@@ -55,7 +55,7 @@
                     <i class="fa fa-minus"></i>
                 </div>
             </a>
-            <ul class="collapse" id="selling">
+            <ul class="collapse show" id="selling">
                 <li><a href="{{ path('manage_my_ads_active') }}" class="{% if currentRoute == 'manage_my_ads_active' %}active{% endif %}"><span class="sub-menu-item">{{ 'Manage my ads'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
                 {% if userCreditRepository.getActiveCreditCountForUser(app.user.getId()) > 0 %}
                     <li><a href="{{ path('my_credits') }}" class="{% if currentRoute == 'my_credits' %}active{% endif %}"><span class="sub-menu-item">{{ 'Credits'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
@@ -84,7 +84,7 @@
                     <i class="fa fa-minus"></i>
                 </div>
             </a>
-            <ul id="buying" class="collapse">
+            <ul id="buying" class="collapse show">
                 <li><a href="{{ path('my_favourite') }}" class="{% if currentRoute == 'my_favourite' %}active{% endif %}"><span class="sub-menu-item">{{ 'My favourites'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
                 <li><a href="{{ path('list_search_agent') }}" class="{% if currentRoute == 'list_search_agent' %}active{% endif %}"><span class="sub-menu-item">{{ 'Alerts and searches'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
                 <li><a href="{{ path('my_purchases') }}" class="{% if currentRoute == 'my_purchases' %}active{% endif %}"><span class="sub-menu-item">{{ 'Purchases'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>

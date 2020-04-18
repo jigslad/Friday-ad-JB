@@ -5,40 +5,50 @@
     {{'Review'|trans({}, 'frontend-review')}}
 {% endblock %}
 
+{% block scripttop %}
+    <link rel="stylesheet" href="{{ asset('build/css/dashboard.css') }}"/>
+{% endblock %}
+
+
 {% set currentRoute = app.request.attributes.get('_route') %}
 {% block body -%}
+    <div class="dash-block">
+
+    </div>
     <div id="leave_review_modal" class="reveal-modal" data-reveal></div>
     <div class="posting-bg">
-        {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
-        <div class="row d-board-main">
-            <div class="off-canvas-wrap" data-offcanvas>
-                <div class="inner-wrap">
-                    {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
-                    <div id="db-right-part" class="large-18 columns">
-                        <h1 class="db-title">{{ 'Reviews' }}</h1>
-                        <h2 class="db-sub-title">{{ 'Let other Friday-Ad users to know when someone is a good seller, leave a review about sellers you have bought from or sent messages to.'|trans({}, 'frontend-review') }}</h2>
-        
-                        <div class="review-tabs">{{ include('FaUserBundle:Review:reviewTabs.html.twig') }}</div>
-        
-                        <div class="tab-content">
-                            <div class="row">
-                                <div class="columns">
-                                    {% if pagination.getNbResults() %}
-                                        <div class="my-msg-main user-review">
-                                            {% for review in pagination.getCurrentPageResults() %}
-                                                {{ include('FaUserBundle:Review:list.html.twig', {'review' : review}) }}
-                                            {% endfor %}
-                                        </div>
-                                        <div class="pagination-centered">
-                                            {{ include('FaFrontendBundle:Default:googlePager.html.twig', {'pagination': pagination, 'addToEndPage': 0, 'seoPager': false}) }}
-                                        </div>
-                                    {% else %}
-                                        <div class="row">
-                                            <div class="columns mt20">
-                                                {{ 'No records found.'|trans({}, 'frontend-reivew') }}
+        <div class="container">
+            <div class="row d-board-main">
+                {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
+                <div class="off-canvas-wrap" data-offcanvas>
+                    <div class="inner-wrap">
+                        {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
+                        <div id="db-right-part" class="large-18 columns">
+                            <h1 class="db-title">{{ 'Reviews' }}</h1>
+                            <h2 class="db-sub-title">{{ 'Let other Friday-Ad users to know when someone is a good seller, leave a review about sellers you have bought from or sent messages to.'|trans({}, 'frontend-review') }}</h2>
+
+                            <div class="review-tabs">{{ include('FaUserBundle:Review:reviewTabs.html.twig') }}</div>
+
+                            <div class="tab-content">
+                                <div class="row">
+                                    <div class="columns">
+                                        {% if pagination.getNbResults() %}
+                                            <div class="my-msg-main user-review">
+                                                {% for review in pagination.getCurrentPageResults() %}
+                                                    {{ include('FaUserBundle:Review:list.html.twig', {'review' : review}) }}
+                                                {% endfor %}
                                             </div>
-                                        </div>
-                                    {% endif %}
+                                            <div class="pagination-centered">
+                                                {{ include('FaFrontendBundle:Default:googlePager.html.twig', {'pagination': pagination, 'addToEndPage': 0, 'seoPager': false}) }}
+                                            </div>
+                                        {% else %}
+                                            <div class="row">
+                                                <div class="columns mt20">
+                                                    {{ 'No records found.'|trans({}, 'frontend-reivew') }}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                         </div>

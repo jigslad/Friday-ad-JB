@@ -4,16 +4,22 @@
     {{'Alerts & Searches'|trans({}, 'frontend-my-saved-searches')}}
 {% endblock %}
 
+{% block scripttop %}
+    <link rel="stylesheet" href="{{ asset('build/css/dashboard.css') }}"/>
+{% endblock %}
+
 {% set container = fetch_container_instance() %}
 
 {% block body -%}
 
 {% if guid is not defined %}
-<div class="posting-bg">
-    {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
-    <div class="row d-board-main">
-        <div class="off-canvas-wrap" data-offcanvas>
-        {% endif %}
+<div class="dash-block">
+    <div class="posting-bg">
+        <div class="container">
+            {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
+            <div class="row d-board-main">
+                <div class="off-canvas-wrap" data-offcanvas>
+{% endif %}
             {% if guid is not defined %}
                 <div class="inner-wrap">
             {% else %}
@@ -41,6 +47,8 @@
                 </div>
             </div>
 {% if guid is not defined %}
+                </div>
+            </div>
         </div>
     </div>
 </div>

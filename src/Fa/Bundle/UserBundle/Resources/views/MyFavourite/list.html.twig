@@ -1,32 +1,35 @@
 {% set adRepository = fetch_repository('FaAdBundle:Ad') %}
-<div class="posting-bg">
-    {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
-    
-    <div class="row d-board-main">
-        <div class="off-canvas-wrap" data-offcanvas>
-            <div class="inner-wrap">
-                {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
-                <div class="large-18 columns" id="db-right-part">
-                    <h1 class="db-title">{{'My favourites'|trans({}, 'frontend-my-favourites')}}</h1>
-                    {% if pagination is defined %}
-                        <h2 class="db-sub-title">{{'Here is the adverts you markes as favourites so far. You can review or delete them from your favourites.'|trans({}, 'frontend-my-favourites')}}</h2>
-	                    <div id="dashboard-favourites" class="fa-slider clearfix">
-	                        {% if pagination.getNbResults() %}
-	                            {% for favouriteAdArray in pagination.getCurrentPageResults() %}
-	                                {{ include('FaUserBundle:MyFavourite:adDetail.html.twig', {'favouriteAdArray': favouriteAdArray}) }}
-	                            {% endfor %}
-	                        {% else %}
-	                            <div class="row">
-	                                <div class="columns">
-	                                    {{ 'No records found.'|trans({}, 'frontend-my-favourites') }}
-	                                </div>
-	                            </div>
-	                        {% endif %}
-	                    </div>
-	                    <div class="pagination-centered">
-	                        {{ include('FaFrontendBundle:Default:googlePager.html.twig', {'pagination': pagination, 'addToEndPage': 0, 'seoPager': false}) }}
-	                    </div>
-	                 {% endif %}
+<div class="dash-block">
+    <div class="posting-bg">
+        <div class="container">
+            {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
+            <div class="row d-board-main">
+                <div class="off-canvas-wrap" data-offcanvas>
+                    <div class="inner-wrap">
+                        {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
+                        <div class="large-18 columns" id="db-right-part">
+                            <h1 class="db-title">{{'My favourites'|trans({}, 'frontend-my-favourites')}}</h1>
+                            {% if pagination is defined %}
+                                <h2 class="db-sub-title">{{'Here is the adverts you markes as favourites so far. You can review or delete them from your favourites.'|trans({}, 'frontend-my-favourites')}}</h2>
+                                <div id="dashboard-favourites" class="fa-slider clearfix">
+                                    {% if pagination.getNbResults() %}
+                                        {% for favouriteAdArray in pagination.getCurrentPageResults() %}
+                                            {{ include('FaUserBundle:MyFavourite:adDetail.html.twig', {'favouriteAdArray': favouriteAdArray}) }}
+                                        {% endfor %}
+                                    {% else %}
+                                        <div class="row">
+                                            <div class="columns">
+                                                {{ 'No records found.'|trans({}, 'frontend-my-favourites') }}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="pagination-centered">
+                                    {{ include('FaFrontendBundle:Default:googlePager.html.twig', {'pagination': pagination, 'addToEndPage': 0, 'seoPager': false}) }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
