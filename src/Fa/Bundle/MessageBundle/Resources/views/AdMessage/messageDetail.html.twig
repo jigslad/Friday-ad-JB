@@ -11,7 +11,7 @@
 {% if not isNewMessageFlag %}
     {% set adUrl = container.get('router').generate('ad_detail_page_by_id', {'id': arrayMessage['ad_id']}, true) %}
 {% endif %}
-<div id="msg_{{arrayMessage['id']}}" class="my-msg-box {% if (arrayMessage['is_read'] == 0 and arrayMessage['sender_id'] != app.user.getId()) %}unread-msg{% endif %}">
+<div id="msg_{{arrayMessage['id']}}" class="manage-item-list my-msg-box {% if (arrayMessage['is_read'] == 0 and arrayMessage['sender_id'] != app.user.getId()) %}unread-msg{% endif %}">
     {% if arrayMessage['receiver_id'] == app.user.getId() %}
         {% set messageType = 'receiver' %}
     {% else %}
@@ -19,14 +19,13 @@
     {% endif %}
     <a href="{{path('user_ad_message_reply', {'type': messageType, 'replyId': arrayMessage['id']})}}" class="tricky-link">{{ userDisplayName }}</a>
 
-    <div class="clearfix">
-        <div class="large-3 columns">
+    <div class="media">
+        <div class="my-msg-usericon mr-3">
             {% if (userLogosArray[arrayMessage['sender_id']]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or (userLogosArray[arrayMessage['sender_id']]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID'))) %}
                 {% set isCompanyUser = true %}
             {% else %}
                 {% set isCompanyUser = false %}
             {% endif %}
-
             {% if arrayMessage['sender_id'] == app.user.getId() %}
                 {% if (userLogosArray[arrayMessage['receiver_id']]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or userLogosArray[arrayMessage['receiver_id']]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
                     {% set isCompanyUser = true %}
@@ -37,30 +36,31 @@
             {% else %}
                 {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), userLogosArray[arrayMessage['sender_id']]['user_image'], arrayMessage['sender_id'], null, null, true, isCompanyUser, userLogosArray[arrayMessage['sender_id']]['status_id'], userDisplayName]) %}
             {% endif %}
-            <div class="my-msg-usericon{% if isCompanyUser == false %} rounded{% endif %}">
-                {% if userLogo %}
-                    {{userLogo|raw}}
-                {% else %}
-                    <img src="{{ asset_url('fafrontend/images/user-icon.svg') }}" alt="" />
-                {% endif %}
-            </div>
+            {% if userLogo %}
+                {{userLogo|raw}}
+            {% else %}
+                <img class="pvt-no-img {% if isCompanyUser == false %} rounded-circle {% endif %}" src="{{ asset_url('fafrontend/images/user-icon.svg') }}" alt="" />
+            {% endif %}
+
         </div>
-        <div class="large-21 columns my-msg-content">
-            <div class="clearfix my-msg-heading">
-                <h3>{{userDisplayName}}</h3>
-                <div class="delete-msg-icon hide-for-small hide-for-medium">
-                    <div class="delete-msg-caption">Delete</div>
-                    <a href="javascript:void(0);" class="delete-msg" onclick="removeMessageConfirmation('{{arrayMessage['id']}}', '{{app.user.getId()}}', '{{arrayMessage['message_ad_id']}}');">Delete</a>
+        <div class="media-body my-msg-content">
+            <div class="my-msg-heading">
+                <h3  class="s-h3 mb5">{{userDisplayName}}</h3>
+                <div class="list-created-hours">
+                    <span class="{% if (arrayMessage['has_attachments'] > 0) %}attach-icon{% endif %}">{{arrayMessage['created_at']|time_ago_in_words}}</span>
+                    <div class="delete-msg-icon d-none d-md-block">
+                        <div class="delete-msg-caption">Delete</div>
+                        <a href="javascript:void(0);" class="delete-msg" onclick="removeMessageConfirmation('{{arrayMessage['id']}}', '{{app.user.getId()}}', '{{arrayMessage['message_ad_id']}}');">Delete</a>
+                    </div>
                 </div>
-                <span class="{% if (arrayMessage['has_attachments'] > 0) %}attach-icon{% endif %}">{{arrayMessage['created_at']|time_ago_in_words}}</span>
             </div>
-            <div class="my-msg-title">
+            <h5 class="my-msg-title mb5">
                 {% if isNewMessageFlag %}
                     <b>{{arrayMessage['subject']}}</b>
                 {% else %}
                     <b>{{arrayMessage['ad_title']}}</b>
                 {% endif %}
-            </div>
+            </h5>
             <div class="my-msg-desc">
                 {% if (arrayMessage['is_oneclickenq_message'] or arrayMessage['oneclickenq_reply']) %}
                     {% if (arrayMessage['oneclickenq_reply'] == 'No' and arrayMessage['receiver_id'] == app.user.getId()) %}

@@ -21,37 +21,23 @@
                         <div class="inner-wrap">
                             {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
                             <div id="db-right-part" class="col-md-19 d-right-col">
-                                <h1 class="db-title">{{'My Messages'|trans({}, 'frontend-inbox')}}</h1>
-                                <h2 class="db-sub-title">Keep up to date with messages about your ads and the ads you are interested in.</h2>
+                                <h1 class="s-h1 db-title mt30 mb20">{{'My Messages'|trans({}, 'frontend-inbox')}}</h1>
+                                <h2 class="s-h2 mb10">Keep up to date with messages about your ads and the ads you are interested in.</h2>
 
                                 {{ include('FaMessageBundle:AdMessage:messageTabs.html.twig') }}
-
                                 <div class="tab-content">
-                                    <div class="row">
-                                        <div class="columns">
-                                            <div id="msg_div" style="display:none;"></div>
-                                        </div>
+                                    <div class="tab-pane fade show active">
+                                        {% if pagination.getNbResults() %}
+                                            <div class="my-msg-main">
+                                                {% for arrayMessage in messageDetailArray %}
+                                                    {{ include('FaMessageBundle:AdMessage:messageDetail.html.twig') }}
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            <div class="p15">{{ 'No records found.'|trans({}, 'frontend-inbox') }}</div>
+                                        {% endif %}
                                     </div>
-
-                                    {% if pagination.getNbResults() %}
-                                        <div class="row ">
-                                            <div class="columns">
-                                                <div class="my-msg-main">
-                                                    {% for arrayMessage in messageDetailArray %}
-                                                        {{ include('FaMessageBundle:AdMessage:messageDetail.html.twig') }}
-                                                    {% endfor %}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {% else %}
-                                        <div class="row">
-                                            <div class="columns">
-                                                {{ 'No records found.'|trans({}, 'frontend-inbox') }}
-                                            </div>
-                                        </div>
-                                    {% endif %}
                                 </div>
-
                                 {{ include('FaFrontendBundle:Default:pager.html.twig', {'pagination': pagination}) }}
 
                             </div>

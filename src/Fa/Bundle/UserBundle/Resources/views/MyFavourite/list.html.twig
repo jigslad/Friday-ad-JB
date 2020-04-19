@@ -8,9 +8,9 @@
                     <div class="inner-wrap">
                         {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
                         <div class="col-md-19 d-right-col" id="db-right-part">
-                            <h1 class="db-title">{{'My favourites'|trans({}, 'frontend-my-favourites')}}</h1>
+                            <h1 class="s-h1 db-title mt30 mb20">{{'My favourites'|trans({}, 'frontend-my-favourites')}}</h1>
+                            <h2 class="s-h2 mb10">{{'Here is the adverts you markes as favourites so far. You can review or delete them from your favourites.'|trans({}, 'frontend-my-favourites')}}</h2>
                             {% if pagination is defined %}
-                                <h2 class="db-sub-title">{{'Here is the adverts you markes as favourites so far. You can review or delete them from your favourites.'|trans({}, 'frontend-my-favourites')}}</h2>
                                 <div id="dashboard-favourites" class="fa-slider clearfix">
                                     {% if pagination.getNbResults() %}
                                         {% for favouriteAdArray in pagination.getCurrentPageResults() %}
