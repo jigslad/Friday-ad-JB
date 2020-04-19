@@ -705,7 +705,7 @@
                         {% set choiceCount = 0 %}
                         {% for linkText, linkUrl in staticPageUrls %}
                             {% if choiceCount == 0 or (choiceCount % choicesPerColumn) == 0 %}
-                            <ul class="links-list">
+                            <ul class="link-list">
                             {% endif %}
                                 <li><a href="{{ linkUrl }}">{{ linkText }}</a></li>
                                 {% set choiceCount = choiceCount + 1 %}
@@ -753,7 +753,7 @@
                             {% set totalColumns = 4 %}
                             {% set choicesPerColumn = (totalChoices / totalColumns)|round(0, 'ceil') %}
                             {% set choiceCount = 0 %}
-                            <ul class="links-list">
+                            <ul class="link-list">
                                 {% for catId, adCount in topCarMakes %}
                                     {% set queryParams = searchParams %}
                                     {% set queryParams = queryParams|merge({'item__category_id': (catId)}) %}
@@ -795,7 +795,7 @@
                                     {% endfor %}
 
                                     {% for i in 0..columns-1 %}
-                                        <ul class="links-list">
+                                        <ul class="link-list">
                                             {% for k in 0..colCounter[i]-1 %}
                                                 {% if staticPageUrls[ctr] is defined %}
                                                     <li><a href="{{ replace_case_insensitive('{Location}', staticPageLocationSlug, staticPageUrls[ctr]['url']) }}">{{ staticPageUrls[ctr]['title'] }}</a></li>
