@@ -36,37 +36,48 @@
 {% endif %}
     <div class="media mma-media-list">
         {% if isBoostEnabled is defined and isBoostEnabled==1 and boostAdRemaining is defined and boostAdRemaining > 0 and currentRoute == 'manage_my_ads_active' and (userBusinessCategory is defined and userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
-{#            <div class="d-col-1 d-none d-md-block">#}
-{#                <div class="label-inline">#}
-{#                    <ul class="custom-control custom-checkbox search-type">#}
-{#                        <li>#}
-{#                            <input type="checkbox" class="custom-control-input" id="customCheckBox1_1" value="{{adId}}">#}
-{#                            <label class="custom-control-label gray-chbox" for="customCheckBox1_1">Select</label>#}
-{#                        </li>#}
-{#                    </ul>#}
-{#                </div>#}
-{#            </div>#}
-            <div class="medium-1 large-1 small-24 columns">
-                <span class="custom-checkbox">
-                    <input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]">
-                </span>
-                <span class="seladv-addet show-for-small-only">Select</span>
+            <div class="d-col-1 d-none d-md-block">
+                <div class="label-inline">
+                    <ul class="search-type custom-control custom-checkbox">
+                        <li>
+                            <input type="checkbox" class="custom-control-input" value="{{adId}}" name="boostads[]" id="customCheckBox1_1">
+                            <label class="custom-control-label gray-chbox" for="customCheckBox1_1">Select</label>
+                        </li>
+                    </ul>
+                </div>
             </div>
         {% elseif isBoostEnabled is defined and isBoostEnabled==1 and boostAdRemaining is defined and boostAdRemaining > 0 and currentRoute=='ajax_manage_my_ads_get_status' and (userBusinessCategory is defined and userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
-            <div class="medium-1 large-1 small-24 columns">
-                <span class="custom-checkbox ajaxcustom-checkbox">
-                    <input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]">
-                </span>
-                <span class="seladv-addet show-for-small-only">Select</span>
+            <div class="d-col-1 d-none d-md-block">
+                <div class="label-inline">
+                    <ul class="custom-control search-type custom-checkbox ajaxcustom-checkbox">
+                        <li>
+                            <input type="checkbox" class="custom-control-input" value="{{adId}}" id="customCheckBox1_1" name="boostads[]">
+                            <label class="custom-control-label gray-chbox" for="customCheckBox1_1">Select</label>
+                        </li>
+                    </ul>
+                </div>
             </div>
         {% elseif isBoostEnabled is defined and isBoostEnabled==1 and currentRoute == 'manage_my_ads_boosted' and (userBusinessCategory is defined and  userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
-            <div class="medium-1 large-1 small-24 columns">
-                <span class="custom-checkbox ajaxcustom-checkbox">
-                    <input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]">
-                </span>
-                <span class="seladv-addet show-for-small-only">Select</span></div>
+            <div class="d-col-1 d-none d-md-block">
+                <div class="label-inline">
+                    <ul class="custom-control search-type custom-checkbox ajaxcustom-checkbox">
+                        <li>
+                            <input type="checkbox" class="custom-control-input" id="customCheckBox1_1" value="{{adId}}" name="boostads[]">
+                            <label class="custom-control-label gray-chbox" for="customCheckBox1_1">Select</label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         {% else %}
-            <div class="medium-1 large-1 columns"><span class="dummbychk"></span></div>
+            <div class="d-col-1 d-none d-md-block">
+                <div class="label-inline">
+                    <ul class="custom-control search-type custom-checkbox ajaxcustom-checkbox">
+                        <li>
+                            <span class="dummbychk"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         {% endif %}
         <div class="d-col-2">
             {% if ad['status_id'] == adStatusLive %}
