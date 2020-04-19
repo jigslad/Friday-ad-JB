@@ -1,12 +1,4 @@
-{% block image_slider_css %}
-    {% stylesheets filter='uglifycss' output='bundles/css/compiled/imageSlider.css'
-        'bundles/facore/css/owl.carousel.css'
-        'bundles/facore/css/owl.theme.css'
-        'bundles/facore/css/jquery.fancybox.css'
-          %}
-        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}?v=3"/>
-    {% endstylesheets %}
-{% endblock %}
+{% block image_slider_css %}{% endblock %}
 {% block image_slider_html %}	
     {% set container = fetch_container_instance() %}
     {% set imageAltString = null %}
@@ -33,8 +25,10 @@
         {{ include('FaAdBundle:AdImage:editImagesPopup.html.twig') }}
     {% endif %}
     {% if adImages|length or (allowAdEdit is defined and allowAdEdit) %}
-        <div class="relative">
+        <div class="photo-panel-in">
+        <div class="all">
             {% if currentDevice is defined and currentDevice != 'M' and not adImages|length  and allowAdEdit is defined and allowAdEdit %}
+                <div class="slider-photo">
                 <div class="owl-carousel" id="big-image-slider">
                     <div class="no-photo">
                         <div class="no-photo-heading">{{ 'No photo?'|trans({}, 'frontend-show-ad') }}</div>
@@ -45,15 +39,24 @@
                         <a id="add_photo_no_image_link" class="primary-btn-3 button thin-btn" href="javascript:void(0);">{{ 'Add photo'|trans({}, 'frontend-show-ad') }}</a>
                     </div>
                 </div>
-            {% elseif adImages|length %}                
-                <div class="owl-carousel" id="big-image-slider">
+                </div>
+            {% elseif adImages|length %}
+            	<div class="slider-photo">                
+                	<div class="details-img-icons">
+                    	<a href="javascript:void(0);" data-toggle="modal" data-target="#zoomphotoModal" class="zoom-img d-none d-md-block">zoom image</a>
+                    	{% if allowAdEdit is defined and allowAdEdit %}
+                            <a href="javascript:void(0);" onclick="showEditImagesPopup();" class="edit-item-img hide-for-small">edit image</a>
+                        {% endif %}
+                    </div>
+			        <div class="owl-carousel owl-theme one">
                     {% for adImage in adImages %}
                         {% set adBigImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageUrl', [container, adId, adImage.path, adImage.hash, '800X600', adImage.aws, adImage.image_name]) %}
                         {% set altString = imageAltStringArr['img_alt_'~((loop.index%8) == 0 ? 8 : (loop.index%8))] %}
-                        <div class="item">
-                            <img class="lazyOwl" id="big_image_{{loop.index}}" data-src="{{ adBigImageUrl }}" alt="{{ altString }}" />
-                        </div>
-                    {% endfor %}                    
+                        <div style="background-image: url({{ adBigImageUrl }}" class="item-box"></div>
+                    {% endfor %}   
+                    </div>
+					<div class="left nonl"></div>
+					<div class="right"></div>                 
                 </div>
                 <div class="photos-block">
                     {% if (adImages|length and isFinance == true) %}
@@ -62,48 +65,65 @@
                            <a href="javascript:clickFinance('{{ financeDetails['finance_url'] }}');" class="hide finance-btn">{{ financeDetails['finance_title'] }}</a>
             			   <div class="vif-overlay hide hide-for-small-only" id="financeOverlay">&nbsp;</div>
                       </div>
-                      {% endif %}
-    				<div class="details-img-icons clearfix">
-                            <a href="javascript:void(0);" onclick="showOriginalImage()" class="zoom-img hide-for-small">zoom image</a>
-                            {% if allowAdEdit is defined and allowAdEdit %}
-                                <a href="javascript:void(0);" onclick="showEditImagesPopup();" class="edit-item-img hide-for-small">edit image</a>
-                            {% endif %}
-                        </div>
-                    {% if allowAdEdit is defined and allowAdEdit %}
-                        <div class="text-right show-for-small-only clearfix mt5">
-                            <a href="javascript:void(0)" onclick="showEditImagesPopup();" class="edit-advert">{{'Edit images'|trans({}, 'frontend-show-ad')}}</a>
-                        </div>
                     {% endif %}
                 </div>
             {% endif %}
         
             {% if adImages|length > 1 or (adImages|length == 1 and allowAdEdit is defined and allowAdEdit) %}
-                <div class="owl-carousel hide-for-small-only {% if allowAdEdit is defined and allowAdEdit %}add-small-photo{% endif %}" id="small-image-slider">
-                    {% for adImage in adImages %}
-                        {% set adSmallImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageUrl', [container, adId, adImage.path, adImage.hash, '300X225', adImage.aws, adImage.image_name]) %}
-                        {% set altString = imageAltStringArr['img_alt_'~((loop.index%8) == 0 ? 8 : (loop.index%8))] %}
-                        <div class="item"><img class="lazyOwl" data-src="{{ adSmallImageUrl }}" alt="{{ altString }}" /></div>
-                    {% endfor %}
-                </div>
-                {% if allowAdEdit is defined and allowAdEdit %}
-                    <div class="add-photo hide-for-small-only">
-                        <a id="add_a_photo_link" class="tricky-link" href="javascript:void(0);">{{ altString }}</a>
-                        <div class="add-photo-text">{{ 'Add a photo'|trans({}, 'frontend-show-ad') }}</div>
-                    </div>
-                {% endif %}               
+            	<div class="slider-two d-none d-md-block">
+                    <div class="owl-carousel owl-theme two {% if allowAdEdit is defined and allowAdEdit %}add-small-photo{% endif %}" id="small-image-slider">
+                        {% for adImage in adImages %}
+                            {% set adSmallImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageUrl', [container, adId, adImage.path, adImage.hash, '300X225', adImage.aws, adImage.image_name]) %}
+                            {% set altString = imageAltStringArr['img_alt_'~((loop.index%8) == 0 ? 8 : (loop.index%8))] %}
+                            <div style="background-image: url({{ adSmallImageUrl }})" class="item"></div>
+                        {% endfor %}
+                        {% if allowAdEdit is defined and allowAdEdit %}
+                        <div class="add-photo hide-for-small-only">
+                            <a id="add_a_photo_link" class="tricky-link" href="javascript:void(0);">{{ altString }}</a>
+                            <div class="add-photo-text">{{ 'Add a photo'|trans({}, 'frontend-show-ad') }}</div>
+                        </div>
+                        {% endif %}
+                    </div>                      
+                    <div class="left-t nonl-t"></div>
+					<div class="right-t"></div>
+               </div>             
         {% endif %}         
         </div>
-       
+       </div>
     {% else %}
-        <br />
-        <div data-alert class="alert-box info radius">
+        <div class="photo-panel-in">
+        <div class="all"><div data-alert class="alert-box info radius">
             <span class="alert-icon">&nbsp;</span> {{'No images found for ad.'}}
-        </div>
+        </div></div></div>
     {% endif %}
-{% endblock %}
 
+{% if adImages|length > 1 or (adImages|length == 1 and allowAdEdit is defined and allowAdEdit) %}
+	<div class="modal fade zoomphotoModal" id="zoomphotoModal" tabindex="-1" role="dialog" aria-labelledby="zoomphotoModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      <div class="slider-three slider-zoom-photo">
+	        <div class="owl-carousel owl-theme three">
+                {% for adImage in adImages %}
+                    {% set adBigImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageUrl', [container, adId, adImage.path, adImage.hash, '800X600', adImage.aws, adImage.image_name]) %}
+                    {% set altString = imageAltStringArr['img_alt_'~((loop.index%8) == 0 ? 8 : (loop.index%8))] %}
+                    <div style="background-image: url({{ adBigImageUrl }}" class="item-box"></div>
+                {% endfor %}	        </div>
+	       	<div class="left nonl"></div>
+			<div class="right"></div>
+	      </div>
+	      </div>
+	    </div>
+	  </div>
+</div>
+{% endif %}
+{% endblock %}
 {% block image_slider_js %}
-    <script async='async' src="{{ asset_url('facore/js/owl.carousel.min.js') }}"></script>
     <script async='async' src="{{ asset_url('facore/js/jquery.fancybox.pack.js') }}"></script>
     <script language="javascript" type="text/javascript">
     //<![CDATA[

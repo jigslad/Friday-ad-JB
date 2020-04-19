@@ -17,7 +17,7 @@
 <div class="pvt-seller-box">
     <div class="pvt-seller-cap">
         <span class="person-collection">
-            {% if adDetail['user']['user_role'] is defined %}
+        	{% if adDetail['user']['user_role'] is defined %}
                 {% if (adDetail['user']['business_category_id'] is defined) %}
                     {% set rootCatId = adDetail['user']['business_category_id'] %}
                 {% else %}
@@ -37,16 +37,15 @@
     {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}
         {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adDetail['user']['image'], adDetail['user']['id'], null, null, true, false, adDetail['user']['status_id'], adDetail['user']['user_name']]) %}
     {% endif %}
-
-    <div class="pvt-seller-img {% if (userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') or userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION')) %}bz-seller-img{% else %}seller-img-round{% endif %}">
-        <div class="pvt-seller-wrapper" id="left_profile_image_div">
-            {% if userCompanyLogo %}
+	<div class="pvt-seller-img {% if (userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') or userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION')) %}bz-seller-img{% else %}seller-img-round{% endif %}">
+		<div class="pvt-seller-wrapper" id="left_profile_image_div">
+			{% if userCompanyLogo %}
                 {{userCompanyLogo|raw}}
             {% elseif userLogo %}
                 {{userLogo|raw}}
             {% endif %}
-        </div>
-        {% if allowAdEdit %}
+		</div>
+		{% if allowAdEdit %}
             <div class="profile-img-overlay"> </div>
         {% endif %}
         
@@ -65,9 +64,8 @@
             </div>
         {% endif %}
     </div>
-
     <div class="pvt-seller-info">
-        {% if allowAdEdit and currentDevice != 'D' %}
+		{% if allowAdEdit and currentDevice != 'D' %}
             {% set hasUserLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), adDetail['user']['id'], false, true]) %}
             <div class="mt10 mb10">
                 <div id="profile_change_btn_with_opt" {% if not hasUserLogo|length %}style="display:none;"{% endif %}>
@@ -147,11 +145,10 @@
                 {% endif %}
                 {% if adCompanyInfo['website_link'] is defined %}
                     {% set companyWebSite = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'addHttpToUrl', [adCompanyInfo['website_link']]) %}
-                    {#<li class="website"><a rel="nofollow" onclick="openUserWebsite('{{(adDetail['ad_id'] is defined ? adDetail['ad_id'] : adDetail['id'])}}', '{{ companyWebSite }}',{{businessName}})" href="javascript:void(0);">{{ adCompanyInfo['website_link'] }}</a></li>#}
                 {% endif %}
             </ul>
-        {% endif %}
-
+        {% endif %}                                  
+        
         {% set isBusinessAdPage = false %}
         {% if adDetail['user']['role_id'] is defined %}
             {% if (adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
@@ -168,10 +165,10 @@
                 {% endif %}
 
                 {% if currentRoute == 'show_draft_ad' %}
-                    <a href="javascript:void(0);" class="secondary-btn-1 button expand not-hover">{{ profileLabel }}</a>
+                    <a href="javascript:void(0);" class="secondary-btn-1 btn btn-block not-hover">{{ profileLabel }}</a>
                 {% else %}
                     {% if profileUrl %}
-                        <a href="{{ profileUrl }}" class="secondary-btn-1 button expand">{{ profileLabel }}</a>
+                        <a href="{{ profileUrl }}" class="secondary-btn-1 btn btn-block">{{ profileLabel }}</a>
                     {% endif %}
                 {% endif %}
             {% else %}
@@ -180,10 +177,10 @@
                     {% set profileLabel = 'Visit profile'|trans({}, 'frontend-show-ad') %}
                 {% endif %}
                 {% if currentRoute == 'show_draft_ad'%}
-                    <a href="javascript:void(0);" class="secondary-btn-1 button expand not-hover" rel="nofollow">{{ profileLabel }}</a>
+                    <a href="javascript:void(0);" class="secondary-btn-1 btn btn-block not-hover" rel="nofollow">{{ profileLabel }}</a>
                 {% else %}
                     {% if profileUrl %}
-                        <a href="{{ profileUrl }}" class="secondary-btn-1 button expand" rel="nofollow">{{ profileLabel }}</a>
+                        <a href="{{ profileUrl }}" class="secondary-btn-1 btn btn-block" rel="nofollow">{{ profileLabel }}</a>
                     {% endif %}
                 {% endif %}
             {% endif %}
@@ -209,5 +206,6 @@
                 <a href="{{ profileAdsUrl }}" {% if not isBusinessAdPage %}rel="nofollow"{% endif %}>{{ otherItemLabel }}</a>
             {% endif %}
         {% endif %}
-    </div>
+	</div>
 </div>
+

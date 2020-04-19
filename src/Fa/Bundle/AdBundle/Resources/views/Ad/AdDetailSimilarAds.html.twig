@@ -3,9 +3,10 @@
     {% set adPropertyRepository = fetch_repository('FaAdBundle:AdProperty') %}
     {% set seoToolRepository = fetch_repository('FaContentBundle:SeoTool') %}
     <div class="details-similar-item{% if isSoldExpiredAdFlag and similarAds['totalAds'] is defined and similarAds['totalAds'] <= 0 %} no-expired-items{% endif %}">
-        <div class="row">
-            <div class="columns">
-                <h2 class="text-center">
+        <div class="container">
+            <div class="row">
+            	<div class="col-md-24">
+                <h3 class="details-similar-item-title">
                     {% if isSoldExpiredAdFlag %}
                         {{'This advert has expired.'|trans({}, 'frontend-show-ad')}}<br />
                         {% if similarAds['totalAds'] is defined and similarAds['totalAds'] > 0 %}
@@ -14,9 +15,9 @@
                     {% else %}
                         {{'Similar ads'|trans({}, 'frontend-show-ad')}}
                     {% endif %}
-                </h2>
+                </h3>
                 {% if similarAds['totalAds'] is defined and similarAds['totalAds'] > 0 %}
-                    <div class="owl-carousel {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}motor-similar-item{% endif %}{% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID')} %}service-similar-slider{% endif %}" id="similar-item-slider" data-equalizer>
+                    <div class="owl-carousel owl-theme fa-slider {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}motor-similar-item{% endif %}{% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID')} %}service-similar-slider{% endif %}" id="similar-item-slider" data-equalizer>
                         {% for similarAd in similarAds['ads']%}
                             {% set adCategoryId = attribute(similarAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::CATEGORY_ID')) %}
                             {% set rootCategoryId = attribute(similarAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::ROOT_CATEGORY_ID')) %}
@@ -28,7 +29,7 @@
                             {% set imageAltString = null %}
                             {% if seoRule['image_alt'] is defined %}
                                 {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], similarAd]) %}
-                            {% endif %}
+                            {% endif %}                           
                             <div class="item" data-equalizer-watch>
                                 <a href="{{ adUrl }}" class="tricky-link">
                                     {% if attribute(similarAd, constant(similarAdSolrMapping ~ 'TITLE')) is defined %}
@@ -48,7 +49,7 @@
                                        {{trim_text(attribute(similarAd, constant(similarAdSolrMapping ~ 'TITLE')), 65)|raw}}
                                     {% endif %}
                                 </h3>
-                                <div class="clearfix">
+                                <div class="two-grid-col">
                                     <div class="list-dimensions left">
                                         {% if adListFields|length %}
                                             {% for adFieldName, adListFieldValue in adListFields %}
@@ -88,6 +89,7 @@
                         {% endfor %}
                     </div>
                 {% endif %}
+            	</div>
             </div>
         </div>
     </div>

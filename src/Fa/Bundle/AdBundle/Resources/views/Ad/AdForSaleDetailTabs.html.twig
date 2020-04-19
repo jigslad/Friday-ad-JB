@@ -1,22 +1,23 @@
 <div class="detail-tabpart-2" id="vif_tabs">
-    <ul class="tabs hide-for-small-only" data-tab>
-        {% if adForSaleDetail['postage_payment'] is defined or adDetailAndDimensionFields['dimension'] is defined %}
-            <li class="tab-title active"><a href="#basic_info_panel" id="basic_info_panel_tab">{{'The basics'|trans({}, 'frontend-show-ad')}}</a></li>
-        {% endif %}
-        {% if adForSaleDetail['postage_payment'] is defined %}
-            <li class="tab-title"><a href="#postage_payment_panel" id="postage_payment_panel_tab">{{'Postage & Payment'|trans({}, 'frontend-show-ad')}}</a></li>
-        {% endif %}
-        {% if adDetailAndDimensionFields['dimension'] is defined %}
-            <li class="tab-title"><a href="#dimension_panel" id="dimension_panel_tab">{{'Dimensions'|trans({}, 'frontend-show-ad')}}</a></li>
-        {% endif %}
-    </ul>
-    <dl class="accordion" data-accordion="">
-        <dd class="accordion-navigation">
-            {% if adForSaleDetail['postage_payment'] is defined or adDetailAndDimensionFields['dimension'] is defined %}
-                <a href="#basic_info_panel" id="basic_info_panel_anchor" class="show-for-small-only">{{'The basics'|trans({}, 'frontend-show-ad')}} <i class="fi-plus right"></i></a>
+	<nav>
+		<div class="nav nav-tabs nav-fill custom-tabs" id="vif_tabs" role="tablist">
+			{% if adForSaleDetail['postage_payment'] is defined or adDetailAndDimensionFields['dimension'] is defined %}
+                <a href="#basic_info_panel" class="nav-item nav-link active" data-toggle="tab" role="tab" aria-controls="nav-basic" aria-selected="true" id="basic_info_panel_tab">{{'The basics'|trans({}, 'frontend-show-ad')}}</a></li>
             {% endif %}
-             <div class="content active" id="basic_info_panel">
-                 <div class="hide-for-small-only">
+            {% if adForSaleDetail['postage_payment'] is defined %}
+                <a class="nav-item nav-link" href="#postage_payment_panel" data-toggle="tab" role="tab" aria-controls="nav-postage" aria-selected="false" id="postage_payment_panel_tab">{{'Postage & Payment'|trans({}, 'frontend-show-ad')}}</a></li>
+            {% endif %}
+            {% if adDetailAndDimensionFields['dimension'] is defined %}
+                <a class="nav-item nav-link" href="#dimension_panel" data-toggle="tab" role="tab" aria-controls="nav-dimension" aria-selected="false" id="dimension_panel_tab">{{'Dimensions'|trans({}, 'frontend-show-ad')}}</a></li>
+            {% endif %}
+		</div>
+	</nav>
+	<div class="tab-content">
+		<div class="tab-pane fade show active" id="basic_info_panel" role="tabpanel" aria-labelledby="nav-basic-tab">
+    		{% if adForSaleDetail['postage_payment'] is defined or adDetailAndDimensionFields['dimension'] is defined %}
+    			<a href="#basic_info_panel" id="basic_info_panel_anchor" class="d-block d-md-none">{{'The basics'|trans({}, 'frontend-show-ad')}} <i class="fi-plus right"></i></a>
+            {% endif %}		
+			 <div class="d-none d-md-block">
                     <div id="ad_desc">
                         {% if adForSaleDetail['description'] is defined %}
                             {{ adForSaleDetail['description']|replace({"\\n": "<br />", "&nbsp;": " "})|raw|nl2br }}
@@ -24,27 +25,27 @@
                     </div>
                     <a href="javascript:void(0);" class="read-more" style="display:none;">{{ 'Read more'|trans({}, 'frontend-show-ad') }}</a>
                     <a href="javascript:void(0);" class="read-less" style="display:none;">{{ 'Read less'|trans({}, 'frontend-show-ad') }}</a>
-                 </div>
-                 {% if adDetailAndDimensionFields['detail'] is defined %}
-                     <h5>{{'The details'|trans({}, 'frontend-show-ad')}}</h5>
-                        <ul class="details-info">
-                            {% for fieldName, fieldValue in adDetailAndDimensionFields['detail'] %}
-                                <li class="clearfix">
-                                    <div class="detail-text">{{fieldName}}</div>
-                                    <div class="detail-text">{{fieldValue|join(', ')|raw}}</div>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                 {% endif %}
-            </div>
-             
-             {% if adForSaleDetail['postage_payment'] is defined %}
-                <a href="#postage_payment_panel" class="show-for-small-only">{{'Postage & Payment'|trans({}, 'frontend-show-ad')}}<i class="fi-plus right"></i></a>
+             </div>
+			 {% if adDetailAndDimensionFields['detail'] is defined %}
+                 <h5>{{'The details'|trans({}, 'frontend-show-ad')}}</h5>
+                    <ul class="details-info clearfix">
+                        {% for fieldName, fieldValue in adDetailAndDimensionFields['detail'] %}
+                            <li>
+                                <div class="detail-text">{{fieldName}}</div>
+                                <div class="detail-text">{{fieldValue|join(', ')|raw}}</div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+            {% endif %}           
+		</div>
+		<div class="tab-pane fade" id="postage_payment_panel" role="tabpanel" aria-labelledby="nav-postage-tab">
+			{% if adForSaleDetail['postage_payment'] is defined %}
+                <a href="#postage_payment_panel" class="d-block d-md-none">{{'Postage & Payment'|trans({}, 'frontend-show-ad')}}<i class="fi-plus right"></i></a>
                  <div class="content" id="postage_payment_panel">
                     {% if adForSaleDetail['postage_payment']['delivery_method'] is defined %}
                         <h5>{{'Delivery'|trans({}, 'frontend-show-ad')}}</h5>
-                        <ul class="details-info">
-                            <li class="clearfix">
+                        <ul class="details-info clearfix">
+                            <li>
                                 <div class="detail-text">{{'Delivery method'|trans({}, 'frontend-show-ad')}}</div>
                                 <div class="detail-text">{{ adForSaleDetail['postage_payment']['delivery_method'] }}</div>
                             </li>
@@ -53,8 +54,8 @@
                     
                     {% if adForSaleDetail['postage_payment']['payment_method'] is defined %}
                         <h5 class="mt10">{{'Payment'|trans({}, 'frontend-show-ad')}}</h5>
-                        <ul class="details-info">
-                            <li class="clearfix">
+                        <ul class="details-info clearfix">
+                            <li>
                                 <div class="detail-text">{{'Payment method'|trans({}, 'frontend-show-ad')}}</div>
                                 <div class="detail-text">{{ adForSaleDetail['postage_payment']['payment_method'] }}</div>
                             </li>
@@ -70,19 +71,19 @@
              {% endif %}
              
              {% if adDetailAndDimensionFields['dimension'] is defined %}
-                <a href="#dimension_panel" class="show-for-small-only">{{'Dimensions'|trans({}, 'frontend-show-ad')}}<i class="fi-plus right"></i></a>
+                <a href="#dimension_panel" class="d-block d-md-none">{{'Dimensions'|trans({}, 'frontend-show-ad')}}<i class="fi-plus right"></i></a>
                 <div class="content" id="dimension_panel">
                      <h5>{{'Item dimensions'|trans({}, 'frontend-show-ad')}}</h5>
-                     <ul class="details-info">
+                     <ul class="details-info clearfix">
                          {% for fieldName, fieldValue in adDetailAndDimensionFields['dimension'] %}
-                             <li class="clearfix">
+                             <li>
                                  <div class="detail-text">{{fieldName}}</div>
                                  <div class="detail-text">{{fieldValue}}</div>
                              </li>
                          {% endfor %}
                      </ul>
                 </div>
-            {% endif %}
-        </dd>
-    </dl>
-</div>
+            {% endif %}			
+		</div>
+	</div>
+</div>	

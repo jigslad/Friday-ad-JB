@@ -11,7 +11,7 @@
         </div>
         <div class="clearfix nimber-fields">
             <div class="nimber-postcode">
-                {{ form_widget(form.zip, {'attr':{'class': 'white-field', 'placeholder': 'Type your postcode...'|trans({}, 'frontend-nimber')}}) }}
+                {{ form_widget(form.zip, {'attr':{'class': 'form-control white-field', 'placeholder': 'Type your postcode...'|trans({}, 'frontend-nimber')}}) }}
                 {{ form_errors(form.zip) }}
             </div>
             {{ form_widget(form.get_estimate_btn, {'attr': {'class':'secondary-btn-1 button mb0'}}) }}
