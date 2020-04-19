@@ -9,8 +9,16 @@
     {% set leftForOthersRoute = path('user_review_left_for_others') %}
     {% set reviewType = app.request.get('type') %}
 {% endif %}
-<ul class="tab-menu my-msg-tabs clearfix">
-    <li {% if reviewType == '' or reviewType == 'from_buyers' %} class="active" {% endif %}><a href="{{ fromBuyersRoute }}">{{ 'From <br />buyers'|trans({}, 'frontend-review')|raw }} <br />({{ reviewFromBuyerCount }})</a></li>
-    <li {% if reviewType == 'from_sellers' %} class="active" {% endif %}><a href="{{ fromSellersRoute }}">{{ 'From <br />sellers'|trans({}, 'frontend-review')|raw }} <br />({{ reviewFromSellerCount }})</a></li>
-    <li {% if reviewType == 'left_for_others' %} class="active" {% endif %}><a href="{{ leftForOthersRoute }}">{{ 'Left <br />for others'|trans({}, 'frontend-review')|raw }} <br />({{ reviewLeftForOthersCount }})</a></li>
-</ul>
+<nav>
+    <div class="nav nav-tabs nav-fill custom-tabs">
+        <a class="nav-item nav-link {% if (currentRoute == 'dashboard_home') and (reviewType == '' or reviewType == 'from_buyers') %} active {% endif %}" href="{{ fromBuyersRoute }}">
+            {{ 'From <br />buyers'|trans({}, 'frontend-review')|raw }} <span>({{ reviewFromBuyerCount }})</span>
+        </a>
+        <a class="nav-item nav-link {% if (currentRoute == 'dashboard_home') and (reviewType == 'from_sellers') %} active {% endif %}" href="{{ fromSellersRoute }}">
+            {{ 'From <br />sellers'|trans({}, 'frontend-review')|raw }} <span>({{ reviewFromSellerCount }})</span>
+        </a>
+        <a class="nav-item nav-link {% if (currentRoute == 'user_review_left_for_others') or (reviewType == 'left_for_others') %} active {% endif %}"  href="{{ leftForOthersRoute }}">
+            {{ 'Left <br />for others'|trans({}, 'frontend-review')|raw }} <span>({{ reviewLeftForOthersCount }})</span>
+        </a>
+    </div>
+</nav>

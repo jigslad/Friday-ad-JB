@@ -91,109 +91,106 @@
         {% endif %}
     {% endif %}
 {% endif %}
-
-<div class="posting-bg">
-    <div class="row d-board-main">
-        {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
-        <div id="db-right-part" class="large-18 columns">
-            <h1 class="db-title">{{'Your conversation with %userName%'|trans({'%userName%': userName}, 'frontend-inbox')}}</h1>
-            <div id="mark_as_sold_msg_div" style="display:none"></div>
-            <div id="message_box">
-                <div class="reply-msg-heading clearfix">
-                    <div class="right">
-                        <div class="clearfix">
-                            <div class="reply-delete-msg">
-                                <a id="deleteButton" href="javascript:void(0);" class="delete-msg" onclick="removeMessageConfirmation('{{replyMessageId}}', '{{objLoggedInUser.getId()}}', '{{messsageAdId}}');">Delete</a>
-                            </div>
-                            <div class="right hide-for-small-only">
-                                {% if reviewDetails|length %}
-                                    <span id="msg_leave_review_link">
-                                        {{ include('FaUserBundle:Review:leaveReviewLink.html.twig', {'reviewDetails' : reviewDetails, 'to_whom' : 'buyer', 'class' : 'button xs-btn-1 mt5 mb0 mymsg-review-btn', 'from_where': 'message'}) }}
-                                    </span>
-                                {% endif %}
-                                {% if isAdActive == true %}
-                                    {% if adOwnerId != objLoggedInUser.getId() %}
-                                        {% set messageSpammerObj = messageSpammerRepository.findOneBy({'ad_id': fullConversation[0]['message_ad_id'], 'reporter':app.user.getId(), 'spammer': adOwnerId}) %}
-                                    {% elseif adOwnerId == objLoggedInUser.getId() %}
-                                        {% set messageSpammerObj = messageSpammerRepository.findOneBy({'ad_id': fullConversation[0]['message_ad_id'], 'reporter':app.user.getId(), 'spammer': fullConversation[0]['sender_user_id']}) %}
+<div class="dash-block">
+    <div class="posting-bg">
+        <div class="row d-board-main">
+            <div class="container">
+                {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
+                <div id="db-right-part" class="col-md-19 d-right-col">
+                    <h1 class="s-h1 db-title mt30 mb20">{{'Your conversation with %userName%'|trans({'%userName%': userName}, 'frontend-inbox')}}</h1>
+                    <div id="mark_as_sold_msg_div" style="display:none"></div>
+                    <div id="message_box">
+                        <div class="reply-msg-heading clearfix">
+                        <div class="right">
+                            <div class="clearfix">
+                                <div class="reply-delete-msg">
+                                    <a id="deleteButton" href="javascript:void(0);" class="delete-msg" onclick="removeMessageConfirmation('{{replyMessageId}}', '{{objLoggedInUser.getId()}}', '{{messsageAdId}}');">Delete</a>
+                                </div>
+                                <div class="right hide-for-small-only">
+                                    {% if reviewDetails|length %}
+                                        <span id="msg_leave_review_link">
+                                            {{ include('FaUserBundle:Review:leaveReviewLink.html.twig', {'reviewDetails' : reviewDetails, 'to_whom' : 'buyer', 'class' : 'button xs-btn-1 mt5 mb0 mymsg-review-btn', 'from_where': 'message'}) }}
+                                        </span>
                                     {% endif %}
-                                    {% if not messageSpammerObj %}
-                                        <span class="report" id="report_user_btn" onclick="reportUser();">{{ 'Report'|trans({}, 'frontend-inbox') }}</span>
+                                    {% if isAdActive == true %}
+                                        {% if adOwnerId != objLoggedInUser.getId() %}
+                                            {% set messageSpammerObj = messageSpammerRepository.findOneBy({'ad_id': fullConversation[0]['message_ad_id'], 'reporter':app.user.getId(), 'spammer': adOwnerId}) %}
+                                        {% elseif adOwnerId == objLoggedInUser.getId() %}
+                                            {% set messageSpammerObj = messageSpammerRepository.findOneBy({'ad_id': fullConversation[0]['message_ad_id'], 'reporter':app.user.getId(), 'spammer': fullConversation[0]['sender_user_id']}) %}
+                                        {% endif %}
+                                        {% if not messageSpammerObj %}
+                                            <span class="report" id="report_user_btn" onclick="reportUser();">{{ 'Report'|trans({}, 'frontend-inbox') }}</span>
+                                        {% endif %}
                                     {% endif %}
-                                {% endif %}
-                                {% if not isNewMessageFlag and adOwnerId == objLoggedInUser.getId() and isAdActive == true %}
-                                    <span class="mark-sold" onclick="$('#markAsSoldModal').foundation('reveal', 'open');">{{ 'Mark as sold'|trans({}, 'frontend-inbox') }}</span>
-                                {% endif %}
+                                    {% if not isNewMessageFlag and adOwnerId == objLoggedInUser.getId() and isAdActive == true %}
+                                        <span class="mark-sold" onclick="$('#markAsSoldModal').foundation('reveal', 'open');">{{ 'Mark as sold'|trans({}, 'frontend-inbox') }}</span>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div>
-                        <a onclick="history.back();" class="back-link left">{{'Go Back'|trans({}, 'frontend-inbox')}}</a>
-                        <h3>{{ 'Discussion about:'|trans({}, 'frontend-inbox')}} {% if (adUrl is defined and adUrl != '') %}<a  class="green-text" href="{{adUrl}}">{% endif %}{{'%adTitle%'|trans({'%adTitle%': adTitle}, 'frontend-inbox')|raw}}{% if (adUrl is defined and adUrl != '') %}</a>{% endif %}</h3>
-                    </div>
-                </div>
-
-                <div id="messages_div" class="reply-msg-content">
-                    {{ include('FaMessageBundle:AdMessage:showReplyMessage.html.twig') }}
-                </div>
-
-                {% set backRedirectUrl = app.request.headers.get('referer') %}
-
-                {% if  get_substr_count(backRedirectUrl, 'user_ad_message') == 0 and get_substr_count(backRedirectUrl, 'user_interested_ad_message') == 0 %}
-                    {% set backRedirectUrl = path('user_ad_message') %}
-                {% endif %}
-
-
-                <div class="write-reply">
-                {% if isAllowCommunication == true %}
-                    <div id="reply_msg_div" style="display:none"></div>
-                    {{ form_start(form, {'attr': {'novalidate': '', 'id': 'fa_message_ad_message_id'}}) }}
-                        {{ form_widget(form.text_message) }}
-                        {{ include('FaMessageBundle:AdMessageAttachments:messageUploadAttachments.html.twig') }}
-                        <div class="msg-btns">
-                            <button id="fa_message_message_ad_attachments" class="primary-btn-3 thin-btn button mb0 attach-files-btn">
-                                <span></span>{{'Attach files'|trans({}, 'frontend-inbox')}}
-                            </button>
-                            {{ form_widget(form.save, {'attr': {'class':'primary-btn-2 thin-btn button mb0', 'onclick': 'sendReply()'}}) }}
+                        <div>
+                            <a onclick="history.back();" class="back-link left">{{'Go Back'|trans({}, 'frontend-inbox')}}</a>
+                            <h3>{{ 'Discussion about:'|trans({}, 'frontend-inbox')}} {% if (adUrl is defined and adUrl != '') %}<a  class="green-text" href="{{adUrl}}">{% endif %}{{'%adTitle%'|trans({'%adTitle%': adTitle}, 'frontend-inbox')|raw}}{% if (adUrl is defined and adUrl != '') %}</a>{% endif %}</h3>
                         </div>
-                    {{ form_end(form) }}
-                {% else %}
-                    <div class="green-text">{{'Sorry ad is no more active, so communication is disabled for this ad!'|trans({}, 'frontend-inbox')}}</div>
-                {% endif %}
+                    </div>
+                        <div id="messages_div" class="reply-msg-content">
+                        {{ include('FaMessageBundle:AdMessage:showReplyMessage.html.twig') }}
+                    </div>
+                        {% set backRedirectUrl = app.request.headers.get('referer') %}
+                        {% if  get_substr_count(backRedirectUrl, 'user_ad_message') == 0 and get_substr_count(backRedirectUrl, 'user_interested_ad_message') == 0 %}
+                            {% set backRedirectUrl = path('user_ad_message') %}
+                        {% endif %}
+                        <div class="write-reply">
+                    {% if isAllowCommunication == true %}
+                        <div id="reply_msg_div" style="display:none"></div>
+                        {{ form_start(form, {'attr': {'novalidate': '', 'id': 'fa_message_ad_message_id'}}) }}
+                            {{ form_widget(form.text_message) }}
+                            {{ include('FaMessageBundle:AdMessageAttachments:messageUploadAttachments.html.twig') }}
+                            <div class="msg-btns">
+                                <button id="fa_message_message_ad_attachments" class="primary-btn-3 thin-btn button mb0 attach-files-btn">
+                                    <span></span>{{'Attach files'|trans({}, 'frontend-inbox')}}
+                                </button>
+                                {{ form_widget(form.save, {'attr': {'class':'primary-btn-2 thin-btn button mb0', 'onclick': 'sendReply()'}}) }}
+                            </div>
+                        {{ form_end(form) }}
+                    {% else %}
+                        <div class="green-text">{{'Sorry ad is no more active, so communication is disabled for this ad!'|trans({}, 'frontend-inbox')}}</div>
+                    {% endif %}
+                    </div>
+                        {% set messageRepository = fetch_repository('FaMessageBundle:Message') %}
+                        {{ set_variables('AdMessage', {'replyId':messageRepository.getLastConversationId(app.request.get('replyId')), 'type': app.request.get('type'), 'adId': messsageAdId}) }}
+                    </div>
                 </div>
-            {% set messageRepository = fetch_repository('FaMessageBundle:Message') %}
-            {{ set_variables('AdMessage', {'replyId':messageRepository.getLastConversationId(app.request.get('replyId')), 'type': app.request.get('type'), 'adId': messsageAdId}) }}
-        </div>
-    </div>
-</div>
-
-<div id="leave_review_modal" class="reveal-modal" data-reveal></div>
-
-<div id="markAsSoldModal" class="reveal-modal tiny" data-reveal>
-    <a class="close-reveal-modal">&#215;</a>
-    <h5 class="modal-title">
-        {{'Ad sold!'|trans({}, 'frontend-inbox')}}
-    </h5>
-    <div class="modal-content remove-modal">
-        <div class="row">
-            <div class="columns">
-                <h5>{{'You have marked this ad as sold.'|trans({}, 'frontend-inbox')}}</h5>
-                <div class="gray-text mt10">This will remove this ad from the listings.</div>
             </div>
         </div>
-        <div class="mt20">
+        <div id="leave_review_modal" class="reveal-modal" data-reveal></div>
+        <div id="markAsSoldModal" class="reveal-modal tiny" data-reveal>
+        <a class="close-reveal-modal">&#215;</a>
+        <h5 class="modal-title">
+            {{'Ad sold!'|trans({}, 'frontend-inbox')}}
+        </h5>
+        <div class="modal-content remove-modal">
             <div class="row">
-                <div class="large-12 columns">
-                    <button type="button" class="button secondary-btn-4 thin-btn expand mb0" onclick="closeRevealModel('#markAsSoldModal');markAsSold('{{adId}}');">{{'Continue'|trans({}, 'frontend-inbox')}}</button>
+                <div class="columns">
+                    <h5>{{'You have marked this ad as sold.'|trans({}, 'frontend-inbox')}}</h5>
+                    <div class="gray-text mt10">This will remove this ad from the listings.</div>
                 </div>
-                <div class="large-12 columns">
-                    <button type="button" class="button secondary-btn-1 thin-btn expand mb0" onclick="javascript:closeRevealModel('#markAsSoldModal');">{{'Cancel'|trans({}, 'frontend-inbox')}}</button>&nbsp;
+            </div>
+            <div class="mt20">
+                <div class="row">
+                    <div class="large-12 columns">
+                        <button type="button" class="button secondary-btn-4 thin-btn expand mb0" onclick="closeRevealModel('#markAsSoldModal');markAsSold('{{adId}}');">{{'Continue'|trans({}, 'frontend-inbox')}}</button>
+                    </div>
+                    <div class="large-12 columns">
+                        <button type="button" class="button secondary-btn-1 thin-btn expand mb0" onclick="javascript:closeRevealModel('#markAsSoldModal');">{{'Cancel'|trans({}, 'frontend-inbox')}}</button>&nbsp;
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+        <div id="reportUserModal" class="reveal-modal small" data-reveal></div>
+    </div>
 </div>
-<div id="reportUserModal" class="reveal-modal small" data-reveal></div>
 {{ include('FaMessageBundle:AdMessage:removeMessageModel.html.twig') }}
 {% endblock %}
 

@@ -4,6 +4,11 @@
     {{'My favourites'|trans({}, 'frontend-my-favourites')}}
 {% endblock %}
 
+{% block scripttop %}
+    <link rel="stylesheet" href="{{ asset('build/css/dashboard.css') }}"/>
+{% endblock %}
+
+
 {% set container = fetch_container_instance() %}
 
 {% block body -%}

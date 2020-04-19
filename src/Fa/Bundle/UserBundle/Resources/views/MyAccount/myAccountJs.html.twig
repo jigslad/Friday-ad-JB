@@ -70,7 +70,7 @@
     }
 
     function showHidePrivatePhoneNumberField() {
-        {% if userDetailForm.is_private_phone_number.vars.data == 0 %}
+        {% if (userDetailForm.is_private_phone_number.vars.data is defined) and (userDetailForm.is_private_phone_number.vars.data == 0) %}
                 $('#fa_user_user_account_detail_is_private_phone_number').parent().addClass('checkbox-disabled');
                 $('#fa_user_user_account_detail_is_private_phone_number').attr('checked', false);
                 $('#fa_user_user_account_detail_is_private_phone_number').attr('disabled', 'disabled');
@@ -80,7 +80,7 @@
     }
 
     $("#fa_user_user_account_detail_is_private_phone_number").click(function(event){
-        {% if userDetailForm.is_private_phone_number.vars.data == 0 %}
+        {% if (userDetailForm.is_private_phone_number.vars.data is defined) and (userDetailForm.is_private_phone_number.vars.data == 0) %}
             event.stopPropagation();
             showHidePrivatePhoneNumberField();
         {% endif %}
