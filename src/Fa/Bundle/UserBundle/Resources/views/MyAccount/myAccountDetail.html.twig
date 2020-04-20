@@ -1,69 +1,97 @@
-<dd class="accordion-navigation {% if not userDetailForm.vars.valid or app.session.flashbag.has('account_detail_success') %}active{% endif %}">
-    <a href="#panel1b" class="section-head">
-        <span class="your-details-icon">{{ 'Your details'|trans({}, 'frontend-user-account-detail') }}</span>
-        <span>&nbsp;</span>
+<div class="db-listn {% if not userDetailForm.vars.valid or app.session.flashbag.has('account_detail_success') %}active{% endif %}">
+    <a href="#panel1b" class="panel-heading collapsed" data-toggle="collapse" data-target="#panel1b">
+        <div class="media section-head">
+            <div class="media-body">
+                <span class="your-details-icon list-icon-text">{{ 'Your details'|trans({}, 'frontend-user-account-detail') }}</span>
+            </div>
+            <div class="arrow-block">
+                <i class="fa fa-chevron-up"></i>
+                <i class="fa fa-chevron-down"></i>
+            </div>
+        </div>
     </a>
-    <div id="panel1b" class="content {% if not userDetailForm.vars.valid or app.session.flashbag.has('account_detail_success') %}active{% endif %}">
+    <div id="panel1b" class="collapse collapse-body-content {% if not userDetailForm.vars.valid or app.session.flashbag.has('account_detail_success') %}active{% endif %}">
         {{ form_start(userDetailForm, {'attr': {'novalidate': 'novalidate'}}) }}
             {{ include('FaUserBundle:MyAccount:myAccountMessage.html.twig', {'msgName': 'account_detail_success'}) }}
             <h5 class="db-myacc-title">{{ 'Update your contact details'|trans({}, 'frontend-user-account-detail') }}</h5>
             <span class="db-ins">{{ '(not publicly displayed)'|trans({}, 'frontend-user-account-detail') }}</span>
-            <div class="myacc-details white-checkbox">
-                {{ form_row(userDetailForm.email, {'attr': {'class': 'white-field'}}) }}
-                <label>Social connections</label>
-                <button class="signup-fb-btn button expand" type="button" {% if not app.user.getFacebookId() %}onclick="javascript:fbLoginPopup('{{ facebookLoginUrl }}');"{% endif %}><span class="signup-fb-icon">&nbsp;</span>{{ 'Connect with Facebook'|trans({}, 'frontend-user-account-detail') }}{% if app.user.getFacebookId() %}<span class="tickmark-icon right">&nbsp;</span>{% endif %}</button>
-                <button class="signup-google-btn button expand" type="button" {% if not app.user.getGoogleId() %}onclick="javascript:googleLoginPopup('{{ googleLoginUrl }}');"{% endif %}><span class="signup-google-icon">&nbsp;</span>{{ 'Connected with Google'|trans({}, 'frontend-user-account-detail') }}{% if app.user.getGoogleId() %}<span class="tickmark-icon right">&nbsp;</span>{% endif %}</button>
-                
-                {{ form_row(userDetailForm.phone, {'attr': {'class': 'white-field'}}) }}
-                
+            <div class="col-md-14 col-lg-9 pad-none mt20">
+                <div>
+                    {{ form_row(userDetailForm.email, {'attr': {'class': 'white-field'}}) }}
+                </div>
+                <div>
+                    <label for="fa_user_user_account_detail_email" class="required">Social connections</label>
+                    <button class="signup-fb-btn button expand" type="button" {% if not app.user.getFacebookId() %}onclick="javascript:fbLoginPopup('{{ facebookLoginUrl }}');"{% endif %}>
+                        <span class="signup-fb-icon">&nbsp;</span>{{ 'Connect with Facebook'|trans({}, 'frontend-user-account-detail') }}{% if app.user.getFacebookId() %}<span class="tickmark-icon right">&nbsp;</span>{% endif %}
+                    </button>
+                    <button class="signup-google-btn button expand" type="button" {% if not app.user.getGoogleId() %}onclick="javascript:googleLoginPopup('{{ googleLoginUrl }}');"{% endif %}>
+                        <span class="signup-google-icon">&nbsp;</span>{{ 'Connected with Google'|trans({}, 'frontend-user-account-detail') }}{% if app.user.getGoogleId() %}<span class="tickmark-icon right">&nbsp;</span>{% endif %}
+                    </button>
+                </div>
+                <div>
+                    {{ form_row(userDetailForm.phone, {'attr': {'class': 'white-field'}}) }}
+                </div>
                 {% if app.user.getOldIsPrivatePhoneNumber() %}
-                <div class="hlight-box clearfix pvt-phone-num white-checkbox">
-                <span style="color:#ff0000;font-weight:bold">Please note the option to use Privacy Numbers has been disabled from 1st September 2019. Read more <a href="https://help.friday-ad.co.uk/hc/en-us/articles/360034112434">here</a>.</span>
-                </div>
+                    <div class="hlight-box clearfix pvt-phone-num white-checkbox">
+                        <span style="color:#ff0000;font-weight:bold">Please note the option to use Privacy Numbers has been disabled from 1st September 2019. Read more <a href="https://help.friday-ad.co.uk/hc/en-us/articles/360034112434">here</a>.</span>
+                    </div>
                 {% endif %}
-                
-                {# <div class="hlight-box clearfix pvt-phone-num white-checkbox {% if userDetailForm.is_private_phone_number.vars.errors|length %}mb0{% endif %}" style="display:{% if userDetailForm.is_private_phone_number.vars.data %}block{% else %}none{% endif %}">
-                    {{ form_widget(userDetailForm.is_private_phone_number) }}
-                    {{ form_label(userDetailForm.is_private_phone_number) }}
-                    <a href="#" class="help-icon" data-reveal-id="privacyNumberModal">{{'Help'|trans({}, 'frontend-register')}}</a>
-                </div>
-                {{ form_errors(userDetailForm.is_private_phone_number) }}#}
-
-                
                 <div class="buyer-contact">
                      <label>{{'I would like buyers to contact me by:'|trans({}, 'frontend-paa-register')}}</label>
-                     <div class="label-inline">
-                         {{ form_row(userDetailForm.contact_through_phone) }}
-                         {{ form_row(userDetailForm.contact_through_email) }}
+                     <div class="label-inline d-inline-flex">
+                         <ul class="custom-control custom-checkbox search-type mr10">
+                             <li>
+                                 {{ form_row(userDetailForm.contact_through_phone) }}
+{#                                 <input type="checkbox" class="custom-control-input" id="customCheckBox1_a">#}
+{#                                 <label class="custom-control-label" for="customCheckBox1_a">Contact by phone</label>#}
+                             </li>
+                         </ul>
+                         <ul class="custom-control custom-checkbox search-type">
+                             <li>
+                                 {{ form_row(userDetailForm.contact_through_email) }}
+{#                                 <input type="checkbox" class="custom-control-input" id="customCheckBox1_b">#}
+{#                                 <label class="custom-control-label" for="customCheckBox1_b">Contact by email</label>#}
+                             </li>
+                         </ul>
                      </div>
                  </div>
             </div>
-            
             {% if app.user.getPassword() %}
-                <h5>{{ 'Change password'|trans({}, 'frontend-user-account-detail') }}</h5>
+                <div class="col-md-24 pad-none mt20">
+                    <h5 class="db-myacc-title">{{ 'Change password'|trans({}, 'frontend-user-account-detail') }}</h5>
+                </div>
             {% endif %}
+            <div class="col-md-14 col-lg-9 pad-none mt20">
             <div class="myacc-details white-checkbox">
                 {% if userDetailForm.old_password is defined %}
                     {{ form_row(userDetailForm.old_password, {'attr': {'class': 'white-field'}}) }}
                 {% endif %}
+
                 {% if userDetailForm.new_password is defined %}
                     {{ form_row(userDetailForm.new_password, {'attr': {'class': 'white-field'}}) }}
                     <div class="label-inline">
-                        {% if userDetailForm.show_password is defined %}
-                            {{ form_row(userDetailForm.show_password) }}
-                        {% endif %}
+                        <ul class="custom-control custom-checkbox search-type">
+                            <li>
+                                {% if userDetailForm.show_password is defined %}
+                                    {{ form_row(userDetailForm.show_password) }}
+                                {% endif %}
+{#                                <input type="checkbox" class="custom-control-input" id="customCheckBox1_c">#}
+{#                                <label class="custom-control-label" for="customCheckBox1_c">Show password</label>#}
+                            </li>
+                        </ul>
                     </div>
                 {% endif %}
                 {% if not app.user.getPassword() %}
                     <a href="{{ path('create_new_password') }}">{{'Create password'|trans({}, 'frontend-user-account-detail')}}</a>
                 {% endif %}
                 <div class="mt20">
-                    {{ form_widget(userDetailForm.save_changes, {'attr': {'class':'secondary-btn-1 button expand mb0'}}) }}
+                    {{ form_widget(userDetailForm.save_changes, {'attr': {'class':'secondary-btn-1 btn btn-block'}}) }}
                 </div>
             </div>
+        </div>
         {{ form_end(userDetailForm) }}
     </div>
-</dd>
+</div>
 <div id="privacyNumberModal" class="reveal-modal" data-reveal>
     {% set privacyNumberBlock = staticPageRepository.getStaticBlockDetailArray('privacy-number-block', fetch_container_instance()) %}
     

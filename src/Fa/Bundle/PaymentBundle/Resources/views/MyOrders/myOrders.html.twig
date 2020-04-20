@@ -25,11 +25,10 @@
                             {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
                             <div class="col-md-19 d-right-col" id="db-right-part">
                                 <h1 class="s-h1 db-title mt30 mb20">{{'Orders'|trans({}, 'frontend-my-orders')}}</h1>
-                                <h2 class="db-sub-title" id="sub_title_div">{{ 'From here you can keep track of orders placed by your customers, the details of those orders, customer addresses and update the status of those orders.'|trans({}, 'frontend-my-orders') }}</h2>
+                                <h2 class="s-h2 mb10" id="sub_title_div">{{ 'From here you can keep track of orders placed by your customers, the details of those orders, customer addresses and update the status of those orders.'|trans({}, 'frontend-my-orders') }}</h2>
 
                                 <div id="leave_review_modal" class="reveal-modal" data-reveal></div>
-                                <div class="order-purchase-main">
-                                    {% if pagination.getNbResults() %}
+                                {% if pagination.getNbResults() %}
                                     {% for paymentDetail in pagination.getCurrentPageResults() %}
                                         {% set paymentValue = array_unserialize(paymentDetail['value']) %}
                                         {% set orderId = paymentDetail['payment_id'] %}
@@ -41,106 +40,129 @@
                                             {% set userStatusText = entityCacheManager.getEntityNameById('FaEntityBundle:Entity', paymentDetail['user_status_id']) %}
                                         {% endif %}
                                         {% set objMessage = fetch_repository('FaMessageBundle:Message').getLastConversionOfTwoUsersForAd(paymentDetail['ad_id'], paymentDetail['seller_id'], paymentDetail['user_id']) %}
-                                        <div class="purchase-item">
-                                            <div class="row" id="order_{{ paymentDetail['payment_id'] }}">
-                                                <div class="large-12 columns">
+                                        <div class="own-item search-alert-block">
+                                            <div class="media" id="order_{{ paymentDetail['payment_id'] }}">
+                                                <div class="col-md-12 col-lg-12 l-block">
                                                     {% set userRepository = fetch_repository('FaUserBundle:User') %}
-                                                    {% set profileName = userRepository.getFullNameFromArray(paymentDetail) %}
-                                                    <b>{{ 'Buyer name'|trans({}, 'frontend-my-orders') }}</b>
+                                                        {% set profileName = userRepository.getFullNameFromArray(paymentDetail) %}
+                                                    <span class="mr-3"><b>{{ 'Buyer name'|trans({}, 'frontend-my-orders') }}</b></span>
                                                     {% if paymentDetail['user_status_id'] == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::USER_STATUS_ACTIVE_ID') %}
-                                                        <a target="_blank" href="{{profileUrl}}">{{ profileName }}</a>
+                                                        <span><a target="_blank" href="{{profileUrl}}">{{ profileName }}</a></span>
                                                     {% else %}
-                                                        {{ profileName }} <i>({{userStatusText}})</i>
+                                                        <span>{{ profileName }} <i>({{userStatusText}})</i></span>
                                                     {% endif %}
-                                                    <br />
-                                                    <b>{{ 'Order no.'|trans({}, 'frontend-my-orders') }}</b> {{paymentDetail['cart_code']}}<br />
-                                                    <b>{{ 'Order placed'|trans({}, 'frontend-my-orders') }}</b> {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [paymentDetail['created_at'], container]) }}<br />
-                                                    <b>{{ 'Item'|trans({}, 'frontend-my-orders') }}</b> <a target="_blank" href="{{ container.get('router').generate('ad_detail_page_by_id', {'id': paymentDetail['ad_id']}, true) }}">{{paymentDetail['title']}}</a>
+
+                                                    <span class="mr-3"><b>{{ 'Order no.'|trans({}, 'frontend-my-orders') }}</b></span><span>{{paymentDetail['cart_code']}}</span>
+                                                    <span class="mr-3"><b>{{ 'Order placed'|trans({}, 'frontend-my-orders') }}</b></span><span>{{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [paymentDetail['created_at'], container]) }}</span>
+                                                    <span class="mr-3"><b>{{ 'Item'|trans({}, 'frontend-my-orders') }}</b></span><span><a target="_blank" href="{{ container.get('router').generate('ad_detail_page_by_id', {'id': paymentDetail['ad_id']}, true) }}">{{paymentDetail['title']}}</a></span>
                                                 </div>
-                                                <div class="large-12 columns">
-                                                    <div class="clearfix">
-                                                        <div class="order-status">{{'Order status'|trans({}, 'frontend-my-orders')}}</div>
-                                                        <div class="order-select">
-                                                            {% set currentStatusId = paymentDetail['buy_now_status_id'] %}
-                                                            {% set currentStatusName = deliveryStatusArray[paymentDetail['buy_now_status_id']] %}
-                                                            <button id="order_status_button_{{orderId}}" class="button alert round dropdown {{orderStatusButtonColorClassesArray[paymentDetail['buy_now_status_id']]}}" aria-expanded="false" aria-controls="order_status_dd_{{orderId}}" data-dropdown="order_status_dd_{{orderId}}">{{ currentStatusName }}</button>
-                                                            <ul aria-hidden="true" class="f-dropdown" data-dropdown-content="" id="order_status_dd_{{orderId}}">
-                                                                {% for deliveryStatusId, deliveryStatusName in deliveryStatusArray %}
-                                                                    <li><a href="javascript:void(0)" onclick="updateOrderStatus('{{orderId}}', '{{ deliveryStatusId }}', '{{deliveryStatusName}}')">{{ deliveryStatusName }}</a></li>
-                                                                {% endfor %}
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                    <button class="xs-btn-1 button order-details-btn" id="order_detail_button_{{orderId}}" onclick="toggleOrderDetail('{{orderId}}')">{{ 'Show details'|trans({}, 'frontend-my-orders') }}</button>
-                                                </div>
-                                            </div>
-                                            <div class="row" id="order_detail_div_{{orderId}}" style="display: none;">
-                                                <div class="large-18 columns">
-                                                    <div class="order-disc">
-                                                        {% set paymentDetailValuesArray = array_unserialize(paymentDetail['value']) %}
-                                                        <div class="clearfix">
-                                                            <b class="left ">{{'Delivery method'|trans({}, 'frontend-my-orders')}}</b>
-                                                            <div class="delivery-method {% if paymentDetail['delivery_method_id'] == constant('Fa\\Bundle\\PaymentBundle\\Repository\\DeliveryMethodOptionRepository::COLLECTION_ONLY_ID') or paymentDetailValuesArray['delivery_address_id'] == -1 %} mb0{% endif %}">
-                                                                {% if paymentDetail['delivery_method_id'] !=  constant('Fa\\Bundle\\PaymentBundle\\Repository\\DeliveryMethodOptionRepository::COLLECTION_ONLY_ID') and paymentDetailValuesArray['delivery_address_id'] != -1 %}
-                                                                    {{'Post to'|trans({}, 'frontend-my-purchases')}}:
-                                                                {% endif %}
-                                                                <div class="{% if paymentDetail['delivery_method_id'] !=  constant('Fa\\Bundle\\PaymentBundle\\Repository\\DeliveryMethodOptionRepository::COLLECTION_ONLY_ID') and paymentDetailValuesArray['delivery_address_id'] != -1 %}mt10{% endif %}">
-                                                                    {% if paymentDetail['delivery_method_id'] !=  constant('Fa\\Bundle\\PaymentBundle\\Repository\\DeliveryMethodOptionRepository::COLLECTION_ONLY_ID') and paymentDetailValuesArray['delivery_address_id'] != -1 %}
-                                                                        {{ profileName }}<br />
-                                                                        {% set paymentDeliveryAddressArray = paymentDetailValuesArray['delivery_address_info'] %}
-                                                                        {% if paymentDeliveryAddressArray['street_address'] is defined %}
-                                                                            {% if paymentDeliveryAddressArray['street_address'] is defined %}
-                                                                                {{paymentDeliveryAddressArray['street_address']}}&nbsp;
-                                                                            {% endif %}
-                                                                            {% if paymentDeliveryAddressArray['street_address_2'] is defined %}
-                                                                                {{paymentDeliveryAddressArray['street_address_2']}}, <br />
-                                                                            {% endif %}
-                                                                            {% if paymentDeliveryAddressArray['town_name'] is defined %}
-                                                                                {{paymentDeliveryAddressArray['town_name']}}, <br />
-                                                                            {% endif %}
-                                                                            {% if paymentDeliveryAddressArray['domicile_name'] is defined %}
-                                                                                {{paymentDeliveryAddressArray['domicile_name']}}, <br />
-                                                                            {% endif %}
-                                                                            {% if paymentDeliveryAddressArray['zip'] is defined %}
-                                                                                {{paymentDeliveryAddressArray['zip']}}
-                                                                            {% endif %}
-                                                                        {% endif %}
-                                                                    {% else %}
-                                                                        {{'Buyer will collect the item.'|trans({}, 'frontend-my-orders')}}
-                                                                    {% endif %}
+                                                <div class="col-md-12 float-right pad-none">
+                                                    <div class="clearfix d-inline-flex f-width mb10">
+                                                        <div class="order-status h-width">{{'Order status'|trans({}, 'frontend-my-orders')}}</div>
+                                                        <div class="order-select f-width">
+                                                            <div class="dropdown custom-drop">
+                                                                {% set currentStatusId = paymentDetail['buy_now_status_id'] %}
+                                                                {% set currentStatusName = deliveryStatusArray[paymentDetail['buy_now_status_id']] %}
+                                                                <button id="order_status_button_{{orderId}}" class="btn dropdown-toggle new-order-btn f-width dispatched {{orderStatusButtonColorClassesArray[paymentDetail['buy_now_status_id']]}}" aria-expanded="false" aria-controls="order_status_dd_{{orderId}}" data-dropdown="order_status_dd_{{orderId}}">{{ currentStatusName }}</button>
+                                                                <div class="dropdown-menu custom-drop-menu" aria-hidden="true" data-dropdown-content="" id="order_status_dd_{{orderId}}">
+                                                                    {% for deliveryStatusId, deliveryStatusName in deliveryStatusArray %}
+                                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="updateOrderStatus('{{orderId}}', '{{ deliveryStatusId }}', '{{deliveryStatusName}}')">{{ deliveryStatusName }}</a>
+                                                                    {% endfor %}
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <b>{{'Total price'|trans({}, 'frontend-my-orders')}}</b> {{ format_currency(paymentDetail['amount']) }}<br />
-                                                        <b>{{'Payment method'|trans({}, 'frontend-my-orders')}}</b> {{ paymentRepository.getPaymentMethodNameById(constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_ID'), container) }}<br />
+                                                    </div>
+                                                    <div class="col-md-12 float-right pad-none mt20">
+                                                        <button class="secondary-btn-1 xs-thin-btn btn btn-block small-btn float-right showmoreDetails" id="order_detail_button_{{orderId}}" onclick="toggleOrderDetail('{{orderId}}')">{{ 'Show details'|trans({}, 'frontend-my-orders') }}</button>
                                                     </div>
                                                 </div>
-                                                <div class="large-6 columns">
-                                                    <button class="xs-btn-2 button expand order-receipt-btn" onclick="viewReceipt('{{orderId}}');"><span class="view-icon">View receipt</span></button>
-                                                    <button class="xs-btn-2 button expand mb10" onclick="printReceipt('{{orderId}}');"><span class="print-receipt-icon">Print receipt</span></button>
-                                                    <div class="purchase-link-list">
-                                                        {% if paymentDetail['user_status_id'] == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::USER_STATUS_ACTIVE_ID') %}
-                                                            {{ include('FaUserBundle:Review:leaveReviewLink.html.twig', {'reviewDetails' : paymentDetail, 'to_whom' : 'buyer'}) }}<br />
-                                                            {% if objMessage.getId() is defined and  objMessage.getId() == 1 %}
-                                                                <a href="javascript:void(0);" onclick="return contactUser('{{orderId}}', '{{ paymentDetail['ad_id'] }}', '{{ paymentDetail['seller_id'] }}', '{{ paymentDetail['user_id'] }}');">Send buyer a message</a>
-                                                            {% elseif objMessage.getId() is defined  %}
-                                                                {% if objMessage.getReceiver().getId() is defined and objMessage.getReceiver().getId() == app.user.getId() %}
-                                                                    {% set messageType = 'receiver' %}
-                                                                {% else %}
-                                                                    {% set messageType = 'sender' %}
-                                                                {% endif %}
-                                                                <a href="{{path('user_ad_message_reply', {'type': messageType, 'replyId': objMessage.getId()})}}">Send buyer a message</a>
+
+                                            </div>
+                                            <div class="collapse" id="order_detail_div_{{orderId}}" style="display: none;">
+                                                <div class="media mt20">
+                                                    <div class="col-md-18 col-lg-18 l-block mb20">
+                                                        {% set paymentDetailValuesArray = array_unserialize(paymentDetail['value']) %}
+                                                        <div>
+                                                            <span class="mr-3">
+                                                                <label class="mb0">{{'Delivery method'|trans({}, 'frontend-my-orders')}}</label>
+                                                            </span>
+                                                            {% if paymentDetail['delivery_method_id'] !=  constant('Fa\\Bundle\\PaymentBundle\\Repository\\DeliveryMethodOptionRepository::COLLECTION_ONLY_ID') and paymentDetailValuesArray['delivery_address_id'] != -1 %}
+                                                                <span>
+                                                                    {{ profileName }}>
+                                                                    {% set paymentDeliveryAddressArray = paymentDetailValuesArray['delivery_address_info'] %}
+                                                                    {% if paymentDeliveryAddressArray['street_address'] is defined %}
+                                                                        {% if paymentDeliveryAddressArray['street_address'] is defined %}
+                                                                            {{paymentDeliveryAddressArray['street_address']}},
+                                                                        {% endif %}
+                                                                        {% if paymentDeliveryAddressArray['street_address_2'] is defined %}
+                                                                            {{paymentDeliveryAddressArray['street_address_2']}},
+                                                                        {% endif %}
+                                                                                    {% if paymentDeliveryAddressArray['town_name'] is defined %}
+                                                                            {{paymentDeliveryAddressArray['town_name']}},
+                                                                        {% endif %}
+                                                                                    {% if paymentDeliveryAddressArray['domicile_name'] is defined %}
+                                                                            {{paymentDeliveryAddressArray['domicile_name']}},
+                                                                        {% endif %}
+                                                                        {% if paymentDeliveryAddressArray['zip'] is defined %}
+                                                                            {{paymentDeliveryAddressArray['zip']}}
+                                                                        {% endif %}
+                                                                    {% endif %}
+                                                                </span>
+                                                            {% else %}
+                                                                <span>{{'Buyer will collect the item.'|trans({}, 'frontend-my-orders')}}</span>
                                                             {% endif %}
+                                                        </div>
+                                                        {% if paymentDetail['delivery_method_id'] !=  constant('Fa\\Bundle\\PaymentBundle\\Repository\\DeliveryMethodOptionRepository::COLLECTION_ONLY_ID') and paymentDetailValuesArray['delivery_address_id'] != -1 %}
+                                                            <div>
+                                                                <span class="mr-3">
+                                                                    <label class="mb0">{{'Post to'|trans({}, 'frontend-my-purchases')}}</label>
+                                                                </span>
+                                                                <span></span>
+                                                            </div>
                                                         {% endif %}
+                                                        <div>
+                                                            <span class="mr-3">
+                                                                <label class="mb0">{{'Total price'|trans({}, 'frontend-my-orders')}}</label>
+                                                            </span>
+                                                            <span>{{ format_currency(paymentDetail['amount']) }}</span>
+                                                        </div>
+                                                        <div>
+                                                            <span class="mr-3">
+                                                                <label class="mb0">{{'Payment method'|trans({}, 'frontend-my-orders')}}</label>
+                                                            </span>
+                                                            <span>{{ paymentRepository.getPaymentMethodNameById(constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_ID'), container) }}</span>>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 col-lg-6 r-block">
+                                                        <button class="xs-btn-2 btn btn-block order-receipt-btn small-btn" onclick="viewReceipt('{{orderId}}');">
+                                                            <span class="view-icon">View receipt</span>
+                                                        </button>
+                                                        <button class="xs-btn-2 btn btn-block small-btn" onclick="printReceipt('{{orderId}}');">
+                                                            <span class="print-receipt-icon">Print receipt</span>
+                                                        </button>
+                                                        <div class="purchase-link-list">
+                                                            {% if paymentDetail['user_status_id'] == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::USER_STATUS_ACTIVE_ID') %}
+                                                                {{ include('FaUserBundle:Review:leaveReviewLink.html.twig', {'reviewDetails' : paymentDetail, 'to_whom' : 'buyer'}) }}<br />
+                                                                {% if objMessage.getId() is defined and  objMessage.getId() == 1 %}
+                                                                    <a href="javascript:void(0);" onclick="return contactUser('{{orderId}}', '{{ paymentDetail['ad_id'] }}', '{{ paymentDetail['seller_id'] }}', '{{ paymentDetail['user_id'] }}');">Send buyer a message</a>
+                                                                {% elseif objMessage.getId() is defined  %}
+                                                                    {% if objMessage.getReceiver().getId() is defined and objMessage.getReceiver().getId() == app.user.getId() %}
+                                                                        {% set messageType = 'receiver' %}
+                                                                    {% else %}
+                                                                        {% set messageType = 'sender' %}
+                                                                    {% endif %}
+                                                                    <a href="{{path('user_ad_message_reply', {'type': messageType, 'replyId': objMessage.getId()})}}">Send buyer a message</a>
+                                                                {% endif %}
+                                                            {% endif %}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     {% endfor %}
-                                </div>
-                                <div class="pagination-centered">
-                                    {{ include('FaFrontendBundle:Default:googlePager.html.twig', {'pagination': pagination, 'addToEndPage': 0, 'seoPager': false}) }}
-                                </div>
+                                    <div class="pagination-centered">
+                                        {{ include('FaFrontendBundle:Default:googlePager.html.twig', {'pagination': pagination, 'addToEndPage': 0, 'seoPager': false}) }}
+                                    </div>
                                 {% else %}
                                     <div class="row">
                                         <div class="columns">

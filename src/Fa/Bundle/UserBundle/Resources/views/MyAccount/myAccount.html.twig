@@ -27,35 +27,30 @@
                         <div class="inner-wrap">
                             {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
                             <div id="db-right-part" class="col-md-19 d-right-col">
-                                {% if not userDetailForm.vars.valid or not userAccountProfileForm.vars.valid or not userNewsletterPrefForm.vars.valid or not userCardForm.vars.valid %}
-                                    <div data-alert class="alert-box alert radius mt10">
-                                        <span class="alert-icon">&nbsp;</span>
-                                        {{ 'Please correct errors and resubmit form.'|trans({}, 'frontend-my-account') }}
-                                        <a href="javascript:void(0)" class="close">&times;</a>
+                                <div id="manage-my-ads-list-only">
+                                    {% if not userDetailForm.vars.valid or not userAccountProfileForm.vars.valid or not userNewsletterPrefForm.vars.valid or not userCardForm.vars.valid %}
+                                        <div data-alert class="alert-box alert radius mt10">
+                                            <span class="alert-icon">&nbsp;</span>
+                                            {{ 'Please correct errors and resubmit form.'|trans({}, 'frontend-my-account') }}
+                                            <a href="javascript:void(0)" class="close">&times;</a>
+                                        </div>
+                                    {% endif %}
+                                    <div class="mb40">
+                                        <h1 class="s-h1 db-title mt30 mb20">{{'Your account'|trans({}, 'frontend-my-account')}}</h1>
+                                        <h2 class="s-h2 d-none d-md-block">{{'From here you can update your account settings, update payment details and maintain your address book.'|trans({}, 'frontend-my-account')}}</h2>
                                     </div>
-                                {% endif %}
-                                <div class="db-content">
-                                    <h1 class="s-h1 db-title mt30 mb20">{{'Your account'|trans({}, 'frontend-my-account')}}</h1>
-                                    <h2 class="db-sub-title hide-for-small-only">{{'From here you can update your account settings, update payment details and maintain your address book.'|trans({}, 'frontend-my-account')}}</h2>
                                     <div class="db-section">
-                                        <dl class="accordion" data-accordion>
-                                            {{ include('FaUserBundle:MyAccount:myAccountDetail.html.twig') }}
-
-                                            {{ include('FaUserBundle:MyAccount:mySavedPaymentSources.html.twig') }}
-
-                                            {{ include('FaUserBundle:MyAccount:myPaypalAccount.html.twig') }}
-
-                                            {{ include('FaUserBundle:MyAccount:myAccountProfile.html.twig') }}
-
-                                            {{ include('FaUserBundle:MyAccount:myNewsletterPref.html.twig') }}
-
-                                            {{ include('FaUserBundle:MyAccount:myAddresses.html.twig') }}
-
-                                            {{ include('FaUserBundle:MyAccount:myInvoices.html.twig') }}
-
-                                            {{ include('FaUserBundle:MyAccount:deactivateAccount.html.twig') }}
-
-                                        </dl>
+                                        {{ include('FaUserBundle:MyAccount:myAccountDetail.html.twig') }}
+                                        {{ include('FaUserBundle:MyAccount:mySavedPaymentSources.html.twig') }}
+                                        {{ include('FaUserBundle:MyAccount:myPaypalAccount.html.twig') }}
+                                        {{ include('FaUserBundle:MyAccount:myAccountProfile.html.twig') }}
+                                        {{ include('FaUserBundle:MyAccount:myNewsletterPref.html.twig') }}
+                                        {{ include('FaUserBundle:MyAccount:myAddresses.html.twig') }}
+                                        {{ include('FaUserBundle:MyAccount:myInvoices.html.twig') }}
+                                        {{ include('FaUserBundle:MyAccount:deactivateAccount.html.twig') }}
+                                        <div class="d-block d-md-none">
+                                            <a href="{{ path('logout') }}" class="secondary-btn-3 btn btn-block mt10 mb0">{{'Sign Out'|trans({}, 'frontend-deactivate-account')}}</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -1,3 +1,64 @@
+<div class="db-list">
+    <a href="#panel6b" class="panel-heading collapsed" data-toggle="collapse" data-target="#panel6b">
+        <div class="media section-head">
+            <div class="media-body">
+                <span class="address-book-icon list-icon-text">My addresses</span>
+            </div>
+            <div class="arrow-block">
+                <i class="fa fa-chevron-up"></i>
+                <i class="fa fa-chevron-down"></i>
+            </div>
+        </div>
+    </a>
+    <div class="collapse collapse-body-content" id="panel6b">
+        <div>Manage your saved addresses</div>
+        <div class="col-md-14 col-lg-9 pad-none mt20">
+            <button class="secondary-btn-1 btn btn-block mb0" type="button" data-toggle="modal" data-target="#addressBookModal">Add an address</button>
+        </div>
+        <div class="modal custom-modal" id="addressBookModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h5 class="modal-title save-search-title no-icon-title">Add an address </h5>
+                        <button class="close-modal" class="close" data-dismiss="modal">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="user_address_id">
+                            <form name="fa_user_half_account" method="post" novalidate="novalidate" class="outline">
+                                <div>
+                                    <div class="m-form-space">
+                                        <label for="" class="required">Full name</label>
+                                        <input type="text" class="form-control" id="" name="" required="required" maxlength="100">
+                                        <label for="" class="required">House name/number</label>
+                                        <input type="email" class="form-control" id="" name="" required="required" maxlength="255">
+
+                                        <label for="" class="required">Postcode</label>
+                                        <div class="postcode clearfix">
+                                            <input type="text" class="form-control" id="fa_payment_cyber_source_checkout_zip" name="fa_payment_cyber_source_checkout[zip]" required="required" maxlength="15">
+                                            <button type="button" class="btn secondary-btn-1 right" onclick="return getUserAddress();">Find address</button>
+                                        </div>
+
+                                        <label for="" class="required">Street name</label>
+                                        <input type="email" class="form-control" id="" name="" required="required" maxlength="255">
+
+                                        <label for="" class="required">Town/city</label>
+                                        <input type="email" class="form-control" id="" name="" required="required" maxlength="255">
+
+                                        <label for="" class="required">State/county</label>
+                                        <input type="email" class="form-control" id="" name="" required="required" maxlength="255">
+                                    </div>
+                                    <button type="submit" id="" name="" class="secondary-btn-1 btn btn-block">Add this Address</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <dd class="accordion-navigation">
     <a href="#panel6b" class="section-head">
         <span class="address-book-icon">{{ 'Address book'|trans({}, 'frontend-user-address-book') }}</span>

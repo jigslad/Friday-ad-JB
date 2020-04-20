@@ -4,10 +4,6 @@
         {{ include('FaUserBundle:UserSearchAgent:searchAgentDetail.html.twig') }}
     {% endfor %}
 {% else %}
-    <div class="row">
-        <div class="columns">
-            {{ 'No records found.'|trans({}, 'frontend-manage-my-ad') }}
-        </div>
-    </div>
+    <div class="p15">{{ 'No records found.'|trans({}, 'frontend-manage-my-ad') }}</div>
 {% endif %}
 
