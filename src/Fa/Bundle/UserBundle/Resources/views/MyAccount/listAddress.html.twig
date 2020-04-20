@@ -37,8 +37,4 @@
         </div>
     {% endfor %}
 {% endif %}
-<div class="large-8 columns end">
-    <div class="address-btn {% if not userAddresses|length %}single-address{% endif %}">
-        <a href="javascript:void(0);" onclick="javascript:addNewAddressBook();" class="xs-btn-1 button expand">{{ 'Add an address'|trans({}, 'frontend-user-address-book') }}</a>
-    </div>
-</div>
+<button class="secondary-btn-1 btn btn-block mb0" onclick="javascript:addNewAddressBook();" type="button" data-toggle="modal" data-target="#addressBookModal">{{ 'Add an address'|trans({}, 'frontend-user-address-book') }}</button>

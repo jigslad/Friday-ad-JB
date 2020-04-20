@@ -1,8 +1,8 @@
 <div class="db-list">
-    <a href="#panel8b" class="panel-heading collapsed" data-toggle="collapse" data-target="#panel8b">
+    <a class="panel-heading collapsed" data-toggle="collapse" data-target="#panel8b">
         <div class="media section-head">
             <div class="media-body">
-                <span class="deactivate-icon list-icon-text">Deactivate account</span>
+                <span class="deactivate-icon list-icon-text">{{ 'Deactivate account'|trans({}, 'frontend-deactivate-account') }}</span>
             </div>
             <div class="arrow-block">
                 <i class="fa fa-chevron-up"></i>
@@ -10,40 +10,7 @@
             </div>
         </div>
     </a>
-    <div class="collapse collapse-body-content" id="panel8b">
-        <div class="col-md-24 col-lg-24 pad-none">
-            <div>
-                We would be sorry to see you go. If you're having a problem with your account please <a target="__blank" href="/contact-us/">Contact us</a> first and see if we can help.
-            </div>
-            <div class="pt10"><a href="javascript:void(0);" data-toggle="modal" data-target="#deactivateAccountModal">Deactivate account</a></div>
-        </div>
-
-        <div class="modal custom-modal" id="deactivateAccountModal">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <!-- Modal Header -->
-                    <div class="modal-header">
-                        <h5 class="modal-title save-search-title no-icon-title">Deactivate account?</h5>
-                        <button class="close-modal" class="close" data-dismiss="modal">×</button>
-                    </div>
-                    <div class="modal-body">
-                        <h5>This will deactivate your account and you will no longer be able to log in. Any adverts you have will be removed from the site.</h5>
-                        <div class="mt20 deactModal-btn">
-                            <button type="submit" id="" name="" class="secondary-btn-4 btn btn-block">Cancel</button>
-                            <button type="submit" id="" name="" class="secondary-btn-1 btn btn-block ok-btn">Ok</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<dd class="accordion-navigation">
-    <a href="#panel7b" class="section-head">
-        <span class="deactivate-icon">{{ 'Deactivate account'|trans({}, 'frontend-deactivate-account') }}</span>
-        <span>&nbsp;</span>
-    </a>
-    <div id="panel7b" class="content">
+    <div id="panel8b" class="collapse collapse-body-content">
         {% set contactUsLink = '' %}
         {% set staticPages = staticPageRepository.getStaticPageLinkArray(container) %}
         {% if staticPages[constant('Fa\\Bundle\\ContentBundle\\Repository\\StaticPageRepository::STATIC_PAGE_CONTACT_US_ID')] is defined %}
@@ -54,30 +21,30 @@
             {% endif %}
             {% set contactUsLink = '<a target="__blank" href="'~path('location_home_page', {'location': contactUsPageSlug})~'">'~contactUsPageTitle~'</a>' %}
         {% endif %}
-        {{ "We would be sorry to see you go. If you're having a problem with your account please %contact_us% first and see if we can help."|trans({'%contact_us%': contactUsLink}, 'frontend-deactivate-account')|raw }}
-        <div class="mt10"><a href="javascript:void(0);" data-reveal-id="deactivateAccountModal">{{ 'Deactivate account'|trans({}, 'frontend-deactivate-account') }}</a></div>
-        <div id="deactivateAccountModal" class="reveal-modal small" data-reveal>
-            <a class="close-reveal-modal">&#215;</a>
-            <h5 class="modal-title">
-                {{'Deactivate account?'|trans({}, 'frontend-deactivate-account')}}
-            </h5>
-            <div class="modal-content remove-modal">
-                <div class="row">
-                    <div class="columns">
-                        <h5>{{'This will deactivate your account and you will no longer be able to log in. Any adverts you have will be removed from the site.'|trans({}, 'frontend-deactivate-account')}}</h5>
+        <div class="col-md-24 col-lg-24 pad-none">
+            <div>
+                {{ "We would be sorry to see you go. If you're having a problem with your account please %contact_us% first and see if we can help."|trans({'%contact_us%': contactUsLink}, 'frontend-deactivate-account')|raw }}
+            </div>
+            <div class="pt10"><a href="javascript:void(0);" data-toggle="modal" data-target="#deactivateAccountModal">{{ 'Deactivate account'|trans({}, 'frontend-deactivate-account') }}</a></div>
+        </div>
+        <div id="deactivateAccountModal" class="modal custom-modal">
+
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h5 class="modal-title save-search-title no-icon-title">{{'Deactivate account?'|trans({}, 'frontend-deactivate-account')}}</h5>
+                        <button class="close-modal" class="close" data-dismiss="modal">×</button>
                     </div>
-                </div>
-                <div class="mt20">
-                    <div class="row">
-                        <div class="columns large-12">
-                            <button type="button" class="button secondary-btn-4 thin-btn expand  mb0" onclick="javascript:closeRevealModel('#deactivateAccountModal');">{{'Cancel'|trans({}, 'frontend-deactivate-account')}}</button>
-                        </div>
-                        <div class="columns large-12">
-                            <button type="button" class="button secondary-btn-1 thin-btn expand  mb0" onclick="closeRevealModel('#deactivateAccountModal');window.location.href='{{ path('deactivate_account') }}'">{{'Ok'|trans({}, 'frontend-deactivate-account')}}</button>
+                    <div class="modal-body">
+                        <h5>{{'This will deactivate your account and you will no longer be able to log in. Any adverts you have will be removed from the site.'|trans({}, 'frontend-deactivate-account')}}</h5>
+                        <div class="mt20 deactModal-btn">
+                            <button type="button" class="secondary-btn-4 btn btn-block" data-dismiss="modal">{{'Cancel'|trans({}, 'frontend-deactivate-account')}}</button>
+                            <button type="button" class="secondary-btn-1 btn btn-block ok-btn" data-dismiss="modal" onclick="window.location.href='{{ path('deactivate_account') }}'">{{'Ok'|trans({}, 'frontend-deactivate-account')}}</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</dd>
+</div>

@@ -1,10 +1,10 @@
 {% set userPackageRepository = fetch_repository('FaUserBundle:UserPackage') %}
 {% set paymentTokenizationRepository = fetch_repository('FaPaymentBundle:PaymentTokenization') %}
 <div class="db-list">
-    <a href="#panel4b" class="panel-heading collapsed" data-toggle="collapse" data-target="#panel4b">
+    <a class="panel-heading collapsed" data-toggle="collapse" data-target="#panel4b">
         <div class="media section-head">
             <div class="media-body">
-                <span class="profile-icon list-icon-text">Your profile</span>
+                <span class="profile-icon list-icon-text">{{ 'Your profile'|trans({}, 'frontend-user-account-profile') }}</span>
             </div>
             <div class="arrow-block">
                 <i class="fa fa-chevron-up"></i>
@@ -12,7 +12,7 @@
             </div>
         </div>
     </a>
-    <div class="collapse collapse-body-content" id="panel4b">
+    <div id="panel4b" class="collapse collapse-body-content">
         <div class="col-md-14 col-lg-9 pad-none">
             <label>User Type</label>
             <div class="label-inline">
@@ -48,14 +48,6 @@
                 <button class="secondary-btn-1 btn btn-block mb0" name="save_paypal_changes" id="save_paypal_changes" type="button">Save changes</button>
             </div>
         </div>
-    </div>
-</div>
-<dd class="accordion-navigation {% if not userAccountProfileForm.vars.valid or app.session.flashbag.has('user_account_profile_success') %}active{% endif %}">
-    <a href="#panel4b" class="section-head">
-        <span class="profile-icon">{{ 'Your profile'|trans({}, 'frontend-user-account-profile') }}</span>
-        <span>&nbsp;</span>
-    </a>
-    <div id="panel4b" class="content {% if not userAccountProfileForm.vars.valid or app.session.flashbag.has('user_account_profile_success') %}active{% endif %}">
         {{ form_start(userAccountProfileForm, {'attr': {'novalidate': 'novalidate'}}) }}
             {{ include('FaUserBundle:MyAccount:myAccountMessage.html.twig', {'msgName': 'user_account_profile_success'}) }}
             <div class="white-radio user-type label-inline">
@@ -138,4 +130,4 @@
             </div>
         {{ form_end(userAccountProfileForm) }}
     </div>
-</dd>
+</div>

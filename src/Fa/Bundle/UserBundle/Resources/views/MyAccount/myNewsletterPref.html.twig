@@ -1,9 +1,9 @@
 {% set newsletterTypeRepository = fetch_repository('FaDotMailerBundle:DotmailerNewsletterType') %}
 <div class="db-list">
-    <a href="#panel5b" class="panel-heading collapsed" data-toggle="collapse" data-target="#panel5b">
+    <a class="panel-heading collapsed" data-toggle="collapse" data-target="#panel5b">
         <div class="media section-head">
             <div class="media-body">
-                <span class="newsleter-pref-icon list-icon-text">Newsletter preferences</span>
+                <span class="newsleter-pref-icon list-icon-text">{{ 'Newsletter preferences'|trans({}, 'frontend-newsletter-pref') }}</span>
             </div>
             <div class="arrow-block">
                 <i class="fa fa-chevron-up"></i>
@@ -11,228 +11,82 @@
             </div>
         </div>
     </a>
-    <div class="collapse collapse-body-content" id="panel5b">
-        <div>Select the news, offers and promotions that you would like to receive from Friday-Ad.</div>
+    <div id="panel5b" class="collapse collapse-body-content {% if not userNewsletterPrefForm.vars.valid or app.session.flashbag.has('newsletter_success') %}show{% endif %}">
+        {{ include('FaUserBundle:MyAccount:myAccountMessage.html.twig', {'msgName': 'newsletter_success'}) }}
+        {{ form_start(userNewsletterPrefForm, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
+        {{ form_errors(userNewsletterPrefForm) }}
+            {% if is_unsubscribe is defined %}
+                <div>{{ 'Select the news, offers and promotions that you would like to receive from Friday-Ad.'|trans({}, 'frontend-newsletter-pref') }}</div>
+            {% else %}
+                <div>{{ 'Select the news, offers and promotions that you would like to receive from Friday-Ad.'|trans({}, 'frontend-newsletter-pref') }}</div>
+            {% endif %}
         <div class="newsletter-pref">
             <div class="label-inline">
                 <ul class="custom-control custom-checkbox search-type">
                     <li>
-                        <input type="checkbox" class="custom-control-input white-feild" id="newsletter1_a">
-                        <label class="custom-control-label" for="newsletter1_a">Unsubscribe from all emails</label>
+                        {{ form_row(userNewsletterPrefForm.dotmailer_newsletter_unsubscribe) }}
+{#                        <input type="checkbox" class="custom-control-input white-feild" id="newsletter1_a">#}
+{#                        <label class="custom-control-label" for="newsletter1_a">Unsubscribe from all emails</label>#}
                     </li>
                 </ul>
             </div>
         </div>
         <div id="newsletter_categories">
-            <div class="newsletter_equalizer" id="newsletter_equalizer">
-                <div class="newsletter-pref">
-                    <div class="col-md-12 col-lg-8 pad-none d-inline-flex">
-                        <div class="label-inline">
-                            <ul class="custom-control custom-checkbox search-type">
-                                <li>
-                                    <input type="checkbox" class="custom-control-input white-feild" id="newsletter2_a">
-                                    <label class="custom-control-label" for="newsletter2_a">For Sale</label>
-                                </li>
-                            </ul>
-                            <ul class="custom-control custom-checkbox search-type">
-                                <li>
-                                    <input type="checkbox" class="custom-control-input white-feild" id="newsletter2_b">
-                                    <label class="custom-control-label" for="newsletter2_b">Agricultural</label>
-                                </li>
-                            </ul>
-                            <ul class="custom-control custom-checkbox search-type">
-                                <li>
-                                    <input type="checkbox" class="custom-control-input white-feild" id="newsletter2_c">
-                                    <label class="custom-control-label" for="newsletter2_c">Antiques and Collectables</label>
-                                </li>
-                            </ul>
-                            <ul class="custom-control custom-checkbox search-type">
-                                <li>
-                                    <input type="checkbox" class="custom-control-input white-feild" id="newsletter12_d">
-                                    <label class="custom-control-label" for="newsletter12_d"> Baby and Kids</label>
-                                </li>
-                            </ul>
+            {% set totalChoices = newsletterMainCategoryArray|length %}
+            {% set totalColumns = 3 %}
+            {% set choicesPerColumn = (totalChoices / totalColumns)|round(0, 'ceil') %}
+            {% set choiceCount = 0 %}
+            <div class="clearfix fa-equalizer" id="newsletter_equalizer">
+                {% for mainCatId in newsletterMainCategoryArray %}
+                    {% set child = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(mainCatId - 1)] %}
+                    <div class="newsletter-pref">
+                        <div class="col-md-12 col-lg-8 pad-none d-inline-flex">
+                            <div class="label-inline">
+                                <ul class="custom-control custom-checkbox search-type">
+                                    <li>
+                                        {{ form_widget(child) }}
+                                        <label for="{{ child.vars.id }}">{{ child.vars.label|raw }}</label>
+                                    </li>
+                                </ul>
+                                {% set childrenArray = newsletterTypeRepository.getChildrens(mainCatId, container)|keys %}
+                                {% for subCatId in childrenArray %}
+                                    {% set subChild = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(subCatId - 1)] %}
+                                    <ul class="custom-control custom-checkbox search-type">
+                                        <li>
+                                            {{ form_widget(subChild) }}
+                                            <label for="{{ subChild.vars.id }}">{{ subChild.vars.label|raw }}</label>
+                                        </li>
+                                    </ul>
+                                {% endfor %}
+                            </div>
                         </div>
+                        {% if mainCatId == 43 %}
+                            <div class="col-md-12 col-lg-8 pad-none d-inline-flex">
+                                <div class="label-inline">
+                                    {% set nonMappedChildrenArray = newsletterTypeRepository.getNonMappedCategories(container)|keys %}
+                                    {% for nonMappedCatId in nonMappedChildrenArray %}
+                                        {% set nonMappedCatChild = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(nonMappedCatId - 1)] %}
+                                        <ul class="custom-control custom-checkbox search-type">
+                                            <li>
+                                                {{ form_widget(nonMappedCatChild) }}
+                                                <label for="{{ nonMappedCatChild.vars.id }}">{{ nonMappedCatChild.vars.label|raw }}</label>
+                                            </li>
+                                        </ul>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% set choiceCount = choiceCount + 1 %}
                     </div>
-                    <div class="col-md-12 col-lg-8 pad-none d-inline-flex">
-                        <div class="label-inline">
-                            <ul class="custom-control custom-checkbox search-type">
-                                <li>
-                                    <input type="checkbox" class="custom-control-input white-feild" id="newsletter2_a">
-                                    <label class="custom-control-label" for="newsletter2_a">For Sale</label>
-                                </li>
-                            </ul>
-                            <ul class="custom-control custom-checkbox search-type">
-                                <li>
-                                    <input type="checkbox" class="custom-control-input white-feild" id="newsletter2_b">
-                                    <label class="custom-control-label" for="newsletter2_b">Agricultural</label>
-                                </li>
-                            </ul>
-                            <ul class="custom-control custom-checkbox search-type">
-                                <li>
-                                    <input type="checkbox" class="custom-control-input white-feild" id="newsletter2_c">
-                                    <label class="custom-control-label" for="newsletter2_c">Antiques and Collectables</label>
-                                </li>
-                            </ul>
-                            <ul class="custom-control custom-checkbox search-type">
-                                <li>
-                                    <input type="checkbox" class="custom-control-input white-feild" id="newsletter12_d">
-                                    <label class="custom-control-label" for="newsletter12_d"> Baby and Kids</label>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-md-12 col-lg-8 pad-none d-inline-flex">
-                        <div class="label-inline">
-                            <ul class="custom-control custom-checkbox search-type">
-                                <li>
-                                    <input type="checkbox" class="custom-control-input white-feild" id="newsletter2_a">
-                                    <label class="custom-control-label" for="newsletter2_a">For Sale</label>
-                                </li>
-                            </ul>
-                            <ul class="custom-control custom-checkbox search-type">
-                                <li>
-                                    <input type="checkbox" class="custom-control-input white-feild" id="newsletter2_b">
-                                    <label class="custom-control-label" for="newsletter2_b">Agricultural</label>
-                                </li>
-                            </ul>
-                            <ul class="custom-control custom-checkbox search-type">
-                                <li>
-                                    <input type="checkbox" class="custom-control-input white-feild" id="newsletter2_c">
-                                    <label class="custom-control-label" for="newsletter2_c">Antiques and Collectables</label>
-                                </li>
-                            </ul>
-                            <ul class="custom-control custom-checkbox search-type">
-                                <li>
-                                    <input type="checkbox" class="custom-control-input white-feild" id="newsletter12_d">
-                                    <label class="custom-control-label" for="newsletter12_d"> Baby and Kids</label>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="newsletter-pref">
-                    <div class="label-inline col-md-8 pad-none">
-                        <ul class="custom-control custom-checkbox search-type">
-                            <li>
-                                <input type="checkbox" class="custom-control-input white-feild" id="newsletter2_a">
-                                <label class="custom-control-label" for="newsletter2_a">I'm a private advertiser</label>
-                            </li>
-                        </ul>
-                        <ul class="custom-control custom-checkbox search-type">
-                            <li>
-                                <input type="checkbox" class="custom-control-input white-feild" id="newsletter2_b">
-                                <label class="custom-control-label" for="newsletter2_b">I'm a private advertiser</label>
-                            </li>
-                        </ul>
-                        <ul class="custom-control custom-checkbox search-type">
-                            <li>
-                                <input type="checkbox" class="custom-control-input white-feild" id="newsletter2_c">
-                                <label class="custom-control-label" for="newsletter2_c">I'm a private advertiser</label>
-                            </li>
-                        </ul>
-                        <ul class="custom-control custom-checkbox search-type">
-                            <li>
-                                <input type="checkbox" class="custom-control-input white-feild" id="newsletter12_d">
-                                <label class="custom-control-label" for="newsletter12_d">I'm a private advertiser</label>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="newsletter-pref">
-                    <div class="label-inline col-md-8 pad-none">
-                        <ul class="custom-control custom-checkbox search-type">
-                            <li>
-                                <input type="checkbox" class="custom-control-input white-feild" id="newsletter2_a">
-                                <label class="custom-control-label" for="newsletter2_a">I'm a private advertiser</label>
-                            </li>
-                        </ul>
-                        <ul class="custom-control custom-checkbox search-type">
-                            <li>
-                                <input type="checkbox" class="custom-control-input white-feild" id="newsletter2_b">
-                                <label class="custom-control-label" for="newsletter2_b">I'm a private advertiser</label>
-                            </li>
-                        </ul>
-                        <ul class="custom-control custom-checkbox search-type">
-                            <li>
-                                <input type="checkbox" class="custom-control-input white-feild" id="newsletter2_c">
-                                <label class="custom-control-label" for="newsletter2_c">I'm a private advertiser</label>
-                            </li>
-                        </ul>
-                        <ul class="custom-control custom-checkbox search-type">
-                            <li>
-                                <input type="checkbox" class="custom-control-input white-feild" id="newsletter12_d">
-                                <label class="custom-control-label" for="newsletter12_d">I'm a private advertiser</label>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                {% endfor %}
+                {% do userNewsletterPrefForm.dotmailer_newsletter_type_id.setRendered %}
                 <div class="newsletter-pref">
                     <div class="col-md-8 pad-none">
-                        <button class="secondary-btn-1 btn btn-block mb0" name="" id="" type="button">Update preferences</button>
+                        {{ form_widget(userNewsletterPrefForm.update_newsletter_preferences, {'attr': {'class':'secondary-btn-1 btn btn-block mb0'}}) }}
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-<dd class="accordion-navigation {% if not userNewsletterPrefForm.vars.valid or app.session.flashbag.has('newsletter_success') %}active{% endif %}">
-    <a href="#panel5b" class="section-head">
-        <span class="newsleter-pref-icon">{{ 'Newsletter preferences'|trans({}, 'frontend-newsletter-pref') }}</span>
-        <span>&nbsp;</span>
-    </a>
-    <div id="panel5b" class="content {% if not userNewsletterPrefForm.vars.valid or app.session.flashbag.has('newsletter_success') %}active{% endif %}">
-        {{ include('FaUserBundle:MyAccount:myAccountMessage.html.twig', {'msgName': 'newsletter_success'}) }}
-        {{ form_start(userNewsletterPrefForm, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
-        {{ form_errors(userNewsletterPrefForm) }}
-            {% if is_unsubscribe is defined %}
-                <h2>{{ 'Select the news, offers and promotions that you would like to receive from Friday-Ad.'|trans({}, 'frontend-newsletter-pref') }}</h2>
-            {% else %}
-                {{ 'Select the news, offers and promotions that you would like to receive from Friday-Ad.'|trans({}, 'frontend-newsletter-pref') }}
-            {% endif %}
-            <div class="newsletter-pref white-checkbox">
-                {{ form_row(userNewsletterPrefForm.dotmailer_newsletter_unsubscribe) }}
-            </div>
-            <div id="newsletter_categories">
-                {% set totalChoices = newsletterMainCategoryArray|length %}
-                {% set totalColumns = 3 %}
-                {% set choicesPerColumn = (totalChoices / totalColumns)|round(0, 'ceil') %}
-                {% set choiceCount = 0 %}
-                <div class="newsletter-pref white-checkbox">
-                    <div class="clearfix fa-equalizer" id="newsletter_equalizer">
-                        {% for mainCatId in newsletterMainCategoryArray %}
-                            {% set child = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(mainCatId - 1)] %}
-                                <div class="large-8 columns">
-                                    {{ form_widget(child) }}
-                                    <label for="{{ child.vars.id }}">{{ child.vars.label|raw }}</label>
-                                    {% set childrenArray = newsletterTypeRepository.getChildrens(mainCatId, container)|keys %}
-                                    {% for subCatId in childrenArray %}
-                                        {% set subChild = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(subCatId - 1)] %}
-                                        {{ form_widget(subChild) }}
-                                        <label for="{{ subChild.vars.id }}">{{ subChild.vars.label|raw }}</label>
-                                    {% endfor %}
-                                </div>
-                                {% if mainCatId == 43 %}
-                                    <div class="large-8 columns end">
-                                    {% set nonMappedChildrenArray = newsletterTypeRepository.getNonMappedCategories(container)|keys %}
-                                    {% for nonMappedCatId in nonMappedChildrenArray %}
-                                        {% set nonMappedCatChild = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(nonMappedCatId - 1)] %}
-                                        {{ form_widget(nonMappedCatChild) }}
-                                        <label for="{{ nonMappedCatChild.vars.id }}">{{ nonMappedCatChild.vars.label|raw }}</label>
-                                    {% endfor %}
-                                    </div>
-                                {% endif %}
-                                {% set choiceCount = choiceCount + 1 %}
-                        {% endfor %}
-                    </div>
-                </div>
-                {% do userNewsletterPrefForm.dotmailer_newsletter_type_id.setRendered %}
-            </div>
-            <div class="newsletter-update">
-                <div class="myacc-details">
-                    {{ form_widget(userNewsletterPrefForm.update_newsletter_preferences, {'attr': {'class':'secondary-btn-1 button expand mb0'}}) }}
-                </div>
-            </div>
         {{ form_end(userNewsletterPrefForm) }}
     </div>
-</dd>
+</div>

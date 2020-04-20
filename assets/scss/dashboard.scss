@@ -1,5 +1,8 @@
 @import "global";
-
+.media {
+    display: flex!important;
+    align-items: flex-start;
+}
 .posting-bg {
   position: relative;
   background: $dark-gray;

@@ -1,8 +1,8 @@
 <div class="db-list">
-    <a href="#panel3b" class="panel-heading collapsed" data-toggle="collapse" data-target="#panel3b">
+    <a class="panel-heading collapsed" data-toggle="collapse" data-target="#panel3b">
         <div class="media section-head">
             <div class="media-body">
-                <span class="myacc-paypal-icon list-icon-text">Paypal account</span>
+                <span class="myacc-paypal-icon list-icon-text">{{ 'Paypal account'|trans({}, 'frontend-paypal-email') }}</span>
             </div>
             <div class="arrow-block">
                 <i class="fa fa-chevron-up"></i>
@@ -10,37 +10,21 @@
             </div>
         </div>
     </a>
-    <div class="collapse collapse-body-content" id="panel3b">
-        <div>This is the account that will receive funds when you accept payment through Paypal. Please provide the first name, last name and the email address used for your Paypal account. </div>
+    <div id="panel3b" class="collapse collapse-body-content">
+        <div>
+            {{ 'This is the account that will receive funds when you accept payment through Paypal. Please provide the first name, last name and the email address used for your Paypal account.'|trans({}, 'frontend-paypal-email') }}
+        </div>
         <div class="col-md-14 col-lg-9 pad-none mt20">
-            <div class="myacc-paypal">
-                <label>Paypal details</label>
-                <input type="text" class="white-field form-control" name="paypal_first_name" id="paypal_first_name" value="" placeholder="Paypal first name">
-                <input type="text" class="white-field form-control" name="paypal_last_name" id="paypal_last_name" value="" placeholder="Paypal last name">
-                <input type="text" class="white-field form-control" name="paypal_email" id="paypal_email" value="" placeholder="Paypal email address">
+            <div class="myacc-paypal mb10" id="paypal_section_id">
+                <label>{{ 'Paypal details'|trans({}, 'frontend-paypal-email') }}</label>
+                <input type="text" class="white-field form-control" name="paypal_first_name" id="paypal_first_name" value="{{ app.user.getPaypalFirstName() }}" placeholder="{{ 'Paypal first name'|trans({}, 'frontend-paypal-email') }}"/><br />
+                <input type="text" class="white-field form-control" name="paypal_last_name" id="paypal_last_name" value="{{ app.user.getPaypalLastName() }}"  placeholder="{{ 'Paypal last name'|trans({}, 'frontend-paypal-email') }}"/><br />
+                <input type="text" class="white-field form-control" name="paypal_email" id="paypal_email" value="{{ app.user.getPaypalEmail() }}"  placeholder="{{ 'Paypal email address'|trans({}, 'frontend-paypal-email') }}"/>
             </div>
             <div class="mt20">
-                <button class="secondary-btn-1 btn btn-block mb0" name="save_paypal_changes" id="save_paypal_changes" type="button">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="db-list">
-    <a href="#panel3b" class="section-head">
-        <span class="myacc-paypal-icon">{{ 'Paypal account'|trans({}, 'frontend-paypal-email') }}</span>
-        <span>&nbsp;</span>
-    </a>
-    <div id="panel3b" class="content">
-        {{ 'This is the account that will receive funds when you accept payment through Paypal. Please provide the first name, last name and the email address used for your Paypal account.'|trans({}, 'frontend-paypal-email') }}
-        <div class="myacc-paypal mb10" id="paypal_section_id">
-            <label>{{ 'Paypal details'|trans({}, 'frontend-paypal-email') }}</label>
-            <input type="text" class="white-field" name="paypal_first_name" id="paypal_first_name" value="{{ app.user.getPaypalFirstName() }}" placeholder="{{ 'Paypal first name'|trans({}, 'frontend-paypal-email') }}"/><br />
-            <input type="text" class="white-field" name="paypal_last_name" id="paypal_last_name" value="{{ app.user.getPaypalLastName() }}"  placeholder="{{ 'Paypal last name'|trans({}, 'frontend-paypal-email') }}"/><br />
-            <input type="text" class="white-field" name="paypal_email" id="paypal_email" value="{{ app.user.getPaypalEmail() }}"  placeholder="{{ 'Paypal email address'|trans({}, 'frontend-paypal-email') }}"/>
-        </div>
-        <div class="myacc-details white-checkbox paypal-acc-btn">
-            <div class="mt20">
-                <button class="secondary-btn-1 button mb0" name="save_paypal_changes" id="save_paypal_changes" type="button" onclick="javascript:updatePaypalEmail();">{{ 'Save changes'|trans({}, 'frontend-paypal-email') }}</button>
+                <button class="secondary-btn-1 btn btn-block mb0" name="save_paypal_changes" id="save_paypal_changes" type="button" onclick="javascript:updatePaypalEmail();">
+                    {{ 'Save changes'|trans({}, 'frontend-paypal-email') }}
+                </button>
                 <span {% if app.user.getPaypalEmail() and app.user.getPaypalFirstName() and app.user.getPaypalLastName() %}class="tickmark-icon"{% endif %} id="paypal_email_verify_status" {% if not app.user.getPaypalEmail() %}style="display:none;"{% endif %}>&nbsp;</span>
             </div>
         </div>

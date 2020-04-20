@@ -2,14 +2,6 @@
 <script src="{{ asset_url('fafrontend/js/jquery.equalizer.min.js') }}"></script>
 <script language="javascript" type="text/javascript">
 //<![CDATA[
-    $(document).foundation({
-        accordion: {
-            multi_expand: true,
-            callback : function (accordion) {
-                accordionCallback(accordion);
-            }
-        }
-    });
     $('#fa_user_card_zip').focus(function(e){
         $('#card_zip_error_div').hide()
     });
@@ -201,7 +193,7 @@
             hideAlertMessage();
             if (response.htmlContent.length) {
                 $('#addressBookModal').html(response.htmlContent);
-                $('#addressBookModal').foundation('reveal', 'open');
+                $('#addressBookModal').equalizer();
             } else if (response.error.length) {
                 $(decorateMessage(response.error, 'alert')).prependTo('#panel6b');
                 scrollToElement('#panel6b', '1000', -150);
@@ -229,7 +221,7 @@
             hideAlertMessage();
             if (response.htmlContent.length) {
                 $('#addressBookModal').html(response.htmlContent);
-                $('#addressBookModal').foundation('reveal', 'open');
+                $('#addressBookModal').equalizer();
             } else if (response.error.length) {
                 $(decorateMessage(response.error, 'alert')).prependTo('#panel6b');
                 scrollToElement('#panel6b', '1000', -150);
@@ -317,7 +309,7 @@
     
     function removePaymentSource(url)
     {
-        $('#paymentSourceDeleteModal').foundation('reveal', 'open');
+        $('#paymentSourceDeleteModal').equalizer();
         $('#remove_payment_source_btn').unbind();
         $('#remove_payment_source_btn').bind( "click", function() {
             $('#paymentSourceDeleteModal').foundation('reveal', 'close');
@@ -327,7 +319,7 @@
     
     function confirmDeleteAddress(addressBookId)
     {
-        $('#addressBookDeleteModal').foundation('reveal', 'open');
+        $('#addressBookDeleteModal').equalizer();
         $('#remove_address_btn').unbind();
         $('#remove_address_btn').bind( "click", function() {
             $('#addressBookDeleteModal').foundation('reveal', 'close');

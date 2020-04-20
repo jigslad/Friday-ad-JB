@@ -1,5 +1,5 @@
 <div class="db-list {% if not userCardForm.vars.valid or app.session.flashbag.has('card_success') %}active{% endif %}">
-    <a href="#panel2b" class="panel-heading collapsed" data-toggle="collapse" data-target="#panel2b">
+    <a class="panel-heading collapsed" data-toggle="collapse" data-target="#panel2b">
         <div class="media section-head">
             <div class="media-body">
                 <span class="payment-sources-icon list-icon-text">{{ 'Saved payment sources'|trans({}, 'frontend-payment-sources') }}</span>
@@ -9,8 +9,6 @@
                 <i class="fa fa-chevron-down"></i>
             </div>
         </div>
-        <span class="payment-sources-icon"></span>
-        <span>&nbsp;</span>
     </a>
     <div id="panel2b" class="collapse collapse-body-content {% if not userCardForm.vars.valid or app.session.flashbag.has('card_success') %}active{% endif %}">
         {{ include('FaUserBundle:MyAccount:myAccountMessage.html.twig', {'msgName': 'card_success'}) }}
@@ -20,7 +18,7 @@
                     {% for paymentToken in paymentTokens %}
                         <li class="label-inline">
                             <label><span class="{{ paymentCyberSourceRepository.getCardTypeClass(paymentToken.getCardType()) }}">&nbsp;</span>***{{ paymentToken.getCardNumber() }}&nbsp;{{ paymentToken.getCardHolderName() }}</label>
-                            <a href="javascript:void(0);" onclick="javascript:removePaymentSource('{{ path('cybersource_delete_token', {'id': paymentToken.getId(), 'from': 'my_account'}) }}');">{{ 'Remove'|trans({}, 'frontend-payment-sources') }}</a>
+                            <a href="javascript:void(0);" data-toggle="model" data-target="#paymentSourceDeleteModal" onclick="javascript:removePaymentSource('{{ path('cybersource_delete_token', {'id': paymentToken.getId(), 'from': 'my_account'}) }}');">{{ 'Remove'|trans({}, 'frontend-payment-sources') }}</a>
                         </li>
                     {% endfor %}
                 </ul>
@@ -103,24 +101,24 @@
                </div>
             </div>
         {{ form_end(userCardForm) }}
-        <div id="paymentSourceDeleteModal" class="reveal-modal tiny" data-reveal>
-            <a class="close-reveal-modal">&#215;</a>
-            <h5 class="modal-title">
-                {{'Remove payment source?'|trans({}, 'frontend-payment-sources')}}
-            </h5>
-            <div class="modal-content remove-modal">
-                <div class="row">
-                    <div class="columns">
-                        <h5>{{'This will remove your payment source.'|trans({}, 'frontend-payment-sources')}}</h5>
+        <div class="modal custom-modal" id="paymentSourceDeleteModal">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title save-search-title">{{'Remove payment source?'|trans({}, 'frontend-payment-sources')}}</h5>
+                        <button class="close-modal" class="close" data-dismiss="modal">×</button>
                     </div>
-                </div>
-                <div class="mt20">
-                    <div class="row">
-                        <div class="columns large-12">
-                            <button type="button" class="button secondary-btn-4 thin-btn expand mb0" onclick="javascript:closeRevealModel('#paymentSourceDeleteModal');">{{'Cancel'|trans({}, 'frontend-payment-sources')}}</button>
-                        </div>
-                        <div class="columns large-12">
-                            <button type="button" class="button secondary-btn-1 thin-btn expand mb0" id="remove_payment_source_btn">{{'Ok'|trans({}, 'frontend-payment-sources')}}</button>
+                    <div class="modal-body">
+                        <h5>{{'This will remove your payment source.'|trans({}, 'frontend-payment-sources')}}</h5>
+                        <div class="mt20">
+                            <div class="row">
+                                <div class="columns large-12">
+                                    <button type="button" class="button secondary-btn-4 thin-btn expand mb0" onclick="javascript:closeRevealModel('#paymentSourceDeleteModal');">{{'Cancel'|trans({}, 'frontend-payment-sources')}}</button>
+                                </div>
+                                <div class="columns large-12">
+                                    <button type="button" class="button secondary-btn-1 thin-btn expand mb0" id="remove_payment_source_btn">{{'Ok'|trans({}, 'frontend-payment-sources')}}</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

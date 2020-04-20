@@ -1,20 +1,40 @@
 {% if userInvoices|length %}
     {% for userInvoice in userInvoices %}
-        <div class="invoices-item">
-            <div class="row">
-                <div class="large-11 columns">
-                    <b>{{ 'Transaction ID'|trans({}, 'frontend-user-invoices') }}</b>{{ userInvoice['cart_code'] }}<br />
-                    <b>{{ 'Package Name'|trans({}, 'frontend-user-invoices') }}</b>{{ (userInvoice['package_name'] is defined ? userInvoice['package_name']|join(', ') : '-') }}<br />
-                    <b>{{ 'Invoice Date'|trans({}, 'frontend-user-invoices') }}</b>{{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [userInvoice['created_at'], fetch_container_instance(), null, null, 'dd/MM/YY']) }}
+        <div class="own-item search-alert-block">
+            <div class="media md-tab-view">
+                <div class="col-md-16 col-lg-11 l-block pad-none">
+                    <div>
+                        <span class="mr-3"><b>{{ 'Transaction ID'|trans({}, 'frontend-user-invoices') }}</b></span>
+                        <span>{{ userInvoice['cart_code'] }}</span>
+                    </div>
+                    <div>
+                        <span class="mr-3"><b>{{ 'Package Name'|trans({}, 'frontend-user-invoices') }}</b></span>
+                        <span>{{ (userInvoice['package_name'] is defined ? userInvoice['package_name']|join(', ') : '-') }}</span>
+                    </div>
+                    <div>
+                        <span class="mr-3"><b>{{ 'Invoice Date'|trans({}, 'frontend-user-invoices') }}</b></span>
+                        <span>{{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [userInvoice['created_at'], fetch_container_instance(), null, null, 'dd/MM/YY']) }}</span>
+                    </div>
+                    <div class="col-lg-6 pad-none md-l-tab">
+                        <div>
+                            <span class="mr-3"><b>{{ 'Total Amount'|trans({}, 'frontend-user-invoices') }}</b></span>
+                            <span>{{ format_currency(userInvoice['amount']) }}</span>
+                        </div>
+                    </div>
                 </div>
-        
-                <div class="large-6 columns">
-                    <b>{{ 'Total Amount'|trans({}, 'frontend-user-invoices') }}</b>{{ format_currency(userInvoice['amount']) }}
+                <div class="col-md-0 col-lg-6 md-c-tab">
+                    <div>
+                        <span class="mr-3"><b>{{ 'Total Amount'|trans({}, 'frontend-user-invoices') }}</b></span>
+                        <span>{{ format_currency(userInvoice['amount']) }}</span>
+                    </div>
                 </div>
-        
-                <div class="large-7 columns end">
-                    <button class="xs-btn-2 button expand mb10" onclick="viewInvoiceReceipt('{{ userInvoice['cart_code'] }}');"><span class="view-icon">{{ 'View receipt'|trans({}, 'frontend-user-invoices') }}</span></button>
-                    <button class="xs-btn-2 button expand mb0" onclick="printInvoiceReceipt('{{ userInvoice['cart_code'] }}');"><span class="print-receipt-icon">{{ 'Print receipt'|trans({}, 'frontend-user-invoices') }}</span></button>
+                <div class="col-md-8 col-lg-7 r-block pad-none md-r-tab">
+                    <div class="group-m-btn">
+                        <button class="xs-btn-2 btn btn-block small-btn order-receipt-btn" onclick="viewInvoiceReceipt('{{ userInvoice['cart_code'] }}');"><span class="view-icon">{{ 'View receipt'|trans({}, 'frontend-user-invoices') }}</span></button>
+                    </div>
+                    <div class="group-m-btn">
+                        <button class="xs-btn-2 btn btn-block small-btn" onclick="printInvoiceReceipt('{{ userInvoice['cart_code'] }}');"><span class="print-receipt-icon">{{ 'Print receipt'|trans({}, 'frontend-user-invoices') }}</span></button>
+                    </div>
                 </div>
             </div>
         </div>

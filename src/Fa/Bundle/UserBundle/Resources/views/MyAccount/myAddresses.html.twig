@@ -1,8 +1,8 @@
 <div class="db-list">
-    <a href="#panel6b" class="panel-heading collapsed" data-toggle="collapse" data-target="#panel6b">
+    <a class="panel-heading collapsed" data-toggle="collapse" data-target="#panel6b">
         <div class="media section-head">
             <div class="media-body">
-                <span class="address-book-icon list-icon-text">My addresses</span>
+                <span class="address-book-icon list-icon-text">{{ 'Address book'|trans({}, 'frontend-user-address-book') }}</span>
             </div>
             <div class="arrow-block">
                 <i class="fa fa-chevron-up"></i>
@@ -10,88 +10,77 @@
             </div>
         </div>
     </a>
-    <div class="collapse collapse-body-content" id="panel6b">
-        <div>Manage your saved addresses</div>
+    <div id="panel6b" class="collapse collapse-body-content">
+        <div>{{ 'Manage your saved addresses'|trans({}, 'frontend-user-address-book') }}</div>
+
+
         <div class="col-md-14 col-lg-9 pad-none mt20">
-            <button class="secondary-btn-1 btn btn-block mb0" type="button" data-toggle="modal" data-target="#addressBookModal">Add an address</button>
+            {{ include('FaUserBundle:MyAccount:listAddress.html.twig') }}
         </div>
-        <div class="modal custom-modal" id="addressBookModal">
+        <div id="addressBookDeleteModal" class="modal custom-modal">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <!-- Modal Header -->
                     <div class="modal-header">
-                        <h5 class="modal-title save-search-title no-icon-title">Add an address </h5>
+                        <h5 class="modal-title save-search-title no-icon-title">{{'Remove an address?'|trans({}, 'frontend-user-address-book')}}</h5>
                         <button class="close-modal" class="close" data-dismiss="modal">×</button>
                     </div>
                     <div class="modal-body">
-                        <div id="user_address_id">
-                            <form name="fa_user_half_account" method="post" novalidate="novalidate" class="outline">
-                                <div>
-                                    <div class="m-form-space">
-                                        <label for="" class="required">Full name</label>
-                                        <input type="text" class="form-control" id="" name="" required="required" maxlength="100">
-                                        <label for="" class="required">House name/number</label>
-                                        <input type="email" class="form-control" id="" name="" required="required" maxlength="255">
-
-                                        <label for="" class="required">Postcode</label>
-                                        <div class="postcode clearfix">
-                                            <input type="text" class="form-control" id="fa_payment_cyber_source_checkout_zip" name="fa_payment_cyber_source_checkout[zip]" required="required" maxlength="15">
-                                            <button type="button" class="btn secondary-btn-1 right" onclick="return getUserAddress();">Find address</button>
-                                        </div>
-
-                                        <label for="" class="required">Street name</label>
-                                        <input type="email" class="form-control" id="" name="" required="required" maxlength="255">
-
-                                        <label for="" class="required">Town/city</label>
-                                        <input type="email" class="form-control" id="" name="" required="required" maxlength="255">
-
-                                        <label for="" class="required">State/county</label>
-                                        <input type="email" class="form-control" id="" name="" required="required" maxlength="255">
-                                    </div>
-                                    <button type="submit" id="" name="" class="secondary-btn-1 btn btn-block">Add this Address</button>
+                        <div class="mt20">
+                            <div class="row">
+                                <div class="columns large-12">
+                                    <button type="button" class="secondary-btn-1 btn btn-block" data-dismiss="modal">{{'Cancel'|trans({}, 'frontend-user-address-book')}}</button>
                                 </div>
-                            </form>
+                                <div class="columns large-12">
+                                    <button type="button" id="remove_address_btn" class="secondary-btn-1 btn btn-block">{{'Ok'|trans({}, 'frontend-user-address-book')}}</button>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>
+        </div>
+        <div id="addressBookModal" class="modal custom-modal">
+{#            <div class="modal-dialog">#}
+{#                <div class="modal-content">#}
+{#                    <!-- Modal Header -->#}
+{#                    <div class="modal-header">#}
+{#                        <h5 class="modal-title save-search-title no-icon-title">Add an address </h5>#}
+{#                        <button class="close-modal" class="close" data-dismiss="modal">×</button>#}
+{#                    </div>#}
+{#                    <div class="modal-body">#}
+{#                        <div id="user_address_id">#}
+{#                            <form name="fa_user_half_account" method="post" novalidate="novalidate" class="outline">#}
+{#                                <div>#}
+{#                                    <div class="m-form-space">#}
+{#                                        <label for="" class="required">Full name</label>#}
+{#                                        <input type="text" class="form-control" id="" name="" required="required" maxlength="100">#}
+{#                                        <label for="" class="required">House name/number</label>#}
+{#                                        <input type="email" class="form-control" id="" name="" required="required" maxlength="255">#}
+
+{#                                        <label for="" class="required">Postcode</label>#}
+{#                                        <div class="postcode clearfix">#}
+{#                                            <input type="text" class="form-control" id="fa_payment_cyber_source_checkout_zip" name="fa_payment_cyber_source_checkout[zip]" required="required" maxlength="15">#}
+{#                                            <button type="button" class="btn secondary-btn-1 right" onclick="return getUserAddress();">Find address</button>#}
+{#                                        </div>#}
+
+{#                                        <label for="" class="required">Street name</label>#}
+{#                                        <input type="email" class="form-control" id="" name="" required="required" maxlength="255">#}
+
+{#                                        <label for="" class="required">Town/city</label>#}
+{#                                        <input type="email" class="form-control" id="" name="" required="required" maxlength="255">#}
+
+{#                                        <label for="" class="required">State/county</label>#}
+{#                                        <input type="email" class="form-control" id="" name="" required="required" maxlength="255">#}
+{#                                    </div>#}
+{#                                    <button type="submit" id="" name="" class="secondary-btn-1 btn btn-block">Add this Address</button>#}
+{#                                </div>#}
+{#                            </form>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
         </div>
     </div>
 </div>
-
-<dd class="accordion-navigation">
-    <a href="#panel6b" class="section-head">
-        <span class="address-book-icon">{{ 'Address book'|trans({}, 'frontend-user-address-book') }}</span>
-        <span>&nbsp;</span>
-    </a>
-    <div id="panel6b" class="content address-book">
-        <div class="mb20 hide-for-small-only">{{ 'Manage your saved addresses'|trans({}, 'frontend-user-address-book') }}</div>
-        <div class="row" id="address_book_main">
-            {{ include('FaUserBundle:MyAccount:listAddress.html.twig') }}
-        </div>
-        <div id="addressBookDeleteModal" class="reveal-modal tiny" data-reveal>
-            <a class="close-reveal-modal">&#215;</a>
-            <h5 class="modal-title">
-                {{'Remove an address?'|trans({}, 'frontend-user-address-book')}}
-            </h5>
-            <div class="modal-content remove-modal">
-                <div class="row">
-                    <div class="columns">
-                        <h5>{{'This will remove this address.'|trans({}, 'frontend-user-address-book')}}</h5>
-                    </div>
-                </div>
-                <div class="mt20">
-                    <div class="row">
-                        <div class="columns large-12">
-                            <button type="button" class="button secondary-btn-4 thin-btn expand  mb0" onclick="javascript:closeRevealModel('#addressBookDeleteModal');">{{'Cancel'|trans({}, 'frontend-user-address-book')}}</button>
-                        </div>
-                        <div class="columns large-12">
-                            <button type="button" id="remove_address_btn" class="button secondary-btn-1 thin-btn expand  mb0">{{'Ok'|trans({}, 'frontend-user-address-book')}}</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="addressBookModal" class="reveal-modal small" data-reveal></div>
-    </div>
-</dd>

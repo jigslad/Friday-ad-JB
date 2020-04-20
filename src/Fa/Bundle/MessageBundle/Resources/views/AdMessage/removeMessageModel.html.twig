@@ -1,21 +1,28 @@
-<div id="removeMessageModal" class="reveal-modal tiny remove-item-modal" data-reveal>
-    <a class="close-reveal-modal">&#215;</a>
-    <h5 class="modal-title">
-        {{'Delete message'|trans({}, 'frontend-inbox')}}
-    </h5>
-    <div class="modal-content remove-modal">
-        <div class="row">
-            <div class="columns">
-                <h5>{{'Are you sure you want to permanently delete this message?'|trans({}, 'frontend-inbox')}}</h5>
+<div id="removeMessageModal" class="modal custom-modal" data-reveal>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title save-search-title">{{'Delete message'|trans({}, 'frontend-inbox')}}</h5>
+                <button class="close-modal" class="close" data-dismiss="modal">×</button>
             </div>
-        </div>
-        <div class="mt20 remove-item-btn">
-            <div class="row">
-                <div class="large-12 columns">
-                    <button type="button" class="red-button2 button secondary-btn-4 thin-btn expand" onclick="deleteMessage(); closeRevealModel('#removeMessageModal');">{{'Delete'|trans({}, 'frontend-inbox')}}</button>
+            <div class="modal-body">
+                <div class="modal-content remove-modal">
+                    <div class="row">
+                        <div class="columns">
+
+                        </div>
+                    </div>
                 </div>
-                <div class="large-12 columns">
-                    <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#removeMessageModal');">{{'Cancel'|trans({}, 'frontend-inbox')}}</button>
+                <h5>{{'Are you sure you want to permanently delete this message?'|trans({}, 'frontend-inbox')}}</h5>
+                <div class="mt20 remove-item-btn">
+                    <div class="row">
+                        <div class="large-12 columns">
+                            <button type="button" class="red-button2 button secondary-btn-4 thin-btn expand" onclick="deleteMessage(); closeRevealModel('#removeMessageModal');">{{'Delete'|trans({}, 'frontend-inbox')}}</button>
+                        </div>
+                        <div class="large-12 columns">
+                            <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#removeMessageModal');">{{'Cancel'|trans({}, 'frontend-inbox')}}</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

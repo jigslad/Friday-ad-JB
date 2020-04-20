@@ -1,5 +1,5 @@
-<div class="db-listn {% if not userDetailForm.vars.valid or app.session.flashbag.has('account_detail_success') %}active{% endif %}">
-    <a href="#panel1b" class="panel-heading collapsed" data-toggle="collapse" data-target="#panel1b">
+<div class="db-list">
+    <a class="panel-heading collapsed" data-toggle="collapse" data-target="#panel1b">
         <div class="media section-head">
             <div class="media-body">
                 <span class="your-details-icon list-icon-text">{{ 'Your details'|trans({}, 'frontend-user-account-detail') }}</span>
@@ -10,7 +10,7 @@
             </div>
         </div>
     </a>
-    <div id="panel1b" class="collapse collapse-body-content {% if not userDetailForm.vars.valid or app.session.flashbag.has('account_detail_success') %}active{% endif %}">
+    <div id="panel1b" class="collapse collapse-body-content">
         {{ form_start(userDetailForm, {'attr': {'novalidate': 'novalidate'}}) }}
             {{ include('FaUserBundle:MyAccount:myAccountMessage.html.twig', {'msgName': 'account_detail_success'}) }}
             <h5 class="db-myacc-title">{{ 'Update your contact details'|trans({}, 'frontend-user-account-detail') }}</h5>
@@ -36,21 +36,20 @@
                         <span style="color:#ff0000;font-weight:bold">Please note the option to use Privacy Numbers has been disabled from 1st September 2019. Read more <a href="https://help.friday-ad.co.uk/hc/en-us/articles/360034112434">here</a>.</span>
                     </div>
                 {% endif %}
-                <div class="buyer-contact">
+                <div class="buyer-contact mt20">
                      <label>{{'I would like buyers to contact me by:'|trans({}, 'frontend-paa-register')}}</label>
                      <div class="label-inline d-inline-flex">
                          <ul class="custom-control custom-checkbox search-type mr10">
                              <li>
-                                 {{ form_row(userDetailForm.contact_through_phone) }}
-{#                                 <input type="checkbox" class="custom-control-input" id="customCheckBox1_a">#}
-{#                                 <label class="custom-control-label" for="customCheckBox1_a">Contact by phone</label>#}
+                                 {{ form_label(userDetailForm.contact_through_phone) }}
+                                 {{ form_widget(userDetailForm.contact_through_phone,{'attr':{'class': 'custom-control-input'} }) }}
                              </li>
                          </ul>
                          <ul class="custom-control custom-checkbox search-type">
                              <li>
-                                 {{ form_row(userDetailForm.contact_through_email) }}
-{#                                 <input type="checkbox" class="custom-control-input" id="customCheckBox1_b">#}
-{#                                 <label class="custom-control-label" for="customCheckBox1_b">Contact by email</label>#}
+                                 {{ form_label(userDetailForm.contact_through_email) }}
+                                 {{ form_widget(userDetailForm.contact_through_email,{'attr':{'class': 'custom-control-input'} }) }}
+{#                                 <input type="checkbox" name="{{ userDetailForm.contact_through_email.vars.name }}" class="custom-control-input" id="{{ userDetailForm.contact_through_email.vars.id }}" {{ userDetailForm.contact_through_email.vars.checked == 'true' ? 'checked':'' }}>#}
                              </li>
                          </ul>
                      </div>
@@ -75,8 +74,6 @@
                                 {% if userDetailForm.show_password is defined %}
                                     {{ form_row(userDetailForm.show_password) }}
                                 {% endif %}
-{#                                <input type="checkbox" class="custom-control-input" id="customCheckBox1_c">#}
-{#                                <label class="custom-control-label" for="customCheckBox1_c">Show password</label>#}
                             </li>
                         </ul>
                     </div>
@@ -92,12 +89,24 @@
         {{ form_end(userDetailForm) }}
     </div>
 </div>
-<div id="privacyNumberModal" class="reveal-modal" data-reveal>
-    {% set privacyNumberBlock = staticPageRepository.getStaticBlockDetailArray('privacy-number-block', fetch_container_instance()) %}
-    
-    {% if privacyNumberBlock['title'] is defined %}
-        <h5 class="modal-title">{{privacyNumberBlock['title']}}</h5>
-        <div class="modal-content">{{privacyNumberBlock['description']|raw}}</div>
-    {% endif %}
-    <a class="close-reveal-modal">&#215;</a>
+<div id="privacyNumberModal" class="modal custom-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            {% set privacyNumberBlock = staticPageRepository.getStaticBlockDetailArray('privacy-number-block', fetch_container_instance()) %}
+            {% if privacyNumberBlock['title'] is defined %}
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title save-search-title no-icon-title">{{privacyNumberBlock['title']}}</h5>
+                    <button class="close-modal" data-dismiss="modal">×</button>
+                </div>
+                <div class="modal-body">
+                    <h5>{{privacyNumberBlock['description']|raw}}</h5>
+                </div>
+            {% else %}
+                <div class="modal-header">
+                    <button class="close-modal" data-dismiss="modal">×</button>
+                </div>
+            {% endif %}
+        </div>
+    </div>
 </div>
