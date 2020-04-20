@@ -1,20 +1,22 @@
 <div class="detail-tabpart-2" id="vif_tabs">
-    <ul class="tabs hide-for-small-only" data-tab id="ad_motors_tabs">
-        {% if adDetailAndDimensionFields['performance_economy'] is defined or adDetailAndDimensionFields['safety_features'] is defined %}
-            <li class="tab-title active"><a href="#basic_info_panel" id="basic_info_panel_tab">{{'The basics'|trans({}, 'frontend-show-ad')}}</a></li>
-        {% endif %}
-        {% if adDetailAndDimensionFields['performance_economy'] is defined %}
-            <li class="tab-title"><a href="#performance_economy_panel" id="performance_economy_panel_tab">{{'Performance & economy'|trans({}, 'frontend-show-ad')}}</a></li>
-        {% endif %}
-        {% if adDetailAndDimensionFields['safety_features'] is defined %}
-            <li class="tab-title"><a href="#safety_features_panel" id="safety_features_panel_tab">{{'Safety & features'|trans({}, 'frontend-show-ad')}}</a></li>
-        {% endif %}
-    </ul>
-    <dl class="accordion" data-accordion="">
-        <dd class="accordion-navigation">
-            <a href="#basic_info_panel" id="basic_info_panel_anchor" class="show-for-small-only">{{'The basics'|trans({}, 'frontend-show-ad')}} <i class="fi-plus right"></i></a>
-            <div class="content active" id="basic_info_panel">
-                <div class="hide-for-small-only">
+	<nav>
+		<div class="nav nav-tabs nav-fill custom-tabs" id="ad_motors_tabs" role="tablist">
+            {% if adDetailAndDimensionFields['performance_economy'] is defined or adDetailAndDimensionFields['safety_features'] is defined %}
+                <a href="#basic_info_panel" id="basic_info_panel_tab" aria-controls="nav-basic-tab" class="nav-item nav-link active" data-toggle="tab" role="tab" aria-selected="true">{{'The basics'|trans({}, 'frontend-show-ad')}}</a></li>
+            {% endif %}
+            {% if adDetailAndDimensionFields['performance_economy'] is defined %}
+                <a href="#performance_economy_panel"  id="performance_economy_panel_tab" aria-controls="nav-performance-economy" class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false">{{'Performance & economy'|trans({}, 'frontend-show-ad')}}</a></li>
+            {% endif %}
+            {% if adDetailAndDimensionFields['safety_features'] is defined %}
+                <a href="#safety_features_panel" id="safety_features_panel_tab" aria-controls="nav-safety-features" class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false">{{'Safety & features'|trans({}, 'frontend-show-ad')}}</a></li>
+            {% endif %}
+		</div>
+	</nav>
+    
+    <div class="tab-content">
+		<div class="tab-pane fade show active" id="basic_info_panel" role="tabpanel" aria-labelledby="nav-basic-tab">
+            <a href="#basic_info_panel" id="basic_info_panel_anchor" class="d-block d-md-none">{{'The basics'|trans({}, 'frontend-show-ad')}} <i class="fi-plus right"></i></a>
+                <div class="d-none d-md-block">
                     <div id="ad_desc">
                         {% if adMotorDetail['description'] is defined %}
                             {{ adMotorDetail['description']|replace({"\\n": "<br />", "&nbsp;": " "})|raw|nl2br }}
@@ -25,7 +27,7 @@
                     <a href="javascript:void(0);" class="read-less" style="display:none;">{{ 'Read less'|trans({}, 'frontend-show-ad') }}</a>
                 </div>
                 {% if adCategoryId not in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORHOMES_AND_CARAVANS_CARAVANS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORHOMES_AND_CARAVANS_STATIC_CARAVANS_ID')}%}
-                    <h5 class="hide-for-small-only">{{'The details'|trans({}, 'frontend-show-ad')}}</h5>
+                    <h5 class="d-none d-md-block">{{'The details'|trans({}, 'frontend-show-ad')}}</h5>
     
                     <div class="motor-info">
                         <div class="info-row">
@@ -116,10 +118,10 @@
                         {% endif %}
                     </div>
                 {% elseif adCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORHOMES_AND_CARAVANS_CARAVANS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORHOMES_AND_CARAVANS_STATIC_CARAVANS_ID')} and adDetailAndDimensionFields['detail'] is defined and adDetailAndDimensionFields['detail']|length %}
-                    <h5 class="hide-for-small-only">{{'The details'|trans({}, 'frontend-show-ad')}}</h5>
-                    <ul class="details-info">
+                    <h5 class="d-none d-md-block">{{'The details'|trans({}, 'frontend-show-ad')}}</h5>
+                    <ul class="details-info clearfix">
                         {% for fieldName, fieldValue in adDetailAndDimensionFields['detail'] %}
-                            <li class="clearfix">
+                            <li>
                                 <div class="detail-text">{{fieldName}}</div>
                                 <div class="detail-text">{{fieldValue|join(', ')|raw}}</div>
                             </li>
@@ -129,22 +131,22 @@
             </div>
 
             {% if adDetailAndDimensionFields['performance_economy'] is defined %}
-                <a href="#performance_economy_panel" class="show-for-small-only">{{'Performance & economy'|trans({}, 'frontend-show-ad')}}<i class="fi-plus right"></i></a>
-                <div class="content" id="performance_economy_panel">
-                    <ul class="details-info">
+            <div class="tab-pane fade" id="performance_economy_panel_tab" role="tabpanel" aria-labelledby="nav-performance-economy">
+                <a href="#performance_economy_panel" class="d-block d-md-none">{{'Performance & economy'|trans({}, 'frontend-show-ad')}}<i class="fi-plus right"></i></a>
+                    <ul class="details-info clearfix">
                          {% for fieldName, fieldValue in adDetailAndDimensionFields['performance_economy'] %}
-                             <li class="clearfix">
+                             <li>
                                  <div class="detail-text">{{fieldName}}</div>
                                  <div class="detail-text">{{fieldValue}}</div>
                              </li>
                          {% endfor %}
                      </ul>
-                </div>
+             </div>
              {% endif %}
-
+             
              {% if adDetailAndDimensionFields['safety_features'] is defined %}
-                <a href="#safety_features_panel" class="show-for-small-only" id="safety_features_panel_tab">{{'Safety & features'|trans({}, 'frontend-show-ad')}}<i class="fi-plus right"></i></a>
-                <div class="content" id="safety_features_panel">
+             <div class="tab-pane fade" id="safety_features_panel_tab" role="tabpanel" aria-labelledby="nav-safety-features">
+                <a href="#safety_features_panel" class="d-block d-md-none" id="safety_features_panel_tab">{{'Safety & features'|trans({}, 'frontend-show-ad')}}<i class="fi-plus right"></i></a>
                     {% if metaData['ncap_rating'] is defined or adMotorRepository.hasISOFixFeature(featureIds) or safetyFeatureIds|length %}
                         <h5>{{'Safety'|trans({}, 'frontend-show-ad')}}</h5>
                         {% if metaData['ncap_rating'] is defined or adMotorRepository.hasISOFixFeature(featureIds) %}
@@ -210,6 +212,5 @@
                     {% endif %}
                 </div>
             {% endif %}
-        </dd>
-    </dl>
+        </div>
 </div>

@@ -11,32 +11,36 @@
     {% endif %}
 {% endif %}
 
-{% if not isSoldExpiredAdFlag %}
-    <dl id="adDetailMainTabs" class="tabs relative" data-tab>
-        {% if rootCategoryId in {0:constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 1:constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), } %}
-            <dd class="active"><a href="#map_panel" id="map_tab_anchor"><span class="map-tab">Map-tab</span>{{'Map'|trans({}, 'frontend-show-ad')}}</a></dd>
-            {% if adImages|length or (allowAdEdit is defined and allowAdEdit) %}
-                <dd class="active"><a href="#photo_panel" id="photo-panel-id"><span class="photo-tab">Photo-tab</span>{{'Photos'|trans({}, 'frontend-show-ad')}}</a></dd>
+{# {% if not isSoldExpiredAdFlag %} #}
+<div class="detail-tabpart-1" id="adDetailMainTabs">
+	<nav>
+		<div class="nav nav-tabs nav-fill custom-tabs" id="nav-tab" role="tablist">
+			{% if rootCategoryId in {0:constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 1:constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), } %}
+                <a class="nav-item nav-link" id="map_tab_anchor" data-toggle="tab" href="#map_panel" role="tab" aria-controls="nav-profile" aria-selected="false"><span class="map-tab">Map-tab</span>{{'Map'|trans({}, 'frontend-show-ad')}}</a>
+                {% if adImages|length or (allowAdEdit is defined and allowAdEdit) %}
+                    <a class="nav-item nav-link active" id="photo-panel-id" data-toggle="tab" href="#photo_panel" role="tab" aria-controls="nav-home" aria-selected="true"><span class="photo-tab">Photo-tab</span>{{'Photos'|trans({}, 'frontend-show-ad')}}</a>
+                {% endif %}
+                {% if youtubeVideoUrl|length or (allowAdEdit is defined and allowAdEdit) %}
+                    <a class="nav-item nav-link {% if not adImages|length and not (allowAdEdit is defined and allowAdEdit) %} active {% endif %}" id="video-panel-id" data-toggle="tab" href="#video_panel" role="tab" aria-controls="nav-profile" aria-selected="false"><span class="video-tab">Video-tab</span>{{'Video'|trans({}, 'frontend-show-ad')}}</a>
+                {% endif %}
+            {% else %}
+                {% if adImages|length or (allowAdEdit is defined and allowAdEdit) %}
+                    <a class="nav-item nav-link active" id="photo-panel-id" data-toggle="tab" href="#photo_panel" role="tab" aria-controls="nav-home" aria-selected="true"><span class="photo-tab">Photo-tab</span>{{'Photos'|trans({}, 'frontend-show-ad')}}</a>
+                {% endif %}
+                {% if 'youtube_video_url' in paaFieldArray and (youtubeVideoUrl|length or (allowAdEdit is defined and allowAdEdit)) %}
+                    <a class="nav-item nav-link {% if not adImages|length and not (allowAdEdit is defined and allowAdEdit) %} active {% endif %}" id="video-panel-id" data-toggle="tab" href="#video_panel" role="tab" aria-controls="nav-profile" aria-selected="false"><span class="video-tab">Video-tab</span>{{'Video'|trans({}, 'frontend-show-ad')}}</a>
+                {% endif %}
+                <a class="nav-item nav-link {% if not adImages|length and not (allowAdEdit is defined and allowAdEdit) and  not youtubeVideoUrl|length %} active {% endif %}" id="map_tab_anchor" data-toggle="tab" href="#map_panel" role="tab" aria-controls="nav-profile" aria-selected="false"><span class="map-tab">Map-tab</span>{{'Map'|trans({}, 'frontend-show-ad')}}</a>
             {% endif %}
-            {% if youtubeVideoUrl|length or (allowAdEdit is defined and allowAdEdit) %}
-                <dd {% if not adImages|length and not (allowAdEdit is defined and allowAdEdit) %} class="active" {% endif %}><a href="#video_panel" id="video-panel-id"><span class="video-tab">Video-tab</span>{{'Video'|trans({}, 'frontend-show-ad')}}</a></dd>
-            {% endif %}
-        {% else %}
-            {% if adImages|length or (allowAdEdit is defined and allowAdEdit) %}
-                <dd class="active"><a href="#photo_panel" id="photo-panel-id"><span class="photo-tab">Photo-tab</span>{{'Photos'|trans({}, 'frontend-show-ad')}}</a></dd>
-            {% endif %}
-            {% if 'youtube_video_url' in paaFieldArray and (youtubeVideoUrl|length or (allowAdEdit is defined and allowAdEdit)) %}
-                <dd {% if not adImages|length and not (allowAdEdit is defined and allowAdEdit) %} class="active" {% endif %}><a href="#video_panel" id="video-panel-id"><span class="video-tab">Video-tab</span>{{'Video'|trans({}, 'frontend-show-ad')}}</a></dd>
-            {% endif %}
-            <dd {% if not adImages|length and not (allowAdEdit is defined and allowAdEdit) and  not youtubeVideoUrl|length %} class="active" {% endif %}><a href="#map_panel" id="map_tab_anchor"><span class="map-tab">Map-tab</span>{{'Map'|trans({}, 'frontend-show-ad')}}</a></dd>
-        {% endif %}
-        <dd class="text-right report-tab hide-for-small-only"><span class="report" onclick="return reportAd('{{ adId }}');" id="add-report-id">{{'Report'|trans({}, 'frontend-show-ad')}}</span></dd>
-    </dl>
-    <div class="tabs-content">
-        <div class="content {% if adImages|length or (allowAdEdit is defined and allowAdEdit) %}active{% endif %}" id="photo_panel">
-            {{ image_slider_html|raw }}
-        </div>
-        {% if (youtubeVideoUrl|length or (allowAdEdit is defined and allowAdEdit)) %}
+            <a class="text-right report-tab d-none d-md-block"><span class="report" onclick="return reportAd('{{ adId }}');" id="add-report-id">{{'Report'|trans({}, 'frontend-show-ad')}}</span></a>
+		</div>
+	</nav>
+	<div class="tab-content" id="nav-tabContent">
+		<div class="tab-pane fade show active photo-panel" id="photo_panel" role="tabpanel" aria-labelledby="nav-home-tab">
+			{{ image_slider_html|raw }}
+		</div>
+		
+		{% if (youtubeVideoUrl|length or (allowAdEdit is defined and allowAdEdit)) %}
             {% if youtubeVideoUrl|length %}
                 {% set youtubeVideoId = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getYouTubeVideoId', [youtubeVideoUrl]) %}
                 <div class="content" id="video_panel">
@@ -56,74 +60,38 @@
                 {% endif %}
             {% endif %}
         {% endif %}
-        <div class="content" id="map_panel">
-            {{ googlemap_location_html|raw }}
-        </div>
-    </div>
-{% endif %}
-{% if attribute(adDetail, constant(solrMapping ~ 'PERSONALIZED_TITLE')) is defined %}
-    <h2 class="detail-sub-head show-for-small-only">"{{attribute(adDetail, constant(solrMapping ~ 'PERSONALIZED_TITLE'))}}"</h2>
-{% endif %}
-
-{% if rootCategoryId not in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID')} %}
-    <div class="seller-mob-desc show-for-small-only">
-        <div id="ad_desc_mob">
-            {% if attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
-                {% if attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) is defined and  attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) not in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID')}  %}
-                    {% set optHideOrRemove = 'remove' %}
-                {% else %}
-                    {% set optHideOrRemove = 'hide' %}
-                {% endif %}
-                {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [orgAdDesc, optHideOrRemove, 'mob']) %}
-                {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), adDescWithReplacedPhone) %}
-                {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [adId, adDescWithReplacedPhone, 'hide', 'mob'])) %}
-            {% endif %}
-            {% if attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
-                <p>{{attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION'))|replace({"\\n": "<br />", "&nbsp;": " "})|raw}}</p>
-            {% endif %}
-        </div>
-        <a href="javascript:void(0);" class="read-more" style="display:none;">{{ 'Read more'|trans({}, 'frontend-show-ad') }}</a>
-        <a href="javascript:void(0);" class="read-less" style="display:none;">{{ 'Read less'|trans({}, 'frontend-show-ad') }}</a>
-    </div>
-{% endif %}
-
-{% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') and adDetail['user']['about_us'] is defined and adDetail['user']['about_us'] is not null %}
-    <b class="show-for-small-only">{{'About Us'|trans({}, 'frontend-preview-ad')}}</b>
-    <div class="seller-mob-desc show-for-small-only">
-        <div id="user_about_us_desc_mob">
-            <p>{{ adDetail['user']['about_us']|replace({"\\n": "<br />"})|raw}}</p>
-        </div>
-        <a href="javascript:void(0);" class="read-more" style="display:none;">{{ 'Read more'|trans({}, 'frontend-preview-ad') }}</a>
-        <a href="javascript:void(0);" class="read-less" style="display:none;">{{ 'Read less'|trans({}, 'frontend-preview-ad') }}</a>
-    </div>
-{% endif %}
-
+		<div class="tab-pane fade" id="map_panel" role="tabpanel" aria-labelledby="nav-profile-tab">
+			<div class="content" id="map_panel">
+            	{{ googlemap_location_html|raw }}
+		    </div>
+		</div>
+	</div>
+</div>	
+{# {% endif %} #}
 {% if not isSoldExpiredAdFlag %}
-    <div class="row dtl-user-links" id="detail_{{ adId }}">
-        <div class="large-12 columns dtl-white-btn">
-            <div class="clearfix">
-                <span id="fav_{{ adId }}">
-                    {% if adId in adFavoriteAdIds %}
-                        <a href="javascript:void(0);" onclick="return removeFromFavorite('{{adId}}');" class="save-item-btn added-in-fav" id="save-item-btn-id"><span class="saved-icon">save</span>{{'Favourite'|trans({}, 'frontend-show-ad')}}</a>
-                    {% else %}
-                        <a href="javascript:void(0);" onclick="return addToFavorite('{{adId}}');" class="save-item-btn" id="save-item-btn-id"><span class="save-icon">save</span>{{'Favourite'|trans({}, 'frontend-show-ad')}}</a>
-                    {% endif %}
-                </span>
+<div class="two-grid-col dtl-user-links">
+	<div class="left-col dtl-white-btn">
+        <span id="fav_{{ adId }}">
+            {% if adId in adFavoriteAdIds %}
+                <a href="javascript:void(0);" onclick="return removeFromFavorite('{{adId}}');" class="save-item-btn added-in-fav" id="save-item-btn-id"><span class="saved-icon">save</span>{{'Favourite'|trans({}, 'frontend-show-ad')}}</a>
+            {% else %}
+                <a href="javascript:void(0);" onclick="return addToFavorite('{{adId}}');" class="save-item-btn" id="save-item-btn-id"><span class="save-icon">save</span>{{'Favourite'|trans({}, 'frontend-show-ad')}}</a>
+            {% endif %}
+        </span>
 
-                <span class="report show-for-small-only" onclick="return reportAd('{{ adId }}');" id="add-report-id">{{'Report'|trans({}, 'frontend-show-ad')}}</span>
-            </div>
+        <span class="text-right report d-block d-md-none" onclick="return reportAd('{{ adId }}');" id="add-report-id">{{'Report'|trans({}, 'frontend-show-ad')}}</span>
+	</div>
+	<div class="right-col">
+		<div class="dtl-social-icons">
+           {{'Share'|trans({}, 'frontend-show-ad')}}:
+            <a onclick="return socialShare('{{adId}}', '{{container.getParameter('fa.social.share.url')}}/facebook/offer?url={{app.request.getUri()}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if attribute(adDetail, constant(solrMapping ~ 'TITLE')) is defined %}{{attribute(adDetail, constant(solrMapping ~ 'TITLE'))}}{% endif %}&pco=tbxnj-1.0', 'fb-share', '500', '300');" href="javascript:void(0);" title="{{'Facebook'|trans({}, 'frontend-show-ad')}}" class="dtl-fb" id="dtl-fb-id"></a>
+            <a onclick="return socialShare('{{adId}}', '{{container.getParameter('fa.social.share.url')}}/twitter/offer?url={{app.request.getUri()}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if attribute(adDetail, constant(solrMapping ~ 'TITLE')) is defined %}{{attribute(adDetail, constant(solrMapping ~ 'TITLE'))}}{% endif %}&pco=tbxnj-1.0', 'twitter-share', '500', '300');" href="javascript:void(0);" title="{{'Twitter'|trans({}, 'frontend-show-ad')}}" class="dtl-twi" id="dtl-twi-id"></a>
+            <a onclick="return socialShare('{{adId}}', '{{container.getParameter('fa.social.share.url')}}/google_plusone_share/offer?url={{app.request.getUri()}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if attribute(adDetail, constant(solrMapping ~ 'TITLE')) is defined %}{{attribute(adDetail, constant(solrMapping ~ 'TITLE'))}}{% endif %}&pco=tbxnj-1.0', 'google-plush-share', '500', '300');" href="javascript:void(0);" title="{{'Google Plus'|trans({}, 'frontend-show-ad')}}" class="dtl-gpl" id="dtl-gpl-id"></a>
+            <a onclick="return socialShare('{{adId}}', '{{container.getParameter('fa.social.share.url')}}/pinterest/offer?url={{app.request.getUri()}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if attribute(adDetail, constant(solrMapping ~ 'TITLE')) is defined %}{{attribute(adDetail, constant(solrMapping ~ 'TITLE'))}}{% endif %}&pco=tbxnj-1.0', 'pinterest-share', '800', '600');" href="javascript:void(0);" title="{{'Pinterest'|trans({}, 'frontend-show-ad')}}" class="dtl-pin" id="dtl-pin-id"></a>
+            <a onclick="return socialShare('{{adId}}', '{{container.getParameter('fa.social.share.url')}}/email/offer?url={{app.request.getUri()}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if attribute(adDetail, constant(solrMapping ~ 'TITLE')) is defined %}{{attribute(adDetail, constant(solrMapping ~ 'TITLE'))}}{% endif %}&pco=tbxnj-1.0', 'email-share', '800', '600');" href="javascript:void(0);" title="{{'Email'|trans({}, 'frontend-show-ad')}}" class="dtl-eml" id="dtl-eml-id"></a>        
         </div>
-        <div class="large-12 columns">
-            <div class="dtl-social-icons">
-                {{'Share'|trans({}, 'frontend-show-ad')}}:
-                <a onclick="return socialShare('{{adId}}', '{{container.getParameter('fa.social.share.url')}}/facebook/offer?url={{app.request.getUri()}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if attribute(adDetail, constant(solrMapping ~ 'TITLE')) is defined %}{{attribute(adDetail, constant(solrMapping ~ 'TITLE'))}}{% endif %}&pco=tbxnj-1.0', 'fb-share', '500', '300');" href="javascript:void(0);" title="{{'Facebook'|trans({}, 'frontend-show-ad')}}" class="dtl-fb" id="dtl-fb-id"></a>
-                <a onclick="return socialShare('{{adId}}', '{{container.getParameter('fa.social.share.url')}}/twitter/offer?url={{app.request.getUri()}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if attribute(adDetail, constant(solrMapping ~ 'TITLE')) is defined %}{{attribute(adDetail, constant(solrMapping ~ 'TITLE'))}}{% endif %}&pco=tbxnj-1.0', 'twitter-share', '500', '300');" href="javascript:void(0);" title="{{'Twitter'|trans({}, 'frontend-show-ad')}}" class="dtl-twi" id="dtl-twi-id"></a>
-                <a onclick="return socialShare('{{adId}}', '{{container.getParameter('fa.social.share.url')}}/google_plusone_share/offer?url={{app.request.getUri()}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if attribute(adDetail, constant(solrMapping ~ 'TITLE')) is defined %}{{attribute(adDetail, constant(solrMapping ~ 'TITLE'))}}{% endif %}&pco=tbxnj-1.0', 'google-plush-share', '500', '300');" href="javascript:void(0);" title="{{'Google Plus'|trans({}, 'frontend-show-ad')}}" class="dtl-gpl" id="dtl-gpl-id"></a>
-                <a onclick="return socialShare('{{adId}}', '{{container.getParameter('fa.social.share.url')}}/pinterest/offer?url={{app.request.getUri()}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if attribute(adDetail, constant(solrMapping ~ 'TITLE')) is defined %}{{attribute(adDetail, constant(solrMapping ~ 'TITLE'))}}{% endif %}&pco=tbxnj-1.0', 'pinterest-share', '800', '600');" href="javascript:void(0);" title="{{'Pinterest'|trans({}, 'frontend-show-ad')}}" class="dtl-pin" id="dtl-pin-id"></a>
-                <a onclick="return socialShare('{{adId}}', '{{container.getParameter('fa.social.share.url')}}/email/offer?url={{app.request.getUri()}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if attribute(adDetail, constant(solrMapping ~ 'TITLE')) is defined %}{{attribute(adDetail, constant(solrMapping ~ 'TITLE'))}}{% endif %}&pco=tbxnj-1.0', 'email-share', '800', '600');" href="javascript:void(0);" title="{{'Email'|trans({}, 'frontend-show-ad')}}" class="dtl-eml" id="dtl-eml-id"></a>
-            </div>
-        </div>
-    </div>
+	</div>
+</div>
 {% endif %}
 
 {% if recommendedSlotArray is defined and recommendedSlotArray|length %}

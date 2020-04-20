@@ -290,7 +290,9 @@
 	}
 </script>
 {% endblock %}
-
+{% block stylesheet %}
+	<link rel="stylesheet" href="{{ asset('/build/css/addetail.css') }}">
+{% endblock %}
 {% if promotePackages is defined and promotePackages|length %}
     {% set packageIdArray = {} %}
     {% set printOptionCount = 0 %}
@@ -358,81 +360,77 @@
 {% endif %}
 {% if currentDevice == 'D' or currentDevice == 'T' %}
     <div class="details-top-banner" id="sticky_item_information_id" style="display:none">
-        <div class="row">
-            <div class="columns">
-                <div class="row">
-                    <div class="large-16 columns">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-16 d-none d-md-block">
+                    {% if app.session.has('back_to_search_url') %}
+                        <a href="{{app.session.get('back_to_search_url')}}" class="back-to-list">test</a>
+                    {% endif %}
+                    <div class="col-md-22">
+                        {% if attribute(adDetail, constant(solrMapping ~ 'TITLE')) is defined %}
+                            <h3>{{ attribute(adDetail, constant(solrMapping ~ 'TITLE')) }}</h3>
+                        {% endif %}
                         <div class="clearfix">
-                            {% if app.session.has('back_to_search_url') %}
-                                <a href="{{app.session.get('back_to_search_url')}}" class="back-to-list">test</a>
+                            {% if (attribute(adDetail, constant(solrMapping ~ 'LOCALITY_ID')) is defined and attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')) is defined) %}
+                                <div class="detail-location"><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'LOCALITY_ID')).0 ~ ',' ~ attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Locality', attribute(adDetail, constant(solrMapping ~ 'LOCALITY_ID')).0) }}</a></div>
+                            {% elseif attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')) is defined %}
+                                {% if attribute(adDetail, constant(solrMapping ~ 'AREA_ID')) is defined  %}
+                                	{% if attribute(adDetail, constant(solrMapping ~ 'IS_SPECIAL_AREA_LOCATION')) is defined and attribute(adDetail, constant(solrMapping ~ 'IS_SPECIAL_AREA_LOCATION')) %}
+                                		<b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'AREA_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'AREA_ID')).0) }}</a></b>
+                                	{% else %}
+                                		<b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'AREA_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'AREA_ID')).0) ~ ', ' ~ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b>
+                                	{% endif %}
+                                {% else %}
+                            		<b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b>
+                            	{% endif %}
+                            {% else %}
+                                <div class="detail-location">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID')) }}</div>
                             {% endif %}
-                            <div class="large-22 columns">
-                                {% if attribute(adDetail, constant(solrMapping ~ 'TITLE')) is defined %}
-                                    <h3>{{ attribute(adDetail, constant(solrMapping ~ 'TITLE')) }}</h3>
+                            <div class="item-price">
+                                {% if attribute(adDetail, constant(solrMapping ~ 'PRICE')) is defined and attribute(adDetail, constant(solrMapping ~ 'PRICE')) > 0 and secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID')%}
+                                    {{ format_currency(attribute(adDetail, constant(solrMapping ~ 'PRICE'))) }} {% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') %}<span>{{'per hour'|trans({}, 'messages')}}</span>{% endif %}{% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') and attribute(adDetail, constant(solrMapping ~ 'RENT_PER_ID')) is defined %}<span>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', attribute(adDetail, constant(solrMapping ~ 'RENT_PER_ID'))) }}</span>{% endif %}
                                 {% endif %}
-                                <div class="clearfix">
-                                    {% if (attribute(adDetail, constant(solrMapping ~ 'LOCALITY_ID')) is defined and attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')) is defined) %}
-                                        <div class="detail-location"><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'LOCALITY_ID')).0 ~ ',' ~ attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Locality', attribute(adDetail, constant(solrMapping ~ 'LOCALITY_ID')).0) }}</a></div>
-                                    {% elseif attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')) is defined %}
-                                        {% if attribute(adDetail, constant(solrMapping ~ 'AREA_ID')) is defined  %}
-                                        	{% if attribute(adDetail, constant(solrMapping ~ 'IS_SPECIAL_AREA_LOCATION')) is defined and attribute(adDetail, constant(solrMapping ~ 'IS_SPECIAL_AREA_LOCATION')) %}
-                                        		<b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'AREA_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'AREA_ID')).0) }}</a></b>
-                                        	{% else %}
-                                        		<b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'AREA_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'AREA_ID')).0) ~ ', ' ~ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b>
-                                        	{% endif %}
-                                        {% else %}
-                                    		<b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b>
-                                    	{% endif %}
-                                    {% else %}
-                                        <div class="detail-location">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID')) }}</div>
-                                    {% endif %}
-                                    <div class="item-price">
-                                        {% if attribute(adDetail, constant(solrMapping ~ 'PRICE')) is defined and attribute(adDetail, constant(solrMapping ~ 'PRICE')) > 0 and secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID')%}
-                                            {{ format_currency(attribute(adDetail, constant(solrMapping ~ 'PRICE'))) }} {% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') %}<span>{{'per hour'|trans({}, 'messages')}}</span>{% endif %}{% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') and attribute(adDetail, constant(solrMapping ~ 'RENT_PER_ID')) is defined %}<span>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', attribute(adDetail, constant(solrMapping ~ 'RENT_PER_ID'))) }}</span>{% endif %}
-                                        {% endif %}
-                                        {% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and attribute(adDetail, constant(solrMapping ~ 'EVENT_START')) is defined %}
-                                            {% set eventStartDate = fetch_repository('FaAdBundle:AdCommunity').getEventDateForListing(attribute(adDetail, constant(solrMapping ~ 'EVENT_START')), (attribute(adDetail, constant(solrMapping ~ 'EVENT_END')) is defined ? attribute(adDetail, constant(solrMapping ~ 'EVENT_END')) : null), container) %}
-                                            <span class="whats-on item-preview-on">{{ eventStartDate }}</span>
-                                        {% endif %}
-                                    </div>
-                                </div>
+                                {% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and attribute(adDetail, constant(solrMapping ~ 'EVENT_START')) is defined %}
+                                    {% set eventStartDate = fetch_repository('FaAdBundle:AdCommunity').getEventDateForListing(attribute(adDetail, constant(solrMapping ~ 'EVENT_START')), (attribute(adDetail, constant(solrMapping ~ 'EVENT_END')) is defined ? attribute(adDetail, constant(solrMapping ~ 'EVENT_END')) : null), container) %}
+                                    <span class="whats-on item-preview-on">{{ eventStartDate }}</span>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
-                    <div class="large-8 columns">
-                        {% if not isSoldExpiredAdFlag and ((adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) or (adDetail['user'] is defined and showBuyNowWithPaypal)) %}
-                            <div class="clearfix {% if ((adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined)) and (adDetail['user'] is defined and showBuyNowWithPaypal) or (isOneclickenqbutton == true) %}double-buttons{% endif %}">
-                                {% if (adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) %}
-                                    <a href="javascript:void(0);" onclick="return contactSeller('{{ adId }}', 'Contact Seller button');" id="fixed_contact_button_anchor" class="primary-btn-1 button cont-seller-btn{% if (isOneclickenqbutton == false) %} expand{% endif %}">
-                                        <span class="btn-txt">
-                                            {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
-                                                {{'Apply'|trans({}, 'frontend-show-ad')}}
-                                            {% else %}
-                                                {{'Contact'|trans({}, 'frontend-show-ad')}}
-                                            {% endif %}
-                                        </span>
-                                        {% if adDetail['user'] is defined and adDetail['user']['contact_through_phone'] == 1 and adDetail['user']['contact_through_email'] == 1 %}
-                                            <span class="contact-icon">contact</span>
-                                        {% elseif adDetail['user'] is defined and not adDetail['user']['contact_through_phone'] and adDetail['user']['contact_through_email'] == 1 %}
-                                            <span class="contact-email-icon">contact</span>
-                                        {% elseif (adDetail['user'] is defined and adDetail['user']['contact_through_phone'] == 1 and not adDetail['user']['contact_through_email']) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) %}
-                                            <span class="contact-phone-icon">contact</span>
+                </div>
+                <div class="col-md-8">
+                    {% if not isSoldExpiredAdFlag and ((adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) or (adDetail['user'] is defined and showBuyNowWithPaypal)) %}
+                        <div class="{% if ((adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined)) and (adDetail['user'] is defined and showBuyNowWithPaypal) or (isOneclickenqbutton == true) %}double-buttons{% endif %}">
+                            {% if (adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) %}
+                                <a href="javascript:void(0);" onclick="return contactSeller('{{ adId }}', 'Contact Seller button');" id="fixed_contact_button_anchor" class="primary-btn-1 btn btn-block cont-seller-btn sticky-cont-seller-btn">
+                                    <span class="btn-txt">
+                                        {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
+                                            {{'Apply'|trans({}, 'frontend-show-ad')}}
+                                        {% else %}
+                                            {{'Contact'|trans({}, 'frontend-show-ad')}}
                                         {% endif %}
-                                    </a>
-                                {% endif %}
-                                {% if adDetail['user'] is defined and showBuyNowWithPaypal %}
-                                        <a href="{{ path('buy_now', {'adId': adId}) }}" class="primary-btn-1 button expand paypal-btn"><span class="btn-txt">{{'Buy now'|trans({}, 'frontend-show-ad')}}</span><span class="paypal-icon">paypal</span></a>
-                                {% endif %}
+                                    </span>
+                                    {% if adDetail['user'] is defined and adDetail['user']['contact_through_phone'] == 1 and adDetail['user']['contact_through_email'] == 1 %}
+                                        <span class="contact-icon">contact</span>
+                                    {% elseif adDetail['user'] is defined and not adDetail['user']['contact_through_phone'] and adDetail['user']['contact_through_email'] == 1 %}
+                                        <span class="contact-email-icon">contact</span>
+                                    {% elseif (adDetail['user'] is defined and adDetail['user']['contact_through_phone'] == 1 and not adDetail['user']['contact_through_email']) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) %}
+                                        <span class="contact-phone-icon">contact</span>
+                                    {% endif %}
+                                </a>
+                            {% endif %}
+                            {% if adDetail['user'] is defined and showBuyNowWithPaypal %}
+                                    <a href="{{ path('buy_now', {'adId': adId}) }}" class="primary-btn-1 btn btn-block paypal-btn sticky-cont-seller-btn"><span class="btn-txt">{{'Buy now'|trans({}, 'frontend-show-ad')}}</span><span class="paypal-icon">paypal</span></a>
+                            {% endif %}
 
-                                {% if (isOneclickenqbutton == true) %}
-                                    <a href="javascript:void(0)" class="primary-btn-2 button enquire-btn" onclick="return sendOneClickEnquiry();" >
-                                        <span class="btn-txt">{{'Still available?'|trans({}, 'frontend-show-ad')}}</span>
-                                        <span class="enquire-icon">{{'Still available?'|trans({}, 'frontend-show-ad')}}</span>
-                                    </a>
-                                {% endif %}
-                            </div>
-                        {% endif %}
-                    </div>
+                            {% if (isOneclickenqbutton == true) %}
+                                <a href="javascript:void(0)" class="primary-btn-2 button enquire-btn" onclick="return sendOneClickEnquiry();" >
+                                    <span class="btn-txt">{{'Still available?'|trans({}, 'frontend-show-ad')}}</span>
+                                    <span class="enquire-icon">{{'Still available?'|trans({}, 'frontend-show-ad')}}</span>
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -494,421 +492,325 @@
                         <span class="float-right"><a id ="edit_advert_link1" href="javascript:void(0);" class="edit-advert mt10">{{ 'Edit Advert'|trans({}, 'frontend-show-ad') }}</a></span>
                     {% endif %}
                 </p>
+                {% set noImage = 0 %}
+                {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, adDetail, '300X225', 1) %}
+                {% if not imagePath %}
+                    {% set imagePath = asset_url('fafrontend/images/no-image.svg') %}
+                    {% set noImage = 1 %}
+                {% endif %}
                 
+                 {% if rootCategoryId in {2:constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 3:constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), } %}
+                 <div class="detail-thumb-img">
+                    <div class="dtl-thumb{% if noImage == 1 %} img-placeholder{% endif %}">
+                        {% if noImage == 1 and allowAdEdit is defined and allowAdEdit %}
+                            <span>No photo?</span>
+                            <a class="primary-btn-3 button thin-btn" href="{{ path('ad_edit', {'id': adId, 'scrollTo': 'image'})}}">Add photo</a>
+                        {% else %}
+                            {% if noImage != 1 %}<a href="javascript:void(0);" onclick="showOriginalImage();">{% endif %}
+                                <img src="{{ imagePath }}" alt="no-image" />
+                            {% if noImage != 1 %}</a>{% endif %}
+
+                        {% endif %}
+                    </div>
+                 </div>
+                 {% endif %}
+                 
+                 <h1 class="detail-head">
+                    {% if seoFields.h1_tag is defined %}
+                        {{ seoManager.parseAdDetailSeoString(seoFields.h1_tag, adDetail) }}
+                    {% elseif attribute(adDetail, constant(solrMapping ~ 'TITLE')) is defined %}
+                        {{attribute(adDetail, constant(solrMapping ~ 'TITLE'))}}
+                    {% endif %}
+                 </h1>
+
+                 {% if attribute(adDetail, constant(solrMapping ~ 'PERSONALIZED_TITLE')) is defined %}
+                    <h2 class="detail-sub-head d-block d-md-none">"{{attribute(adDetail, constant(solrMapping ~ 'PERSONALIZED_TITLE'))}}"</h2>
+                 {% endif %}
+
+                 {% if attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')) is defined  %}
+                	{% set adLocationName = entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) %}
+                 {% endif %}
+                 <div class="two-grid-col">
+            		<div class="left-col">
+            			<div class="detail-location">
+							{% if (attribute(adDetail, constant(solrMapping ~ 'LOCALITY_ID')) is defined and attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')) is defined) %}
+                                <b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'LOCALITY_ID')).0 ~ ',' ~ attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0 }) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Locality', attribute(adDetail, constant(solrMapping ~ 'LOCALITY_ID')).0) }}</a></b>
+                            {% elseif attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')) is defined %}
+                            	{% if attribute(adDetail, constant(solrMapping ~ 'AREA_ID')) is defined  %}
+                                	{% if attribute(adDetail, constant(solrMapping ~ 'IS_SPECIAL_AREA_LOCATION')) is defined and attribute(adDetail, constant(solrMapping ~ 'IS_SPECIAL_AREA_LOCATION')) %}
+                                		<b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'AREA_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'AREA_ID')).0) }}</a></b>
+                                	{% else %}
+                                		<b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'AREA_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'AREA_ID')).0) ~ ', ' ~ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b>
+                                	{% endif %}
+                                {% else %}
+                            		<b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b>
+                        	    {% endif %}
+                        	    {# {% else %}
+                                <b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b> #}
+                            {% endif %}
+						</div>
+            		</div>
+            		<div class="right-col d-none d-md-block">
+        				{% if allowAdEdit is defined and allowAdEdit %}
+                            <a id ="edit_advert_link2"  href="javascript:void(0)" class="edit-advert">{{ 'Edit Advert'|trans({}, 'frontend-show-ad') }}</a>
+                        {% endif %}
+                        
+                        {% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')} and adDetail['user']['company_welcome_message'] is defined and adDetail['user']['company_welcome_message'] is not null %}
+                            <h2 class="services-desc">{{ adDetail['user']['company_welcome_message']|replace({"\\n": "<br />"})|raw }}</h2>
+                        {% endif %}
+            		</div>
+            	</div>
+            	{% if allowAdEdit is defined and promotePackages[0] is defined and allowAdEdit and attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) is defined and  attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID')} and ((adPackageArray[adId] is defined and adPackageArray[adId]['price'] == 0) or adPackageArray[adId] is not defined) %}
+                   {# get featured Top upsell from packages #}
+                  	{% set getTopUpsellPackagePrice = fetch_repository('FaPromotionBundle:Package').getPackageFeturedTopUpsellPrice(promotePackages) %}
+                    <div class="upgrade-box">
+                        <div class="row">
+                            <div class="col-md-16">
+                                <b>{{ 'Your ad type: %package_title%'|trans({'%package_title%': adPackageArray[adId]['title']}, 'frontend-show-ad') }}</b><br />
+                                {% if promotePackages[0] is defined  %}
+                                    {{ 'Get a better response by upgrading to %next_package_text% for %next_package_price%'|trans({'%next_package_text%': promotePackages[0].getPackage().getTitle(), '%next_package_price%': format_currency(packageActualPrice)}, 'frontend-show-ad') }}
+                                {% endif %}
+                            </div>
+                            <div class="col-md-8">
+                                {# <a id="upgrade_now_link" class="primary-btn-1 button thin-btn expand mb0" href="javascript:void(0);">{{'Upgrade now'|trans({}, 'frontend-manage-my-ad')}}</a> #}
+                                 <a id="upgrade_now_link" class="primary-btn-1 button thin-btn expand mb0" href="javascript:void(0);" onclick="return upgradeToNextPlanBtn('{{ adId }}', '{{ rootCategoryId }}');">{{'Upgrade now'|trans({}, 'frontend-manage-my-ad')}}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="upgradeBasicAdToFeaturedModal" class="modal tiny remove-item-modal upgrade-modal"></div>
+                {% endif %}
+	            <div class="two-grid-col d-inline-flex f-width d-block d-md-none">
+            		<div class="left-col">
+            		{% if secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and attribute(adDetail, constant(solrMapping ~ 'PRICE')) is defined and attribute(adDetail, constant(solrMapping ~ 'PRICE')) > 0 %}
+						<b class="item-price {% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') or (rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') and attribute(adDetail, constant(solrMapping ~ 'RENT_PER_ID')) is defined) %}classes-tution-price{% endif %}">
+                            {{ format_currency(attribute(adDetail, constant(solrMapping ~ 'PRICE'))) }}{% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') %}<span>{{'per hour'|trans({}, 'messages')}}</span>{% endif %}{% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') and attribute(adDetail, constant(solrMapping ~ 'RENT_PER_ID')) is defined %}<span>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', attribute(adDetail, constant(solrMapping ~ 'RENT_PER_ID'))) }}</span>{% endif %}
+                        </b>
+                        {% if attribute(adDetail, constant(solrMapping ~ 'POSTAGE_PRICE')) is defined and attribute(adDetail, constant(solrMapping ~ 'POSTAGE_PRICE')) > 0 %}
+                            <div class="item-postage">
+                                <b>+ {{ format_currency(attribute(adDetail, constant(solrMapping ~ 'POSTAGE_PRICE'))) }}</b> {{ 'postage'|trans({}, 'frontend-show-ad') }}
+                            </div>
+                        {% endif %}
+					{% endif %}
+            		</div>
+            		<div class="right-col">
+			            {% if attribute(adDetail, constant(solrMapping ~ 'DELIVERY_METHOD_OPTION_ID')) is defined %}
+                            <div class="mob-delivery-method">
+                                <span class="person-collection">
+                                    {{ entityCacheManager.getEntityNameById('FaPaymentBundle:DeliveryMethodOption', attribute(adDetail, constant(solrMapping ~ 'DELIVERY_METHOD_OPTION_ID'))) }}
+                                </span>
+                            </div>
+                        {% endif %}
+            		</div>
+            	</div>
+            	{% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and attribute(adDetail, constant(solrMapping ~ 'EVENT_START')) is defined %}
+                    {% set eventStartDate = fetch_repository('FaAdBundle:AdCommunity').getEventDateForListing(attribute(adDetail, constant(solrMapping ~ 'EVENT_START')), (attribute(adDetail, constant(solrMapping ~ 'EVENT_END')) is defined ? attribute(adDetail, constant(solrMapping ~ 'EVENT_END')) : null), container) %}
+                    <div class="clearfix">
+                        <span class="whats-on item-preview-on show-for-small-only">{{ eventStartDate }}</span>
+                    </div>
+                {% endif %}
+                
+                {% set latitude = null %}
+                {% set longitude = null %}
+                {% if attribute(adDetail, constant(solrMapping ~ 'LATITUDE')) is defined and attribute(adDetail, constant(solrMapping ~ 'LONGITUDE')) is defined %}
+                    {% set latitude = attribute(adDetail, constant(solrMapping ~ 'LATITUDE')).0 %}
+                    {% set longitude = attribute(adDetail, constant(solrMapping ~ 'LONGITUDE')).0 %}
+                    {% set mapHeight = '400px' %}
+                    {% set mapWidth =  '709px' %}
+                    {{ set_variables('adDetailMap', {'latitude':latitude, 'longitude': longitude, 'tabId': 'adDetailMainTabs', 'mapContentId': 'map_panel'}) }}
+                {% endif %}
+
+                {% if attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
+                    {% if attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) is defined and  attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) not in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID')}  %}
+                        {% set optHideOrRemove = 'remove' %}
+                    {% else %}
+                        {% set optHideOrRemove = 'hide' %}
+                    {% endif %}
+                    {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [orgAdDesc, optHideOrRemove,'AdDetails']) %}
+                    {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), adDescWithReplacedPhone) %}
+                    {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [adId, adDescWithReplacedPhone, optHideOrRemove,'AdDetails'])) %}
+                {% endif %}
+
+                {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
+                    {% set adJobDetail = {} %}
+                    {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
+                        {% set adJobDetail = adJobDetail|merge({'description': attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION'))}) %}
+                    {% endif %}
+                    {% set metaData = {} %}
+                    {% set additionalJobReqIds = {} %}
+                    {% set additionalJobBenefitIds = {} %}
+                    {% set featureIds = {} %}
+                    {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'META_DATA')) is defined %}
+                        {% set metaData = array_unserialize(attribute(adDetail, constant(solrMapping ~ 'META_DATA'))) %}
+                        {% if metaData['additional_job_requirements_id'] is defined %}
+                            {% set additionalJobReqIds = metaData['additional_job_requirements_id']|split(',') %}
+                        {% endif %}
+                        {% if metaData['additional_benefits_id'] is defined %}
+                            {% set additionalJobBenefitIds = metaData['additional_benefits_id']|split(',') %}
+                        {% endif %}
+                    {% endif %}
+                    {{ include('FaAdBundle:Ad:AdJobDetailTabs.html.twig') }}
+                {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID') %}
+                    {% set adServiceDetail = {} %}
+                    {% set servicesOfferedIds = {} %}
+                    {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
+                        {% set adServiceDetail = adServiceDetail|merge({'description': attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION'))}) %}
+                    {% endif %}
+                    {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'SERVICES_OFFERED_ID')) is defined %}
+                        {% set servicesOfferedIds = attribute(adDetail, constant(solrMapping ~ 'SERVICES_OFFERED_ID')) %}
+                    {% endif %}
+                    {{ include('FaAdBundle:Ad:AdServiceDetailTabs.html.twig') }}
+                {% endif %}
+                
+            	{{ include('FaAdBundle:Ad:showMapImages.html.twig', { 'googlemap_location_html': block('googlemap_location_html'), 'image_slider_html': block('image_slider_html'), 'allowAdEdit': allowAdEdit, 'imageZoomBannerExist': imageZoomBannerExist }) }}	
+                
+                {% if attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
+                    {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [orgAdDesc, optHideOrRemove,'AdDetails']) %}
+                    {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), adDescWithReplacedPhone) %}
+                    {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [adId, adDescWithReplacedPhone, optHideOrRemove,'AdDetails'])) %}
+                {% endif %}
+
+                {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
+                    {% set adForSaleDetail = {} %}
+                    {% set postagePayment = {} %}
+                    {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
+                        {% set adForSaleDetail = adForSaleDetail|merge({'description': attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION'))}) %}
+                    {% endif %}
+                    {% if attribute(adDetail, constant(solrMapping ~ 'DELIVERY_METHOD_OPTION_ID')) is defined %}
+                        {% set postagePayment = postagePayment|merge({'delivery_method': entityCacheManager.getEntityNameById('FaPaymentBundle:DeliveryMethodOption', attribute(adDetail, constant(solrMapping ~ 'DELIVERY_METHOD_OPTION_ID')))}) %}
+                    {% endif %}
+                    {% if attribute(adDetail, constant(solrMapping ~ 'PAYMENT_METHOD_OPTION_ID')) is defined %}
+                        {% set postagePayment = postagePayment|merge({'payment_method': paymentRepository.getPaymentMethodNameById(attribute(adDetail, constant(solrMapping ~ 'PAYMENT_METHOD_OPTION_ID')), container)}) %}
+                    {% endif %}
+                    {% if postagePayment|length%}
+                        {% set adForSaleDetail = adForSaleDetail|merge({'postage_payment': postagePayment}) %}
+                    {% endif %}
+                    {{ include('FaAdBundle:Ad:AdForSaleDetailTabs.html.twig') }}
+                {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMUNITY_ID') %}
+                    {% set adCommunityDetail = {} %}
+                    {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
+                        {% set adCommunityDetail = adCommunityDetail|merge({'description': attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION'))}) %}
+                    {% endif %}
+                    {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'PRICE')) is defined and attribute(adDetail, constant(solrMapping ~ 'PRICE')) > 0 and secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') %}
+                        {% set adCommunityDetail = adCommunityDetail|merge({'price': attribute(adDetail, constant(solrMapping ~ 'PRICE'))}) %}
+                    {% endif %}
+                    {{ include('FaAdBundle:Ad:AdCommunityDetailTabs.html.twig') }}
+                {% elseif secondLevelCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CARS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMERCIALVEHICLES_ID'), 2: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORBIKES_ID'), 3: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORHOMES_AND_CARAVANS_ID')} %}
+                    {% set adMotorRepository = fetch_repository('FaAdBundle:AdMotors') %}
+                    {% set adMotorDetail = {} %}
+                    {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
+                        {% set adMotorDetail = adMotorDetail|merge({'description': attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION'))}) %}
+                    {% endif %}
+                    {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'COLOUR_ID')) is defined %}
+                        {% set adMotorDetail = adMotorDetail|merge({'colour_id': attribute(adDetail, constant(solrMapping ~ 'COLOUR_ID'))}) %}
+                    {% endif %}
+                    {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'FUEL_TYPE_ID')) is defined %}
+                        {% set adMotorDetail = adMotorDetail|merge({'fuel_type_id': attribute(adDetail, constant(solrMapping ~ 'FUEL_TYPE_ID'))}) %}
+                    {% endif %}
+                    {% set metaData = {} %}
+                    {% set featureIds = {} %}
+                    {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'META_DATA')) is defined %}
+                        {% set metaData = array_unserialize(attribute(adDetail, constant(solrMapping ~ 'META_DATA'))) %}
+                        {% if metaData['features_id'] is defined %}
+                            {% set featureIds = metaData['features_id']|split(',') %}
+                        {% endif %}
+                    {% endif %}
+
+                    {% set safetyFeatureIds = adMotorRepository.getSafetyFeature(featureIds) %}
+                    {% set otherFeatureIds = adMotorRepository.getOtherFeature(featureIds) %}
+                    {{ include('FaAdBundle:Ad:AdMotorDetailTabs.html.twig') }}
+                    <br>
+                    {% if secondLevelCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CARS_ID')} %}
+                        {{ include('FaAdBundle:Ad:zutoLoanCalc.html.twig') }}
+                    {% endif %}
+
+                {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') %}
+                    {% set adPropertyDetail = {} %}
+                    {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
+                        {% set adPropertyDetail = adPropertyDetail|merge({'description': attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION'))}) %}
+                    {% endif %}
+                    {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'NUMBER_OF_BEDROOMS_ID')) is defined %}
+                        {% set adPropertyDetail = adPropertyDetail|merge({'number_of_bedrooms_id': attribute(adDetail, constant(solrMapping ~ 'NUMBER_OF_BEDROOMS_ID'))}) %}
+                    {% endif %}
+                    {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'NUMBER_OF_BATHROOMS_ID')) is defined %}
+                        {% set adPropertyDetail = adPropertyDetail|merge({'number_of_bathrooms_id': attribute(adDetail, constant(solrMapping ~ 'NUMBER_OF_BATHROOMS_ID'))}) %}
+                    {% endif %}
+                    {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'TYPE_ID')) is defined %}
+                        {% set adPropertyDetail = adPropertyDetail|merge({'type_id': attribute(adDetail, constant(solrMapping ~ 'TYPE_ID'))}) %}
+                    {% endif %}
+                    {% set metaData = {} %}
+                    {% set amenitiesIds = {} %}
+                    {% set billsIncludedIds = {} %}
+                    {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'META_DATA')) is defined %}
+                        {% set metaData = array_unserialize(attribute(adDetail, constant(solrMapping ~ 'META_DATA'))) %}
+                    {% endif %}
+                    {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'AMENITIES_ID')) is defined %}
+                        {% set amenitiesIds = attribute(adDetail, constant(solrMapping ~ 'AMENITIES_ID')) %}
+                    {% endif %}
+                    {% if metaData['bills_included_in_rent_id'] is defined %}
+                        {% set billsIncludedIds = metaData['bills_included_in_rent_id']|split(',') %}
+                    {% endif %}
+                    {{ include('FaAdBundle:Ad:AdPropertyDetailTabs.html.twig') }}
+                {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+                    {% set adAdultDetail = {} %}
+                    {% set servicesIds = {} %}
+                    {% set metaData = {} %}
+                    {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'META_DATA')) is defined %}
+                    	{% set metaData = array_unserialize(attribute(adDetail, constant(solrMapping ~ 'META_DATA'))) %}
+                    	{% if metaData['rates_id']['incall'] is defined %}
+                            {% set adultInCallRates = metaData['rates_id']['incall'] %}
+                        {% endif %}
+                        {% if metaData['rates_id']['outcall'] is defined %}
+                            {% set adultOutCallRates = metaData['rates_id']['outcall'] %}
+                        {% endif %}
+                    {% endif %}
+                    {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
+                        {% set adAdultDetail = adAdultDetail|merge({'description': attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION'))}) %}
+                    {% endif %}
+                    {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'SERVICES_ID')) is defined %}
+                        {% set servicesIds = attribute(adDetail, constant(solrMapping ~ 'SERVICES_ID')) %}
+                    {% endif %}
+                    {{ include('FaAdBundle:Ad:AdAdultDetailTabs.html.twig') }}
+                {% elseif rootCategoryId not in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID')} %}
+                    {{ include('FaAdBundle:Ad:AdDetailTabs.html.twig') }}
+                {% endif %}
+                <br />
+                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_BELOW_DESCRIPTION_DESKTOP') %}
+                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_BELOW_DESCRIPTION_TABLET') %}
+                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}            
         	</div>
-        	<div class="col-md-8">
-        	</div>
+            {{ include('FaAdBundle:Ad:AdDetailRightPanel.html.twig') }}
 		</div>
     </div>
 </div>
+{% if not isSoldExpiredAdFlag and similarAds['totalAds'] is defined and similarAds['totalAds'] > 0 %}
+    {{ block('similar_ads_html') }}
+{% endif %}
 
-<div class="banner-wrapper clearfix">
+{% if currentDevice == 'M' and relatedBusinesses is defined and relatedBusinesses|length %}
+    {{ include('FaAdBundle:Ad:relatedBusinessesMobile.html.twig') }}
+{% endif %}
 
-    <div class="row relative details-wrapper banner-mid-column">
-    	<div class="left-banner">
-        </div>
-        <div class="">
-            <div class="">
-                <div class="columns">
-                    <div class="row">
-                        <div class="large-16 columns">
+{% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_BOTTOM_DESKTOP') %}
+{{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
+{% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_BOTTOM_TABLET') %}
+{{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
+{% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_BOTTOM_MOBILE') %}
+{{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
 
-                            <div class="row show-for-small-only">
-                                <div class="small-14 columns">
-                                    <p class="listed-date">
-                                        {% if attribute(adDetail, constant(solrMapping ~ 'PUBLISHED_AT')) is defined %}
-                                            <span class="ago-icon">ago</span>{{attribute(adDetail, constant(solrMapping ~ 'PUBLISHED_AT'))|time_ago_in_words}}
-                                        {% endif %}
-                                    </p>
-                                </div>
-                                <div class="small-10 columns">
-                                    {% if allowAdEdit is defined and allowAdEdit %}
-                                        <a id ="edit_advert_link1" href="javascript:void(0);" class="edit-advert mt10">{{ 'Edit Advert'|trans({}, 'frontend-show-ad') }}</a>
-                                    {% endif %}
-                                </div>
-                            </div>
+{% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+	{{ render(controller('FaAdBundle:Ad:showAdDetailSeoBlocks', {'categoryId': adCategoryId, 'seoPageRule': seoPageRule, 'adLocationName' : adLocationName})) }}
+{% else %}
+    {% cache 'addetail|page|seo'~adCategoryId 900 %}
+        {{ render(controller('FaAdBundle:Ad:showAdDetailSeoBlocks', {'categoryId': adCategoryId, 'seoPageRule': seoPageRule, 'adLocationName' : adLocationName})) }}
+    {% endcache %}
+{% endif %}
 
-                            {% set noImage = 0 %}
-                            {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, adDetail, '300X225', 1) %}
-                            {% if not imagePath %}
-                                {% set imagePath = asset_url('fafrontend/images/no-image.svg') %}
-                                {% set noImage = 1 %}
-                            {% endif %}
-                            {% if rootCategoryId in {2:constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 3:constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), } %}
-                            <div class="detail-thumb-img">
-                                <div class="dtl-thumb{% if noImage == 1 %} img-placeholder{% endif %}">
-                                    {% if noImage == 1 and allowAdEdit is defined and allowAdEdit %}
-                                        <span>No photo?</span>
-                                        <a class="primary-btn-3 button thin-btn" href="{{ path('ad_edit', {'id': adId, 'scrollTo': 'image'})}}">Add photo</a>
-                                    {% else %}
-                                        {% if noImage != 1 %}<a href="javascript:void(0);" onclick="showOriginalImage();">{% endif %}
-                                            <img src="{{ imagePath }}" alt="no-image" />
-                                        {% if noImage != 1 %}</a>{% endif %}
-
-                                    {% endif %}
-                                </div>
-                            </div>
-                            {% endif %}
-                            <h1 class="detail-head">
-                                {% if seoFields.h1_tag is defined %}
-                                    {{ seoManager.parseAdDetailSeoString(seoFields.h1_tag, adDetail) }}
-                                {% elseif attribute(adDetail, constant(solrMapping ~ 'TITLE')) is defined %}
-                                    {{attribute(adDetail, constant(solrMapping ~ 'TITLE'))}}
-                                {% endif %}
-                            </h1>
-
-                            {% if attribute(adDetail, constant(solrMapping ~ 'PERSONALIZED_TITLE')) is defined %}
-                                <h2 class="detail-sub-head hide-for-small-only">"{{attribute(adDetail, constant(solrMapping ~ 'PERSONALIZED_TITLE'))}}"</h2>
-                            {% endif %}
-
-                            {% if attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')) is defined  %}
-                            	{% set adLocationName = entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) %}
-                            {% endif %}
-
-                            <div class="row {% if rootCategoryId in {2:constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 3:constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), } %}location-with-image{% endif %}">
-                                <div class="large-12 medium-11 columns">
-                                    <div class="detail-location">
-                                        {% if (attribute(adDetail, constant(solrMapping ~ 'LOCALITY_ID')) is defined and attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')) is defined) %}
-                                            <b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'LOCALITY_ID')).0 ~ ',' ~ attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0 }) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Locality', attribute(adDetail, constant(solrMapping ~ 'LOCALITY_ID')).0) }}</a></b>
-                                        {% elseif attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')) is defined %}
-                                        	{% if attribute(adDetail, constant(solrMapping ~ 'AREA_ID')) is defined  %}
-                                            	{% if attribute(adDetail, constant(solrMapping ~ 'IS_SPECIAL_AREA_LOCATION')) is defined and attribute(adDetail, constant(solrMapping ~ 'IS_SPECIAL_AREA_LOCATION')) %}
-                                            		<b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'AREA_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'AREA_ID')).0) }}</a></b>
-                                            	{% else %}
-                                            		<b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'AREA_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'AREA_ID')).0) ~ ', ' ~ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b>
-                                            	{% endif %}
-                                            {% else %}
-                                        		<b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b>
-                                    	    {% endif %}
-                                    	    {# {% else %}
-                                            <b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b> #}
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="large-6 medium-6 columns hide-for-small-only">
-                                    {% if allowAdEdit is defined and allowAdEdit %}
-                                        <a id ="edit_advert_link2"  href="javascript:void(0)" class="edit-advert">{{ 'Edit Advert'|trans({}, 'frontend-show-ad') }}</a>
-                                    {% endif %}
-                                </div>
-                            </div>
-
-                            {% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')} and adDetail['user']['company_welcome_message'] is defined and adDetail['user']['company_welcome_message'] is not null %}
-                                <h2 class="services-desc">{{ adDetail['user']['company_welcome_message']|replace({"\\n": "<br />"})|raw }}</h2>
-                            {% endif %}
-
-                            {% if allowAdEdit is defined and promotePackages[0] is defined and allowAdEdit and attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) is defined and  attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID')} and ((adPackageArray[adId] is defined and adPackageArray[adId]['price'] == 0) or adPackageArray[adId] is not defined) %}
-                               {# get featured Top upsell from packages #}
-                              	{% set getTopUpsellPackagePrice = fetch_repository('FaPromotionBundle:Package').getPackageFeturedTopUpsellPrice(promotePackages) %}
-                                <div class="upgrade-box">
-                                    <div class="row">
-                                        <div class="large-16 columns">
-                                            <b>{{ 'Your ad type: %package_title%'|trans({'%package_title%': adPackageArray[adId]['title']}, 'frontend-show-ad') }}</b><br />
-                                            {% if promotePackages[0] is defined  %}
-                                                {{ 'Get a better response by upgrading to %next_package_text% for %next_package_price%'|trans({'%next_package_text%': promotePackages[0].getPackage().getTitle(), '%next_package_price%': format_currency(packageActualPrice)}, 'frontend-show-ad') }}
-                                            {% endif %}
-                                        </div>
-                                        <div class="large-8 columns">
-                                            {# <a id="upgrade_now_link" class="primary-btn-1 button thin-btn expand mb0" href="javascript:void(0);">{{'Upgrade now'|trans({}, 'frontend-manage-my-ad')}}</a> #}
-                                             <a id="upgrade_now_link" class="primary-btn-1 button thin-btn expand mb0" href="javascript:void(0);" onclick="return upgradeToNextPlanBtn('{{ adId }}', '{{ rootCategoryId }}');">{{'Upgrade now'|trans({}, 'frontend-manage-my-ad')}}</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="upgradeBasicAdToFeaturedModal" class="reveal-modal tiny remove-item-modal upgrade-modal" data-reveal></div>
-                            {% endif %}
-
-                            <div class="clearfix">
-                                {% if secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and attribute(adDetail, constant(solrMapping ~ 'PRICE')) is defined and attribute(adDetail, constant(solrMapping ~ 'PRICE')) > 0 %}
-                                    <div class="show-for-small-only left">
-                                        <b class="item-price show-for-small-only {% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') or (rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') and attribute(adDetail, constant(solrMapping ~ 'RENT_PER_ID')) is defined) %}classes-tution-price{% endif %}">
-                                            {{ format_currency(attribute(adDetail, constant(solrMapping ~ 'PRICE'))) }}{% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') %}<span>{{'per hour'|trans({}, 'messages')}}</span>{% endif %}{% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') and attribute(adDetail, constant(solrMapping ~ 'RENT_PER_ID')) is defined %}<span>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', attribute(adDetail, constant(solrMapping ~ 'RENT_PER_ID'))) }}</span>{% endif %}
-                                        </b>
-                                        {% if attribute(adDetail, constant(solrMapping ~ 'POSTAGE_PRICE')) is defined and attribute(adDetail, constant(solrMapping ~ 'POSTAGE_PRICE')) > 0 %}
-                                            <div class="item-postage show-for-small-only">
-                                                <b>+ {{ format_currency(attribute(adDetail, constant(solrMapping ~ 'POSTAGE_PRICE'))) }}</b> {{ 'postage'|trans({}, 'frontend-show-ad') }}
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                {% endif %}
-                                {% if attribute(adDetail, constant(solrMapping ~ 'DELIVERY_METHOD_OPTION_ID')) is defined %}
-                                    <div class="show-for-small-only mob-delivery-method">
-                                        <span class="person-collection">
-                                            {{ entityCacheManager.getEntityNameById('FaPaymentBundle:DeliveryMethodOption', attribute(adDetail, constant(solrMapping ~ 'DELIVERY_METHOD_OPTION_ID'))) }}
-                                        </span>
-                                    </div>
-                                {% endif %}
-                            </div>
-                            {% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and attribute(adDetail, constant(solrMapping ~ 'EVENT_START')) is defined %}
-                                {% set eventStartDate = fetch_repository('FaAdBundle:AdCommunity').getEventDateForListing(attribute(adDetail, constant(solrMapping ~ 'EVENT_START')), (attribute(adDetail, constant(solrMapping ~ 'EVENT_END')) is defined ? attribute(adDetail, constant(solrMapping ~ 'EVENT_END')) : null), container) %}
-                                <div class="clearfix">
-                                    <span class="whats-on item-preview-on show-for-small-only">{{ eventStartDate }}</span>
-                                </div>
-                            {% endif %}
-
-                            {% set latitude = null %}
-                            {% set longitude = null %}
-                            {% if attribute(adDetail, constant(solrMapping ~ 'LATITUDE')) is defined and attribute(adDetail, constant(solrMapping ~ 'LONGITUDE')) is defined %}
-                                {% set latitude = attribute(adDetail, constant(solrMapping ~ 'LATITUDE')).0 %}
-                                {% set longitude = attribute(adDetail, constant(solrMapping ~ 'LONGITUDE')).0 %}
-                                {% set mapHeight = '400px' %}
-                                {% set mapWidth =  '709px' %}
-                                {{ set_variables('adDetailMap', {'latitude':latitude, 'longitude': longitude, 'tabId': 'adDetailMainTabs', 'mapContentId': 'map_panel'}) }}
-                            {% endif %}
-
-                            {% if attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
-                                {% if attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) is defined and  attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) not in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID')}  %}
-                                    {% set optHideOrRemove = 'remove' %}
-                                {% else %}
-                                    {% set optHideOrRemove = 'hide' %}
-                                {% endif %}
-                                {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [orgAdDesc, optHideOrRemove]) %}
-                                {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), adDescWithReplacedPhone) %}
-                                {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [adId, adDescWithReplacedPhone, optHideOrRemove])) %}
-                            {% endif %}
-
-                            {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
-                                {% set adJobDetail = {} %}
-                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
-                                    {% set adJobDetail = adJobDetail|merge({'description': attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION'))}) %}
-                                {% endif %}
-                                {% set metaData = {} %}
-                                {% set additionalJobReqIds = {} %}
-                                {% set additionalJobBenefitIds = {} %}
-                                {% set featureIds = {} %}
-                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'META_DATA')) is defined %}
-                                    {% set metaData = array_unserialize(attribute(adDetail, constant(solrMapping ~ 'META_DATA'))) %}
-                                    {% if metaData['additional_job_requirements_id'] is defined %}
-                                        {% set additionalJobReqIds = metaData['additional_job_requirements_id']|split(',') %}
-                                    {% endif %}
-                                    {% if metaData['additional_benefits_id'] is defined %}
-                                        {% set additionalJobBenefitIds = metaData['additional_benefits_id']|split(',') %}
-                                    {% endif %}
-                                {% endif %}
-                                {{ include('FaAdBundle:Ad:AdJobDetailTabs.html.twig') }}
-                                <br />
-                            {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID') %}
-                                {% set adServiceDetail = {} %}
-                                {% set servicesOfferedIds = {} %}
-                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
-                                    {% set adServiceDetail = adServiceDetail|merge({'description': attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION'))}) %}
-                                {% endif %}
-                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'SERVICES_OFFERED_ID')) is defined %}
-                                    {% set servicesOfferedIds = attribute(adDetail, constant(solrMapping ~ 'SERVICES_OFFERED_ID')) %}
-                                {% endif %}
-                                {{ include('FaAdBundle:Ad:AdServiceDetailTabs.html.twig') }}
-                                <br />
-                            {% endif %}
-
-                            {{ include('FaAdBundle:Ad:showMapImages.html.twig', { 'googlemap_location_html': block('googlemap_location_html'), 'image_slider_html': block('image_slider_html'), 'allowAdEdit': allowAdEdit, 'imageZoomBannerExist': imageZoomBannerExist }) }}
-
-                            {% if attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
-                                {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [orgAdDesc, optHideOrRemove]) %}
-                                {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), adDescWithReplacedPhone) %}
-                                {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [adId, adDescWithReplacedPhone, optHideOrRemove])) %}
-                            {% endif %}
-
-                            {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
-                                {% set adForSaleDetail = {} %}
-                                {% set postagePayment = {} %}
-                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
-                                    {% set adForSaleDetail = adForSaleDetail|merge({'description': attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION'))}) %}
-                                {% endif %}
-                                {% if attribute(adDetail, constant(solrMapping ~ 'DELIVERY_METHOD_OPTION_ID')) is defined %}
-                                    {% set postagePayment = postagePayment|merge({'delivery_method': entityCacheManager.getEntityNameById('FaPaymentBundle:DeliveryMethodOption', attribute(adDetail, constant(solrMapping ~ 'DELIVERY_METHOD_OPTION_ID')))}) %}
-                                {% endif %}
-                                {% if attribute(adDetail, constant(solrMapping ~ 'PAYMENT_METHOD_OPTION_ID')) is defined %}
-                                    {% set postagePayment = postagePayment|merge({'payment_method': paymentRepository.getPaymentMethodNameById(attribute(adDetail, constant(solrMapping ~ 'PAYMENT_METHOD_OPTION_ID')), container)}) %}
-                                {% endif %}
-                                {% if postagePayment|length%}
-                                    {% set adForSaleDetail = adForSaleDetail|merge({'postage_payment': postagePayment}) %}
-                                {% endif %}
-                                {{ include('FaAdBundle:Ad:AdForSaleDetailTabs.html.twig') }}
-                            {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMUNITY_ID') %}
-                                {% set adCommunityDetail = {} %}
-                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
-                                    {% set adCommunityDetail = adCommunityDetail|merge({'description': attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION'))}) %}
-                                {% endif %}
-                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'PRICE')) is defined and attribute(adDetail, constant(solrMapping ~ 'PRICE')) > 0 and secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') %}
-                                    {% set adCommunityDetail = adCommunityDetail|merge({'price': attribute(adDetail, constant(solrMapping ~ 'PRICE'))}) %}
-                                {% endif %}
-                                {{ include('FaAdBundle:Ad:AdCommunityDetailTabs.html.twig') }}
-                            {% elseif secondLevelCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CARS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMERCIALVEHICLES_ID'), 2: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORBIKES_ID'), 3: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORHOMES_AND_CARAVANS_ID')} %}
-                                {% set adMotorRepository = fetch_repository('FaAdBundle:AdMotors') %}
-                                {% set adMotorDetail = {} %}
-                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
-                                    {% set adMotorDetail = adMotorDetail|merge({'description': attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION'))}) %}
-                                {% endif %}
-                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'COLOUR_ID')) is defined %}
-                                    {% set adMotorDetail = adMotorDetail|merge({'colour_id': attribute(adDetail, constant(solrMapping ~ 'COLOUR_ID'))}) %}
-                                {% endif %}
-                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'FUEL_TYPE_ID')) is defined %}
-                                    {% set adMotorDetail = adMotorDetail|merge({'fuel_type_id': attribute(adDetail, constant(solrMapping ~ 'FUEL_TYPE_ID'))}) %}
-                                {% endif %}
-                                {% set metaData = {} %}
-                                {% set featureIds = {} %}
-                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'META_DATA')) is defined %}
-                                    {% set metaData = array_unserialize(attribute(adDetail, constant(solrMapping ~ 'META_DATA'))) %}
-                                    {% if metaData['features_id'] is defined %}
-                                        {% set featureIds = metaData['features_id']|split(',') %}
-                                    {% endif %}
-                                {% endif %}
-
-                                {% set safetyFeatureIds = adMotorRepository.getSafetyFeature(featureIds) %}
-                                {% set otherFeatureIds = adMotorRepository.getOtherFeature(featureIds) %}
-                                {{ include('FaAdBundle:Ad:AdMotorDetailTabs.html.twig') }}
-                                <br>
-                                {% if secondLevelCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CARS_ID')} %}
-                                    {{ include('FaAdBundle:Ad:zutoLoanCalc.html.twig') }}
-                                {% endif %}
-
-                            {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') %}
-                                {% set adPropertyDetail = {} %}
-                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
-                                    {% set adPropertyDetail = adPropertyDetail|merge({'description': attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION'))}) %}
-                                {% endif %}
-                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'NUMBER_OF_BEDROOMS_ID')) is defined %}
-                                    {% set adPropertyDetail = adPropertyDetail|merge({'number_of_bedrooms_id': attribute(adDetail, constant(solrMapping ~ 'NUMBER_OF_BEDROOMS_ID'))}) %}
-                                {% endif %}
-                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'NUMBER_OF_BATHROOMS_ID')) is defined %}
-                                    {% set adPropertyDetail = adPropertyDetail|merge({'number_of_bathrooms_id': attribute(adDetail, constant(solrMapping ~ 'NUMBER_OF_BATHROOMS_ID'))}) %}
-                                {% endif %}
-                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'TYPE_ID')) is defined %}
-                                    {% set adPropertyDetail = adPropertyDetail|merge({'type_id': attribute(adDetail, constant(solrMapping ~ 'TYPE_ID'))}) %}
-                                {% endif %}
-                                {% set metaData = {} %}
-                                {% set amenitiesIds = {} %}
-                                {% set billsIncludedIds = {} %}
-                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'META_DATA')) is defined %}
-                                    {% set metaData = array_unserialize(attribute(adDetail, constant(solrMapping ~ 'META_DATA'))) %}
-                                {% endif %}
-                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'AMENITIES_ID')) is defined %}
-                                    {% set amenitiesIds = attribute(adDetail, constant(solrMapping ~ 'AMENITIES_ID')) %}
-                                {% endif %}
-                                {% if metaData['bills_included_in_rent_id'] is defined %}
-                                    {% set billsIncludedIds = metaData['bills_included_in_rent_id']|split(',') %}
-                                {% endif %}
-                                {{ include('FaAdBundle:Ad:AdPropertyDetailTabs.html.twig') }}
-                            {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
-                                {% set adAdultDetail = {} %}
-                                {% set servicesIds = {} %}
-                                {% set metaData = {} %}
-                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'META_DATA')) is defined %}
-                                	{% set metaData = array_unserialize(attribute(adDetail, constant(solrMapping ~ 'META_DATA'))) %}
-                                	{% if metaData['rates_id']['incall'] is defined %}
-                                        {% set adultInCallRates = metaData['rates_id']['incall'] %}
-                                    {% endif %}
-                                    {% if metaData['rates_id']['outcall'] is defined %}
-                                        {% set adultOutCallRates = metaData['rates_id']['outcall'] %}
-                                    {% endif %}
-                                {% endif %}
-                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
-                                    {% set adAdultDetail = adAdultDetail|merge({'description': attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION'))}) %}
-                                {% endif %}
-                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'SERVICES_ID')) is defined %}
-                                    {% set servicesIds = attribute(adDetail, constant(solrMapping ~ 'SERVICES_ID')) %}
-                                {% endif %}
-                                {{ include('FaAdBundle:Ad:AdAdultDetailTabs.html.twig') }}
-                            {% elseif rootCategoryId not in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID')} %}
-                                {{ include('FaAdBundle:Ad:AdDetailTabs.html.twig') }}
-                            {% endif %}
-                            <br />
-                            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_BELOW_DESCRIPTION_DESKTOP') %}
-                            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
-                            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_BELOW_DESCRIPTION_TABLET') %}
-                            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
-                        </div>
-                        {{ include('FaAdBundle:Ad:AdDetailRightPanel.html.twig') }}
-                    </div>
-                </div>
-            </div>
-            {% set contactBtnWidthClass = '' %}
-            {% set paypalBtnWidthClass = '' %}
-            {% set enqBtnWidthClass = '' %}
-            {% if (showBuyNowWithPaypal == false and isOneclickenqbutton == false) %}
-                {% set contactBtnWidthClass = 'large-24' %}
-                {% set paypalBtnWidthClass = '' %}
-                {% set enqBtnWidthClass = '' %}
-            {% elseif (showBuyNowWithPaypal == true and isOneclickenqbutton == false) %}
-                {% set contactBtnWidthClass = 'large-12' %}
-                {% set paypalBtnWidthClass = 'large-12' %}
-                {% set enqBtnWidthClass = '' %}
-            {% elseif (showBuyNowWithPaypal == false and isOneclickenqbutton == true) %}
-                {% set contactBtnWidthClass = 'large-12' %}
-                {% set paypalBtnWidthClass = '' %}
-                {% set enqBtnWidthClass = 'large-12' %}
-            {% endif %}
-
-            {% if not isSoldExpiredAdFlag and ((adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) or (adDetail['user'] is defined and showBuyNowWithPaypal)) %}
-                <div class="dtl-bottom-btn show-for-small-only">
-                    <div class="row">
-                        {% if adDetail['user'] is defined and showBuyNowWithPaypal %}
-                            <div class="{{ paypalBtnWidthClass }} columns">
-                                <a href="{{ path('buy_now', {'adId': adId}) }}" class="primary-btn-1 button expand">{{'Buy now'|trans({}, 'frontend-show-ad')}}</a>
-                            </div>
-                        {% endif %}
-
-                        {% if (adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) %}
-                            <div class="{{ contactBtnWidthClass }} columns">
-                                <a href="javascript:void(0);" id="contact_seller_btn_mob" onclick="return contactSeller('{{ adId }}', 'Contact Seller button');" class="primary-btn-1 button expand">
-                                    {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
-                                        {{'Apply'|trans({}, 'frontend-show-ad')}}
-                                    {% else %}
-                                        {{'Contact'|trans({}, 'frontend-show-ad')}}
-                                    {% endif %}
-                                    {% if adDetail['user'] is defined and adDetail['user']['contact_through_phone'] == 1 and adDetail['user']['contact_through_email'] == 1 %}
-                                        <span class="contact-icon">contact</span>
-                                    {% elseif adDetail['user'] is defined and not adDetail['user']['contact_through_phone'] and adDetail['user']['contact_through_email'] == 1 %}
-                                        <span class="contact-email-icon">contact</span>
-                                    {% elseif (adDetail['user'] is defined and adDetail['user']['contact_through_phone'] == 1 and not adDetail['user']['contact_through_email']) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) %}
-                                        <span class="contact-phone-icon">contact</span>
-                                    {% endif %}
-                                </a>
-
-                            </div>
-                        {% endif %}
-
-                        {% if (isOneclickenqbutton is defined and isOneclickenqbutton == true) %}
-                            <div class="{{ enqBtnWidthClass }} columns">
-                                <a href="javascript:void(0)" class="primary-btn-2 button expand show-avl-btn" onclick="return sendOneClickEnquiry();" >{{'Still available?'|trans({}, 'frontend-show-ad')}}</a>
-                            </div>
-                        {% endif %}
-
-                    </div>
-                </div>
-            {% endif %}
-        </div>
-		<div class="clearfix"></div>
-        {% if not isSoldExpiredAdFlag and similarAds['totalAds'] is defined and similarAds['totalAds'] > 0 %}
-            {{ block('similar_ads_html') }}
-        {% endif %}
-
-        {% if currentDevice == 'M' and relatedBusinesses is defined and relatedBusinesses|length %}
-            {{ include('FaAdBundle:Ad:relatedBusinessesMobile.html.twig') }}
-        {% endif %}
-
-        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_BOTTOM_DESKTOP') %}
-        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
-        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_BOTTOM_TABLET') %}
-        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
-        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_BOTTOM_MOBILE') %}
-        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
-
-        <div class="row">
-            <div class="columns">
-            {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
-            	{{ render(controller('FaAdBundle:Ad:showAdDetailSeoBlocks', {'categoryId': adCategoryId, 'seoPageRule': seoPageRule, 'adLocationName' : adLocationName})) }}
-            {% else %}
-                {% cache 'addetail|page|seo'~adCategoryId 900 %}
-                    {{ render(controller('FaAdBundle:Ad:showAdDetailSeoBlocks', {'categoryId': adCategoryId, 'seoPageRule': seoPageRule, 'adLocationName' : adLocationName})) }}
-                {% endcache %}
-            {% endif %}
-            </div>
-        </div>
-        <div class="right-banner">
-            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_RIGHT') %}
-            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
-        </div>
-    </div>
+<div class="right-banner">
+    {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_RIGHT') %}
+    {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
 </div>
+
 {% if successPaymentModalbox is defined and successPaymentModalbox %}
     {#  Upgrade Success Modal Box   #}
     {{ include('FaAdBundle:Ad:upgradeSuccessModalBox.html.twig') }}

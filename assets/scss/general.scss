@@ -191,13 +191,13 @@ button:focus, a:focus {
 }
 
 .secondary-btn-1 {
-    background: $secondary-color;
-    border: 1px solid $secondary-h-color;
+    background: linear-gradient(135deg, $secondary-btn-l-color 0%, $secondary-btn-r-color 100%) !important;
+    border: 1px solid $secondary-btn-brdr-color;
     color: $white;
     font-family: $font-family-secondary;
     &:focus, &:hover {
-        background: $secondary-h-color;
-        border: 1px solid $secondary-h-color;
+        background: linear-gradient(135deg, $secondary-btn-lh-color 0%, $secondary-btn-rh-color 100%) !important;
+        border: 1px solid $secondary-btn-brdr-h-color;
         color: $white;
     }
 }
@@ -233,13 +233,13 @@ button:focus, a:focus {
 }
 
 .primary-btn-1 {
-    background: $primary-color;
-    border: 1px solid $primary-h-color;
+    background: linear-gradient(135deg, $primary-btn-l-color 0%, $primary-btn-r-color 100%) !important;
+    border: 1px solid transparent;
     border-radius: 2px;
     color: $white;
     &:focus, &:hover {
-        background: $primary-h-color;
-        border: 1px solid $primary-h-color;
+        background: linear-gradient(135deg, $primary-btn-lh-color 0%, $primary-btn-rh-color 100%) !important;
+        border: 1px solid transparent;
         color: $white;
     }
 }
@@ -266,11 +266,11 @@ button:focus, a:focus {
 }
 
 .xs-btn-1 {
-    background: $secondary-color;
-    border: 1px solid $secondary-h-color;
+    background: linear-gradient(135deg, $secondary-btn-l-color 0%, $secondary-btn-r-color 100%) !important;
+    border: 1px solid $secondary-btn-brdr-color;
     &:focus, &:hover {
-        background: $secondary-h-color;
-        border: 1px solid $secondary-h-color;
+        background: linear-gradient(135deg, $secondary-btn-lh-color 0%, $secondary-btn-rh-color 100%) !important;
+        border: 1px solid $secondary-btn-brdr-h-color;
         color: $white;
     }
 }
@@ -1430,7 +1430,7 @@ button.signup-fb-btn, button.signup-google-btn {
 }
 .alert-box.success {
     background: #eef8d4;
-    border: 1px solid $secondary-color;
+    border: 1px solid $secondary-btn-brdr-color;
     color: $secondary-color;
 }
 .alert-box.white {
@@ -1453,9 +1453,9 @@ button.signup-fb-btn, button.signup-google-btn {
 }
 .top-bar-section {
    li.place-item-btn {
-        background: $primary-color;
+        background: linear-gradient(135deg, $primary-btn-l-color 0%, $primary-btn-r-color 100%) !important;
         a {
-            background: $primary-color;
+            background: linear-gradient(135deg, $primary-btn-lh-color 0%, $primary-btn-rh-color 100%) !important;
             font-family: $font-family-secondary;
             color: $white;
         }
@@ -1481,7 +1481,7 @@ button.signup-fb-btn, button.signup-google-btn {
         color: $common-text-color;
         font-family: $font-family-default;
         &:hover, &:focus, &:active {
-            color: $secondary-color;
+            color: $secondary-h-color;
             transition: all .2s ease-out;
         }
     }
@@ -1594,7 +1594,7 @@ footer {
 	      	font-family: $font-family-default;
 	      	color: $common-bg-color;
 	      	&:hover, &:focus {
-	      		color: $secondary-color;
+	      		color: $secondary-h-color;
 	      	}
 	    }
 	}

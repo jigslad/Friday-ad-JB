@@ -4,7 +4,7 @@
 {% if paaFieldRules.0 is defined %}
     {% set adPaaFieldRule = paaFieldRules.0 %}
 {% endif %}
-<div id="editImagesModal" class="reveal-modal small remove-item-modal" data-reveal>
+<div id="editImagesModal" class="modal small remove-item-modal" aria-hidden="true">
     <a class="close-reveal-modal">&#215;</a>
     <h5 class="modal-title">
         {{'Upload and edit your photos'|trans({}, 'frontend-edit-photo')}}
