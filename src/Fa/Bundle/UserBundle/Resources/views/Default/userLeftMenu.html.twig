@@ -48,14 +48,12 @@
         <li class="db-left-submenu">
             <a class="selling submenu-list" data-toggle="collapse" href="#selling" role="" aria-expanded="false" aria-controls="selling">
                 <span class="menu-item">{{ 'Selling'|trans({}, 'frontend-dashboard-left-menu') }}</span>
-{#                 <span class="menu-item" onclick="toggleDashboardLeftMenu('selling');"></span>#}
-                {# <i class="right {{menuToggleClass}}" id="selling_i"></i>#}
                 <div class="arrow-block">
                     <i class="fa fa-plus"></i>`
                     <i class="fa fa-minus"></i>
                 </div>
             </a>
-            <ul class="collapse show" id="selling">
+            <ul class="collapse" id="selling">
                 <li><a href="{{ path('manage_my_ads_active') }}" class="{% if currentRoute == 'manage_my_ads_active' %}active{% endif %}"><span class="sub-menu-item">{{ 'Manage my ads'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
                 {% if userCreditRepository.getActiveCreditCountForUser(app.user.getId()) > 0 %}
                     <li><a href="{{ path('my_credits') }}" class="{% if currentRoute == 'my_credits' %}active{% endif %}"><span class="sub-menu-item">{{ 'Credits'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
@@ -75,16 +73,14 @@
             {% set menuToggleStyle = 'display:block;' %}
         {% endif %}
         <li class="db-left-submenu">
-{#            <a href="javascript:void(0);" onclick="toggleDashboardLeftMenu('buying');">#}
             <a class="buying submenu-list" data-toggle="collapse" href="#buying" role="" aria-expanded="false" aria-controls="buying">
                 <span class="menu-item">{{ 'Buying'|trans({}, 'frontend-dashboard-left-menu') }}</span>
-{#                <i class="right {{menuToggleClass}}" id="buying_i"></i>#}
                 <div class="arrow-block">
                     <i class="fa fa-plus"></i>
                     <i class="fa fa-minus"></i>
                 </div>
             </a>
-            <ul id="buying" class="collapse show">
+            <ul id="buying" class="collapse">
                 <li><a href="{{ path('my_favourite') }}" class="{% if currentRoute == 'my_favourite' %}active{% endif %}"><span class="sub-menu-item">{{ 'My favourites'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
                 <li><a href="{{ path('list_search_agent') }}" class="{% if currentRoute == 'list_search_agent' %}active{% endif %}"><span class="sub-menu-item">{{ 'Alerts and searches'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
                 <li><a href="{{ path('my_purchases') }}" class="{% if currentRoute == 'my_purchases' %}active{% endif %}"><span class="sub-menu-item">{{ 'Purchases'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
