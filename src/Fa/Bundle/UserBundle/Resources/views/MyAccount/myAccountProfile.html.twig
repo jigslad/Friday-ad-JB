@@ -1,6 +1,55 @@
 {% set userPackageRepository = fetch_repository('FaUserBundle:UserPackage') %}
 {% set paymentTokenizationRepository = fetch_repository('FaPaymentBundle:PaymentTokenization') %}
-
+<div class="db-list">
+    <a href="#panel4b" class="panel-heading collapsed" data-toggle="collapse" data-target="#panel4b">
+        <div class="media section-head">
+            <div class="media-body">
+                <span class="profile-icon list-icon-text">Your profile</span>
+            </div>
+            <div class="arrow-block">
+                <i class="fa fa-chevron-up"></i>
+                <i class="fa fa-chevron-down"></i>
+            </div>
+        </div>
+    </a>
+    <div class="collapse collapse-body-content" id="panel4b">
+        <div class="col-md-14 col-lg-9 pad-none">
+            <label>User Type</label>
+            <div class="label-inline">
+                <ul class="custom-control custom-radio search-type white-radio">
+                    <li>
+                        <input type="radio" class="custom-control-input white-feild" id="customradio1_a" name="private-user">
+                        <label class="custom-control-label" for="customradio1_a">I'm a private advertiser</label>
+                    </li>
+                </ul>
+                <ul class="custom-control custom-radio search-type white-radio">
+                    <li>
+                        <input type="radio" class="custom-control-input white-feild" id="customradio1_b" name="private-user">
+                        <label class="custom-control-label" for="customradio1_b">Save Changes</label>
+                    </li>
+                </ul>
+            </div>
+            <div class="mt10"><label>Business category</label></div>
+            <div>
+                <select>
+                    <option value="For Sale">For Sale</option>
+                    <option value="Motors">Motors</option>
+                    <option value="Jobs">Jobs</option>
+                    <option value="Services">Services</option>
+                    <option value="Property">Property</option>
+                    <option value="Animals">Animals</option>
+                    <option value="Community">Community</option>
+                    <option value="Adult">Adult</option>
+                </select>
+            </div>
+            <div class="mt20"><label>Profile level:</label>&nbsp;&nbsp;<span>Get Free Shop</span></div>
+            <div class="mt10"><label>Monthly cost:</label>&nbsp;&nbsp;<span>£0</span></div>
+            <div class="mt20">
+                <button class="secondary-btn-1 btn btn-block mb0" name="save_paypal_changes" id="save_paypal_changes" type="button">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 <dd class="accordion-navigation {% if not userAccountProfileForm.vars.valid or app.session.flashbag.has('user_account_profile_success') %}active{% endif %}">
     <a href="#panel4b" class="section-head">
         <span class="profile-icon">{{ 'Your profile'|trans({}, 'frontend-user-account-profile') }}</span>

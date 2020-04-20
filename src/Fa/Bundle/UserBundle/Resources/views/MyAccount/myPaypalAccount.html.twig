@@ -1,3 +1,30 @@
+<div class="db-list">
+    <a href="#panel3b" class="panel-heading collapsed" data-toggle="collapse" data-target="#panel3b">
+        <div class="media section-head">
+            <div class="media-body">
+                <span class="myacc-paypal-icon list-icon-text">Paypal account</span>
+            </div>
+            <div class="arrow-block">
+                <i class="fa fa-chevron-up"></i>
+                <i class="fa fa-chevron-down"></i>
+            </div>
+        </div>
+    </a>
+    <div class="collapse collapse-body-content" id="panel3b">
+        <div>This is the account that will receive funds when you accept payment through Paypal. Please provide the first name, last name and the email address used for your Paypal account. </div>
+        <div class="col-md-14 col-lg-9 pad-none mt20">
+            <div class="myacc-paypal">
+                <label>Paypal details</label>
+                <input type="text" class="white-field form-control" name="paypal_first_name" id="paypal_first_name" value="" placeholder="Paypal first name">
+                <input type="text" class="white-field form-control" name="paypal_last_name" id="paypal_last_name" value="" placeholder="Paypal last name">
+                <input type="text" class="white-field form-control" name="paypal_email" id="paypal_email" value="" placeholder="Paypal email address">
+            </div>
+            <div class="mt20">
+                <button class="secondary-btn-1 btn btn-block mb0" name="save_paypal_changes" id="save_paypal_changes" type="button">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 <dd class="accordion-navigation">
     <a href="#panel3b" class="section-head">
         <span class="myacc-paypal-icon">{{ 'Paypal account'|trans({}, 'frontend-paypal-email') }}</span>

@@ -28,79 +28,120 @@
                             <h2 class="s-h2 mb10">From here you can keep track of orders you have made and get receipts for any online purchases made through paypal.</h2>
 
                             <div id="leave_review_modal" class="reveal-modal" data-reveal></div>
-                            <div class="order-purchase-main">
-                                {% if pagination.getNbResults() %}
-                                {% for paymentDetail in pagination.getCurrentPageResults() %}
-                                    {% set paymentValue = array_unserialize(paymentDetail['value']) %}
-                                    {% set orderId = paymentDetail['payment_id'] %}
-                                    {% if paymentDetail['user_status_id'] == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::USER_STATUS_ACTIVE_ID') %}
-                                        {% set profileUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(paymentDetail['seller_id']) %}
-                                        {% set userStatusText = entityCacheManager.getEntityNameById('FaEntityBundle:Entity', paymentDetail['user_status_id']) %}
-                                    {% else %}
-                                        {% set profileUrl = '#' %}
-                                        {% set userStatusText = entityCacheManager.getEntityNameById('FaEntityBundle:Entity', paymentDetail['user_status_id']) %}
-                                    {% endif %}
 
-                                    {% set objMessage = fetch_repository('FaMessageBundle:Message').getLastConversionOfTwoUsersForAd(paymentDetail['ad_id'], paymentDetail['buyer_id'], paymentDetail['seller_id']) %}
-                                    <div class="purchase-item">
-                                        <div class="row" id="order_{{ paymentDetail['payment_id'] }}">
-                                            <div class="large-18 columns">
-                                                <b>{{'Order no.'|trans({}, 'frontend-my-purchases')}}</b> {{paymentDetail['cart_code']}}<br />
-                                                <b>{{'Item'|trans({}, 'frontend-my-purchases')}}</b> <a target="_blank" href="{{ container.get('router').generate('ad_detail_page_by_id', {'id': paymentDetail['ad_id']}, true) }}">{{paymentDetail['title']}}</a><br />
+                            {% if pagination.getNbResults() %}
+                            {% for paymentDetail in pagination.getCurrentPageResults() %}
+                                {% set paymentValue = array_unserialize(paymentDetail['value']) %}
+                                {% set orderId = paymentDetail['payment_id'] %}
+                                {% if paymentDetail['user_status_id'] == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::USER_STATUS_ACTIVE_ID') %}
+                                    {% set profileUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(paymentDetail['seller_id']) %}
+                                    {% set userStatusText = entityCacheManager.getEntityNameById('FaEntityBundle:Entity', paymentDetail['user_status_id']) %}
+                                {% else %}
+                                    {% set profileUrl = '#' %}
+                                    {% set userStatusText = entityCacheManager.getEntityNameById('FaEntityBundle:Entity', paymentDetail['user_status_id']) %}
+                                {% endif %}
 
+                                {% set objMessage = fetch_repository('FaMessageBundle:Message').getLastConversionOfTwoUsersForAd(paymentDetail['ad_id'], paymentDetail['buyer_id'], paymentDetail['seller_id']) %}
+                                <div class="own-item search-alert-block">
+                                    <div class="media" id="order_{{ paymentDetail['payment_id'] }}">
+                                        <div class="col-md-18 col-lg-18 l-block">
+                                            <div>
+                                                <span class="mr-3">
+                                                    <b>{{'Order no.'|trans({}, 'frontend-my-purchases')}}</b>
+                                                </span>
+                                                <span>{{paymentDetail['cart_code']}}</span>
                                             </div>
-                                            <div class="large-6 columns">
-                                                <button class="xs-btn-1 button order-details-btn purchase-details-btn" id="order_detail_button_{{orderId}}" onclick="toggleOrderDetail('{{orderId}}')">{{ 'Show details'|trans({}, 'frontend-my-orders') }}</button>
+                                            <div>
+                                                <span class="mr-3">
+                                                    <b>{{'Item'|trans({}, 'frontend-my-purchases')}}</b>
+                                                </span>
+                                                <span>
+                                                    <a target="_blank" href="{{ container.get('router').generate('ad_detail_page_by_id', {'id': paymentDetail['ad_id']}, true) }}">{{paymentDetail['title']}}</a>
+                                                </span>
                                             </div>
                                         </div>
-                                        <div class="row" id="order_detail_div_{{orderId}}" style="display: none;">
-                                            <div class="large-18 columns">
-                                                <div class="purchase-disc">
-                                                    <b>{{'Order placed'|trans({}, 'frontend-my-purchases')}}</b> {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [paymentDetail['created_at'], container]) }}<br />
-                                                    <b>{{'Total price'|trans({}, 'frontend-my-purchases')}}</b> {{ format_currency(paymentDetail['amount']) }}<br />
-                                                    <b>{{'Sold by'|trans({}, 'frontend-my-purchases')}}</b>
+                                        <div class="col-md-6 col-lg-6 r-block mob-purc-t-space">
+                                            <a class="secondary-btn-1 xs-thin-btn btn btn-block small-btn float-right showmoreDetails" data-toggle="collapse" aria-expanded="false" aria-controls="showdetailscollapse-01" role="button" href="#showdetailscollapse-01"></a>
+                                            <button class="xs-btn-1 button order-details-btn purchase-details-btn" id="order_detail_button_{{orderId}}" onclick="toggleOrderDetail('{{orderId}}')">{{ 'Show details'|trans({}, 'frontend-my-orders') }}</button>
+                                        </div>
+                                    </div>
+                                    <div class="collapse" id="order_detail_div_{{orderId}}">
+                                        <div class="media mt20">
+                                            <div class="col-md-6 col-lg-6 r-block mt20">
+                                                <button class="xs-btn-2 btn btn-block order-receipt-btn small-btn"><span class="view-icon">View receipt</span></button>
+                                                <button class="xs-btn-2 btn btn-block small-btn"><span class="print-receipt-icon">Print receipt</span></button>
+                                                <div class="purchase-link-list float-right mt10">
+                                                    <a class="" href="javascript:void(0)" title="Leave a review" >Leave a review</a>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-18 col-lg-18 l-block">
+                                                <div>
+                                                    <span class="mr-3">
+                                                        <label class="mb0">{{'Order placed'|trans({}, 'frontend-my-purchases')}}</label>
+                                                    </span>
+                                                    <span>{{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [paymentDetail['created_at'], container]) }}</span>
+                                                </div>
+                                                <div>
+                                                    <span class="mr-3">
+                                                        <label class="mb0">{{'Total price'|trans({}, 'frontend-my-purchases')}}</label>
+                                                    </span>
+                                                    <span>{{ format_currency(paymentDetail['amount']) }}</span>
+                                                </div>
+                                                <div>
+                                                    <span class="mr-3">
+                                                        <label class="mb0">{{'Sold by'|trans({}, 'frontend-my-purchases')}}</label>
+                                                    </span>
+                                                    <span>
                                                         {% if paymentDetail['user_status_id'] == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::USER_STATUS_ACTIVE_ID') %}
                                                             <a target="_blank" href="{{profileUrl}}">{{ userRepository.getFullNameFromArray(paymentDetail) }}</a>
                                                         {% else %}
                                                             {{ userRepository.getFullNameFromArray(paymentDetail) }} <i>({{userStatusText}})</i>
                                                         {% endif %}
-                                                        <br />
-                                                    <b>{{'Order status'|trans({}, 'frontend-my-purchases')}}</b> {% if deliveryStatusArray[paymentDetail['buy_now_status_id']] is defined %}{{ deliveryStatusArray[paymentDetail['buy_now_status_id']] }}{% else %} - {% endif %}<br />
-
-                                                    <div class="clearfix">
-                                                        <b class="left">{{'Delivey method'|trans({}, 'frontend-my-purchases')}}</b>
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <span class="mr-3"><label class="mb0">{{'Order status'|trans({}, 'frontend-my-purchases')}}</label></span>
+                                                    <span>
+                                                        {% if deliveryStatusArray[paymentDetail['buy_now_status_id']] is defined %}
+                                                            {{ deliveryStatusArray[paymentDetail['buy_now_status_id']] }}
+                                                        {% else %}
+                                                            -
+                                                        {% endif %}
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <span class="mr-3">
+                                                        <label class="mb0">{{'Delivey method'|trans({}, 'frontend-my-purchases')}}</label>
+                                                    </span>
+                                                    <span>
                                                         {% set paymentDetailValuesArray = array_unserialize(paymentDetail['value']) %}
-                                                        <div class="delivery-method {% if paymentDetail['delivery_method_id'] ==  constant('Fa\\Bundle\\PaymentBundle\\Repository\\DeliveryMethodOptionRepository::COLLECTION_ONLY_ID') or paymentDetailValuesArray['delivery_address_id'] == -1 %} mb0{% endif %}">
-                                                            {% if paymentDetail['delivery_method_id'] !=  constant('Fa\\Bundle\\PaymentBundle\\Repository\\DeliveryMethodOptionRepository::COLLECTION_ONLY_ID') and paymentDetailValuesArray['delivery_address_id'] != -1 %}
-                                                                {{'Post to'|trans({}, 'frontend-my-purchases')}}:
-                                                            {% endif %}
-                                                            <div class="{% if paymentDetail['delivery_method_id'] !=  constant('Fa\\Bundle\\PaymentBundle\\Repository\\DeliveryMethodOptionRepository::COLLECTION_ONLY_ID') and paymentDetailValuesArray['delivery_address_id'] != -1 %}mt10{% endif %}">
-                                                                {% if paymentDetail['delivery_method_id'] !=  constant('Fa\\Bundle\\PaymentBundle\\Repository\\DeliveryMethodOptionRepository::COLLECTION_ONLY_ID') and paymentDetailValuesArray['delivery_address_id'] != -1 %}
-                                                                    {{ app.user.getUserFullName() }}<br />
-                                                                    {% set paymentDeliveryAddressArray = paymentDetailValuesArray['delivery_address_info'] %}
-                                                                    {% if paymentDeliveryAddressArray['street_address'] is defined %}
-                                                                        {% if paymentDeliveryAddressArray['street_address'] is defined %}
-                                                                            {{paymentDeliveryAddressArray['street_address']}}&nbsp;
-                                                                        {% endif %}
-                                                                        {% if paymentDeliveryAddressArray['street_address_2'] is defined %}
-                                                                            {{paymentDeliveryAddressArray['street_address_2']}}, <br />
-                                                                        {% endif %}
-                                                                        {% if paymentDeliveryAddressArray['town_name'] is defined %}
-                                                                            {{paymentDeliveryAddressArray['town_name']}}, <br />
-                                                                        {% endif %}
-                                                                        {% if paymentDeliveryAddressArray['domicile_name'] is defined %}
-                                                                            {{paymentDeliveryAddressArray['domicile_name']}}, <br />
-                                                                        {% endif %}
-                                                                        {% if paymentDeliveryAddressArray['zip'] is defined %}
-                                                                            {{paymentDeliveryAddressArray['zip']}}
-                                                                        {% endif %}
-                                                                    {% endif %}
-                                                                {% else %}
-                                                                    {{'Buyer will collect the item.'|trans({}, 'frontend-my-purchases')}}
+                                                        {% if paymentDetail['delivery_method_id'] !=  constant('Fa\\Bundle\\PaymentBundle\\Repository\\DeliveryMethodOptionRepository::COLLECTION_ONLY_ID') and paymentDetailValuesArray['delivery_address_id'] != -1 %}
+                                                            {{'Post to'|trans({}, 'frontend-my-purchases')}}:
+                                                        {% endif %}
+                                                        {% if paymentDetail['delivery_method_id'] !=  constant('Fa\\Bundle\\PaymentBundle\\Repository\\DeliveryMethodOptionRepository::COLLECTION_ONLY_ID') and paymentDetailValuesArray['delivery_address_id'] != -1 %}
+                                                            {{ app.user.getUserFullName() }}<br />
+                                                            {% set paymentDeliveryAddressArray = paymentDetailValuesArray['delivery_address_info'] %}
+                                                            {% if paymentDeliveryAddressArray['street_address'] is defined %}
+                                                                {% if paymentDeliveryAddressArray['street_address'] is defined %}
+                                                                    {{paymentDeliveryAddressArray['street_address']}}&nbsp;
                                                                 {% endif %}
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                                {% if paymentDeliveryAddressArray['street_address_2'] is defined %}
+                                                                    {{paymentDeliveryAddressArray['street_address_2']}}, <br />
+                                                                {% endif %}
+                                                                {% if paymentDeliveryAddressArray['town_name'] is defined %}
+                                                                    {{paymentDeliveryAddressArray['town_name']}}, <br />
+                                                                {% endif %}
+                                                                {% if paymentDeliveryAddressArray['domicile_name'] is defined %}
+                                                                    {{paymentDeliveryAddressArray['domicile_name']}}, <br />
+                                                                {% endif %}
+                                                                {% if paymentDeliveryAddressArray['zip'] is defined %}
+                                                                    {{paymentDeliveryAddressArray['zip']}}
+                                                                {% endif %}
+                                                            {% endif %}
+                                                        {% else %}
+                                                            {{'Buyer will collect the item.'|trans({}, 'frontend-my-purchases')}}
+                                                        {% endif %}
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div class="large-6 columns">
@@ -124,17 +165,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                {% endfor %}
-                            </div>
+                                </div>
+                            {% endfor %}
                             <div class="pagination-centered">
                                 {{ include('FaFrontendBundle:Default:googlePager.html.twig', {'pagination': pagination, 'addToEndPage': 0, 'seoPager': false}) }}
                             </div>
                         {% else %}
-                            <div class="row">
-                                <div class="columns">
-                                    {{ 'No records found.'|trans({}, 'frontend-my-purchases') }}
-                                </div>
-                            </div>
+                            <div class="p15">{{ 'No records found.'|trans({}, 'frontend-my-purchases') }}</div>
                         {% endif %}
                         </div>
                     </div>

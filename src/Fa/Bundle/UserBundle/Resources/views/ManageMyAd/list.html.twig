@@ -216,19 +216,17 @@
                         <div class="col-md-19 d-right-col" id="db-right-part">
                             <div id="manage-my-ads-list-only">
                                 <h1 class="s-h1 db-title mt30 mb20">{{'Manage ads (%ad_count%)'|trans({'%ad_count%': totalAdCount}, 'frontend-manage-my-ad')}}</h1>
-                                <h2 class="db-sub-title title-space2">You'll find everything you need to update, edit, track and generally manage your ads.</h2>
-
+                                <h2 class="s-h2 mb10">You'll find everything you need to update, edit, track and generally manage your ads.</h2>
                                 <div class="{% if userCreditCount > 0 or (isBoostEnabled==1 and boostMaxPerMonth > 0) %}mb20{% endif%} hide-for-small-only">
                                     {% if userCreditCount > 0 %}
                                         <span class="total-credits-remaining mr20">
-                                {{'Total credits remaining:'|trans({}, 'frontend-manage-my-ad')}} <a href="{{ path('my_credits') }}">{{ userCreditRepository.getActiveCreditCountForUser(app.user.getId()) }}</a>
-                            </span>
+                                        {{'Total credits remaining:'|trans({}, 'frontend-manage-my-ad')}} <a href="{{ path('my_credits') }}">{{ userCreditRepository.getActiveCreditCountForUser(app.user.getId()) }}</a>
+                                        </span>
                                     {% endif %}
-
                                     {% if isBoostEnabled==1 and boostMaxPerMonth > 0 %}
                                         <span class="manage-my-ad-boost-text total-credits-remaining">
-                                {{'Boosts remaining:'|trans({}, 'frontend-manage-my-ad')}} <a href="{{ path('manage_my_ads_boosted') }}">{{ boostAdRemaining }}</a> <span> Boost renew on {{ boostRenewDate }}</span>
-                            </span>
+                                            {{'Boosts remaining:'|trans({}, 'frontend-manage-my-ad')}} <a href="{{ path('manage_my_ads_boosted') }}">{{ boostAdRemaining }}</a> <span> Boost renew on {{ boostRenewDate }}</span>
+                                        </span>
                                     {% endif %}
                                 </div>
 
@@ -246,77 +244,67 @@
                                         <div class="manage-my-ad-boost-mob-text mb20"><span>Boost renew on {{ boostRenewDate }}</span></div>
                                     {% endif %}
                                 </div>
+                                <nav>
+                                    <div class="nav nav-tabs nav-fill custom-tabs">
+                                        <a class ="nav-item nav-link {% if currentRoute == 'manage_my_ads_active' %} active {% endif %}" href="{{path('manage_my_ads_active')}}">
+                                            {{ 'My Active Ads'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{activeAdCount}}</span>)
+                                            {# {{ 'Active'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{activeAdCount}}</span>)#}
+                                        </a>
 
-
-
-                                <ul class="tab-menu manage-item-tabs clearfix">
-                                    <li {% if currentRoute == 'manage_my_ads_active' %} class="active" {% endif %}>
-
-                                        <a href="{{path('manage_my_ads_active')}}" class="hide-for-small-only">{{ 'My Active Ads'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{activeAdCount}}</span>)</a>
-
-                                        <a href="{{path('manage_my_ads_active')}}" class="show-for-small-only">{{ 'Active'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{activeAdCount}}</span>)</a>
-
-
-                                    </li>
-                                    {% if isBoostEnabled==1 and adsBoostedCount>0 %}
-                                        <li {% if currentRoute == 'manage_my_ads_boosted' %} class="active" {% endif %}>
-
-                                            <a href="{{path('manage_my_ads_boosted')}}" class="hide-for-small-only">{{ 'My Boosted Ads'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{adsBoostedCount}}</span>)</a>
-
-                                            <a href="{{path('manage_my_ads_boosted')}}" class="show-for-small-only">{{ 'Boosted'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{adsBoostedCount}}</span>)</a>
-
-                                        </li>
-                                    {% endif %}
-                                    <li {% if currentRoute == 'manage_my_ads_inactive' %} class="active" {% endif %}>
-
-                                        <a href="{{path('manage_my_ads_inactive')}}" class="hide-for-small-only">{{ 'My Inactive Ads'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{inActiveAdCount}}</span>)</a>
-
-                                        <a href="{{path('manage_my_ads_inactive')}}" class="show-for-small-only">{{ 'Inactive'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{inActiveAdCount}}</span>)</a>
-
-                                    </li>
-                                </ul>
-
-                                <div class="manage-items-main">
-                                    {% if pagination.getNbResults() %}
-                                        {% if isBoostEnabled==1 and boostAdRemaining > 0 and (currentRoute == 'manage_my_ads_active' or currentRoute == 'manage_my_ads_boosted') %}
-                                            <div class="manage-item-list" style="border-top:0px">
-                                                <span class="all-sel-chkbox custom-checkbox"><input type="checkbox" id="boostad_selectall"></span> <a id="boost_ad_selected_all" class="all-sel-text">All {% if currentRoute == 'manage_my_ads_active' %}
-                                                        Active Ads ({{onlyActiveAdCount}})
-                                                    {% elseif currentRoute == 'manage_my_ads_boosted' %}
-                                                        Boosted Ads ({{adsBoostedCount}})
-                                                    {% endif %}
-                                                </a>
-                                            </div>
+                                        {% if isBoostEnabled==1 and adsBoostedCount>0 %}
+                                            <a class="nav-item nav-link {% if currentRoute == 'manage_my_ads_boosted' %} active {% endif %}" href="{{path('manage_my_ads_boosted')}}">
+                                                {{ 'My Boosted Ads'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{adsBoostedCount}}</span>)
+                                                {# {{ 'Boosted'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{adsBoostedCount}}</span>)#}
+                                            </a>
                                         {% endif %}
-                                        {% for ad in pagination.getCurrentPageResults() %}
-                                            {% set adId = ad.id %}
-                                            {% set adCategoryId = null %}
-                                            {% if adCategoryIdArray[adId] is defined %}
-                                                {% set adCategoryId = adCategoryIdArray[adId] %}
+                                        <a class="nav-item nav-link {% if currentRoute == 'manage_my_ads_inactive' %} active {% endif %}" href="{{path('manage_my_ads_inactive')}}">
+                                            {{ 'My Inactive Ads'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{inActiveAdCount}}</span>)
+                                            {# {{ 'Inactive'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{inActiveAdCount}}</span>)#}
+                                        </a>
+                                    </div>
+                                </nav>
+                                <div class="tab-content">
+                                    <div id="mma_active_ads" class="tab-pane fade show active">
+                                        {% if pagination.getNbResults() %}
+                                            {% if isBoostEnabled==1 and boostAdRemaining > 0 and (currentRoute == 'manage_my_ads_active' or currentRoute == 'manage_my_ads_boosted') %}
+                                                <div class="manage-item-list" style="border-top:0px">
+                                                    <span class="all-sel-chkbox custom-checkbox"><input type="checkbox" id="boostad_selectall"></span> <a id="boost_ad_selected_all" class="all-sel-text">All {% if currentRoute == 'manage_my_ads_active' %}
+                                                            Active Ads ({{onlyActiveAdCount}})
+                                                        {% elseif currentRoute == 'manage_my_ads_boosted' %}
+                                                            Boosted Ads ({{adsBoostedCount}})
+                                                        {% endif %}
+                                                    </a>
+                                                </div>
                                             {% endif %}
-                                            {% if ad['status_id'] == adStatusLive %}
-                                                {% set adUrl = container.get('router').generate('ad_detail_page_by_id', {'id': adId}, true) %}
-                                                {# {% set adUrl = adUrl|trim('/') %} #}
-                                            {% endif %}
-
-                                            {{ include('FaUserBundle:ManageMyAd:adDetail.html.twig') }}
-                                        {% endfor %}
-                                    {% else %}
-                                        <div class="row">
-                                            <div class="columns">
-                                                {% if app.request.attributes.get('type') == 'inactive' %}
-                                                    {{ 'You currently have no inactive adverts.'|trans({}, 'frontend-manage-my-ad') }}
-                                                {% else %}
-                                                    {{ 'You currently have no active adverts.'|trans({}, 'frontend-manage-my-ad') }}
+                                            {% for ad in pagination.getCurrentPageResults() %}
+                                                {% set adId = ad.id %}
+                                                {% set adCategoryId = null %}
+                                                {% if adCategoryIdArray[adId] is defined %}
+                                                    {% set adCategoryId = adCategoryIdArray[adId] %}
                                                 {% endif %}
-                                            </div>
-                                        </div>
-                                    {% endif %}
+                                                {% if ad['status_id'] == adStatusLive %}
+                                                    {% set adUrl = container.get('router').generate('ad_detail_page_by_id', {'id': adId}, true) %}
+                                                    {# {% set adUrl = adUrl|trim('/') %} #}
+                                                {% endif %}
 
-                                    <div class="pagination-centered">
-                                        {{ include('FaFrontendBundle:Default:googlePager.html.twig', {'pagination': pagination, 'addToEndPage': 0, 'seoPager': false}) }}
+                                                {{ include('FaUserBundle:ManageMyAd:adDetail.html.twig') }}
+                                            {% endfor %}
+                                            {% else %}
+                                                <div class="row">
+                                                    <div class="columns">
+                                                        {% if app.request.attributes.get('type') == 'inactive' %}
+                                                            {{ 'You currently have no inactive adverts.'|trans({}, 'frontend-manage-my-ad') }}
+                                                        {% else %}
+                                                            {{ 'You currently have no active adverts.'|trans({}, 'frontend-manage-my-ad') }}
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            {% endif %}
                                     </div>
                                 </div>
+                            </div>
+                            <div class="pagination-centered d-flex justify-content-around">
+                                {{ include('FaFrontendBundle:Default:googlePager.html.twig', {'pagination': pagination, 'addToEndPage': 0, 'seoPager': false}) }}
                             </div>
                             <!-- BoostModal -->
                             <div id="markAdAsBoostedModal" style="display:none" class="">
