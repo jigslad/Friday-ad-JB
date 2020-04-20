@@ -14,7 +14,7 @@
                     <div class="small-15 medium-5 columns mobile-p-0" style="display: inline-flex;">
                         <label class="from-sec">{{ 'from'|trans({}, 'frontend')}}</label>
                         <div class="location-col">
-                        {{ form_widget(form.item__location_autocomplete) }}
+                        {{ form_widget(form.item__location_autocomplete,{'attr':{'class':'white-field'}) }}
                         <a href="javascript:void(0);" id="fa_adult_home_page_search_item__location_close" class="adul-loc-close ui-autocomplete-close select2-search-choice-close"></a>
                         </div>
                      </div>
@@ -24,7 +24,7 @@
                         {{ form_widget(attribute(form, 'item_adult__services_id'),{'attr':{ 'class': 'select-control'  }}) }}
                     </div>
                     <div class="medium-6 columns mobile-p-0 mt10">
-                        {{ form_widget(form.item_adult__independent_or_agency_id, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_widget(form.item_adult__independent_or_agency_id, {'attr': {'class': 'form-control custom-radio'}}) }}
                     </div>
                     <div class="medium-7 columns mobile-p-0" style="display: inline-flex;">
                         {{ form_widget(attribute(form, 'item_adult__ethnicity_id'),{'attr':{ 'class': 'form-control select-control'  }}) }}
