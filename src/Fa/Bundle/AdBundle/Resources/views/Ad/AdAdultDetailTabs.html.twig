@@ -2,20 +2,20 @@
 {% set adAdultRepository = fetch_repository('FaAdBundle:AdAdult') %}
 {% set solrMapping = 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::' %}
 <div class="detail-tabpart-2" id="vif_tabs">
-    <ul class="tabs hide-for-small-only" data-tab id="ad_property_tabs">
-        {% if (adDetail['user']['about_us'] is defined and adDetail['user']['about_us'] is not null) %}
-            <li class="tab-title active"><a href="#basic_info_panel" id="description-tab-id">{{'Description'|trans({}, 'frontend-show-ad')}}</a></li>
-        {% endif %}
-        {% if adDetail['user']['about_us'] is defined and adDetail['user']['about_us'] is not null %}
-            <li class="tab-title"><a href="#about_us_panel" id="aboutus-tab-id">{{'About Us'|trans({}, 'frontend-show-ad')}}</a></li>
-        {% endif %}
-    </ul>
-    {# <dl class="accordion {% if servicesIds|length == 0 %}hide-for-small-only{% endif %}" data-accordion=""> #}
-    <dl class="accordion" data-accordion="">
-        <dd class="accordion-navigation">
-            <div class="content active" id="basic_info_panel">
+	<nav>
+		<div class="nav nav-tabs nav-fill custom-tabs" id="ad_adult_tabs" role="tablist">
+            {% if (adAdultDetail['description'] is defined and adAdultDetail['description'] is not null) %}
+                <a href="#basic_info_panel"  id="description-tab-id" aria-controls="nav-basic" class="nav-item nav-link active" data-toggle="tab" role="tab" aria-selected="true">{{'Description'|trans({}, 'frontend-show-ad')}}</a></li>
+            {% endif %}
+            {% if adDetail['user']['about_us'] is defined and adDetail['user']['about_us'] is not null %}
+                <a href="#about_us_panel" id="aboutus-tab-id" aria-controls="nav-aboutus" class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false">{{'About Us'|trans({}, 'frontend-show-ad')}}</a></li>
+            {% endif %}
+		</div>
+	</nav>
+    <div class="tab-content">
+		<div class="tab-pane fade show active" id="basic_info_panel" role="tabpanel" aria-labelledby="nav-basic-tab">
                 {% if adAdultDetail['description'] is defined %}
-                    <div class="hide-for-small-only">
+                    <div class="d-none d-md-block">
                         <div id="ad_desc">
                             <p>{{adAdultDetail['description']|replace({"\\n": "<br />", "&nbsp;": " "})|raw|nl2br }}</p>
                         </div>
@@ -92,10 +92,10 @@
                         </div>                            
                     </div> 
                {% if adDetailAndDimensionFields['detail'] is defined %} 
-                    <ul class="details-info">
+                    <ul class="details-info clearfix">
                         {% for fieldName, fieldValue in adDetailAndDimensionFields['detail'] %}
                         	{% if fieldName != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::TRAVEL_ARRANGEMENTS') and fieldName != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::INDEPENDENT_OR_AGENCY') and fieldName != 'Gender' and fieldName != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::MY_SERVICE_IS_FOR') and fieldName != 'Gender' and fieldName != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::LOOKING_FOR') %}
-                                <li class="clearfix">
+                                <li>
                                     <div class="detail-text">{{fieldName}}</div>
                                     <div class="detail-text">{{fieldValue|join(', ')|raw}}</div>
                                 </li>
@@ -103,7 +103,7 @@
                         {% endfor %}
                         
                         {% if adDetailAndDimensionFields['payment_method_id'] is defined and adDetailAndDimensionFields['payment_method_id'] != '' %}
-                        	<li class="clearfix">
+                        	<li>
                                     <div class="detail-text">{{ 'Payment Method'|trans({}, 'frontend-show-ad')}}</div>
                                     <div class="detail-text">
                                     	{% if adDetailAndDimensionFields['payment_method_id'] == '4' %}
@@ -116,7 +116,7 @@
                         {% endif %}
                         
                         {% if attribute(adDetail, constant(solrMapping ~ 'PAYMENT_METHOD_OPTION_ID')) is defined %}
-                    		<li class="clearfix">
+                    		<li>
                                     <div class="detail-text">{{ 'Payment Method'|trans({}, 'frontend-show-ad')}}</div>
                                     <div class="detail-text">
                                     	{% if attribute(adDetail, constant(solrMapping ~ 'PAYMENT_METHOD_OPTION_ID')) == '4' %}
@@ -158,9 +158,9 @@
                             </tbody>
                         </table>
                     {#  Mobile View  #}
-                        <ul class="details-info show-for-medium-down">
+                        <ul class="details-info show-for-medium-down clearfix">
                             {% for servicesId in servicesIds %}
-                                <li class="clearfix">
+                                <li>
                                     <div class="detail-text">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', servicesId) }}</div>
                                     <div class="detail-text text-center"><span class="safety-fe-check"></span></div>
                                 </li>
@@ -178,7 +178,7 @@
                             <div class="in-out-calls-text"><span colspan="4"><span class="safety-fe-incall m-r-10"></span><span>In-calls</span></span></div>
                             <table class="responsive-card-table boder-rates"  style="table-layout: fixed!important;">
                                 <tbody>                            
-                                    <tr class="hide-for-small-only hide-for-medium-down hide-block">
+                                    <tr class="d-none d-md-block hide-for-medium-down hide-block">
                                     	{% set strInCallContent = '<tr>' %}
                                     	{% for fieldName, fieldValue in adultInCallRates %}
                                     	{% set fieldLabel = entityCacheManager.getEntityNameById('FaEntityBundle:Entity', fieldName) %}
@@ -199,7 +199,7 @@
                             <div class="in-out-calls-text"><span colspan="4"><span class="safety-fe-outcall m-r-10"></span><span>Out-calls</span></span></div>
                             <table class="responsive-card-table boder-rates"  style="table-layout: fixed!important;">
                                 <tbody>                            
-                                    <tr class="hide-for-small-only hide-for-medium-down hide-block">
+                                    <tr class="d-none d-md-block">
                                     	{% set strOutCallContent = '<tr>' %}
                                     	{% for fieldName, fieldValue in adultOutCallRates %}
                                         	{% set fieldLabel = entityCacheManager.getEntityNameById('FaEntityBundle:Entity', fieldName) %}
@@ -224,10 +224,9 @@
             </div>
             
             {% if adDetail['user']['about_us'] is defined and adDetail['user']['about_us'] is not null %}
-                <div class="content" id="about_us_panel">
+                <div class="tab-pane fade" id="about_us_panel" role="tabpanel" aria-labelledby="nav-aboutus">
                     <p>{{adDetail['user']['about_us']|replace({"\\n": "<br />"})|raw}}</p>
                 </div>
             {% endif %}
-        </dd>
-    </dl>
+        </div>
 </div>

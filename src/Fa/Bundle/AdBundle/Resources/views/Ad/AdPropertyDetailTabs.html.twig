@@ -1,17 +1,19 @@
 <div class="detail-tabpart-2" id="vif_tabs">
-    <ul class="tabs hide-for-small-only" data-tab id="ad_property_tabs">
-        {% if adDetailAndDimensionFields['more_details'] is defined or amenitiesIds|length or billsIncludedIds|length %}
-            <li class="tab-title active"><a href="#basic_info_panel" id="basic_info_panel_tab">{{'The basics'|trans({}, 'frontend-show-ad')}}</a></li>
-            <li class="tab-title"><a href="#more_details_panel" id="more_details_panel_tab">{{'More details'|trans({}, 'frontend-show-ad')}}</a></li>
-        {% endif %}
-    </ul>
-    <dl class="accordion" data-accordion="">
-        <dd class="accordion-navigation">
+	<nav>
+		<div class="nav nav-tabs nav-fill custom-tabs" id="ad_property_tabs" role="tablist">
             {% if adDetailAndDimensionFields['more_details'] is defined or amenitiesIds|length or billsIncludedIds|length %}
-                <a href="#basic_info_panel" id="basic_info_panel_anchor" class="show-for-small-only">{{'The basics'|trans({}, 'frontend-show-ad')}} <i class="fi-plus right"></i></a>
+                <a href="#basic_info_panel"  id="basic_info_panel_tab" aria-controls="nav-basic-tab" class="nav-item nav-link active" data-toggle="tab" role="tab" aria-selected="true">{{'The basics'|trans({}, 'frontend-show-ad')}}</a></li>
+                <a href="#more_details_panel" id="more_details_panel_tab" aria-controls="nav-moredetails" class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false">{{'More details'|trans({}, 'frontend-show-ad')}}</a></li>
             {% endif %}
-            <div class="content active" id="basic_info_panel">
-                <div class="hide-for-small-only">
+		</div>
+	</nav>
+	
+    <div class="tab-content">
+		<div class="tab-pane fade show active" id="basic_info_panel" role="tabpanel" aria-labelledby="nav-basic-tab">
+            {% if adDetailAndDimensionFields['more_details'] is defined or amenitiesIds|length or billsIncludedIds|length %}
+                <a href="#basic_info_panel" id="basic_info_panel_anchor" class="d-block d-md-none">{{'The basics'|trans({}, 'frontend-show-ad')}} <i class="fi-plus right"></i></a>
+            {% endif %}
+                <div class="d-none d-md-block">
                     <div id="ad_desc">
                         {% if adPropertyDetail['description'] is defined %}
                             {{ adPropertyDetail['description']|replace({"\\n": "<br />", "&nbsp;": " "})|raw|nl2br }}
@@ -20,9 +22,9 @@
                     <a href="javascript:void(0);" class="read-more" style="display:none;">{{ 'Read more'|trans({}, 'frontend-show-ad') }}</a>
                     <a href="javascript:void(0);" class="read-less" style="display:none;">{{ 'Read less'|trans({}, 'frontend-show-ad') }}</a>
                 </div>
-                <h5 class="hide-for-small-only">{{'The details'|trans({}, 'frontend-show-ad')}}</h5>
+                <h5 class="d-none d-md-block">{{'The details'|trans({}, 'frontend-show-ad')}}</h5>
                 
-                <div class="motor-info hide-for-small-only">
+                <div class="motor-info d-none d-md-block">
                     <div class="info-row">
                     	<div class="clearfix" data-equalizer>
                             
@@ -85,7 +87,7 @@
                 
                 {% if adDetailAndDimensionFields['detail'] is defined or adPropertyDetail['type_id'] is defined or adPropertyDetail['number_of_bedrooms_id'] is defined or adPropertyDetail['number_of_bathrooms_id'] is defined %}
                     <ul class="details-info prop-detail-info">
-                        <li class="clearfix show-for-small-only">
+                        <li class="clearfix d-block d-md-none">
                             <div class="detail-text">{{'Ad type'|trans({}, 'frontend-show-ad')}}</div>
                             <div class="detail-text">
                                 {% if adPropertyDetail['type_id'] is defined %}
@@ -95,7 +97,7 @@
                                 {% endif %}
                             </div>
                         </li>
-                        <li class="clearfix show-for-small-only">
+                        <li class="clearfix d-block d-md-none">
                             <div class="detail-text">{{'No of bedrooms'|trans({}, 'frontend-show-ad')}}</div>
                             <div class="detail-text">
                                 {% if adPropertyDetail['number_of_bedrooms_id'] is defined %}
@@ -105,7 +107,7 @@
                                 {% endif %}
                             </div>
                         </li>
-                        <li class="clearfix show-for-small-only">
+                        <li class="clearfix d-block d-md-none">
                             <div class="detail-text">{{'No of bathrooms'|trans({}, 'frontend-show-ad')}}</div>
                             <div class="detail-text">
                                 {% if adPropertyDetail['number_of_bathrooms_id'] is defined %}
@@ -116,7 +118,7 @@
                             </div>
                         </li>
                         {% if secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_FOR_SALE_ID') %}
-                            <li class="clearfix show-for-small-only">
+                            <li class="clearfix d-block d-md-none">
                                  <div class="detail-text">{{'Date available'|trans({}, 'frontend-show-ad')}}</div>
                                  <div class="detail-text">
                                     {% if metaData['date_available'] is defined %}
@@ -138,8 +140,8 @@
             </div>
              
             {% if adDetailAndDimensionFields['more_details'] is defined or amenitiesIds|length or billsIncludedIds|length %}
-                <a href="#more_details_panel" class="show-for-small-only">{{'More details'|trans({}, 'frontend-show-ad')}}<i class="fi-plus right"></i></a>
-                <div class="content" id="more_details_panel">
+                <div class="tab-pane fade show active" id="more_details_panel" role="tabpanel" aria-labelledby="nav-moredetails">
+                <a href="#more_details_panel" class="d-block d-md-none">{{'More details'|trans({}, 'frontend-show-ad')}}<i class="fi-plus right"></i></a>
                     {% if amenitiesIds|length %}
                         <h5 class="safety-title">{{'Amenities'|trans({}, 'frontend-show-ad')}}</h5>
                         <div class="safety-features">
@@ -183,6 +185,5 @@
                      {% endif %}
                 </div>
             {% endif %}
-        </dd>
-    </dl>
+        </div>
 </div>

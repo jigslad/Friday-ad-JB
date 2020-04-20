@@ -2,18 +2,19 @@
 	<nav>
 		<div class="nav nav-tabs nav-fill custom-tabs" id="vif_tabs" role="tablist">
 			{% if adForSaleDetail['postage_payment'] is defined or adDetailAndDimensionFields['dimension'] is defined %}
-                <a href="#basic_info_panel" class="nav-item nav-link active" data-toggle="tab" role="tab" aria-controls="nav-basic" aria-selected="true" id="basic_info_panel_tab">{{'The basics'|trans({}, 'frontend-show-ad')}}</a></li>
+                <a href="#basic_info_panel" id="basic_info_panel_tab" class="nav-item nav-link active" data-toggle="tab" role="tab" aria-controls="nav-basic" aria-selected="true">{{'The basics'|trans({}, 'frontend-show-ad')}}</a></li>
             {% endif %}
             {% if adForSaleDetail['postage_payment'] is defined %}
-                <a class="nav-item nav-link" href="#postage_payment_panel" data-toggle="tab" role="tab" aria-controls="nav-postage" aria-selected="false" id="postage_payment_panel_tab">{{'Postage & Payment'|trans({}, 'frontend-show-ad')}}</a></li>
+                <a href="#postage_payment_panel" id="postage_payment_panel_tab" aria-controls="nav-postage" class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false">{{'Postage & Payment'|trans({}, 'frontend-show-ad')}}</a></li>
             {% endif %}
             {% if adDetailAndDimensionFields['dimension'] is defined %}
-                <a class="nav-item nav-link" href="#dimension_panel" data-toggle="tab" role="tab" aria-controls="nav-dimension" aria-selected="false" id="dimension_panel_tab">{{'Dimensions'|trans({}, 'frontend-show-ad')}}</a></li>
+                <a href="#dimension_panel" id="dimension_panel_tab" aria-controls="nav-dimension" class="nav-item nav-link" data-toggle="tab" role="tab" aria-selected="false">{{'Dimensions'|trans({}, 'frontend-show-ad')}}</a></li>
             {% endif %}
 		</div>
 	</nav>
+
 	<div class="tab-content">
-		<div class="tab-pane fade show active" id="basic_info_panel" role="tabpanel" aria-labelledby="nav-basic-tab">
+		<div class="tab-pane fade show active" id="basic_info_panel" role="tabpanel" aria-labelledby="nav-basic">
     		{% if adForSaleDetail['postage_payment'] is defined or adDetailAndDimensionFields['dimension'] is defined %}
     			<a href="#basic_info_panel" id="basic_info_panel_anchor" class="d-block d-md-none">{{'The basics'|trans({}, 'frontend-show-ad')}} <i class="fi-plus right"></i></a>
             {% endif %}		
@@ -38,52 +39,51 @@
                     </ul>
             {% endif %}           
 		</div>
+		
+        {% if adForSaleDetail['postage_payment'] is defined %}
 		<div class="tab-pane fade" id="postage_payment_panel" role="tabpanel" aria-labelledby="nav-postage-tab">
-			{% if adForSaleDetail['postage_payment'] is defined %}
-                <a href="#postage_payment_panel" class="d-block d-md-none">{{'Postage & Payment'|trans({}, 'frontend-show-ad')}}<i class="fi-plus right"></i></a>
-                 <div class="content" id="postage_payment_panel">
-                    {% if adForSaleDetail['postage_payment']['delivery_method'] is defined %}
-                        <h5>{{'Delivery'|trans({}, 'frontend-show-ad')}}</h5>
-                        <ul class="details-info clearfix">
-                            <li>
-                                <div class="detail-text">{{'Delivery method'|trans({}, 'frontend-show-ad')}}</div>
-                                <div class="detail-text">{{ adForSaleDetail['postage_payment']['delivery_method'] }}</div>
-                            </li>
-                        </ul>
-                    {% endif %}
-                    
-                    {% if adForSaleDetail['postage_payment']['payment_method'] is defined %}
-                        <h5 class="mt10">{{'Payment'|trans({}, 'frontend-show-ad')}}</h5>
-                        <ul class="details-info clearfix">
-                            <li>
-                                <div class="detail-text">{{'Payment method'|trans({}, 'frontend-show-ad')}}</div>
-                                <div class="detail-text">{{ adForSaleDetail['postage_payment']['payment_method'] }}</div>
-                            </li>
-                        </ul>
-                    {% endif %}
-                    
-                    {% if showNimber is defined %}
-                        <div id="nimber_div">
-                            {{ render(controller('FaAdBundle:Nimber:showNimberPricesuggestion', {'adId': adId})) }}
-                        </div>
-                    {% endif %}
-                 </div>
-             {% endif %}
-             
-             {% if adDetailAndDimensionFields['dimension'] is defined %}
-                <a href="#dimension_panel" class="d-block d-md-none">{{'Dimensions'|trans({}, 'frontend-show-ad')}}<i class="fi-plus right"></i></a>
-                <div class="content" id="dimension_panel">
-                     <h5>{{'Item dimensions'|trans({}, 'frontend-show-ad')}}</h5>
-                     <ul class="details-info clearfix">
-                         {% for fieldName, fieldValue in adDetailAndDimensionFields['dimension'] %}
-                             <li>
-                                 <div class="detail-text">{{fieldName}}</div>
-                                 <div class="detail-text">{{fieldValue}}</div>
-                             </li>
-                         {% endfor %}
-                     </ul>
-                </div>
-            {% endif %}			
-		</div>
+            <a href="#postage_payment_panel" class="d-block d-md-none">{{'Postage & Payment'|trans({}, 'frontend-show-ad')}}<i class="fi-plus right"></i></a>
+                {% if adForSaleDetail['postage_payment']['delivery_method'] is defined %}
+                    <h5>{{'Delivery'|trans({}, 'frontend-show-ad')}}</h5>
+                    <ul class="details-info clearfix">
+                        <li>
+                            <div class="detail-text">{{'Delivery method'|trans({}, 'frontend-show-ad')}}</div>
+                            <div class="detail-text">{{ adForSaleDetail['postage_payment']['delivery_method'] }}</div>
+                        </li>
+                    </ul>
+                {% endif %}
+                
+                {% if adForSaleDetail['postage_payment']['payment_method'] is defined %}
+                    <h5 class="mt10">{{'Payment'|trans({}, 'frontend-show-ad')}}</h5>
+                    <ul class="details-info clearfix">
+                        <li>
+                            <div class="detail-text">{{'Payment method'|trans({}, 'frontend-show-ad')}}</div>
+                            <div class="detail-text">{{ adForSaleDetail['postage_payment']['payment_method'] }}</div>
+                        </li>
+                    </ul>
+                {% endif %}
+                
+                {% if showNimber is defined %}
+                    <div id="nimber_div">
+                        {{ render(controller('FaAdBundle:Nimber:showNimberPricesuggestion', {'adId': adId})) }}
+                    </div>
+                {% endif %}
+             </div>
+         {% endif %}
+   
+         {% if adDetailAndDimensionFields['dimension'] is defined %}
+         <div class="tab-pane fade" id="dimension_panel" role="tabpanel" aria-labelledby="nav-dimension">
+            <a href="#dimension_panel" class="d-block d-md-none">{{'Dimensions'|trans({}, 'frontend-show-ad')}}<i class="fi-plus right"></i></a>
+                 <h5>{{'Item dimensions'|trans({}, 'frontend-show-ad')}}</h5>
+                 <ul class="details-info clearfix">
+                     {% for fieldName, fieldValue in adDetailAndDimensionFields['dimension'] %}
+                         <li>
+                             <div class="detail-text">{{fieldName}}</div>
+                             <div class="detail-text">{{fieldValue}}</div>
+                         </li>
+                     {% endfor %}
+                 </ul>
+        </div>
+        {% endif %}			
 	</div>
 </div>	
