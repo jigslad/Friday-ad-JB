@@ -24,14 +24,14 @@
                         {{ form_widget(attribute(form, 'item_adult__services_id'),{'attr':{ 'class': 'select-control'  }}) }}
                     </div>
                     <div class="medium-6 columns mobile-p-0 mt10">
-                        <div id="fa_adult_home_page_search_independent_or_agency_id" class="form-control adult-radio-form">
-                            <span class="custom-radio checked radio-inline-flex">
-                                <input type="radio" id="fa_adult_home_page_search_independent_or_agency_id_0" name="independent_or_agency_id" required="required" value="7317">
+                        <div class="form-control adult-radio-form">
+                            <span class="custom-radio radio-inline-flex">
+                                <input type="radio" id="fa_adult_home_page_search_independent_or_agency_id_0" class="independent-or-agency-cls" name="independent_or_agency_id" required="required" value="7317">
                                 <label for="fa_adult_home_page_search_independent_or_agency_id_0" class="required radio-label">Independent</label>
                             </span>
                             <span class="custom-radio radio-inline-flex">
-                                <input type="radio" id="fa_adult_home_page_search_independent_or_agency_id_1" name="independent_or_agency_id" required="required" value="7318">
-                                <label for="fa_adult_home_page_search_independent_or_agency_id_1" class="required">Agency</label>
+                                <input type="radio" id="fa_adult_home_page_search_independent_or_agency_id_1" class="independent-or-agency-cls" name="independent_or_agency_id" required="required" value="7318">
+                                <label for="fa_adult_home_page_search_independent_or_agency_id_1" class="required radio-label">Agency</label>
                             </span>
                         </div>
                         {{ form_widget(form.item_adult__independent_or_agency_id) }}
@@ -54,6 +54,11 @@
         setDefaultLocatonFromCookie();
         $('#fa_adult_home_page_search_item_adult__services_id').attr('placeholder','Choose services');
         $('#fa_adult_home_page_search_item_adult__services_id').addClass('placeholderTxt');
+
+        $('.independent-or-agency-cls').click(function(){
+            var radioValue = $("input[name='independent_or_agency_id']:checked").val();
+            $('#fa_adult_home_page_search_item_adult__independent_or_agency_id').val();
+        });
     });
 </script>
 {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_adult_home_page_search_item__location', 'placeHolder': 'City'|trans, 'route' : 'town_ajax_find_town_by_term', 'displayOnlyTown' : 'true'}) }}
