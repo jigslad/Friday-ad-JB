@@ -24,7 +24,17 @@
                         {{ form_widget(attribute(form, 'item_adult__services_id'),{'attr':{ 'class': 'select-control'  }}) }}
                     </div>
                     <div class="medium-6 columns mobile-p-0 mt10">
-                        {{ form_widget(form.item_adult__independent_or_agency_id, {'attr': {'class': 'form-control custom-radio adult-radio-form'}}) }}
+                        <div id="fa_adult_home_page_search_independent_or_agency_id" class="form-control adult-radio-form">
+                            <span class="custom-radio checked radio-inline-flex">
+                                <input type="radio" id="fa_adult_home_page_search_independent_or_agency_id_0" name="independent_or_agency_id" required="required" value="7317">
+                                <label for="fa_adult_home_page_search_independent_or_agency_id_0" class="required radio-label">Independent</label>
+                            </span>
+                            <span class="custom-radio radio-inline-flex">
+                                <input type="radio" id="fa_adult_home_page_search_independent_or_agency_id_1" name="independent_or_agency_id" required="required" value="7318">
+                                <label for="fa_adult_home_page_search_independent_or_agency_id_1" class="required">Agency</label>
+                            </span>
+                        </div>
+                        {{ form_widget(form.item_adult__independent_or_agency_id) }}
                     </div>
                     <div class="medium-7 columns mobile-p-0" style="display: inline-flex;">
                         {{ form_widget(attribute(form, 'item_adult__ethnicity_id'),{'attr':{ 'class': 'form-control select-control'  }}) }}
