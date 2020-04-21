@@ -919,7 +919,7 @@ class AdListController extends CoreController
                     $searchParams['keywords'] = $data['search']['keywords'];
                 }
 
-                if (!isset($data['search']['item__category_id']) || (isset($data['search']['item__category_id']) && $rootCategoryId != CategoryRepository::ADULT_ID)) {
+                if (!isset($data['search']['item__category_id'])) {
                     $response = new Response();
                     $response->headers->setCookie(new Cookie('home_page_search_params', serialize($searchParams), time() + (365*24*60*60*1000), '/', null, false, false));
                     $response->sendHeaders();
