@@ -14,10 +14,10 @@
                 {{ include('FaAdBundle:AdPost:businessPhoneField.html.twig') }}
             {% elseif field == 'personalized_title' %}
                 <div class="col-md-24 d-flex justify-content-center paa-box">
-                    <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
+                    <div class="paa-bdr-box" id="element_{{ field }}">
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                        <div class="collapse collapse-body-content" id="element_toggle_{{ field }}_target">
                             <div class="row">
                               <div class="large-12 columns subtitle-ins">
                                 {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
@@ -40,7 +40,7 @@
                 </div>>
             {% elseif field in capsuleFields %}
                 <div class="col-md-24 d-flex justify-content-center paa-box">
-                    <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
+                    <div class="paa-bdr-box" id="element_{{ field }}">
                         {% set choiceField = field|replace({'_id':''})%}
                         {% set isMultiple = false %}
                         {% if attribute(form, field).vars.multiple == true %}
@@ -48,13 +48,13 @@
                         {% endif %}
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                        <div class="collapse collapse-body-content" id="element_toggle_{{ field }}_target">
                             {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
                                 <div class="paa-title-ins">
                                     {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
                                 </div>
                             {% endif %}
-                            <div id="{{choiceField}}_choice_div" style="display:none">
+                            <div id="{{choiceField}}_choice_div">
                                 {{ form_widget(attribute(form, field)) }}
                             </div>
                             <div class="capsule-links {{choiceField}}-links">
@@ -79,10 +79,10 @@
                 </div>
             {% elseif field == 'deposit' %}
                 <div class="col-md-24 d-flex justify-content-center paa-box">
-                    <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
+                    <div class="paa-bdr-box" id="element_{{ field }}">
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                        <div class="collapse collapse-body-content" id="element_toggle_{{ field }}_target">
                             {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
                                 <div class="paa-title-ins">
                                     {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
@@ -98,10 +98,10 @@
                 </div>
             {% elseif field == 'date_available' %}
                 <div class="col-md-24 d-flex justify-content-center paa-box">
-                    <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
+                    <div class="paa-bdr-box" id="element_{{ field }}">
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                        <div class="collapse collapse-body-content" id="element_toggle_{{ field }}_target">
                             {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
                                 <div class="paa-title-ins">
                                     {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
@@ -119,10 +119,10 @@
                 </div>
             {% elseif field == 'amenities_id' or field == 'bills_included_in_rent_id' %}
                 <div class="col-md-24 d-flex justify-content-center paa-box">
-                    <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
+                    <div class="paa-bdr-box" id="element_{{ field }}">
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                        <div class="collapse collapse-body-content" id="element_toggle_{{ field }}_target">
                             {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
                                 <div class="paa-title-ins">
                                     {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
@@ -146,10 +146,10 @@
                 </div>
             {% elseif field == 'rental_length' %}
                 <div class="col-md-24 d-flex justify-content-center paa-box">
-                    <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
+                    <div class="paa-bdr-box" id="element_{{ field }}">
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                        <div class="collapse collapse-body-content" id="element_toggle_{{ field }}_target">
                             {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
                                 <div class="paa-title-ins">
                                     {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
@@ -164,10 +164,10 @@
                 </div>
             {% else %}
                 <div class="col-md-24 d-flex justify-content-center paa-box">
-                    <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
+                    <div class="paa-bdr-box" id="element_{{ field }}">
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                        <div class="collapse collapse-body-content" id="element_toggle_{{ field }}_target">
                             {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
                                 <div class="paa-title-ins">
                                     {{ attribute(attribute(form, field).vars.attr, 'field-help') }}

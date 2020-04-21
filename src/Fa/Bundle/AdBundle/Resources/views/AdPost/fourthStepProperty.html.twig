@@ -89,7 +89,12 @@
                $('#fa_paa_fourth_step_property_preview').addClass('mt30');
            {% endif %}
        {% endif %}
-
+       var id= '#element_'+ '{{ formFields['lastField'] }}';
+       console.log(id);
+       $('#element_'+ '{{ formFields['lastField'] }}').click(function () {
+            var res = $('.collapsed').val();
+            console.log(res);
+       });
        $('.textcounter').keyup(function(e){
            updateCharCounter($(this).attr('id'));
        });
@@ -192,7 +197,7 @@
         var nowTemp = new Date();
         var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
      
-        $('.fdatepicker-paa').fdatepicker({
+        $('.fdatepicker-paa').datepicker({
             format: 'dd/mm/yyyy',
             onRender: function (date) {
                 return date.valueOf() < now.valueOf() ? 'disabled' : '';
@@ -206,13 +211,15 @@
         });
     }
 
-    $(document).foundation({
+    /*$(document).foundation({
         equalizer : {
             // Specify if Equalizer should make elements equal height once they become stacked.
             equalize_on_stack: true
         }
-    });
+    });*/
 //]]>
+
+
 </script>
 {% if (form.location_autocomplete) is defined %}
     {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_fourth_step_property_location', 'placeHolder': ((attribute(form, 'location_autocomplete').vars.attr.placeholder is defined and attribute(form, 'location_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'location_autocomplete').vars.attr.placeholder : ''), 'route' : 'town_ajax_find_town_by_term', 'dropdownCssClass': 'white-choices' }) }}
