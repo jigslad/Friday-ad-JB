@@ -233,6 +233,24 @@
             });
         {% endif %}
 
+        var expand = false;
+        $(".m-pop-click").on('click',function(){
+            //display hidden items
+            if(!expand ){
+            	$("#popular-dropdown").removeClass('m-pop-1');
+            	$("#popular-dropdown").addClass('m-pop-2');
+            	$(".adult-down-arrow").show();
+            	$(".adult-up-arrow").hide();
+            	expand = true;
+            }else{
+            	$("#popular-dropdown").addClass('m-pop-1');
+            	$("#popular-dropdown").removeClass('m-pop-2');
+            	$(".adult-down-arrow").hide();
+            	$(".adult-up-arrow").show();
+            	expand = false
+            }
+        });
+        
         var headerParallax;
         $(document).ready(function() {
             $('div.homepage-row:even').addClass('white-bg');
