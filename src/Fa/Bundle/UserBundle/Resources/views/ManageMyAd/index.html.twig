@@ -53,9 +53,9 @@
     {
     	adIdToRemove = adId;
         if (currentAdStatus == "{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID')}}") {
-        	$('#markAdAsSoldOrExpireModal').foundation('reveal', 'open');
+        	$('#markAdAsSoldOrExpireModal').modal('show');
         } else {
-        	$('#markAdAsInactiveModal').foundation('reveal', 'open');
+        	$('#markAdAsInactiveModal').modal('show');
         }
     }
 
@@ -63,7 +63,7 @@
     {
     	adIdToRemove = '';
     	statusIdToChange = '';
-    	closeRevealModel('#'+modelId);
+        $('#'+modelId).modal('show');
     }
 
     function openMarkAdAsBoostedModal() {
@@ -100,7 +100,7 @@
         }
     }
     function openMarkAdAsUnBoostModal() {
-        $('#markAdAsUnBoostModal').foundation('reveal', 'open');
+        $('#markAdAsUnBoostModal').modal('show');
     }
 
     function checkAllBoostButtonEnabled() {
@@ -153,7 +153,7 @@
              })
             .done(function(response) {
                 $('#social_share_icon_div').html(response.htmlContent);
-            	$('#socialShareMobileModal').foundation('reveal', 'open');
+            	$('#socialShareMobileModal').modal('show');
             });
         }
     }
