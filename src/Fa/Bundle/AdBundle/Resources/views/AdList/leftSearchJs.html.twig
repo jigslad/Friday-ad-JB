@@ -135,7 +135,7 @@
 
     function closeDimensionModal()
     {
-        $('#left_search_dimension_modal').foundation('reveal', 'close');
+        $('#left_search_dimension_modal')..modal('hide');
     }
 
     function closeDimensionModalAndSubmitForm()
@@ -207,11 +207,11 @@
                 success: function(data) {
                     $('#left_search_dimension_modal').html(data);
                     bindCustomCheckboxEvent();
-                    $('#left_search_dimension_modal').foundation('reveal', 'open');
+                    $('#left_search_dimension_modal')..modal('show');
                 }
             });
         } else {
-            $('#left_search_dimension_modal').foundation('reveal', 'open');
+            $('#left_search_dimension_modal')..modal('show');
         }
     }
 

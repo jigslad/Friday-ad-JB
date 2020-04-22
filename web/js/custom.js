@@ -526,7 +526,7 @@ $(function(e) {
   }
 });
 
-$('select').each(function(){
+/*$('select').each(function(){
     var $this = $(this), numberOfOptions = $(this).children('option').length;
   
     $this.addClass('select-hidden'); 
@@ -570,7 +570,7 @@ $('select').each(function(){
         $list.hide();
     });
 
-});
+});*/
 
 
  $(function(){
