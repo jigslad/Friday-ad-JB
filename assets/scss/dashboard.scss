@@ -2,6 +2,7 @@
 .media {
     display: flex!important;
     align-items: flex-start;
+    width: 100%;
 }
 .posting-bg {
   position: relative;
@@ -55,6 +56,7 @@
   left: auto;
   bottom: auto;
 }
+
 .user-name {
     min-width: 250px;
     float: right;
@@ -72,7 +74,7 @@
 .user-name {
     h2 {
         width: 260px;
-        font-family: "Helvetica Neue",Arial;
+        font-family: $font-family-secondary;
         font-size: 20px;
         color: $white;
         margin: 10px;
@@ -82,6 +84,10 @@
         display: inline-block;
         margin: 0 0 29px;
         vertical-align: top;
+        color: $secondary-color;
+        &:hover, &:focus, &:active {
+            color: $secondary-h-color;
+        }
     }
 }
 .db-left-menu {
@@ -95,6 +101,7 @@
 .left-off-canvas-menu * {
     -webkit-backface-visibility: hidden;
 }
+
 .db-left-menu li {
     border-top: 1px solid $black;
     box-shadow: inset 0 1px 0 $common-text-color;
@@ -372,7 +379,7 @@
         line-height: 28px;
     }    
     .manage-list-desc {
-        font-family: "Helvetica Neue",Arial;
+        font-family: $font-family-secondary;
         color: $form-text-color;
         line-height: 20px;
     }    
@@ -1094,7 +1101,7 @@
     height: 65px;
     background-color: rgba(0, 0, 0, 0.5);
     filter: alpha(opacity = 50);
-    font-family: "Helvetica Neue",Arial;
+    font-family: $font-family-secondary;
     color: $form-text-color;
     text-align: center;
     z-index: 1;

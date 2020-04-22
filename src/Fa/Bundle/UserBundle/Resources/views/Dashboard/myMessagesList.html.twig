@@ -5,27 +5,15 @@
 {% set unreadUserInterestedAdMsgCount = myMessagesParameters['unreadUserInterestedAdMsgCount'] %}
 {{ include('FaMessageBundle:AdMessage:messageTabs.html.twig') }}
 <div class="tab-content">
-    <div class="row">
-        <div class="columns">
-            <div id="msg_div" style="display:none;"></div>
+    <div class="tab-pane fade show active">
+        <div class="my-msg-main">
+            {% if pagination.getNbResults() %}
+                {% for arrayMessage in messageDetailArray %}
+                    {{ include('FaMessageBundle:AdMessage:messageDetail.html.twig') }}
+                {% endfor %}
+            {% else %}
+                <div class="p15">{{ "You don't have any messages yet, but we're sure you will get some very soon."|trans({}, 'frontend-dashboard') }}</div>
+            {% endif %}
         </div>
     </div>
-
-    {% if pagination.getNbResults() %}
-        <div class="row ">
-            <div class="columns">
-                <div class="my-msg-main">
-        {% for arrayMessage in messageDetailArray %}
-            {{ include('FaMessageBundle:AdMessage:messageDetail.html.twig') }}
-        {% endfor %}
-                </div>
-            </div>
-        </div>
-    {% else %}
-        <div class="row ">
-            <div class="columns">
-                <div><br>{{ "You don't have any messages yet, but we're sure you will get some very soon."|trans({}, 'frontend-dashboard') }}</div>
-            </div>
-        </div>
-    {% endif %}
 </div>

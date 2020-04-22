@@ -82,10 +82,10 @@
                                                     <span class="list-icon-text recent-view-icon">{{ 'Recently viewed ads (%totalRecentlyAds%)'|trans({'%totalRecentlyAds%':totalRecentlyAds}, 'frontend-dashboard') }}</span>
                                                 </div>
                                             </div>
-                                            <div class="collapse collapse-body-content show recently-viewed">
+                                            <div class="collapse collapse-body-content show">
                                                 {% if recentlyViewedAds|length > 0 %}
                                                     {% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
-                                                    {{ include('FaFrontendBundle:Default:homePageRecommendedAdsSlider.html.twig', {'divId': 'recommended-item-slider', 'ads': recentlyViewedAds, 'noImageColor': 'grey'}) }}
+                                                    {{ include('FaFrontendBundle:Default:homePageRecommendedAdsSlider.html.twig', {'divId': 'recently-view-item-slider', 'ads': recentlyViewedAds, 'noImageColor': 'grey'}) }}
                                                 {% else %}
                                                     {% set linkText = 'browse ads' %}
                                                     {% set browseAds = '<a href="'~searchResultUrl~'">'~linkText~'</a>' %}
@@ -116,16 +116,16 @@
                                         </div>
                                         <div class="db-list">
                                             <div class="media section-head">
-                                                {% if myFavouritesParameters['pagination'] is defined and myFavouritesParameters['pagination'].getNbResults() > 0 %}
-                                                    <div class="media-body">
+                                                <div class="media-body">
+                                                    {% if myFavouritesParameters['pagination'] is defined and myFavouritesParameters['pagination'].getNbResults() > 0 %}
                                                         <span class="list-icon-text db-my-favourites">{{ 'My favourites (%totalFavourites%)'|trans({'%totalFavourites%':myFavouritesParameters['pagination'].getNbResults()}, 'frontend-dashboard') }}</span>
-                                                    </div>
-                                                    <div class="arrow-block">
-                                                        <a class="db-view-all db-h-b-link" href="{{path('my_favourite')}}">View all</a>
-                                                    </div>
-                                                {% else %}
-                                                    <span class="db-my-favourites">{{ 'My favourites (%totalFavourites%)'|trans({'%totalFavourites%':0}, 'frontend-dashboard') }}</span>
-                                            {% endif %}
+                                                    {% else %}
+                                                        <span class="list-icon-text db-my-favourites">{{ 'My favourites (%totalFavourites%)'|trans({'%totalFavourites%':0}, 'frontend-dashboard') }}</span>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="arrow-block">
+                                                    <a class="db-view-all db-h-b-link" href="{{path('my_favourite')}}">View all</a>
+                                                </div>
                                             </div>
                                             <div class="collapse collapse-body-content show">
                                                 {% if myFavouritesParameters['pagination'] is defined and myFavouritesParameters['pagination'].getNbResults() > 0 %}
@@ -175,22 +175,9 @@
     {{ include('FaCoreBundle::starRatingJs.html.twig') }}
     {{ include('FaUserBundle:Review:reviewResponseJs.html.twig', {'success_url': app.request.getUri}) }}
     {{ include('FaMessageBundle:AdMessage:messageJs.html.twig', {'page': 'listing'}) }}
-    <script src="{{ asset_url('facore/js/owl.carousel.min.js') }}"></script>
-    <script src="{{ asset('js/custom.js') }}"></script>
     <script language="javascript" type="text/javascript">
     //<![CDATA[
     $(document).ready(function() {
-        var recommendedItemSlider = $("#recommended-item-slider");
-        recommendedItemSlider.owlCarousel({
-            items : 6,
-            itemsCustom:[[320, 1], [568, 3], [768, 3], [1024, 4], [1151, 4]],
-            navigation: true,
-            pagination:false,
-            responsiveRefreshRate : 100,
-            navigationText: ['<img src="/bundles/fafrontend/images/small-slider-prev.svg" alt="" />', '<img src="/bundles/fafrontend/images/small-slider-next.svg" alt="" />'],
-            lazyLoad: true,
-            scrollPerPage: true,
-        });
         var isReviewTypeSet = '{{isReviewTypeSet}}';
         if (parseInt(isReviewTypeSet) == 1) {
             scrollToElement($('#review_section'));

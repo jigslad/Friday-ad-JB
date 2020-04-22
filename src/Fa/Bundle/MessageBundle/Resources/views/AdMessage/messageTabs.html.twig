@@ -12,13 +12,13 @@
 <nav>
     <div class="nav nav-tabs nav-fill custom-tabs">
         <a class="nav-item nav-link {% if currentRoute == 'user_ad_message_all' or (currentRoute == 'dashboard_home' and (messageType == '' or messageType == 'all')) %} active {% endif %}" href="{{ allMessagesRoute }}">
-            {{ 'All <br />messages'|trans({}, 'frontend-inbox')|raw }} <br />{% if totalMsgCount > 0 %}(<span id="unreadUserMsgCount_div">{{totalMsgCount}}</span>){% endif %}
+            {{ 'All messages'|trans({}, 'frontend-inbox')|raw }} <br />{% if totalMsgCount > 0 %}(<span id="unreadUserMsgCount_div">{{totalMsgCount}}</span>){% endif %}
         </a>
         <a class="nav-item nav-link {% if currentRoute == 'user_ad_message' or (currentRoute == 'dashboard_home' and messageType == 'receiver') %} active {% endif %}" id="about_your_ads_tab" href="{{ aboutYourAdMessagesRoute }}">
-            {{ 'About <br />your ads'|trans({}, 'frontend-inbox')|raw }} <br />{% if unreadUserAdMsgCount > 0 %}(<span id="unreadUserMsgCount_div">{{unreadUserAdMsgCount}}</span>){% endif %}
+            {{ 'About your ads'|trans({}, 'frontend-inbox')|raw }} <br />{% if unreadUserAdMsgCount > 0 %}(<span id="unreadUserMsgCount_div">{{unreadUserAdMsgCount}}</span>){% endif %}
         </a>
         <a class="nav-item nav-link {% if currentRoute == 'user_interested_ad_message' or (currentRoute == 'dashboard_home' and messageType == 'sender') %} active {% endif %}" id="ads_interest_in_tab" href="{{ intrestedAdMessagesRoute }}" >
-            {{ "Ads you're <br />interested in"|trans({}, 'frontend-inbox')|raw }} <br />{% if unreadUserInterestedAdMsgCount > 0 %}(<span id="unreadUserInterestedMsgCount_div">{{unreadUserInterestedAdMsgCount}}</span>){% endif %}
+            {{ "Ads you're interested in"|trans({}, 'frontend-inbox')|raw }} <br />{% if unreadUserInterestedAdMsgCount > 0 %}(<span id="unreadUserInterestedMsgCount_div">{{unreadUserInterestedAdMsgCount}}</span>){% endif %}
         </a>
     </div>
 </nav>

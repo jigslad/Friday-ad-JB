@@ -911,9 +911,9 @@ class CommonManager
                     }
 
                     if (!$imageWidth && !$imageHeight) {
-                        return ($isCompany ? '<div class="profile-placeholder">' : '').'<img src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.'" alt="'.$userName.'" '.(!$isCompany ? 'class="pvt-no-img"':null).' />'.($isCompany ? '</div>' : '');
+                        return '<img src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.'" alt="'.$userName.'" '.'class="pvt-no-img rounded-circle"'.' />';
                     } else {
-                        return ($isCompany ? '<div class="profile-placeholder">' : '').'<img src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.'" width="'.$imageWidth.'" height="'.$imageHeight.'" alt="'.$userName.'" '.(!$isCompany ? 'class="pvt-no-img"':null).' />'.($isCompany ? '</div>' : '');
+                        return '<img src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.'" width="'.$imageWidth.'" height="'.$imageHeight.'" alt="'.$userName.'" '.'class="pvt-no-img rounded-circle"'.' />';
                     }
                 }
             } else {
@@ -952,9 +952,9 @@ class CommonManager
                 $noImageName = 'user-no-logo.svg';
             }
             if (!$imageWidth && !$imageHeight) {
-                return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).($isCompany ? '<div class="profile-placeholder">' : '').'<img src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.'" alt="'.$userName.'" '.(!$isCompany ? 'class="pvt-no-img"':null).' />'.($isCompany ? '</div>' : '');
+                return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.'" alt="'.$userName.'" '.'class="pvt-no-img rounded-circle" />';
             } else {
-                return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).($isCompany ? '<div class="profile-placeholder">' : '').'<img src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.'" width="'.$imageWidth.'" height="'.$imageHeight.'" alt="'.$userName.'" '.(!$isCompany ? 'class="pvt-no-img"':null).' />'.($isCompany ? '</div>' : '');
+                return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.'" width="'.$imageWidth.'" height="'.$imageHeight.'" alt="'.$userName.'" class="pvt-no-img rounded-circle" />';
             }
         }
     }
@@ -1017,7 +1017,7 @@ class CommonManager
                     $noImageName = 'user-no-logo.svg';
                 }
 
-                return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).(($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) ? '<div class="profile-placeholder">' : '').'<img src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.($appendTime ? '?'.time() : null).'" alt="'.$userName.'" '.($userRole == RoleRepository::ROLE_SELLER? 'class="pvt-no-img"':null).' />'.(($userRole == RoleRepository::ROLE_BUSINESS_SELLER  || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) ? '</div>' : '');
+                return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.($appendTime ? '?'.time() : null).'" alt="'.$userName.'" '. 'class="pvt-no-img rounded-circle"'.' />';
             }
         }
     }

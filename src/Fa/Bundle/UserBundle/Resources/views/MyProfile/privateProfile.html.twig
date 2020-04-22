@@ -6,6 +6,9 @@
 {% block scripttop %}
     {{ block('profileImageUploadStylesheets') }}
     {{ set_variables('profileImageUploadStylesheets', {'loaded':'true'}) }}
+{% endblock %}
+
+{% block stylesheet %}
     <link rel="stylesheet" href="{{ asset('build/css/dashboard.css') }}"/>
 {% endblock %}
 
