@@ -27,15 +27,15 @@
                                 {{ include('FaMessageBundle:AdMessage:messageTabs.html.twig') }}
                                 <div class="tab-content">
                                     <div class="tab-pane fade show active">
-                                        {% if pagination.getNbResults() %}
-                                            <div class="my-msg-main">
+                                        <div class="my-msg-main">
+                                            {% if pagination.getNbResults() %}
                                                 {% for arrayMessage in messageDetailArray %}
                                                     {{ include('FaMessageBundle:AdMessage:messageDetail.html.twig') }}
                                                 {% endfor %}
-                                            </div>
-                                        {% else %}
-                                            <div class="p15">{{ 'No records found.'|trans({}, 'frontend-inbox') }}</div>
-                                        {% endif %}
+                                            {% else %}
+                                                <div class="p15">{{ 'No records found.'|trans({}, 'frontend-inbox') }}</div>
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </div>
                                 {{ include('FaFrontendBundle:Default:pager.html.twig', {'pagination': pagination}) }}
