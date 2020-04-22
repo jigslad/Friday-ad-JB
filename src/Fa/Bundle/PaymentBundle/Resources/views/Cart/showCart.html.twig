@@ -9,51 +9,59 @@
     <div class="cart-list-main" id="cart_main_div">
         {{ include('FaPaymentBundle:Cart:cart.html.twig') }}
     </div>
-    <div id="removeDiscountcodeModal" class="reveal-modal tiny remove-item-modal" data-reveal>
-        <a class="close-reveal-modal">&#215;</a>
-        <h5 class="modal-title">
-            {{'Remove discount code?'|trans({}, 'frontend-manage-my-ad')}}
-        </h5>
-        <div class="modal-content remove-modal">
-            <div class="row">
-                <div class="columns">
-                    <h5>{{'Are you sure that you want to remove this discount code?'|trans({}, 'frontend-manage-my-ad')}}</h5>
-                </div>
-            </div>
-            <div class="mt20 remove-item-btn">
-                <div class="row">
-                    <div class="large-12 columns">
-                        <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="removeDiscountCode();">{{'Remove'|trans({}, 'frontend-manage-my-ad')}}</button>
+    <div id="removeDiscountcodeModal" class="modal custom-modal tiny remove-item-modal">
+        <div class="modal-dialog">
+		    <div class="modal-content">
+		      	<div class="modal-header">
+		        	<h5 class="modal-title save-search-title no-icon-title">{{'Remove discount code?'|trans({}, 'frontend-manage-my-ad')}}</h5>
+		        	<button class="close-modal" class="close" data-dismiss="modal">×</button>
+		      	</div>
+		      	<div class="modal-body">        
+                    <div class="container">
+                        <div class="row">
+                            <h5>{{'Are you sure that you want to remove this discount code?'|trans({}, 'frontend-manage-my-ad')}}</h5>
+                        </div>
                     </div>
-                    <div class="large-12 columns">
-                        <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#removeDiscountcodeModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
+                    <div class="mt20 remove-item-btn">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="removeDiscountCode();">{{'Remove'|trans({}, 'frontend-manage-my-ad')}}</button>
+                            </div>
+                            <div class="col-md-12">
+                                <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#removeDiscountcodeModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+                 </div>
+              </div>
         </div>
     </div>
     
-    <div id="removeCreditModal" class="reveal-modal tiny remove-item-modal" data-reveal>
-        <a class="close-reveal-modal">&#215;</a>
-        <h5 class="modal-title">
-            {{'Remove credit?'|trans({}, 'frontend-manage-my-ad')}}
-        </h5>
-        <div class="modal-content remove-modal">
-            <div class="row">
-                <div class="columns">
-                    <h5>{{'Are you sure that you want to remove credit?'|trans({}, 'frontend-manage-my-ad')}}</h5>
-                </div>
-            </div>
-            <div class="mt20 remove-item-btn">
-                <div class="row">
-                    <div class="large-12 columns">
-                        <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="removeCredit();">{{'Remove'|trans({}, 'frontend-manage-my-ad')}}</button>
+    <div id="removeCreditModal" class="modal custom-modal tiny remove-item-modal">
+    	<div class="modal-dialog">
+		    <div class="modal-content">
+		      	<div class="modal-header">
+		        	<h5 class="modal-title save-search-title no-icon-title">{{'Remove credit?'|trans({}, 'frontend-manage-my-ad')}}</h5>
+		        	<button class="close-modal" class="close" data-dismiss="modal">×</button>
+		      	</div>
+		      	<div class="modal-body">       
+                    <div class="container">
+                        <div class="row">
+                            <h5>{{'Are you sure that you want to remove credit?'|trans({}, 'frontend-manage-my-ad')}}</h5>
+                        </div>
                     </div>
-                    <div class="large-12 columns">
-                        <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#removeCreditModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
+                    <div class="mt20 remove-item-btn">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="removeCredit();">{{'Remove'|trans({}, 'frontend-manage-my-ad')}}</button>
+                            </div>
+                            <div class="col-md-12">
+                                <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#removeCreditModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+                 </div>
+              </div>
         </div>
     </div>
 {% endblock %}
