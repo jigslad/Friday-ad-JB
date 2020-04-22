@@ -108,21 +108,6 @@
 
 
 
-{#                    <div class="write-reply">#}
-{#                        <form name="fa_message_message_ad" method="post" novalidate="" id="">#}
-{#                            <div>#}
-{#                                <textarea id="" name="" required="required" rows="5" class="form-control white-field"></textarea>#}
-{#                            </div>#}
-{#                            <div class="d-flex justify-content-sm-between justify-content-md-end">#}
-{#                                <button id="fa_message_message_ad_attachments" class="primary-btn-3 thin-btn btn  attach-files-btn mr20">#}
-{#                                    <span></span>Attach files#}
-{#                                </button>#}
-{#                                <button type="button" id="" name="" class="secondary-btn-1 thin-btn btn">Reply</button>#}
-{#                            </div>#}
-{#                            <div class="clearfix"></div>#}
-{#                        </form>#}
-{#                    </div>#}
-
 
                 <h1 class="s-h1 db-title mt30 mb20">{{'Your conversation with %userName%'|trans({'%userName%': userName}, 'frontend-inbox')}}</h1>
                 <div id="mark_as_sold_msg_div" style="display:none"></div>
@@ -171,54 +156,54 @@
                         {% set backRedirectUrl = path('user_ad_message') %}
                     {% endif %}
                     <div class="write-reply">
-                {% if isAllowCommunication == true %}
-                    <div id="reply_msg_div" style="display:none"></div>
-                    {{ form_start(form, {'attr': {'novalidate': '', 'id': 'fa_message_ad_message_id'}}) }}
-                        {{ form_widget(form.text_message) }}
-                        {{ include('FaMessageBundle:AdMessageAttachments:messageUploadAttachments.html.twig') }}
-                        <div class="msg-btns">
-                            <button id="fa_message_message_ad_attachments" class="primary-btn-3 thin-btn button mb0 attach-files-btn">
-                                <span></span>{{'Attach files'|trans({}, 'frontend-inbox')}}
-                            </button>
-                            {{ form_widget(form.save, {'attr': {'class':'primary-btn-2 thin-btn button mb0', 'onclick': 'sendReply()'}}) }}
+                        {% if isAllowCommunication == true %}
+                            <div id="reply_msg_div" style="display:none"></div>
+                            {{ form_start(form, {'attr': {'novalidate': '', 'id': 'fa_message_ad_message_id'}}) }}
+                                <div>
+                                    {{ form_widget(form.text_message) }}
+                                </div>
+                                {{ include('FaMessageBundle:AdMessageAttachments:messageUploadAttachments.html.twig') }}
+                                <div class="d-flex justify-content-sm-between justify-content-md-end">
+                                    <button id="fa_message_message_ad_attachments" class="primary-btn-3 thin-btn btn  attach-files-btn mr20">
+                                        <span></span>{{'Attach files'|trans({}, 'frontend-inbox')}}
+                                    </button>
+                                    {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 thin-btn btn', 'onclick': 'sendReply()'}}) }}
+                                </div>
+                            {{ form_end(form) }}
+                        {% else %}
+                            <div class="green-text">{{'Sorry ad is no more active, so communication is disabled for this ad!'|trans({}, 'frontend-inbox')}}</div>
+                        {% endif %}
                         </div>
-                    {{ form_end(form) }}
-                {% else %}
-                    <div class="green-text">{{'Sorry ad is no more active, so communication is disabled for this ad!'|trans({}, 'frontend-inbox')}}</div>
-                {% endif %}
-                </div>
-                    {% set messageRepository = fetch_repository('FaMessageBundle:Message') %}
-                    {{ set_variables('AdMessage', {'replyId':messageRepository.getLastConversationId(app.request.get('replyId')), 'type': app.request.get('type'), 'adId': messsageAdId}) }}
-                </div>
-            </div>
+                            {% set messageRepository = fetch_repository('FaMessageBundle:Message') %}
+                            {{ set_variables('AdMessage', {'replyId':messageRepository.getLastConversationId(app.request.get('replyId')), 'type': app.request.get('type'), 'adId': messsageAdId}) }}
+                        </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div id="leave_review_modal" class="reveal-modal" data-reveal></div>
-        <div id="markAsSoldModal" class="reveal-modal tiny" data-reveal>
-            <a class="close-reveal-modal">&#215;</a>
-            <h5 class="modal-title">
-            {{'Ad sold!'|trans({}, 'frontend-inbox')}}
-        </h5>
-            <div class="modal-content remove-modal">
-            <div class="row">
-                <div class="columns">
-                    <h5>{{'You have marked this ad as sold.'|trans({}, 'frontend-inbox')}}</h5>
-                    <div class="gray-text mt10">This will remove this ad from the listings.</div>
+        <div id="markAsSoldModal" class="modal custom-modal" >
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title save-search-title">{{'Ad sold!'|trans({}, 'frontend-inbox')}}</h5>
+                        <button class="close-modal" class="close" data-dismiss="modal">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <h5>{{'You have marked this ad as sold.'|trans({}, 'frontend-inbox')}}</h5>
+                        <div class="gray-text mt10">This will remove this ad from the listings.</div>
+                        <div class="row">
+                            <div class="large-12 columns">
+                                <button type="button" class="button secondary-btn-4 thin-btn expand mb0" onclick="closeRevealModel('#markAsSoldModal');markAsSold('{{adId}}');">{{'Continue'|trans({}, 'frontend-inbox')}}</button>
+                            </div>
+                            <div class="large-12 columns">
+                                <button type="button" class="button secondary-btn-1 thin-btn expand mb0" onclick="javascript:closeRevealModel('#markAsSoldModal');">{{'Cancel'|trans({}, 'frontend-inbox')}}</button>&nbsp;
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="mt20">
-                <div class="row">
-                    <div class="large-12 columns">
-                        <button type="button" class="button secondary-btn-4 thin-btn expand mb0" onclick="closeRevealModel('#markAsSoldModal');markAsSold('{{adId}}');">{{'Continue'|trans({}, 'frontend-inbox')}}</button>
-                    </div>
-                    <div class="large-12 columns">
-                        <button type="button" class="button secondary-btn-1 thin-btn expand mb0" onclick="javascript:closeRevealModel('#markAsSoldModal');">{{'Cancel'|trans({}, 'frontend-inbox')}}</button>&nbsp;
-                    </div>
-                </div>
-            </div>
-        </div>
         </div>
         <div id="reportUserModal" class="reveal-modal small" data-reveal></div>
     </div>
