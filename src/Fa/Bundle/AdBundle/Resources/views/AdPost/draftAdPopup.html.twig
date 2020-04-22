@@ -1,27 +1,31 @@
-<div id="draftAdModal" class="reveal-modal tiny remove-item-modal" data-reveal>
-    <a class="close-reveal-modal">&#215;</a>
-    <h5 class="modal-title">
-        {{'Start where you left off?'|trans({}, 'frontend-paa-first-step')}}
-    </h5>
-    <div class="modal-content remove-modal">
-        <div class="row">
-            <div class="columns">
-                {% if (objDraftAd.getTitle() is defined) %}
-                    {{'Would you like to continue with your previous draft: <b>%adTitle%</b>?'|trans({'%adTitle%': objDraftAd.getTitle()}, 'frontend-paa-first-step')|raw}}
-                {% else %}
-                    {{'Would you like to continue with your previous draft?'|trans({}, 'frontend-paa-first-step')}}
-                {% endif %}
-            </div>
-        </div>
-        <div class="mt20 remove-item-btn">
-            <div class="row">
-                <div class="large-12 columns">
-                    <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#draftAdModal');">{{'No Thanks'|trans({}, 'frontend-paa-first-step')}}</button>
-                </div>
-                <div class="large-12 columns">
-                    <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="setStepSessionData('{{ objDraftAd.getId() }}');">{{'Load saved draft'|trans({}, 'frontend-paa-first-step')}}</button>
-                </div>
-            </div>
-        </div>
+<div id="draftAdModal" class="modal custom-modal tiny remove-item-modal">
+	<div class="modal-dialog">
+		    <div class="modal-content">
+		      	<div class="modal-header">
+		        	<h5 class="modal-title save-search-title no-icon-title">{{'Start where you left off?'|trans({}, 'frontend-paa-first-step')}}</h5>
+		        	<button class="close-modal" class="close" data-dismiss="modal">×</button>
+		      	</div>
+		      	<div class="modal-body"> 
+                    <div class="container">
+                        <div class="row">
+                            {% if (objDraftAd.getTitle() is defined) %}
+                                {{'Would you like to continue with your previous draft: <b>%adTitle%</b>?'|trans({'%adTitle%': objDraftAd.getTitle()}, 'frontend-paa-first-step')|raw}}
+                            {% else %}
+                                {{'Would you like to continue with your previous draft?'|trans({}, 'frontend-paa-first-step')}}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="mt20 remove-item-btn">
+                        <div class="row">
+                            <div class="large-12 columns">
+                                <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#draftAdModal');">{{'No Thanks'|trans({}, 'frontend-paa-first-step')}}</button>
+                            </div>
+                            <div class="large-12 columns">
+                                <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="setStepSessionData('{{ objDraftAd.getId() }}');">{{'Load saved draft'|trans({}, 'frontend-paa-first-step')}}</button>
+                            </div>
+                        </div>
+                    </div>
+               </div>
+          </div>
     </div>
 </div>
