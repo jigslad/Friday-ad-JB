@@ -120,10 +120,10 @@
             <div class="columns">
                 <h3 class="homepage-title">{{'Latest Ads'|trans({}, 'frontend-homepage')}}</h3>
             </div>
-	        <div class="medium-15 columns">
+	        <div class="medium-24 large-15 columns">
                 {{ include('FaFrontendBundle:Adult:homePageLatestAds.html.twig', {'divId': 'featured-top-item-slider', 'ads': ''}) }}
             </div>
-            <div class="medium-9 columns">
+            <div class="medium-24 large-9 columns latest-ad-r-block">
 	        	<div class="mb20 square-block-img ga-ahpBlockAResults">
 	        		{% if mobileDetectManager.isMobile() %}
                         {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK_MOBILE') %}
@@ -274,7 +274,7 @@
             var featuredItemSlider = $("#featured-top-item-slider");
             featuredItemSlider.owlCarousel({
             	items : 3,
-                itemsCustom:[[320, 2], [568, 3], [641, 2], [960, 3]],
+                itemsCustom:[[320, 2], [568, 3], [641, 2], [760, 3]],
                 navigation: true,
                 pagination:false,
                 responsiveRefreshRate : 100,
