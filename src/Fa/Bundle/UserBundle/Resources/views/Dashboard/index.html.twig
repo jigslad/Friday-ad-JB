@@ -116,16 +116,16 @@
                                         </div>
                                         <div class="db-list">
                                             <div class="media section-head">
-                                                {% if myFavouritesParameters['pagination'] is defined and myFavouritesParameters['pagination'].getNbResults() > 0 %}
-                                                    <div class="media-body">
+                                                <div class="media-body">
+                                                    {% if myFavouritesParameters['pagination'] is defined and myFavouritesParameters['pagination'].getNbResults() > 0 %}
                                                         <span class="list-icon-text db-my-favourites">{{ 'My favourites (%totalFavourites%)'|trans({'%totalFavourites%':myFavouritesParameters['pagination'].getNbResults()}, 'frontend-dashboard') }}</span>
-                                                    </div>
-                                                    <div class="arrow-block">
-                                                        <a class="db-view-all db-h-b-link" href="{{path('my_favourite')}}">View all</a>
-                                                    </div>
-                                                {% else %}
-                                                    <span class="db-my-favourites">{{ 'My favourites (%totalFavourites%)'|trans({'%totalFavourites%':0}, 'frontend-dashboard') }}</span>
-                                            {% endif %}
+                                                    {% else %}
+                                                        <span class="list-icon-text db-my-favourites">{{ 'My favourites (%totalFavourites%)'|trans({'%totalFavourites%':0}, 'frontend-dashboard') }}</span>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="arrow-block">
+                                                    <a class="db-view-all db-h-b-link" href="{{path('my_favourite')}}">View all</a>
+                                                </div>
                                             </div>
                                             <div class="collapse collapse-body-content show">
                                                 {% if myFavouritesParameters['pagination'] is defined and myFavouritesParameters['pagination'].getNbResults() > 0 %}

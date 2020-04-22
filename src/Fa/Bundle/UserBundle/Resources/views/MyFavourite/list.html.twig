@@ -13,12 +13,14 @@
                             {% if pagination is defined %}
                                 <div id="dashboard-favourites" class="fa-slider clearfix">
                                     {% if pagination.getNbResults() %}
-                                        {% for favouriteAdArray in pagination.getCurrentPageResults() %}
-                                            {{ include('FaUserBundle:MyFavourite:adDetail.html.twig', {'favouriteAdArray': favouriteAdArray}) }}
-                                        {% endfor %}
+                                        <div class="card-columns">
+                                            {% for favouriteAdArray in pagination.getCurrentPageResults() %}
+                                                {{ include('FaUserBundle:MyFavourite:adDetail.html.twig', {'favouriteAdArray': favouriteAdArray}) }}
+                                            {% endfor %}
+                                        </div>
                                     {% else %}
                                         <div class="row">
-                                            <div class="columns">
+                                            <div class="col">
                                                 {{ 'No records found.'|trans({}, 'frontend-my-favourites') }}
                                             </div>
                                         </div>
