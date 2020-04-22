@@ -10,7 +10,7 @@
 {% set orderStatusButtonColorClassesArray = {0:'', 1:'new-order', 2:'preparing-dispatched', 3:'dispatched', 4:'delivered', 5:'closed'} %}
 {% set entityCacheManager = container.get('fa.entity.cache.manager') %}
 
-{% block scripttop %}
+{% block stylesheet %}
     <link rel="stylesheet" href="{{ asset('build/css/dashboard.css') }}"/>
 {% endblock %}
 

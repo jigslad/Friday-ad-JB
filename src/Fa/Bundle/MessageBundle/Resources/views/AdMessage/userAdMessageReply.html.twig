@@ -6,9 +6,14 @@
 
 {% use "FaMessageBundle:AdMessageAttachments:showAttachmentsUploader.html.twig" %}
 
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('build/css/dashboard.css') }}" />
+{% endblock %}
+
 {% block scripttop %}
     {{ block('message_attachments_slider_css') }}
 {% endblock %}
+
 
 {% block message_attachments_slider_css %}
     {% stylesheets filter='uglifycss' output='bundles/css/compiled/imageSlider.css'
@@ -93,22 +98,45 @@
 {% endif %}
 <div class="dash-block">
     <div class="posting-bg">
-        <div class="row d-board-main">
-            <div class="container">
-                {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
-                <div id="db-right-part" class="col-md-19 d-right-col">
-                    <h1 class="s-h1 db-title mt30 mb20">{{'Your conversation with %userName%'|trans({'%userName%': userName}, 'frontend-inbox')}}</h1>
-                    <div id="mark_as_sold_msg_div" style="display:none"></div>
-                    <div id="message_box">
-                        <div class="reply-msg-heading clearfix">
-                        <div class="right">
+        <div class="container">
+            <div class="row d-board-main">
+                <a class="left-off-canvas-toggle db-menu-link d-blocks d-md-none" id="menu_off_canvas_anchor" href="javascript:void(0);" aria-expanded="true">Open menu</a>
+                <div class="off-canvas-wrap" data-offcanvas="">
+                    <div class="inner-wrap">
+                        {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
+                        <div id="db-right-part" class="col-md-19 d-right-col">
+
+
+
+{#                    <div class="write-reply">#}
+{#                        <form name="fa_message_message_ad" method="post" novalidate="" id="">#}
+{#                            <div>#}
+{#                                <textarea id="" name="" required="required" rows="5" class="form-control white-field"></textarea>#}
+{#                            </div>#}
+{#                            <div class="d-flex justify-content-sm-between justify-content-md-end">#}
+{#                                <button id="fa_message_message_ad_attachments" class="primary-btn-3 thin-btn btn  attach-files-btn mr20">#}
+{#                                    <span></span>Attach files#}
+{#                                </button>#}
+{#                                <button type="button" id="" name="" class="secondary-btn-1 thin-btn btn">Reply</button>#}
+{#                            </div>#}
+{#                            <div class="clearfix"></div>#}
+{#                        </form>#}
+{#                    </div>#}
+
+
+                <h1 class="s-h1 db-title mt30 mb20">{{'Your conversation with %userName%'|trans({'%userName%': userName}, 'frontend-inbox')}}</h1>
+                <div id="mark_as_sold_msg_div" style="display:none"></div>
+                <div id="message_box">
+                    <div class="reply-msg-heading clearfix">
+                        <div class="float-right">
                             <div class="clearfix">
                                 <div class="reply-delete-msg">
                                     <a id="deleteButton" href="javascript:void(0);" class="delete-msg" onclick="removeMessageConfirmation('{{replyMessageId}}', '{{objLoggedInUser.getId()}}', '{{messsageAdId}}');">Delete</a>
                                 </div>
-                                <div class="right hide-for-small-only">
+                                <div class="float-right d-none d-md-block">
                                     {% if reviewDetails|length %}
                                         <span id="msg_leave_review_link">
+{#                                                class="xs-btn-1 btn small-btn leave-msg-btn"#}
                                             {{ include('FaUserBundle:Review:leaveReviewLink.html.twig', {'reviewDetails' : reviewDetails, 'to_whom' : 'buyer', 'class' : 'button xs-btn-1 mt5 mb0 mymsg-review-btn', 'from_where': 'message'}) }}
                                         </span>
                                     {% endif %}
@@ -119,57 +147,61 @@
                                             {% set messageSpammerObj = messageSpammerRepository.findOneBy({'ad_id': fullConversation[0]['message_ad_id'], 'reporter':app.user.getId(), 'spammer': fullConversation[0]['sender_user_id']}) %}
                                         {% endif %}
                                         {% if not messageSpammerObj %}
-                                            <span class="report" id="report_user_btn" onclick="reportUser();">{{ 'Report'|trans({}, 'frontend-inbox') }}</span>
+                                            <span class="xs-btn-2 report" id="report_user_btn" onclick="reportUser();">{{ 'Report'|trans({}, 'frontend-inbox') }}</span>
                                         {% endif %}
                                     {% endif %}
                                     {% if not isNewMessageFlag and adOwnerId == objLoggedInUser.getId() and isAdActive == true %}
-                                        <span class="mark-sold" onclick="$('#markAsSoldModal').foundation('reveal', 'open');">{{ 'Mark as sold'|trans({}, 'frontend-inbox') }}</span>
+                                        <span class="xs-btn-2 btn small-btn marksold-btn" onclick="$('#markAsSoldModal').foundation('reveal', 'open');">{{ 'Mark as sold'|trans({}, 'frontend-inbox') }}</span>
                                     {% endif %}
                                 </div>
                             </div>
                         </div>
-                        <div>
+                        <div class="d-inline-flex">
                             <a onclick="history.back();" class="back-link left">{{'Go Back'|trans({}, 'frontend-inbox')}}</a>
                             <h3>{{ 'Discussion about:'|trans({}, 'frontend-inbox')}} {% if (adUrl is defined and adUrl != '') %}<a  class="green-text" href="{{adUrl}}">{% endif %}{{'%adTitle%'|trans({'%adTitle%': adTitle}, 'frontend-inbox')|raw}}{% if (adUrl is defined and adUrl != '') %}</a>{% endif %}</h3>
                         </div>
-                    </div>
-                        <div id="messages_div" class="reply-msg-content">
-                        {{ include('FaMessageBundle:AdMessage:showReplyMessage.html.twig') }}
-                    </div>
-                        {% set backRedirectUrl = app.request.headers.get('referer') %}
-                        {% if  get_substr_count(backRedirectUrl, 'user_ad_message') == 0 and get_substr_count(backRedirectUrl, 'user_interested_ad_message') == 0 %}
-                            {% set backRedirectUrl = path('user_ad_message') %}
-                        {% endif %}
-                        <div class="write-reply">
-                    {% if isAllowCommunication == true %}
-                        <div id="reply_msg_div" style="display:none"></div>
-                        {{ form_start(form, {'attr': {'novalidate': '', 'id': 'fa_message_ad_message_id'}}) }}
-                            {{ form_widget(form.text_message) }}
-                            {{ include('FaMessageBundle:AdMessageAttachments:messageUploadAttachments.html.twig') }}
-                            <div class="msg-btns">
-                                <button id="fa_message_message_ad_attachments" class="primary-btn-3 thin-btn button mb0 attach-files-btn">
-                                    <span></span>{{'Attach files'|trans({}, 'frontend-inbox')}}
-                                </button>
-                                {{ form_widget(form.save, {'attr': {'class':'primary-btn-2 thin-btn button mb0', 'onclick': 'sendReply()'}}) }}
-                            </div>
-                        {{ form_end(form) }}
-                    {% else %}
-                        <div class="green-text">{{'Sorry ad is no more active, so communication is disabled for this ad!'|trans({}, 'frontend-inbox')}}</div>
+                    <div>
+                </div>
+                </div>
+                    <div id="messages_div" class="reply-msg-content">
+                    {{ include('FaMessageBundle:AdMessage:showReplyMessage.html.twig') }}
+                </div>
+                    {% set backRedirectUrl = app.request.headers.get('referer') %}
+                    {% if  get_substr_count(backRedirectUrl, 'user_ad_message') == 0 and get_substr_count(backRedirectUrl, 'user_interested_ad_message') == 0 %}
+                        {% set backRedirectUrl = path('user_ad_message') %}
                     {% endif %}
-                    </div>
-                        {% set messageRepository = fetch_repository('FaMessageBundle:Message') %}
-                        {{ set_variables('AdMessage', {'replyId':messageRepository.getLastConversationId(app.request.get('replyId')), 'type': app.request.get('type'), 'adId': messsageAdId}) }}
+                    <div class="write-reply">
+                {% if isAllowCommunication == true %}
+                    <div id="reply_msg_div" style="display:none"></div>
+                    {{ form_start(form, {'attr': {'novalidate': '', 'id': 'fa_message_ad_message_id'}}) }}
+                        {{ form_widget(form.text_message) }}
+                        {{ include('FaMessageBundle:AdMessageAttachments:messageUploadAttachments.html.twig') }}
+                        <div class="msg-btns">
+                            <button id="fa_message_message_ad_attachments" class="primary-btn-3 thin-btn button mb0 attach-files-btn">
+                                <span></span>{{'Attach files'|trans({}, 'frontend-inbox')}}
+                            </button>
+                            {{ form_widget(form.save, {'attr': {'class':'primary-btn-2 thin-btn button mb0', 'onclick': 'sendReply()'}}) }}
+                        </div>
+                    {{ form_end(form) }}
+                {% else %}
+                    <div class="green-text">{{'Sorry ad is no more active, so communication is disabled for this ad!'|trans({}, 'frontend-inbox')}}</div>
+                {% endif %}
+                </div>
+                    {% set messageRepository = fetch_repository('FaMessageBundle:Message') %}
+                    {{ set_variables('AdMessage', {'replyId':messageRepository.getLastConversationId(app.request.get('replyId')), 'type': app.request.get('type'), 'adId': messsageAdId}) }}
+                </div>
+            </div>
                     </div>
                 </div>
             </div>
         </div>
         <div id="leave_review_modal" class="reveal-modal" data-reveal></div>
         <div id="markAsSoldModal" class="reveal-modal tiny" data-reveal>
-        <a class="close-reveal-modal">&#215;</a>
-        <h5 class="modal-title">
+            <a class="close-reveal-modal">&#215;</a>
+            <h5 class="modal-title">
             {{'Ad sold!'|trans({}, 'frontend-inbox')}}
         </h5>
-        <div class="modal-content remove-modal">
+            <div class="modal-content remove-modal">
             <div class="row">
                 <div class="columns">
                     <h5>{{'You have marked this ad as sold.'|trans({}, 'frontend-inbox')}}</h5>
@@ -187,7 +219,7 @@
                 </div>
             </div>
         </div>
-    </div>
+        </div>
         <div id="reportUserModal" class="reveal-modal small" data-reveal></div>
     </div>
 </div>

@@ -14,9 +14,11 @@
     {{ set_variables('profileImageUploadStylesheets', {'loaded':'true'}) }}
     {{ block('userSiteBannerUploadStylesheets') }}
     {{ block('userSiteImageUploadStylesheets') }}
-    <link rel="stylesheet" href="{{ asset('build/css/dashboard.css') }}"/>
 {% endblock %}
 
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('build/css/dashboard.css') }}"/>
+{% endblock %}
 
 
 
