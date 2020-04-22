@@ -12,133 +12,118 @@
 
 {% set isCreditUsed = false %}
 {% set categoryPath = '' %}
-<div class="row">
-
-    <div class="columns">
-        <h1 class="text-center" id="cart_main_heading">{{'Basket'|trans({}, 'frontend-cart')}}</h1>
-        <div class="cart-list">
-            <ul>
-                <li class="hide-for-small-only">
-                    <div class="row">
-                        <div class="large-12 columns"><h2>{{'Adverts'|trans({}, 'frontend-cart')}}</h2></div>
-                        <div class="large-6 columns"><h2 class="text-center">{{'Package'|trans({}, 'frontend-cart')}}</h2></div>
-                        <div class="large-6 columns"><h2 class="text-center">{{'Cost'|trans({}, 'frontend-cart')}}</h2></div>
-                    </div>
-                </li>
-                {% if cartDetails|length %}
-                	{% set gaVar = '' %}
-                	{% set K = 0 %}
-                    {% for cartDetail in cartDetails %}
-                        {% set packageId = null %}
-                        {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(cartDetail['category_id'], false, fetch_container_instance())|join(' - ') %}
-                        {% set value = array_unserialize(cartDetail['value'])%}
-                        {% if K > 0 %}
-                        	{% set gaVar = gaVar ~ "|" %}
-                    	{% endif %}
-                        {% set gaVar = gaVar ~ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(cartDetail['category_id'], false, fetch_container_instance())|join('-')|raw  %}
-                        {% if value['package'] is defined %}
-                            {% set packageIdArray = value['package']|keys %}
-                            {% set packageId = packageIdArray[0] %}
-                        {% endif %}
-                        {% if not isCreditUsed and value['user_credit_id'] is defined and value['user_credit_id'] and value['user_credit'] is defined and value['user_credit'] %}
-                            {% set isCreditUsed = true  %}
-                        {% endif %}
-                        <li>                        
+<div class="container">
+	<div class="row">
+		<div class="col-md-24 pad-none">
+			<div class="col-md-24 d-flex justify-content-center">
+				<h1 class="s-h1 paa-title col-md-24 col-lg-18 text-center" id="cart_main_heading">{{'Basket'|trans({}, 'frontend-cart')}}</h1>
+			</div>
+			<div class="col-md-24 d-flex justify-content-center cart-list">
+				<ul>
+                    <li class="d-none d-md-block">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h2 class="s-h2">{{'Adverts'|trans({}, 'frontend-cart')}}</h2>
+                            </div>
+                            <div class="col-md-6 text-center">
+                                <h2 class="s-h2">{{'Package'|trans({}, 'frontend-cart')}}</h2>
+                            </div>
+                            <div class="col-md-6 text-center">
+                                <h2 class="s-h2">{{'Cost'|trans({}, 'frontend-cart')}}</h2>
+                            </div>
+                        </div>
+                    </li>
+                    {% if cartDetails|length %}
+                    	{% set gaVar = '' %}
+                    	{% set K = 0 %}
+                        {% for cartDetail in cartDetails %}
+                            {% set packageId = null %}
+                            {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(cartDetail['category_id'], false, fetch_container_instance())|join(' - ') %}
+                            {% set value = array_unserialize(cartDetail['value'])%}
+                            {% if K > 0 %}
+                            	{% set gaVar = gaVar ~ "|" %}
+                        	{% endif %}
+                            {% set gaVar = gaVar ~ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(cartDetail['category_id'], false, fetch_container_instance())|join('-')|raw  %}
+                            {% if value['package'] is defined %}
+                                {% set packageIdArray = value['package']|keys %}
+                                {% set packageId = packageIdArray[0] %}
+                            {% endif %}
+                            {% if not isCreditUsed and value['user_credit_id'] is defined and value['user_credit_id'] and value['user_credit'] is defined and value['user_credit'] %}
+                                {% set isCreditUsed = true  %}
+                            {% endif %}
+                        <li>
                             <div class="row">
-                                <div class="large-12 columns">
-                                    <div class="cart-item clearfix">
+                                <div class="col-md-12 cart-l-block">
+                                    <div class="media cart-item">
                                         <div class="cart-item-img">
                                             {% if cartDetail['path'] is defined and cartDetail['path'] is not null and cartDetail['hash'] is defined and cartDetail['hash'] is not null %}
-                                                {% set adImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageUrl', [container, cartDetail['ad_id'], cartDetail['path'], cartDetail['hash'], '300X225', cartDetail['aws'],cartDetail['image_name']]) %}
-                                                <img src="{{ adImageUrl }}" />
-                                            {% else %}
-                                                <img src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="" />
-                                            {% endif %}
+                                                    {% set adImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageUrl', [container, cartDetail['ad_id'], cartDetail['path'], cartDetail['hash'], '300X225', cartDetail['aws'],cartDetail['image_name']]) %}
+                                                    <img src="{{ adImageUrl }}" />
+                                                {% else %}
+                                                    <img src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="" />
+                                                {% endif %}
                                         </div>
-                                        <div class="cart-item-info">
-                                            <h3>{{cartDetail['title']}}</h3>
+                                        <div class="media-body cart-item-info">
+                                            <h3 class="s-h3">{{cartDetail['title']}}</h3>
                                             {% if cartDetail['price'] > 0 %}
                                                 <h4>{{format_currency(cartDetail['price'])}}</h4>
                                             {% endif %}
                                         </div>
                                     </div>
-
                                 </div>
-                                <div class="large-6 columns">
-                                    <div class="cart-item-type text-center">
-                                        {% if packageId and cartDetail['ad_id'] is not null %}
+                                {% if packageId and cartDetail['ad_id'] is not null %}
+                                <div class="col-md-6 cart-m-block">
+                                    <div class="cart-item-type text-center">                                
                                             {% set packageObj = packageRepository.find(packageId)%}
-                                            <h3>{{packageObj.getTitle()}}</h3>
+                                            <h3 class="s-h3">{{packageObj.getTitle()}}</h3>										
                                             <div class="row">
-                                                {% if value['package'][packageId]['is_purchased'] is defined and value['package'][packageId]['is_purchased'] == 1 %}
-                                                    {% set packagePrintId = null %}
-                                                    {% if value['package'][packageId]['packagePrint'] is defined and value['package'][packageId]['packagePrint']['id'] is defined %}
-                                                        {% set packagePrintId = value['package'][packageId]['packagePrint']['id'] %}
-                                                    {% endif %}
-                                                    <div class="large-12 columns">
-                                                        {% set businessValue = (value.privateUserAdParams.business is defined ? value.privateUserAdParams.business : 0 )%}
-                                                        {% if value['promoteRepostAdFlag'] is defined %} 
-                                                            {% set editUrl = path('ad_promote', {'adId': cartDetail['ad_id'], 'packageId': packageId, 'packagePrintId': packagePrintId, 'type': value['promoteRepostAdFlag'], 'business': businessValue}) %} 
-                                                        {% else %}
-                                                            {% set editUrl = path('ad_package_purchase', {'adId': cartDetail['ad_id'], 'packageId': packageId, 'packagePrintId': packagePrintId, 'business': businessValue}) %} 
+                                            	 {% if value['package'][packageId]['is_purchased'] is defined and value['package'][packageId]['is_purchased'] == 1 %}
+                                                        {% set packagePrintId = null %}
+                                                        {% if value['package'][packageId]['packagePrint'] is defined and value['package'][packageId]['packagePrint']['id'] is defined %}
+                                                            {% set packagePrintId = value['package'][packageId]['packagePrint']['id'] %}
                                                         {% endif %}
-                                                        <a href="javascript:void(0);" onclick="return sendGaAndRedirect('{{ editUrl }}', 'Change', '{{categoryPath|e('js')}}');" class="secondary-btn-3 button expand">{{'Change'|trans({}, 'frontend-cart')}}</a>
-                                                    </div>
-                                                {% endif %}
-                                                <div class="large-12 columns">
-                                                    <a href="javascript:void(0);" onclick="return removeCartItem('{{cartDetail['id']}}', '{{categoryPath|e('js')}}');" class="secondary-btn-3 button expand">{{'Delete'|trans({}, 'frontend-cart')}}</a>
+                                                        <div class="col-md-12">
+                                                	        {% set businessValue = (value.privateUserAdParams.business is defined ? value.privateUserAdParams.business : 0 )%}
+                                                            {% if value['promoteRepostAdFlag'] is defined %} 
+                                                                {% set editUrl = path('ad_promote', {'adId': cartDetail['ad_id'], 'packageId': packageId, 'packagePrintId': packagePrintId, 'type': value['promoteRepostAdFlag'], 'business': businessValue}) %} 
+                                                            {% else %}
+                                                                {% set editUrl = path('ad_package_purchase', {'adId': cartDetail['ad_id'], 'packageId': packageId, 'packagePrintId': packagePrintId, 'business': businessValue}) %} 
+                                                            {% endif %}
+                                                            <a href="javascript:void(0);" onclick="return sendGaAndRedirect('{{ editUrl }}', 'Change', '{{categoryPath|e('js')}}');" class="secondary-btn-3 btn btn-block">{{'Change'|trans({}, 'frontend-cart')}}</a>
+                                                        </div>
+                                                 {% endif %}
+                                                <div class="col-md-12">
+                                                	<a href="javascript:void(0);" onclick="return removeCartItem('{{cartDetail['id']}}', '{{categoryPath|e('js')}}');" class="secondary-btn-3 btn btn-block">{{'Delete'|trans({}, 'frontend-cart')}}</a>                                                
                                                 </div>
                                             </div>
-                                        {% endif %}
+                                            {% endif %}
+                                            <div class="cart-item-price text-center d-block d-md-none">
+                                                <h4>
+                                                {% set totalVat = totalVat + cartDetail['vat_amount'] %}
+                                                {{format_currency(cartDetail['amount'])}}
+                                                <span>{{'(%vat%% vat included.)'|trans({'%vat%': cartDetail['vat']}, 'frontend-cart')}}</span>
+                                                </h4>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="large-6 columns">
-                                    <div class="cart-item-price">
-                                        <h4>
-                                            {% set totalVat = totalVat + cartDetail['vat_amount'] %}
-                                            {{format_currency(cartDetail['amount'])}}
-                                            <span>{{'(%vat%% vat included.)'|trans({'%vat%': cartDetail['vat']}, 'frontend-cart')}}</span>
-                                        </h4>
-                                    </div>
+                            
+                            <div class="col-md-6 cart-r-block d-none d-md-block">
+                                <div class="cart-item-price text-center">
+                                    <h4>
+                                        {% set totalVat = totalVat + cartDetail['vat_amount'] %}
+                                        {{format_currency(cartDetail['amount'])}}
+                                        <span>{{'(%vat%% vat included.)'|trans({'%vat%': cartDetail['vat']}, 'frontend-cart')}}</span>
+                                    </h4>
                                 </div>
                             </div>
-                        </li>
-                        {% set K = K+1 %}
+                            {% endif %}
+                        </div>
+                    </li>
                     {% endfor %}
-                {% else %}
-                    <div class="row">
-                        <div class="large-24 columns text-center">
-                            {{'No items in your basket.'|trans({}, 'frontend-cart')}}
-                        </div>
-                    </div>
-                {% endif %}
-                {% if cart.getAmount() > 0 or (cart.getAmount() <= 0 and cartValue['discount_values'] is defined and cartValue['discount_values']|length) %}
-                    {% if cartValue['discount_values'] is defined and cartValue['discount_values']|length %}
-                        {% set discountValue = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getDiscountValuetoDisplay', [cartValue['discount_values']]) %}
-                        <li class="code-applied hide-for-small-only">
-                            <div class="row">
-                                <div class="large-6 columns text-center">
-                                    <label class="mb0">{{'Code applied (%discount_value% Discount)'|trans({'%discount_value%': discountValue}, 'frontend-cart')}}</label>
-                                    <a href="javascript:removeDuscountcodeAlert();" class="bold">{{'Remove'|trans({}, 'frontend-cart')}}</a>
-                                </div>
-                            </div>
-                        </li>
-                    {% endif %}
-                {% endif %}
-                {% if isCreditUsed %}
-                    <li class="code-applied hide-for-small-only">
+                    <li class="cart-total">
                         <div class="row">
-                            <div class="large-6 columns text-center">
-                                <label class="mb0">{{'Credit applied'|trans({}, 'frontend-cart')}}</label>
-                                <a href="javascript:removeCreditAlert();" class="bold">{{'Remove'|trans({}, 'frontend-cart')}}</a>
-                            </div>
-                        </div>
-                    </li>   
-                {% endif %}
-                <li class="cart-total">
-                    <div class="row">
-                        <div class="large-12 columns">
-                            {% if cart.getAmount() > 0 or (cart.getAmount() <= 0 and cartValue['discount_values'] is defined and cartValue['discount_values']|length) %}
+                        	{% if cart.getAmount() > 0 or (cart.getAmount() <= 0 and cartValue['discount_values'] is defined and cartValue['discount_values']|length) %}
+                                <div class="col-md-12">
                                 <div class="promo-code">
                                     <a href="javascript:hideShowPromotionCodeSectionForMobile();" class="show-code {% if cartValue['discount_values'] is defined and cartValue['discount_values']|length %}up-arrow{% else %}down-arrow{% endif %}" id="promo_code_anchor_mobile">{{'Promotional Code'|trans({}, 'frontend-cart')}}</a>
                                     <label class="hide-for-small-only">{{'Promotional Code'|trans({}, 'frontend-cart')}}</label>
@@ -150,11 +135,13 @@
                                     {% endif %}
                                     <div class="clearfix code-field {% if cartValue['discount_values'] is defined and cartValue['discount_values']|length %}promo-disable{% endif %}" {% if cartValue['discount_values'] is not defined and currentDevice == 'M' %} style="display:none;"{% endif %} id="discount_code_input_div">
                                         <input type="text" class="white-field" name="discount_code" id="discount_code" placeholder="{{'Insert promotional code'|trans({}, 'frontend-cart')}}" />
-                                        <button class="secondary-btn-3 button expand" onclick="return applyDiscountcode();">{{'Apply'|trans({}, 'frontend-cart')}}</button>
+                                        <button class="secondary-btn-3 btn btn-block" onclick="return applyDiscountcode();">{{'Apply'|trans({}, 'frontend-cart')}}</button>
                                     </div>
+                                </div>
                                 </div>
                             {% endif %}
                             {% if isCreditUsed %}
+                            	<div class="col-md-12">
                                 <div class="promo-code show-for-small-only">
                                     <a href="javascript:hideShowCreditSectionForMobile();" class="show-code down-arrow" id="credit_anchor_mobile">{{'Credit'|trans({}, 'frontend-cart')}}</a>
                                     <div class="code-applied-mob" id="display_credit_applied_div" style="display:none">
@@ -162,76 +149,64 @@
                                         <a href="javascript:removeCreditAlert();" class="bold">{{'Remove'|trans({}, 'frontend-cart')}}</a>
                                     </div>
                                 </div>
+                                </div>
                             {% endif %}
+                            <div class="col-md-12 d-inline-flex">
+                                <div class="cart-item-type text-center h-width">
+                                    <h2 class="s-h2 cart-cost-text text-right">{{'TOTAL COST'|trans({}, 'frontend-cart')}}:</h2>
+                                </div>
+                                <div class="cart-item-price text-center h-width">
+                                    <h4>{{format_currency(cart.getAmount())}}</h4>
+                                </div>
+                            </div>
                         </div>
-                        <div class="large-6 columns"><h2 class="cart-cost-text">{{'TOTAL COST'|trans({}, 'frontend-cart')}}:</h2></div>
-                        <div class="large-6 columns">
-                            <div class="cart-item-price"><h4 class="total-price">{{format_currency(cart.getAmount())}}</h4></div>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
+                    </li>
+                </ul>
+			</div>
+		</div>
+	</div>
 </div>
 <div class="white-bg">
-    {% if cart.getAmount() > 0 %}
+    <div class="container">
         <div class="row">
-            <div class="columns">
-                <h1 class="text-center">{{'Pay now with'|trans({}, 'frontend-cart')}}:</h1>
-                {% if (isAdultAdvertPresent == 1) %}
-                    {#<div class="alert-box info radius" data-alert="">
-                        <span class="alert-icon">&nbsp;</span>
-                            {{ 'In accordance with their Acceptable Use Policy, we are unable to provide PayPal as a payment method for Adult ads. Please use an alternative method or, for further assistance, please call our support team on 01646 689360.'|trans({}, 'frontend-cart') }}
-                            <a class="close" href="javascript:void(0)">×</a>
-                    </div>#}
-                {% endif %}
-                <div class="pay-now-box clearfix">
-                      {% set ccUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_CYBERSOURCE')}) %}
-                      {% set appleUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_APPLEPAY')}) %}
-                      {% set catPath = '' %}
-                      {% if (cartDetails|length == 1) %}
-                        {% set catPath = categoryPath %}
-                      {% endif %}
-                                            
-                      <div class="credit-cards-box small-24 medium-12 large-12 columns {% if (isAdultAdvertPresent == 1) %} credit-cards-box-center{% endif %}" onclick="sendGaAndRedirect('{{ ccUrl }}', 'Visa', '{{gaVar|e('js')}}');"> </div>
-                      {% if isAdultAdvertPresent == 0 %}
-                        <div class="small-24 medium-12 large-12 columns paypal-pad">
-                            {% set paypalUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL')}) %}
-                            {#<div class="pay-or-caption hide-for-small-only">{{'or'|trans({}, 'frontend-cart')}}</div>#}
-                            <div class="paypal-box" onclick="sendGaAndRedirect('{{ paypalUrl }}', 'Paypal', '{{gaVar|e('js')}}');"> </div>
-                            {# <div class="apple-pay"><div class="apple-pay-button" onclick="applePayButtonClicked()"> </div></div>#}
-                            {# <div class="pay-or-caption hide-for-small-only">{{'or'|trans({}, 'frontend-cart')}}</div>#}
-                        </div>
-                      {% endif %}
-                     
+            {% if cart.getAmount() > 0 %}
+                <div class="col-md-24 d-flex justify-content-center">
+                    <h1 class="s-h1 paa-title col-md-24 col-lg-18 text-center">{{'Pay now with'|trans({}, 'frontend-cart')}}:</h1>
                 </div>
-            </div>
-        </div>
-    {% elseif cartDetails|length %}
-        <div class="small-wrapper">
-            <div class="row">
-                <div class="columns">
-                    <button class="primary-btn-1 expand mt10" name="" id="" type="button" onclick="window.location='{{path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_FREE')})}}'">{{'Place my ads'|trans({}, 'frontend-cart')}}</button>
-                </div>
-            </div>
-        </div>
-    {% endif %}
-    <div class="small-wrapper">
-        <div class="row">
-            <div class="columns">
-                <h2 class="or-caption">{{'OR'|trans({}, 'frontend-cart-case-sensitive')}}</h2>
-                {% set redirectUrl = path('ad_post_first_step') %}
-                {% set catPath = '' %}
-                {% if (cartDetails|length == 1) %}
+                <div class="col-md-18 mx-auto pay-now-box">
+                  {% set ccUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_CYBERSOURCE')}) %}
+                  {% set appleUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_APPLEPAY')}) %}
+                  {% set catPath = '' %}
+                  {% if (cartDetails|length == 1) %}
                     {% set catPath = categoryPath %}
-                {% endif %}
-                
-                <button class="primary-btn-1 expand" name="" id="" type="button" onclick="return sendGaAndRedirect('{{ redirectUrl }}', 'Place another ad', '{{catPath|e('js')}}');">{{'Place another ad'|trans({}, 'frontend-cart')}}</button>
+                  {% endif %}
+                    <div class="col-sm-24 col-md-12 {% if (isAdultAdvertPresent == 1) %} credit-cards-box {% endif %}" onclick="sendGaAndRedirect('{{ ccUrl }}', 'Visa', '{{gaVar|e('js')}}');"></div>
+                    {% if isAdultAdvertPresent == 0 %}
+                          {% set paypalUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL')}) %}
+                          <div class="paypal-box col-sm-24 col-md-12" onclick="sendGaAndRedirect('{{ paypalUrl }}', 'Paypal', '{{gaVar|e('js')}}');"> </div>
+                    {% endif %}
+                </div>
+             {% elseif cartDetails|length %}
+                <div class="col-md-24 d-flex justify-content-center">
+                     <button class="primary-btn-1 btn btn-block btn-place-ad" name="" id="" type="button" onclick="window.location='{{path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_FREE')})}}'">{{'Place my ads'|trans({}, 'frontend-cart')}}</button>
+                </div>
+            {% endif %}
+            <div class="col-md-24 d-flex justify-content-center">
+                <div class="small-wrapper center-block">
+                    <h2 class="s-h2 or-caption">{{'OR'|trans({}, 'frontend-cart-case-sensitive')}}</h2>
+                    {% set redirectUrl = path('ad_post_first_step') %}
+                    {% set catPath = '' %}
+                    {% if (cartDetails|length == 1) %}
+                        {% set catPath = categoryPath %}
+                    {% endif %}
+                    
+                    <button class="primary-btn-1 btn btn-block btn-place-ad" name="" id="" type="button" onclick="return sendGaAndRedirect('{{ redirectUrl }}', 'Place another ad', '{{catPath|e('js')}}');">{{'Place another ad'|trans({}, 'frontend-cart')}}</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 {% block scriptbottom %}
 <script>
 /*

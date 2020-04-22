@@ -75,25 +75,27 @@
     {% endif  %}
     <input type="hidden" name="credit_id" id="credit_id" />
     <div class="white-bg pkg-bdr">
-        <div class="row">
-            <div class="columns">
-                <div class="paa-pkg-main">
-                    {% if backUrl is defined and backUrl %}
-                        <a href="{{ backUrl }}" class="paa-back-arrow-pkg" title="{{ 'Go back'|trans({}, 'frontend-paa') }}">{{ 'Go back'|trans({}, 'frontend-paa') }}</a>
-                    {% endif %}
-                    <h1 class="text-center">{{'Your ad type: Essential details'|trans({}, 'frontend-ad-package')}}</h1>
-                    {% if app.request.get('type') %}
-                        <div class="mb10">
-                            {% if app.request.get('from') and app.request.get('from') == 'vif' %}
-                                <a href="{{ path('ad_detail_page_by_id', {'id': app.request.get('adId')}) }}" class="paa-back-arrow-pkg">{{'Go back'|trans({}, 'frontend-ad-package')}}</a>
-                            {% else %}
-                                <a href="{{ path('manage_my_ads_active') }}" class="paa-back-arrow-pkg">{{'Go back'|trans({}, 'frontend-ad-package')}}</a>
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                    {% if packages|length %}
-                        <div class="row fa-equalizer" id="package_equalizer">
-                            {% for package in packages %}
+		<div class="container">
+			<div class="row">
+				<div class="col-md-24 paa-pkg-main">
+					<div>
+					{% if backUrl is defined and backUrl %}
+                        <a href="{{ backUrl }}" class="green-back-link" title="{{ 'Go back'|trans({}, 'frontend-paa') }}">{{ 'Go back'|trans({}, 'frontend-paa') }}</a>
+                    {% elseif app.request.get('type') %}
+                        {% if app.request.get('from') and app.request.get('from') == 'vif' %}
+                            <a href="{{ path('ad_detail_page_by_id', {'id': app.request.get('adId')}) }}" class="green-back-link">{{'Go back'|trans({}, 'frontend-ad-package')}}</a>
+                        {% else %}
+                            <a href="{{ path('manage_my_ads_active') }}" class="green-back-link">{{'Go back'|trans({}, 'frontend-ad-package')}}</a>
+                        {% endif %}
+					{% endif %}
+					</div>					
+					<div class="col-md-24 d-flex justify-content-center mb30">
+						<h1 class="s-h1 paa-title col-md-24 col-lg-18 text-center">{{'Your ad type: Essential details'|trans({}, 'frontend-ad-package')}}</h1>
+					</div>
+					{% if packages|length %}
+					<div class="col-md-24 d-flex justify-content-center paa-pkg-box">
+						<div class="row row-flex fa-equalizer" id="package_equalizer">
+						{% for package in packages %}
                                 {% set packageValues = array_unserialize(package.getPackage().getValue()) %}
                                 {% set packageActualPrice = 0 %}
                                 {% set packagePrice = '' %}
@@ -131,98 +133,133 @@
                                     {% set packagePrice = format_currency(packageActualPrice) %}
                                 {% else %}
                                     {% set packagePrice = 'Free'|trans({}, 'frontend-ad-package')%}
-                                {% endif %}
-
-                                <div class="{% if packages|length == 3 %}large-8{% elseif packages|length == 2 %}large-12{% else %}large-6{% endif%} columns">
-                                    <div class="paa-pkg-bg">
-                                        <span class="pkg-selection" id="package_selection_{{package.getPackage().getId()}}">Select Package</span>
+                                {% endif %}		
+							<div class="col-md-6 col-sm-24 col-xs-24 mb20 pl10 pr10 tab-pad">
+						        <div class="paa-pkg-bg">
+						        	<span class="pkg-selection" id="package_selection_{{package.getPackage().getId()}}">Select Package</span>
                                         {% set pkgBoxColorClass = 'pkg-green-head' %}
                                         {% set pkgButtonColorClass = '' %}
                                         {% if (locationGroupIds is defined and constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationGroupRepository::NON_PRINT_LOCATION_GROUP_ID') in locationGroupIds) %}
                                             {% set pkgBoxColorClass = 'pkg-blue-head' %}
-                                            {% set pkgButtonColorClass = 'primary-btn-1' %}
+                                            {% set pkgButtonColorClass = 'secondary-btn-1' %}
                                         {% endif %}
                                         {% if packageActualPrice == 0 %}
                                             {% set pkgBoxColorClass = 'pkg-grey-head' %}
-                                            {% set pkgButtonColorClass = 'primary-btn-grey' %}
+                                            {% set pkgButtonColorClass = 'primary-btn-grey thin-button' %}
                                         {% endif %}
-                                        <div class="pkg-title {{ pkgBoxColorClass}}">{{package.getPackage().getLabel()}}</div>
-                                        <div id="active_package_{{package.getPackage().getId()}}">
-                                            <div class="pkg-subtitle">
-                                                <div class="hide">
-                                                    <span class="custom-radio {% if selectedPackageId == package.getPackage().getId() %} checked {% endif %}">
-                                                        <input type="radio" name="package_id" value="{{package.getPackage().getId()}}" {% if selectedPackageId == package.getPackage().getId() %} checked="checked" {% endif %} onclick="return highlightSelectedPackage('{{package.getPackage().getId()}}');" />
-                                                    </span>
+						          	<div class="pkg-title {{ pkgBoxColorClass}}">{{package.getPackage().getLabel()}}</div>
+						          	<div id="active_package_{{package.getPackage().getId()}}">
+                                        <div class="pkg-subtitle">
+                                        	{#<div class="hide">
+                                                <span class="custom-radio {% if selectedPackageId == package.getPackage().getId() %} checked {% endif %}">
+                                                    <input type="radio" name="package_id" value="{{package.getPackage().getId()}}" {% if selectedPackageId == package.getPackage().getId() %} checked="checked" {% endif %} onclick="return highlightSelectedPackage('{{package.getPackage().getId()}}');" />
+                                                </span>
+                                            </div>#}
+                                            {{package.getPackage().getTitle()}}
+                                        </div>
+                                        <div class="pkg-pricing {% if printPackageDuration[package.getPackage().getId()] is defined %}print-pkg{% elseif printPackageDuration is defined and printPackageDuration|length %}non-print-pkg{% endif %}">
+                                            <div class="pkg-pricing-wrap{% if printPackageDuration|length and printOptionCount > 3 %} pkg-pricing-equalizer{% endif %}">
+                                                <div>
+                                                    <h4 id="package_price_{{package.getPackage().getId()}}">
+                                                        {{packagePrice}}  
+                                                    </h4>
                                                 </div>
-                                                {{package.getPackage().getTitle()}}
-                                            </div>
-                                            <div class="pkg-pricing {% if printPackageDuration[package.getPackage().getId()] is defined %}print-pkg{% elseif printPackageDuration is defined and printPackageDuration|length %}non-print-pkg{% endif %}">
-                                                <div class="pkg-pricing-wrap{% if printPackageDuration|length and printOptionCount > 3 %} pkg-pricing-equalizer{% endif %}">
-                                                    <H4 id="package_price_{{package.getPackage().getId()}}">
-                                                        {{packagePrice}} 
-                                                    </H4>
-                                                    {% if printPackageDuration[package.getPackage().getId()] is defined %}
-                                                        <div class="weekly-pkg">
-                                                            {% for printDuration in printPackageDuration[package.getPackage().getId()] %}
-                                                                {% set printDurationPrice = 0 %}
-                                                                {% set printFirstDurationPrice = 0 %}
-                                                                {% if isAdminPostedAd %}
-                                                                    {% set printDurationPrice = printDuration['admin_price'] is not null ? printDuration['admin_price'] : printDuration['price'] %}
-                                                                    {% set printFirstDurationPrice = printPackageDuration[package.getPackage().getId()][0]['admin_price'] is not null ? printPackageDuration[package.getPackage().getId()][0]['admin_price'] : printPackageDuration[package.getPackage().getId()][0]['price'] %}
-                                                                {% else %}
-                                                                    {% set printDurationPrice = printDuration['price'] %}
-                                                                    {% set printFirstDurationPrice = printPackageDuration[package.getPackage().getId()][0]['price'] %}
-                                                                {% endif %}
-                                                                <span class="pkg-box">
-                                                                    <span class="custom-radio {% if loop.index == 1 %}checked{% endif %}">
-                                                                        <input type="hidden" name="package_print_price_{{printDuration['id']}}" id="package_print_price_{{printDuration['id']}}" value="{{format_currency(printDurationPrice)}}" />
-                                                                        <input type="radio" {% if loop.index == 1 %} checked="checked" {% endif %} name="package_print_id_{{package.getPackage().getId()}}" id="package_print_id_{{printDuration['id']}}" value="{{printDuration['id']}}" onclick="return updatePackagePrice({{package.getPackage().getId()}}, {{printDuration['id']}})" />
-                                                                    </span>
-                                                                    <label for="package_print_id_{{printDuration['id']}}">
+                                                {% if printPackageDuration[package.getPackage().getId()] is defined %}
+                                                <div class="weekly-pkg">
+                                                {% for printDuration in printPackageDuration[package.getPackage().getId()] %}
+                                                    {% set printDurationPrice = 0 %}
+                                                    {% set printFirstDurationPrice = 0 %}
+                                                    {% if isAdminPostedAd %}
+                                                        {% set printDurationPrice = printDuration['admin_price'] is not null ? printDuration['admin_price'] : printDuration['price'] %}
+                                                        {% set printFirstDurationPrice = printPackageDuration[package.getPackage().getId()][0]['admin_price'] is not null ? printPackageDuration[package.getPackage().getId()][0]['admin_price'] : printPackageDuration[package.getPackage().getId()][0]['price'] %}
+                                                    {% else %}
+                                                        {% set printDurationPrice = printDuration['price'] %}
+                                                        {% set printFirstDurationPrice = printPackageDuration[package.getPackage().getId()][0]['price'] %}
+                                                    {% endif %}
+                                                                
+                                                    <div class="d-flex tab-d-flex">
+                                                        <label class="horizontal-radio">
+                                                            <input type="hidden" name="package_print_price_{{printDuration['id']}}" id="package_print_price_{{printDuration['id']}}" value="{{format_currency(printDurationPrice)}}" />
+                                                            <input type="radio" {% if loop.index == 1 %} checked="checked" {% endif %} name="package_print_id_{{package.getPackage().getId()}}" id="package_print_id_{{printDuration['id']}}" value="{{printDuration['id']}}" onclick="return updatePackagePrice({{package.getPackage().getId()}}, {{printDuration['id']}})" />
+                                                            <span class="checkmark"></span>
+                                                            <label class="label-text" for="package_print_id_{{printDuration['id']}}">
+                                                                {% set fullDuration = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getFullDurationFromShortForm', [printDuration['duration']]) %}
+                                                                {{fullDuration}} {{'in print'|trans({}, 'frontend-ad-package')}} {% if loop.index != 1 %}(+{{format_currency(printDurationPrice - printFirstDurationPrice)}}){% endif %}
+                                                            </label>
+                                                        </label>
+                                                    </div>
+                                                 {% endfor %}
+                                                </div>
+                                                
+                                                <div class="weekly-pkg d-none">
+                                                	{% for printDuration in printPackageDuration[package.getPackage().getId()] %}
+                                                    {% set printDurationPrice = 0 %}
+                                                    {% set printFirstDurationPrice = 0 %}
+                                                    {% if isAdminPostedAd %}
+                                                        {% set printDurationPrice = printDuration['admin_price'] is not null ? printDuration['admin_price'] : printDuration['price'] %}
+                                                        {% set printFirstDurationPrice = printPackageDuration[package.getPackage().getId()][0]['admin_price'] is not null ? printPackageDuration[package.getPackage().getId()][0]['admin_price'] : printPackageDuration[package.getPackage().getId()][0]['price'] %}
+                                                    {% else %}
+                                                        {% set printDurationPrice = printDuration['price'] %}
+                                                        {% set printFirstDurationPrice = printPackageDuration[package.getPackage().getId()][0]['price'] %}
+                                                    {% endif %}
+                                                    <span class="pkg-box">
+                                                        <div class="label-inline non-inline">
+                                                            <ul class="custom-control custom-radio search-type">
+                                                                <li>
+                                                                	<input type="hidden" name="package_print_price_{{printDuration['id']}}" id="package_print_price_{{printDuration['id']}}" value="{{format_currency(printDurationPrice)}}" />
+                                                                    <input class="custom-control-input " type="radio" {% if loop.index == 1 %} checked="checked" {% endif %} name="package_print_id_{{package.getPackage().getId()}}" id="package_print_id_{{printDuration['id']}}" value="{{printDuration['id']}}" onclick="return updatePackagePrice({{package.getPackage().getId()}}, {{printDuration['id']}})" />                                                                	
+                                                                     <label class="custom-control-label" for="package_print_id_{{printDuration['id']}}">
                                                                         {% set fullDuration = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getFullDurationFromShortForm', [printDuration['duration']]) %}
                                                                         {{fullDuration}} {{'in print'|trans({}, 'frontend-ad-package')}} {% if loop.index != 1 %}(+{{format_currency(printDurationPrice - printFirstDurationPrice)}}){% endif %}
                                                                     </label>
-                                                                </span>
-                                                            {% endfor %}
+                                                                </li>
+                                                            </ul>
                                                         </div>
-
-                                                        <input type="hidden" name="package_print_edition_limit_{{ package.getPackage().getId() }}" id="package_print_edition_limit_{{ package.getPackage().getId() }}" value="{{ (printEditionLimits[package.getPackage().getId()] is defined ? printEditionLimits[package.getPackage().getId()] : 0) }}" />
-                                                        {% if printEditionLimits[package.getPackage().getId()] is defined %}
-                                                            <div class="edition-link">
-                                                                <a href="javascript:void(0);" id="print_edition_show_anchor_{{ package.getPackage().getId() }}" onclick="hideShowPrintEditions({{ package.getPackage().getId() }})">
-                                                                    {% if printEditionLimits[package.getPackage().getId()] == 1 %}
-                                                                        {{'Change your edition'|trans({}, 'frontend-ad-package')}}
-                                                                    {% elseif printEditionLimits[package.getPackage().getId()] > 1 %}
-                                                                        {{'Change your editions'|trans({}, 'frontend-ad-package')}}
-                                                                    {% endif %}
-                                                                </a>
-                                                            </div>
-                                                            <div class="pkg-error-msg" id="error_package_print_editions_{{ package.getPackage().getId() }}" style="display:none;">
-                                                                <div class="alert-box alert radius" data-alert="">
-                                                                    <span class="alert-icon">&nbsp;</span>
-                                                                    {% if errorMsg is not null %}
-                                                                        {{ errorMsg }}
-                                                                    {% else %}
-                                                                        {{'Please choose all print editions for your package.'|trans({}, 'frontend-ad-package')}}
-                                                                    {% endif %}
-                                                                </div>
-                                                            </div>
-                                                            <div id="package_print_editions_{{ package.getPackage().getId() }}" style="display:none;" class="edition-fields">
-                                                                {% for editionCntr in 1..printEditionLimits[package.getPackage().getId()] %}
-                                                                    <select class="printSelect fa-select-white" name="print_editions_{{ package.getPackage().getId()~'_'~editionCntr }}" id="print_editions_{{ package.getPackage().getId()~'_'~editionCntr }}" onchange="updateSelects({{ package.getPackage().getId() }})">
-                                                                        <option value=''>{{'Select edition'|trans({}, 'frontend-ad-package')}}</option>
-                                                                        {% set selectedFlag = false %}
-                                                                        {% for editionId, editionName in printEditions %}
-                                                                            <option value="{{ editionId }}" {% if selectedPackageId and selectedPackageId == package.getPackage().getId() and selectedPrintEditions[editionCntr] is defined and editionId == selectedPrintEditions[editionCntr] %}{% set selectedFlag = true %}selected="selected"{% elseif not selectedFlag and defaultSelectedPrintEditions[editionCntr] is defined and editionId == defaultSelectedPrintEditions[editionCntr] %}selected="selected"{% endif %}>{{ editionName }}</option>
-                                                                        {% endfor %}
-                                                                    </select>
-                                                                {% endfor %}
-                                                            </div>
-                                                        {% endif %}
-                                                    {% endif %}
+                                                    </span>  
+                                                   {% endfor %}                                                  
                                                 </div>
-                                                {% set userCreditId = fetch_repository('FaPromotionBundle:Package').isPackageValidForCredit(package.getPackage(), userActiveCredits, activeShopPackageDetail) %}
-                                                <button type="button" class="{% if pkgButtonColorClass is defined and pkgButtonColorClass != '' %}{{pkgButtonColorClass}}{% else %}primary-btn-2{% endif %} expand{% if not userCreditId or (userCreditId and package.getPackage().getPrice() <= 0) %} free-button-spacing{% endif %} choose_btn" onclick="return selectPackage({{package.getPackage().getId()}}, '{{ package.getPackage().getPrice() }}');" onmouseover="$('#package_selection_{{package.getPackage().getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getPackage().getId()}}').attr('style', '');">
+                                            {% endif %}
+                                            </div>
+                                           <input type="hidden" name="package_print_edition_limit_{{ package.getPackage().getId() }}" id="package_print_edition_limit_{{ package.getPackage().getId() }}" value="{{ (printEditionLimits[package.getPackage().getId()] is defined ? printEditionLimits[package.getPackage().getId()] : 0) }}" />
+                                            {% if printEditionLimits[package.getPackage().getId()] is defined %}
+                                            	 <div class="edition-block area-show mb20">
+                                                    <div class="edition-link text-center mb10">
+                                                        <a href="javascript:void(0);" id="print_edition_show_anchor_{{ package.getPackage().getId() }}" onclick="hideShowPrintEditions({{ package.getPackage().getId() }})">
+                                                            {% if printEditionLimits[package.getPackage().getId()] == 1 %}
+                                                                {{'Change your edition'|trans({}, 'frontend-ad-package')}}
+                                                            {% elseif printEditionLimits[package.getPackage().getId()] > 1 %}
+                                                                {{'Change your editions'|trans({}, 'frontend-ad-package')}}
+                                                            {% endif %}
+                                                        </a>
+                                                    </div>
+                                                    <div class="pkg-error-msg" id="error_package_print_editions_{{ package.getPackage().getId() }}" style="display:none;">
+                                                        <div class="alert-box alert radius" data-alert="">
+                                                            <span class="alert-icon">&nbsp;</span>
+                                                            {% if errorMsg is not null %}
+                                                                {{ errorMsg }}
+                                                            {% else %}
+                                                                {{'Please choose all print editions for your package.'|trans({}, 'frontend-ad-package')}}
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                    <div id="package_print_editions_{{ package.getPackage().getId() }}" style="display:none;" class="edition-fields">
+                                                        {% for editionCntr in 1..printEditionLimits[package.getPackage().getId()] %}
+                                                            <select class="printSelect fa-select-white" name="print_editions_{{ package.getPackage().getId()~'_'~editionCntr }}" id="print_editions_{{ package.getPackage().getId()~'_'~editionCntr }}" onchange="updateSelects({{ package.getPackage().getId() }})">
+                                                                <option value=''>{{'Select edition'|trans({}, 'frontend-ad-package')}}</option>
+                                                                {% set selectedFlag = false %}
+                                                                {% for editionId, editionName in printEditions %}
+                                                                    <option value="{{ editionId }}" {% if selectedPackageId and selectedPackageId == package.getPackage().getId() and selectedPrintEditions[editionCntr] is defined and editionId == selectedPrintEditions[editionCntr] %}{% set selectedFlag = true %}selected="selected"{% elseif not selectedFlag and defaultSelectedPrintEditions[editionCntr] is defined and editionId == defaultSelectedPrintEditions[editionCntr] %}selected="selected"{% endif %}>{{ editionName }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        {% endfor %}
+                                                    </div>
+                                                 </div>
+                                            {% endif %}
+                                            </div>
+                                            
+                                            <div class="choose-btn-block">
+                                            	{% set userCreditId = fetch_repository('FaPromotionBundle:Package').isPackageValidForCredit(package.getPackage(), userActiveCredits, activeShopPackageDetail) %}
+                                                <button type="button" class="{% if pkgButtonColorClass is defined and pkgButtonColorClass != '' %}{{pkgButtonColorClass}}{% else %}primary-btn-1{% endif %} {% if not userCreditId or (userCreditId and package.getPackage().getPrice() <= 0) %} free-button-spacing{% endif %} btn btn-block choose_btn btn-h-lg" onclick="return selectPackage({{package.getPackage().getId()}}, '{{ package.getPackage().getPrice() }}');" onmouseover="$('#package_selection_{{package.getPackage().getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getPackage().getId()}}').attr('style', '');">
                                                 {% if package.getPackage().getPrice() > 0 and userCreditId %}
                                                     {{'Pay for advert'|trans({}, 'frontend-ad-package')}}
                                                 {% else %}
@@ -235,106 +272,121 @@
                                                     {% endif %}
                                                 {% endif %}
                                                 </button>
-                                                {% if package.getPackage().getPrice() > 0 and userCreditId %}
+                                                 {% if package.getPackage().getPrice() > 0 and userCreditId %}
                                                     {% set creditName = fetch_repository('FaUserBundle:UserCredit').getCreditPackageName(package.getPackage().getPackageSrNo()) %}
-                                                    <button type="button" class="primary-btn-1 expand credit_btn" onclick="return confirmCreditBox({{package.getPackage().getId()}}, {{package.getPackage().getPackageSrNo()}}, {{ (packageSrNoCredits[package.getPackage().getPackageSrNo()] is defined ? packageSrNoCredits[package.getPackage().getPackageSrNo()] : 0) }}, {{userCreditId}}, '{{ creditName }}', '{{ package.getPackage().getPrice() }}')" onmouseover="$('#package_selection_{{package.getPackage().getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getPackage().getId()}}').attr('style', '');">
+                                                    <button type="button" class="primary-btn-1 btn btn-block credit_btn btn-h-lg" onclick="return confirmCreditBox({{package.getPackage().getId()}}, {{package.getPackage().getPackageSrNo()}}, {{ (packageSrNoCredits[package.getPackage().getPackageSrNo()] is defined ? packageSrNoCredits[package.getPackage().getPackageSrNo()] : 0) }}, {{userCreditId}}, '{{ creditName }}', '{{ package.getPackage().getPrice() }}')" onmouseover="$('#package_selection_{{package.getPackage().getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getPackage().getId()}}').attr('style', '');">
                                                         <span>{{'Use credit'|trans({}, 'frontend-ad-package')}}</span>
                                                     </button>
                                                 {% endif %}
                                             </div>
-                                            <div class="pkg-ins">
-                                                {{package.getPackage().getSubTitle()}}
-                                                <div class="pkg-includes show-for-small-only">
-                                                    <a href="javascript:void(0);" onclick="return showHidePackageUpsells({{package.getPackage().getId()}})" id="package_upsell_show_anchor_{{package.getPackage().getId()}}">{{"What's included?"|trans({}, 'frontend-ad-package')}}</a>
-                                                </div>
-                                            </div>
-                                            <ul class="pkg-points" id="package_upsells_{{package.getPackage().getId()}}">
-                                                {{strip_tags(package.getPackage().getDescription(), '<li><b>')|raw}}
-                                            </ul>
                                         </div>
+                                        <div class="pkg-ins">
+                                            {{package.getPackage().getSubTitle()}}
+                                            <div class="pkg-includes d-block d-md-none">
+                                                <a data-toggle="collapse" href="#package_upsells" aria-expanded="false" aria-controls="package_upsells" onclick="return showHidePackageUpsells({{package.getPackage().getId()}})" id="package_upsell_show_anchor_{{package.getPackage().getId()}}">{{"What's included?"|trans({}, 'frontend-ad-package')}}</a>
+                                            </div>
+                                        </div>
+                                        <ul class="pkg-points" id="package_upsells_{{package.getPackage().getId()}}">
+                                            {{strip_tags(package.getPackage().getDescription(), '<li><b>')|raw}}
+                                        </ul>
                                     </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                        <div class="avail-payment-box">
-                            <div class="text-center p-b-20">Pay on the next page with...</div>
-                            {% if (isAdultAdvertPresent == 0) %}
-                                <div class="available-payment-options hide-for-small-only"></div>
-                                <div class="available-payment-options-mob show-for-small-only"></div>
+						        </div>
+						        {% endfor %}						   
+						     </div>
+						    
+						</div>
+
+
+					<div class="col-md-24 d-flex justify-content-center paa-pkg-box">
+    					<div class="avail-payment-box">
+                        	<div class="text-center mb20">Pay on the next page with...</div>
+                        	{% if (isAdultAdvertPresent == 0) %}
+                                <div class="available-payment-options"></div>
                             {% else %}
-                                <div class="available-payment-adult-options hide-for-small-only"></div>
-                                <div class="available-payment-adult-options-mob show-for-small-only"></div>
+                                <div class="available-payment-adult-options"></div>
                             {% endif %}
                         </div>
-
+                    </div>
                     {% else %}
                         {{'No ad packages found.'|trans({}, 'frontend-ad-package')}}
                     {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
+				</div>
+			</div>
+		</div>
+	</div>    
     </form>
-    <div id="creditConfimBox" class="reveal-modal tiny remove-item-modal" data-reveal>
-        <a class="close-reveal-modal">&#215;</a>
-        <h5 class="modal-title">
-            {{'Use credit'|trans({}, 'frontend-ad-package')}}
-        </h5>
-        <div class="modal-content remove-modal">
-            <div class="row">
-                <div class="columns">
-                    <h5>{{'Are you sure you want to use a credit?'|trans({}, 'frontend-ad-package')}}</h5>
-                    <div class="mt15" id="remaining_credit_text"></div>
-                </div>
-            </div>
-            <div class="mt20 remove-item-btn">
-                <div class="row">
-                    <div class="large-12 columns">
-                        <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeCreditBox('creditConfimBox');">{{'Cancel'|trans({}, 'frontend-ad-package')}}</button>
+    <div id="creditConfimBox" class="modal custom-modal tiny remove-item-modal">
+        <div class="modal-dialog">
+		    <div class="modal-content">
+		      	<div class="modal-header">
+		        	<h5 class="modal-title save-search-title no-icon-title">{{'Use credit'|trans({}, 'frontend-ad-package')}}</h5>
+		        	<button class="close-modal" class="close" data-dismiss="modal">×</button>
+		      	</div>
+		      	<div class="modal-body">        
+                    <div class="container">
+                        <div class="row">
+                            <h5>{{'Are you sure you want to use a credit?'|trans({}, 'frontend-ad-package')}}</h5>
+                            <div class="mt15" id="remaining_credit_text"></div>
+                        </div>
                     </div>
-                    <div class="large-12 columns">
-                        <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="closeRevealModel('#creditConfimBox');selectCredit();">{{'Continue'|trans({}, 'frontend-ad-package')}}</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="unsufficientCreditForPrintBox" class="reveal-modal tiny remove-item-modal" data-reveal>
-        <a class="close-reveal-modal">&#215;</a>
-        <h5 class="modal-title">
-            {{'Use credit'|trans({}, 'frontend-ad-package')}}
-        </h5>
-        <div class="modal-content remove-modal">
-            <div class="row">
-                <div class="columns">
-                    <h5>{{'You have insufficient credits.'|trans({}, 'frontend-ad-package')}}</h5>
-                    <div class="mt15" id="prev_package_text"></div>
-                </div>
-            </div>
-            <div class="mt20 remove-item-btn">
-                <div class="row">
-                    <div class="large-12 columns">
-                        <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeCreditBox('unsufficientCreditForPrintBox');">{{'Cancel'|trans({}, 'frontend-ad-package')}}</button>
-                    </div>
-                    <div class="large-12 columns">
-                        <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="closeRevealModel('#unsufficientCreditForPrintBox');selectCredit();">{{'Ok'|trans({}, 'frontend-ad-package')}}</button>
+                    <div class="mt20 remove-item-btn">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeCreditBox('creditConfimBox');">{{'Cancel'|trans({}, 'frontend-ad-package')}}</button>
+                            </div>
+                            <div class="col-md-12">
+                                <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="closeRevealModel('#creditConfimBox');selectCredit();">{{'Continue'|trans({}, 'frontend-ad-package')}}</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div id="unsufficientCreditBox" class="reveal-modal tiny remove-item-modal" data-reveal>
-        <a class="close-reveal-modal">&#215;</a>
-        <h5 class="modal-title">
-            {{'Use credit'|trans({}, 'frontend-ad-package')}}
-        </h5>
-        <div class="modal-content remove-modal">
-            <div class="row">
-                <div class="columns">
-                    <h5>{{'You have insufficient credits.'|trans({}, 'frontend-ad-package')}}</h5>
-                    <div class="mt15" >{{'Sorry! You only have enough credits.'|trans({}, 'frontend-ad-package')|raw}}</div>
+    <div id="unsufficientCreditForPrintBox" class="modal custom-modal tiny remove-item-modal">
+       <div class="modal-dialog">
+		    <div class="modal-content">
+		      	<div class="modal-header">
+		        	<h5 class="modal-title save-search-title no-icon-title">{{'Use credit'|trans({}, 'frontend-ad-package')}}</h5>
+		        	<button class="close-modal" class="close" data-dismiss="modal">×</button>
+		      	</div>
+		      	<div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <h5>{{'You have insufficient credits.'|trans({}, 'frontend-ad-package')}}</h5>
+                            <div class="mt15" id="prev_package_text"></div>
+                        </div>
+                    </div>
+                    <div class="mt20 remove-item-btn">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeCreditBox('unsufficientCreditForPrintBox');">{{'Cancel'|trans({}, 'frontend-ad-package')}}</button>
+                            </div>
+                            <div class="col-md-12">
+                                <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="closeRevealModel('#unsufficientCreditForPrintBox');selectCredit();">{{'Ok'|trans({}, 'frontend-ad-package')}}</button>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+              </div>
+        </div>
+    </div>
+    <div id="unsufficientCreditBox" class="modal custom-modal tiny remove-item-modal">
+        <div class="modal-dialog">
+		    <div class="modal-content">
+		      	<div class="modal-header">
+		        	<h5 class="modal-title save-search-title no-icon-title">{{'Use credit'|trans({}, 'frontend-ad-package')}}</h5>
+		        	<button class="close-modal" class="close" data-dismiss="modal">×</button>
+		      	</div>
+		      	<div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <h5>{{'You have insufficient credits.'|trans({}, 'frontend-ad-package')}}</h5>
+                            <div class="mt15" >{{'Sorry! You only have enough credits.'|trans({}, 'frontend-ad-package')|raw}}</div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+             </div>
         </div>
     </div>
     {% if privateUserAdParams is defined and privateUserAdParams|length and not privateUserAdParams.allowPrivateUserToPostAdFlag %}
@@ -345,7 +397,6 @@
 {% endblock %}
 
 {% block scriptbottom %}
-<script src="{{ asset_url('fafrontend/js/jquery.equalizer.min.js') }}"></script>
 <script src="{{ asset_url('facore/js/jquery.query-object.js') }}"></script>
 {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
 <script language="javascript" type="text/javascript">

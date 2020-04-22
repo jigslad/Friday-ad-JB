@@ -5,8 +5,8 @@
     {{ form_start(form, {'attr': {'novalidate': '', 'id': 'cyber_source_form'}}) }}
     <div class="payment">
         <div class="mb20">
-            <div class="row">
-                <div class="columns">
+            <div class="container">
+                <div class="row">
                     {% if subscription != 1 %}
                         <a href="{{ path('show_cart') }}" class="back-arrow-link mt10">{{'Go back'|trans({}, 'frontend-ad-package')}}</a>
                     {% else %}
