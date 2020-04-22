@@ -43,7 +43,7 @@
                                             </div>
                                             <div class="collapse collapse-body-content show">
                                                 {% set messageType = app.request.get('messageType') %}
-                                                {% if (myMessagesParameters['pagination'] is defined and myMessagesParameters['pagination'].getNbResults() > 0) %}
+                                                {% if (myMessagesParameters['pagination'] is defined and myMessagesParameters['pagination'].getNbResults() > 0) or (messageType != 'all') %}
                                                     {% set pagination = myMessagesParameters['pagination'] %}
                                                     {{ include('FaUserBundle:Dashboard:myMessagesList.html.twig', {'myMessagesParameters': myMessagesParameters}) }}
                                                 {% else %}
