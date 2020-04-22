@@ -337,30 +337,28 @@
         </div>
     </div>
 </div>
-            
-           
-                
-<div id="markAdAsSoldOrExpireModal" class="reveal-modal tiny remove-item-modal" data-reveal>
-    <a class="close-reveal-modal">&#215;</a>
-    <h5 class="modal-title">
-        {{'Remove ad'|trans({}, 'frontend-manage-my-ad')}}
-    </h5>
-    <div class="modal-content remove-modal">
-        <div class="row">
-            <div class="columns">
+
+<div class="modal custom-modal" id="markAdAsSoldOrExpireModal">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title save-search-title">{{'Remove ad'|trans({}, 'frontend-manage-my-ad')}}</h5>
+                <button class="close-modal" class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
                 <h5>{{'Was your advert successful?'|trans({}, 'frontend-manage-my-ad')}}</h5>
-            </div>
-        </div>
-        <div class="mt20 remove-item-btn">
-            <div class="row">
-                <div class="large-6 columns">
-                    <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#markAdAsSoldOrExpireModal');changeAdStatus('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID')}}');">{{'Yes'|trans({}, 'frontend-manage-my-ad')}}</button>
-                </div>
-                <div class="large-6 columns">
-                    <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#markAdAsSoldOrExpireModal');changeAdStatus('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID')}}');">{{'No'|trans({}, 'frontend-manage-my-ad')}}</button>
-                </div>
-                <div class="large-12 columns">
-                    <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="closeRemoveAdConfirmationBox('markAdAsSoldOrExpireModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
+                <div class="mt20 remove-item-btn">
+                    <div class="row">
+                        <div class="large-6 columns">
+                            <button type="button" class="button secondary-btn-4 thin-btn expand" data-dismiss="modal" onclick="changeAdStatus('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID')}}');">{{'Yes'|trans({}, 'frontend-manage-my-ad')}}</button>
+                        </div>
+                        <div class="large-6 columns">
+                            <button type="button" class="button secondary-btn-4 thin-btn expand" data-dismiss="modal" onclick="changeAdStatus('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID')}}');">{{'No'|trans({}, 'frontend-manage-my-ad')}}</button>
+                        </div>
+                        <div class="large-12 columns">
+                            <button type="button" class="button secondary-btn-1 thin-btn expand" data-dismiss="modal" onclick="closeRemoveAdConfirmationBox('markAdAsSoldOrExpireModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -368,64 +366,63 @@
 </div>
 
 
-
-
-<div id="markAdAsUnBoostModal" class="reveal-modal tiny remove-item-modal" data-reveal>
-    <a class="close-reveal-modal">&#215;</a>
-    <h5 class="modal-title">
-        {{'Boost ads'|trans({}, 'frontend-manage-my-ad')}}
-    </h5>
-    <div class="modal-content remove-modal">
-        <div class="row">
-            <div class="columns">
+<div class="modal custom-modal" id="markAdAsUnBoostModal">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title save-search-title">{{'Boost ads'|trans({}, 'frontend-manage-my-ad')}}</h5>
+                <button class="close-modal" class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
                 <h5>{{'Do you really want to unboost all your selected ads?'|trans({}, 'frontend-manage-my-ad')}}</h5>
-            </div>
-        </div>
-        <div class="mt20 remove-item-btn">
-            <div class="row">
-                <div class="large-12 columns">
-                    <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#markAdAsUnBoostModal');unBoostSelectedAds();">{{'Yes'|trans({}, 'frontend-manage-my-ad')}}</button>
-                </div>
-                <div class="large-12 columns">
-                    <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="closeRemoveAdConfirmationBox('markAdAsUnBoostModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
+                <div class="mt20 remove-item-btn">
+                    <div class="row">
+                        <div class="large-12 columns">
+                            <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#markAdAsUnBoostModal');unBoostSelectedAds();">{{'Yes'|trans({}, 'frontend-manage-my-ad')}}</button>
+                        </div>
+                        <div class="large-12 columns">
+                            <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="closeRemoveAdConfirmationBox('markAdAsUnBoostModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div id="markAdAsInactiveModal" class="reveal-modal tiny remove-item-modal" data-reveal>
-    <a class="close-reveal-modal">&#215;</a>
-    <h5 class="modal-title">
-        {{'Remove ad'|trans({}, 'frontend-manage-my-ad')}}
-    </h5>
-    <div class="modal-content remove-modal">
-        <div class="row">
-            <div class="columns">
+
+<div class="modal custom-modal" id="markAdAsInactiveModal">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title save-search-title">{{'Remove ad'|trans({}, 'frontend-manage-my-ad')}}</h5>
+                <button class="close-modal" class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
                 <h5>{{'Are you sure that you want to permanently delete this advert?'|trans({}, 'frontend-manage-my-ad')}}</h5>
-            </div>
-        </div>
-        <div class="mt20 remove-item-btn">
-            <div class="row">
-                <div class="large-12 columns">
-                    <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#markAdAsInactiveModal');changeAdStatus('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_INACTIVE_ID')}}');">{{'Delete'|trans({}, 'frontend-manage-my-ad')}}</button>
-                </div>
-                <div class="large-12 columns">
-                    <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="closeRemoveAdConfirmationBox('markAdAsInactiveModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
+                <div class="mt20 remove-item-btn">
+                    <div class="row">
+                        <div class="large-12 columns">
+                            <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#markAdAsInactiveModal');changeAdStatus('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_INACTIVE_ID')}}');">{{'Delete'|trans({}, 'frontend-manage-my-ad')}}</button>
+                        </div>
+                        <div class="large-12 columns">
+                            <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="closeRemoveAdConfirmationBox('markAdAsInactiveModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div id="socialShareMobileModal" class="reveal-modal tiny" data-reveal>
-    <a class="close-reveal-modal">&#215;</a>
-    <h5 class="modal-title">
-        {{'Share this ad'|trans({}, 'frontend-manage-my-ad')}}
-    </h5>
-    <div class="modal-content remove-modal">
-        <div class="row">
-            <div class="columns">
+<div class="modal custom-modal" id="socialShareMobileModal">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title save-search-title">{{'Share this ad'|trans({}, 'frontend-manage-my-ad')}}</h5>
+                <button class="close-modal" class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
                 <div id="social_share_icon_div" class="dtl-social-icons manage-list-social-icons text-left"></div>
             </div>
         </div>

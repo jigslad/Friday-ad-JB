@@ -204,9 +204,9 @@
     {
     	adIdToRemove = adId;
         if (currentAdStatus == "{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID')}}") {
-        	$('#markAdAsSoldOrExpireModal').foundation('reveal', 'open');
+        	$('#markAdAsSoldOrExpireModal').modal('show');
         } else {
-        	$('#markAdAsInactiveModal').foundation('reveal', 'open');
+        	$('#markAdAsInactiveModal').modal('show');
         }
     }
 
@@ -214,7 +214,7 @@
     {
     	adIdToRemove = '';
     	statusIdToChange = '';
-    	closeRevealModel('#'+modelId);
+        $('#'+modelId).modal('show');
     }
 
     var ajaxLoading = false;
