@@ -1,7 +1,11 @@
 {% set container = fetch_container_instance() %}
-<a class="close-reveal-modal" href="javascript:void(0)" onClick="return $('#createHalfAccountModal').foundation('reveal', 'close');">&#215;</a>
-<h5 class="modal-title save-search-title">{{ 'Create a new alert'|trans({}, 'frontend-half-account') }}</h5>
-<div class="modal-content">
-    <h5>{{ 'You will receive an email alert if we find more ads that match this search. Please enter your details below.'|trans({}, 'frontend-half-account') }}</h5>
-    <div id="createHalfAccountModalForm">{{ include('FaUserBundle:HalfAccount:createForm.html.twig') }}</div>
-</div>
+<div class="modal-dialog"><div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title save-search-title no-icon-title">{{ 'Create a new alert'|trans({}, 'frontend-half-account') }}</h5>
+		    <button class="close-modal" class="close" data-dismiss="modal"  href="javascript:void(0)" onClick="return $('#createHalfAccountModal').modal('hide');">×</button>
+		</div>
+        <div class="modal-body">
+            <h5>{{ 'You will receive an email alert if we find more ads that match this search. Please enter your details below.'|trans({}, 'frontend-half-account') }}</h5>
+            <div id="createHalfAccountModalForm">{{ include('FaUserBundle:HalfAccount:createForm.html.twig') }}</div>
+		</div>
+</div></div>

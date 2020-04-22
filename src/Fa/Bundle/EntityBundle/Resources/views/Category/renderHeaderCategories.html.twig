@@ -24,7 +24,7 @@
             {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['full_slug']) %}
         {% endif %}
             <li class="nav-item dropdown d-navbar-block">
-                <a class="nav-link dropdown-toggle main_category" href="{{ listurl }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{categoryArray['name']}}</a>
+                <a class="nav-link dropdown-toggle main_category" data-target="{{ listurl }}" href="{{ listurl }}" role="button" aria-haspopup="true" aria-expanded="false">{{categoryArray['name']}}</a>
                 {% if categoryArray['children'] is defined and categoryArray['children']|length %}
                     {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}
                         {% set staticPageUrls = fetch_repository('FaContentBundle:SeoTool').getLandingPageStaticPageUrlArray('motors', container, location_id) %}

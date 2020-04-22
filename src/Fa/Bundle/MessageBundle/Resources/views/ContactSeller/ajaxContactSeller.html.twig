@@ -28,16 +28,19 @@
 {% for categoryId,categoryName in categoryPath %}
     {% set catString = catString ~ '-' ~ categoryName %}
 {% endfor %}
-<a class="close-reveal-modal">&#215;</a>
+<div class="modal-dialog"><div class="modal-content">
+<div class="modal-header">
 {% set adOwnerName = adUser ? adUser.getProfileName() : null %}
 {% set jobCategoryId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
-<h5 class="modal-title">
+<h5 class="modal-title save-search-title no-icon-title">
     {% if rootCategoryId == jobCategoryId %}
         {{'Apply for this job'|trans({}, 'frontend-contact-seller')}}
     {% else %}
         {{'Ask %user_name% a question..'|trans({'%user_name%': adOwnerName}, 'frontend-contact-seller')}}
     {% endif %}
 </h5>
+<button class="close-modal" class="close" data-dismiss="modal">×</button>
+</div>
 {% if adUser %}
     {{ form_start(form, {'attr': {'novalidate': '', 'id': 'contact_seller_id'}}) }}
 {% endif %}
