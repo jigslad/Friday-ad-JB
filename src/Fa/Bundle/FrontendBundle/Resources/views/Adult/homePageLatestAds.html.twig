@@ -58,7 +58,7 @@
         {% if seoRule['image_alt'] is defined %}
             {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], latestAdultAd]) %}
         {% endif %}
-        <div class="small-12 medium-12 large-8 columns mb20 list">
+        <div class="small-12 medium-8 large-8 columns mb20 list">
             <div class="card">
                 <div class="item" data-equalizer-watch>
                     <a class="tricky-link" href="{{ adUrl }}">
