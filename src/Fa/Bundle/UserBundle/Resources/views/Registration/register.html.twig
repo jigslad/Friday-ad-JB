@@ -110,7 +110,7 @@
 
                 <div class="mb20 paa-role">
                     <div class="white-radio">
-                    {{ form_row(form.user_roles, {'attr': {'add-br': true,'class':'checkbox'}}) }}
+                    {{ form_widget(form.user_roles) }}
                     </div>
                     {#<div class="label-inline mb10">                    	
                         <ul class="custom-control custom-radio white-radio search-type crawlable-checkbox">
@@ -155,20 +155,20 @@
                     </div>
 				   <div class="business_seller_fields white-select" style="display:none;">
                         {{ form_row(form.business_name) }}
-                        {{ form_row(form.business_category_id, {'attr': {'class':'fa-select-white'}}) }}
+                        {{ form_row(form.business_category_id, {'attr': {'class':'select-control'}}) }}
                     </div>
                     <div class="label-inline">
-                        <div class="white-check">
+                        <div class="white-check mb10">
                         	{{ form_widget(form.is_email_alert_enabled, {'attr': {'class': 'checkbox'}}) }}
-                        	<label class="custom-control-label" for="{{ form.is_email_alert_enabled.vars.id }}"></label>I'd like to receive news, offers and promotions by email from Friday-Ad                                                        
+                        	<label class="mb0" for="{{ form.is_email_alert_enabled.vars.id }}"></label>I'd like to receive news, offers and promotions by email from Friday-Ad                                                        
                         </div> 
-                        <div class="white-check">    
+                        <div class="white-check mb10">    
                         	{{ form_widget(form.is_third_party_email_alert_enabled, {'attr': {'class': 'checkbox'}}) }}
-                        	<label class="custom-control-label" for="{{ form.is_third_party_email_alert_enabled.vars.id }}"></label>I'd like to receive offers and promotions by email on behalf of carefully chosen partners                                                        
+                        	<label class="mb0" for="{{ form.is_third_party_email_alert_enabled.vars.id }}"></label>I'd like to receive offers and promotions by email on behalf of carefully chosen partners                                                        
                         </div> 
-                        <div class="white-check">
+                        <div class="white-check mb10">
                            {{ form_widget(form.is_terms_agreed, {'attr': {'class': 'checkbox'}}) }}
-                           <label class="custom-control-label" for="{{ form.is_terms_agreed.vars.id }}"></label>I have read and agree to the <a href="/terms-and-conditions/" target="_blank">terms and conditions</a>                            
+                           <label class="mb0" for="{{ form.is_terms_agreed.vars.id }}"></label>I have read and agree to the <a href="/terms-and-conditions/" target="_blank">terms and conditions</a>                            
                         </div> 
                     </div>
                 </div>
