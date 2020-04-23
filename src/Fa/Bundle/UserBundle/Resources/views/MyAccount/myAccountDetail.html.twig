@@ -41,15 +41,12 @@
                      <div class="label-inline d-inline-flex">
                          <ul class="custom-control custom-checkbox search-type mr10">
                              <li>
-                                 {{ form_label(userDetailForm.contact_through_phone) }}
-                                 {{ form_widget(userDetailForm.contact_through_phone,{'attr':{'class': 'custom-control-input'} }) }}
+                                 {{ form_row(userDetailForm.contact_through_phone,{'attr':{'class': 'custom-control-input'},'label_attr': {'class': 'custom-control-label'} }) }}
                              </li>
                          </ul>
                          <ul class="custom-control custom-checkbox search-type">
                              <li>
-                                 {{ form_label(userDetailForm.contact_through_email) }}
-                                 {{ form_widget(userDetailForm.contact_through_email,{'attr':{'class': 'custom-control-input'} }) }}
-{#                                 <input type="checkbox" name="{{ userDetailForm.contact_through_email.vars.name }}" class="custom-control-input" id="{{ userDetailForm.contact_through_email.vars.id }}" {{ userDetailForm.contact_through_email.vars.checked == 'true' ? 'checked':'' }}>#}
+                                 {{ form_row(userDetailForm.contact_through_email,{'attr':{'class': 'custom-control-input'},'label_attr': {'class': 'custom-control-label'} }) }}
                              </li>
                          </ul>
                      </div>
@@ -72,7 +69,7 @@
                         <ul class="custom-control custom-checkbox search-type">
                             <li>
                                 {% if userDetailForm.show_password is defined %}
-                                    {{ form_row(userDetailForm.show_password) }}
+                                    {{ form_row(userDetailForm.show_password,{'attr':{'class': 'custom-control-input'},'label_attr': {'class': 'custom-control-label'} }) }}
                                 {% endif %}
                             </li>
                         </ul>

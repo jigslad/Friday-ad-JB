@@ -15,71 +15,90 @@
 {% block body -%}
     <div class="dash-block">
         <div class="posting-bg" id="my_credits">
-            <div class="container"
-            {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
-            <div class="row d-board-main">
-                <div class="off-canvas-wrap" data-offcanvas>
-                    <div class="inner-wrap">
-                        {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
-                        <div id="db-right-part" class="col-md-19 d-right-col">
-                            <h1 class="s-h1 db-title mt30 mb20">{{'Credits'|trans({}, 'frontend-my-credits')}}</h1>
-                            <div class="row bz-profile-title">
-                                <div class="large-18 columns">
-                                    <h2 class="db-sub-title">
-                                        {{'View all your active credits. To use them, just place an ad and click \'Use credit\' when choosing your package'|trans({}, 'frontend-my-credits')|raw}}
-                                    </h2>
-                                </div>
-                                <div class="large-6 columns text-right">
-                                    <a href="{{ path('ad_post_first_step') }}" class="primary-btn-1 button">{{'Place an ad'|trans({}, 'frontend-my-credits')}}</a>
-                                </div>
-                            </div>
-                            <div class="total-credits-remaining">
-                                {{'Total credits:'|trans({}, 'frontend-manage-my-ad')}} {{ userCreditRepository.getActiveCreditCountForUser(app.user.getId()) }}
-                            </div>
-                            <div id="manage-credits" class="db-content">
-                                <div class="db-section">
-                                    {% if userCredits|length %}
-                                        <dl class="accordion" data-accordion>
-                                        {% for userCreditCategoryId, userCredit in userCredits %}
-                                            {% set categoryClassName = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [userCreditCategoryId])|replace({'_':'-'}) %}
-                                            <dd class="accordion-navigation">
-                                                <a href="#panel{{categoryClassName}}" class="section-head {% if loop.index == 1 %}active{% endif %}">
-                                                    <span class="{{categoryClassName}}-icon manage-credits-icon">{{ categoryRepository.getRootCategoryName(userCreditCategoryId, container)|replace({'_': ' '})|capitalize }} ({{ userCredit['credit'] }})</span>
-                                                    <span>&nbsp;</span>
-                                                </a>
-                                                <div id="panel{{categoryClassName}}" class="content {% if loop.index == 1 %}active{% endif %}">
-                                                    <div class="clearfix credit-blocks">
-                                                        <ul>
-                                                            {% for userCreditDetail in userCredit %}
-                                                                {% if userCreditDetail['package_sr_no'] is defined %}
-                                                                    <li>
-                                                                        <div class="inner-box">
-                                                                            <div class="credit-title">
-                                                                                {% set creditTitle = {} %}
-                                                                                {% for userCreditPackageSrNo in userCreditDetail['package_sr_no'] %}
-                                                                                    {% set creditTitle = creditTitle|merge({0 : userCreditRepository.getCreditPackageName(userCreditPackageSrNo)}) %}
-                                                                                {% endfor %}
-                                                                                {{ creditTitle|join(' + ') }}
+            <div class="container">
+                {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
+                <div class="row d-board-main">
+                    <div class="off-canvas-wrap" data-offcanvas>
+                        <div class="inner-wrap">
+                            {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
+                            <div id="db-right-part" class="col-md-19 d-right-col">
+                                <div id="manage-my-ads-list-only">
+                                    <h1 class="s-h1 db-title mt30 mb20">{{'Credits'|trans({}, 'frontend-my-credits')}}</h1>
+
+                                    <div class="row">
+                                        <div class="col-md-18">
+                                            <h2 class="s-h2 mb10">
+                                                {{'View all your active credits. To use them, just place an ad and click \'Use credit\' when choosing your package'|trans({}, 'frontend-my-credits')|raw}}
+                                            </h2>
+                                        </div>
+                                        <div class="col-md-6 mb20">
+                                            <a href="{{ path('ad_post_first_step') }}" class="primary-btn-1 btn btn-block next-btn btn-h-lg">{{'Place an ad'|trans({}, 'frontend-my-credits')}}</a>
+                                        </div>
+                                    </div>
+                                    <div class="mb20">
+                                        <h3 class="s-h3">
+                                            {{'Total credits:'|trans({}, 'frontend-manage-my-ad')}} {{ userCreditRepository.getActiveCreditCountForUser(app.user.getId()) }}
+                                        </h3>
+                                    </div>
+                                    <div id="manage-credits">
+                                        {% if userCredits|length %}
+                                            <div class="db-section">
+                                            {% for userCreditCategoryId, userCredit in userCredits %}
+                                                {% set categoryClassName = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [userCreditCategoryId])|replace({'_':'-'}) %}
+                                                <div class="db-list">
+                                                    <a class="panel-heading {% if loop.index == 1 %}collapsed{% endif %}" data-toggle="collapse" data-target="#panel{{categoryClassName}}">
+                                                        <div class="media section-head">
+                                                            <div class="media-body">
+                                                                <span class="{{categoryClassName}}-icon manage-credits-icon">{{ categoryRepository.getRootCategoryName(userCreditCategoryId, container)|replace({'_': ' '})|capitalize }} ({{ userCredit['credit'] }})</span>
+                                                            </div>
+                                                            <div class="arrow-block">
+                                                                <i class="fa fa-chevron-up"></i>
+                                                                <i class="fa fa-chevron-down"></i>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                    <div id="panel{{categoryClassName}}" class="collapse {% if loop.index == 1 %}show{% endif %}">
+                                                        <div class="credit-blocks">
+                                                            <div class="row collapse-body-content">
+                                                                {% for userCreditDetail in userCredit %}
+                                                                    {% if userCreditDetail['package_sr_no'] is defined %}
+                                                                        <div class="col-md-12 col-lg-8">
+                                                                            <div class="card mb10">
+                                                                                <div class="card-body">
+                                                                                    <h5 class="card-title">
+                                                                                        {% set creditTitle = {} %}
+                                                                                        {% for userCreditPackageSrNo in userCreditDetail['package_sr_no'] %}
+                                                                                            {% set creditTitle = creditTitle|merge({0 : userCreditRepository.getCreditPackageName(userCreditPackageSrNo)}) %}
+                                                                                        {% endfor %}
+                                                                                        {{ creditTitle|join(' + ') }}
+                                                                                    </h5>
+                                                                                    <label class="card-text">{{'%credits% credits remaining'|trans({'%credits%': userCreditDetail['credit'] }, 'frontend-my-credits')}}</label>
+                                                                                    <p class="card-text mt5">
+                                                                                        <small class="text-muted">
+                                                                                            <em>
+                                                                                                {% if userCreditDetail['expires_at'] is not null %}
+                                                                                                    {{'Expiry date:'|trans({}, 'frontend-my-credits')}} {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [userCreditDetail['expires_at'], container, null, null, 'd MMMM YYYY']) }}
+                                                                                                {% else %}
+                                                                                                    {{'Expiry date:'|trans({}, 'frontend-my-credits')}} {{'Infinite'|trans({}, 'frontend-my-credits')}}
+                                                                                                {% endif %}
+                                                                                            </em>
+                                                                                        </small>
+                                                                                    </p>
+                                                                                </div>
                                                                             </div>
-                                                                            <p>{{'%credits% credits remaining'|trans({'%credits%': userCreditDetail['credit'] }, 'frontend-my-credits')}}</p>
-                                                                            {% if userCreditDetail['expires_at'] is not null %}
-                                                                                <div class="expiry-date">{{'Expiry date:'|trans({}, 'frontend-my-credits')}} {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [userCreditDetail['expires_at'], container, null, null, 'd MMMM YYYY']) }}</div>
-                                                                            {% else %}
-                                                                                <div class="expiry-date">{{'Expiry date:'|trans({}, 'frontend-my-credits')}} {{'Infinite'|trans({}, 'frontend-my-credits')}}</div>
-                                                                            {% endif %}
                                                                         </div>
-                                                                    </li>
-                                                                {% endif %}
-                                                            {% endfor %}
-                                                        </ul>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </dd>
-                                        {% endfor %}
-                                        </dl>
-                                    {% else %}
-                                        {{'No credits available.'|trans({}, 'frontend-my-credits')}}
-                                    {% endif %}
+                                            {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            {{'No credits available.'|trans({}, 'frontend-my-credits')}}
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
