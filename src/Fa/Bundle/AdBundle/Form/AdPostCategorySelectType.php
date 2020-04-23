@@ -172,12 +172,12 @@ class AdPostCategorySelectType extends AdPostSecondStepType
                 if ($i == 1) {
                     $optionArray = array(
                         'placeholder' =>  'Please select category',
-                        'attr'        => array('class' => 'fa-select category category_'.$i),
+                        'attr'        => array('class' => 'select-control category category_'.$i),
                     );
                 } else {
                     $optionArray = array(
                         'placeholder' => 'Please select subcategory',
-                        'attr'        => array('class' => 'fa-select category category_'.$i),
+                        'attr'        => array('class' => 'select-control category category_'.$i),
                     );
                 }
                 $builder->addEventSubscriber(
