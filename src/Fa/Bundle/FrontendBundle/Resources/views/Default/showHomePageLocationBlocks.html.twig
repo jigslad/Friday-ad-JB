@@ -16,9 +16,9 @@
         {% for solrFieldName, block in blocks %}
             {% if block['facet'] is defined and block['facet']|length %}
                   <div class="panel panel-default">
-                    <div class="panel-heading active" role="tab" id="home-heading{{ panelCnt }}">
+                    <div class="panel-heading" role="tab" id="home-heading{{ panelCnt }}">
                       <h4 class="panel-title">
-                        <a role="button" data-toggle="collapse" data-parent="#home-accordion" href="#home-collapse{{ panelCnt }}" aria-expanded="true" aria-controls="home-collapse{{ panelCnt }}">{{ block['heading'] }} <i class="fa float-right fa-plus"></i></a>
+                        <a role="button" data-toggle="collapse" data-parent="#home-accordion" href="#home-collapse{{ panelCnt }}" aria-expanded="false" aria-controls="home-collapse{{ panelCnt }}">{{ block['heading'] }} <i class="fa float-right fa-plus"></i></a>
                       </h4>
                     </div>
                     <div id="home-collapse{{ panelCnt }}" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="home-heading{{ panelCnt }}">

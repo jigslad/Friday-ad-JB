@@ -30,13 +30,9 @@
                         <input placeholder="{{'Password'|trans({}, 'frontend-login')}}" class="form-control white-field" id="user_login_password" name="_password" type="password" value="" tabindex="2"/>
                     </div>
                     <div>
-                        <div class="label-inline">
-                            <ul class="custom-control custom-checkbox search-type crawlable-checkbox">
-                                <li>
-                                	<input type="checkbox" value="1" class="custom-control-input" name="show_password" id="user_login_show_password">
-                                    <label class="custom-control-label" for="user_login_show_password">{{'Show password'|trans({}, 'frontend-login')}}</label>
-                                </li>
-                            </ul>              
+                        <div class="white-check">
+                        	<input type="checkbox" value="1" class="checkbox" name="show_password" id="user_login_show_password">
+                        	<label for="user_login_show_password"></label>{{'Show password'|trans({}, 'frontend-login')}}                                                                                    
                         </div>
                     </div>
                     <div class="mt20">

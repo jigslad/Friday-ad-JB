@@ -74,16 +74,19 @@
             {% endif %}
         </span>
     {% else %}
-        <span class="custom-radio {% if checked %}checked{% endif %}">
-            <input type="radio" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+        {#<span class="custom-radio {% if checked %}checked{% endif %}">#}
+        <span class="radio-span">
+            <input class="checkbox" type="radio" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />        	
+            <label for="{{ form.vars.id }}"></label>
         </span>
+        {#</span>#}
     {% endif %}
 {%- endblock radio_widget %}
 
 {% block checkbox_widget -%}
-    <span class="custom-checkbox {% if checked %}checked{% endif %}">
+    {#<span class="custom-checkbox {% if checked %}checked{% endif %}">#}
         <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
-    </span>
+    {#</span>#}
 {%- endblock checkbox_widget %}
 
 {% block form_label -%}
