@@ -44,7 +44,7 @@
 {% if adUser %}
     {{ form_start(form, {'attr': {'novalidate': '', 'id': 'contact_seller_id'}}) }}
 {% endif %}
-    <div class="modal-content">
+    <div class="modal-body">
         {% if app.user and app.request.cookies.has('contact_seller_flag') and app.request.cookies.has('contact_seller_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') and app.request.cookies.get('contact_seller_flag') %}
             <div data-alert class="alert-box success radius">
                 <span class="alert-icon">&nbsp;</span>
@@ -163,6 +163,8 @@
     <input type="hidden" value="{{ deadlockRetry }}" name="deadlockRetry" id="deadlockRetry" />
     {{ form_end(form) }}
 {% endif %}
+ </div>
+ </div>
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     $(document).ready(function(){

@@ -82,8 +82,9 @@
                 <div class="mb10">
                     <div class="label-inline">
                         <ul class="custom-control custom-checkbox search-type crawlable-checkbox">
-                            <li>
-                               {{ form_row(form.show_password) }}
+                            <li>                               
+                                {{ form_widget(form.show_password, {'attr': {'class': 'custom-control-input'}}) }}
+                                {{ form_label(form.show_password, null, {'label_attr': {'class': 'custom-control-label'}}) }}
                             </li>
                         </ul>              
                     </div>
