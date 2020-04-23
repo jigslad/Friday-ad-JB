@@ -229,21 +229,6 @@
                                         </span>
                                     {% endif %}
                                 </div>
-
-                                <div class="show-for-small-only">
-                                    {% if userCreditCount > 0 %}
-                                        <div class="total-credits-remaining-mob">
-                                            {{'Total credits remaining:'|trans({}, 'frontend-manage-my-ad')}} <a href="{{ path('my_credits') }}">{{ userCreditRepository.getActiveCreditCountForUser(app.user.getId()) }}</a>
-                                        </div>
-                                    {% endif %}
-
-                                    {% if isBoostEnabled==1 and boostMaxPerMonth > 0 %}
-                                        <div class="manage-my-ad-boost-mob-text">
-                                            {{'Boosts remaining:'|trans({}, 'frontend-manage-my-ad')}} <a href="{{ path('manage_my_ads_boosted') }}">{{ boostAdRemaining }}</a>
-                                        </div>
-                                        <div class="manage-my-ad-boost-mob-text mb20"><span>Boost renew on {{ boostRenewDate }}</span></div>
-                                    {% endif %}
-                                </div>
                                 <nav>
                                     <div class="nav nav-tabs nav-fill custom-tabs">
                                         <a class ="nav-item nav-link {% if currentRoute == 'manage_my_ads_active' %} active {% endif %}" href="{{path('manage_my_ads_active')}}">

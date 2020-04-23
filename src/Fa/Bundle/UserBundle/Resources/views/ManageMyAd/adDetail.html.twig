@@ -145,15 +145,13 @@
                         {% endif %}
                     </div>
                 {% endif %}
-                <div class="manage-price-box clearfix">
-                    <div class="manage-price">
-                        {% if ad.price > 0 %}
+                {% if ad.price > 0 %}
+                    <div class="manage-price-box clearfix">
+                        <div class="manage-price">
                             {{ format_currency(ad.price) }}
-                        {% else %}
-
-                        {% endif %}
+                        </div>
                     </div>
-                </div>
+                {% endif %}
                 {% if adPackageArray[adId] is defined and adPackageArray[adId] is not null %}
                     <div class="clearfix">
                         <span class="item-status pkg-free">Package: {{adPackageArray[adId]['title']}}</span>
