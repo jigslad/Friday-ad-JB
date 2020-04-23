@@ -94,7 +94,7 @@
                     {{ form_label(form.phone) }}
                     {{ form_widget(form.phone, {'attr': {'class': 'form-control white-field'}}) }}
                 </div>
-                <div class="mb20">
+                <div class="mb05">
                     <label>{{'I would like buyers to contact me by:'|trans({}, 'frontend-paa-register')}}</label>
                     <div class="label-inline d-inline-flex">
                         <div class="white-check">
@@ -108,25 +108,9 @@
                     </div>
                 </div>
 
-                <div class="mb20 paa-role">
-                    <div class="white-radio">
-                    {{ form_widget(form.user_roles) }}
-                    </div>
-                    {#<div class="label-inline mb10">                    	
-                        <ul class="custom-control custom-radio white-radio search-type crawlable-checkbox">
-                            <li>                            	
-                            	{{ form_row(form.user_roles, {'attr': {'class': 'custom-control-input'}}) }}                        
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="label-inline mb10">
-                        <ul class="custom-control custom-radio white-radio search-type crawlable-checkbox">
-                            <li>
-                            	{{ form_widget(form.contact_through_email, {'attr': {'class': 'custom-control-input'}}) }}
-                            	<label class="custom-control-label" for="{{ form.contact_through_email.vars.id }}">Contact by email</label>                            
-                           </li>
-                        </ul>
-                    </div> #}
+                <div class="mb05">
+                	<label>Account status</label>
+                    {{ form_widget(form.user_roles, {'attr': {'class': 'white-radio radio-circle-btn'}}) }}                 
                 </div>
                 <div>
                 	{% set logoLabel = privateLogoLabel %}
@@ -154,10 +138,10 @@
                         </div>
                     </div>
 				   <div class="business_seller_fields white-select" style="display:none;">
-                        {{ form_row(form.business_name) }}
-                        {{ form_row(form.business_category_id, {'attr': {'class':'select-control'}}) }}
+                        {{ form_row(form.business_name, {'attr': {'class':'white-field'}}) }}
+                        {{ form_row(form.business_category_id, {'attr': {'class':'select-control white-field'}}) }}
                     </div>
-                    <div class="label-inline">
+                    <div class="label-inline mt10">
                         <div class="white-check mb10">
                         	{{ form_widget(form.is_email_alert_enabled, {'attr': {'class': 'checkbox'}}) }}
                         	<label class="mb0" for="{{ form.is_email_alert_enabled.vars.id }}"></label>I'd like to receive news, offers and promotions by email from Friday-Ad                                                        
