@@ -42,89 +42,90 @@
                                         <a href="javascript:void(0)" class="close">&times;</a>
                                     </div>
                                 {% endif %}
-                                <h1 class="s-h1 db-title mt30 mb20">{{'Your profile'|trans({}, 'frontend-my-profile')}}</h1>
-                                <div class="row">
-                                    <div class="large-24 columns">
-                                        <h2 class="db-sub-title">{{'From here you can edit your basic info, add photos and tell others a bit about yourself.'|trans({}, 'frontend-my-profile')}}</h2>
-                                    </div>
+                                <div class="mb40">
+                                    <h1 class="s-h1 db-title mt30 mb20">{{'Your profile'|trans({}, 'frontend-my-profile')}}</h1>
+                                    <h2 class="s-h2 d-none d-md-block">{{'From here you can edit your basic info, add photos and tell others a bit about yourself.'|trans({}, 'frontend-my-profile')}}</h2>
                                 </div>
-                                <div class="db-content">
-                                    <div class="db-section">
-                                        <dl class="accordion" data-accordion>
-                                            <dd class="accordion-navigation active">
-                                                <a href="#panel1b" class="section-head">
-                                                    <span class="profile-icon">{{'Basic info'|trans({}, 'frontend-my-profile')}}</span>
-                                                    <span>&nbsp;</span>
-                                                </a>
-                                                <div id="panel1b" class="content active">
-                                                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-                                                        {{ include('FaUserBundle:MyAccount:myAccountMessage.html.twig', {'msgName': 'profile_success'}) }}
-                                                        <div class="bz-profile-fields">
-                                                            {{ form_label(form.first_name) }}
-                                                            {{ form_widget(form.first_name, {'attr': {'class': 'white-field field-300'}}) }}
-                                                            {{ form_errors(form.first_name) }}
+                                <div class="db-section">
+                                    <div class="db-list active">
+                                        <a href="#panel1b" class="panel-heading collapsed" data-toggle="collapse" data-target="#panel1b">
+                                            <div class="media section-head">
+                                                <div class="media-body">
+                                                    <span class="your-details-icon list-icon-text">{{'Basic info'|trans({}, 'frontend-my-profile')}}</span>
+                                                </div>
+                                                <div class="arrow-block">
+                                                    <i class="fa fa-chevron-up"></i>
+                                                    <i class="fa fa-chevron-down"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div id="panel1b" class="collapse collapse-body-content active">
+                                            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                                                {{ include('FaUserBundle:MyAccount:myAccountMessage.html.twig', {'msgName': 'profile_success'}) }}
+                                                <div class="bz-profile-fields">
+                                                    {{ form_label(form.first_name) }}
+                                                    {{ form_widget(form.first_name, {'attr': {'class': 'white-field field-300'}}) }}
+                                                    {{ form_errors(form.first_name) }}
 
-                                                            {{ form_label(form.last_name) }}<span class="db-ins">{{'(Only your initial will be publicly displayed)'|trans({}, 'frontend-my-profile')}}</span>
-                                                            {{ form_widget(form.last_name, {'attr': {'class': 'white-field field-300'}}) }}
-                                                            {{ form_errors(form.last_name) }}
+                                                    {{ form_label(form.last_name) }}<span class="db-ins">{{'(Only your initial will be publicly displayed)'|trans({}, 'frontend-my-profile')}}</span>
+                                                    {{ form_widget(form.last_name, {'attr': {'class': 'white-field field-300'}}) }}
+                                                    {{ form_errors(form.last_name) }}
 
-                                                            <label>{{'Profile image'|trans({}, 'frontend-my-profile')}}</label>
-                                                            {{ render(controller('FaUserBundle:UserImage:showProfileImageUploader', {'userId': app.user.getId()})) }}
-                                                            {{ set_variables('profileImageUploadJavascriptBottom', {'loaded':'false'}) }}
-                                                            <div class="clearfix">
-                                                                {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), app.user.getImage(), app.user.getId(), null, null, true, false, app.user.getStatus().getId(), app.user.getProfileName()]) %}
-                                                                <div class="profile-logo-img">
-                                                                    <div class="bz-profile-logo rounded" id="profile_image_div">
-                                                                        {% if userLogo %}
-                                                                            {{userLogo|raw}}
-                                                                        {% endif %}
-                                                                    </div>
-                                                                </div>
-                                                                <div class="profile-logo-ins private-profile">
-                                                                    <span class="hide-for-small-only">{{"Add a photo of yourself to your profile. It doesn't just look nice - buyers prefer to see who they are buying from when deciding what to buy."|trans({}, 'frontend-my-profile')}}<br /></span>
-                                                                    <div id="profile_change_btn_with_opt" {% if not app.user.getImage() %}style="display:none;"{% endif %}>
-                                                                        <a href="javascript:void(0);" data-dropdown="profile_image_upload" aria-controls="profile_image_upload" aria-expanded="false" class="primary-btn-3 button thin-btn dropdown">{{'Change image'|trans({}, 'frontend-my-profile')}}</a><br />
-                                                                        <ul id="profile_image_upload" data-dropdown-content class="f-dropdown" aria-hidden="true">
-                                                                            <li><a href="javascript:void(0)" class="pickProfileFile needsclick" id="pickProfileFile">{{'Upload profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
-                                                                            <li><a href="javascript:getProfileBigImage('{{ path(getProfileBigImageRoute, {'userId': app.user.getId(), 'isCompany': 0}) }}')">{{'Edit profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
-                                                                            <li><a href="javascript:deleteImage('{{ path(deleteRoute, {'userId': app.user.getId(), 'isCompany': 0}) }}')">{{'Remove'|trans({}, 'frontend-my-profile')}}</a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                    <div id="profile_change_btn_without_opt" {% if app.user.getImage() %}style="display:none;"{% endif %}>
-                                                                        <a href="javascript:void(0);" id="pickProfileFile1" class="primary-btn-3 button thin-btn dropdown pickProfileFile needsclick">{{'Change image'|trans({}, 'frontend-my-profile')}}</a><br />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="show-for-small-only mt15">
-                                                                {{"Add a photo of yourself to your profile. It doesn't just look nice - buyers prefer to see who they are buying from when deciding what to buy."|trans({}, 'frontend-my-profile')}}
-                                                            </div>
-
-                                                            <div class="mt30 about-profile">
-                                                                {{ form_label(form.about_you) }}<br class="hide-for-small-only" />
-                                                                {{'Tell people more about yourself by adding some extra information to your profile!'|trans({}, 'frontend-my-profile')}}
-                                                                <div class="field-530">
-                                                                    {{ form_widget(form.about_you, {'attr': {'class': 'white-field mt10 mb0 textcounter', 'rows': 3}}) }}
-                                                                    <div class="clearfix">
-                                                                        <div class="left">
-                                                                            {{ form_errors(form.about_you) }}
-                                                                        </div>
-                                                                        <div class="profile-ins text-right right" id="{{ attribute(form, 'about_you').vars.id }}_textcounter"></div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            {{ form_label(form.location_autocomplete) }}
-                                                            {{ form_widget(form.location_autocomplete, {'attr': {'class': 'white-field field-300', 'placeholder': 'Postcode or Town'|trans({}, 'frontend-my-profile')}}) }}
-                                                            {{ form_errors(form.location_autocomplete) }}
-
-                                                            <div class="mt30 field-300">
-                                                                {{ form_widget(form.save_profile_changes, {'attr': {'class':'primary-btn-2 button expand mb0'}}) }}
+                                                    <label>{{'Profile image'|trans({}, 'frontend-my-profile')}}</label>
+                                                    {{ render(controller('FaUserBundle:UserImage:showProfileImageUploader', {'userId': app.user.getId()})) }}
+                                                    {{ set_variables('profileImageUploadJavascriptBottom', {'loaded':'false'}) }}
+                                                    <div class="clearfix">
+                                                        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), app.user.getImage(), app.user.getId(), null, null, true, false, app.user.getStatus().getId(), app.user.getProfileName()]) %}
+                                                        <div class="profile-logo-img">
+                                                            <div class="bz-profile-logo rounded" id="profile_image_div">
+                                                                {% if userLogo %}
+                                                                    {{userLogo|raw}}
+                                                                {% endif %}
                                                             </div>
                                                         </div>
-                                                    {{ form_end(form) }}
+                                                        <div class="profile-logo-ins private-profile">
+                                                            <span class="hide-for-small-only">{{"Add a photo of yourself to your profile. It doesn't just look nice - buyers prefer to see who they are buying from when deciding what to buy."|trans({}, 'frontend-my-profile')}}<br /></span>
+                                                            <div id="profile_change_btn_with_opt" {% if not app.user.getImage() %}style="display:none;"{% endif %}>
+                                                                <a href="javascript:void(0);" data-dropdown="profile_image_upload" aria-controls="profile_image_upload" aria-expanded="false" class="primary-btn-3 button thin-btn dropdown">{{'Change image'|trans({}, 'frontend-my-profile')}}</a><br />
+                                                                <ul id="profile_image_upload" data-dropdown-content class="f-dropdown" aria-hidden="true">
+                                                                    <li><a href="javascript:void(0)" class="pickProfileFile needsclick" id="pickProfileFile">{{'Upload profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
+                                                                    <li><a href="javascript:getProfileBigImage('{{ path(getProfileBigImageRoute, {'userId': app.user.getId(), 'isCompany': 0}) }}')">{{'Edit profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
+                                                                    <li><a href="javascript:deleteImage('{{ path(deleteRoute, {'userId': app.user.getId(), 'isCompany': 0}) }}')">{{'Remove'|trans({}, 'frontend-my-profile')}}</a></li>
+                                                                </ul>
+                                                            </div>
+                                                            <div id="profile_change_btn_without_opt" {% if app.user.getImage() %}style="display:none;"{% endif %}>
+                                                                <a href="javascript:void(0);" id="pickProfileFile1" class="primary-btn-3 button thin-btn dropdown pickProfileFile needsclick">{{'Change image'|trans({}, 'frontend-my-profile')}}</a><br />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="show-for-small-only mt15">
+                                                        {{"Add a photo of yourself to your profile. It doesn't just look nice - buyers prefer to see who they are buying from when deciding what to buy."|trans({}, 'frontend-my-profile')}}
+                                                    </div>
+
+                                                    <div class="mt30 about-profile">
+                                                        {{ form_label(form.about_you) }}<br class="hide-for-small-only" />
+                                                        {{'Tell people more about yourself by adding some extra information to your profile!'|trans({}, 'frontend-my-profile')}}
+                                                        <div class="field-530">
+                                                            {{ form_widget(form.about_you, {'attr': {'class': 'white-field mt10 mb0 textcounter', 'rows': 3}}) }}
+                                                            <div class="clearfix">
+                                                                <div class="left">
+                                                                    {{ form_errors(form.about_you) }}
+                                                                </div>
+                                                                <div class="profile-ins text-right right" id="{{ attribute(form, 'about_you').vars.id }}_textcounter"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    {{ form_label(form.location_autocomplete) }}
+                                                    {{ form_widget(form.location_autocomplete, {'attr': {'class': 'white-field field-300', 'placeholder': 'Postcode or Town'|trans({}, 'frontend-my-profile')}}) }}
+                                                    {{ form_errors(form.location_autocomplete) }}
+
+                                                    <div class="mt30 field-300">
+                                                        {{ form_widget(form.save_profile_changes, {'attr': {'class':'primary-btn-2 button expand mb0'}}) }}
+                                                    </div>
                                                 </div>
-                                            </dd>
-                                        </dl>
+                                            {{ form_end(form) }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

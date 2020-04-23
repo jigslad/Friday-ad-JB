@@ -14,65 +14,27 @@
     </a>
     <div id="panel4b" class="collapse collapse-body-content">
         <div class="col-md-14 col-lg-9 pad-none">
-            <label>User Type</label>
-            <div class="label-inline">
-                <ul class="custom-control custom-radio search-type white-radio">
-                    <li>
-                        <input type="radio" class="custom-control-input white-feild" id="customradio1_a" name="private-user">
-                        <label class="custom-control-label" for="customradio1_a">I'm a private advertiser</label>
-                    </li>
-                </ul>
-                <ul class="custom-control custom-radio search-type white-radio">
-                    <li>
-                        <input type="radio" class="custom-control-input white-feild" id="customradio1_b" name="private-user">
-                        <label class="custom-control-label" for="customradio1_b">Save Changes</label>
-                    </li>
-                </ul>
-            </div>
-            <div class="mt10"><label>Business category</label></div>
-            <div>
-                <select>
-                    <option value="For Sale">For Sale</option>
-                    <option value="Motors">Motors</option>
-                    <option value="Jobs">Jobs</option>
-                    <option value="Services">Services</option>
-                    <option value="Property">Property</option>
-                    <option value="Animals">Animals</option>
-                    <option value="Community">Community</option>
-                    <option value="Adult">Adult</option>
-                </select>
-            </div>
-            <div class="mt20"><label>Profile level:</label>&nbsp;&nbsp;<span>Get Free Shop</span></div>
-            <div class="mt10"><label>Monthly cost:</label>&nbsp;&nbsp;<span>£0</span></div>
-            <div class="mt20">
-                <button class="secondary-btn-1 btn btn-block mb0" name="save_paypal_changes" id="save_paypal_changes" type="button">Save changes</button>
-            </div>
-        </div>
-        {{ form_start(userAccountProfileForm, {'attr': {'novalidate': 'novalidate'}}) }}
-            {{ include('FaUserBundle:MyAccount:myAccountMessage.html.twig', {'msgName': 'user_account_profile_success'}) }}
-            <div class="white-radio user-type label-inline">
-              {{ form_row(userAccountProfileForm.user_roles, {'attr': {'field-help': true}}) }}
-            </div>
-            <div class="business_seller_fields myacc-bz-category white-select" style="display:none;">
-                {{ form_row(userAccountProfileForm.business_category_id, {'attr': {'class':'fa-select-white'}}) }}
-            </div>
-            {% if shopPackageDetail is not null %}
-                <ul class="myacc-profile-dtl">
-                    <li><label>{{ 'Profile level'|trans({}, 'frontend-user-account-profile') }}:</label>{{ (shopPackageDetail.getPackage() ? shopPackageDetail.getPackage().getTitle() : '-' ) }}</li>
-                    {% if not shopPackageDetail.getPackage().getPrice() or (shopPackageDetail.getPackage().getPrice() and shopPackageDetail.getRemark() != 'choose-package-backend') %}
-                        <li><label>{{ 'Monthly cost'|trans({}, 'frontend-user-account-profile') }}:</label>{{ (shopPackageDetail.getPackage() ? format_currency(shopPackageDetail.getPackage().getPrice()) : '-' ) }}</li>
-                        {% if shopPackageDetail.getExpiresAt() and shopPackageDetail.getPayment() %}
-                            <li><label>{{ 'Next payment due'|trans({}, 'frontend-user-account-profile') }}:</label>{{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [userPackageRepository.getNextPaymentDueDateFromExpiresAt(shopPackageDetail.getExpiresAt(), container), container, null, null, 'd MMM YYYY']) }}</li>
-                        {% elseif shopPackageDetail.getExpiresAt() and not shopPackageDetail.getPayment() %}
-                            <li><label>{{ 'You have cancelled your upgraded profile package and will be converted to a basic profile at the end of the current subscription period on %expires-at%.'|trans({'%expires-at%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [shopPackageDetail.getExpiresAt(), container, null, null, 'd MMM YYYY'])}, 'frontend-user-account-profile') }}</label></li>
-                        {% endif %}
-                        {% if shopPackageDetail.getPayment() and  paymentTokens|length %}
-                            <li><label>{{ 'Payment source'|trans({}, 'frontend-user-account-profile') }}:</label></li>
-                        {% endif %}
-                    {% endif %}
-                </ul>
-            {% endif %}
-            <div class="saved-payment-sources white-radio">
+            {{ form_start(userAccountProfileForm, {'attr': {'novalidate': 'novalidate'}}) }}
+                {{ include('FaUserBundle:MyAccount:myAccountMessage.html.twig', {'msgName': 'user_account_profile_success'}) }}
+
+                {{ form_label(userAccountProfileForm.user_roles) }}
+                <div class="label-inline">
+                    {% for userRoles in userAccountProfileForm.user_roles %}
+                        <ul class="custom-control custom-radio search-type white-radio">
+                            <li>
+                                {{ form_row(userRoles) }}
+{#                                <input type="radio" class="custom-control-input white-feild" id="customradio1_a" name="private-user">#}
+{#                                <label class="custom-control-label" for="customradio1_a">I'm a private advertiser</label>#}
+                            </li>
+                        </ul>
+                    {% endfor %}
+                </div>
+                <div class="mt10">
+                    {{ form_label(userAccountProfileForm.business_category_id) }}
+                </div>
+                <div>
+                    {{ form_widget(userAccountProfileForm.business_category_id) }}
+                </div>
                 {% if shopPackageDetail is not null and shopPackageDetail.getPayment() and  paymentTokens|length %}
                     {% set paymentValue = array_unserialize(shopPackageDetail.getPayment().getValue()) %}
                     {% set paymentSource = null %}
@@ -94,40 +56,57 @@
                         {% endfor %}
                     </ul>
                 {% endif %}
+
+
                 {% if userAccountProfileForm.payment_source is defined %}
                     {% do attribute(userAccountProfileForm, 'payment_source').setRendered %}
                 {% endif %}
-
-                <div class="mt20 myacc-details">
-                    {{ form_widget(userAccountProfileForm.save_profile_changes, {'attr': {'class':'secondary-btn-1 button expand'}}) }}
+                {% if shopPackageDetail is not null %}
+                    <div class="mt20">
+                        <label>{{ 'Profile level'|trans({}, 'frontend-user-account-profile') }}:</label>&nbsp;&nbsp;<span>{{ (shopPackageDetail.getPackage() ? shopPackageDetail.getPackage().getTitle() : '-' ) }}</span>
+                    </div>
+                    {% if not shopPackageDetail.getPackage().getPrice() or (shopPackageDetail.getPackage().getPrice() and shopPackageDetail.getRemark() != 'choose-package-backend') %}
+                        <div class="mt10"><label>{{ 'Monthly cost'|trans({}, 'frontend-user-account-profile') }}:</label><span>{{ (shopPackageDetail.getPackage() ? format_currency(shopPackageDetail.getPackage().getPrice()) : '-' ) }}</span></div>
+                        {% if shopPackageDetail.getExpiresAt() and shopPackageDetail.getPayment() %}
+                            <div class="mt10"><label>{{ 'Next payment due'|trans({}, 'frontend-user-account-profile') }}:</label><span>{{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [userPackageRepository.getNextPaymentDueDateFromExpiresAt(shopPackageDetail.getExpiresAt(), container), container, null, null, 'd MMM YYYY']) }}</span></div>
+                        {% elseif shopPackageDetail.getExpiresAt() and not shopPackageDetail.getPayment() %}
+                            <div class="mt10"><label>{{ 'You have cancelled your upgraded profile package and will be converted to a basic profile at the end of the current subscription period on %expires-at%.'|trans({'%expires-at%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [shopPackageDetail.getExpiresAt(), container, null, null, 'd MMM YYYY'])}, 'frontend-user-account-profile') }}</label></div>
+                        {% endif %}
+                        {% if shopPackageDetail.getPayment() and  paymentTokens|length %}
+                            <div class="mt10"><label>{{ 'Payment source'|trans({}, 'frontend-user-account-profile') }}:</label></div>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+                <div class="mt20">
+                    {{ form_widget(userAccountProfileForm.save_profile_changes, {'attr': {'class':'secondary-btn-1 btn btn-block mb0'}}) }}
                     {% if shopPackageDetail is not null and shopPackageDetail.getPayment() and  paymentTokens|length %}
                         <a href="javascript:void(0);" data-reveal-id="myAccountProfileCancelSubscriptionModal">{{ 'Cancel subscription'|trans({}, 'frontend-user-account-profile') }}</a>
                     {% endif %}
                 </div>
-            </div>
-            <div id="myAccountProfileCancelSubscriptionModal" class="reveal-modal tiny" data-reveal>
-                <a class="close-reveal-modal">&#215;</a>
-                <h5 class="modal-title">
-                    {{'Cancel subscription?'|trans({}, 'frontend-user-account-profile')}}
-                </h5>
-                <div class="modal-content remove-modal">
-                    <div class="row">
-                        <div class="columns">
-                            <h5>{{'Are you sure you want to cancel your upgraded profile package?'|trans({}, 'frontend-user-account-profile')}}</h5>
-                        </div>
+            {{ form_end(userAccountProfileForm) }}
+        </div>
+        <div class="modal custom-modal" id="myAccountProfileCancelSubscriptionModal">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title save-search-title">{{'Cancel subscription?'|trans({}, 'frontend-user-account-profile')}}</h5>
+                        <button class="close-modal" class="close" data-dismiss="modal">×</button>
                     </div>
-                    <div class="mt20">
-                        <div class="row">
-                            <div class="columns large-12">
-                                <button type="button" class="button secondary-btn-4 thin-btn expand  mb0" onclick="javascript:closeRevealModel('#myAccountProfileCancelSubscriptionModal');">{{'Cancel'|trans({}, 'frontend-user-account-profile')}}</button>
-                            </div>
-                            <div class="columns large-12">
-                                <button type="button" class="button secondary-btn-1 thin-btn expand  mb0" onclick="closeRevealModel('#myAccountProfileCancelSubscriptionModal');window.location.href='{{ path('my_account_cancel_subscription') }}'">{{'Ok'|trans({}, 'frontend-user-account-profile')}}</button>
+                    <div class="modal-body">
+                        <h5>{{'Are you sure you want to cancel your upgraded profile package?'|trans({}, 'frontend-user-account-profile')}}</h5>
+                        <div class="mt20">
+                            <div class="row">
+                                <div class="columns large-12">
+                                    <button type="button" class="button secondary-btn-4 thin-btn expand  mb0" onclick="javascript:closeRevealModel('#myAccountProfileCancelSubscriptionModal');">{{'Cancel'|trans({}, 'frontend-user-account-profile')}}</button>
+                                </div>
+                                <div class="columns large-12">
+                                    <button type="button" class="button secondary-btn-1 thin-btn expand  mb0" onclick="closeRevealModel('#myAccountProfileCancelSubscriptionModal');window.location.href='{{ path('my_account_cancel_subscription') }}'">{{'Ok'|trans({}, 'frontend-user-account-profile')}}</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        {{ form_end(userAccountProfileForm) }}
+        </div>
     </div>
 </div>
