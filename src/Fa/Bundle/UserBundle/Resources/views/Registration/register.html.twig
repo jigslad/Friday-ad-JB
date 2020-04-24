@@ -6,9 +6,9 @@
 {% else  %}
     {% set userId = tempUserId %}
 {% endif %}
-{# {% use "\\App\\Entity\\User\\UserImage/showProfileImageUploader.html.twig" %} #}
+{% use "FaUserBundle:UserImage:showProfileImageUploader.html.twig" %}
 {% block scripttop %}
-    {# { block('profileImageUploadStylesheets') } #}
+    {{ block('profileImageUploadStylesheets') }}
     {{ set_variables('profileImageUploadStylesheets', {'loaded':'true'}) }}
 {% endblock %}
 {% set getProfileBigImageRoute = "ajax_get_profile_big_image_registration" %}
@@ -80,13 +80,9 @@
                 </div>
                 {% if form.password is defined %}
                 <div class="mb10">
-                    <div class="label-inline">
-                        <ul class="custom-control custom-checkbox search-type crawlable-checkbox">
-                            <li>                               
-                                {{ form_widget(form.show_password, {'attr': {'class': 'custom-control-input'}}) }}
-                                {{ form_label(form.show_password, null, {'label_attr': {'class': 'custom-control-label'}}) }}
-                            </li>
-                        </ul>              
+                    <div class="label-inline white-check">
+                        {{ form_widget(form.show_password, {'attr': {'class': 'checkbox'}}) }}
+                        <label for="{{ form.contact_through_phone.vars.id }}"></label>Show password                                      
                     </div>
                 </div>
                 {% endif %}
@@ -99,7 +95,7 @@
                     <div class="label-inline d-inline-flex">
                         <div class="white-check">
                         	{{ form_widget(form.contact_through_phone, {'attr': {'class': 'checkbox'}}) }}
-                        	<label for="{{ form.contact_through_phone.vars.id }}"></label>Contact through phone                                                                                    
+                        	<label for="{{ form.contact_through_phone.vars.id }}"></label>Contact by phone                                                                                    
                         </div>
                         <div class="white-check">
                         	{{ form_widget(form.contact_through_email, {'attr': {'class': 'checkbox'}}) }}
@@ -118,14 +114,16 @@
                        {% set logoLabel = businessLogoLabel %}
                     {% endif %}
                     <div><label>{{ logoLabel }}:</label></div>
-
+					 <div id="logo_uploader_div">
+                        {{ include('FaUserBundle:UserImage:registrationImageUploader.html.twig', {'userId': userId, 'isCompany': isCompany, 'profileImage': ''}) }}
+                      </div>
                     <div class="d-inline-flex mb20">
                         <div class="profile-logo-img">
                             <div class="bz-profile-logo {% if isCompany == 0 %} rounded{% endif %}" id="profile_image_div"></div>
                         </div>
                         <div class="profile-logo-ins private-profile reg-profile-btn {% if isCompany == 1 %}bz-profile-btn{% endif %}">
                             <div id="profile_change_btn_with_opt" {% if logoUploaded == 0 %}style="display:none;"{% endif %}>
-                                <a href="javascript:void(0);" data-dropdown="profile_image_upload" aria-controls="profile_image_upload" aria-expanded="false" class="primary-btn-2 button dropdown thin-btn">{{'Upload image'|trans({}, 'frontend-my-profile')}}</a><br />
+                                <a href="javascript:void(0);" data-dropdown="profile_image_upload" aria-controls="profile_image_upload" aria-expanded="false" class="secondary-btn-1 btn dropdown thin-btn">{{'Upload image'|trans({}, 'frontend-my-profile')}}</a><br />
                                 <ul id="profile_image_upload" data-dropdown-content class="f-dropdown" aria-hidden="true">
                                     <li><a href="javascript:void(0)" class="pickProfileFile needsclick" id="pickProfileFile">{{'Upload profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
                                     <li><a href="javascript:getProfileBigImage('{{ path(getProfileBigImageRoute, {'userId': userId, 'isCompany': isCompany}) }}')">{{'Edit profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
@@ -189,21 +187,28 @@
             </div>
         </div>
 </section>
-<div id="privacyNumberModal" class="reveal-modal" data-reveal style="display:none">
-    {% set privacyNumberBlock = staticPageRepository.getStaticBlockDetailArray('privacy-number-block', fetch_container_instance()) %}
-    <a class="close-reveal-modal">&#215;</a>
-    {% if privacyNumberBlock['title'] is defined %}
-        <h5 class="modal-title">{{privacyNumberBlock['title']}}</h5>
-    {% endif %}
-    <div class="modal-content">
-        {{privacyNumberBlock['description']|raw}}
-    </div>
+<div id="privacyNumberModal" class="modal custom-modal" style="display:none">
+     {% set privacyNumberBlock = staticPageRepository.getStaticBlockDetailArray('privacy-number-block', fetch_container_instance()) %}
+    <div class="modal-dialog"><div class="modal-content">
+		<div class="modal-header">
+			{% if privacyNumberBlock['title'] is defined %}
+			<h5 class="modal-title save-search-title no-icon-title">{{privacyNumberBlock['title']}}</h5>
+			{% endif %}
+		    <button class="close-modal" class="close" data-dismiss="modal">×</button>
+		</div>
+        <div class="modal-body">
+            {{privacyNumberBlock['description']|raw}}
+       </div>
+    </div></div>
 </div>
-<div id="cropProfileImageModal" class="reveal-modal small" data-reveal></div>
+<div id="cropProfileImageModal" class="modal custom-modal small"></div>
 {% endblock %}
 
 {% block scriptbottom %}
 {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+<script type="text/javascript" src="{{ asset('/bundles/facore/js/plupload.full.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('/bundles/fafrontend/js/jquery.Jcrop.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('/bundles/facore/js/jquery.ui.touch-punch.min.js') }}"></script>
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     $(document).ready(function(){
@@ -350,7 +355,7 @@
         } else {
           $('#profile_image_div').html(response.privateUserLogo);
         }
-        $('#profile_image_upload').foundation('dropdown', 'close', $('#profile_image_upload'));
+        $('#profile_image_upload').modal('hide');
         $('#profile_change_btn_with_opt').hide();
         $('#profile_change_btn_without_opt').show();
         $('#filelist').html('');

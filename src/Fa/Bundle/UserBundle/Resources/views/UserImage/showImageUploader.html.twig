@@ -26,12 +26,8 @@
         {% set userId    = (variables.userId is defined ? variables.userId : 0) %}
         {% set isCompany = (variables.isCompany is defined ? variables.isCompany : false) %}
         {% set maxFileSize = (isCompany ? container.getParameter("fa.company.allow_size_in_mb")~' mb' : container.getParameter("fa.user.allow_size_in_mb")~' mb') %}
-        {% javascripts filter='uglifyjs2' output='bundles/js/compiled/userShowImageUploader.js'
-            'bundles/facore/js/plupload.full.min.js'
-            'bundles/fafrontend/js/vendor/jquery-ui.min.js'
-        %}
-        <script src="{{ static_asset_url(asset_url) }}"></script>
-        {% endjavascripts %}
+        <script type="text/javascript" src="{{ asset('/bundles/facore/js/plupload.full.min.js') }}"></script>
+        
         <script language="javascript" type="text/javascript">
         //<![CDATA[
         $(document).ready(function(){

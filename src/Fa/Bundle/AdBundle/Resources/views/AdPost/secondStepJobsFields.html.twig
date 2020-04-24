@@ -26,9 +26,9 @@
             </div>
         {% elseif field == 'contract_type_id' %}
             <div class="paa-bdr-box">
-                <h3 class="text-center">{{ attribute(form, field).vars.label }}<br><span style="font-family: 'Asap',sans-serif;font-size: 14px;color: #4a4a4a;">({{ 'Select at least one'|trans({}, 'frontend-paa-second-step') }})</span></h3>
+                <h3 class="text-center">{{ attribute(form, field).vars.label }}<br><span style="font-size: 14px;">({{ 'Select at least one'|trans({}, 'frontend-paa-second-step') }})</span></h3>
 
-                <ul class="paa-features clearfix fa-equalizer" id="{{ field }}_equalizer">
+                <ul class="paa-features clearfix" id="{{ field }}_equalizer">
                     {% set selectedValues = attribute(form, field).vars.data %}
 
                     {% for child in attribute(form, field) %}
@@ -36,9 +36,9 @@
                         {% if child.vars.value in selectedValues %}
                             {% set activeClass = 'active' %}
                         {% endif %}
-                        <li class="{{ activeClass }}">
-                            {{ form_widget(child) }}
-                            <label for="{{ child.vars.id }}">{{ child.vars.label }}</label>
+                        <li class="grey-check {{ activeClass }}">
+                            {{ form_widget(child, {'attr': {'class': 'checkbox'}}) }}
+                            <label for="{{ child.vars.id }}"></label>{{ child.vars.label }}
                         </li>
                     
                     {% endfor %}

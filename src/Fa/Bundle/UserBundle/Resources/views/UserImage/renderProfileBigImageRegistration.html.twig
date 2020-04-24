@@ -1,33 +1,38 @@
-<a class="close-reveal-modal">&#215;</a>
-<h5 class="modal-title">
-    {% if isCompany %}
-        {{'Crop logo image'|trans({}, 'frontend-my-profile')}}
-    {% else %}
-        {{'Crop profile image'|trans({}, 'frontend-my-profile')}}
-    {% endif %}
-</h5>
-<div class="modal-content">
-    <div class="text-center">{{'Resize your image and drag to reposition'|trans({}, 'frontend-my-profile')}}</div>
-    <div class="crop-prof-img-main">
-        <div class="crop-prof-img"><img src="{{ imageUrl }}" id="profile_image_crop" /></div>
-
-        <div class="clearfix">
-            <span class="zoom-minus text-left">-</span>
-            <div id="zoom_div"></div>
-            <span class="zoom-plus text-right">+</span>
-        </div>
-
-        <div class="clearfix">
-            <input type="hidden" class="cropProfileImg" id="profile_crop_x" name="profile_crop_x" />
-            <input type="hidden" class="cropProfileImg" id="profile_crop_y" name="profile_crop_y" />
-            <input type="hidden" class="cropProfileImg" id="profile_crop_w" name="profile_crop_w" />
-            <input type="hidden" class="cropProfileImg" id="profile_crop_h" name="profile_crop_h" />
-            <input type="hidden" class="cropProfileImg" id="profile_crop_real_w" name="profile_crop_real_w" />
-            <input type="hidden" class="cropProfileImg" id="profile_crop_real_h" name="profile_crop_real_h" />
-            <button type="button" class="button secondary-btn-4 thin-btn expand mb0 left" onclick="javascript:closeRevealModel('#cropProfileImageModal');" id="cancelCropProfileImage" style="display:none" >{{'Cancel'|trans({}, 'frontend-my-profile')}}</button>
-            <button type="button" class="button secondary-btn-1 thin-btn expand mb0 right" id="cropProfileImage" onclick="return cropProfileImage();" style="display:none">{{'Apply'|trans({}, 'frontend-my-profile')}}</button>
-        </div>
-    </div>
+<div class="modal-dialog"><div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title save-search-title no-icon-title">
+				{% if isCompany %}
+                    {{'Crop logo image'|trans({}, 'frontend-my-profile')}}
+                {% else %}
+                    {{'Crop profile image'|trans({}, 'frontend-my-profile')}}
+                {% endif %}
+			</h5>
+		    <button class="close-modal" class="close" data-dismiss="modal">×</button>
+		</div>
+        <div class="modal-body">
+            <div class="text-center">{{'Resize your image and drag to reposition'|trans({}, 'frontend-my-profile')}}</div>
+            <div class="crop-prof-img-main">
+                <div class="crop-prof-img"><img src="{{ imageUrl }}" id="profile_image_crop" /></div>
+        
+                <div class="clearfix">
+                    <span class="zoom-minus text-left">-</span>
+                    <div id="zoom_div"></div>
+                    <span class="zoom-plus text-right">+</span>
+                </div>
+        
+                <div class="clearfix">
+                    <input type="hidden" class="cropProfileImg" id="profile_crop_x" name="profile_crop_x" />
+                    <input type="hidden" class="cropProfileImg" id="profile_crop_y" name="profile_crop_y" />
+                    <input type="hidden" class="cropProfileImg" id="profile_crop_w" name="profile_crop_w" />
+                    <input type="hidden" class="cropProfileImg" id="profile_crop_h" name="profile_crop_h" />
+                    <input type="hidden" class="cropProfileImg" id="profile_crop_real_w" name="profile_crop_real_w" />
+                    <input type="hidden" class="cropProfileImg" id="profile_crop_real_h" name="profile_crop_real_h" />
+                    <button type="button" class="button secondary-btn-4 thin-btn expand mb0 left" onclick="javascript:closeRevealModel('#cropProfileImageModal');" id="cancelCropProfileImage" style="display:none" >{{'Cancel'|trans({}, 'frontend-my-profile')}}</button>
+                    <button type="button" class="button secondary-btn-1 thin-btn expand mb0 right" id="cropProfileImage" onclick="return cropProfileImage();" style="display:none">{{'Apply'|trans({}, 'frontend-my-profile')}}</button>
+                </div>
+            </div>
+         </div>
+      </div>
 </div>
 <script language="javascript" type="text/javascript">
 //<![CDATA[
