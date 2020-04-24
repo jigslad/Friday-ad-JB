@@ -44,32 +44,36 @@
                             {{ include('FaAdBundle:AdPost:fourthStepAdultFields.html.twig') }}
                             <div class="small-wrapper">
                                 {{ form_widget(form.preview, {'attr': {'class':'secondary-btn-2 expand'}}) }}
-                                {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand'}}) }}
+                                {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 btn btn-block next-btn mt20'}}) }}
                             </div>
                         {{ form_end(form) }}
                     {% endif %}
                 </div>
                     {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {'paaBlockSlug': 'paa-adult-fourth-step', 'hideRightSideTxt': hideRightSideTxt}) }}
 
-                    <div id="change_category_for_adult_reveal_modal" class="reveal-modal tiny" data-reveal>
-                        <a class="close-reveal-modal">&#215;</a>
-                        <h5 class="modal-title">
-                            {{'Placing a male escort ad?'|trans({}, 'frontend-invalid-location')}}
-                        </h5>
-                        <div class="modal-content remove-modal">
-                            <div class="row">
-                                <div class="columns">
-                                    {{ "We have a dedicated category for male escorts. Click below to change the category of your ad to 'Gay Male Escorts'"|trans({}, 'frontend-invalid-location') }}<br /><br />
-                                </div>
-                            </div>
-
-                            <div class="invalid-loc-btns">
-                                <div class="row">
-                                    <div class="large-24 columns text-center">
-                                        <button type="button" class="button secondary-btn-1"  onclick='changeCategoryForAdult();'>{{'Change Category'|trans({}, 'frontend-invalid-location')}}</button>
+                    <div id="change_category_for_adult_reveal_modal" class="modal custom-modal tiny" data-reveal>
+                        <div class="modal-dialog">
+                		    <div class="modal-content">
+                		      	<div class="modal-header">
+                		        	<h5 class="modal-title save-search-title no-icon-title"> {{'Placing a male escort ad?'|trans({}, 'frontend-invalid-location')}}</h5>
+                		        	<button class="close-modal" class="close" data-dismiss="modal">×</button>
+                		      	</div>
+                		      	<div class="modal-body">
+                		      		<div class="container">
+                                        <div class="row">
+                                            {{ "We have a dedicated category for male escorts. Click below to change the category of your ad to 'Gay Male Escorts'"|trans({}, 'frontend-invalid-location') }}<br /><br />
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
+        
+                                    <div class="invalid-loc-btns">
+                                        <div class="row">
+                                            <div class="col-lg-24 col-md-24 text-center">
+                                                <button type="button" class="button secondary-btn-1"  onclick='changeCategoryForAdult();'>{{'Change Category'|trans({}, 'frontend-invalid-location')}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                		      	</div>
+                             </div>
                         </div>
                     </div>
             </div>

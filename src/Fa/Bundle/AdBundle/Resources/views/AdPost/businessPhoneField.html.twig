@@ -5,11 +5,11 @@
         <div class="paa-bdr-box" id="element_{{ field }}">
             {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
             {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-            <div class="collapse collapse-body-content" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+            <div class="collapse collapse-body-content" id="element_toggle_{{ field }}">
                 <div class="paa-title-ins">
                     {{ 'As a business user you can set a specific phone number for only this ad.'|trans({}, 'frontend-paa-fourth-step') }}
                 </div>
-                <div class="small-wrapper">
+                <div class="small-wrapper grey-color">
                     {{ form_widget(attribute(form, field)) }}
                     {{ form_errors(attribute(form, field)) }}
                 </div>

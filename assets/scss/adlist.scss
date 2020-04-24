@@ -374,6 +374,7 @@
 .listing {
   .media-left img {
     width: 185px;
+    object-fit: scale-down;
   }
   .media-body {
     margin-left: 20px;
@@ -423,6 +424,7 @@
     img {
       max-width: 184px;
       max-height: 138px;
+      object-fit: scale-down;
     }
   }
   .list-img-num {
@@ -462,7 +464,7 @@
     padding: 0px;
     font-family: $font-family-secondary;
     font-size: 18px;
-    font-weight: 400;
+    font-weight: 600;
     color: $dark-gray;
   }
   .list-price {
@@ -504,9 +506,10 @@
   }
   .list-distance {
     font-size: 12px;
-    margin: 20px 0 0 0;
-    position: relative;
-    bottom: 0;
+    margin: 5px 0 0;
+    width: 547px;
+    position: absolute;
+    bottom: 19px;
   }
   .list-miles {
     float: left;

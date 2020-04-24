@@ -201,7 +201,7 @@ input.checkbox {
 .grey-radio, .white-radio, .grey-check, .white-check { font-size:13px !important; color: #a4a4a4 !important; }
 
 .select2-container { width: 100% !important; }
-.gray-select .select2-container--default .select2-selection--single {
+.grey-select .select2-container--default .select2-selection--single {
 	background: #EAEFF0 !important;
 }
 .white-select .select2-container--default .select2-selection--single {
@@ -446,6 +446,38 @@ input.checkbox {
     outline: 0;
     background:url("data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjlweCIgaGVpZ2h0PSI5cHgiIHZpZXdCb3g9Ii0xIC0xIDkgOSIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAtMSAtMSA5IDkiIHhtbDpzcGFjZT0icHJlc2VydmUiPjxwb2x5Z29uIHBvaW50cz0iNy41LDAuOTU1IDYuMDQ2LC0wLjUgMy41LDIuMDQ1IDAuOTU1LC0wLjUgLTAuNSwwLjk1NSAyLjA0NSwzLjUgLTAuNSw2LjA0NCAwLjk1NSw3LjUgMy41LDQuOTU0IDYuMDQ2LDcuNSA3LjUsNi4wNDQgNC45NTQsMy41ICIvPjwvc3ZnPg==") 50% 50% no-repeat !important;
     opacity: .5;
+}
+
+
+ul.pagination li a, ul.pagination li button {
+    background: #fbfbfb;
+    border: 1px solid #e3e3e3;
+    color: #ACB0B7;
+    font-size: 16px;
+    min-width: 40px;
+    padding: 0 4px;
+    height: 40px;
+    line-height: 38px;
+    border-radius: 0;
+    display: inline-block;
+    margin-left: -1px;
+}
+ul.pagination li.current a, ul.pagination li.current button {
+    font-weight: bold;
+    cursor: default;
+    color: #212527;
+    background: #fff;
+}
+ul.pagination li.pager-prev a, ul.pagination li.pager-prev.unavailable a {
+    color: transparent;
+    background: #EAEFF0 url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2213%22%20height%3D%2212%22%20viewBox%3D%220%200%2013%2012%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3Anone%3Bstroke%3A%23ACB0B7%3Bstroke-width%3A2%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Edouble%20arrow%20previous%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-498.000000%2C%20-506.000000%29%22%3E%3Cg%20transform%3D%22translate%28486.000000%2C%20396.000000%29%22%3E%3Cg%20transform%3D%22translate%280.000000%2C%2096.000000%29%22%3E%3Cg%20transform%3D%22translate%2812.000000%2C%2015.000000%29%22%3E%3Cg%20transform%3D%22translate%289.500000%2C%205.000000%29%20scale%28-1%2C%201%29%20translate%28-9.500000%2C%20-5.000000%29%20translate%287.000000%2C%200.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M0%200l4%205%20-4%205%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%282.500000%2C%205.000000%29%20scale%28-1%2C%201%29%20translate%28-2.500000%2C%20-5.000000%29%20%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M0%200l4%205%20-4%205%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat center center;
+}
+ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {
+    color: transparent;
+    background: #EAEFF0 url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2214%22%20height%3D%2212%22%20viewBox%3D%220%200%2014%2012%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3Anone%3Bstroke%3A%23ACB0B7%3Bstroke-width%3A2%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Edouble%20arrow%20next%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-928.000000%2C%20-506.000000%29%22%3E%3Cg%20transform%3D%22translate%28486.000000%2C%20396.000000%29%22%3E%3Cg%20transform%3D%22translate%2896.000000%2C%200.000000%29%22%3E%3Cg%20transform%3D%22translate%28347.000000%2C%20111.000000%29%22%3E%3Cg%20transform%3D%22translate%288.000000%2C%200.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M0%200l4%205%20-4%205%22/%3E%3C/g%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M0%200l4%205%20-4%205%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat center center;
+}
+ul.pagination li.pager-prev:hover a, ul.pagination li.pager-next:hover a {
+    background-color: #e3e3e3 !important;
 }
 
 

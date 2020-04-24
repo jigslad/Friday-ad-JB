@@ -181,7 +181,7 @@
         .done(function(response) {
             if (response.htmlContent.length) {
                 $('#savedSearchAgentModal').html(response.htmlContent);
-                $('#savedSearchAgentModal').foundation('reveal', 'open');
+                $('#savedSearchAgentModal').modal('show');
                 scrollToElement("#savedSearchAgentModal");
             }
             if (response.error.length) {
@@ -294,7 +294,7 @@
     function removeSavedSearchConfirmation(savedSearchId)
     {
         savedSearchIdToRemove = savedSearchId;
-        $('#removeSavedSearch').foundation('reveal', 'open');
+        $('#removeSavedSearch').modal('show');
     }
 
     function removeSavedSearch()
