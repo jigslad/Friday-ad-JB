@@ -57,296 +57,307 @@
                                     <a href="javascript:void(0)" class="close">&times;</a>
                                 </div>
                             {% endif %}
-                            <h1 class="s-h1 db-title mt30 mb20">{{'Business profile'|trans({}, 'frontend-my-profile')}}</h1>
-                            <div class="row bz-profile-title">
-                                <div class="large-12 columns">
-                                    <h2 class="db-sub-title">
-                                        {{'You currently have <b>%package_name%.</b>'|trans({'%package_name%': (activeShopPackage and activeShopPackage.getPackage() ? activeShopPackage.getPackage().getTitle() : 'no package')}, 'frontend-my-profile')|raw}}
-                                        {% if showUpgradeBtn %}
-                                            <br />
-                                            {{'Get more visitors by upgrading!'|trans({}, 'frontend-my-profile')}}
-                                        {% endif %}
-                                    </h2>
-                                </div>
+                            <div class="mb40">
+                                <h1 class="s-h1 db-title mt30 mb20">{{'Business profile'|trans({}, 'frontend-my-profile')}}</h1>
+                                <h2 class="s-h2 d-none d-md-block">
+                                    {{'You currently have <b>%package_name%.</b>'|trans({'%package_name%': (activeShopPackage and activeShopPackage.getPackage() ? activeShopPackage.getPackage().getTitle() : 'no package')}, 'frontend-my-profile')|raw}}
+                                    {% if showUpgradeBtn %}
+                                        <br />
+                                        {{'Get more visitors by upgrading!'|trans({}, 'frontend-my-profile')}}
+                                    {% endif %}
+                                </h2>
+                            </div>
+                            <div class="row">
                                 {% if showUpgradeBtn %}
-                                    <div class="large-12 columns text-right">
+                                    <div class="col-md-12 d-right-col">
                                         <a href="{{ path('user_package_choose_profile', {'from': 'profile'}) }}" class="primary-btn-1 button thin-btn upgrade-profile-btn">{{'Upgrade your profile now!'|trans({}, 'frontend-my-profile')}}</a>
                                     </div>
                                 {% endif %}
                             </div>
-                            <div class="db-content">
-                                <div class="db-section">
-                                    <dl class="accordion" data-accordion>
-                                        <dd class="accordion-navigation {% if not form.vars.valid or app.session.flashbag.has('profile_success') %}active{% endif %}">
-                                            <a href="#panel1b" class="section-head">
-                                                <span class="profile-icon">{{'Basic info'|trans({}, 'frontend-my-profile')}}</span>
-                                                <span>&nbsp;</span>
-                                            </a>
-                                            <div id="panel1b" class="content {% if not form.vars.valid or app.session.flashbag.has('profile_success') %}active{% endif %}">
-                                                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-                                                    {{ include('FaUserBundle:MyAccount:myAccountMessage.html.twig', {'msgName': 'profile_success'}) }}
-                                                    <div class="bz-profile-fields">
-                                                        {{ form_label(form.user.first_name) }}<span class="db-ins">{{'(not displayed publicly for business users)'|trans({}, 'frontend-my-profile')}}</span>
-                                                        {{ form_widget(form.user.first_name, {'attr': {'class': 'white-field field-300'}}) }}
-                                                        {{ form_errors(form.user.first_name) }}
+                            <div class="db-section">
+                                <div class="db-list {% if not form.vars.valid or app.session.flashbag.has('profile_success') %}active{% endif %}">
+                                    <a href="#panel1b" class="panel-heading collapsed" data-toggle="collapse" data-target="#panel1b">
+                                        <div class="media section-head">
+                                            <div class="media-body">
+                                                <span class="your-details-icon list-icon-text">{{'Basic info'|trans({}, 'frontend-my-profile')}}</span>
+                                            </div>
+                                            <div class="arrow-block">
+                                                <i class="fa fa-chevron-up"></i>
+                                                <i class="fa fa-chevron-down"></i>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div id="panel1b" class="collapse collapse-body-content {% if not form.vars.valid or app.session.flashbag.has('profile_success') %}active{% endif %}">
+                                        <div class="small-wrapper">
+                                            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                                                {{ include('FaUserBundle:MyAccount:myAccountMessage.html.twig', {'msgName': 'profile_success'}) }}
+                                                <div class="bz-profile-fields">
+                                                    {{ form_label(form.user.first_name) }}<span class="db-ins">{{'(not displayed publicly for business users)'|trans({}, 'frontend-my-profile')}}</span>
+                                                    {{ form_widget(form.user.first_name, {'attr': {'class': 'white-field field-300'}}) }}
+                                                    {{ form_errors(form.user.first_name) }}
 
-                                                        {{ form_label(form.user.last_name) }}<span class="db-ins">{{'(not displayed publicly for business users)'|trans({}, 'frontend-my-profile')}}</span>
-                                                        {{ form_widget(form.user.last_name, {'attr': {'class': 'white-field field-300'}}) }}
-                                                        {{ form_errors(form.user.last_name) }}
+                                                    {{ form_label(form.user.last_name) }}<span class="db-ins">{{'(not displayed publicly for business users)'|trans({}, 'frontend-my-profile')}}</span>
+                                                    {{ form_widget(form.user.last_name, {'attr': {'class': 'white-field field-300'}}) }}
+                                                    {{ form_errors(form.user.last_name) }}
 
-                                                        {{ form_label(form.user.business_name) }}
-                                                        {{ form_widget(form.user.business_name, {'attr': {'class': 'white-field field-300'}}) }}
-                                                        {{ form_errors(form.user.business_name) }}
+                                                    {{ form_label(form.user.business_name) }}
+                                                    {{ form_widget(form.user.business_name, {'attr': {'class': 'white-field field-300'}}) }}
+                                                    {{ form_errors(form.user.business_name) }}
 
-                                                        <label>{{'Logo image'|trans({}, 'frontend-my-profile')}}</label>
-                                                        {{ set_variables('profileImageUploadStylesheets', {'loaded':'false'}) }}
-                                                        {{ render(controller('FaUserBundle:UserImage:showProfileImageUploader', {'userId': app.user.getId(), 'isCompany': true})) }}
-                                                        {{ set_variables('profileImageUploadJavascriptBottom', {'loaded':'false'}) }}
-                                                        <div class="clearfix">
-                                                            {% set userCompanyLogo = null %}
-                                                            {% if userSiteObj %}
-                                                                {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), userSiteObj.getPath(), app.user.getId(), null, null, true, true, app.user.getStatus().getId(), app.user.getProfileName()]) %}
-                                                            {% endif %}
-                                                            <div class="profile-logo-img">
-                                                                <div class="bz-profile-logo" id="profile_image_div">
-                                                                    {% if userCompanyLogo %}
-                                                                        {{userCompanyLogo|raw}}
-                                                                    {% endif %}
-                                                                </div>
-                                                            </div>
-                                                            <div class="profile-logo-ins end corporate-profile">
-                                                                {{"Add a logo to your profile. It doesn't just look nice - buyers prefer to see who they are buying from when deciding what to buy."|trans({}, 'frontend-my-profile')}}<br />
-                                                                <div id="profile_change_btn_with_opt" {% if not userSiteObj.getPath() %}style="display:none;"{% endif %}>
-                                                                    <a href="javascript:void(0);" data-dropdown="profile_image_upload" aria-controls="profile_image_upload" aria-expanded="false" class="primary-btn-3 button thin-btn dropdown">{{'Change image'|trans({}, 'frontend-my-profile')}}</a><br />
-                                                                    <ul id="profile_image_upload" data-dropdown-content class="f-dropdown" aria-hidden="true">
-                                                                        <li><a href="javascript:void(0)" class="pickProfileFile needsclick" id="pickProfileFile">{{'Upload logo'|trans({}, 'frontend-my-profile')}}</a></li>
-                                                                        <li><a href="javascript:getProfileBigImage('{{ path(getProfileBigImageRoute, {'userId': app.user.getId(), 'isCompany': 1}) }}')">{{'Edit logo'|trans({}, 'frontend-my-profile')}}</a></li>
-                                                                        <li><a href="javascript:deleteImage('{{ path(deleteRoute, {'userId': app.user.getId(), 'isCompany': 1}) }}')">{{'Remove'|trans({}, 'frontend-my-profile')}}</a></li>
-                                                                    </ul>
-                                                                </div>
-                                                                <div id="profile_change_btn_without_opt" {% if userSiteObj.getPath() %}style="display:none;"{% endif %}>
-                                                                    <a href="javascript:void(0);" id="pickProfileFile1" class="primary-btn-3 button thin-btn dropdown pickProfileFile needsclick">{{'Change image'|trans({}, 'frontend-my-profile')}}</a><br />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="mt30">
-                                                            {{ form_label(form.company_welcome_message) }}<br class="hide-for-small-only" />
-                                                            {{'A short paragraph describing your business. You can go into details in the next field.'|trans({}, 'frontend-my-profile')}}
-                                                            <div class="field-530">
-                                                                {{ form_widget(form.company_welcome_message, {'attr': {'class': 'white-field mt10 mb0 textcounter'}}) }}
-                                                                <div class="clearfix">
-                                                                    <div class="left">
-                                                                        {{ form_errors(form.company_welcome_message) }}
-                                                                    </div>
-                                                                    <div class="profile-ins text-right" id="{{ attribute(form, 'company_welcome_message').vars.id }}_textcounter" ></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="mt30">
-                                                            {{ form_label(form.about_us) }}<br class="hide-for-small-only" />
-                                                            {{'Text us about your business here...'|trans({}, 'frontend-my-profile')}}
-                                                            <div class="field-530">
-                                                                {{ form_widget(form.about_us) }}
-                                                                <div class="clearfix">
-                                                                    <div class="left">
-                                                                        {{ form_errors(form.about_us) }}
-                                                                    </div>
-                                                                    <div class="profile-ins text-right" id="{{ attribute(form, 'about_us').vars.id }}_textcounter" ></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="mt30">
-                                                            {{ form_label(form.company_address) }}
-                                                            <div class="field-530 company-address">
-                                                                <span></span>
-                                                                {{ form_widget(form.company_address, {'attr': {'class': 'white-field', 'placeholder': 'eg. King House 101 Sunshine Road, Burgess Hill, West Sussesx, NH22 8LN'|trans({}, 'frontend-my-profile')}}) }}
-                                                                {{ form_errors(form.company_address) }}
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="mt30 profile-telephone">
-                                                            <label>{{'Telephone(s)'|trans({}, 'frontend-my-profile')}}</label>
-                                                            <div class="field-300 telephone-icon">
-                                                                <span></span>
-                                                                {{ form_widget(form.phone1, {'attr': {'class': 'white-field', 'placeholder': 'Telephone 1'|trans({}, 'frontend-my-profile')}}) }}
-                                                                {{ form_errors(form.phone1) }}
-                                                            </div>
-                                                            <div class="field-300 telephone-icon">
-                                                                <span></span>
-                                                                {{ form_widget(form.phone2, {'attr': {'class': 'white-field', 'placeholder': 'Telephone 2'|trans({}, 'frontend-my-profile')}}) }}
-                                                                {{ form_errors(form.phone2) }}
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="mt30">
-                                                            {{ form_label(form.website_link) }}
-                                                            <div class="field-530 company-website">
-                                                                <span></span>
-                                                                {{ form_widget(form.website_link, {'attr': {'class': 'white-field', 'placeholder': 'eg. https://www.yourwebsitename.co.uk'|trans({}, 'frontend-my-profile')}}) }}
-                                                                {{ form_errors(form.website_link) }}
-                                                            </div>
-                                                        </div>
-
-                                                        {% if activeShopPackage and activeShopPackage.getPackage() and (activeShopPackage.getPackage().getPrice() is null or activeShopPackage.getPackage().getPrice() <= 0) %}
-                                                            {{ form_label(form.location_autocomplete) }}
-                                                            {{ form_widget(form.location_autocomplete, {'attr': {'class': 'white-field field-300', 'placeholder': 'Postcode or Town'|trans({}, 'frontend-my-profile')}}) }}
-                                                            {{ form_errors(form.location_autocomplete) }}
+                                                    <label>{{'Logo image'|trans({}, 'frontend-my-profile')}}</label>
+                                                    {{ set_variables('profileImageUploadStylesheets', {'loaded':'false'}) }}
+                                                    {{ render(controller('FaUserBundle:UserImage:showProfileImageUploader', {'userId': app.user.getId(), 'isCompany': true})) }}
+                                                    {{ set_variables('profileImageUploadJavascriptBottom', {'loaded':'false'}) }}
+                                                    <div class="clearfix d-flex">
+                                                        {% set userCompanyLogo = null %}
+                                                        {% if userSiteObj %}
+                                                            {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), userSiteObj.getPath(), app.user.getId(), null, null, true, true, app.user.getStatus().getId(), app.user.getProfileName()]) %}
                                                         {% endif %}
-
-                                                        <div class="mt30 field-300">
-                                                            {{ form_widget(form.save_profile_changes, {'attr': {'class':'primary-btn-2 button expand mb0'}}) }}
+                                                        <div class="profile-logo-img">
+                                                            <div class="bz-profile-logo" id="profile_image_div">
+                                                                {% if userCompanyLogo %}
+                                                                    {{userCompanyLogo|raw}}
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+                                                        <div class="profile-logo-ins end corporate-profile">
+                                                            {{"Add a logo to your profile. It doesn't just look nice - buyers prefer to see who they are buying from when deciding what to buy."|trans({}, 'frontend-my-profile')}}<br />
+                                                            <div id="profile_change_btn_with_opt" {% if not userSiteObj.getPath() %}style="display:none;"{% endif %}>
+                                                                <a href="javascript:void(0);" data-dropdown="profile_image_upload" aria-controls="profile_image_upload" aria-expanded="false" class="primary-btn-3 button thin-btn dropdown">{{'Change image'|trans({}, 'frontend-my-profile')}}</a><br />
+                                                                <ul id="profile_image_upload" data-dropdown-content class="f-dropdown" aria-hidden="true">
+                                                                    <li><a href="javascript:void(0)" class="pickProfileFile needsclick" id="pickProfileFile">{{'Upload logo'|trans({}, 'frontend-my-profile')}}</a></li>
+                                                                    <li><a href="javascript:getProfileBigImage('{{ path(getProfileBigImageRoute, {'userId': app.user.getId(), 'isCompany': 1}) }}')">{{'Edit logo'|trans({}, 'frontend-my-profile')}}</a></li>
+                                                                    <li><a href="javascript:deleteImage('{{ path(deleteRoute, {'userId': app.user.getId(), 'isCompany': 1}) }}')">{{'Remove'|trans({}, 'frontend-my-profile')}}</a></li>
+                                                                </ul>
+                                                            </div>
+                                                            <div id="profile_change_btn_without_opt" {% if userSiteObj.getPath() %}style="display:none;"{% endif %}>
+                                                                <a href="javascript:void(0);" id="pickProfileFile1" class="primary-btn-3 button thin-btn dropdown pickProfileFile needsclick">{{'Change image'|trans({}, 'frontend-my-profile')}}</a><br />
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                {{ form_end(form) }}
-                                            </div>
-                                        </dd>
 
-                                        <dd class="accordion-navigation {% if (shopForm is defined and not shopForm.vars.valid) or app.session.flashbag.has('profile_shop_success') %}active{% endif %}">
-                                            <a href="#panel2b" class="section-head">
-                                                {% set shopName = 'Design your business profile'|trans({}, 'frontend-my-profile') %}
-                                                {% set businessCategoryId = app.user.getBusinessCategoryId() %}
-                                                {% if businessCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID')%}
-                                                    {% set shopName = 'Design your shop'|trans({}, 'frontend-my-profile') %}
-                                                {% elseif businessCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID')%}
-                                                    {% set shopName = 'Design your dealership'|trans({}, 'frontend-my-profile') %}
-                                                {% elseif businessCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') or businessCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
-                                                    {% set shopName = 'Design your agency profile'|trans({}, 'frontend-my-profile') %}
-                                                {% endif %}
-                                                <span class="design-icon">{{ shopName }}</span>
-                                                <span>&nbsp;</span>
-                                            </a>
-                                            <div id="panel2b" class="content {% if (shopForm is defined and not shopForm.vars.valid) or app.session.flashbag.has('profile_shop_success') %}active{% endif %}">
-                                                {{ include('FaUserBundle:MyAccount:myAccountMessage.html.twig', {'msgName': 'profile_shop_success'}) }}
-                                                <div class="design-your-profile">
-                                                    {% if (showUpgradeBtn and (not activeShopPackage or (activeShopPackage and activeShopPackage.getPackage() and activeShopPackage.getPackage().getPackageText() == constant('Fa\\Bundle\\PromotionBundle\\Repository\\PackageRepository::SHP_PACKAGE_BASIC_TEXT')))) %}
-                                                        <p>{{'Not available for users with basic business profile.'|trans({}, 'frontend-my-profile')}}</p>
-                                                        <a href="{{ path('user_package_choose_profile', {'from': 'profile'}) }}" class="primary-btn-1 button thin-btn upgrade-profile-btn">{{'Upgrade your profile now!'|trans({}, 'frontend-my-profile')}}</a>
-                                                    {% else %}
-                                                        {{ form_start(shopForm, {'attr': {'novalidate': 'novalidate'}}) }}
-                                                            {% set userSiteBannerRepository = fetch_repository('FaUserBundle:UserSiteBanner') %}
-                                                            {% set userSiteBannerOtherImages = userSiteBannerRepository.getUserSiteBannerOtherImages() %}
-                                                            <div id="shopBannerModal" class="reveal-modal small" data-reveal>
-                                                                <a class="close-reveal-modal">&#215;</a>
-                                                                <h5 class="modal-title">
-                                                                    {{'Change cover image'|trans({}, 'frontend-my-profile')}}
-                                                                </h5>
-                                                                <div class="modal-content">
-                                                                    <div class="text-center">
-                                                                        {{'We recommend you to upload an image<br />with a minimum size of 1190px x 350px'|trans({}, 'frontend-my-profile')}}
-                                                                        {{ render(controller('FaUserBundle:UserSiteBanner:showUserSiteBannerUploader', {'userSiteId': userSiteObj.getId()})) }}
-                                                                        {{ set_variables('userSiteBannerUploadJavascriptBottom', {'loaded':'false'}) }}
-                                                                        <div class="relative">
-                                                                            <a href="javascript:void(0);" class="button secondary-btn-1 expand mt15 needsclick" id="pickUserSiteBannerFile">{{'Upload your photo'|trans({}, 'frontend-my-profile')}}</a>
-                                                                        </div>
-                                                                        <div class="text-center">{{'Or choose from the options below'|trans({}, 'frontend-my-profile')}}</div>
-                                                                        <ul class="cover-img-thumbs clearfix">
-                                                                            {% for userSiteBannerOtherImage in userSiteBannerOtherImages%}
-                                                                                <li><a href="javascript:void(0);" onclick="return changeBanner('{{ userSiteBannerOtherImage.getId() }}');"><img src="{{ shared_url(userSiteBannerOtherImage.getPath()~'/'~userSiteBannerOtherImage.getFilename()|replace({'.png':''})~'_68x55.jpg') }}" alt="" /></a></li>
-                                                                            {% endfor %}
-                                                                        </ul>
-                                                                    </div>
+                                                    <div class="mt30">
+                                                        {{ form_label(form.company_welcome_message) }}<br class="hide-for-small-only" />
+                                                        {{'A short paragraph describing your business. You can go into details in the next field.'|trans({}, 'frontend-my-profile')}}
+                                                        <div class="field-530">
+                                                            {{ form_widget(form.company_welcome_message, {'attr': {'class': 'white-field mt10 mb0 textcounter'}}) }}
+                                                            <div class="clearfix">
+                                                                <div class="left">
+                                                                    {{ form_errors(form.company_welcome_message) }}
                                                                 </div>
+                                                                <div class="profile-ins text-right" id="{{ attribute(form, 'company_welcome_message').vars.id }}_textcounter" ></div>
                                                             </div>
-                                                            {% if businessCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID')} %}
-                                                                <div class="featured-cat-block">
-                                                                    <h5>{{'Featured category'|trans({}, 'frontend-my-profile')}}</h5>
-                                                                    <p>{{'Please select category where you would like to promote your profile'|trans({}, 'frontend-my-profile')}}</p>
-                                                                    {% set totalLevel = fetch_repository('FaEntityBundle:Category').getMaxLevel() %}
-                                                                    {{ set_variables('shop_profile_category_select', {'totalLevel' : totalLevel }) }}
-                                                                    {% if totalLevel %}
-                                                                        <div id="category_choices_div" class="field-300">
-                                                                            <div class="admin_cat_search list_style_none">
-                                                                                {% for i in 1..totalLevel %}
-                                                                                    {% set field = 'category_' ~ i %}
-                                                                                    <div id="category_choice_div_{{ i }}" class="category_choices_div white-select" {% if not shopForm[field].vars.choices|length %} style="display:none;" {%endif%}>
-                                                                                        {{ form_widget(attribute(shopForm, field)) }}
-                                                                                        {{ form_errors(attribute(shopForm, field)) }}
-                                                                                    </div>
-                                                                                {% endfor %}
-                                                                            </div>
-                                                                        </div>
-                                                                    {% endif %}
-                                                                    {{ form_label(shopForm.zip, null, {'label_attr': {'class': 'black-text'}}) }}
-                                                                    {{ form_widget(shopForm.zip, {'attr': {'class': 'white-field field-122 mb0'}}) }}
-                                                                    {{ form_errors(shopForm.zip) }}
-                                                                    <div class="label-inline white-checkbox mt20">
-                                                                        {{ form_widget(shopForm.show_map) }}
-                                                                        {{ form_label(shopForm.show_map, null, {'label_attr': {'class': 'black-text'}}) }}
-                                                                        {{ form_errors(shopForm.show_map) }}
-                                                                    </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="mt30">
+                                                        {{ form_label(form.about_us) }}<br class="hide-for-small-only" />
+                                                        {{'Text us about your business here...'|trans({}, 'frontend-my-profile')}}
+                                                        <div class="field-530">
+                                                            {{ form_widget(form.about_us) }}
+                                                            <div class="clearfix">
+                                                                <div class="left">
+                                                                    {{ form_errors(form.about_us) }}
                                                                 </div>
-                                                            {% endif %}
-                                                            <h5>{{'Banner'|trans({}, 'frontend-my-profile')}}</h5>
-                                                            <p>{{'Personalise your shop by uploading a cover photo. Minimum dimensions are 1190px x 350px.'|trans({}, 'frontend-my-profile')}}</p>
-                                                            <div id="user_site_banner_div">
-                                                                {{ include('FaUserBundle:UserSiteBanner:userSiteBanner.html.twig') }}
+                                                                <div class="profile-ins text-right" id="{{ attribute(form, 'about_us').vars.id }}_textcounter" ></div>
                                                             </div>
+                                                        </div>
+                                                    </div>
 
-                                                            <div class="design-field">
-                                                                <h5>{{'Photo gallery'|trans({}, 'frontend-my-profile')}}</h5>
-                                                                <p>{{'Let visitors know what you offer. Remember to make it appealing!'|trans({}, 'frontend-my-profile')}}</p>
-                                                                {{ render(controller('FaUserBundle:UserSiteImage:showUserSiteImageUploader', {'userSiteId': userSiteObj.getId() })) }}
-                                                                {{ set_variables('userSiteImageUploadJavascriptBottom', {'loaded':'false'}) }}
-                                                            </div>
+                                                    <div class="mt30">
+                                                        {{ form_label(form.company_address) }}
+                                                        <div class="field-530 company-address">
+                                                            <span></span>
+                                                            {{ form_widget(form.company_address, {'attr': {'class': 'white-field', 'placeholder': 'eg. King House 101 Sunshine Road, Burgess Hill, West Sussesx, NH22 8LN'|trans({}, 'frontend-my-profile')}}) }}
+                                                            {{ form_errors(form.company_address) }}
+                                                        </div>
+                                                    </div>
 
-                                                            {% if businessCategoryId not in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID')} %}
-                                                                <div class="design-field">
-                                                                    <h5>{{'Map'|trans({}, 'frontend-my-profile')}}</h5>
-                                                                    <p>{{'If you would like to display the location of your business on a map, please add a postcode.'|trans({}, 'frontend-my-profile')}}</p>
-                                                                    {{ form_label(shopForm.zip) }}
-                                                                    {{ form_widget(shopForm.zip, {'attr': {'class': 'white-field field-122 mb0 zip-uppercase'}}) }}
-                                                                    {{ form_errors(shopForm.zip) }}
-                                                                </div>
-                                                            {% endif %}
+                                                    <div class="mt30 profile-telephone">
+                                                        <label>{{'Telephone(s)'|trans({}, 'frontend-my-profile')}}</label>
+                                                        <div class="field-300 telephone-icon">
+                                                            <span></span>
+                                                            {{ form_widget(form.phone1, {'attr': {'class': 'white-field', 'placeholder': 'Telephone 1'|trans({}, 'frontend-my-profile')}}) }}
+                                                            {{ form_errors(form.phone1) }}
+                                                        </div>
+                                                        <div class="field-300 telephone-icon">
+                                                            <span></span>
+                                                            {{ form_widget(form.phone2, {'attr': {'class': 'white-field', 'placeholder': 'Telephone 2'|trans({}, 'frontend-my-profile')}}) }}
+                                                            {{ form_errors(form.phone2) }}
+                                                        </div>
+                                                    </div>
 
-                                                            <div class="design-field">
-                                                                <h5>{{''|trans({}, 'frontend-my-profile')}}Social profiles</h5>
-                                                                <p>{{''|trans({}, 'frontend-my-profile')}}If you would like to display links to your social pages, please add the addresses for each social network.</p>
-                                                                <div class="field-530">
-                                                                    {{ form_label(shopForm.facebook_url) }}
-                                                                    {{ form_widget(shopForm.facebook_url, {'attr': {'class': 'white-field'}}) }}
-                                                                    {{ form_errors(shopForm.facebook_url) }}
+                                                    <div class="mt30">
+                                                        {{ form_label(form.website_link) }}
+                                                        <div class="field-530 company-website">
+                                                            <span></span>
+                                                            {{ form_widget(form.website_link, {'attr': {'class': 'white-field', 'placeholder': 'eg. https://www.yourwebsitename.co.uk'|trans({}, 'frontend-my-profile')}}) }}
+                                                            {{ form_errors(form.website_link) }}
+                                                        </div>
+                                                    </div>
 
-                                                                    {{ form_label(shopForm.twitter_url) }}
-                                                                    {{ form_widget(shopForm.twitter_url, {'attr': {'class': 'white-field'}}) }}
-                                                                    {{ form_errors(shopForm.twitter_url) }}
-
-                                                                    {{ form_label(shopForm.google_url) }}
-                                                                    {{ form_widget(shopForm.google_url, {'attr': {'class': 'white-field'}}) }}
-                                                                    {{ form_errors(shopForm.google_url) }}
-
-                                                                    {{ form_label(shopForm.pinterest_url) }}
-                                                                    {{ form_widget(shopForm.pinterest_url, {'attr': {'class': 'white-field'}}) }}
-                                                                    {{ form_errors(shopForm.pinterest_url) }}
-
-                                                                    {{ form_label(shopForm.instagram_url) }}
-                                                                    {{ form_widget(shopForm.instagram_url, {'attr': {'class': 'white-field'}}) }}
-                                                                    {{ form_errors(shopForm.instagram_url) }}
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="design-field">
-                                                                <h5>{{'Video'|trans({}, 'frontend-my-profile')}}</h5>
-                                                                <p>{{'Videos are a great way to give visitors an introduction of your business. Add a youtube link below.'|trans({}, 'frontend-my-profile')}}</p>
-                                                                <div class="field-530">
-                                                                    {{ form_label(shopForm.youtube_video_url) }}
-                                                                    {{ form_widget(shopForm.youtube_video_url, {'attr': {'class': 'white-field mb0'}}) }}
-                                                                    {{ form_errors(shopForm.youtube_video_url) }}
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="design-field field-300">
-                                                                {{ form_widget(shopForm.save_shop_profile_changes, {'attr': {'class':'primary-btn-2 button expand mb0'}}) }}
-                                                            </div>
-                                                        {{ form_end(shopForm) }}
+                                                    {% if activeShopPackage and activeShopPackage.getPackage() and (activeShopPackage.getPackage().getPrice() is null or activeShopPackage.getPackage().getPrice() <= 0) %}
+                                                        {{ form_label(form.location_autocomplete) }}
+                                                        {{ form_widget(form.location_autocomplete, {'attr': {'class': 'white-field field-300', 'placeholder': 'Postcode or Town'|trans({}, 'frontend-my-profile')}}) }}
+                                                        {{ form_errors(form.location_autocomplete) }}
                                                     {% endif %}
+
+                                                    <div class="mt30 field-300">
+                                                        {{ form_widget(form.save_profile_changes, {'attr': {'class':'secondary-btn-1 button expand mb0'}}) }}
+                                                    </div>
                                                 </div>
+                                            {{ form_end(form) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="db-list {% if (shopForm is defined and not shopForm.vars.valid) or app.session.flashbag.has('profile_shop_success') %}active{% endif %}">
+                                    <a href="#panel2b" class="panel-heading collapsed" data-toggle="collapse" data-target="#panel2b">
+                                        {% set shopName = 'Design your business profile'|trans({}, 'frontend-my-profile') %}
+                                        {% set businessCategoryId = app.user.getBusinessCategoryId() %}
+                                        {% if businessCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID')%}
+                                            {% set shopName = 'Design your shop'|trans({}, 'frontend-my-profile') %}
+                                        {% elseif businessCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID')%}
+                                            {% set shopName = 'Design your dealership'|trans({}, 'frontend-my-profile') %}
+                                        {% elseif businessCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') or businessCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
+                                            {% set shopName = 'Design your agency profile'|trans({}, 'frontend-my-profile') %}
+                                        {% endif %}
+                                        <div class="media section-head">
+                                            <div class="media-body">
+                                                <span class="your-details-icon list-icon-text">{{ shopName }}</span>
                                             </div>
-                                        </dd>
-                                    </dl>
+                                            <div class="arrow-block">
+                                                <i class="fa fa-chevron-up"></i>
+                                                <i class="fa fa-chevron-down"></i>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div id="panel2b" class="collapse collapse-body-content {% if (shopForm is defined and not shopForm.vars.valid) or app.session.flashbag.has('profile_shop_success') %}active{% endif %}">
+                                        {{ include('FaUserBundle:MyAccount:myAccountMessage.html.twig', {'msgName': 'profile_shop_success'}) }}
+                                        <div class="design-your-profile">
+                                            {% if (showUpgradeBtn and (not activeShopPackage or (activeShopPackage and activeShopPackage.getPackage() and activeShopPackage.getPackage().getPackageText() == constant('Fa\\Bundle\\PromotionBundle\\Repository\\PackageRepository::SHP_PACKAGE_BASIC_TEXT')))) %}
+                                                <p>{{'Not available for users with basic business profile.'|trans({}, 'frontend-my-profile')}}</p>
+                                                <a href="{{ path('user_package_choose_profile', {'from': 'profile'}) }}" class="primary-btn-1 button thin-btn upgrade-profile-btn">{{'Upgrade your profile now!'|trans({}, 'frontend-my-profile')}}</a>
+                                            {% else %}
+                                                {{ form_start(shopForm, {'attr': {'novalidate': 'novalidate'}}) }}
+                                                    {% set userSiteBannerRepository = fetch_repository('FaUserBundle:UserSiteBanner') %}
+                                                    {% set userSiteBannerOtherImages = userSiteBannerRepository.getUserSiteBannerOtherImages() %}
+                                                    <div id="shopBannerModal" class="reveal-modal small" data-reveal>
+                                                        <a class="close-reveal-modal">&#215;</a>
+                                                        <h5 class="modal-title">
+                                                            {{'Change cover image'|trans({}, 'frontend-my-profile')}}
+                                                        </h5>
+                                                        <div class="modal-content">
+                                                            <div class="text-center">
+                                                                {{'We recommend you to upload an image<br />with a minimum size of 1190px x 350px'|trans({}, 'frontend-my-profile')}}
+                                                                {{ render(controller('FaUserBundle:UserSiteBanner:showUserSiteBannerUploader', {'userSiteId': userSiteObj.getId()})) }}
+                                                                {{ set_variables('userSiteBannerUploadJavascriptBottom', {'loaded':'false'}) }}
+                                                                <div class="relative">
+                                                                    <a href="javascript:void(0);" class="button secondary-btn-1 expand mt15 needsclick" id="pickUserSiteBannerFile">{{'Upload your photo'|trans({}, 'frontend-my-profile')}}</a>
+                                                                </div>
+                                                                <div class="text-center">{{'Or choose from the options below'|trans({}, 'frontend-my-profile')}}</div>
+                                                                <ul class="cover-img-thumbs clearfix">
+                                                                    {% for userSiteBannerOtherImage in userSiteBannerOtherImages%}
+                                                                        <li><a href="javascript:void(0);" onclick="return changeBanner('{{ userSiteBannerOtherImage.getId() }}');"><img src="{{ shared_url(userSiteBannerOtherImage.getPath()~'/'~userSiteBannerOtherImage.getFilename()|replace({'.png':''})~'_68x55.jpg') }}" alt="" /></a></li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {% if businessCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID')} %}
+                                                        <div class="featured-cat-block">
+                                                            <h5>{{'Featured category'|trans({}, 'frontend-my-profile')}}</h5>
+                                                            <p>{{'Please select category where you would like to promote your profile'|trans({}, 'frontend-my-profile')}}</p>
+                                                            {% set totalLevel = fetch_repository('FaEntityBundle:Category').getMaxLevel() %}
+                                                            {{ set_variables('shop_profile_category_select', {'totalLevel' : totalLevel }) }}
+                                                            {% if totalLevel %}
+                                                                <div id="category_choices_div" class="field-300">
+                                                                    <div class="admin_cat_search list_style_none">
+                                                                        {% for i in 1..totalLevel %}
+                                                                            {% set field = 'category_' ~ i %}
+                                                                            <div id="category_choice_div_{{ i }}" class="category_choices_div white-select" {% if not shopForm[field].vars.choices|length %} style="display:none;" {%endif%}>
+                                                                                {{ form_widget(attribute(shopForm, field)) }}
+                                                                                {{ form_errors(attribute(shopForm, field)) }}
+                                                                            </div>
+                                                                        {% endfor %}
+                                                                    </div>
+                                                                </div>
+                                                            {% endif %}
+                                                            {{ form_label(shopForm.zip, null, {'label_attr': {'class': 'black-text'}}) }}
+                                                            {{ form_widget(shopForm.zip, {'attr': {'class': 'white-field field-122 mb0'}}) }}
+                                                            {{ form_errors(shopForm.zip) }}
+                                                            <div class="label-inline white-checkbox mt20">
+                                                                {{ form_widget(shopForm.show_map) }}
+                                                                {{ form_label(shopForm.show_map, null, {'label_attr': {'class': 'black-text'}}) }}
+                                                                {{ form_errors(shopForm.show_map) }}
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+                                                    <h5>{{'Banner'|trans({}, 'frontend-my-profile')}}</h5>
+                                                    <p>{{'Personalise your shop by uploading a cover photo. Minimum dimensions are 1190px x 350px.'|trans({}, 'frontend-my-profile')}}</p>
+                                                    <div id="user_site_banner_div">
+                                                        {{ include('FaUserBundle:UserSiteBanner:userSiteBanner.html.twig') }}
+                                                    </div>
+
+                                                    <div class="design-field">
+                                                        <h5>{{'Photo gallery'|trans({}, 'frontend-my-profile')}}</h5>
+                                                        <p>{{'Let visitors know what you offer. Remember to make it appealing!'|trans({}, 'frontend-my-profile')}}</p>
+                                                        {{ render(controller('FaUserBundle:UserSiteImage:showUserSiteImageUploader', {'userSiteId': userSiteObj.getId() })) }}
+                                                        {{ set_variables('userSiteImageUploadJavascriptBottom', {'loaded':'false'}) }}
+                                                    </div>
+
+                                                    {% if businessCategoryId not in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID')} %}
+                                                        <div class="design-field">
+                                                            <h5>{{'Map'|trans({}, 'frontend-my-profile')}}</h5>
+                                                            <p>{{'If you would like to display the location of your business on a map, please add a postcode.'|trans({}, 'frontend-my-profile')}}</p>
+                                                            {{ form_label(shopForm.zip) }}
+                                                            {{ form_widget(shopForm.zip, {'attr': {'class': 'white-field field-122 mb0 zip-uppercase'}}) }}
+                                                            {{ form_errors(shopForm.zip) }}
+                                                        </div>
+                                                    {% endif %}
+
+                                                    <div class="design-field">
+                                                        <h5>{{''|trans({}, 'frontend-my-profile')}}Social profiles</h5>
+                                                        <p>{{''|trans({}, 'frontend-my-profile')}}If you would like to display links to your social pages, please add the addresses for each social network.</p>
+                                                        <div class="field-530">
+                                                            {{ form_label(shopForm.facebook_url) }}
+                                                            {{ form_widget(shopForm.facebook_url, {'attr': {'class': 'white-field'}}) }}
+                                                            {{ form_errors(shopForm.facebook_url) }}
+
+                                                            {{ form_label(shopForm.twitter_url) }}
+                                                            {{ form_widget(shopForm.twitter_url, {'attr': {'class': 'white-field'}}) }}
+                                                            {{ form_errors(shopForm.twitter_url) }}
+
+                                                            {{ form_label(shopForm.google_url) }}
+                                                            {{ form_widget(shopForm.google_url, {'attr': {'class': 'white-field'}}) }}
+                                                            {{ form_errors(shopForm.google_url) }}
+
+                                                            {{ form_label(shopForm.pinterest_url) }}
+                                                            {{ form_widget(shopForm.pinterest_url, {'attr': {'class': 'white-field'}}) }}
+                                                            {{ form_errors(shopForm.pinterest_url) }}
+
+                                                            {{ form_label(shopForm.instagram_url) }}
+                                                            {{ form_widget(shopForm.instagram_url, {'attr': {'class': 'white-field'}}) }}
+                                                            {{ form_errors(shopForm.instagram_url) }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="design-field">
+                                                        <h5>{{'Video'|trans({}, 'frontend-my-profile')}}</h5>
+                                                        <p>{{'Videos are a great way to give visitors an introduction of your business. Add a youtube link below.'|trans({}, 'frontend-my-profile')}}</p>
+                                                        <div class="field-530">
+                                                            {{ form_label(shopForm.youtube_video_url) }}
+                                                            {{ form_widget(shopForm.youtube_video_url, {'attr': {'class': 'white-field mb0'}}) }}
+                                                            {{ form_errors(shopForm.youtube_video_url) }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="design-field field-300">
+                                                        {{ form_widget(shopForm.save_shop_profile_changes, {'attr': {'class':'secondary-btn-1 button expand mb0'}}) }}
+                                                    </div>
+                                                {{ form_end(shopForm) }}
+                                            {% endif %}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

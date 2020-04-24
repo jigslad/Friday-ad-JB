@@ -32,7 +32,7 @@
         {% set singleAttachmentId = '' %}
         <div class="reply-chat">
             <div class="row {{ rowClass }}">
-                {% if (message['oneclickenq_reply'] == NULL or message['oneclickenq_reply'] == 'Yes') %}
+                {% if (message['oneclickenq_reply'] == NULL or message['oneclickenq_reply'] == 'Yes') and (rowClass =='chat-left') %}
                     {% set userRole = userRepository.getUserRole(message['sender_user_id']) %}
                     {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), message['sender_user_id']], true) %}
                     <div class="col-md-3 chat-icon-box">
@@ -142,6 +142,24 @@
                         </div>
                     </div>
                 </div>
+                {% if (message['oneclickenq_reply'] == NULL or message['oneclickenq_reply'] == 'Yes') and (rowClass =='chat-right') %}
+                    {% set userRole = userRepository.getUserRole(message['sender_user_id']) %}
+                    {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), message['sender_user_id']], true) %}
+                    <div class="col-md-3 chat-icon-box">
+                        {# {% if (userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') or userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION')) %}square{% endif %}#}
+                        <div class="chat-usericon square">
+                            {% if userLogo %}
+                                <div class="profile-placeholder">
+                                    {{userLogo|raw}}
+                                </div>
+                            {% else %}
+                                <div class="profile-placeholder">
+                                    <img src="/bundles/fafrontend/images/user-icon.svg" alt="" />
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
         
