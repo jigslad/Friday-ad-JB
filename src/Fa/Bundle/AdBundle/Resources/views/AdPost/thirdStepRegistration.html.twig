@@ -18,9 +18,6 @@
 {% endblock %}
 
 {% block body %}
-<style>
-.buyer-contact .label-inline label { margin-right:0px !important; }
-</style>
     <div class="posting-bg">
         <div class="fad-sign-bdr">&nbsp;</div>
         <div class="container">
@@ -30,7 +27,7 @@
             	<div>
                     <a href="{{ path('ad_post_third_step') }}" class="paa-back-arrow" title="{{ 'Go back'|trans({}, 'frontend-paa') }}">{{ 'Go back'|trans({}, 'frontend-paa') }}</a>
                 </div>
-                <div class="col-md-24 d-flex justify-content-center">
+                <div class="col-lg-24 col-md-24 justify-content-center">
                     {% set socialMediaData = app.session.get('paa_user_info') %}
                     {% if socialMediaData['user_facebook_id'] is defined or socialMediaData['user_google_id'] is defined %}
                         {% if socialMediaData['user_facebook_id'] is defined %}
@@ -38,11 +35,11 @@
                         {% elseif socialMediaData['user_google_id'] is defined %}
                             {% set socialSiteName = 'Google' %}
                         {% endif %}
-                        <div><h1 class="s-h1 paa-title text-center">{{'Confirm your details'|trans({}, 'frontend-paa-register')}}</h1></div>
-                        <h2 class="text-center subtitle col-md-24 col-lg-18">{{'These are the details we got from %socialSiteName%,<br /> please confirm or change them.'|trans({'%socialSiteName%': socialSiteName}, 'frontend-paa-register')|raw}}</h2>
-                        <h4 class="text-center subtitle col-md-24 col-lg-18">{{'This is the contact info buyers will use to get in touch.'|trans({}, 'frontend-paa-register')}}</h4>
+                        <h1 class="s-h1 paa-title text-center">{{'Confirm your details'|trans({}, 'frontend-paa-register')}}</h1>
+                        <h2 class="subtitle text-center">{{'These are the details we got from %socialSiteName%,<br /> please confirm or change them.'|trans({'%socialSiteName%': socialSiteName}, 'frontend-paa-register')|raw}}</h2>
+                        <h4 class="subtitle text-center">{{'This is the contact info buyers will use to get in touch.'|trans({}, 'frontend-paa-register')}}</h4>
                     {% else %}
-                        <div><h1 class="s-h1 paa-title  text-center">{{'Your details'|trans({}, 'frontend-paa-register')}}</h1></div>
+                        <h1 class="s-h1 paa-title text-center">{{'Your details'|trans({}, 'frontend-paa-register')}}</h1>
                         <h2 class="text-center subtitle">{{'We just need a few details so that we know how buyers can contact you.'|trans({}, 'frontend-paa-register')}}</h2>
                     {% endif %}
                 </div>
@@ -55,8 +52,9 @@
                             {% if form.password is defined %}
                                 <div class="reg-pwd">
                                     {{ form_row(form.password) }}
-                                    <div class="label-inline">
-                                        {{ form_row(form.show_password) }}
+                                    <div class="label-inline grey-check">
+                                        {{ form_widget(form.show_password, {'attr': {'class': 'checkbox'}}) }}
+                        				<label for="{{ form.show_password.vars.id }}"></label>Show password
                                     </div>
                                 </div>
                             {% endif %}
@@ -72,26 +70,33 @@
                             <div class="buyer-contact">
                                 <label>{{'I would like buyers to contact me by:'|trans({}, 'frontend-paa-register')}}</label>
                                 <div class="label-inline">
-                                    {{ form_row(form.contact_through_phone) }}
-                                    {{ form_row(form.contact_through_email) }}
+                                	<div class="grey-check">
+                                    	{{ form_widget(form.contact_through_phone, {'attr': {'class': 'checkbox'}}) }}
+                                    	<label for="{{ form.contact_through_phone.vars.id }}"></label>Contact by phone                                                                                    
+                                    </div>
+                                    <div class="grey-check">
+                                    	{{ form_widget(form.contact_through_email, {'attr': {'class': 'checkbox'}}) }}
+                                    	<label for="{{ form.contact_through_email.vars.id }}"></label>Contact by email                                                                                
+                                    </div>    
                                 </div>
                             </div>
                             <div class="paa-role">
-                              {{ form_row(form.user_roles, {'attr': {'add-br': true}}) }}
+                            	<label>Account status</label>
+                                {{ form_widget(form.user_roles, {'attr': {'class': 'grey-radio radio-circle-btn'}}) }}
                             </div>
                             <div class="paa-role">
                                 <label class="required">{{'Upload a logo image:'|trans({}, 'frontend-paa-register')}}</label>
                                   <div id="logo_uploader_div">
                                     {{ include('FaUserBundle:UserImage:registrationImageUploader.html.twig', {'userId': userId, 'isCompany': isCompany, 'profileImage': ''}) }}
                                   </div>
-                                  <div class="clearfix">
+                                  <div class="d-inline-flex mb20">
                                         <div class="profile-logo-img">
                                             <div class="bz-profile-logo{% if isCompany == 0 %} rounded{% endif %}" id="profile_image_div">
                                             </div>
                                         </div>
                                         <div class="profile-logo-ins private-profile reg-profile-btn">
                                             <div id="profile_change_btn_with_opt" {% if logoUploaded == 0 %}style="display:none;"{% endif %}>
-                                                <a href="javascript:void(0);" data-dropdown="profile_image_upload" aria-controls="profile_image_upload" aria-expanded="false" class="primary-btn-2 button dropdown thin-btn">{{'Upload image'|trans({}, 'frontend-my-profile')}}</a><br />
+                                                <a href="javascript:void(0);" data-dropdown="profile_image_upload" aria-controls="profile_image_upload" aria-expanded="false" class="secondary-btn-1 btn dropdown thin-btn">{{'Upload image'|trans({}, 'frontend-my-profile')}}</a><br />
                                                 <ul id="profile_image_upload" data-dropdown-content class="f-dropdown" aria-hidden="true">
                                                     <li><a href="javascript:void(0)" class="pickProfileFile needsclick" id="pickProfileFile">{{'Upload profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
                                                     <li><a href="javascript:getProfileBigImage('{{ path(getProfileBigImageRoute, {'userId': userId, 'isCompany': isCompany}) }}')">{{'Edit profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
@@ -99,7 +104,7 @@
                                                 </ul>
                                             </div>
                                             <div id="profile_change_btn_without_opt" {% if logoUploaded == 1 %}style="display:none;"{% endif %}>
-                                                <a href="javascript:void(0);" id="pickProfileFile1" class="primary-btn-2 button pickProfileFile needsclick thin-btn">{{'Upload image'|trans({}, 'frontend-my-profile')}}</a><br />
+                                                <a href="javascript:void(0);" id="pickProfileFile1" class="secondary-btn-1 btn pickProfileFile needsclick thin-btn">{{'Upload image'|trans({}, 'frontend-my-profile')}}</a><br />
                                             </div>
                                         </div>
                                     </div>
@@ -113,7 +118,7 @@
                             </div>
                             <div class="white-check mb10">
                                 {{ form_widget(form.is_third_party_email_alert_enabled, {'attr': {'class': 'checkbox'}}) }}
-                                <label for="{{ form.is_email_alert_enabled.vars.id }}"></label>I'd like to receive offers and promotions by email on behalf of carefully chosen partners
+                                <label for="{{ form.is_third_party_email_alert_enabled.vars.id }}"></label>I'd like to receive offers and promotions by email on behalf of carefully chosen partners
                             </div>
                             <div class="white-check mb10">
                                 {{ form_widget(form.is_terms_agreed, {'attr': {'class': 'checkbox'}}) }}
@@ -125,7 +130,7 @@
                             <div class="mt20 mb20" style="color: #a4a4a4;">
                                 We will use your data to help us create your account. Please take a look at our <a href="/privacy-policy/" target="_blank">Privacy Policy</a> for more information about how we use your data.
                             </div>
-                            {{ form_widget(form.Register, {'attr': {'class':'primary-btn-1 button expand'}}) }}
+                            {{ form_widget(form.Register, {'attr': {'class':'primary-btn-1 btn btn-block next-btn'}}) }}
                         {{ form_end(form) }}
                     </div>
                 </div>
@@ -134,17 +139,21 @@
         </div>
         </div>
     </div>
-    <div id="privacyNumberModal" class="reveal-modal" data-reveal>
+    <div id="privacyNumberModal" class="modal custom-modal">
         {% set privacyNumberBlock = staticPageRepository.getStaticBlockDetailArray('privacy-number-block', fetch_container_instance()) %}
-        <a class="close-reveal-modal">&#215;</a>
-        {% if privacyNumberBlock['title'] is defined %}
-            <h5 class="modal-title">{{privacyNumberBlock['title']}}</h5>
-        {% endif %}
-        <div class="modal-content">
+        <div class="modal-dialog"><div class="modal-content">
+		<div class="modal-header">
+			{% if privacyNumberBlock['title'] is defined %}
+			<h5 class="modal-title save-search-title no-icon-title">{{privacyNumberBlock['title']}}</h5>
+			{% endif %}
+		    <button class="close-modal" class="close" data-dismiss="modal">×</button>
+		</div>
+        <div class="modal-body">       
             {{privacyNumberBlock['description']|raw}}
         </div>
+        </div></div>
     </div>
-    <div id="cropProfileImageModal" class="reveal-modal small" data-reveal></div>
+    <div id="cropProfileImageModal" class="modal custom-modal small"></div>
 {% endblock %}
 
 {% block scriptbottom %}
@@ -271,7 +280,7 @@
         } else {
           $('#profile_image_div').html(response.privateUserLogo);
         }
-        $('#profile_image_upload').foundation('dropdown', 'close', $('#profile_image_upload'));
+        $('#profile_image_upload').modal('hide');
         $('#profile_change_btn_with_opt').hide();
         $('#profile_change_btn_without_opt').show();
         $('#filelist').html('');
@@ -284,8 +293,9 @@
     }
 
     // add multiple select / deselect functionality
-    $("#fa_paa_registration_is_third_party_email_alert_enabled").parent('span').on('click', function (e) {
-        if (!$('#fa_paa_registration_is_third_party_email_alert_enabled').parent('span').hasClass('checked')) {
+    /*$("#fa_paa_registration_is_third_party_email_alert_enabled").on('click', function (e) {
+        
+        if (!$('#fa_paa_registration_is_third_party_email_alert_enabled').hasClass('checked')) {
             $('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked', true);
         } else {
             $('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked', false);
@@ -293,24 +303,25 @@
         
         if ($('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked')) {
         	$('#fa_paa_registration_is_email_alert_enabled').attr('checked', $('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked'));
-            $('#fa_paa_registration_is_email_alert_enabled').parent('span').addClass('checked');
+            $('#fa_paa_registration_is_email_alert_enabled').addClass('checked');
         }
     });
 
-    $("#fa_paa_registration_is_email_alert_enabled").parent('span').on('click', function (e) {
-        if (!$('#fa_paa_registration_is_email_alert_enabled').parent('span').hasClass('checked')) {
+    $("#fa_paa_registration_is_email_alert_enabled").on('click', function (e) {
+        if (!$('#fa_paa_registration_is_email_alert_enabled').hasClass('checked')) {
             $('#fa_paa_registration_is_email_alert_enabled').attr('checked', true);
         } else {
             $('#fa_paa_registration_is_email_alert_enabled').attr('checked', false);
         }
         if (!$('#fa_paa_registration_is_email_alert_enabled').attr('checked')) {
             $('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked', false);
-            $('#fa_paa_registration_is_third_party_email_alert_enabled').parent('span').removeClass('checked');
+            $('#fa_paa_registration_is_third_party_email_alert_enabled').removeClass('checked');
         } 
     });
 
-    $("#fa_paa_registration_is_third_party_email_alert_enabled").parent('span').on('change', function (e) {
-        if ($('#fa_paa_registration_is_third_party_email_alert_enabled').parent('span').hasClass('checked')) {
+    $("#fa_paa_registration_is_third_party_email_alert_enabled").on('change', function (e) {
+    	alert('hi');
+        if ($('#fa_paa_registration_is_third_party_email_alert_enabled').hasClass('checked')) {
             $('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked', true);
         } else {
             $('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked', false);
@@ -318,27 +329,38 @@
         
         if ($('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked')) {
         	$('#fa_paa_registration_is_email_alert_enabled').attr('checked', $('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked'));
-            $('#fa_paa_registration_is_email_alert_enabled').parent('span').addClass('checked');
+            $('#fa_paa_registration_is_email_alert_enabled').addClass('checked');
         }
     });
  
-    $("#fa_paa_registration_is_email_alert_enabled").parent('span').on('change', function (e) {
-        if ($('#fa_paa_registration_is_email_alert_enabled').parent('span').hasClass('checked')) {
+    $("#fa_paa_registration_is_email_alert_enabled").on('change', function (e) {
+        if ($('#fa_paa_registration_is_email_alert_enabled').hasClass('checked')) {
             $('#fa_paa_registration_is_email_alert_enabled').attr('checked', true);
         } else {
             $('#fa_paa_registration_is_email_alert_enabled').attr('checked', false);
         }
         if (!$('#fa_paa_registration_is_email_alert_enabled').attr('checked')) {
             $('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked', false);
-            $('#fa_paa_registration_is_third_party_email_alert_enabled').parent('span').removeClass('checked');
+            $('#fa_paa_registration_is_third_party_email_alert_enabled').removeClass('checked');
         } 
+    });*/
+
+    $("#fa_paa_registration_is_email_alert_enabled").change(function (e) {
+    	if ($('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked') && !($(this).is(':checked'))) {
+            $('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked', false);
+        }
+    });
+
+    $("#fa_paa_registration_is_third_party_email_alert_enabled").change(function (e) {
+    	if ($(this).is(':checked') && !$('#fa_paa_registration_is_email_alert_enabled').attr('checked')) {
+            $('#fa_paa_registration_is_email_alert_enabled').attr('checked', true);
+        }
     });
     
     function tickUntickEmailAndThirdPartyAlertCheckbox()
     {
         if ($('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked') && !$('#fa_paa_registration_is_email_alert_enabled').attr('checked')) {
-            $('#fa_paa_registration_is_email_alert_enabled').parent('span').removeClass('checked');
-            $('#fa_paa_registration_is_email_alert_enabled').attr('checked', false);
+            $('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked', false);
         }
     }
 //]]>

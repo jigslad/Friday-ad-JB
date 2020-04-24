@@ -11,7 +11,7 @@
                         <div class="tagline"><img src="{{ asset_url('fafrontend/images/tagline.svg') }}" alt="" /></div>
                     </div>
                     <h2 class="tagline-text d-none d-md-block">{{ 'What are you searching for? Whether it’s a bargain bicycle or an emergency<br /> electrician, there’s all sorts of gems to be discovered. Get browsing today ...'|trans({}, 'frontend-homepage')|raw }}</h2>
-                    <div id="home-search" class="col-sm-18 col-md-14 home-search">
+                    <div id="home-search" class="col-sm-18 col-md-18 col-lg-14 home-search">
                         <div class="input-group mb-3">
                             <div class="input-group-prepend home-category-list">
                                {{ form_widget(attribute(form, 'item__category_id'), {'attr': {'class':'find-all custom_select' }}) }}
@@ -38,9 +38,9 @@
                      </div>
                     <div class="forsale-phone d-none d-sm-block"></div>
                 </div> 
-                <div class="d-block d-md-none text-center mt20">
+                {#<div class="d-block d-md-none text-center mt20">
                     <a class="primary-btn-1 btn col-14 font-16" title="Place an ad" href="{{ path('ad_post_first_step') }}">Place an ad</a>
-                </div>
+                </div>#}
             </div>
         </div>
     </div>       

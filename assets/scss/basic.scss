@@ -201,12 +201,17 @@ input.checkbox {
 .grey-radio, .white-radio, .grey-check, .white-check { font-size:13px !important; color: #a4a4a4 !important; }
 
 .select2-container { width: 100% !important; }
+.gray-select .select2-container--default .select2-selection--single {
+	background: #EAEFF0 !important;
+}
+.white-select .select2-container--default .select2-selection--single {
+	background: #FFFFFF !important;
+}
 .select2-container--default .select2-selection--single {
 	font-size: 13px !important;
 	color: #212527 !important;
 	font-weight: normal !important;
 	border-radius: 4px !important;
-	background: #EAEFF0 !important;
 	border: 1px solid #CBD5D9 !important;
 	margin-bottom: 0px !important;
 	height: 40px !important;
@@ -271,9 +276,6 @@ input.checkbox {
 .top-bar-section .navbar-nav .nav-item .dropdown-menu .row {
 	flex: content !important;
 }
-.home-search #top_search_location {
-	width: 40%;
-}
 #top_search_location .xs-btn-1 {
     margin: 5px 0px 0;
     width: 49%;
@@ -333,12 +335,113 @@ input.checkbox {
 }
 .width-100per { width:100% !important; } 
 .mb20 { margin-bottom:20px !important; }
-.cat-mid-full { width:63% !important; margin:auto auto 20px auto !important;  }
 .primary-btn-1 { color: #ffffff !important; }
 .primary-btn-1.disabled, .btn-disabled {
     background: #EAEFF0 !important;
 }
-.paa-block .paa-features li.grey-check label { display:inline-flex !important; }
-.paa-usr-type .grey-radio span { display:inline-block !important; }
+.bz-profile-logo.rounded {
+    border-radius: 50% !important;
+    width: 111px;
+    height: 111px;
+    line-height: 100px;
+    overflow: hidden;
+}
+.bz-profile-logo {
+    background: #ffffff;
+    width: 158px;
+    height: 116px;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    box-shadow: 0 0 4px 0 rgba(0,0,0,0.5);
+    position: relative;
+    padding: 4px;
+}
+.bz-profile-logo.rounded img.pvt-no-img {
+    width: 103px;
+    height: 103px;
+    border-radius: 50%;
+}
+.bz-profile-logo img {
+    max-width: 154px;
+    max-height: 113px;
+}
+.reg-profile-btn {
+    width: auto;
+    padding: 40px 0 0 25px;
+}
+
+/* tooltip */
+.image-tooltip-wrapper {
+    position: relative;
+    display: inline-block
+}
+
+.image-tooltip {
+    background: #EAEFF0;
+    border: 1px solid #ACB0B7;
+    border-radius: 3px;
+    padding: 10px;
+    font-size: 13px;
+    color: #ACB0B7;
+    line-height: 21px;
+    width: 280px;
+    min-height: 80px;
+    position: absolute;
+    left: -128px;
+    bottom: 28px;
+    z-index: 2;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+    visibility: hidden;
+    opacity: 0;
+    -webkit-transition: visibility .5s, opacity .5s linear;
+    -moz-transition: visibility .5s, opacity .5s linear;
+    -o-transition: visibility .5s, opacity .5s linear;
+    transition: visibility .5s, opacity .5s linear
+}
+
+.image-tooltip:after {
+    left: 50%;
+    bottom: -15px;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    margin-left: -9px;
+    border-style: solid;
+    border-width: 7px;
+    border-color: #b3b3b3 transparent transparent transparent
+}
+
+.image-tooltip-wrapper:hover .image-tooltip {h{background:url("data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjlweCIgaGVpZ2h0PSI5cHgiIHZpZXdCb3g9Ii0xIC0xIDkgOSIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAtMSAtMSA5IDkiIHhtbDpzcGFjZT0icHJlc2VydmUiPjxwb2x5Z29uIHBvaW50cz0iNy41LDAuOTU1IDYuMDQ2LC0wLjUgMy41LDIuMDQ1IDAuOTU1LC0wLjUgLTAuNSwwLjk1NSAyLjA0NSwzLjUgLTAuNSw2LjA0NCAwLjk1NSw3LjUgMy41LDQuOTU0IDYuMDQ2LDcuNSA3LjUsNi4wNDQgNC45NTQsMy41ICIvPjwvc3ZnPg==") 50% 50% no-repeat !important}
+.autocomplete {
+  position: relative;
+  display: inline-block;
+}
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff; 
+  border-bottom: 1px solid #d4d4d4; 
+}
+.autocomplete-items div:hover {
+  background-color: #e9e9e9; 
+}
+.autocomplete-active {
+  background-color: #000000 !important; 
+  color: #ffffff; 
+}
+
 
 

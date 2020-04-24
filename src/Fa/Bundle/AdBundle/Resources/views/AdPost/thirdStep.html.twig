@@ -37,7 +37,7 @@
                                         {{ form_row(form.username, {'attr': {'tabindex':'1'}}) }}
                                     </div>
                                 </div>
-                                <div class="col-md-24 d-flex justify-content-center paa-usr-type">
+                                <div class="col-md-24 d-flex paa-box paa-usr-type">
                                    {{ form_widget(form.user_type, {'attr': {'onchange':'showUserTypeField()', 'class': 'grey-radio radio-circle-btn'}}) }}
                                    {{ form_errors(form.user_type) }}
                                 </div>
@@ -50,15 +50,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-24 d-flex justify-content-center paa-box">
-                                        <div class="paa-login-box">
-                                            <div class="label-inline paa-forgot-pwd">
-                                                <ul class="custom-control custom-checkbox search-type crawlable-checkbox">
-                                                    <li>
-                                                        {{ form_row(form.show_password) }}
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                    <div class="col-md-24 d-flex paa-box">
+                                        <div class="grey-check">
+                                            {{ form_widget(form.show_password, {'attr': {'class': 'checkbox'}}) }}
+                            				<label for="{{ form.show_password.vars.id }}"></label>Show password
                                         </div>
                                     </div>
                                 </div>
