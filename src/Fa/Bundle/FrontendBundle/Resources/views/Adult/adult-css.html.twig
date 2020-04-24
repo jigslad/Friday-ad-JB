@@ -1278,5 +1278,22 @@ footer a:hover{
     .m-pop-1{ min-height: 90px;overflow: hidden;height: 90px; }
     .m-pop-2{ min-height: 100%;overflow: auto; height: auto; }
 }
+@media only screen and (min-width: 320px) and (max-width: 640px) {
+    .top-bar-section .login-menu li:not(.has-form) a:not(.button) {
+        background: #4D5052 !important;
+        border-right: 1px solid #212527 !important;
+        column-count: 2 !important;
+        column-gap: 0 !important;
+    }
+    .top-bar-section .accordion dd > a, .top-bar-section .accordion dd > a:hover, .top-bar-section .accordion dd.active > a {
+        background: #4D5052 !important;
+    }
+    .top-bar-section li:not(.has-form) a:not(.button) {
+        color: #fff !important;
+    }
+    .top-bar-section ul li:hover:not(.has-form) > a, .top-bar-section ul li:focus:not(.has-form) > a {
+        color: #9C1F9F !important
+    }
+}
 </style>
 
