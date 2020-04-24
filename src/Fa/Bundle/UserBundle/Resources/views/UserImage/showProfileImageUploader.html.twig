@@ -26,13 +26,10 @@
         {% set profileImage = (variables.profileImage is defined ? variables.profileImage : false) %}
         {% set fromProfilePage = (fromProfilePageVariables.fromProfilePage is defined ? fromProfilePageVariables.fromProfilePage : false) %}
         {% set maxFileSize = (isCompany ? container.getParameter("fa.company.allow_size_in_mb")~' mb' : container.getParameter("fa.user.allow_size_in_mb")~' mb') %}
-        {% javascripts filter='uglifyjs2' output='bundles/js/compiled/showProfileImageUploader.js'
-            'bundles/facore/js/plupload.full.min.js'
-            'bundles/fafrontend/js/jquery.Jcrop.min.js'
-            'bundles/facore/js/jquery.ui.touch-punch.min.js'
-        %}
-        <script src="{{ static_asset_url(asset_url) }}"></script>
-        {% endjavascripts %}
+        <script type="text/javascript" src="{{ asset('/bundles/facore/js/plupload.full.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('/bundles/fafrontend/js/jquery.Jcrop.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('/bundles/facore/js/jquery.ui.touch-punch.min.js') }}"></script>
+        
         <script language="javascript" type="text/javascript">
         //<![CDATA[
         $(document).ready(function(){
@@ -217,7 +214,7 @@
 
         function closeProfileMenu()
         {
-            $('#profile_image_upload').foundation('dropdown', 'close', $('#profile_image_upload'));
+            $('#profile_image_upload').modal('hide');
         }
         //]]>
         </script>

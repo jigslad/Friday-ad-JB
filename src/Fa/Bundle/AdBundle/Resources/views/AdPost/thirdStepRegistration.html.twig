@@ -23,26 +23,30 @@
 </style>
     <div class="posting-bg">
         <div class="fad-sign-bdr">&nbsp;</div>
-        <div class="row paa-main">
+        <div class="container">
+            <div class="row">
             {{ include('FaAdBundle:AdPost:paaStepsList.html.twig', {'step' : 3}) }}
-            <div id="middle-column" class="large-12 columns">
-                <a href="{{ path('ad_post_third_step') }}" class="paa-back-arrow" title="{{ 'Go back'|trans({}, 'frontend-paa') }}">{{ 'Go back'|trans({}, 'frontend-paa') }}</a>
-                {% set socialMediaData = app.session.get('paa_user_info') %}
-                {% if socialMediaData['user_facebook_id'] is defined or socialMediaData['user_google_id'] is defined %}
-                    {% if socialMediaData['user_facebook_id'] is defined %}
-                        {% set socialSiteName = 'Facebook' %}
-                    {% elseif socialMediaData['user_google_id'] is defined %}
-                        {% set socialSiteName = 'Google' %}
-                    {% endif %}
-                    <h1 class="text-center paa-title">{{'Confirm your details'|trans({}, 'frontend-paa-register')}}</h1>
-                    <h2 class="text-center subtitle">{{'These are the details we got from %socialSiteName%,<br /> please confirm or change them.'|trans({'%socialSiteName%': socialSiteName}, 'frontend-paa-register')|raw}}</h2>
-                    <h4 class="text-center subtitle">{{'This is the contact info buyers will use to get in touch.'|trans({}, 'frontend-paa-register')}}</h4>
-                {% else %}
-                    <h1 class="text-center paa-title">{{'Your details'|trans({}, 'frontend-paa-register')}}</h1>
-                    <h2 class="text-center subtitle paa-title">{{'We just need a few details so that we know how buyers can contact you.'|trans({}, 'frontend-paa-register')}}</h2>
-                {% endif %}
-                
+            <div id="middle-column"  class="col-md-12 medium-col step-register">
+            	<div>
+                    <a href="{{ path('ad_post_third_step') }}" class="paa-back-arrow" title="{{ 'Go back'|trans({}, 'frontend-paa') }}">{{ 'Go back'|trans({}, 'frontend-paa') }}</a>
+                </div>
                 <div class="col-md-24 d-flex justify-content-center">
+                    {% set socialMediaData = app.session.get('paa_user_info') %}
+                    {% if socialMediaData['user_facebook_id'] is defined or socialMediaData['user_google_id'] is defined %}
+                        {% if socialMediaData['user_facebook_id'] is defined %}
+                            {% set socialSiteName = 'Facebook' %}
+                        {% elseif socialMediaData['user_google_id'] is defined %}
+                            {% set socialSiteName = 'Google' %}
+                        {% endif %}
+                        <div><h1 class="s-h1 paa-title text-center">{{'Confirm your details'|trans({}, 'frontend-paa-register')}}</h1></div>
+                        <h2 class="text-center subtitle col-md-24 col-lg-18">{{'These are the details we got from %socialSiteName%,<br /> please confirm or change them.'|trans({'%socialSiteName%': socialSiteName}, 'frontend-paa-register')|raw}}</h2>
+                        <h4 class="text-center subtitle col-md-24 col-lg-18">{{'This is the contact info buyers will use to get in touch.'|trans({}, 'frontend-paa-register')}}</h4>
+                    {% else %}
+                        <div><h1 class="s-h1 paa-title  text-center">{{'Your details'|trans({}, 'frontend-paa-register')}}</h1></div>
+                        <h2 class="text-center subtitle">{{'We just need a few details so that we know how buyers can contact you.'|trans({}, 'frontend-paa-register')}}</h2>
+                    {% endif %}
+                </div>
+                <div class="col-sm-24 col-md-22 col-lg-16 paa-box" style="margin: 0 auto;">
                     <div class="your-details">
                         {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
                             {{ form_row(form.first_name) }}
@@ -103,15 +107,17 @@
                             <div class="business_seller_fields" style="display:none;">
                                 {{ form_row(form.business_name) }}
                             </div>
-                            <div class="label-inline mb10">
-                                {{ form_row(form.is_email_alert_enabled) }}
+                            <div class="white-check mb10">
+                               {{ form_widget(form.is_email_alert_enabled, {'attr': {'class': 'checkbox'}}) }}
+                                <label for="{{ form.is_email_alert_enabled.vars.id }}"></label>I'd like to receive news, offers and promotions by email from Friday-Ad
                             </div>
-                            <div class="label-inline mb10">
-                                {{ form_row(form.is_third_party_email_alert_enabled) }}
+                            <div class="white-check mb10">
+                                {{ form_widget(form.is_third_party_email_alert_enabled, {'attr': {'class': 'checkbox'}}) }}
+                                <label for="{{ form.is_email_alert_enabled.vars.id }}"></label>I'd like to receive offers and promotions by email on behalf of carefully chosen partners
                             </div>
-                            <div class="label-inline regchkbox-label mb10" style="display:inline-flex">
-                                {{ form_widget(form.is_terms_agreed) }}
-                                <label class="form-control">I have read and agree to the <a href="/terms-and-conditions/" target="_blank">terms and conditions</a></label><br>
+                            <div class="white-check mb10">
+                                {{ form_widget(form.is_terms_agreed, {'attr': {'class': 'checkbox'}}) }}
+                                <label for="{{ form.is_terms_agreed.vars.id }}"></label>I have read and agree to the <a href="/terms-and-conditions/" target="_blank">terms and conditions</a><br>
                                 
                             </div>
                             <div>{{ form_errors(attribute(form, 'is_terms_agreed')) }}</div>
@@ -125,6 +131,7 @@
                 </div>
             </div>
             {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {'paaBlockSlug': 'paa-registration-third-step'}) }}
+        </div>
         </div>
     </div>
     <div id="privacyNumberModal" class="reveal-modal" data-reveal>
@@ -142,13 +149,9 @@
 
 {% block scriptbottom %}
 {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
-{% javascripts filter='uglifyjs2' output='bundles/js/compiled/showProfileImageUploader.js'
-    'bundles/facore/js/plupload.full.min.js'
-    'bundles/fafrontend/js/jquery.Jcrop.min.js'
-    'bundles/facore/js/jquery.ui.touch-punch.min.js'
-%}
-<script src="{{ static_asset_url(asset_url) }}"></script>
-{% endjavascripts %}
+<script type="text/javascript" src="{{ asset('/bundles/facore/js/plupload.full.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('/bundles/fafrontend/js/jquery.Jcrop.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('/bundles/facore/js/jquery.ui.touch-punch.min.js') }}"></script>
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     $(document).ready(function(){

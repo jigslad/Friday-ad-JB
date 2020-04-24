@@ -120,19 +120,13 @@
                                 {% set totalLevel = fetch_repository('FaEntityBundle:Category').getMaxLevel(fetch_container_instance()) %}
                                 {{ set_variables('paa_category_select', {'totalLevel' : totalLevel }) }}
                                 {% if totalLevel %}
-                                    <div id="main_div">
-                                        <div id="category_choices_div">
-                                            {% for i in 1..totalLevel %}
-                                                <div class="col-md-24 d-flex justify-content-center mt20 mb20" style="">
-                                                    <div id="category_choice_div_{{ i }}" class="col-md-24 col-lg-16 pad-none" style="display:none">
-                                                        <div class="gray-bg">
-                                                            {% set field = 'category_' ~ i %}
-                                                            {{ form_widget(attribute(form, field)) }}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            {% endfor %}
-                                        </div>
+                                    <div id="category_choices_div" class="width-100per">
+                                        {% for i in 1..totalLevel %}
+                                            <div id="category_choice_div_{{ i }}" class="col-md-24 col-lg-16 cat-mid-full" style="display:none">
+                                                {% set field = 'category_' ~ i %}
+                                                {{ form_widget(attribute(form, field)) }}
+                                            </div>
+                                        {% endfor %}
                                     </div>
                                 {% endif %}
                             </div>
@@ -169,11 +163,16 @@
         {% if (objDraftAd is defined and objDraftAd is not null and not app.request.cookies.has('draft_ad_popup')) %}
           {{ include('FaAdBundle:AdPost:draftAdPopup.html.twig') }}
         {% endif %}
-        <div id="carweb_category_msg_modal" class="reveal-modal tiny" data-reveal style="display: none">
-          <a class="close-reveal-modal">&#215;</a>
-          <h5 class="modal-title">&nbsp;</h5>
-      </div>
-    </div>
+        <div id="carweb_category_msg_modal" class="modal custom-modal tiny">
+          <div class="modal-dialog">
+		    <div class="modal-content">
+		      	<div class="modal-header">
+		        	<h5 class="modal-title save-search-title no-icon-title"></h5>
+		        	<button class="close-modal" class="close" data-dismiss="modal">×</button>
+		      	</div>
+             </div>
+          </div>
+        </div>
 {% endblock %}
 
 {% block scriptbottom %}

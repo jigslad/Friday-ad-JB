@@ -73,13 +73,27 @@
                 {{ form.vars.label }}
             {% endif %}
         </span>
-    {% else %}
-        {#<span class="custom-radio {% if checked %}checked{% endif %}">#}
-        <span class="radio-span">
-            <input class="checkbox" type="radio" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />        	
-            <label for="{{ form.vars.id }}"></label>
+    {% elseif attr['class'] is defined and 'radio-circle-btn' in attr['class'] %}
+       <span class="radio-span">
+    	<input class="checkbox" type="radio" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} /> 
+       {% if form.vars.label is defined and form.vars.label is not null %}
+           {% if label is empty -%}
+                {%- if label_format is defined and label_format is not empty -%}
+                    {% set label = label_format|replace({
+                        '%name%': name,
+                        '%id%': id,
+                    }) %}
+                {%- else -%}
+                    {% set label = name|humanize %}
+                {%- endif -%}
+            {%- endif -%}
+            <label for="{{ form.vars.id }}"></label>{{ label|trans({}, translation_domain)|raw }}
+        {% endif %}
+      </span>
+    {% else %}    
+        <span class="custom-radio {% if checked %}checked{% endif %}">
+           <input class="checkbox" type="radio" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />        	
         </span>
-        {#</span>#}
     {% endif %}
 {%- endblock radio_widget %}
 
@@ -89,7 +103,7 @@
     {#</span>#}
 {%- endblock checkbox_widget %}
 
-{% block form_label -%}
+{% block form_label -%}	
     {% if label is not same as(false) -%}
         {% if not compound -%}
             {% set label_attr = label_attr|merge({'for': id}) %}
@@ -130,6 +144,8 @@
         {% if attr['field-help'] is defined and key > 0 %}<br />{% endif %}
         {% if attr['field-help'] is not defined and attr['add-br'] is defined and key > 0 %}<br />{% endif %}
         {% if attr['class'] is defined and 'radio-capsule-btn' in attr['class'] %}
+            {{- form_widget(child, { 'attr': { 'class': attr['class'] }}) -}}
+        {% elseif attr['class'] is defined and 'radio-circle-btn' in attr['class'] %}
             {{- form_widget(child, { 'attr': { 'class': attr['class'] }}) -}}
         {% else %}
             {{- form_widget(child) -}}
