@@ -108,7 +108,7 @@
                                                     {{ set_variables('profileImageUploadStylesheets', {'loaded':'false'}) }}
                                                     {{ render(controller('FaUserBundle:UserImage:showProfileImageUploader', {'userId': app.user.getId(), 'isCompany': true})) }}
                                                     {{ set_variables('profileImageUploadJavascriptBottom', {'loaded':'false'}) }}
-                                                    <div class="clearfix">
+                                                    <div class="clearfix d-flex">
                                                         {% set userCompanyLogo = null %}
                                                         {% if userSiteObj %}
                                                             {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), userSiteObj.getPath(), app.user.getId(), null, null, true, true, app.user.getStatus().getId(), app.user.getProfileName()]) %}
@@ -203,7 +203,7 @@
                                                     {% endif %}
 
                                                     <div class="mt30 field-300">
-                                                        {{ form_widget(form.save_profile_changes, {'attr': {'class':'primary-btn-2 button expand mb0'}}) }}
+                                                        {{ form_widget(form.save_profile_changes, {'attr': {'class':'secondary-btn-1 button expand mb0'}}) }}
                                                     </div>
                                                 </div>
                                             {{ form_end(form) }}
@@ -352,7 +352,7 @@
                                                     </div>
 
                                                     <div class="design-field field-300">
-                                                        {{ form_widget(shopForm.save_shop_profile_changes, {'attr': {'class':'primary-btn-2 button expand mb0'}}) }}
+                                                        {{ form_widget(shopForm.save_shop_profile_changes, {'attr': {'class':'secondary-btn-1 button expand mb0'}}) }}
                                                     </div>
                                                 {{ form_end(shopForm) }}
                                             {% endif %}

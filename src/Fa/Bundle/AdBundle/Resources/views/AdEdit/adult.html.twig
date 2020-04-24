@@ -17,43 +17,53 @@
     {{ block('imageUploadStylesheets') }}
 {% endblock %}
 
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('build/css/dashboard.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('build/css/paa.css') }}"/>
+{% endblock %}
+
+
 {% use "FaCoreBundle:GoogleMap:renderLocationUsingCircle.html.twig" %}
 
 {% block body -%}
-    <div class="posting-bg">
-        {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
-        <div class="row d-board-main">
-            <div class="off-canvas-wrap" data-offcanvas>
-                <div class="inner-wrap">
-                    {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
-                    <div id="db-middle-part" class="large-18 columns">
-                        <div id="middle-column">
-                            <a href="{{ path('manage_my_ads_active') }}" class="backto-my-items" title="{{ 'Back to Manage my ads'|trans({}, 'frontend-ad-edit') }}">{{ 'Back to Manage my ads'|trans({}, 'frontend-ad-edit') }}</a>
-                            <h1 class="text-center paa-title">{{ 'Edit your ad'|trans({}, 'frontend-ad-edit') }} </h1>
-                            <div class="big-wrapper">
-                                <div class="change-category clearfix">
-                                    {#<div class="cat-name-wrap">
-                                        <span>{{ 'Category'|trans({}, 'frontend-ad-edit') }}:</span> {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|last('<span class="seperator"></span>')|raw }}
-                                    </div>#}
-                                    <div class=" left cat-name-wrap media-object" style="display: inline-flex;">
-                                        <div class="media-object-section">
-                                            <span class="cat-caption">{{ 'Category'|trans({}, 'frontend-ad-edit') }}:</span>
+    <div class="dash-block">
+        <div class="posting-bg">
+            <div class="container">
+                {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
+                <div class="row d-board-main">
+                    <div class="off-canvas-wrap" data-offcanvas>
+                        <div class="inner-wrap">
+                            {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
+                            <div id="db-middle-part" class="col-md-19 d-right-col">
+                                <div id="middle-column">
+                                    <a href="{{ path('manage_my_ads_active') }}" class="backto-my-items" title="{{ 'Back to Manage my ads'|trans({}, 'frontend-ad-edit') }}">{{ 'Back to Manage my ads'|trans({}, 'frontend-ad-edit') }}</a>
+                                    <h1 class="text-center paa-title">{{ 'Edit your ad'|trans({}, 'frontend-ad-edit') }} </h1>
+                                    <div class="big-wrapper">
+                                        <div class="change-category clearfix">
+                                            {#<div class="cat-name-wrap">
+                                                <span>{{ 'Category'|trans({}, 'frontend-ad-edit') }}:</span> {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|last('<span class="seperator"></span>')|raw }}
+                                            </div>#}
+                                            <div class=" left cat-name-wrap media-object" style="display: inline-flex;">
+                                                <div class="media-object-section">
+                                                    <span class="cat-caption">{{ 'Category'|trans({}, 'frontend-ad-edit') }}:</span>
+                                                </div>
+                                                <div class="media-object-section">
+                                                    {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|last('<span class="seperator"></span>')|raw }}
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="media-object-section">
-                                            {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|last('<span class="seperator"></span>')|raw }}
-                                        </div>
+                                        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                                            {{ form_errors(form) }}
+                                            {% set orderedFields = form.paa_ordered_fields.vars.value|split(',') %}
+                                            {% if orderedFields|length  > 0 %}
+                                                {{ include('FaAdBundle:AdEdit:adultFields.html.twig') }}
+                                            {% endif %}
+                                            <div class="small-wrapper">
+                                                {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand mt30'}}) }}
+                                            </div>
+                                        {{ form_end(form) }}
                                     </div>
                                 </div>
-                                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-                                    {{ form_errors(form) }}
-                                    {% set orderedFields = form.paa_ordered_fields.vars.value|split(',') %}
-                                    {% if orderedFields|length  > 0 %}
-                                        {{ include('FaAdBundle:AdEdit:adultFields.html.twig') }}
-                                    {% endif %}
-                                    <div class="small-wrapper">
-                                        {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand mt30'}}) }}
-                                    </div>
-                                {{ form_end(form) }}
                             </div>
                         </div>
                     </div>
