@@ -206,9 +206,9 @@ input.checkbox {
 	color: #212527 !important;
 	font-weight: normal !important;
 	border-radius: 4px !important;
-	background: #FFFFFF !important;
+	background: #CBD5D9 !important;
 	border: 1px solid #CBD5D9 !important;
-	margin-bottom: 10px !important;
+	margin-bottom: 0px !important;
 	height: 40px !important;
 }
 .select2-container .select2-selection--single .select2-selection__rendered {
@@ -280,11 +280,6 @@ input.checkbox {
     margin: 0 5px;
 }
 
-element.style {
-    position: absolute;
-    left: 136.818px;
-    top: 199.341px;
-}
 .profile-logo-ins .f-dropdown {
     margin-top: 10px;
     border-color: #e3e3e3;
@@ -341,4 +336,5 @@ element.style {
     background: #EAEFF0 !important;
 }
 .paa-block .paa-features li.grey-check label { display:inline-flex !important; }
+.paa-usr-type .grey-radio span { display:inline-block !important; }
 
