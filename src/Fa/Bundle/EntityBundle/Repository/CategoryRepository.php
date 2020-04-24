@@ -1296,6 +1296,19 @@ class CategoryRepository extends NestedTreeRepository
 
         return $categoryClassArray;
     }
+    
+    public function getHeaderAdultCategoryClassArray()
+    {
+        $categoryClassArray = array();
+        $categoryClassArray[self::ADULT_ID]     = 'mob-adult';
+        $categoryClassArray[self::ADULT_MASSAGE_ID]     = 'mob-adult-massage';
+        $categoryClassArray[self::ESCORT_SERVICES_ID]     = 'mob-adult-escorts';
+        $categoryClassArray[self::FETISH_AND_ROLE_PLAY_ID]     = 'mob-adult-fetish-role';
+        $categoryClassArray[self::GAY_MALE_ESCORT_ID]     = 'mob-adult-agy-male';
+        $categoryClassArray[self::ADULT_INDUSTRY_JOBS_ID]     = 'mob-adult-industry-jobs';
+        $categoryClassArray[self::ADULT_CONTACTS_ID]     = 'mob-adult-contacts';
+        return $categoryClassArray;
+    }
 
     /**
      * Get categories childrens array by parent id.
@@ -2480,7 +2493,8 @@ class CategoryRepository extends NestedTreeRepository
             if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
                 $data['query_filters']['item']['location'] = $locationId.'|15';
             }
-            $data['query_filters']['item']['category_id'] = self::ADULT_ID;
+            $data['static_filters'] = ' AND ('.AdSolrFieldMapping::ROOT_CATEGORY_ID.':'.CategoryRepository::ADULT_ID.' OR '.AdSolrFieldMapping::CATEGORY_ID.':'.CategoryRepository::ADULT_ID.')';
+            //$data['query_filters']['item']['category_id'] = self::ADULT_ID;
             if (!empty($locationDetails)) {
                 if (isset($locationDetails['latitude']) && isset($locationDetails['longitude'])) {
                     $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'].', '.$locationDetails['longitude']);
@@ -2499,6 +2513,7 @@ class CategoryRepository extends NestedTreeRepository
             $leafLevelCategoryCount = get_object_vars($result['a_category_id_i']);
             
             $this->categoryCountArray = $categoryCountArray;
+            $this->leafLevelCategoryCount = $leafLevelCategoryCount;
         }
         
         $tableName = $this->_em->getClassMetadata('FaEntityBundle:Category')->getTableName();
@@ -2513,13 +2528,14 @@ class CategoryRepository extends NestedTreeRepository
         $stmt = $this->_em->getConnection()->prepare($query);
         $stmt->execute();
         $categories         = $stmt->fetchAll();
+        $categoryClassArray = $this->getHeaderAdultCategoryClassArray();
         
         if (count($categories)) {
             
             foreach ($categories as $index => $category) {
                 if ($category['parent_id'] == self::ADULT_ID || $category['id'] == self::ADULT_ID) {
                     $count = (isset($categoryCountArray[$category['id']]) ? $categoryCountArray[$category['id']] : 0);
-                    
+                    $leafCatCount = (isset($leafLevelCategoryCount[$category['id']]) ? $leafLevelCategoryCount[$category['id']] : 0);
                     if ($count < 1) {
                         $count = (isset($leafLevelCategoryCount[$category['id']]) ? $leafLevelCategoryCount[$category['id']] : 0);
                         if ($count < 1) {
@@ -2536,6 +2552,12 @@ class CategoryRepository extends NestedTreeRepository
                         $headerCategoryArray[$category['id']] = $categoryArray;
                         $categoryId1 = $category['id'];
                     } elseif (($category['lvl'] == 2 || ($category['lvl'] == 3 && $category['include_as_main_category_in_header'] == 1)) && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'])) {
+                        if (isset($categoryClassArray[$category['id']])) {
+                            $categoryArray['class'] = $categoryClassArray[$category['id']];
+                        }
+                        if($leafCatCount>1) {
+                            $categoryArray['count'] = $leafCatCount;
+                        }
                         $headerCategoryArray[$categoryId1]['children'][$category['id']] = $categoryArray;
                         $categoryId2 = $category['id'];
                     } elseif ($category['lvl'] == 3 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'])) {

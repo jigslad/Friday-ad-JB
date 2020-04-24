@@ -1273,10 +1273,40 @@ footer a:hover{
 .m-pop-click { position: absolute;right: 15px; width: 15px; }
 .m-pop-1{ min-height: 40px;overflow: hidden;height: 40px}
 .m-pop-2{ min-height: 100%;overflow: auto;height: auto; }
+
+.back-arrow-icon {
+    margin-right: 2px !important;
+    display: inline-block;
+    transform: rotate(180deg);
+    width: 10px;
+    height: 31px;
+    background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' x='0' y='0' width='13' height='15' viewBox='-1411 455.9 13 33' xml:space='preserve'%3e%3cstyle type='text/css'%3e .st0%7bfill:none;stroke:%23ACB0B7;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;%7d %3c/style%3e%3ctitle%3eselected arrow%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cg transform='translate(-398.000000, -693.000000)'%3e%3cg transform='translate(-2.000000, -127.000000)'%3e%3cg transform='translate(0.000000, 387.000000)'%3e%3cpath class='st0' d='M-1009 890.9l9 14.5 -9 14.5'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e") 0 4px no-repeat !important;
+}
+.m-back-to-hp a {
+    font-weight: 600 !important;
+}
+    
 @media only screen and (min-width: 320px) and (max-width: 640px) {
     .m-pop-click { top: 50px; }
     .m-pop-1{ min-height: 90px;overflow: hidden;height: 90px; }
     .m-pop-2{ min-height: 100%;overflow: auto; height: auto; }
+}
+@media only screen and (min-width: 320px) and (max-width: 640px) {
+    .top-bar-section .login-menu li:not(.has-form) a:not(.button) {
+        background: #4D5052 !important;
+        border-right: 1px solid #212527 !important;
+        column-count: 2 !important;
+        column-gap: 0 !important;
+    }
+    .top-bar-section .accordion dd > a, .top-bar-section .accordion dd > a:hover, .top-bar-section .accordion dd.active > a {
+        background: #4D5052 !important;
+    }
+    .top-bar-section li:not(.has-form) a:not(.button) {
+        color: #fff !important;
+    }
+    .top-bar-section ul li:hover:not(.has-form) > a, .top-bar-section ul li:focus:not(.has-form) > a {
+        color: #9C1F9F !important
+    }
 }
 </style>
 
