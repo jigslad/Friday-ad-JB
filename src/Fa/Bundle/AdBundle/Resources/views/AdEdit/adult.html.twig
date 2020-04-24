@@ -19,7 +19,6 @@
 
 {% block stylesheet %}
     <link rel="stylesheet" href="{{ asset('build/css/dashboard.css') }}"/>
-    <link rel="stylesheet" href="{{ asset('build/css/paa.css') }}"/>
 {% endblock %}
 
 
@@ -36,6 +35,14 @@
                             {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
                             <div id="db-middle-part" class="col-md-19 d-right-col">
                                 <div id="middle-column">
+                                    <div>
+                                        <a href="{{ path('manage_my_ads_active') }}" class="backto-my-items" title="{{ 'Back to Manage my ads'|trans({}, 'frontend-ad-edit') }}">{{ 'Back to Manage my ads'|trans({}, 'frontend-ad-edit') }}</a>
+                                        <a href="{{ path('manage_my_ads_active') }}" class="paa-back-arrow" title="{{ 'Back to Manage my ads'|trans({}, 'frontend-ad-edit') }}">{{ 'Back to Manage my ads'|trans({}, 'frontend-ad-edit') }}</a>
+                                    </div>
+                                    <div class="col-md-24 d-flex justify-content-center mb30">
+                                        {#                                        <h1 class="text-center paa-title">{{ 'Edit your ad'|trans({}, 'frontend-ad-edit') }} </h1>#}
+                                        <h1 class="s-h1 paa-title col-md-24 col-lg-18 text-center">{{ 'Edit your ad'|trans({}, 'frontend-ad-edit') }}</h1>
+                                    </div>
                                     <a href="{{ path('manage_my_ads_active') }}" class="backto-my-items" title="{{ 'Back to Manage my ads'|trans({}, 'frontend-ad-edit') }}">{{ 'Back to Manage my ads'|trans({}, 'frontend-ad-edit') }}</a>
                                     <h1 class="text-center paa-title">{{ 'Edit your ad'|trans({}, 'frontend-ad-edit') }} </h1>
                                     <div class="big-wrapper">

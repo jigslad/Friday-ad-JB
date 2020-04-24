@@ -8,11 +8,11 @@
             <div class="clearfix">
                 <div class="edit-pro-btns">
                     <a class="xs-btn-1 button edit-banner-btn" href="javascript:void(0);" onclick="return getUserSiteBannerOriginalImage('{{ path(bigImageRoute, {'userSiteId': userSiteObj.getId()}) }}', true);" id="edit_banner_btn">{{'Edit'|trans({}, 'frontend-my-profile')}}</a>
-                    <a class="xs-btn-1 button change-banner-btn" href="javascript:void(0);" data-reveal-id="shopBannerModal">{{'Change image'|trans({}, 'frontend-my-profile')}}</a>
+                    <a class="xs-btn-1 button change-banner-btn" data-toggle="modal" data-target="#shopBannerModal">{{'Change image'|trans({}, 'frontend-my-profile')}}</a>
                 </div>
             </div>
         </div>
     </div>
     
-    <div class="show-for-small-only text-right mt10"><a class="primary-btn-3 button thin-btn mb0" href="javascript:void(0);" data-reveal-id="shopBannerModal">{{'Change image'|trans({}, 'frontend-my-profile')}}</a></div>
+    <div class="show-for-small-only text-right mt10"><a class="primary-btn-3 button thin-btn mb0"  data-toggle="modal" data-target="#shopBannerModal">{{'Change image'|trans({}, 'frontend-my-profile')}}</a></div>
 {% endif %}

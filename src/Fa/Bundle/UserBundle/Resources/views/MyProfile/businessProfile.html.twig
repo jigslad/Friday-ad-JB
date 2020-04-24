@@ -241,28 +241,34 @@
                                                 {{ form_start(shopForm, {'attr': {'novalidate': 'novalidate'}}) }}
                                                     {% set userSiteBannerRepository = fetch_repository('FaUserBundle:UserSiteBanner') %}
                                                     {% set userSiteBannerOtherImages = userSiteBannerRepository.getUserSiteBannerOtherImages() %}
-                                                    <div id="shopBannerModal" class="reveal-modal small" data-reveal>
-                                                        <a class="close-reveal-modal">&#215;</a>
-                                                        <h5 class="modal-title">
-                                                            {{'Change cover image'|trans({}, 'frontend-my-profile')}}
-                                                        </h5>
-                                                        <div class="modal-content">
-                                                            <div class="text-center">
-                                                                {{'We recommend you to upload an image<br />with a minimum size of 1190px x 350px'|trans({}, 'frontend-my-profile')}}
-                                                                {{ render(controller('FaUserBundle:UserSiteBanner:showUserSiteBannerUploader', {'userSiteId': userSiteObj.getId()})) }}
-                                                                {{ set_variables('userSiteBannerUploadJavascriptBottom', {'loaded':'false'}) }}
-                                                                <div class="relative">
-                                                                    <a href="javascript:void(0);" class="button secondary-btn-1 expand mt15 needsclick" id="pickUserSiteBannerFile">{{'Upload your photo'|trans({}, 'frontend-my-profile')}}</a>
+                                                    <div class="modal custom-modal" id="shopBannerModal">
+                                                        <div class="modal-dialog modal-sm">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title save-search-title">{{'Change cover image'|trans({}, 'frontend-my-profile')}}</h5>
+                                                                    <button class="close-modal" class="close" data-dismiss="modal">×</button>
                                                                 </div>
-                                                                <div class="text-center">{{'Or choose from the options below'|trans({}, 'frontend-my-profile')}}</div>
-                                                                <ul class="cover-img-thumbs clearfix">
-                                                                    {% for userSiteBannerOtherImage in userSiteBannerOtherImages%}
-                                                                        <li><a href="javascript:void(0);" onclick="return changeBanner('{{ userSiteBannerOtherImage.getId() }}');"><img src="{{ shared_url(userSiteBannerOtherImage.getPath()~'/'~userSiteBannerOtherImage.getFilename()|replace({'.png':''})~'_68x55.jpg') }}" alt="" /></a></li>
-                                                                    {% endfor %}
-                                                                </ul>
+                                                                <div class="modal-body">
+                                                                    <div class="text-center">
+                                                                        {{'We recommend you to upload an image<br />with a minimum size of 1190px x 350px'|trans({}, 'frontend-my-profile')}}
+                                                                        {{ render(controller('FaUserBundle:UserSiteBanner:showUserSiteBannerUploader', {'userSiteId': userSiteObj.getId()})) }}
+                                                                        {{ set_variables('userSiteBannerUploadJavascriptBottom', {'loaded':'false'}) }}
+                                                                        <div class="relative" style="display: inline-flex !important;">
+                                                                            <a href="javascript:void(0);" class="button secondary-btn-1 expand mt15 needsclick" id="pickUserSiteBannerFile">{{'Upload your photo'|trans({}, 'frontend-my-profile')}}</a>
+                                                                        </div>
+                                                                        <div class="text-center">{{'Or choose from the options below'|trans({}, 'frontend-my-profile')}}</div>
+                                                                        <ul class="cover-img-thumbs clearfix">
+                                                                            {% for userSiteBannerOtherImage in userSiteBannerOtherImages%}
+                                                                                <li><a href="javascript:void(0);" onclick="return changeBanner('{{ userSiteBannerOtherImage.getId() }}');"><img src="{{ shared_url(userSiteBannerOtherImage.getPath()~'/'~userSiteBannerOtherImage.getFilename()|replace({'.png':''})~'_68x55.jpg') }}" alt="" /></a></li>
+                                                                            {% endfor %}
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
+
+
                                                     {% if businessCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID')} %}
                                                         <div class="featured-cat-block">
                                                             <h5>{{'Featured category'|trans({}, 'frontend-my-profile')}}</h5>

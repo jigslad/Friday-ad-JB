@@ -516,7 +516,7 @@
     width: 530px;
 }
 .field-122, input.field-122 {
-    width: 122px;
+    width: 122px !important;
 }
 .bz-profile-logo {
     background: #fff;
@@ -600,6 +600,79 @@
 }
 .edit-pro-btns .edit-banner-btn {
     min-width: 90px;
+}
+.inline-list {
+    margin: 0 auto 1.0625rem auto;
+    margin-right: auto;
+    margin-left: auto;
+    margin-left: -1.375rem;
+    margin-right: 0;
+    padding: 0;
+    list-style: none;
+    overflow: hidden;
+}
+.inline-list > li {
+    list-style: none;
+    float: left;
+    margin-left: 1.375rem;
+    display: block;
+}
+.thumb-img-wrap {
+    padding: 4px;
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+.upload-thumb-img span {
+    display: block;
+    width: 130px;
+    height: 100px;
+    background: url('data:image/svg+xml;charset=US-ASCII,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%0D%0A%3C%21--%20Generator%3A%20Adobe%20Illustrator%2018.0.0%2C%20SVG%20Export%20Plug-In%20.%20SVG%20Version%3A%206.00%20Build%200%29%20%20--%3E%0D%0A%3C%21DOCTYPE%20svg%20PUBLIC%20%22-//W3C//DTD%20SVG%201.1//EN%22%20%22http%3A//www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd%22%3E%0D%0A%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3Asketch%3D%22http%3A//www.bohemiancoding.com/sketch/ns%22%0D%0A%09%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%22133px%22%20height%3D%22100px%22%0D%0A%09%20viewBox%3D%220%200%20133%20100%22%20style%3D%22enable-background%3Anew%200%200%20133%20100%3B%22%20xml%3Aspace%3D%22preserve%22%3E%0D%0A%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23FFFFFF%3B%7D%0D%0A%09.st1%7Bfill%3A%2393C5FF%3B%7D%0D%0A%09.st2%7Bfill%3A%23CE9158%3B%7D%0D%0A%09.st3%7Bfill%3A%23FFCB00%3B%7D%0D%0A%09.st4%7Bfill%3A%23FFFFFF%3Bfill-opacity%3A0.8%3B%7D%0D%0A%09.st5%7Bfill%3A%23A8DC28%3B%7D%0D%0A%3C/style%3E%0D%0A%3Ctitle%3Ephoto%20icon%20off%3C/title%3E%0D%0A%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%0D%0A%3Cg%20id%3D%22PAA%22%20sketch%3Atype%3D%22MSPage%22%3E%0D%0A%09%3Cg%20id%3D%22Desktop-HD-Motors-PAA-10%22%20transform%3D%22translate%28-485.000000%2C%20-899.000000%29%22%20sketch%3Atype%3D%22MSArtboardGroup%22%3E%0D%0A%09%09%3Cg%20id%3D%22_x35_-Add-more-details-2%22%20transform%3D%22translate%28457.000000%2C%20-43.000000%29%22%20sketch%3Atype%3D%22MSLayerGroup%22%3E%0D%0A%09%09%09%3Cg%20id%3D%22Group%22%20sketch%3Atype%3D%22MSShapeGroup%22%3E%0D%0A%09%09%09%09%3Cg%20id%3D%22Add-photos-2%22%20transform%3D%22translate%280.000000%2C%20525.000000%29%22%3E%0D%0A%09%09%09%09%09%3Cg%20transform%3D%22translate%280.000000%2C%20266.000000%29%22%3E%0D%0A%09%09%09%09%09%09%3Cg%20id%3D%22main-photo%22%20transform%3D%22translate%2822.999324%2C%20111.478761%29%22%3E%0D%0A%09%09%09%09%09%09%09%3Cg%20id%3D%22photo-icon-off%22%20transform%3D%22translate%285.141268%2C%2040.108563%29%22%3E%0D%0A%09%09%09%09%09%09%09%09%3Crect%20id%3D%22Rectangle-128%22%20x%3D%220%22%20y%3D%220%22%20class%3D%22st0%22%20width%3D%22132%22%20height%3D%2299%22/%3E%0D%0A%09%09%09%09%09%09%09%09%3Crect%20id%3D%22Rectangle-129%22%20x%3D%228%22%20y%3D%228%22%20class%3D%22st1%22%20width%3D%22116%22%20height%3D%2283%22/%3E%0D%0A%09%09%09%09%09%09%09%09%3Cpath%20id%3D%22Path-106%22%20class%3D%22st2%22%20d%3D%22M7.8%2C91.2h116l-0.3-44.8L99.5%2C67.9L51.1%2C33.6L7.8%2C68V91.2z%22/%3E%0D%0A%09%09%09%09%09%09%09%09%3Cellipse%20id%3D%22Oval-70%22%20class%3D%22st3%22%20cx%3D%2299.3%22%20cy%3D%2230.4%22%20rx%3D%2212.3%22%20ry%3D%2211.9%22/%3E%0D%0A%09%09%09%09%09%09%09%09%3Crect%20id%3D%22Rectangle-124%22%20x%3D%220%22%20y%3D%220%22%20class%3D%22st4%22%20width%3D%22131.7%22%20height%3D%2298.8%22/%3E%0D%0A%09%09%09%09%09%09%09%09%3Cpath%20id%3D%22Plus%22%20class%3D%22st5%22%20d%3D%22M61.4%2C45.4V27.1h11.2v18.3h17.2v11.2H72.5v17.2H61.4V56.6H43.1V45.4H61.4z%22/%3E%0D%0A%09%09%09%09%09%09%09%3C/g%3E%0D%0A%09%09%09%09%09%09%3C/g%3E%0D%0A%09%09%09%09%09%3C/g%3E%0D%0A%09%09%09%09%3C/g%3E%0D%0A%09%09%09%3C/g%3E%0D%0A%09%09%3C/g%3E%0D%0A%09%3C/g%3E%0D%0A%3C/g%3E%0D%0A%3C/svg%3E%0D%0A') no-repeat;
+    background-size: auto;
+    background-size: 130px 100px;
+}
+.upload-thumb-img .moxie-shim.moxie-shim-html5 {
+    z-index: 1 !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+.inline-list > li {
+    list-style: none;
+}
+.thumb-img-wrap {
+    cursor: pointer;
+}
+.featured-cat-block {
+    margin: 0 0 45px;
+}
+.design-your-profile h5 {
+    margin: 0 0 9px;
+}
+.design-your-profile p {
+    font-size: 14px;
+    line-height: 22px;
+}
+.cover-img-thumbs {
+    margin: 20px 0 0 0;
+    list-style: none;
+}
+.cover-img-thumbs li {
+    float: left;
+    width: 68px;
+    margin: 0 10px 10px 0;
+}
+.cover-img-thumbs li a {
+    display: inline-block;
+}
+.cover-img-thumbs li img {
+    max-width: 68px;
+    max-height: 55px;
+}
+.modal {
+    z-index: 1050 !important;
+    top: 0 !important;
+    width: 100% !important;
 }
 @media (min-width: 641px) and (max-width: 959px){
 	.manage-item-list .ad-remove a {
