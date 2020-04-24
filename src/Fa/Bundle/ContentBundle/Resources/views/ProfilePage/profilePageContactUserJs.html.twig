@@ -22,7 +22,7 @@ function profilePageContactUser(status = 1)
         hideAlertMessage();
         if (response.htmlContent.length) {
             $('#profilePageContactUserModal').html(response.htmlContent);
-            $('#profilePageContactUserModal').foundation('reveal', 'open');
+            $('#profilePageContactUserModal').modal('show');
             //same popup displaying at mybusiness detail email link for that below ga is not reuired ticket FFR-2185 
             if(status == 1) {
             	ga('send', 'event', 'CTA', 'Contact Seller button Profile', 'Profile {{ profileUserId }}');

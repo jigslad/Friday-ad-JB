@@ -69,7 +69,7 @@
                 $('#profileEditModal').html(response.htmlContent);
             } else {
                 $('#business_about_us_div').html(response.successContent);
-                $('#profileEditModal').foundation('reveal', 'close');
+                $('#profileEditModal').modal('hide');
                 $('#business_about_us_heading').notify('{{'About us edited successfully.'|trans({}, 'frontend-my-profile')}}', { position:"top", className:"success" });
                 scrollToElement('#business_about_us_div', '1000', -150);
                 {% if currentDevice == 'M' %}

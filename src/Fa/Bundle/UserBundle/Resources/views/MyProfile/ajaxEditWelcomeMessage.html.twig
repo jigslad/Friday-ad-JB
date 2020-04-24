@@ -63,7 +63,7 @@
                 $('#profileEditModal').html(response.htmlContent);
             } else {
                 $('#business_welcome_message_div').html(response.successContent);
-                $('#profileEditModal').foundation('reveal', 'close');
+                $('#profileEditModal').modal('hide');
                 $('#company_welcome_message_content').notify('{{'Welcome message edited successfully.'|trans({}, 'frontend-my-profile')}}', { position:"top", className:"success" });
                 scrollToElement('#company_welcome_message_content', '1000', -150);
             }

@@ -99,12 +99,12 @@
             if (response.htmlContent.length) {
                 $('#profilePageContactUserModal').html(response.htmlContent);
             } else if (response.error.length) {
-                $('#profilePageContactUserModal').foundation('reveal', 'close');
+                $('#profilePageContactUserModal').modal('hide');
                 $(decorateMessage(response.error, 'alert')).insertBefore('{{msg_div_id}}');
                 scrollToElement('{{msg_div_id}}', '1000', -150);
             } else {
                 updateUserSiteViewCounterField('{{ contactUserObj.getId() }}', 'profile_page_email_sent_count', '');
-                $('#profilePageContactUserModal').foundation('reveal', 'close');
+                $('#profilePageContactUserModal').modal('hide');
                 $(decorateMessage('{{'Contact request sent successfully.'|trans({}, 'frontend-contact-seller')}}', 'success')).insertBefore('{{msg_div_id}}');
                 scrollToElement('{{msg_div_id}}', '1000', -150);
                 ga('send', 'event', 'CTA', 'Send email Profile', 'Profile {{ contactUserObj.getId() }}');

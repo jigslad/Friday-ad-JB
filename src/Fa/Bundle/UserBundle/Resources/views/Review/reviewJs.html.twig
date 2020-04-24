@@ -15,14 +15,14 @@
                 bindAddReviewSubmitFormEvent();
                 bindReviewMessageUpdateCharCounterEvent();
                 bindStarRatingEvents('user_review_rating', 'rating_text');
-                $('#leave_review_modal').foundation('reveal', 'open');
+                $('#leave_review_modal').modal('show');
             }
         });
     }
 
     function closeAddReviewModalForm()
     {
-        $('#leave_review_modal').foundation('reveal', 'close');
+        $('#leave_review_modal').modal('hide');
     }
     
     function bindAddReviewSubmitFormEvent()

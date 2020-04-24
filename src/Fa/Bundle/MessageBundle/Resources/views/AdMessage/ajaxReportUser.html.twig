@@ -42,11 +42,11 @@
             if (response.htmlContent.length) {
                 $('#reportUserModal').html(response.htmlContent);
             } else if (response.error.length) {
-                $('#reportUserModal').foundation('reveal', 'close');
+                $('#reportUserModal').modal('hide');
                 $(decorateMessage(response.error, 'alert')).insertBefore('#message_box');
                 scrollToElement('#message_box', '1000', -150);
             } else {
-                $('#reportUserModal').foundation('reveal', 'close');
+                $('#reportUserModal').modal('hide');
                 $(decorateMessage('{{'User reported successfully.'|trans({}, 'frontend-contact-seller')}}', 'success')).insertBefore('#message_box');
                 scrollToElement('#message_box', '1000', -150);
                 $('#report_user_btn').hide();

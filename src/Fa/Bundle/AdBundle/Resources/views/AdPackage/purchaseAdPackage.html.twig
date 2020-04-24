@@ -439,7 +439,7 @@
             creditPackageSrNo = packageSrNo;
             creditPackagePrice = packagePrice;
             userCreditId = creditId;
-            $('#creditConfimBox').foundation('reveal', 'open');
+            $('#creditConfimBox').modal('show');
         } else {
             if (totalPrintWeeks && printPackageIdDurationArr[packageId]) {
                 var prevAvailableWeeks = null;
@@ -458,9 +458,9 @@
                     creditPackageSrNo = packageSrNo;
                     creditPackagePrice = packagePrice;
                     userCreditId = creditId;
-                    $('#unsufficientCreditForPrintBox').foundation('reveal', 'open');
+                    $('#unsufficientCreditForPrintBox').modal('show');
                 } else {
-                	$('#unsufficientCreditBox').foundation('reveal', 'open');
+                	$('#unsufficientCreditBox').modal('show');
                 }
             }
         }
@@ -520,7 +520,7 @@
     {
     	{% if privateUserAdParams is defined and privateUserAdParams|length and not privateUserAdParams.allowPrivateUserToPostAdFlag %}
             if (packagePrice <= 0) {
-                $('#privateUserMaxAdPostLimitModal').foundation('reveal', 'open');
+                $('#privateUserMaxAdPostLimitModal').modal('show');
                 return false;
             }
         {% endif %}

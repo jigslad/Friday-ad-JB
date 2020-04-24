@@ -105,7 +105,7 @@
                 hideAlertMessage();
                 if (response.htmlContent.length) {
                     $('#profileEditModal').html(response.htmlContent);
-                    $('#profileEditModal').foundation('reveal', 'open');
+                    $('#profileEditModal').modal('show');
                 } else if (response.error.length) {
                     $('#profile_main_div').prepend(decorateMessage(response.error, 'alert'));
                     scrollToElement('#profile_main_div', '1000', -150);
@@ -130,7 +130,7 @@
                 hideAlertMessage();
                 if (response.htmlContent.length) {
                     $('#profileEditModal').html(response.htmlContent);
-                    $('#profileEditModal').foundation('reveal', 'open');
+                    $('#profileEditModal').modal('show');
                 } else if (response.error.length) {
                     $('#profile_main_div').prepend(decorateMessage(response.error, 'alert'));
                     scrollToElement('#profile_main_div', '1000', -150);
@@ -155,7 +155,7 @@
                 hideAlertMessage();
                 if (response.htmlContent.length) {
                     $('#profileEditModal').html(response.htmlContent);
-                    $('#profileEditModal').foundation('reveal', 'open');
+                    $('#profileEditModal').modal('show');
                 } else if (response.error.length) {
                     $('#profile_main_div').prepend(decorateMessage(response.error, 'alert'));
                     scrollToElement('#profile_main_div', '1000', -150);
@@ -180,7 +180,7 @@
                 hideAlertMessage();
                 if (response.htmlContent.length) {
                     $('#profileEditModal').html(response.htmlContent);
-                    $('#profileEditModal').foundation('reveal', 'open');
+                    $('#profileEditModal').modal('show');
                 } else if (response.error.length) {
                     $('#profile_main_div').prepend(decorateMessage(response.error, 'alert'));
                     scrollToElement('#profile_main_div', '1000', -150);
@@ -205,7 +205,7 @@
                 hideAlertMessage();
                 if (response.htmlContent.length) {
                     $('#profileEditModal').html(response.htmlContent);
-                    $('#profileEditModal').foundation('reveal', 'open');
+                    $('#profileEditModal').modal('show');
                 } else if (response.error.length) {
                     $('#profile_main_div').prepend(decorateMessage(response.error, 'alert'));
                     scrollToElement('#profile_main_div', '1000', -150);
@@ -230,7 +230,7 @@
                 hideAlertMessage();
                 if (response.htmlContent.length) {
                     $('#profileEditModal').html(response.htmlContent);
-                    $('#profileEditModal').foundation('reveal', 'open');
+                    $('#profileEditModal').modal('show');
                 } else if (response.error.length) {
                     $('#profile_main_div').prepend(decorateMessage(response.error, 'alert'));
                     scrollToElement('#profile_main_div', '1000', -150);
@@ -255,7 +255,7 @@
                 hideAlertMessage();
                 if (response.htmlContent.length) {
                     $('#profileEditLocationModal').html(response.htmlContent);
-                    $('#profileEditLocationModal').foundation('reveal', 'open');
+                    $('#profileEditLocationModal').modal('show');
                 } else if (response.error.length) {
                     $('#profile_main_div').prepend(decorateMessage(response.error, 'alert'));
                     scrollToElement('#profile_main_div', '1000', -150);
@@ -280,14 +280,14 @@
                 hideAlertMessage();
                 if (response.htmlContent.length) {
                     $('#user_site_banner_div').html(response.htmlContent);
-                    $('#shopBannerModal').foundation('reveal', 'close');
+                    $('#shopBannerModal').modal('hide');
                 }
                 if (response.error.length) {
                     $(decorateMessage(response.error, 'alert')).insertBefore('#show_message_div');
-                    $('#shopBannerModal').foundation('reveal', 'close');
+                    $('#shopBannerModal').modal('hide');
                 } else {
                     $(decorateMessage("{{'Banner changed successfully.'|trans({}, 'frontend-my-profile')}}", 'success')).insertBefore('#show_message_div');
-                    $('#shopBannerModal').foundation('reveal', 'close');
+                    $('#shopBannerModal').modal('hide');
                 }
                 scrollToElement('#user_site_banner_div', '1000', -150);
             });

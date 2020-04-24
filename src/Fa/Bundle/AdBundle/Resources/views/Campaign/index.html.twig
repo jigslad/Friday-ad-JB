@@ -335,28 +335,28 @@
                 }
             {% else %} 
                 {% set showLoginPopUp = 1 %}
-                $('#login-modal').foundation('reveal', 'open');
+                $('#login-modal').modal('show');
                 event.preventDefault(); 
                 return false;
             {% endif %}
         });
 
         if({{showLoginPopUp}}==1) {
-            $('#login-modal').foundation('reveal', 'open');
+            $('#login-modal').modal('show');
         }
 
         if({{showAddToCartPopUp}}==1) {
             addToCart();
         }
         if({{showErrorPopUp}}==1) {
-            $('#error-modal').foundation('reveal', 'open');
+            $('#error-modal').modal('show');
         }
         if({{showAdLivePopUp}}==1) {
-            $('#adIsLive-modal').foundation('reveal', 'open');
+            $('#adIsLive-modal').modal('show');
         }
 
         if({{showAdLimitPopUp}}==1) {
-            $('#adLlimit-modal').foundation('reveal', 'open');
+            $('#adLlimit-modal').modal('show');
         }
         
         $("#manage_my_ad_link").click(function() {
@@ -435,8 +435,8 @@
                 route = Routing.generate('paa_lite_login');
             } else if ($('#fa_paa_lite_login_user_type_1').attr('checked')) {
             	$('#fa_paa_lite_login_user_type_1').prop('disabled', true);
-                $('#login-modal').foundation('reveal', 'close');
-                $('#register-modal').foundation('reveal', 'open');
+                $('#login-modal').modal('hide');
+                $('#register-modal').modal('show');
                 $('#fa_paa_lite_register_user_type_0').attr('checked', false);
                 $('#fa_paa_lite_register_user_type_1').attr('checked', true);
                 $('#fa_paa_lite_register_user_type_1').parent('.custom-radio').addClass('checked');
@@ -535,7 +535,7 @@
             if($('#fa_paa_lite_register_user_type_0').attr("checked")) {
             	$('#fa_paa_lite_register_user_type_0').prop('disabled', true);
                 $('#register-modal').foundation('reveal', 'close');
-                $('#login-modal').foundation('reveal', 'open');
+                $('#login-modal').modal('show');
                 $('#fa_paa_lite_login_user_type_1').parent('.custom-radio').removeClass('checked');
                 $('#fa_paa_lite_login_user_type_0').parent('.custom-radio').addClass('checked');
                 $('#fa_paa_lite_login_user_type_0').attr('checked', true);
@@ -630,7 +630,7 @@
             $('#paa_password_field_div').hide();
             $('#fa_paa_lite_login_save').text("{{'Sign up with email'|trans({}, 'frontend-paa-lite-login')}}");*/
             $('#login-modal').foundation('reveal', 'close');
-            $('#register-modal').foundation('reveal', 'open');
+            $('#register-modal').modal('show');
             $('#fa_paa_lite_register_user_type_0').parent('.custom-radio').removeClass('checked');
             $('#fa_paa_lite_register_user_type_1').parent('.custom-radio').addClass('checked');
             $('#fa_paa_lite_register_user_type_0').attr('checked', false);
@@ -641,7 +641,7 @@
             /*$('#paa_password_field_div').show();
             $('#fa_paa_lite_login_save').text("{{'Next step: add more details'|trans({}, 'frontend-paa-lite-login')}}");*/
             $('#register-modal').foundation('reveal', 'close');
-            $('#login-modal').foundation('reveal', 'open');
+            $('#login-modal').modal('show');
             $('#fa_paa_lite_login_user_type_0').attr('checked', true);
             $('#fa_paa_lite_login_user_type_1').attr('checked', false);
             $('#fa_paa_lite_login_user_type_0').prop('disabled', true);
@@ -661,7 +661,7 @@
         
         if (userType == 2) {
             $('#login-modal').foundation('reveal', 'close');
-            $('#register-modal').foundation('reveal', 'open');
+            $('#register-modal').modal('show');
             $('#fa_paa_lite_register_user_type_0').parent('.custom-radio').removeClass('checked');
             $('#fa_paa_lite_register_user_type_1').parent('.custom-radio').addClass('checked');
             $('#fa_paa_lite_register_user_type_0').attr('checked', false);
@@ -670,7 +670,7 @@
             $('#fa_paa_lite_register_user_type_0').prop('disabled', false);
         } else {
             $('#register-modal').foundation('reveal', 'close');
-            $('#login-modal').foundation('reveal', 'open');
+            $('#login-modal').modal('show');
             $('#fa_paa_lite_login_user_type_1').parent('.custom-radio').removeClass('checked');
             $('#fa_paa_lite_login_user_type_0').parent('.custom-radio').addClass('checked');
             $('#fa_paa_lite_login_user_type_0').attr('checked', true);
@@ -830,7 +830,7 @@
         })
         .done(function(response) {
             $('#upgradeBasicAdToFeaturedModal').html(response.htmlContent);
-            $('#upgradeBasicAdToFeaturedModal').foundation('reveal', 'open');
+            $('#upgradeBasicAdToFeaturedModal').modal('show');
         });
     }
 

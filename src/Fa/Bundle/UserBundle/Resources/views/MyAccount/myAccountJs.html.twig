@@ -312,7 +312,7 @@
         $('#paymentSourceDeleteModal').equalizer();
         $('#remove_payment_source_btn').unbind();
         $('#remove_payment_source_btn').bind( "click", function() {
-            $('#paymentSourceDeleteModal').foundation('reveal', 'close');
+            $('#paymentSourceDeleteModal').modal('hide');
             window.location.href = url;
         });
     }
@@ -322,7 +322,7 @@
         $('#addressBookDeleteModal').equalizer();
         $('#remove_address_btn').unbind();
         $('#remove_address_btn').bind( "click", function() {
-            $('#addressBookDeleteModal').foundation('reveal', 'close');
+            $('#addressBookDeleteModal').modal('hide');
             deleteAddress(addressBookId);
         });
     }

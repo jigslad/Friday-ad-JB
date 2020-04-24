@@ -62,7 +62,7 @@
                     $('#address_book_main').html(response.listHtmlContent);
                 }
                 
-                $('#addressBookModal').foundation('reveal', 'close');
+                $('#addressBookModal').modal('hide');
                 {% if userAddressBook.getId() %}
                     $(decorateMessage('{{'Address edited successfully.'|trans({}, 'frontend-user-address-book')}}', 'success')).insertBefore('#address_book_main');
                 {% else %}

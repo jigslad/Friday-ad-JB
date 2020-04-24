@@ -104,7 +104,7 @@
     	   var myServicelength = $("input[name='fa_paa_fourth_step_adult[my_service_id][]']:checked").length;
     	   if(categoryId == '{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ESCORT_SERVICES_ID')}}' && !$("#change_category_for_adult_reveal_modal").hasClass('editNtRevealPopup')) {
        			if(myServicelength == '1' && $("#fa_paa_fourth_step_adult_my_service_id_0").is(':checked') && genderTxt == 'Male') {
-       				$("#change_category_for_adult_reveal_modal").foundation('reveal', 'open');
+       				$("#change_category_for_adult_reveal_modal").modal('show');
        				return false;
            		}
        			return true;
@@ -258,7 +258,7 @@
         			serviceForMen = $("label[for="+$(this).attr('id')+"").text();
         			if(genderTxt == 'Male' && serviceForMen == 'Men' && myServicelength == '1') { 
         				 if( !$("#change_category_for_adult_reveal_modal").hasClass('revealPopup') ) {
-                			$("#change_category_for_adult_reveal_modal").foundation('reveal', 'open');
+                			$("#change_category_for_adult_reveal_modal").modal('show');
                 			$("#change_category_for_adult_reveal_modal").addClass('revealPopup');
                 			return false; 
         				 }

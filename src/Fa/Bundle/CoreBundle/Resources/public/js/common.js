@@ -299,7 +299,7 @@ function getViewport()
 
 function closeRevealModel(modelId)
 {
-    $(modelId).foundation('reveal', 'close');
+    $(modelId).modal('hide');
 }
 
 $(document).ready(function(){

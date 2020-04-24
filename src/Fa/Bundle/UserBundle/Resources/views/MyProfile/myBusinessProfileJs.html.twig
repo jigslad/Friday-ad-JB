@@ -74,14 +74,14 @@
             hideAlertMessage();
             if (response.htmlContent.length) {
                 $('#user_site_banner_div').html(response.htmlContent);
-                $('#shopBannerModal').foundation('reveal', 'close');
+                $('#shopBannerModal').modal('hide');
             }
             if (response.error.length) {
                 $(decorateMessage(response.error, 'alert')).insertBefore('#user_site_banner_div');
-                $('#shopBannerModal').foundation('reveal', 'close');
+                $('#shopBannerModal').modal('hide');
             } else {
                 $(decorateMessage("{{'Banner changed successfully.'|trans({}, 'frontend-my-profile')}}", 'success')).insertBefore('#user_site_banner_div');
-                $('#shopBannerModal').foundation('reveal', 'close');
+                $('#shopBannerModal').modal('hide');
             }
             scrollToElement('#user_site_banner_div', '1000', -150);
         });

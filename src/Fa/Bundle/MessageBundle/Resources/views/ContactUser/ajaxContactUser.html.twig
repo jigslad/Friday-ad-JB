@@ -54,7 +54,7 @@
             if (response.htmlContent.length) {
                 $('#messageUserModal').html(response.htmlContent);
             } else {
-                $('#messageUserModal').foundation('reveal', 'close');
+                $('#messageUserModal').modal('hide');
                 ga('send', 'event', 'CTA', 'Send email', {{ objAd.getId() }});
                 location.reload();
             }

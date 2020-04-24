@@ -15,7 +15,7 @@
     {% endif %}
     <h5 id="saved_search_header">{{'Your search has been set up!'|trans({}, 'frontend-save-search')}}</h5>
     <p>{{'Manage your <a href="%search_agent_link%">alerts and searches.</a>'|trans({'%search_agent_link%': path('list_search_agent', {'guid': (userGuid)})}, 'frontend-save-search')|raw}}</p>
-    <button class="secondary-btn-1 button expand" onclick="return $('#savedSearchAgentModal').foundation('reveal', 'close');">{{'Done'|trans({}, 'frontend-save-search')}}</button>
+    <button class="secondary-btn-1 button expand" onclick="return $('#savedSearchAgentModal').modal('hide');">{{'Done'|trans({}, 'frontend-save-search')}}</button>
 </div>
 <script language="javascript" type="text/javascript">
 //<![CDATA[
@@ -33,7 +33,7 @@
 
     	hideAlertMessage();
         ga('send', 'event', 'Email Alerts', 'Search-results-signup', gaLabel);
-        $('#savedSearchAgentModal').foundation('reveal', 'close');
+        $('#savedSearchAgentModal').modal('hide');
         if ($(".alertButton")) {
             $(".alertButton").each(function( index ) {
             	$(this).attr("onclick", "removeSavedSearchConfirmation('{{userSearchAgent.getId()}}')");

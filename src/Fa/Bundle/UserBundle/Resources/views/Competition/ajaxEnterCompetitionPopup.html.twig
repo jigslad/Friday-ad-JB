@@ -113,7 +113,7 @@
             unblockElement('#competitionModel');
         })
         .done(function(response) {
-            $('#competitionModel').foundation('reveal', 'close');
+            $('#competitionModel').modal('hide');
         });
     });
     $("#competition_id").submit(function(event) {
@@ -135,7 +135,7 @@
             	$('.manage-item-tabs').prepend(decorateMessage(response.error.length, 'error'));
             	scrollToElement('.manage-item-tabs', '1000', -150);
             } else if (response.success.length) {
-                $('#competitionModel').foundation('reveal', 'close');
+                $('#competitionModel').modal('hide');
                 $('.manage-item-tabs').prepend(decorateMessage('{{'You have successfully entered the competition.'|trans({}, 'frontend-competition')}}', 'success'));
                 scrollToElement('.manage-item-tabs', '1000', -150);
             }

@@ -69,7 +69,7 @@
             hideAlertMessage();
             if (response.htmlContent.length) {
                 $('#addTestimonialModal').html(response.htmlContent);
-                $('#addTestimonialModal').foundation('reveal', 'open');
+                $('#addTestimonialModal').modal('show');
             } else if (response.error.length) {
                 $('#testimonials_list_id').prepend(decorateMessage(response.error, 'alert'));
                 scrollToElement('#testimonials_list_id', '1000', -150);

@@ -594,7 +594,7 @@
             
         if (showMsg) {
             $('#carweb_category_msg_modal').append(msg);
-            $('#carweb_category_msg_modal').foundation('reveal', 'open');
+            $('#carweb_category_msg_modal').modal('show');
             $('#close_carweb_category_msg').click(function(e){
                 $('#carweb_category_msg').remove();
                 $('.close-reveal-modal').trigger('click');

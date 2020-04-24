@@ -113,7 +113,7 @@
                         if (!errorFlag) {
                             hideAlertMessage();
                             $(decorateMessage("{{'Banner uploaded successfully. You can reposition your cover photo.'|trans({}, 'frontend-my-profile')}}", 'success')).insertBefore(msgId);
-                            $('#shopBannerModal').foundation('reveal', 'close');
+                            $('#shopBannerModal').modal('hide');
                             var d = new Date();
                             getUserSiteBanner(true);
                             scrollToElement('#user_site_banner_div', '1000', -150);
