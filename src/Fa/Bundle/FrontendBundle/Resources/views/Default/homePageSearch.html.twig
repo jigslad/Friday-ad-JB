@@ -8,10 +8,10 @@
                        {{ include('FaCoreBundle::message.html.twig') }}
                     </div>
                     <div class="caption">
-                        <div class="tagline"><img src="{{ asset_url('fafrontend/images/tagline.svg') }}" alt="" /></div>
+                        <div class="tagline"><img src="{{ asset_url('fafrontend/images/Tagline.svg') }}" alt="" /></div>
                     </div>
                     <h2 class="tagline-text d-none d-md-block">{{ 'What are you searching for? Whether it’s a bargain bicycle or an emergency<br /> electrician, there’s all sorts of gems to be discovered. Get browsing today ...'|trans({}, 'frontend-homepage')|raw }}</h2>
-                    <div id="home-search" class="col-sm-18 col-md-14 home-search">
+                    <div id="home-search" class="col-sm-18 col-md-18 col-lg-14 home-search">
                         <div class="input-group mb-3">
                             <div class="input-group-prepend home-category-list">
                                {{ form_widget(attribute(form, 'item__category_id'), {'attr': {'class':'find-all custom_select' }}) }}
@@ -21,14 +21,16 @@
                             	<button class="input-group-text search-btn secondary-btn-1" type="submit">{{'Search'|trans({}, 'frontend-homepage')}}</button>
                             </div>
                         </div>
-    
+    					<div id="header_search_editable_location_reveal_modal" class="modal custom-modal tiny">
+                            {{ include('FaCoreBundle:Default:invalidLocationModal.html.twig', {'modalId': 'header_search_editable_location_reveal_modal'}) }}
+                        </div>
                         <div class="location">
                                 <span class="search-pin"></span>
-                                <span id="in_text_span" style="display: inline;">in</span> 
-                                <span id="header_search_editable_location_span" style="display: inline;">United Kingdom</span>
-                                <a href="javascript:void(0)" rel="nofollow" id="header_search_editable_location_a" style="display: inline;"> (change)</a>
-                                <div id="top_search_location" class="white-autocomplete" style="display: none;">
+                                <span id="in_text_span">{{ 'in'|trans({}, 'frontend-homepage') }}</span> <span id="header_search_editable_location_span">United Kingdom</span>
+                                <a href="javascript:void(0)" rel="nofollow" id="header_search_editable_location_a">({{ 'change'|trans({}, 'frontend-homepage') }})</a>
+                                <div id="top_search_location" class="white-autocomplete" style="display:none">
                                    {{ form_widget(form.item__location_autocomplete) }}
+                                   <a href="javascript:void(0);" rel="nofollow" id="fa_top_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
                                     <div class="clearfix">
                                         <button class="button xs-btn-1 expand left" type="button" id="top_search_location_homepage_ok">Ok</button>
                                         <button class="button xs-btn-1 expand right" type="button" id="top_search_location_cancel">Cancel</button>
@@ -38,9 +40,9 @@
                      </div>
                     <div class="forsale-phone d-none d-sm-block"></div>
                 </div> 
-                <div class="d-block d-md-none text-center mt20">
+                {#<div class="d-block d-md-none text-center mt20">
                     <a class="primary-btn-1 btn col-14 font-16" title="Place an ad" href="{{ path('ad_post_first_step') }}">Place an ad</a>
-                </div>
+                </div>#}
             </div>
         </div>
     </div>       

@@ -490,11 +490,21 @@
   .drag-ins-hr {
     font-weight: bold;
     color: $form-text-color;
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/upload-image.png) no-repeat;
+    background: url('/bundles/fafrontend/images/upload-image.png') no-repeat;
     padding: 0 0 0 26px;
     margin-bottom: 10px;
-    min-height: 40px;
-    background-position: center;
+    min-height: 15px;
+    display:inline-block;
+    background-position: left center;
+    background-size: 20px 15px;
+  }
+  .drag-ins-vr {
+    font-weight: bold;
+    color: $form-text-color;
+    background: url('/bundles/fafrontend/images/upload-image.png') no-repeat;
+    padding: 43px 0 0 0;
+    margin: 10px 0;
+    background-position: center top;
     background-size: 40px 30px;
   }
 }
@@ -1175,6 +1185,24 @@
     line-height: 16px;
     display: inline-block;
 }
+.cat-mid-full { width:63% !important; margin:auto auto 20px auto !important;  }
+.paa-block .paa-features li.grey-check label { display:inline-flex !important; }
+.paa-usr-type .grey-radio span { display:inline-block !important; }
+.paa-block .subtitle { font-size: 20px;font-weight: 300;line-height: 26px;color: #4a4a4a; }
+
+.show-location-mapfit {
+    visibility: visible;
+    height: 141px;
+    margin-top: 0;
+}
+.map-box {
+    background: #fff;
+    padding: 7px;
+    margin: 15px auto 0 auto;
+    width: 242px;
+    height: 141px;
+}
+
 @media only screen and (min-width: 960px) and (max-width: 1151px) {
     .tab-pad {
         padding: 0px 8px !important;

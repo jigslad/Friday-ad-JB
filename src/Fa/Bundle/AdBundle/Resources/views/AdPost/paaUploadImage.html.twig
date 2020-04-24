@@ -14,21 +14,21 @@
         </h3>
         <div class="text-center">
             <p class="mb0">
-                {% if vertical is defined and vertical == 'jobs' %}
-                    <div><span id="paa_image_upload_tips">{{ 'Upload an image with the logo of your company. This will be used as the main image of your ad. You can add other images if you want to.'|trans({}, 'frontend-paa-fourth-step')}}</span></div>
-                    {% if form.photo_error.vars.attr['field-help'] is defined and form.photo_error.vars.attr['field-help'] is not null %}&nbsp;
-                        <div class="image-tooltip-wrapper" data-toggle="tooltip"><span class="image-tooltip">{{ form.photo_error.vars.attr['field-help']|raw }}</span><span class="info-icon">info</span></div>
-                    {% endif %}
+            	<div><span id="paa_image_upload_tips">
+            	{% if vertical is defined and vertical == 'jobs' %}
+                    {{ 'Upload an image with the logo of your company. This will be used as the main image of your ad. You can add other images if you want to.'|trans({}, 'frontend-paa-fourth-step')}}
                 {% else %}
-                    <div><span id="paa_image_upload_tips">{{ 'Add some images to your advert. You can add multiple images at a time.'|trans({}, 'frontend-paa-fourth-step')}}</span></div>
-                    {% if form.photo_error.vars.attr['field-help'] is defined and form.photo_error.vars.attr['field-help'] is not null %}&nbsp;
-                        <div class="image-tooltip-wrapper" data-toggle="tooltip"><span class="image-tooltip">{{ form.photo_error.vars.attr['field-help']|raw }}</span><span class="info-icon">info</span></div>
-                    {% endif %}
+                    {{ 'Add some images to your advert. You can add multiple images at a time.'|trans({}, 'frontend-paa-fourth-step')}}
+                {% endif %}
+                </div>
+                {% if form.photo_error.vars.attr['field-help'] is defined and form.photo_error.vars.attr['field-help'] is not null %}
+                    &nbsp;
+                    <div class="image-tooltip-wrapper text-left"><span class="image-tooltip">{{ form.photo_error.vars.attr['field-help']|raw }}</span><span class="info-icon">info</span></div>
                 {% endif %}
             </p>
         </div>
-        {{ render(controller('FaAdBundle:AdImage:showImageUploader', {'adId': ad.id, 'vertical': vertical, 'formName': form.vars.name, 'maxValue': (form.photo_error.vars.attr.max_value is defined ? form.photo_error.vars.attr.max_value : null) })) }}
-        {{ set_variables('imageUploadJavascriptBottom', {'loaded':'false'}) }}
+		{{ render(controller('FaAdBundle:AdImage:showImageUploader', {'adId': ad.id, 'vertical': vertical, 'formName': form.vars.name, 'maxValue': (form.photo_error.vars.attr.max_value is defined ? form.photo_error.vars.attr.max_value : null) })) }}
+        {{ set_variables('imageUploadJavascriptBottom', {'loaded':'false'}) }}	    
     </div>
 </div>
 <div style="display:none;">
