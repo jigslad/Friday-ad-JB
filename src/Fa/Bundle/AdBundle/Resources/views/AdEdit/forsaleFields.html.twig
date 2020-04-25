@@ -13,7 +13,7 @@
                             {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
                             <div class="collapse collapse-body-content {{ showHideElement }}" id="element_toggle_{{ field }}">
                                 {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
-                                    <div class="paa-title-ins">
+                                    <div class="paa-title-ins text-center">
                                         {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
                                     </div>
                                 {% endif %}
@@ -124,9 +124,6 @@
                         </div>
                     </div>
                 {% elseif field == 'location_autocomplete' %}
-                    <div class="col-md-24 d-flex justify-content-center paa-box">
-                        <div class="col-md-24 d-flex justify-content-center paa-box">
-                    </div>
                     {{ include('FaAdBundle:AdPost:paaLocationWithMap.html.twig', {'is_edit' : true}) }}
                 {% elseif field == 'qty' %}
                     {% set userUpsellRepository = fetch_repository('FaUserBundle:UserUpsell') %}

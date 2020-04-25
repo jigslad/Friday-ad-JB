@@ -96,8 +96,9 @@
                                         {% set activeClass = 'active' %}
                                     {% endif %}
                                     <li class=" grey-check {{ activeClass }}">
-                                        {{ form_widget(child) }}
-                                        <label for="{{ child.vars.id }}">{{ child.vars.label }}</label>
+                                        {{ form_widget(child,{'attr':{'class':'checkbox'}}) }}
+                                        <label for="{{ child.vars.id }}"></label>
+                                        {{ child.vars.label }}
                                     </li>
                                 {% endfor %}
                             </ul>
@@ -229,7 +230,7 @@
                                     {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
                                 </div>
                             {% endif %}
-                            <div class="small-wrapper {{ field == 'my_service_id'?'custom-checkbox-main':'' }} {{ field == 'independent_or_agency_id'?'label-inline':'' }}">
+                            <div class="small-wrapper grey-select {{ field == 'my_service_id'?'custom-checkbox-main':'' }} {{ field == 'independent_or_agency_id'?'label-inline':'' }}">
                                 {{ form_widget(attribute(form, field)) }}
                                 {{ form_errors(attribute(form, field)) }}
                             </div>
