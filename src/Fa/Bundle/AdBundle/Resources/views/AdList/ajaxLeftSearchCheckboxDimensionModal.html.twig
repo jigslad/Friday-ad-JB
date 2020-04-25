@@ -31,16 +31,16 @@
                         {% set choiceCount = 0 %}
                         {% for child in dimensionOptions %}
                             {% if choiceCount == 0 or (choiceCount % choicesPerColumn) == 0 %}
-                            <ul class="white-checkbox dimension-list">
+                            <ul class="dimension-list">
                             {% endif %}
                             {% set adCount = 0 %}
                             {% if attribute(dimensionFacetResult, child.vars.value) is defined %}
                                 {% set adCount = attribute(dimensionFacetResult, child.vars.value) %}
                             {% endif %}
                             {% if adCount %}
-                                <li>
-                                    {{ form_widget(child) }}
-                                    <label for="{{ child.vars.id }}">{{ child.vars.label }}</label>
+                                <li class="white-check">
+                                    {{ form_widget(child,{'attr':{'class':'checkbox'}}) }}
+                                    <label for="{{ child.vars.id }}"></label>{{ child.vars.label }}
                                     ({{ adCount }})
                                 </li>
                                 {% set choiceCount = choiceCount + 1 %}

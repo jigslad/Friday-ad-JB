@@ -534,7 +534,7 @@
             $('#register-error-span').html('');
             if($('#fa_paa_lite_register_user_type_0').attr("checked")) {
             	$('#fa_paa_lite_register_user_type_0').prop('disabled', true);
-                $('#register-modal').foundation('reveal', 'close');
+                $('#register-modal').modal('hide');
                 $('#login-modal').modal('show');
                 $('#fa_paa_lite_login_user_type_1').parent('.custom-radio').removeClass('checked');
                 $('#fa_paa_lite_login_user_type_0').parent('.custom-radio').addClass('checked');
@@ -629,7 +629,7 @@
             /*$('#fa_paa_lite_login_password').val('');
             $('#paa_password_field_div').hide();
             $('#fa_paa_lite_login_save').text("{{'Sign up with email'|trans({}, 'frontend-paa-lite-login')}}");*/
-            $('#login-modal').foundation('reveal', 'close');
+            $('#login-modal').modal('hide');
             $('#register-modal').modal('show');
             $('#fa_paa_lite_register_user_type_0').parent('.custom-radio').removeClass('checked');
             $('#fa_paa_lite_register_user_type_1').parent('.custom-radio').addClass('checked');
@@ -640,7 +640,7 @@
         } else {
             /*$('#paa_password_field_div').show();
             $('#fa_paa_lite_login_save').text("{{'Next step: add more details'|trans({}, 'frontend-paa-lite-login')}}");*/
-            $('#register-modal').foundation('reveal', 'close');
+            $('#register-modal').modal('hide');
             $('#login-modal').modal('show');
             $('#fa_paa_lite_login_user_type_0').attr('checked', true);
             $('#fa_paa_lite_login_user_type_1').attr('checked', false);
@@ -660,7 +660,7 @@
         }
         
         if (userType == 2) {
-            $('#login-modal').foundation('reveal', 'close');
+            $('#login-modal').modal('hide');
             $('#register-modal').modal('show');
             $('#fa_paa_lite_register_user_type_0').parent('.custom-radio').removeClass('checked');
             $('#fa_paa_lite_register_user_type_1').parent('.custom-radio').addClass('checked');
@@ -669,7 +669,7 @@
             $('#fa_paa_lite_register_user_type_1').prop('disabled', true);
             $('#fa_paa_lite_register_user_type_0').prop('disabled', false);
         } else {
-            $('#register-modal').foundation('reveal', 'close');
+            $('#register-modal').modal('hide');
             $('#login-modal').modal('show');
             $('#fa_paa_lite_login_user_type_1').parent('.custom-radio').removeClass('checked');
             $('#fa_paa_lite_login_user_type_0').parent('.custom-radio').addClass('checked');
@@ -800,7 +800,7 @@
                 resetAndHideCategoryChoiceFields(false);
             }
         }
-        $(document).foundation('equalizer', 'reflow');
+        $(document).equalizer();
     }
 
     function resetAndHideCategoryChoiceFields(removeRegFields)
@@ -813,7 +813,7 @@
 
         if (removeRegFields) {
             $('#motor_reg_fields').html('');
-            $(document).foundation('equalizer', 'reflow');
+            $(document).equalizer();
         }
     }
 

@@ -176,7 +176,7 @@ class AdPostFourthStepAnimalsType extends AdPostType
         }
 
         if (in_array($paaField['field'], array('breed_id', 'species_id'))) {
-            $fieldOptions['attr']['class'] = 'custom_select';
+            $fieldOptions['attr']['class'] = 'bg-sel select-control';
         }
 
         if ($defaultData) {

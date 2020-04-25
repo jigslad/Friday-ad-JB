@@ -17,7 +17,7 @@
                        {% endif %}
                    {% endif %}
                {% endif %}
-               $(document).foundation('equalizer', 'reflow');
+               $(document).equalizer();
                moveCategoryDiv();
            } else {
                $('#fa_paa_category_select_reg_no').val('');
@@ -32,7 +32,7 @@
                    moveCategoryDiv();
                }
                $('.fa-select').selectmenu().selectmenu('refresh',true);
-               $(document).foundation('equalizer', 'reflow');
+               $(document).equalizer();
            }
         }
         
@@ -45,7 +45,7 @@
                $('#reg_no_error_msg').html('');
                $('#reg_no_error_msg').hide();
                moveCategoryDiv();
-               $(document).foundation('equalizer', 'reflow');
+               $(document).equalizer();
                if (!$('#fa_paa_category_select_category_3').val()) {
                    $('#category_choice_div_3').hide();
                }
@@ -71,7 +71,7 @@
                    scrollToElement($('#category_choice_div_3'));                  
                }
                $('.fa-select').selectmenu().selectmenu('refresh',true);
-               $(document).foundation('equalizer', 'reflow');
+               $(document).equalizer();
                //GA Analytics code start
                var eventLabel = categoryPath + ' - No';
                regLookupResult = ' - No';
@@ -316,7 +316,7 @@
                              $('.fa-select').selectmenu().selectmenu('refresh',true);
                              checkCategoryWithCarWeb(regNo, regNoFieldsData);
                              moveCategoryDiv();
-                             $(document).foundation('equalizer', 'reflow');
+                             $(document).equalizer();
                              isSuccess = true;
                         } else {
                             resetRegNoFields();
@@ -325,7 +325,7 @@
                             $('#fa_paa_category_select_reg_no').addClass('error');
                             $('#reg_no_error_msg').html('{{ "Please enter correct registration number."|trans({}, 'frontend-paa-second-step')}}');
                             $('#reg_no_error_msg').show();
-                            $(document).foundation('equalizer', 'reflow');
+                            $(document).equalizer();
                             moveCategoryDiv();
                         }
                         $('#lookup_vehicle').html('{{ "Lookup Vehicle"|trans({}, 'frontend-paa-second-step')}}');
@@ -339,7 +339,7 @@
                 $('#reg_no_error_msg').show();
                 $('.fa-select').selectmenu().selectmenu('refresh',true);
                 $('#reg_no_details_fields').hide();
-                $(document).foundation('equalizer', 'reflow');
+                $(document).equalizer();
                 return isSuccess;
             }
         }

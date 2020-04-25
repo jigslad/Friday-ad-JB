@@ -94,8 +94,8 @@
                                 		{% if not app.request.get('map')%}
 		                        		<label>Sort by</label>
 		                        		<span>
-			                        		<div class="ad-category-list">                                         
-                                            <select name="sort_by" id="sort_by">
+			                        		<div class="ad-category-list white-select">                                         
+                                            <select name="sort_by" id="sort_by" class="select-control">
                                                 {% for sortFieldKey, sortFieldName in sortFields %}
                                                     <option value="{{sortFieldKey}}" {% if app.request.get('sort_field')~'|'~app.request.get('sort_ord') == sortFieldKey %} selected="selected" {% endif %}>{{sortFieldName}}</option>
                                                 {% endfor %}

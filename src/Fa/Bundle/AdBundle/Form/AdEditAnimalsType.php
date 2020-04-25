@@ -96,7 +96,7 @@ class AdEditAnimalsType extends AdEditType
         }
 
         if (in_array($paaField['field'], array('breed_id', 'species_id'))) {
-            $fieldOptions['attr']['class'] = 'custom_select';
+            $fieldOptions['attr']['class'] = 'select-control';
         }
 
         if ($defaultData) {

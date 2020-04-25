@@ -25,7 +25,7 @@
         {% endif %}
         <a href="{{ '#panel' ~ filterPanelCounter ~ 'b'}}" rel="nofollow" class="clearfix"><h5 class="left">{{ attribute(form, filter).vars.label }}</h5> <i class="right {{ plusMinusClass }}"></i></a>
         <div id="{{ 'panel' ~ filterPanelCounter ~ 'b'}}" rel="nofollow" class="content {{ contentActiveClass }}">
-            <ul class="white-checkbox search-type crawlable-checkbox">
+            <ul class="search-type crawlable-checkbox">
                 {% set dimensionOptions = {} %}
                 {% if sortBy == 'ad_count' %}
                     {% for optionValue, counter in dimensionFacetResult %}
@@ -58,15 +58,15 @@
                             {% set adCount = attribute(dimensionFacetResult, child.vars.value) %}
                         {% endif %}
                         {% if adCount %}
-                            <li>
+                            <li class="white-check">
                                 {% set queryParams = dimensionParams|merge({(filter): (child.vars.value)}) %}
                                 {% set queryParams = queryParams|merge({(filter~'_open'): ''}) %}
                                 {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams, null, false, null, false, parentFullSlug, secondLevelParentFullSlug) %}
-                                {{ form_widget(child) }}
+                                {{ form_widget(child,{'attr':{'class':'checkbox'}}) }}
                                 {% if dimensionIsIndexable and child.vars.value not in nonCrawlableDimensionValues %}
                                     <a href="{{ listurl }}" class="crowable_checkbox_link" onclick="return false;" {% if app.request.get('searchQueryString') or getNoFollowLink or 'item_' in listurl %}rel="nofollow"{% endif %}>{{ child.vars.label~extraLabel }}</a>
                                 {% endif %}
-                                <label for="{{ child.vars.id }}" class="crowable_checkbox_link_label">{{ child.vars.label }}</label>
+                                <label for="{{ child.vars.id }}" class="crowable_checkbox_link_label"></label>{{ child.vars.label }}
                                 ({{ adCount }})
                                 {% set childCount = childCount + 1 %}
                             </li>

@@ -989,7 +989,7 @@
 
         $('#ad_motors_tabs').on('toggled', function (event, tab) {
             if (tab.attr('id') == 'safety_features_panel' && !adMotorEquilizerFlag) {
-                $(document).foundation('equalizer', 'reflow');
+                $(document).equalizer();
                 adMotorEquilizerFlag = true;
             }
         });
