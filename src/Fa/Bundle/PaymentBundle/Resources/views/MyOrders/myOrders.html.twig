@@ -27,7 +27,7 @@
                                 <h1 class="s-h1 db-title mt30 mb20">{{'Orders'|trans({}, 'frontend-my-orders')}}</h1>
                                 <h2 class="s-h2 mb10" id="sub_title_div">{{ 'From here you can keep track of orders placed by your customers, the details of those orders, customer addresses and update the status of those orders.'|trans({}, 'frontend-my-orders') }}</h2>
 
-                                <div id="leave_review_modal" class="reveal-modal" data-reveal></div>
+                                <div id="leave_review_modal" class="modal custom-modal"></div>
                                 {% if pagination.getNbResults() %}
                                     {% for paymentDetail in pagination.getCurrentPageResults() %}
                                         {% set paymentValue = array_unserialize(paymentDetail['value']) %}
@@ -177,7 +177,7 @@
             </div>
         </div>
     </div>
-    <div id="messageUserModal" class="reveal-modal" data-reveal></div>
+    <div id="messageUserModal" class="modal custom-modal"></div>
 {% endblock %}
 
 {% block scriptbottom %}

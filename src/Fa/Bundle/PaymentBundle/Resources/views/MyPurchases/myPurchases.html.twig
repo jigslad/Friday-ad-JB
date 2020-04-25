@@ -27,7 +27,7 @@
                             <h1 class="s-h1 db-title mt30 mb20">{{'Purchases'|trans({}, 'frontend-my-purchases')}}</h1>
                             <h2 class="s-h2 mb10">From here you can keep track of orders you have made and get receipts for any online purchases made through paypal.</h2>
 
-                            <div id="leave_review_modal" class="reveal-modal" data-reveal></div>
+                            <div id="leave_review_modal" class="modal custom-modal"></div>
 
                             {% if pagination.getNbResults() %}
                             {% for paymentDetail in pagination.getCurrentPageResults() %}
@@ -179,7 +179,7 @@
             </div>
             </div>
         </div>
-        <div id="messageUserModal" class="reveal-modal" data-reveal></div>
+        <div id="messageUserModal" class="modal custom-modal"></div>
     </div>
 {% endblock %}
 

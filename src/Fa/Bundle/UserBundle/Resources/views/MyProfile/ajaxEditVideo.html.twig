@@ -1,32 +1,39 @@
 {% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
 {% set container = fetch_container_instance() %}
-<a class="close-reveal-modal">&#215;</a>
-<h5 class="modal-title">{{'Edit video'|trans({}, 'frontend-my-profile')}}</h5>
+<div class="modal-dialog"><div class="modal-content">
+	<div class="modal-header">
+		<h5 class="modal-title save-search-title no-icon-title">
+		{{'Edit video'|trans({}, 'frontend-my-profile')}}
+		</h5>
+	    <button class="close-modal" class="close" data-dismiss="modal">×</button>
+	</div>
+
 {{ form_start(form, {'attr': {'novalidate': '', 'id': 'edit_video_id'}}) }}
-    <div class="modal-content remove-modal">
-        <div class="row">
-            <div class="columns">
+    	<div class="modal-body">
+        <div class="container">
+            <div class="row">
                 <h5>{{'Video'|trans({}, 'frontend-my-profile')}}</h5>
                 <div class="mt5">{{'Videos are a great way to give visitors an introduction of your business. Add a youtube link below.'|trans({}, 'frontend-my-profile')}}</div>
             </div>
         </div>
-        <div class="row mt15">
-            <div class="columns">
+        <div class="container mt15">
+            <div class="row">
                 {{ form_row(form.youtube_video_url) }}
             </div>
         </div>
         <div class="mt20 remove-item-btn">
             <div class="row">
-                <div class="large-12 columns">
+                <div class="col-lg-12 col-md-12">
                     <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#profileEditModal');;">{{'Cancel'|trans({}, 'frontend-my-profile')}}</button>
                 </div>
-                <div class="large-12 columns">
+                <div class="col-lg-12 col-md-12">
                     {{ form_widget(form.save, {'attr': {'class':'button secondary-btn-1 thin-btn expand'}}) }}
                 </div>
             </div>
         </div>
     </div>
 {{ form_end(form) }}
+ </div></div>
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     $(document).ready(function() {

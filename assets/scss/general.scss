@@ -186,13 +186,14 @@ button:focus, a:focus {
 .secondary-btn-1, .secondary-btn-2, .secondary-btn-3, .secondary-btn-4 {
     font-size: 16px;
     line-height: 18px;
-    border-radius: 2px;
+    border-radius: 4px;
+    font-weight: 600;
 }
 .secondary-btn-1{
     padding: 10px 15px 10px 15px;
 }
 .secondary-btn-2, .secondary-btn-3, .secondary-btn-4 {
-    padding: 8px 5px 12px 5px;
+     padding: 8px 5px 8px 5px;
 }
 .secondary-btn-1 {
     background: linear-gradient(135deg, $secondary-btn-l-color 0%, $secondary-btn-r-color 100%) !important;

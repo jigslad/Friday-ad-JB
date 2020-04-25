@@ -52,76 +52,87 @@
 {% endif %}
 
 {% if guid is not defined %}
-<div id="renameSavedSearch" class="reveal-modal tiny" data-reveal>
-    <a class="close-reveal-modal">&#215;</a>
-    <h5 class="modal-title">
-        {{'Rename your saved search'|trans({}, 'frontend-my-saved-searches')}}
-    </h5>
-    <div class="modal-content remove-modal">
-        <div class="row">
-            <div class="columns">
+<div id="renameSavedSearch" class="modal custom-modal tiny">
+	<div class="modal-dialog"><div class="modal-content">
+	<div class="modal-header">
+		<h5 class="modal-title save-search-title no-icon-title">
+		{{'Rename your saved search'|trans({}, 'frontend-my-saved-searches')}}
+		</h5>
+	    <button class="close-modal" class="close" data-dismiss="modal">×</button>
+	</div>
+	<div class="modal-body">
+        <div class="container">
+            <div class="row">
                 <label>{{'New name'|trans({}, 'frontend-my-saved-searches')}}</label>
             </div>
         </div>
-        <div class="row">
-            <div class="columns">
+        <div class="container">
+            <div class="row">
                 <input type="text" name="txt_title" id="txt_title" maxlength="50">
             </div>
         </div>
         <div class="row">
-            <div class="large-24 columns">
+            <div class="col-lg-24 col-md-24">
                 <button type="button" class="button secondary-btn-1 thin-btn expand mb0" onclick="closeRevealModel('#removeSavedSearch'); renameSavedSearch();">{{'Save changes'|trans({}, 'frontend-my-saved-searches')}}</button>
             </div>
         </div>
     </div>
 </div>
+</div></div>
 {% endif %}
 
 {% if guid is not defined %}
-<div id="removeSavedSearch" class="reveal-modal tiny" data-reveal>
-    <a class="close-reveal-modal">&#215;</a>
-    <h5 class="modal-title">
-        {{'Stop search alert'|trans({}, 'frontend-my-saved-searches')}}
-    </h5>
-    <div class="modal-content remove-modal">
-        <div class="row">
-            <div class="columns">
+<div id="removeSavedSearch" class="modal custom-modal tiny">
+	<div class="modal-dialog"><div class="modal-content">
+	<div class="modal-header">
+		<h5 class="modal-title save-search-title no-icon-title">
+		{{'Stop search alert'|trans({}, 'frontend-my-saved-searches')}}
+		</h5>
+	    <button class="close-modal" class="close" data-dismiss="modal">×</button>
+	</div>
+	<div class="modal-body">
+        <div class="container">
+            <div class="row">
                 <h5>{{'Are you sure you want to stop this search alert?'|trans({}, 'frontend-my-saved-searches')}}</h5>
             </div>
         </div>
         <div class="mt20 remove-search-btn">
             <div class="row">
-                <div class="large-12 columns">
+                <div class="col-lg-12 col-md-12">
                     <button type="button" class="button secondary-btn-4 thin-btn expand mb0" onclick="closeRevealModel('#removeSavedSearch');removeSavedSearch();">{{'Ok'|trans({}, 'frontend-my-saved-searches')}}</button>
                 </div>
-                <div class="large-12 columns">
+                <div class="col-lg-12 col-md-12">
                     <button type="button" class="button secondary-btn-1 thin-btn expand mb0" onclick="closeRevealModel('#removeSavedSearch');">{{'Cancel'|trans({}, 'frontend-my-saved-searches')}}</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<div id="blankTitleAlert" class="reveal-modal tiny" data-reveal>
-    <a class="close-reveal-modal">&#215;</a>
-    <h5 class="modal-title">
-        {{'Blank title'|trans({}, 'frontend-my-saved-searches')}}
-    </h5>
-    <div class="modal-content remove-modal">
-        <div class="row">
-            <div class="columns">
+</div></div>
+<div id="blankTitleAlert" class="modal custom-modal tiny">
+    <div class="modal-dialog"><div class="modal-content">
+	<div class="modal-header">
+		<h5 class="modal-title save-search-title no-icon-title">
+		{{'Blank title'|trans({}, 'frontend-my-saved-searches')}}
+		</h5>
+	    <button class="close-modal" class="close" data-dismiss="modal">×</button>
+	</div>
+	<div class="modal-body">
+        <div class="container">
+            <div class="row">
                 <h5>{{'Sorry saved search name can not be blank!!'|trans({}, 'frontend-my-saved-searches')}}</h5>
             </div>
         </div>
         <div class="mt20">
             <div class="row">
-                <div class="large-24 columns">
+                <div class="col-lg-24 col-md-24">
                     <button type="button" class="button secondary-btn-4 thin-btn expand mb0" onclick="closeRevealModel('#blankTitleAlert'); renameSavedSearch();">{{'Ok'|trans({}, 'frontend-my-saved-searches')}}</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+</div></div>
 {% endif %}
 
 {% endblock %}
