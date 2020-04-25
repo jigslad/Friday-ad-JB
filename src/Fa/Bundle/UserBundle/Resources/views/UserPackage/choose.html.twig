@@ -1,21 +1,22 @@
 {% extends 'FaFrontendBundle::layout.html.twig' %}
-{% block body -%}
 
-<div class="white-bg pkg-bdr profile-pkg-bg">
-        <div class="row">
-            <div class="columns">
-                <div class="paa-pkg-main profile-pkgs">
-                    <div class="full-width-title">
-                        <h1 class="text-center">{{'Choose your profile'|trans({}, 'frontend-ad-package')}}</h1>
-                        <h2 class="text-center">{{'Start boosting your revenue. We have plan for everyone!'|trans({}, 'frontend-ad-package')}}</h2>
-                    </div>
+{% block body -%}
+<div class="white-bg pkg-bdr profile-pkg-bg paa-block">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-24 paa-pkg-main profile-pkgs">                    
                     {% if app.request.get('from') %}
                         <div class="mb10">
                             <a href="{{ path('my_profile') }}" class="back-arrow-link">{{'Go back'|trans({}, 'frontend-ad-package')}}</a>
                         </div>
                     {% endif %}
+                    <div class="col-md-24 justify-content-center mb30">
+						<h1 class="s-h1 paa-title col-md-24 col-lg-18 text-center">{{'Choose your profile'|trans({}, 'frontend-ad-package')}}</h1>
+						<h2 class="text-center subtitle">{{'Start boosting your revenue. We have plan for everyone!'|trans({}, 'frontend-ad-package')}}</h2>
+					</div>
                     {% if shopPackages|length %}
-                        <div class="row" data-equalizer>
+                        <div class="col-md-24 d-flex justify-content-center paa-pkg-box">
+						<div class="row row-flex fa-equalizer" id="package_equalizer">
                             {% set currentPackageId = null %}
                             {% if currentPackage|default is not empty %}
                                 {% set currentPackageId = currentPackage.getPackage.getId() %}
@@ -32,8 +33,8 @@
                                             {% set  active_class = 'active-pkg' %}
                                         {% endif %}
                                 {% endif %}
-                                <div class="{% if shopPackages|length == 3 or shopPackages|length == 1 %}large-8{% elseif shopPackages|length == 2 %}large-12{% else %}large-6{% endif%} columns">
-                                    <div class="paa-pkg-bg {{ active_class }}" data-equalizer-watch>
+                                <div class="col-md-6 col-sm-24 col-xs-24 mb20 pl10 pr10 tab-pad">
+						        	<div class="paa-pkg-bg {{ active_class }}" data-equalizer-watch>
                                         {% if currentPackageId !=  package.getId() or (currentPackageId == package.getId() and currentPackage.remark == 'reg_back') %}
                                             <a href="javascript:void(0);" class="pkg-selection" id="package_selection_{{package.getId()}}"  onclick="return selectPackage({{package.getId()}}, {{is_trail}});">Select Package</a>
                                         {% endif %}
@@ -99,10 +100,11 @@
                                 </div>
                             {% endfor %}
                         </div>
+                        </div>
                     {% else %}
                         {{'No ad packages found.'|trans({}, 'frontend-ad-package')}}
                     {% endif %}
-                    <div class="show-for-small-only">
+                    <div class="d-block d-md-none">
                         <button id="purchase_btn" class="primary-btn-1 button expand disabled">{{'Place my ad'|trans({}, 'frontend-ad-package')}}</button>
                     </div>
 
