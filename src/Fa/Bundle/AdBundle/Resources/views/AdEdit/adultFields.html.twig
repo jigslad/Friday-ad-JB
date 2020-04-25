@@ -84,7 +84,7 @@
                     <div class="paa-bdr-box" id="element_{{ field }}">
                         <h3 class="text-center">{{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}</h3>
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                        <div  id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                        <div  id="element_toggle_{{ field }}_target" class="collapse collapse-body-content">
                             {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
                                 <div class="paa-title-ins">
                                     {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
