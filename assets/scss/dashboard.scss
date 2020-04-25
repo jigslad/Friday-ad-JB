@@ -787,6 +787,7 @@
         width: 50%;
         margin: 0 -1px -1px 0;
         position: relative;
+        .grey-check label { display:inline-flex !important; }
         .custom-checkbox {
             margin: 0;
             width: 26px;
@@ -818,6 +819,7 @@
 .small-wrapper.center-block{
     margin: 0 !important;
 }
+.subtitle { font-size: 20px;font-weight: 300;line-height: 26px;color: #4a4a4a; }
 @media (min-width: 641px) and (max-width: 959px){
 	.manage-item-list .ad-remove a {
 		background-position: 5px 3px;
