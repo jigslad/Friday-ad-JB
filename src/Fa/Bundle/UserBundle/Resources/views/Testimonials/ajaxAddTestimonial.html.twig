@@ -1,9 +1,14 @@
 {% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
 {% set container = fetch_container_instance() %}
-<a class="close-reveal-modal">&#215;</a>
-<h5 class="modal-title">{{'Send us your testimonial'|trans({}, 'frontend-testimonials')}}</h5>
-{{ form_start(form, {'attr': {'novalidate': '', 'id': 'testimonial_id'}}) }}
-    <div class="modal-content">
+<div class="modal-dialog"><div class="modal-content">
+	<div class="modal-header">
+		<h5 class="modal-title save-search-title no-icon-title">
+		{{'Send us your testimonial'|trans({}, 'frontend-testimonials')}}
+		</h5>
+	    <button class="close-modal" class="close" data-dismiss="modal">×</button>
+	</div>
+	<div class="modal-body">
+    {{ form_start(form, {'attr': {'novalidate': '', 'id': 'testimonial_id'}}) }}
         {% if app.user and app.request.cookies.has('add_testimonial_flag') and app.request.cookies.has('add_testimonial_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') and app.request.cookies.get('add_testimonial_flag') %}
             <div data-alert class="alert-box success radius">
                 <span class="alert-icon">&nbsp;</span>
@@ -15,9 +20,10 @@
         <p>{{'Tell us about your experience with Friday-Ad.'|trans({}, 'frontend-testimonials')}}</p>
         {{ form_row(form.comment) }}
         <b class="black-text">{% if app.user and app.user.getFirstName() is not null %}{{ app.user.getFirstName() }}, {% endif%}{{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [date().timestamp, container]) }}</b>
-        {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 button expand'}}) }}
-    </div>
-{{ form_end(form) }}
+        {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 button expand'}}) }}   
+     {{ form_end(form) }}
+</div>
+</div></div>
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     $(document).ready(function() {

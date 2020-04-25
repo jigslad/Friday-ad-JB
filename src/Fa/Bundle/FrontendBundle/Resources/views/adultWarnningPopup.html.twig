@@ -1,6 +1,9 @@
-<div id="eighteenPlusWarnningModel" class="reveal-modal adult-modal" data-reveal>
-    <h3><span>{{'WARNING'|trans({}, 'frontend-adult-warnning')|raw}} <b>-</b></span> {{'Adult Content Ahead!'|trans({}, 'frontend-adult-warnning')|raw}}</h3>
-    <div class="modal-content">
+<div id="eighteenPlusWarnningModel" class="modal custom-modal adult-modal">
+<div class="modal-dialog"><div class="modal-content">
+		<div class="modal-header">
+			 <h3><span>{{'WARNING'|trans({}, 'frontend-adult-warnning')|raw}} <b>-</b></span> {{'Adult Content Ahead!'|trans({}, 'frontend-adult-warnning')|raw}}</h3>
+		</div>
+        <div class="modal-body">
         <h2>{{'To browse this category you must accept the following terms:'|trans({}, 'frontend-adult-warnning')}}</h2>
         <ul>
             <li><b>1.</b> {{'I am 18 years old or over.'|trans({}, 'frontend-adult-warnning')}}</li>
@@ -19,17 +22,17 @@
         <div class="proceed-buttons">
             <div class="row">
                 {% if for_third_party_link is not defined and modification is not defined %}
-                    <div class="large-12 columns">
+                    <div class="col-lg-12 col-md-12">
                         <button type="button" class="primary-btn-3 button expand" onclick="takeMeBack();">{{'Take me back!'|trans({}, 'frontend-adult-warnning')}}</button>
                     </div>
-                    <div class="large-12 columns">
+                    <div class="col-lg-12 col-md-12">
                         <button type="button" class="primary-btn-2 button expand" onclick="proceed18Plus();"><span>{{'Proceed'|trans({}, 'frontend-adult-warnning')}} <b>-</b></span> {{'I am over 18'|trans({}, 'frontend-adult-warnning')|raw}}</button>
                     </div>
                 {% elseif for_third_party_link is defined and for_third_party_link %}
-                	 <div class="large-12 columns">
+                	 <div class="col-lg-12 col-md-12">
                         <button type="button" class="primary-btn-3 button expand" onclick="closeCheckAgeModalBox();">{{'Take me back!'|trans({}, 'frontend-adult-warnning')}}</button>
                     </div>
-                    <div class="large-12 columns">
+                    <div class="col-lg-12 col-md-12">
                         <button type="button" class="primary-btn-2 button expand" onclick="proceed18PlusForThirdParty();"><span>{{'Proceed'|trans({}, 'frontend-adult-warnning')}} <b>-</b></span> {{'I am over 18'|trans({}, 'frontend-adult-warnning')|raw}}</button>
                     </div>
                 {% elseif modification is defined and modification %}   
@@ -40,6 +43,7 @@
             </div>
         </div>
     </div>
+    </div></div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 <script language="javascript" type="text/javascript">

@@ -1,32 +1,38 @@
 {% use "FaUserBundle:UserSiteImage:showUserSiteImageUploader.html.twig" %}
 {% set container = fetch_container_instance() %}
 {{ block('userSiteImageUploadStylesheets') }}
+<div class="modal-dialog"><div class="modal-content">
+	<div class="modal-header">
+		<h5 class="modal-title save-search-title no-icon-title">
+		{{'Edit gallery'|trans({}, 'frontend-my-profile')}}
+		</h5>
+	    <button class="close-modal" class="close" data-dismiss="modal">×</button>
+	</div>
 
-<a class="close-reveal-modal">&#215;</a>
-<h5 class="modal-title">{{'Edit gallery'|trans({}, 'frontend-my-profile')}}</h5>
 <form method="post" name="edit_gallery_id" id="edit_gallery_id" action="{{path('ajax_edit_gallery')}}">
-    <div class="modal-content remove-modal">
-        <div class="row">
-            <div class="columns">
+    	<div class="modal-body">
+        <div class="container">
+            <div class="row">
                 <h5>{{'Photo gallery'|trans({}, 'frontend-my-profile')}}</h5>
                 <div class="mt5">{{'Let visitors know what you offer. Remember to make it appealing!'|trans({}, 'frontend-my-profile')}}</div>
             </div>
         </div>
-        <div class="row mt5">
-            <div class="columns">
+        <div class="container mt5">
+            <div class="row">
                 {{ render(controller('FaUserBundle:UserSiteImage:showUserSiteImageUploader', {'userSiteId': userSiteObj.getId() })) }}
                 {{ set_variables('userSiteImageUploadJavascriptBottom', {'loaded':'false'}) }}
             </div>
         </div>
         <div class="mt20 remove-item-btn">
             <div class="row">
-                <div class="large-24 columns">
+                <div class="col-lg-24 col-md-24">
                     <button type="button" id="fa_user_edit_location_save" name="fa_user_edit_location[save]" class="button secondary-btn-1 thin-btn expand" onclick="closeRevealModel('#profileEditModal');">{{'Confirm'|trans({}, 'frontend-my-profile')}}</button>
                 </div>
             </div>
         </div>
     </div>
 </form>
+ </div></div>
 {{ set_variables('userSiteImageUploadJavascriptBottom', {'loaded':'true'}) }}
 {{ block('userSiteImageUploadJavascriptBottom') }}
 <script language="javascript" type="text/javascript">

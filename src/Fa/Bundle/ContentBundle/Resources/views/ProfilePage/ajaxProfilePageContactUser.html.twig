@@ -2,15 +2,16 @@
 
 {% set container = fetch_container_instance() %}
 {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
-<a class="close-reveal-modal">&#215;</a>
+<div class="modal-dialog"><div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title save-search-title no-icon-title">{{'Ask %user_name% a question..'|trans({'%user_name%': adOwnerName}, 'frontend-contact-seller')}}</h5>
+		    <button class="close-modal" class="close" data-dismiss="modal">×</button>
+		</div>
 {% set adOwnerName = contactUserObj ? contactUserObj.getProfileName() : null %}
-<h5 class="modal-title">
-    {{'Ask %user_name% a question..'|trans({'%user_name%': adOwnerName}, 'frontend-contact-seller')}}
-</h5>
 {% if contactUserObj %}
     {{ form_start(form, {'attr': {'novalidate': '', 'id': 'profile_page_contact_user_id'}}) }}
 {% endif %}
-    <div class="modal-content">
+    <div class="modal-body">
         {% if contactUserObj and contactUserObj.getContactThroughPhone() %}
             
             {% if userSiteObj and userSiteObj.getPhone1() is not null %}
@@ -70,6 +71,8 @@
             {% endfor %}
         {% endif %}
     </div>
+    </div>
+</div>
 {% if contactUserObj %}
     <input type="hidden" name="msg_div_id" id="msg_div_id" value="{{msg_div_id}}" />
     {{ form_end(form) }}

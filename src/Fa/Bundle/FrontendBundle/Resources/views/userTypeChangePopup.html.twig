@@ -7,31 +7,33 @@
     {% set isUserTypeChanged      = app.user.getIsUserTypeChanged() %}
 
     {% if (userCreatedAt <= userCreatedBeforeDate or app.user.getUserPopup()) and isUserTypeChanged == FALSE %}
-    <div id="userTypeChangedModal" class="private-business-modal reveal-modal medium center" data-reveal>
-        <div class="modal-content remove-modal">
-            <div class="row">
-                <div class="columns">
+    <div id="userTypeChangedModal" class="private-business-modal modal custom-modal medium center">
+        <div class="modal-dialog"><div class="modal-content">
+        <div class="modal-body remove-modal">
+            <div class="container">
+                <div class="row">
                     <h3>{{'Sorry - This will take just 5 seconds!'|trans({}, 'frontend-show-ad')}}</h3>
                     <p class="mt30">{{"We want to provide our users with the best possible on-site experience and to do so, we want to know just one thing..."|trans({}, 'frontend-show-ad')}}</p>
                 </div>
             </div>
-            <div class="row">
-                <div class="columns">
+            <div class=""container"">
+                <div class="row">
                     <h2>{{"Are you a private or business user?"|trans({}, 'frontend-show-ad')}}</h2>
                 </div>
             </div>
             <div class="row">
-                <div class="large-12 small-12 columns">
+                <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="private-icon">{{ "Private"|trans({}, 'frontend-show-ad') }}</div>
                     <a class="primary-btn-2 button expand" href="javascript:void(0)" onclick="return forceUpdateUserType('Private');">{{ "Private"|trans({}, 'frontend-show-ad') }}</a>
                 </div>
-                <div class="large-12 small-12 columns">
+                <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="business-icon">{{ "Business"|trans({}, 'frontend-show-ad') }}</div>
                     <a class="primary-btn-2 button expand" href="javascript:void(0)" onclick="return forceUpdateUserType('Business');">{{ "Business"|trans({}, 'frontend-show-ad') }}</a>
                 </div>
             </div>
         </div>
     </div>
+    </div></div>
     {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
     <script language="javascript" type="text/javascript">
     //<![CDATA[

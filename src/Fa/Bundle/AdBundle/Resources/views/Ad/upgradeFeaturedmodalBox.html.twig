@@ -45,12 +45,12 @@
     z-index: 10000 !important;
 }
 </style>
-<a class="close-reveal-modal" style="display:{% if popup_title is defined %}none{% else %}block{% endif %}">&#215;</a> 
-
-<h5 class="modal-title">
-{% if popup_title is defined %} {{popup_title}} {% else %} Upgrade {% endif %}
-</h5>
-<div class="modal-content  remove-modal">
+<div class="modal-dialog"><div class="modal-content">
+<div class="modal-header">
+	<h5 class="modal-title save-search-title no-icon-title">{% if popup_title is defined %} {{popup_title}} {% else %} Upgrade {% endif %}</h5>
+    <button class="close-modal" style="display:{% if popup_title is defined %}none{% else %}block{% endif %}" class="close" data-dismiss="modal">×</button>
+</div>
+<div class="modal-body">
     <div data-alert class="alert-box alert radius" style="display:none;" id="deadlock_error_main">
         <span class="alert-icon">&nbsp;</span>
         <span id="deadlock_error"></span>
@@ -197,7 +197,7 @@
         {% endfor %}
     </div>
     
-    <div class="large-24 columns" >
+    <div class="col-md-24 col-lg-24" >
           {% set ccUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_CYBERSOURCE')}) %}
           {% set appleUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_APPLEPAY')}) %}
           {% set catPath = '' %}
@@ -246,7 +246,7 @@
     	</div>	
 {{ form_end(form) }}
 {% endif %}
-</div>
+</div></div></div>
 <script src="{{ asset_url('fafrontend/js/jquery.equalizer.min.js') }}"></script>
 <script src="{{ asset_url('facore/js/jquery.query-object.js') }}"></script>
 <script language="javascript" type="text/javascript">

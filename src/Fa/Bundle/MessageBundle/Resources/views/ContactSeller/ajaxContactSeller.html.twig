@@ -90,16 +90,20 @@
                         <div class="text-center">{{'This is a privacy number.'|trans({}, 'frontend-contact-seller')}} <a href="javascript:void(0)" data-reveal-id="privacyNumberModal">{{'Find out more'|trans({}, 'frontend-contact-seller')}}</a></div>
                     {% endif %}
                 </div>
-                <div id="privacyNumberModal" class="reveal-modal" data-reveal>
+                <div id="privacyNumberModal" class="modal custom-modal">
                     {% set staticPageRepository = fetch_repository('FaContentBundle:StaticPage') %}
                     {% set privacyNumberBlock = staticPageRepository.getStaticBlockDetailArray('privacy-number-block', fetch_container_instance()) %}
     
                     {% if privacyNumberBlock['title'] is defined %}
-                        <a class="close-reveal-modal">&#215;</a>
-                        <h5 class="modal-title">{{privacyNumberBlock['title']}}</h5>
-                        <div class="modal-content">
-                            {{privacyNumberBlock['description']|raw}}
-                        </div>
+                        <div class="modal-dialog"><div class="modal-content">
+                    		<div class="modal-header">
+                    			<h5 class="modal-title save-search-title no-icon-title">{{privacyNumberBlock['title']}}</h5>
+                    		    <button class="close-modal" class="close" data-dismiss="modal">×</button>
+                    		</div>
+                            <div class="modal-body">
+                                {{privacyNumberBlock['description']|raw}}
+                            </div>
+                        </div></div>
                     {% endif %}
                 </div>
                 {% if adUser and adUser.getContactThroughEmail() %}

@@ -1,13 +1,16 @@
 {% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
-<a class="close-reveal-modal">&#215;</a>
-<h5 class="modal-title">
-    {% if userAddressBook.getId() %}
-        {{'Edit an address'|trans({}, 'frontend-user-address-book')}}
-    {% else %}
-        {{'Add an address'|trans({}, 'frontend-user-address-book')}}
-    {% endif %}
-</h5>
-<div class="modal-content">
+<div class="modal-dialog"><div class="modal-content">
+	<div class="modal-header">
+		<h5 class="modal-title save-search-title no-icon-title">
+			{% if userAddressBook.getId() %}
+                {{'Edit an address'|trans({}, 'frontend-user-address-book')}}
+            {% else %}
+                {{'Add an address'|trans({}, 'frontend-user-address-book')}}
+            {% endif %}
+		</h5>
+	    <button class="close-modal" class="close" data-dismiss="modal">×</button>
+	</div>
+	<div class="modal-body">
     {{ form_start(form, {'attr': {'novalidate': '', 'id': 'user_address_id'}}) }}
         {{ form_row(form.first_name) }}
         {{ form_row(form.street_address) }}
@@ -26,6 +29,7 @@
         {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 button expand mb0'}}) }}
     {{ form_end(form) }}
 </div>
+</div></div>
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     $(document).ready(function() {

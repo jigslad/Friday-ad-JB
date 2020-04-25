@@ -4,15 +4,16 @@
 {% if paaFieldRules.0 is defined %}
     {% set adPaaFieldRule = paaFieldRules.0 %}
 {% endif %}
-<div id="editImagesModal" class="modal small remove-item-modal" aria-hidden="true">
-    <a class="close-reveal-modal">&#215;</a>
-    <h5 class="modal-title">
-        {{'Upload and edit your photos'|trans({}, 'frontend-edit-photo')}}
-    </h5>
-    <div class="modal-content remove-modal pb0">
+<div id="editImagesModal" class="modal custom-modal small remove-item-modal" aria-hidden="true">
+<div class="modal-dialog"><div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title save-search-title no-icon-title">{{'Upload and edit your photos'|trans({}, 'frontend-edit-photo')}}</h5>
+		    <button class="close-modal" class="close" data-dismiss="modal">×</button>
+		</div>
+        <div class="modal-body remove-modal">
         {{ include('FaAdBundle:AdPost:dragDropMessage.html.twig') }}
-        <div class="row">
-            <div class="columns">
+        <div class="container">
+            <div class="row">
                 <div id="upload_image_div">
                     <h3>
                         {% if adPaaFieldRule.label is defined and adPaaFieldRule.label is not null %}
@@ -39,6 +40,7 @@
                     </div>
                 </div>
                 <div id="crop_big_image_div"></div>
+             </div></div>
             </div>
         </div>
     </div>

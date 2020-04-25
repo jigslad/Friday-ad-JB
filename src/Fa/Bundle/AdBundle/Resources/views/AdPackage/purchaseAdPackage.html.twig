@@ -390,7 +390,7 @@
         </div>
     </div>
     {% if privateUserAdParams is defined and privateUserAdParams|length and not privateUserAdParams.allowPrivateUserToPostAdFlag %}
-        <div id="privateUserMaxAdPostLimitModal" class="reveal-modal tiny remove-item-modal" data-reveal>
+        <div id="privateUserMaxAdPostLimitModal" class="modal custom-modal tiny remove-item-modal">
           {{ include('FaAdBundle:AdPost:privateUserMaxAdPostLimit.html.twig', {}) }}
         </div>
     {% endif %}

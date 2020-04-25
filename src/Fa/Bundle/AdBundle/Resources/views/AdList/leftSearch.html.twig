@@ -169,25 +169,27 @@
 {{ form_end(form) }}
 <div id="left_search_dimension_modal" class="modal custom-modal"></div>
 <div id="removeSavedSearch" class="modal custom-modal">
-    <a class="close-reveal-modal" rel="nofollow" href="javascript:void(0);" onclick="cancleRemoveSearchAgentPopup();">&#215;</a>
-    <h5 class="modal-title">
-        {{'Stop search alert'|trans({}, 'frontend-my-saved-searches')}}
-    </h5>
-    <div class="modal-content remove-modal">
-        <div class="row">
-            <div class="columns">
+	<div class="modal-dialog"><div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title save-search-title no-icon-title">{{'Stop search alert'|trans({}, 'frontend-my-saved-searches')}}</h5>
+		    <button class="close-modal" rel="nofollow" class="close" data-dismiss="modal" onclick="cancleRemoveSearchAgentPopup();">×</button>
+		</div>
+        <div class="modal-body remove-modal">
+        <div class="container">
+            <div class="row">
                 <h5>{{'Are you sure you want to stop this search alert?'|trans({}, 'frontend-my-saved-searches')}}</h5>
             </div>
         </div>
         <div class="mt20 remove-search-btn">
             <div class="row">
-                <div class="large-12 columns">
+                <div class="col-lg-12 col-md-12">
                     <button type="button" class="button secondary-btn-4 thin-btn expand mb0" onclick="closeRevealModel('#removeSavedSearch');removeSavedSearch();">{{'Ok'|trans({}, 'frontend-my-saved-searches')}}</button>
                 </div>
-                <div class="large-12 columns">
+                <div class="col-lg-12 col-md-12">
                     <button type="button" class="button secondary-btn-1 thin-btn expand mb0" onclick="cancleRemoveSearchAgentPopup();">{{'Cancel'|trans({}, 'frontend-my-saved-searches')}}</button>
                 </div>
             </div>
         </div>
+        </div></div>
     </div>
 </div>

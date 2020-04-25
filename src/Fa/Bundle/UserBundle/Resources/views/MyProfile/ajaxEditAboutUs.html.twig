@@ -7,18 +7,23 @@
 {% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
     {% set currentDevice = 'T' %}
 {% endif %}
-<a class="close-reveal-modal">&#215;</a>
-<h5 class="modal-title">{{'Edit about text'|trans({}, 'frontend-my-profile')}}</h5>
+<div class="modal-dialog"><div class="modal-content">
+	<div class="modal-header">
+		<h5 class="modal-title save-search-title no-icon-title">
+		{{'Edit about text'|trans({}, 'frontend-my-profile')}}
+		</h5>
+	    <button class="close-modal" class="close" data-dismiss="modal">×</button>
+	</div>	
 {{ form_start(form, {'attr': {'novalidate': '', 'id': 'edit_about_text_id'}}) }}
-    <div class="modal-content remove-modal">
-        <div class="row">
-            <div class="columns">
+    <div class="modal-body">
+        <div class="container">
+            <div class="row">
                 <h5>{{'About your company'|trans({}, 'frontend-my-profile')}}</h5>
                 <div class="mt5">{{'Tell us about your business here...'|trans({}, 'frontend-my-profile')}}</div>
             </div>
         </div>
-        <div class="row mt15">
-            <div class="columns">
+        <div class="container mt15">
+            <div class="row">
                 {{ form_widget(form.about_us) }}
                 <div class="clearfix">
                     <div class="left">
@@ -30,15 +35,16 @@
         </div>
         <div class="mt20 remove-item-btn">
             <div class="row">
-                <div class="large-12 columns">
+                <div class="col-lg-12 col-md-12">
                     <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#profileEditModal');;">{{'Cancel'|trans({}, 'frontend-my-profile')}}</button>
                 </div>
-                <div class="large-12 columns">
+                <div class="col-lg-12 col-md-12">
                     {{ form_widget(form.save, {'attr': {'class':'button secondary-btn-1 thin-btn expand'}}) }}
                 </div>
             </div>
         </div>
     </div>
+ </div></div>
 {{ form_end(form) }}
 {{ include('FaContentBundle:Default:tinyMceJs.html.twig', {'plugins' : '', 'toolbar1' : 'bold italic underline, bullist numlist', 'toolbar2' : 'false', 'menubar' : 'false', 'statusbar': 'false', 'charCounter' : 'true' }) }}
 <script language="javascript" type="text/javascript">

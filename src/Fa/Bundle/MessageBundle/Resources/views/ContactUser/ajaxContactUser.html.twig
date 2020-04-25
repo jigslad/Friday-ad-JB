@@ -5,13 +5,15 @@
 {% set adUser = objAd.getUser() ? objAd.getUser() : null %}
 
 {{ form_start(form, {'attr': {'novalidate': '', 'id': 'frmMessageUser'}}) }}
-    <div>
-        <a class="close-reveal-modal">&#215;</a>
-        {% set receiverName = objReceiver ? objReceiver.getProfileName() : null %}
-        <h5 class="modal-title">
-            {{'Ask %user_name% a question..'|trans({'%user_name%': receiverName}, 'frontend-contact-seller')}}
-        </h5>
-        <div class="modal-content">
+    <div class="modal-dialog"><div class="modal-content">
+    	{% set receiverName = objReceiver ? objReceiver.getProfileName() : null %}
+		<div class="modal-header">
+			<h5 class="modal-title save-search-title no-icon-title">
+			{{'Ask %user_name% a question..'|trans({'%user_name%': receiverName}, 'frontend-contact-seller')}}
+			</h5>
+		    <button class="close-modal" class="close" data-dismiss="modal">×</button>
+		</div>
+        <div class="modal-body">
             {% if app.user and app.request.cookies.has('contact_seller_flag') and app.request.cookies.has('contact_seller_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') and app.request.cookies.get('contact_seller_flag') %}
                 <div data-alert class="alert-box success radius">
                     <span class="alert-icon">&nbsp;</span>
@@ -22,6 +24,7 @@
             {% endif %}
             {{ form_row(form.text_message) }}
             {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 button expand'}}) }}
+        </div>
         </div>
     </div>
 {{ form_end(form) }}

@@ -752,11 +752,12 @@ All this is done for any sub-level being entered.
         z-index: 9999 !important;
     }
     .top-links .f-dropdown {
-        min-width: 180px;
+        min-width: 220px !important;
         border: 0;
         background: #313133;
         margin-left: -75px;
         margin-top: 0;
+        z-index: 9999 !important;
     }
     .top-links .f-dropdown li {
         float: none;
@@ -774,6 +775,10 @@ All this is done for any sub-level being entered.
         padding: 0 15px 0 54px;
         white-space: nowrap;
         min-height: 38px;
+    }
+    .f-dropdown::before {
+        z-index: 9999 !important;
+        border-color: transparent !important; 
     }
     .top-links .dropdown-toggle::after {
         display: inline-block;
@@ -821,7 +826,19 @@ All this is done for any sub-level being entered.
         box-shadow: inset 0 1px 0 #4a4a4a;
         padding: 10px;
         color: #fff;
+        text-align: left;
     }
+    #notification-menu .button {
+	 text-align: center;
+    }
+	#notification-menu .alert-box {
+	    font-size: 13px;
+	    font-weight: bold;
+	    line-height: 5px;
+	    padding: 10px 10px 19px !important;
+	    border-radius: 0px !important;
+	    text-align: left;
+	}
     .top-links a span.unread-msg {
         display: inline-block;
         background: #a8dc28;

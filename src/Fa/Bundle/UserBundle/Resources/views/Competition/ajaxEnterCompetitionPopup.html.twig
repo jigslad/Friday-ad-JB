@@ -1,13 +1,16 @@
 {% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
 {% set container = fetch_container_instance() %}
 {{ form_start(form, {'attr': {'novalidate': '', 'id': 'competition_id'}}) }}
-    <a class="close-reveal-modal" id="competition_close">&#215;</a>
-    <h5 class="modal-title">
-        {{'Your ad has been published'|trans({}, 'frontend-competition')|raw}}
-    </h5>
-    <div class="modal-content remove-modal">
-        <div class="row">
-            <div class="columns">
+	<div class="modal-dialog"><div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title save-search-title no-icon-title">
+			{{'Your ad has been published'|trans({}, 'frontend-competition')|raw}}
+			</h5>
+		    <button class="close-modal" class="close" data-dismiss="modal">×</button>
+		</div>
+        <div class="modal-body">
+        <div class="container">
+            <div class="row">
                 <img src="/bundles/fafrontend/images/win-a-week-in-spain.png" alt="" />
                 <div class="spain-text">
                     {{'By placing an ad with us this month you\'re eligible to enter our competition to win a week away in a luxury Spanish villa! Just fill in the boxes below to complete your entry:'|trans({}, 'frontend-competition')|raw}}
@@ -54,12 +57,14 @@
         </div>
         <div class="mt20 remove-item-btn">
             <div class="row">
-                <div class="large-24 columns">
+                <div class="col-lg-24 col-md-24">
                     {{ form_widget(form.save, {'attr': {'class':'button secondary-btn-1 thin-btn expand'}}) }}
                 </div>
             </div>
         </div>
     </div>
+    </div>
+ </div>
 {{ form_end(form) }}
 <script language="javascript" type="text/javascript">
 //<![CDATA[

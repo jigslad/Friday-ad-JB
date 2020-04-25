@@ -1,21 +1,23 @@
-<div id="oneClickEnquireInfoModal" class="reveal-modal small" data-reveal>
-    <a class="close-reveal-modal">&#215;</a>
-    <h5 class="modal-title">
-        <span class="one-click-icon"></span> {{'Still available?'|trans({}, 'frontend-show-ad')}}
-    </h5>
-    <div class="modal-content remove-modal">
-        <div class="row">
-            <div class="columns">
-                <div class="enquire-img">enquire</div>
-                <p>{{"Want to know if this item is still available? One click of the 'Still available?' button will alert the seller of your interest and prompt an immediate response."|trans({}, 'frontend-show-ad')}}</p>
+<div id="oneClickEnquireInfoModal" class="modal custom-modal small">
+	   <div class="modal-dialog"><div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title save-search-title no-icon-title">{{'Still available?'|trans({}, 'frontend-show-ad')}}</h5>
+		    <button class="close-modal" class="close" data-dismiss="modal">×</button>
+		</div>
+        <div class="modal-body">
+           <div class="container">
+                <div class="row">
+                    <div class="enquire-img">enquire</div>
+                    <p>{{"Want to know if this item is still available? One click of the 'Still available?' button will alert the seller of your interest and prompt an immediate response."|trans({}, 'frontend-show-ad')}}</p>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="columns">
-                <a class="secondary-btn-1 button expand mb0" href="javascript:void(0)" onclick="return gotItOneClickEnqInfo();">Got It</a>
+            <div class="container">
+                <div class="row">
+                    <a class="secondary-btn-1 button expand mb0" href="javascript:void(0)" onclick="return gotItOneClickEnqInfo();">Got It</a>
+                </div>
             </div>
-        </div>
-    </div>
+       </div>
+    </div></div>
 </div>
 
 <script language="javascript" type="text/javascript">

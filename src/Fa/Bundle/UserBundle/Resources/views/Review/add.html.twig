@@ -1,7 +1,12 @@
 {% set container = fetch_container_instance() %}
-<a class="close-reveal-modal" href="javascript:void(0)" onClick="closeAddReviewModalForm()">&#215;</a>
-<h5 class="modal-title">{{ 'Leave a review'|trans({}, 'frontend-review') }}</h5>
-<div class="modal-content">
+<div class="modal-dialog"><div class="modal-content">
+	<div class="modal-header">
+		<h5 class="modal-title save-search-title no-icon-title">
+		{{ 'Leave a review'|trans({}, 'frontend-review') }}
+		</h5>
+	    <button class="close-modal" class="close" data-dismiss="modal" onClick="closeAddReviewModalForm()">×</button>
+	</div>
+	<div class="modal-body">
     <div class="leave-review-text">
         {% if app.request.get('item_id') > 0 %}
             {% set ad     = fetch_repository('FaAdBundle:Ad').find(app.request.get('item_id')) %}
@@ -18,3 +23,4 @@
         </div>
     </div>
 </div>
+</div></div>

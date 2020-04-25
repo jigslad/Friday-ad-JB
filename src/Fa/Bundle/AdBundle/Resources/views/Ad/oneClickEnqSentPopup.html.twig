@@ -1,11 +1,12 @@
-<div id="oneClickEnquireSentModal" class="reveal-modal tiny" data-reveal>
-    <a class="close-reveal-modal">&#215;</a>
-    <h5 class="modal-title">
-        <span class="one-click-icon"></span> {{'Still available?'|trans({}, 'frontend-show-ad')}}
-    </h5>
-    <div class="modal-content remove-modal">
-        <div class="row">
-            <div class="columns">
+<div id="oneClickEnquireSentModal" class="modal custom-modal small">
+	   <div class="modal-dialog"><div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title save-search-title no-icon-title">{{'Still available?'|trans({}, 'frontend-show-ad')}}</h5>
+		    <button class="close-modal" class="close" data-dismiss="modal">×</button>
+		</div>
+        <div class="modal-body">
+        <div class="container">
+            <div class="row">
                 {% set contactLink = '<a id="get_in_touch_link" href="javascript:void(0)" onclick="getInTouch('~adId~');">get in touch</a>' %}
                 <p id="onclick_sent_success_message">
                     {{ "Your enquiry got sent to the seller. You will receive an answer by email and in your %site_name% message inbox. In the meantime, feel free to %contactLink% with the seller if you have any further questions for them."|trans({'%site_name%': container.getParameter('service_name'), '%contactLink%': contactLink})|raw }}
@@ -15,11 +16,12 @@
                 </p>
             </div>
         </div>
-        <div class="row">
-            <div class="columns">
+        <div class="container">
+            <div class="row">
                 <a class="secondary-btn-1 button expand mb0" href="javascript:void(0)" onclick="return closeRevealModel('#oneClickEnquireSentModal');">{{ 'Continue'|trans({}, 'frontend-show-ad') }}</a>
             </div>
         </div>
+        </div></div>
     </div>
 </div>
 

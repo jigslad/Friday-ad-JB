@@ -51,7 +51,7 @@
                     {% endif %}
                 {% endfor %}
             </ul>
-            <div class="see-more clearfix">
+            <div class="see-more text-right clearfix">
                 {% if showSeeMore %}
                     <a href="javascript:void(0)" {% if getNoFollowLink  %}rel="nofollow"{% endif %} onClick="loadDimensionAllChoicesModal('{{ dimensionId }}', '{{ dimensionName }}', '{{filter}}', '{{ dimensionSearchType }}', '{{array_serialize(searchParams)|escape('js')}}')"><b>{{ 'See more'|trans({}, 'frontend-left-search') }}</b></a>
                 {% endif %}

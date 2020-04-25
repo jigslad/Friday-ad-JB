@@ -7,7 +7,7 @@
 
 {% set currentRoute = app.request.attributes.get('_route') %}
 {% block body -%}
-    <div id="leave_review_modal" class="reveal-modal" data-reveal></div>
+    <div id="leave_review_modal" class="modal custom-modal"></div>
     <div class="posting-bg">
         <div class="user-review">
             {{ include('FaUserBundle:Review:details.html.twig', {'review' : review}) }}

@@ -38,7 +38,7 @@
                 {% endif %}
             {% endfor %}
         </ul>
-        <div class="see-more clearfix">
+        <div class="see-more text-right clearfix">
             {% set sellerQueryParams  = searchParams|merge({'item__is_trade_ad': ''}) %}
             {% set linkClearurl = container.get('fa_ad.manager.ad_routing').getListingUrl(sellerQueryParams, null, false, null, false, parentFullSlug, secondLevelParentFullSlug) %}
             <a href="{{ linkClearurl }}" class="right" {% if app.request.get('searchQueryString') or getNoFollowLink %}rel="nofollow"{% endif %}>{{ 'Clear'|trans({}, 'frontend-left-search') }}</a>

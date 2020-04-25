@@ -1,11 +1,13 @@
 {% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
 {% set container = fetch_container_instance() %}
-<a class="close-reveal-modal">&#215;</a>
-<h5 class="modal-title">
-    {{'Report user'|trans({}, 'frontend-contact-seller')}}
-</h5>
+<div class="modal-dialog"><div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title save-search-title no-icon-title">{{'Report user'|trans({}, 'frontend-contact-seller')}}</h5>
+		    <button class="close-modal" class="close" data-dismiss="modal">×</button>
+		</div>
+        
 {{ form_start(form, {'attr': {'novalidate': '', 'id': 'report_user_form_id'}}) }}
-<div class="modal-content">
+<div class="modal-body">
     <h5 class="tell-us-title">Tell us why:</h5>
     {{ form_widget(form.reason) }}
     {{ form_errors(form.reason) }}
@@ -14,6 +16,7 @@
     {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 button expand'}}) }}
 </div>
 {{ form_end(form) }}
+</div></div>
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     $(document).ready(function() {
