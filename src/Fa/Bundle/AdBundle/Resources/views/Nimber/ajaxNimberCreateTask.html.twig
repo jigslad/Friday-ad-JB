@@ -2,9 +2,12 @@
 {% set container = fetch_container_instance() %}
 {% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
 {{ form_start(form, {'attr': {'novalidate': '', 'id': 'nimber_create_task_form_id'}}) }}
-<a class="close-reveal-modal" aria-label="Close">&#215;</a>
-<h5 class="modal-title text-center">{{'Create a task'|trans({}, 'frontend-nimber')}}</h5>
-<div class="modal-content">
+<div class="modal-dialog"><div class="modal-content">
+	<div class="modal-header">
+		<h5 class="modal-title save-search-title no-icon-title">{{'Create a task'|trans({}, 'frontend-nimber')}}</h5>
+	    <button class="close-modal" class="close" data-dismiss="modal">×</button>
+	</div>
+    <div class="modal-body">
     <div class="text-center">
         <img src="{{ asset_url('fafrontend/images/delivered.png') }}" alt="" />
     </div>
@@ -31,6 +34,7 @@
     </div>
     <p class="text-center mb0 mt20 nimber-term">{{"By registering you accept Nimber's terms of use, and will receive communication."|trans({}, 'frontend-nimber')}}</p>
 </div>
+</div></div>
 {{ form_end(form) }}
 
 {% set catString = null %}

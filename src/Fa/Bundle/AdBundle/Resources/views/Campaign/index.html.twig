@@ -185,17 +185,18 @@
 </section>
 
 <section class="clearfix">
-<div id="login-modal" class="reveal-modal tiny remove-item-modal login-register-modal" data-reveal="">
-    <div class="modal-content remove-modal">
-        <div class="row">
-            <div class="columns mb20">
+<div id="login-modal" class="modal custom-modal tiny remove-item-modal login-register-modal">
+	<div class="modal-dialog"><div class="modal-content">
+    <div class="modal-body remove-modal">
+        <div class="container">
+            <div class="row mb20">
                 <h1 class="text-center">Login</h1>
             </div>
             <form method="post" name="fa_paa_lite_login" id="fa_paa_lite_login">
                 {{ include('FaAdBundle:Campaign:login.html.twig') }}
             </form>
-            <div class="columns"><div class="connect-text">Or connect with</div></div>
-            <div class="columns">
+            <div class="row"><div class="connect-text">Or connect with</div></div>
+            <div class="row">
                 <div class="clearfix text-center">
                     {% if facebookLoginUrl %}
                         <button type="reset" class="fb-btn" onclick="javascript:fbLoginPopup('{{ facebookLoginUrl }}');">{{ 'Login With FB'|trans({}, 'campaign') }}</button>
@@ -205,26 +206,26 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="columns">
+            <div class="row">
                 <p class="post-info">We won't post anything <b>without your permission.</b></p>
             </div>
         </div>
-        
+       </div></div> 
     </div>
 </div>
-<div id="register-modal" class="reveal-modal tiny remove-item-modal login-register-modal" data-reveal="">
+<div id="register-modal" class="modal custom-modal tiny remove-item-modal login-register-modal">
     {{ include('FaAdBundle:Campaign:register.html.twig') }}
 </div>
-<div id="adLlimit-modal" class="reveal-modal tiny remove-item-modal" data-reveal="">
+<div id="adLlimit-modal" class="modal custom-modal tiny remove-item-modal">
     {{ include('FaAdBundle:Campaign:adLimit.html.twig') }}
 </div>
-<div id="error-modal" class="reveal-modal tiny remove-item-modal" data-reveal="">
+<div id="error-modal" class="modal custom-modal tiny remove-item-modal">
     {{ include('FaAdBundle:Campaign:adError.html.twig') }}
 </div>
-<div id="adIsLive-modal" class="reveal-modal tiny remove-item-modal" data-reveal="" >
+<div id="adIsLive-modal" class="modal custom-modal tiny remove-item-modal">
     {{ include('FaAdBundle:Campaign:adIsLive.html.twig') }}  
 </div> 
-<div id="upgradeBasicAdToFeaturedModal" class="reveal-modal tiny remove-item-modal upgrade-modal" data-reveal></div>
+<div id="upgradeBasicAdToFeaturedModal" class="modal custom-modal tiny remove-item-modal upgrade-modal"></div>
 </section>
 {% endblock %}
 

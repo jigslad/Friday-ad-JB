@@ -1,4 +1,3 @@
-<a class="close-reveal-modal">&#215;</a>
 {% set container = fetch_container_instance() %}
 {% set searchParams = app.request.get('searchParams') %}
 {% set dimensionId = app.request.get('dimensionId') %}
@@ -10,9 +9,13 @@
 {% if (dimensionParams[dimensionField]) is defined %}
     {% set dimensionParams = dimensionParams|merge({(dimensionField): ''}) %}
 {% endif %}
-<div id="{{ dimensionField }}_modal">
-    <h5 class="modal-title">{{ 'Showing %dimension%'|trans({'%dimension%':dimensionName}) }}</h5>
-    <div class="modal-content dimension-modal">
+<div id="{{ dimensionField }}_modal" class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title save-search-title no-icon-title">{{ 'Showing %dimension%'|trans({'%dimension%':dimensionName}) }}</h5>
+		    <button class="close-modal" class="close" data-dismiss="modal">×</button>
+		</div>
+        <div class="modal-body dimension-modal">
         <div class="dimension-content">
             <div class="clearfix">
                 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
@@ -58,5 +61,6 @@
                 {{ form_end(form) }}
             </div>
         </div>
+    </div>
     </div>
 </div>
