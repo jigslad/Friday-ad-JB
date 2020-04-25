@@ -201,7 +201,7 @@ input.checkbox {
 .grey-radio, .white-radio, .grey-check, .white-check { font-size:13px !important; color: #a4a4a4 !important; }
 
 .select2-container { width: 100% !important; }
-.grey-select .select2-container--default .select2-selection--single {
+.grey-select .select2-container--default .select2-selection--single, .paa-block .select2-container--default .select2-selection--single {
 	background: #EAEFF0 !important;
 }
 .white-select .select2-container--default .select2-selection--single {

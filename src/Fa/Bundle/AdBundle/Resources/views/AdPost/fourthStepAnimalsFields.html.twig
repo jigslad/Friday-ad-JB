@@ -16,14 +16,14 @@
                     <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                        <div class="collapse collapse-body-content" id="element_toggle_{{ field }}">
                             {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
                                 <div class="paa-title-ins">
                                     {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
                                 </div>
                             {% endif %}
-                            <div class="relative">
-                                {{ form_widget(attribute(form, field)) }}
+                            <div class="relative grey-select">
+                                {{ form_widget(attribute(form, field), {'attr':{'class':'select-control'}}) }}
                                 <a href="javascript:void(0);" id="fa_paa_fourth_step_animals_breed_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
                             </div>
                             {{ form_errors(attribute(form, field)) }}
@@ -35,14 +35,14 @@
                     <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                        <div class="collapse collapse-body-content" id="element_toggle_{{ field }}">
                             {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
                                 <div class="paa-title-ins">
                                     {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
                                 </div>
                             {% endif %}
-                            <div class="relative">
-                                {{ form_widget(attribute(form, field)) }}
+                            <div class="relative grey-select">
+                                {{ form_widget(attribute(form, field), {'attr':{'class':'select-control'}}) }}
                                 <a href="javascript:void(0);" id="fa_paa_fourth_step_animals_species_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
                             </div>
                         {{ form_errors(attribute(form, field)) }}
@@ -54,14 +54,14 @@
                     <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                        <div class="collapse collapse-body-content" id="element_toggle_{{ field }}">
                              {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
                                 <div class="paa-title-ins">
                                     {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
                                 </div>
                             {% endif %}
-                            <div class="relative">
-                                {{ form_widget(attribute(form, field)) }}
+                            <div class="relative grey-select">
+                                {{ form_widget(attribute(form, field), {'attr':{'class':'select-control'}}) }}
                                 <a href="javascript:void(0);" id="fa_paa_fourth_step_animals_colour_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
                             </div>
                             {{ form_errors(attribute(form, field)) }}
@@ -73,7 +73,7 @@
                     <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                        <div class="collapse collapse-body-content" id="element_toggle_{{ field }}">
                             {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
                                 <div class="paa-title-ins">
                                     {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
@@ -82,7 +82,7 @@
                             <div id="gender_choice_div" style="display:none">
                                 {{ form_widget(attribute(form, field)) }}
                             </div>
-                            <div class="capsule-links gender-links">
+                            <div class="capsule-links gender-links text-center">
                                 {% set selectedPaymentMethodId = attribute(form, field).vars.data %}
                                 {% for choice in attribute(form, field).vars.choices %}
                                     {% set activeClass = '' %}
@@ -101,16 +101,16 @@
                     <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                        <div class="collapse collapse-body-content" id="element_toggle_{{ field }}">
                             <div class="row">
-                              <div class="large-12 columns subtitle-ins">
+                              <div class="col-lg-12 col-md-12 subtitle-ins">
                                 {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
                                     <p>{{ attribute(attribute(form, field).vars.attr, 'field-help') }}</p>
                                 {% else %}
                                     <p>{{ 'Add some personality to your ad with a short quote statement that tells readers what makes your advert special'|trans({}, 'frontend-paa-fourth-step')}}</p>
                                 {% endif %}
                               </div>
-                              <div class="large-12 columns">
+                              <div class="col-lg-12 col-md-12">
                                   {{ include('FaAdBundle:AdPost:adSubtitleImage.html.twig', {'categoryId':ad.category.id}) }}
                               </div>
                             </div>
@@ -127,7 +127,7 @@
                      <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                        <div class="collapse collapse-body-content" id="element_toggle_{{ field }}">
                             {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
                                 <div class="paa-title-ins">
                                     {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
