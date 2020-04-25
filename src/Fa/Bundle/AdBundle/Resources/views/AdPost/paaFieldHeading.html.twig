@@ -1,43 +1,43 @@
-{% set showHideElement = 'none' %}
-<a href="#element_toggle_{{ field }}" class="panel-heading collapsed text-center" data-toggle="collapse" data-target="#element_toggle_{{ field }}">
-    {% if attribute(form, field).vars.required %}
-        {% set showHideElement = 'block' %}
+{% set showHideElement = 'collapsed' %}
+{% if attribute(form, field).vars.required %}
+    {% set showHideElement = '' %}
+{% else %}
+    {% set tabArrowClass = 'tab-down' %}
+    {% if validationFields is defined and validationFields|length %}
+        {% set keepOpenFlag = false %}
+        {% for validationField in validationFields %}
+            {% if keepOpenFlag == false and attribute(form, validationField) is defined and (attribute(form, validationField).vars.data|length or attribute(form, validationField).vars.errors|length) %}
+                {% set showHideElement = '' %}
+                {% set tabArrowClass = 'tab-up' %}
+                {% set keepOpenFlag = true %}
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        {% if attribute(form, field).vars.data|length or attribute(form, field).vars.errors|length %}
+            {% set showHideElement = '' %}
+            {% set tabArrowClass = 'tab-up' %}
+        {% endif %}
+    {% endif %}
+{% endif %}
+<a href="#element_toggle_{{ field }}" class="panel-heading text-center {{ showHideElement }}" data-toggle="collapse" data-target="#element_toggle_{{ field }}">
+    <h3 class="text-center">
         {% if label is defined and label %}
             {{ label }}
         {% else %}
             {{ attribute(form, field).vars.label }}
         {% endif %}
-        <span>{#({{ 'required'|trans({}, 'frontend-paa-fourth-step') }})#}</span>
-    {% else %}
-        {% set tabArrowClass = 'tab-down' %}
-        {% if validationFields is defined and validationFields|length %}
-            {% set keepOpenFlag = false %}
-            {% for validationField in validationFields %}
-                {% if keepOpenFlag == false and attribute(form, validationField) is defined and (attribute(form, validationField).vars.data|length or attribute(form, validationField).vars.errors|length) %}
-                    {% set showHideElement = 'block' %}
-                    {% set tabArrowClass = 'tab-up' %}
-                    {% set keepOpenFlag = true %}
-                {% endif %}
-            {% endfor %}
-        {% else %} 
-            {% if attribute(form, field).vars.data|length or attribute(form, field).vars.errors|length %} 
-                {% set showHideElement = 'block' %}
-                {% set tabArrowClass = 'tab-up' %}
-            {% endif %}
-        {% endif %}
-            <h3 class="text-center">
-                {% if label is defined and label %}
-                    {{ label }}
-                {% else %}
-                    {{ attribute(form, field).vars.label }}
-                {% endif %}
-            </h3>
-            <div class="arrow-block">
-                <i class="fa fa-chevron-up"></i>
-                <i class="fa fa-chevron-down"></i>
-            </div>
-            {#<span>({{ field != 'rates_id'?'optional'|trans({}, 'frontend-paa-fourth-step'):'please add your basic rates' }})</span>
-            <span class="paa-tab-arrow"></span>#}        
-    {% endif %}
+    </h3>
+    <div class="arrow-block">
+        <i class="fa fa-chevron-up"></i>
+        <i class="fa fa-chevron-down"></i>
+    </div>
+    {#        <span>#}{#({{ 'required'|trans({}, 'frontend-paa-fourth-step') }})#}{#</span>#}
+    {#<span>({{ field != 'rates_id'?'optional'|trans({}, 'frontend-paa-fourth-step'):'please add your basic rates' }})</span>
+        <span class="paa-tab-arrow"></span>#}
 </a>
-{{ set_variables('fieldHeading', {('showHideElement' ~ (field)):showHideElement}) }}
+{% if showHideElement == 'collapsed' %}
+    {{ set_variables('fieldHeading', {('showHideElement' ~ (field)):''}) }}
+{% else %}
+    {{ set_variables('fieldHeading', {('showHideElement' ~ (field)):'show'}) }}
+{% endif %}
+
