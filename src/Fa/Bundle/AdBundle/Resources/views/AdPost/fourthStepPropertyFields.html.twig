@@ -17,7 +17,7 @@
                     <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                        <div class="collapse collapse-body-content {{ showHideElement }}" id="element_toggle_{{ field }}">
                             <div class="row">
                               <div class="large-12 columns subtitle-ins">
                                 {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
@@ -48,7 +48,7 @@
                         {% endif %}
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                        <div class="collapse collapse-body-content {{ showHideElement }}" id="element_toggle_{{ field }}">
                             {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
                                 <div class="paa-title-ins">
                                     {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
@@ -82,7 +82,7 @@
                     <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                        <div class="collapse collapse-body-content {{ showHideElement }}" id="element_toggle_{{ field }}">
                             {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
                                 <div class="paa-title-ins">
                                     {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
@@ -101,7 +101,7 @@
                     <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                        <div class="collapse collapse-body-content {{ showHideElement }}" id="element_toggle_{{ field }}">
                             {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
                                 <div class="paa-title-ins">
                                     {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
@@ -122,7 +122,7 @@
                     <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                        <div class="collapse collapse-body-content {{ showHideElement }}" id="element_toggle_{{ field }}">
                             {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
                                 <div class="paa-title-ins">
                                     {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
@@ -149,7 +149,7 @@
                     <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                        <div class="collapse collapse-body-content {{ showHideElement }}" id="element_toggle_{{ field }}">
                             {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
                                 <div class="paa-title-ins">
                                     {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
@@ -167,7 +167,7 @@
                     <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                        <div class="collapse collapse-body-content {{ showHideElement }}" id="element_toggle_{{ field }}">
                             {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
                                 <div class="paa-title-ins">
                                     {{ attribute(attribute(form, field).vars.attr, 'field-help') }}

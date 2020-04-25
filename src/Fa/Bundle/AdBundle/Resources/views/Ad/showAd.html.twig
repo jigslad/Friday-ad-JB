@@ -801,9 +801,9 @@
 {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
 	{{ render(controller('FaAdBundle:Ad:showAdDetailSeoBlocks', {'categoryId': adCategoryId, 'seoPageRule': seoPageRule, 'adLocationName' : adLocationName})) }}
 {% else %}
-    {% cache 'addetail|page|seo'~adCategoryId 900 %}
+{# {% cache 'addetail|page|seo'~adCategoryId 900 %} #}
         {{ render(controller('FaAdBundle:Ad:showAdDetailSeoBlocks', {'categoryId': adCategoryId, 'seoPageRule': seoPageRule, 'adLocationName' : adLocationName})) }}
-    {% endcache %}
+        {# {% endcache %} #}
 {% endif %}
 
 <div class="right-banner">
@@ -999,12 +999,14 @@
             relatedBusinessesSlider.owlCarousel({
                 items : 2,
                 itemsCustom:[[320, 2], [568, 2], [768, 1], [1024, 1], [1025, 2]],
-                navigation: true,
                 pagination:false,
                 responsiveRefreshRate : 100,
-                navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
+                navText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
                 lazyLoad: true,
                 scrollPerPage: true,
+                dots:false,
+                nav:true,
+                loop: true
             });
 
             var relatedBusinessesMobileSlider = $("#related_businesses_mobile_slider");

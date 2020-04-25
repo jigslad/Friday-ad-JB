@@ -21,14 +21,14 @@
     	                    <div id="addetailBlock{{panelCnt}}" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="ad-detail-headingOne">
     	                        <div class="panel-body list-panel-body">
     	                            <ul class="link-list">
-    	                                <li>
+    	                                
     	                                {% if block['is_top_links'] is defined and block['is_top_links'] == 1 %}
                                             {% set facetIdArray = block['facet'] %}
                                             {% set ctr = 0 %}
                                             {% set totalItems = facetIdArray|length %}
                                             {% for i in 0..totalItems-1 %}
                                             	{% if facetIdArray[ctr] is defined %}
-                                                	<a href="{{ facetIdArray[ctr]['url'] }}">{{ facetIdArray[ctr]['title'] }}</a>
+                                                	<li><a href="{{ facetIdArray[ctr]['url'] }}">{{ facetIdArray[ctr]['title'] }}</a></li>
                                                 {% endif %}
                                                 {% set ctr = ctr + 1 %}
                                             {% endfor %}
@@ -52,16 +52,15 @@
                                             {% if facetIdArray[ctr] is defined %}
                                                 {% set facetId = facetIdArray[ctr] %}
                                                 {% if block['first_entry_as_uk'] is defined and block['first_entry_as_uk'] == 1 and facetId == 0 %}
-                                                    <a href="{{ block['facet'][0]['url'] }}">{{ block['facet'][0]['title'] }}</a>
+                                                    <li><a href="{{ block['facet'][0]['url'] }}">{{ block['facet'][0]['title'] }}</a></li>
                                                 {% else %}
                                                     {% set searchResultUrl = container.get('fa_ad.manager.ad_routing').getListingUrl(seoSearchParams|merge({ (block['search_field_name']): facetId}), null, false, null, false, parentFullSlug, secondLevelParentFullSlug) %}
-                                                    <a href="{{ searchResultUrl }}">{{ entityCacheManager.getEntityNameById(block['repository'], facetId) }}</a>
+                                                    <li><a href="{{ searchResultUrl }}">{{ entityCacheManager.getEntityNameById(block['repository'], facetId) }}</a></li>
                                                 {% endif %}
                                                 {% set ctr = ctr + 1 %}
                                             {% endif %} 
                                         {% endfor %}                                               
-                                     {% endif %}
-    	                             </li>    	                                
+                                     {% endif %}   	                                
     	                            </ul>
     	                        </div>
     	                    </div>
