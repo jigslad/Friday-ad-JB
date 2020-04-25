@@ -480,9 +480,9 @@ ul.pagination li.pager-prev:hover a, ul.pagination li.pager-next:hover a {
     background-color: #e3e3e3 !important;
 }
 .site-search .change-location #top_search_location {
-    display: grid !important;
-    width: 224px !important;
+   display: inline-block !important; width: 224px !important; z-index: 9999 !important;
 }
+.site-search .input-group { width: max-content !important; }
 .site-search .change-location #top_search_location .clearfix {
     z-index: 999 !important;
 }
