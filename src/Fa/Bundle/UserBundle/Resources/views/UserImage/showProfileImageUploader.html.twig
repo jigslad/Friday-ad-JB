@@ -204,7 +204,7 @@
                 hideAlertMessage();
                 if (response.htmlContent.length) {
                     $('#cropProfileImageModal').html(response.htmlContent);
-                    $('#cropProfileImageModal').foundation('reveal', 'open');
+                    $('#cropProfileImageModal').modal('show');
                 } else if (response.error.length) {
                     $('#filelist').html(decorateMessage(response.error, 'alert'));
                     scrollToElement('#filelist', '1000', -150);

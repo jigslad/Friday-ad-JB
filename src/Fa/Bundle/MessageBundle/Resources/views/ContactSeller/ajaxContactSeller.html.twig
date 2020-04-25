@@ -210,11 +210,11 @@
                     $("#contact_seller_id").submit();
                 }
             } else if (response.error.length) {
-                $('#contactSellerModal').foundation('reveal', 'close');
+                $('#contactSellerModal').modal('hide');
                 $(decorateMessage(response.error, 'alert')).insertBefore('#adDetailMainTabs');
                 scrollToElement('#adDetailMainTabs', '1000', -150);
             } else {
-                $('#contactSellerModal').foundation('reveal', 'close');
+                $('#contactSellerModal').modal('hide');
                 $(decorateMessage('{{'Contact request sent successfully.'|trans({}, 'frontend-contact-seller')}}', 'success')).insertBefore('#adDetailMainTabs');
 
                 if (searchAgent == 1) {

@@ -2,7 +2,7 @@
 //<![CDATA[
 $(window).on('load', function() {           
     $(document).on("click", '.continue-btn', function(event) {
-    	$('#upgradeSuccessPaymentModal').foundation('reveal', 'close');
+    	$('#upgradeSuccessPaymentModal').modal('hide');
     });
 
     {% if paymentTransactionJs['ga_transaction'] is defined and paymentTransactionJs['ga_transaction'].PAYMENT_ID is defined %}
@@ -43,7 +43,7 @@ function upgradeToFeaturedBtn(id, rootCategoryId) {
     })
     .done(function(response) {
     	$('#upgradeBasicAdToFeaturedModal').html(response.htmlContent);
-        $('#upgradeBasicAdToFeaturedModal').foundation('reveal', 'open');
+        $('#upgradeBasicAdToFeaturedModal').modal('show');
     });
 }
 

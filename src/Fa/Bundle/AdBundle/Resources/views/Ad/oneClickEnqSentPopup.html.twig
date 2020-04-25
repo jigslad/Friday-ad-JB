@@ -46,14 +46,14 @@ function sendOneClickEnquiry()
           $('#onclick_sent_error_message').hide();
           ga('send', 'event', 'CTA', 'Send email (one-click)', '{{ adId }}-{{ userTypeText }}{{ catText }}');
         }
-        $('#oneClickEnquireSentModal').foundation('reveal', 'open');
+        $('#oneClickEnquireSentModal').modal('show');
         unblockPage();
     });
 }
 
 function getInTouch(adId)
 {
-  $('#oneClickEnquireSentModal').foundation('reveal', 'close'); 
+  $('#oneClickEnquireSentModal').modal('hide'); 
   contactSeller(adId, 'Contact Seller Link One Click Enquire', '');
 }
 //]]>

@@ -23,7 +23,7 @@
                     <div id="adlist-collapse{{panelCnt}}" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="adlist-heading{{panelCnt}}">
                         <div class="panel-body list-panel-body">
                              <ul class="link-list">
-                                <li>                                     
+                                                                     
                                     {% if block['is_top_links'] is defined and block['is_top_links'] == 1 %}
                                         {% set facetIdArray = block['facet'] %}
                                         {% set columns = 3 %}
@@ -42,7 +42,7 @@
                                         {% for i in 0..columns-1 %}
                                             {% for k in 0..colCounter[i]-1 %}
                                                 {% if facetIdArray[ctr] is defined %}
-                                                    <a href="{{ facetIdArray[ctr]['url'] }}" {% if getNoFollowLink1  %}rel="nofollow"{% endif %} >{{ facetIdArray[ctr]['title'] }}</a>
+                                                    <li><a href="{{ facetIdArray[ctr]['url'] }}" {% if getNoFollowLink1  %}rel="nofollow"{% endif %} >{{ facetIdArray[ctr]['title'] }}</a></li>
                                                 {% endif %}
                                                 {% set ctr = ctr + 1 %}
                                             {% endfor %}
@@ -105,16 +105,16 @@
                                                             {% endif %}
                                                         {% endif %}
                                                         {% if facetId == 0 %}
-                                                            <a href="{{ searchResultUrl }}" {% if getNoFollowLink1  %}rel="nofollow"{% endif %}>{{block['facet'][0]['title']}}</a>
+                                                            <li><a href="{{ searchResultUrl }}" {% if getNoFollowLink1  %}rel="nofollow"{% endif %}>{{block['facet'][0]['title']}}</a></li>
                                                         {% else %}
-                                                            <a href="{{ searchResultUrl }}" {% if getNoFollowLink1  %}rel="nofollow"{% endif %}>{{ entityCacheManager.getEntityNameById(block['repository'], facetId) }} {# ({{ block['facet'][facetId] }}) #}</a>
+                                                            <li><a href="{{ searchResultUrl }}" {% if getNoFollowLink1  %}rel="nofollow"{% endif %}>{{ entityCacheManager.getEntityNameById(block['repository'], facetId) }} {# ({{ block['facet'][facetId] }}) #}</a></li>
                                                         {% endif %}
                                                     {% endif %}
                                                     {% set ctr = ctr + 1 %}
                                                 {% endfor %}
                                         {% endfor %}
                                     {% endif %}
-                                </li>
+                                
                                 {% if block['show_all_link'] is defined and block['show_all_link'] and totalItems == block['facet_limit'] %}
                                     <li class="right"><a href="{{ path('category_dimension_list', {'categoryString': categoryRepository.getSlugById(categoryId, container), 'dimensionName': block['dimension_name']}) }}" {% if getNoFollowLink1  %}rel="nofollow"{% endif %} >{{ 'View all'|trans({}, 'frontend-search-list-block') }}</a></li>
                                 {% endif %}

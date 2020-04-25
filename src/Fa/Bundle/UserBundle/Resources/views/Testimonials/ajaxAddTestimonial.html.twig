@@ -39,7 +39,7 @@
             if (response.htmlContent.length) {
                 $('#addTestimonialModal').html(response.htmlContent);
             } else {
-                $('#addTestimonialModal').foundation('reveal', 'close');
+                $('#addTestimonialModal').modal('hide');
                 $('#testimonials_list_id').prepend(decorateMessage('{{'Testimonial sent successfully, administrator will review it.'|trans({}, 'frontend-testimonials')}}', 'success'));
                 scrollToElement('#testimonials_list_id', '1000', -150);
             }

@@ -115,7 +115,7 @@
             }
 
             if (response.successMsg.length) {
-                $('#saveAddPhotoModal').foundation('reveal', 'open');
+                $('#saveAddPhotoModal').modal('show');
                 $('#adImgHash').val(response.adImgHash);
                 ga('send', 'event', 'Ad details', 'Add photo - autoemail');
             }

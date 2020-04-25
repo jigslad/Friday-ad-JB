@@ -90,7 +90,7 @@
                     }); #}
                 }
                 
-                $('#profileEditLocationModal').foundation('reveal', 'close');
+                $('#profileEditLocationModal').modal('hide');
                 $('#business_location_div').notify('{{'Location edited successfully.'|trans({}, 'frontend-my-profile')}}', { position:"top", className:"success" });
                 scrollToElement('#business_location_div', '1000', -150);
             }

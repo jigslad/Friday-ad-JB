@@ -76,7 +76,7 @@
                 $('#profileEditModal').html(response.htmlContent);
             } else {
                 $('#business_address_detail_div').html(response.successContent);
-                $('#profileEditModal').foundation('reveal', 'close');
+                $('#profileEditModal').modal('hide');
                 $('#business_address_detail_div').notify('{{'Contact details edited successfully.'|trans({}, 'frontend-my-profile')}}', { position:"top", className:"success" });
                 scrollToElement('#business_address_detail_div', '1000', -150);
             }

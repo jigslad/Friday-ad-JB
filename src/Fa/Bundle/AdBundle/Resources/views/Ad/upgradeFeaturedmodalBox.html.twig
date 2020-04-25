@@ -361,7 +361,7 @@
     {
     	{% if privateUserAdParams is defined and privateUserAdParams|length and not privateUserAdParams.allowPrivateUserToPostAdFlag %}
             if (packagePrice <= 0) {
-                $('#privateUserMaxAdPostLimitModal').foundation('reveal', 'open');
+                $('#privateUserMaxAdPostLimitModal').modal('show');
                 return false;
             }
         {% endif %}

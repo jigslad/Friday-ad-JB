@@ -51,9 +51,11 @@
                 {% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
                 {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
                     {{ form_errors(form) }}
+                    <div class="input-group-append">
                     <div style="display:none">{{ form_row(form.email_alert) }}{{ form_row(form.third_party_email_alert) }}</div>
                     {{ form_widget(form.email, {'attr': {'class':'form-control', 'placeholder': 'Enter your email address', 'maxlength': '255'} }) }}
-                    <div class="input-group-append">{{ form_widget(form.save, {'attr': {'class': 'btn btn-success secondary-btn-1'}}) }}</div>
+                    {{ form_widget(form.save, {'attr': {'class': 'btn btn-success secondary-btn-1'}}) }}
+                    </div>
                 {{ form_end(form) }}
             {% endif %}
         {% endif %}

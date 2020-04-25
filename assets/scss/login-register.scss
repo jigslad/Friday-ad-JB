@@ -17,11 +17,9 @@
     float: left;
     border-right: 1px solid $form-border-color;
     box-shadow: inset -1px 0 0 $white;
-    padding: 24px 50px 25px 0;
 }
 .login-right {
     float: right;
-    padding: 50px 0 25px 50px;
 }
 .login-register-block .btn-fad-blue-large {
     height: 60px;
@@ -40,7 +38,14 @@
     padding: 40px 0;
     text-align: center;
 }
-
+@media only screen and (max-width: 760px) {
+	.login-left {
+	    padding: 24px 39px 25px 0 !important;
+	}
+	.login-right {
+		padding: 50px 0 25px 40px !important;
+	}
+}
 @media (min-width: 320px) and (max-width: 759px) {
     .login-left, .login-right {
         padding: 15px;

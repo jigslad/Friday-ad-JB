@@ -65,7 +65,7 @@
             } else if (response.nimberError.length) {
                 $(decorateMessage(response.nimberError, 'alert')).insertBefore('#fa_nimber_create_task_save');
             } else if (response.error.length) {
-                $('#nimberCreateTaskModal').foundation('reveal', 'close');
+                $('#nimberCreateTaskModal').modal('hide');
                 if (response.error == 'no_cookie') {
                     clearNimberCookies(true);
                 } else {
@@ -73,7 +73,7 @@
                     scrollToElement('#adDetailMainTabs', '1000', -150);
                 }
             } else {
-                $('#nimberCreateTaskModal').foundation('reveal', 'close');
+                $('#nimberCreateTaskModal').modal('hide');
                 var succMsg = "{{"Your task has been posted on Nimber - go and check it %task_id_link%. If you are new to Nimber, you'll get an email with a temporary password."|trans({}, 'frontend-contact-seller')|raw}}";
                 succMsg = succMsg.replace("%task_id_link%", '<a id="nimber_task_id_anchor" href="'+response.nimberTaskUrl+'" target="_blank">here</a>');
                 $(decorateMessage(succMsg, 'success')).insertBefore('#adDetailMainTabs');

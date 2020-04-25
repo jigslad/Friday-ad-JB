@@ -20,7 +20,7 @@
                 unblockPage();
                 $('#createHalfAccountModal').html(data);
                 bindHalfAccountSubmitFormEvent(ad_id, callFromGlobalHA);
-                $('#createHalfAccountModal').foundation('reveal', 'open');
+                $('#createHalfAccountModal').modal('show');
             }
         });
     }
@@ -44,7 +44,7 @@
                     bindHalfAccountSubmitFormEvent(ad_id, callFromGlobalHA);
                 }
                 if (response.success.length && response.user_id) {
-                    $('#createHalfAccountModal').foundation('reveal', 'close');
+                    $('#createHalfAccountModal').modal('hide');
 
                     if (ad_id) {
                         sendGaForCreateAlert('halfacoount');

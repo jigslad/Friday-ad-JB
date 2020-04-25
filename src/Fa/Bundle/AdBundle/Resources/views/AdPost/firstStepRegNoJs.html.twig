@@ -217,7 +217,7 @@
         
             if (showMsg) {
                 $('#carweb_category_msg_modal').append(msg);
-                $('#carweb_category_msg_modal').foundation('reveal', 'open');
+                $('#carweb_category_msg_modal').modal('show');
                 $('#change_to_carweb_category').click(function(e){
                     $('.close-reveal-modal').trigger('click');
                     loadRegNofields = false;

@@ -107,7 +107,7 @@
         .done(function(response) {
             if (response.htmlContent.length) {
                 $('#adFeedClickReportCsvListModal').html(response.htmlContent);
-                $('#adFeedClickReportCsvListModal').foundation('reveal', 'open');
+                $('#adFeedClickReportCsvListModal').modal('show');
             }
         });
     }

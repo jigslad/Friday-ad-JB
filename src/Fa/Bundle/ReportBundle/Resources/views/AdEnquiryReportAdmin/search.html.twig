@@ -253,7 +253,7 @@
         .done(function(response) {
             if (response.htmlContent.length) {
                 $('#adEnquiryReportCsvListModal').html(response.htmlContent);
-                $('#adEnquiryReportCsvListModal').foundation('reveal', 'open');
+                $('#adEnquiryReportCsvListModal').modal('show');
             }
         });
     }

@@ -278,7 +278,7 @@
              })
             .done(function(response) {
                 $('#social_share_icon_div').html(response.htmlContent);
-            	$('#socialShareMobileModal').foundation('reveal', 'open');
+            	$('#socialShareMobileModal').modal('show');
             });
         }
     }
@@ -337,7 +337,7 @@
     function removeSavedSearchConfirmation(savedSearchId)
     {
         savedSearchIdToRemove = savedSearchId;
-        $('#removeSavedSearch').foundation('reveal', 'open');
+        $('#removeSavedSearch').modal('show');
     }
 
     function renameSavedSearchConfirmation(savedSearchId)
@@ -348,7 +348,7 @@
             searchAgentTitle = $('#saved_search_title_'+savedSearchIdToRename+'_mobile').html();
         }
         $('#txt_title').val(searchAgentTitle);
-        $('#renameSavedSearch').foundation('reveal', 'open');
+        $('#renameSavedSearch').modal('show');
     }
 
     function renameSavedSearch()
@@ -358,7 +358,7 @@
             searchAgentTitle = searchAgentTitle.trim();
 
             if (searchAgentTitle == '') {
-                $('#blankTitleAlert').foundation('reveal', 'open');
+                $('#blankTitleAlert').modal('show');
             } else {
                 var route = Routing.generate('rename_search_agent', { 'userSearchAgentId': savedSearchIdToRename, 'userSearchAgentTitle': searchAgentTitle });
                 blockPage();

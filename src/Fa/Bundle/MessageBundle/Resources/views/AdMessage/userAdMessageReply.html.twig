@@ -136,7 +136,7 @@
                                         {% endif %}
                                     {% endif %}
                                     {% if not isNewMessageFlag and adOwnerId == objLoggedInUser.getId() and isAdActive == true %}
-                                        <span class="xs-btn-2 btn small-btn marksold-btn" onclick="$('#markAsSoldModal').foundation('reveal', 'open');">{{ 'Mark as sold'|trans({}, 'frontend-inbox') }}</span>
+                                        <span class="xs-btn-2 btn small-btn marksold-btn" onclick="$('#markAsSoldModal').modal('show');">{{ 'Mark as sold'|trans({}, 'frontend-inbox') }}</span>
                                     {% endif %}
                                 </div>
                             </div>
@@ -427,7 +427,7 @@
             hideAlertMessage();
             if (response.htmlContent.length) {
                 $('#reportUserModal').html(response.htmlContent);
-                $('#reportUserModal').foundation('reveal', 'open');
+                $('#reportUserModal').modal('show');
             } else if (response.error.length) {
                 $(decorateMessage(response.error, 'alert')).insertBefore('#message_box');
                 scrollToElement('#message_box', '1000', -150);

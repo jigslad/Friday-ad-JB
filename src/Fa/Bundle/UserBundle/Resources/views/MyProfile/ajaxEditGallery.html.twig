@@ -69,7 +69,7 @@
                         }
                     }
                 });
-                $('#profileEditModal').foundation('reveal', 'close');
+                $('#profileEditModal').modal('hide');
                 if ($('#business_gallery_div').html().length != oldGalleryontentLength) {
                     $('#business_gallery_div').notify('{{'Gallery edited successfully.'|trans({}, 'frontend-my-profile')}}', { position:"top", className:"success" });
                 }

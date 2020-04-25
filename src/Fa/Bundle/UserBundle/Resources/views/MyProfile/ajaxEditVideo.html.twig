@@ -70,7 +70,7 @@
                     return false;
                 });
                 
-                $('#profileEditModal').foundation('reveal', 'close');
+                $('#profileEditModal').modal('hide');
                 $('#business_video_div').notify('{{'Video edited successfully.'|trans({}, 'frontend-my-profile')}}', { position:"top", className:"success" });
                 scrollToElement('#business_video_div', '1000', -150);
             }

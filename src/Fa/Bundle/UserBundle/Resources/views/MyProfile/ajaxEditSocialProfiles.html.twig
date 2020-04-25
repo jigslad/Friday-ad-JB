@@ -53,7 +53,7 @@
                 $('#profileEditModal').html(response.htmlContent);
             } else {
                 $('#business_social_icons_div').html(response.successContent);
-                $('#profileEditModal').foundation('reveal', 'close');
+                $('#profileEditModal').modal('hide');
                 $('#business_social_icons_div').notify('{{'Social profiles edited successfully.'|trans({}, 'frontend-my-profile')}}', { position:"top", className:"success" });
                 scrollToElement('#business_social_icons_div', '1000', -150);
             }
