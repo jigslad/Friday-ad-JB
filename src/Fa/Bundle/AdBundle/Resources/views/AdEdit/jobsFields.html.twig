@@ -64,19 +64,19 @@
                                         </div>
                                     {% endif %}
                                     {% if attribute(form, 'salary_type_id') is defined %}
-                                        <div class="small-wrapper">
+                                        <div class="small-wrapper grey-select">
                                             {{ form_widget(attribute(form, 'salary_type_id')) }}
                                             {{ form_errors(attribute(form, 'salary_type_id')) }}
                                         </div>
                                     {% endif %}
                                     {% if attribute(form, 'salary_band_id') is defined %}
-                                        <div class="small-wrapper" id="salary_band_id_div" style="display:none;">
+                                        <div class="small-wrapper grey-select" id="salary_band_id_div" style="display:none;">
                                             {{ form_widget(attribute(form, 'salary_band_id')) }}
                                             {{ form_errors(attribute(form, 'salary_band_id')) }}
                                         </div>
                                     {% endif %}
                                     {% if attribute(form, 'salary') is defined %}
-                                        <div class="small-wrapper">
+                                        <div class="small-wrapper grey-select">
                                             {{ form_widget(attribute(form, 'salary'), {'attr': {'placeholder': ((attribute(form, 'salary').vars.attr.placeholder is defined and attribute(form, 'salary').vars.attr.placeholder is not null) ? attribute(form, 'salary').vars.attr.placeholder : 'Type specific salary amount')}}) }}
                                             {{ form_errors(attribute(form, 'salary')) }}
                                         </div>
@@ -125,7 +125,7 @@
                                         {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
                                     </div>
                                 {% endif %}
-                                <div class="small-wrapper">
+                                <div class="small-wrapper  grey-select">
                                     {{ form_widget(attribute(form, field)) }}
                                     {{ form_errors(attribute(form, field)) }}
                                 </div>
