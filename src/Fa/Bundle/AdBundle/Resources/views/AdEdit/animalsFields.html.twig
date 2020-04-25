@@ -12,10 +12,10 @@
                                     {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
                                 </div>
                             {% endif %}
-                            <div id="ad_type_choice_div" style="display:none">
-                                {{ form_widget(attribute(form, field)) }}
+                            <div id="ad_type_choice_div" class="capsule-links radio-capsule payment-method-links text-center">
+                                {{ form_widget(attribute(form, field), {'attr': {'class' : 'radio-capsule-btn'}}) }}
                             </div>
-                            <div class="capsule-links ad-type-links">
+                            <div class="capsule-links ad-type-links text-center">
                                 {% set selectedAdTypeId = attribute(form, field).vars.data %}
                                 {% for choice in attribute(form, field).vars.choices %}
                                     {% set activeClass = '' %}

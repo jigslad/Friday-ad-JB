@@ -135,7 +135,7 @@
                             <div id="position_preference_choice_div" style="display:none">
                                 {{ form_widget(attribute(form, field)) }}
                             </div>
-                            <div class="capsule-links ad-type-links">
+                            <div class="capsule-links ad-type-links text-center">
                                 {% set selectedAdTypeId = attribute(form, field).vars.data %}
                                 {% for choice in attribute(form, field).vars.choices %}
                                     {% set activeClass = '' %}
@@ -163,7 +163,7 @@
                             <div id="experience_choice_div" style="display:none">
                                 {{ form_widget(attribute(form, field)) }}
                             </div>
-                            <div class="capsule-links ad-type-links">
+                            <div class="capsule-links ad-type-links text-center">
                                 {% set selectedAdTypeId = attribute(form, field).vars.data %}
                                 {% for choice in attribute(form, field).vars.choices %}
                                     {% set activeClass = '' %}

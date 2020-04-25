@@ -6,7 +6,7 @@
              {{ set_variables('formFields', {'lastField':field}) }}
                 {% if field == 'ad_type_id' %}
                     <div class="col-md-24 d-flex justify-content-center paa-box">
-                        <div class="kind-of-paa paa-bdr-box btm-pa-0" id="element_{{ field }}">
+                        <div class="paa-bdr-box " id="element_{{ field }}">
                             {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                             {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
                             <div class="collapse collapse-body-content {{ showHideElement }}" id="element_toggle_{{ field }}">
@@ -15,10 +15,10 @@
                                         {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
                                     </div>
                                 {% endif %}
-                                <div id="ad_type_choice_div" style="display:none">
-                                    {{ form_widget(attribute(form, field)) }}
+                                <div id="ad_type_choice_div" class="capsule-links radio-capsule payment-method-links text-center">
+                                    {{ form_widget(attribute(form, field), {'attr': {'class' : 'radio-capsule-btn'}}) }}
                                 </div>
-                                <div class="capsule-links ad-type-links">
+                                <div class="capsule-links ad-type-links text-center">
                                     {% set selectedAdTypeId = attribute(form, field).vars.data %}
                                     {% for choice in attribute(form, field).vars.choices %}
                                         {% set activeClass = '' %}
@@ -34,7 +34,7 @@
                     </div>
                 {% elseif field == 'title' %}
                     <div class="col-md-24 d-flex justify-content-center paa-box">
-                        <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
+                        <div class="paa-bdr-box " id="element_{{ field }}">
                             {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                             {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
                             <div class="collapse collapse-body-content {{ showHideElement }}" id="element_toggle_{{ field }}">
@@ -53,7 +53,7 @@
                     </div>
                 {% elseif field == 'description' %}
                     <div class="col-md-24 d-flex justify-content-center paa-box">
-                        <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
+                        <div class="paa-bdr-box " id="element_{{ field }}">
                             {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                             {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
                             <div class="collapse collapse-body-content {{ showHideElement }}" id="element_toggle_{{ field }}">
@@ -71,7 +71,7 @@
                                 {{ form_errors(attribute(form, field)) }}
                             </div>
                         </div>
-                    <div class="col-md-24 d-flex justify-content-center paa-box">
+                    </div>
                 {% elseif field == 'photo_error' %}
                     {{ include('FaAdBundle:AdPost:paaUploadImage.html.twig', {'vertical':'property'}) }}
                 {% elseif field == 'youtube_video_url' %}
@@ -81,7 +81,7 @@
                 {% elseif field == 'price' or field == 'rent_per_id' %}
                     {% if isRentPerRendered == false %}
                         <div class="col-md-24 d-flex justify-content-center paa-box">
-                            <div class="paa-bdr-box {% if attribute(form, 'rent_per_id') is defined %} btm-pa-0 {% endif %}">
+                            <div class="paa-bdr-box {% if attribute(form, 'rent_per_id') is defined %}  {% endif %}">
                             <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
                             <div class="small-wrapper paa-enter-price clearfix">
                                 <div class="price-icon">&pound;</div>
@@ -112,7 +112,7 @@
                     {{ include('FaAdBundle:AdPost:paaLocationWithMap.html.twig', {'is_edit' : true}) }}
                 {% elseif field == 'personalized_title' %}
                     <div class="col-md-24 d-flex justify-content-center paa-box">
-                        <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
+                        <div class="paa-bdr-box " id="element_{{ field }}">
                             {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                             {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
                             <div class="collapse collapse-body-content {{ showHideElement }}" id="element_toggle_{{ field }}">
@@ -138,7 +138,7 @@
                     </div>
                 {% elseif field in capsuleFields %}
                     <div class="col-md-24 d-flex justify-content-center paa-box">
-                        <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
+                        <div class="paa-bdr-box " id="element_{{ field }}">
                             {% set choiceField = field|replace({'_id':''})%}
                             {% set isMultiple = false %}
                             {% if attribute(form, field).vars.multiple == true %}
@@ -177,7 +177,7 @@
                     </div>
                 {% elseif field == 'deposit' %}
                     <div class="col-md-24 d-flex justify-content-center paa-box">
-                        <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
+                        <div class="paa-bdr-box " id="element_{{ field }}">
                             {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                             {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
                             <div class="collapse collapse-body-content {{ showHideElement }}" id="element_toggle_{{ field }}">
@@ -196,7 +196,7 @@
                     </div>
                 {% elseif field == 'date_available' %}
                     <div class="col-md-24 d-flex justify-content-center paa-box">
-                        <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
+                        <div class="paa-bdr-box " id="element_{{ field }}">
                             {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                             {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
                             <div class="collapse collapse-body-content {{ showHideElement }}" id="element_toggle_{{ field }}">
@@ -217,7 +217,7 @@
                     </div>
                 {% elseif field == 'amenities_id' or field == 'bills_included_in_rent_id' %}
                     <div class="col-md-24 d-flex justify-content-center paa-box">
-                        <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
+                        <div class="paa-bdr-box " id="element_{{ field }}">
                             {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                             {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
                             <div class="collapse collapse-body-content {{ showHideElement }}" id="element_toggle_{{ field }}">
@@ -242,10 +242,10 @@
                                 </ul>
                             </div>
                         </div>
-                    <div class="col-md-24 d-flex justify-content-center paa-box">
+                    </div>
                 {% elseif field == 'rental_length' %}
                     <div class="col-md-24 d-flex justify-content-center paa-box">
-                        <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
+                        <div class="paa-bdr-box " id="element_{{ field }}">
                             {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                             {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
                             <div class="collapse collapse-body-content {{ showHideElement }}" id="element_toggle_{{ field }}">
@@ -263,7 +263,7 @@
                     </div>
                 {% else %}
                     <div class="col-md-24 d-flex justify-content-center paa-box">
-                        <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
+                        <div class="paa-bdr-box " id="element_{{ field }}">
                             {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                             {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
                             <div class="collapse collapse-body-content {{ showHideElement }}" id="element_toggle_{{ field }}">
