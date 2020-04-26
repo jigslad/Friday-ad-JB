@@ -297,10 +297,7 @@
         	});
 
             {% if (showAdultPopup == 1) %}
-                $('#eighteenPlusWarnningModel').foundation('reveal', 'open',{
-                	close_on_background_click: false,
-                	close_on_esc: false,
-                	});
+                $('#eighteenPlusWarnningModel').modal({backdrop: "static"});
             {% endif %}
         });
         {% if app.request.get('ti_url') %}

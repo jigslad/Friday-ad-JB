@@ -284,12 +284,13 @@
     line-height: 40px;
   }
   .budget-go-btn {
-    background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' x='0' y='0' width='40' height='40' viewBox='-459 261 40 40' xml:space='preserve'%3e%3cstyle type='text/css'%3e .st0%7bfill:%23A8DC28;stroke:%239BCC21;%7d .st1%7bfill:none;stroke:%23FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;%7d .st2%7bfill:none;stroke:%23FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;%7d %3c/style%3e%3ctitle%3ebutton filters%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cg transform='translate(-362.000000, -910.000000)'%3e%3cg transform='translate(182.000000, 627.000000)'%3e%3cg transform='translate(1.000000, 243.000000)'%3e%3cg transform='translate(179.000000, 40.000000)'%3e%3cpath class='st0' d='M-457 261h36c1.1 0 2 0.9 2 2v36c0 1.1-0.9 2-2 2h-36c-1.1 0-2-0.9-2-2v-36C-459 261.9-458.1 261-457 261z'/%3e%3cg transform='translate(15.000000, 16.000000)'%3e%3cg transform='translate(8.000000, 0.000000)'%3e%3cpath class='st1' d='M-459 261l4 5 -4 5'/%3e%3c/g%3e%3cpath class='st2' d='M-459 261l4 5 -4 5'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e") no-repeat !important;
+   background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' x='0' y='0' width='40' height='40' viewBox='-459 261 40 40' xml:space='preserve'%3e%3cstyle type='text/css'%3e .st0%7bfill:none;stroke:%23FFFFFF;%7d .st1%7bfill:none;stroke:%23FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;%7d .st2%7bfill:none;stroke:%23FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;%7d %3c/style%3e%3ctitle%3ebutton filters%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cg transform='translate(-362.000000, -910.000000)'%3e%3cg transform='translate(182.000000, 627.000000)'%3e%3cg transform='translate(1.000000, 243.000000)'%3e%3cg transform='translate(179.000000, 40.000000)'%3e%3cpath class='st0' d='M-457 261h36c1.1 0 2 0.9 2 2v36c0 1.1-0.9 2-2 2h-36c-1.1 0-2-0.9-2-2v-36C-459 261.9-458.1 261-457 261z'/%3e%3cg transform='translate(15.000000, 16.000000)'%3e%3cg transform='translate(8.000000, 0.000000)'%3e%3cpath class='st1' d='M-459 261l4 5 -4 5'/%3e%3c/g%3e%3cpath class='st2' d='M-459 261l4 5 -4 5'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e") no-repeat center center, linear-gradient(135deg, #A8DC28 0%,#79D378 100%) !important;
     width: 40px;
     height: 40px;
     margin: 0 0 0 7px;
     vertical-align: top;
     border-radius: 2px !important;
+    border: 0px !important;
   }
   .distance-search li.col {
     width: 164px;
@@ -528,6 +529,9 @@
     font-weight: 400;
   }
 }
+.ad-list-block .sortby-area h2, .ad-list-block .sortby-area h1 {
+	margin-bottom: 10px;
+}
 
 @media (min-width: 960px) and (max-width:1151px) {
     .ad-list-block {
@@ -733,6 +737,10 @@
     .notify-me .input-group-append, .notify-me .btn {
         width: 100%;
     }
+   .listing h3.list-title {
+	min-height: 35px;
+	margin-bottom: 3px;
+    }
 }
 
 .md-refine .btn {
@@ -805,7 +813,7 @@
   border-radius: 2px;
   position: absolute;
   left: 60px;
-  top: 104px;
+  top: 140px;
   z-index: 5;
   width: 160px;
 }

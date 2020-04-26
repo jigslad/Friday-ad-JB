@@ -1,6 +1,7 @@
 <div class="businessExposureCarousel">
-  <div class="listing-exposure">
- <div class="owl-carousel fa-slider bus-shop-user-item-slider" id="busshop-user-single-item-slider" data-equalizer>
+	<div class="row">
+	    <div class="col-md-24 col-lg-24">
+	        <div id="bus-shop-user-item-slider" class="owl-carousel owl-theme fa-slider" data-equalizer>
 {% for businessExposureUsersDetail in businessTopExposureUsersDetailsWithoutAd %}       
 {% if businessExposureUsersDetail is defined %}	
 	{% set  businessUserId = businessExposureUsersDetail['businessUserId'] %}
@@ -40,9 +41,9 @@
                             {% endif %}
                         {% endif %}
                         {% set gaEventLabel = businessUserDetail['user_name'] ~ ' - Business ad' %}
-                        <a href="{{ userProfileUrl }}" onClick='visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");' class="button expand secondary-btn-1 mb0">{{ profileLabel }}</a>
+                        <a href="{{ userProfileUrl }}" onClick='visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");' class="button btn-block text-center secondary-btn-1 mb0">{{ profileLabel }}</a>
                     </div>
-                    <div class="medium-19 large-19 columns hide-for-small-only">                    
+                    <div class="col-md-18 d-none d-md-block">  
                         <div class="bus-abt-us-div">
                         	{% if businessUserDetail['company_welcome_message']!='' %}
                         	    <h3 class="featured-single">{{businessUserDetail['company_welcome_message']|raw}}</h3>
@@ -56,7 +57,8 @@
     {% endif %} 
     {% endif %}    
 {% endfor %}
-</div>
-</div>
+			</div>
+		</div>
+	</div>
 </div>
 
