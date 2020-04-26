@@ -8,8 +8,7 @@
             }
             setAndMoveSliderCaption('distance_slider', 'lower', 'distance');
         });
-
-       /* if ($('#price_slider').length) {
+       if ($('#price_slider').length) {
             var slider1 = document.getElementById('price_slider');
     
             if (slider1 != undefined) {
@@ -36,28 +35,28 @@
           }
         }
 
-        if ($('#distance_slider').length) {
-            var slider2 = document.getElementById('distance_slider');
-    
-            if (slider2 != undefined) {
-            noUiSlider.create(slider2, {
-                snap: true,
-                connect: true,
-                start: [ 15 ],
-                range: {
-                	'min': [0, 2],
-                    '5%':  [2, 3],
-                    '10%': [5, 5],
-                    '20%': [20, 10],
-                    '25%': [30, 20],
-                    '35%': [50, 25],
-                    '55%': [100, 50],
-                    '85%': [200, 100000],
-                    'max': 100000
-                }
-            });
-          }
-        } */        
+
+         if ($('#distance_slider').length) {
+             var slider2 = document.getElementById('distance_slider');
+
+             if (slider2 != undefined) {
+             noUiSlider.create(slider2, {
+                 connect: 'lower',
+                 start: [ 15 ],
+                 range: {
+                     'min': [0, 2],
+                     '5%':  [2, 3],
+                     '10%': [5, 5],
+                     '20%': [20, 10],
+                     '25%': [30, 20],
+                     '35%': [50, 25],
+                     '55%': [100, 50],
+                     '85%': [200, 100000],
+                     'max': 100000
+                 }
+             });
+           }
+         }
 
         $("#price_slider").on({
             slide: function(){
