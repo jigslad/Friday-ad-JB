@@ -1,4 +1,3 @@
-<style>.newsletter-icon { background:url(/bundles/fafrontend/images/newsletter-white.svg) no-repeat; background-size: 100%;background-position: center center; }</style>
 <div class="mb20">
             {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'fa_user_newsletter'}}) }}
                 <div class="mb20 newsletter-head"><span class="newsletter-icon list-icons" style=""></span><label class="footer-head">Subscribe to our <br> newsletter</label></div>
@@ -9,22 +8,18 @@
                        </div>
                     </div>
                     {{ form_errors(form) }}
-                    <div class="label-inline white-checkbox mt0 mb0" style="display: inline-flex;">
-                        <span class="custom-checkbox">
-                            {{ form_widget(form.email_alert) }}
-                        </span>
-                        {{ form_label(form.email_alert,'', {'label_attr': {'class': 'footer-subscribe-label'}}) }}
+                    <div class="white-check mt0 mb0" style="display: inline-flex;">
+                        {{ form_widget(form.email_alert, {'attr': {'class': 'checkbox'}}) }}
+                        <label for="{{ form.email_alert.vars.id }}"></label>{{ form.email_alert.vars.label }}
                     </div>
                     <div class="clearfix"></div>
-                    <div class="label-inline white-checkbox mt0 mb0 third-party-email-subscription" style="display: inline-flex;">
-                        <span class="custom-checkbox">
-                            {{ form_widget(form.third_party_email_alert) }}
-                        </span>
-                        {{ form_label(form.third_party_email_alert,'', {'label_attr': {'class': 'footer-subscribe-label'}}) }}
+                    <div class="white-check mt0 mb0 third-party-email-subscription" style="display: inline-flex;">
+                        {{ form_widget(form.third_party_email_alert, {'attr': {'class': 'checkbox'}}) }}
+                        <label for="{{ form.third_party_email_alert.vars.id }}"></label>{{ form.third_party_email_alert.vars.label }}
                     </div>
                     <div class="clearfix">
                        <div class="" style="display: inline-flex;">
-                            {{ form_widget(form.save,{'attr':{'class':'secondary-btn-1 button' }}) }}
+                            {{ form_widget(form.save,{'attr':{'class':'secondary-btn-1 btn' }}) }}
                         </div>
                     </div>
                     <div class="clearfix">
