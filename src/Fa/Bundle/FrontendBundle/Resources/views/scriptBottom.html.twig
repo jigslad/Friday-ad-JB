@@ -156,8 +156,11 @@
         if (notification_box == true) {
             displayNotifications();
         }
-    }, function(){});
-    
+    }, function(){
+        $("#notification-area").empty();
+        notification_box = true;
+    });
+
     
     function displayNotifications()
     {
