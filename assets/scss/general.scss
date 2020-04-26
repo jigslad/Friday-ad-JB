@@ -174,7 +174,7 @@ button:focus, a:focus {
 .btn-h-lg {
     height: 60px !important;
     font-size: 18px !important;
-    line-height: 48px !important;
+    line-height: 36px !important;
 }
 .btn-h-md {
     height: 40px !important;
@@ -358,18 +358,15 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
         color: $form-text-color;
       }
       &:hover a, a:focus {
-        background: $form-border-color;
         box-shadow: none;
       }
       &.pager-prev a {
         &:hover, &:focus {
-          background: $form-border-color;
           box-shadow: none;
         }
       }
       &.pager-next a {
         &:hover, &:focus {
-          background: $form-border-color;
           box-shadow: none;
         }
       }
@@ -638,7 +635,7 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
     width: 100%;
     margin: 0 auto;
     .modal-title {
-	padding: 10px 15px !important;
+	padding: 10px 10px 10px 60px !important;
     }
     .modal-content {
       background: $white;
@@ -654,7 +651,7 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
     .modal-header {
       padding: 0;
       .no-icon-title {
-        padding: 10px 10px 10px 60px !important;
+        padding: 10px 15px !important;
       }
     }
     .close-modal {

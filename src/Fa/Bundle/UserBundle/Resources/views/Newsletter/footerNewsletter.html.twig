@@ -10,12 +10,12 @@
                     {{ form_errors(form) }}
                     <div class="white-check mt0 mb0" style="display: inline-flex;">
                         {{ form_widget(form.email_alert, {'attr': {'class': 'checkbox'}}) }}
-                        <label for="{{ form.email_alert.vars.id }}"></label>{{ form.email_alert.vars.label }}
+                        <label for="{{ form.email_alert.vars.id }}"></label><span class="newsletter-lbl">{{ form.email_alert.vars.label }}</span>
                     </div>
                     <div class="clearfix"></div>
                     <div class="white-check mt0 mb0 third-party-email-subscription" style="display: inline-flex;">
                         {{ form_widget(form.third_party_email_alert, {'attr': {'class': 'checkbox'}}) }}
-                        <label for="{{ form.third_party_email_alert.vars.id }}"></label>{{ form.third_party_email_alert.vars.label }}
+                        <label for="{{ form.third_party_email_alert.vars.id }}"></label><span class="newsletter-lbl">{{ form.third_party_email_alert.vars.label }}</span>
                     </div>
                     <div class="clearfix">
                        <div class="" style="display: inline-flex;">
