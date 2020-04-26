@@ -655,23 +655,6 @@ $(document).ready(function(){
 
 });
 
-$(document).on('click', '.expand-search', function (event) {
-    event.preventDefault();
-    $(this).toggleClass('expanded');
-    $(this).next().slideToggle('slow');
-  });
-
-// $(function() {
-//   $( '#dl-menu' ).dlmenu({
-//     animationClasses : { classin : 'dl-animate-in-2', classout : 'dl-animate-out-2' }
-//   });
-// });
-
-// $(function selectOptions(this) {
-//   // var settings = S(this).data(self.attr_name(true) + "-init") || self.settings;
-//   $(this).removeClass($(this).attr('class')).addClass($(":selected", this).attr('class'));
-// });
-
  /**
 COPY HERE
 */

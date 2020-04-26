@@ -72,7 +72,8 @@
         });
     
         $('#search_preferences_link').click(function() {
-            $(this).toggleClass("expand-search collapse-search");
+            // $(this).toggleClass("expand-search collapse-search");
+            $(this).toggleClass('expanded');
             $('.search-sliders').toggle('medium');
     
             if($('.search-sliders').is(':visible')) {
