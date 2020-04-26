@@ -12,8 +12,7 @@
         {% set adPropertyRepository = fetch_repository('FaAdBundle:AdProperty') %}
              <div class="list-featured-bz item" data-equalizer-watch>
                 <div class="row">
-                    <div class="small-24 medium-24 large-24 columns">
-                    <div class="small-24 medium-5 large-5 columns bus-det-box">
+                    <div class="col-sm-24 col-md-6 bus-det-box">
                         {% if businessUserDetail['business_category_id'] == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
                             <div class="fad-shop-icon">AD SHOP</div>
                         {% endif %}
