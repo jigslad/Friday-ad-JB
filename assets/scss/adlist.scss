@@ -1,5 +1,49 @@
 @import "global";
 
+
+.accordion-navigation li a .menu-item {
+  display: inline-block;
+  padding: 10px 0 13px;
+  width: 203px;
+  text-align: left;
+  position: relative;
+  z-index: 1;
+}
+
+.accordion-navigation {
+  a.submenu-list .menu-item {
+    font-weight: 700;
+  }
+  .fa-plus, .fa-minus {
+    font-size: 8px;
+    font-weight: 400;
+    height: 46px;
+    line-height: 46px;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    top: 0;
+    width: 46px;
+    z-index: 0;
+  }
+  .submenu-list {
+    .fa-plus, &.collapsed .fa-minus {
+      display: none;
+    }
+    .fa-minus, &.collapsed .fa-plus {
+      display: inline-block;
+    }
+  }
+  .arrow-block {
+    position: absolute;
+    margin-top: -12%;
+    right: 5%;
+    i {
+      font-size: 12px;
+    }
+  }
+}
+
 .ad-list-block #top_search_location {
     display: block;
     background: $form-border-color;

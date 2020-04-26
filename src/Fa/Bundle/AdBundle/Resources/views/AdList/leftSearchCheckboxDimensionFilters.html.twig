@@ -19,12 +19,21 @@
     <dd class="accordion-navigation">
         {% set plusMinusClass = 'fi-plus' %}
         {% set contentActiveClass = '' %}
+        {% set collapsedTogleClass = 'collapsed' %}
         {% if attribute(searchParams, filter) is defined %}
             {% set plusMinusClass = 'fi-minus' %}
-            {% set contentActiveClass = 'active' %}
+            {% set contentActiveClass = 'show' %}
+            {% set collapsedTogleClass = '' %}
         {% endif %}
-        <a href="{{ '#panel' ~ filterPanelCounter ~ 'b'}}" rel="nofollow" class="clearfix"><h5 class="left">{{ attribute(form, filter).vars.label }}</h5> <i class="right {{ plusMinusClass }}"></i></a>
-        <div id="{{ 'panel' ~ filterPanelCounter ~ 'b'}}" rel="nofollow" class="content {{ contentActiveClass }}">
+        <a rel="nofollow" class="submenu-list {{ collapsedTogleClass }}" data-toggle="collapse" href="{{ '#panel' ~ filterPanelCounter ~ 'b'}}">
+            <span class="menu-item">{{ attribute(form, filter).vars.label }}</span>
+            <div class="right arrow-block">
+                <i class="fa fa-plus"></i>
+                <i class="fa fa-minus"></i>
+            </div>
+        </a>
+
+        <div id="{{ 'panel' ~ filterPanelCounter ~ 'b'}}" rel="nofollow" class="content collapse {{ contentActiveClass }}">
             <ul class="search-type crawlable-checkbox">
                 {% set dimensionOptions = {} %}
                 {% if sortBy == 'ad_count' %}
