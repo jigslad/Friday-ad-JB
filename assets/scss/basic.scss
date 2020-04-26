@@ -190,6 +190,7 @@ button.expand, .button.expand { width: 100%; }
 }
 .checkbox ~ label {
 	margin-right: 5px;
+margin-bottom: 0px !important;
 }
 input.checkbox {
 	position: absolute;
@@ -198,7 +199,7 @@ input.checkbox {
 }
 .grey-radio .checkbox, .white-radio .checkbox { background:transparent !important; border:none !important; }
 .grey-radio span, .white-radio span { display: block; }
-.grey-radio, .white-radio, .grey-check, .white-check { font-size:13px !important; color: #a4a4a4 !important; }
+.grey-radio, .white-radio, .grey-check, .white-check { font-size:13px !important; color: #a4a4a4 !important; margin-bottom:5px !important;}
 
 .select2-container { width: 100% !important; }
 .grey-select .select2-container--default .select2-selection--single, .paa-block .select2-container--default .select2-selection--single {
@@ -599,7 +600,7 @@ z-index:999;
     visibility: visible;
     opacity: 1;
 }
-.footer .search-box-col .newsletter-lbl {
+footer .search-box-col .newsletter-lbl {
 	line-height: 17px;
 	position: relative;
 	top: -7px;
