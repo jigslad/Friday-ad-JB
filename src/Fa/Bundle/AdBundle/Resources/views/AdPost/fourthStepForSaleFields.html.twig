@@ -35,7 +35,7 @@
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
                         <div class="collapse collapse-body-content {{ showHideElement }}" id="element_toggle_{{ field }}">
-                            <div id="delivery_method_option_choice_div" class="radio-capsule delivery-method-links mb0">
+                            <div id="delivery_method_option_choice_div" class="radio-capsule delivery-method-links mb0 text-center">
                                 {{ form_widget(attribute(form, field), {'attr': {'class' : 'radio-capsule-btn'}}) }}
                             </div>
                             <div id="postage_section_id" {% if not form.postage_price.vars.errors|length %}style="display:none;"{% endif %}>
@@ -56,7 +56,7 @@
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
                         <div class="collapse collapse-body-content {{ showHideElement }}" id="element_toggle_{{ field }}">
-                            <div id="payment_method_choice_div" class="radio-capsule payment-method-links">
+                            <div id="payment_method_choice_div" class="radio-capsule payment-method-links  text-center">
                                 {{ form_widget(attribute(form, field), {'attr': {'class' : 'radio-capsule-btn'}}) }}
                             </div>
                             <div class="paa-paypal-mail" id="paypal_section_id" {% if not form.paypal_email.vars.errors|length %}style="display:none;"{% endif %}>
@@ -167,14 +167,14 @@
                             {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
                             <div class="collapse collapse-body-content {{ showHideElement }}" id="element_toggle_{{ field }}">
                                 <div class="row">
-                                  <div class="large-12 columns subtitle-ins">
+                                  <div class="col-lg-12 col-md-12 subtitle-ins">
                                     {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
                                         <p>{{ attribute(attribute(form, field).vars.attr, 'field-help') }}</p>
                                     {% else %}
                                         <p>{{ 'Add some personality to your ad with a short quote statement that tells readers what makes your advert special'|trans({}, 'frontend-paa-fourth-step')}}</p>
                                     {% endif %}
                                   </div>
-                                  <div class="large-12 columns">
+                                  <div class="col-lg-12 col-md-12">
                                       {{ include('FaAdBundle:AdPost:adSubtitleImage.html.twig', {'categoryId':ad.category.id}) }}
                                   </div>
                                 </div>

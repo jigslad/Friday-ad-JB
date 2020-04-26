@@ -91,7 +91,7 @@
     {% elseif (currentRoute is defined and currentRoute == 'ad_detail_page' ) %}
     	{% set addBodyClass = 1 %}
         {% set setBodyCls = setBodyCls ~' ad-detail' %}  
-    {% elseif (currentRoute is defined and (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step',5: 'show_draft_ad',6: 'ad_package_purchase'})) %}
+    {% elseif (currentRoute is defined and (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step',5: 'show_draft_ad',6: 'ad_package_purchase',7:'user_package_choose_profile',8:'show_cart',9:'cybersource_checkout'})) %}
         {% set addBodyClass = 1 %}
         {% set setBodyCls = setBodyCls ~' paa-block' %}  
     {% endif %}
@@ -137,7 +137,7 @@
     	{{ blockStylesheet|raw }}
     {% endif %}
 
-    {% if (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase',7:'user_package_choose_profile'}) %}
+    {% if (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase',7:'user_package_choose_profile',8:'show_cart',9:'cybersource_checkout'}) %}
     	<link rel="stylesheet" href="{{ asset('build/css/paa.css') }}">
     {% endif %}
     

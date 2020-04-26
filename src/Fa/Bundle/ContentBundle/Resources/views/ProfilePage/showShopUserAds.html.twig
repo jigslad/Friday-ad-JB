@@ -44,7 +44,7 @@
                                 <div class="hide-for-small-only white-select">
                                     {% if not app.request.get('map')%}
                                         <label>{{'Sort by'|trans({}, 'frontend-search-result')}}</label>
-                                        <select class="fa-select-white" name="sort_by" id="sort_by">
+                                        <select class="select-control" name="sort_by" id="sort_by">
                                             {% for sortFieldKey, sortFieldName in sortFields %}
                                                 <option value="{{sortFieldKey}}" {% if app.request.get('sort_field')~'|'~app.request.get('sort_ord') == sortFieldKey %} selected="selected" {% endif %}>{{sortFieldName}}</option>
                                             {% endfor %}

@@ -86,7 +86,7 @@ class NewsletterUpdateType extends AbstractType
         $builder
         ->add('firstname', TextType::class, ['label' => 'First name', 'attr' => ['class' => 'textcounter white-bg']])
         ->add('lastname', TextType::class, ['label' => 'Last name', 'attr' => ['class' => 'textcounter white-bg']])
-        ->add('gender', ChoiceType::class, ['label' => 'Gender', 'attr' => ['class' => 'fa-select error form-input-box white-bg'], 'choices'=>['Please select ..' => '', 'Male' => 'M', 'Female' => 'F', 'Prefer not to say' => 'ND']])
+        ->add('gender', ChoiceType::class, ['label' => 'Gender', 'attr' => ['class' => 'select-control error form-input-box white-bg'], 'choices'=>['Please select ..' => '', 'Male' => 'M', 'Female' => 'F', 'Prefer not to say' => 'ND']])
         ->add('postcode', TextType::class, ['label'=>'Postcode', 'attr' => ['class' => 'textcounter white-bg']])
         ->add('update_newsletter_preferences', SubmitType::class, array('label' => 'Update'))
         //->add('stop_third_party_emails', 'submit', array('label' => 'Stop third party emails'))
@@ -136,9 +136,9 @@ class NewsletterUpdateType extends AbstractType
                 'label' => false,
                 'mapped' => false,
                 'choices' => array_flip($this->getDayChoices()),
-                'attr' => array('class' => 'fa-select'),
+                'attr' => array('class' => 'select-control'),
                 'placeholder' => 'day',
-                'attr' => ['class' => 'fa-select error form-input-box white-bg'],
+                'attr' => ['class' => 'select-control error form-input-box white-bg'],
                 'data' => (isset($birthDateVal[0]) && $birthDateVal[0] != '')?$birthDateVal[0]:'day'
             )
             )
@@ -149,9 +149,9 @@ class NewsletterUpdateType extends AbstractType
                     'label' => false,
                     'mapped' => false,
                     'choices' => array_flip(CommonManager::getMonthChoices()),
-                    'attr' => array('class' => 'fa-select'),
+                    'attr' => array('class' => 'select-control'),
                     'placeholder' => 'month',
-                    'attr' => ['class' => 'fa-select error form-input-box white-bg'],
+                    'attr' => ['class' => 'select-control error form-input-box white-bg'],
                     'data' => (isset($birthDateVal[1]) && $birthDateVal[1] != '')?$birthDateVal[1]:'month'
                 )
                 )
@@ -162,9 +162,9 @@ class NewsletterUpdateType extends AbstractType
                         'label' => false,
                         'mapped' => false,
                         'choices' => array_flip($this->getYearChoices()),
-                        'attr' => array('class' => 'fa-select'),
+                        'attr' => array('class' => 'select-control'),
                         'placeholder' => 'year',
-                        'attr' => ['class' => 'fa-select error form-input-box white-bg'],
+                        'attr' => ['class' => 'select-control error form-input-box white-bg'],
                         'data' => (isset($birthDateVal[2]) && $birthDateVal[2] != '')?$birthDateVal[2]:'year'
                     )
                     );

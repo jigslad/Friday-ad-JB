@@ -96,7 +96,7 @@
                                                 	<a href="javascript:void(0);" onclick="return removeCartItem('{{cartDetail['id']}}', '{{categoryPath|e('js')}}');" class="secondary-btn-3 btn btn-block">{{'Delete'|trans({}, 'frontend-cart')}}</a>                                                
                                                 </div>
                                             </div>
-                                            {% endif %}
+                                            
                                             <div class="cart-item-price text-center d-block d-md-none">
                                                 <h4>
                                                 {% set totalVat = totalVat + cartDetail['vat_amount'] %}
@@ -106,7 +106,8 @@
                                             </div>
                                         </div>
                                     </div>
-                            
+                               {% endif %}
+                               
                             <div class="col-md-6 cart-r-block d-none d-md-block">
                                 <div class="cart-item-price text-center">
                                     <h4>
@@ -116,17 +117,47 @@
                                     </h4>
                                 </div>
                             </div>
-                            {% endif %}
                         </div>
                     </li>
+                     {% set K = K+1 %}
                     {% endfor %}
+                {% else %}
+                    <div class="row">
+                        <div class="col-lg-24 col-md-24 text-center">
+                            {{'No items in your basket.'|trans({}, 'frontend-cart')}}
+                        </div>
+                    </div>
+                {% endif %}
+                {% if cart.getAmount() > 0 or (cart.getAmount() <= 0 and cartValue['discount_values'] is defined and cartValue['discount_values']|length) %}
+                    {% if cartValue['discount_values'] is defined and cartValue['discount_values']|length %}
+                        {% set discountValue = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getDiscountValuetoDisplay', [cartValue['discount_values']]) %}
+                        <li class="code-applied d-none d-md-block">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 text-center">
+                                    <label class="mb0">{{'Code applied (%discount_value% Discount)'|trans({'%discount_value%': discountValue}, 'frontend-cart')}}</label>
+                                    <a href="javascript:removeDuscountcodeAlert();" class="bold">{{'Remove'|trans({}, 'frontend-cart')}}</a>
+                                </div>
+                            </div>
+                        </li>
+                    {% endif %}
+                {% endif %}
+                {% if isCreditUsed %}
+                    <li class="code-applied d-none d-md-block">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 text-center">
+                                <label class="mb0">{{'Credit applied'|trans({}, 'frontend-cart')}}</label>
+                                <a href="javascript:removeCreditAlert();" class="bold">{{'Remove'|trans({}, 'frontend-cart')}}</a>
+                            </div>
+                        </div>
+                    </li>   
+                {% endif %}
                     <li class="cart-total">
                         <div class="row">
                         	{% if cart.getAmount() > 0 or (cart.getAmount() <= 0 and cartValue['discount_values'] is defined and cartValue['discount_values']|length) %}
                                 <div class="col-md-12">
                                 <div class="promo-code">
-                                    <a href="javascript:hideShowPromotionCodeSectionForMobile();" class="show-code {% if cartValue['discount_values'] is defined and cartValue['discount_values']|length %}up-arrow{% else %}down-arrow{% endif %}" id="promo_code_anchor_mobile">{{'Promotional Code'|trans({}, 'frontend-cart')}}</a>
-                                    <label class="hide-for-small-only">{{'Promotional Code'|trans({}, 'frontend-cart')}}</label>
+                                    <a href="javascript:hideShowPromotionCodeSectionForMobile();" class="show-code d-block d-md-none {% if cartValue['discount_values'] is defined and cartValue['discount_values']|length %}up-arrow{% else %}down-arrow{% endif %}" id="promo_code_anchor_mobile">{{'Promotional Code'|trans({}, 'frontend-cart')}}</a>
+                                    <label class="d-none d-md-block">{{'Promotional Code'|trans({}, 'frontend-cart')}}</label>
                                     {% if cartValue['discount_values'] is defined and cartValue['discount_values']|length %}
                                         <div class="code-applied-mob" id="display_discount_applied_div">
                                             <label>{{'Code applied (%discount_value% Discount)'|trans({'%discount_value%': discountValue}, 'frontend-cart')}}</label>
@@ -142,7 +173,7 @@
                             {% endif %}
                             {% if isCreditUsed %}
                             	<div class="col-md-12">
-                                <div class="promo-code show-for-small-only">
+                                <div class="promo-code d-block d-md-none">
                                     <a href="javascript:hideShowCreditSectionForMobile();" class="show-code down-arrow" id="credit_anchor_mobile">{{'Credit'|trans({}, 'frontend-cart')}}</a>
                                     <div class="code-applied-mob" id="display_credit_applied_div" style="display:none">
                                         <label>{{'Credit applied '|trans({}, 'frontend-cart')}}</label>
@@ -180,7 +211,7 @@
                   {% if (cartDetails|length == 1) %}
                     {% set catPath = categoryPath %}
                   {% endif %}
-                    <div class="col-sm-24 col-md-12 {% if (isAdultAdvertPresent == 1) %} credit-cards-box {% endif %}" onclick="sendGaAndRedirect('{{ ccUrl }}', 'Visa', '{{gaVar|e('js')}}');"></div>
+                    <div class="credit-cards-box col-sm-24 col-md-12 {% if (isAdultAdvertPresent == 1) %} credit-cards-box-center {% endif %}" onclick="sendGaAndRedirect('{{ ccUrl }}', 'Visa', '{{gaVar|e('js')}}');"></div>
                     {% if isAdultAdvertPresent == 0 %}
                           {% set paypalUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL')}) %}
                           <div class="paypal-box col-sm-24 col-md-12" onclick="sendGaAndRedirect('{{ paypalUrl }}', 'Paypal', '{{gaVar|e('js')}}');"> </div>

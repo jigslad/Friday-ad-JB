@@ -456,7 +456,7 @@ class PaaLiteType extends AbstractType
         } elseif ($this->getPaaFieldType($paaField) == 'single' || $this->getPaaFieldType($paaField) == 'range') {
             $fieldOptions['expanded'] = false;
             $fieldOptions['multiple'] = false;
-            $fieldOptions['attr']['class'] = isset($fieldOptions['attr']['class']) ? $fieldOptions['attr']['class'] . ' fa-select' : 'fa-select';
+            $fieldOptions['attr']['class'] = isset($fieldOptions['attr']['class']) ? $fieldOptions['attr']['class'] . ' select-control' : 'select-control';
         } elseif ($this->getPaaFieldType($paaField) == 'multiple') {
             $fieldOptions['expanded'] = false;
             $fieldOptions['multiple'] = true;
@@ -796,7 +796,7 @@ class PaaLiteType extends AbstractType
                 'label' => $dimensionName,
                 'choices' => array_flip($fieldChoices),
                 'attr' => array(
-                    'class' => 'fa-select'
+                    'class' => 'select-control'
                 )
             );
 

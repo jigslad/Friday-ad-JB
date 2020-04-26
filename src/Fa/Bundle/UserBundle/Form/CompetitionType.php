@@ -81,7 +81,7 @@ class CompetitionType extends AbstractType
                     'label' => 'Date of birth',
                     'mapped' => false,
                     'choices' => array_flip($this->getDayChoices()),
-                    'attr' => array('class' => 'fa-select'),
+                    'attr' => array('class' => 'select-control'),
                     'placeholder' => 'DD',
                 )
             )
@@ -91,7 +91,7 @@ class CompetitionType extends AbstractType
                 array(
                     'mapped' => false,
                     'choices' => array_flip(CommonManager::getMonthChoices()),
-                    'attr' => array('class' => 'fa-select'),
+                    'attr' => array('class' => 'select-control'),
                     'placeholder' => 'MM',
                 )
             )
@@ -101,7 +101,7 @@ class CompetitionType extends AbstractType
                 array(
                     'mapped' => false,
                     'choices' => array_flip($this->getYearChoices()),
-                    'attr' => array('class' => 'fa-select'),
+                    'attr' => array('class' => 'select-control'),
                     'placeholder' => 'YY',
                 )
             )

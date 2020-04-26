@@ -1,6 +1,8 @@
 {% set showHideElement = 'collapsed' %}
+{% set showArrowElement = 'block' %}
 {% if attribute(form, field).vars.required %}
     {% set showHideElement = '' %}
+    {% set showArrowElement = 'none' %}
 {% else %}
     {% set tabArrowClass = 'tab-down' %}
     {% if validationFields is defined and validationFields|length %}
@@ -27,7 +29,7 @@
             {{ attribute(form, field).vars.label }}
         {% endif %}
     </h3>
-    <div class="arrow-block">
+    <div class="arrow-block" style="display:{{ showArrowElement }}">
         <i class="fa fa-chevron-up"></i>
         <i class="fa fa-chevron-down"></i>
     </div>

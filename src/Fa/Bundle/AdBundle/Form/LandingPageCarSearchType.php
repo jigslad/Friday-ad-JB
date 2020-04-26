@@ -91,7 +91,7 @@ class LandingPageCarSearchType extends AbstractType
                 'choices'     => array_flip($this->em->getRepository('FaEntityBundle:Category')->getChildrenKeyValueArrayByParentId(CategoryRepository::CARS_ID, $this->container)),
                 'placeholder' => 'Any make',
                 'label'       => 'Make',
-                'attr' => array('class' => 'fa-select-white')
+                'attr' => array('class' => 'select-control')
             )
         )
         ->add(
@@ -100,7 +100,7 @@ class LandingPageCarSearchType extends AbstractType
             array(
                 'choices' => array(),
                 'label'   => 'Model',
-                'attr'    => array('class' => 'fa-select-white')
+                'attr'    => array('class' => 'select-control')
             )
         )
         ->add(
@@ -126,7 +126,7 @@ class LandingPageCarSearchType extends AbstractType
                 'label'       => 'Mileage',
                 'placeholder' => 'Any mileage',
                 'choices'     => array_flip(CommonManager::getMileageChoices()),
-                'attr'        => array('class' => 'fa-select-white')
+                'attr'        => array('class' => 'select-control')
             )
         )
         ->add(
@@ -136,7 +136,7 @@ class LandingPageCarSearchType extends AbstractType
                 'label'       => 'Transmission',
                 'placeholder' => 'Any transmission',
                 'choices'     => array_flip($this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($transmissionDimensionId, $this->container)),
-                'attr'        => array('class' => 'fa-select-white')
+                'attr'        => array('class' => 'select-control')
             )
         )
         ->add(
@@ -146,7 +146,7 @@ class LandingPageCarSearchType extends AbstractType
                 'label'       => 'Colour',
                 'placeholder' => 'Any colour',
                 'choices'     => array_flip($this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($colourDimensionId, $this->container)),
-                'attr'        => array('class' => 'fa-select-white')
+                'attr'        => array('class' => 'select-control')
             )
         )
         ->add(
@@ -156,7 +156,7 @@ class LandingPageCarSearchType extends AbstractType
                 'label'       => 'Fuel Type',
                 'placeholder' => 'Any fuel',
                 'choices'     => array_flip($this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($fuelTypeDimensionId, $this->container)),
-                'attr'        => array('class' => 'fa-select-white')
+                'attr'        => array('class' => 'select-control')
             )
         )
         ->add(

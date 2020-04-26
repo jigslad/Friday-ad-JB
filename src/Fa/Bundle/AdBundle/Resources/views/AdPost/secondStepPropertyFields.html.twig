@@ -29,7 +29,7 @@
             {% if isRentPerRendered == false %}
                 <div class="paa-bdr-box {% if attribute(form, 'rent_per_id') is defined %} btm-pa-0 {% endif %}">
                     <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
-                    <div class="small-wrapper paa-enter-price clearfix">
+                    <div class="small-wrapper paa-enter-price clearfix text-center">
                         <div class="price-icon">&pound;</div>
                         {{ form_widget(attribute(form, field)) }}
                         {{ form_errors(attribute(form, field)) }}
