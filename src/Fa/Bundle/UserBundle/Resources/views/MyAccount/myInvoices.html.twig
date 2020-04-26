@@ -26,7 +26,7 @@
                 {{ include('FaUserBundle:MyAccount:listInvoice.html.twig') }}
             </div>
         {% else %}
-            <div class="mb20 hide-for-small-only">{{ 'No invoices found'|trans({}, 'frontend-user-invoices') }}</div>
+            <div class="mb20 d-none d-md-block">{{ 'No invoices found'|trans({}, 'frontend-user-invoices') }}</div>
         {% endif %}
         </div>
     </div>

@@ -17,7 +17,7 @@
                                {{ form_widget(attribute(form, 'item__category_id'), {'attr': {'class':'find-all select-ctrl' }}) }}
                             </div>
                             {{ form_widget(form.keywords, {'attr': {'class': 'white-field form-control', 'placeholder':'Looking for...'|trans({}, 'frontend-homepage') }}) }}
-                            <a href="javascript:void(0);" rel="nofollow" id="fa_top_search_keywords_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                            <div style="position: relative;"><a href="javascript:void(0);" rel="nofollow" id="fa_top_search_keywords_close" class="ui-autocomplete-close select2-search-choice-close">Close</a></div>
                             <div class="input-group-append">
                             	<button class="input-group-text search-btn secondary-btn-1" type="submit">{{'Search'|trans({}, 'frontend-homepage')}}</button>
                             </div>

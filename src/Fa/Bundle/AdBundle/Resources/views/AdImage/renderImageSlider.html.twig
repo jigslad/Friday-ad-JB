@@ -63,7 +63,7 @@
                       <div class="clearfix"></div>
                       <div class="sticky-finance-btn">
                            <a href="javascript:clickFinance('{{ financeDetails['finance_url'] }}');" class="hide finance-btn">{{ financeDetails['finance_title'] }}</a>
-            			   <div class="vif-overlay hide hide-for-small-only" id="financeOverlay">&nbsp;</div>
+            			   <div class="vif-overlay hide d-none d-md-block" id="financeOverlay">&nbsp;</div>
                       </div>
                     {% endif %}
                 </div>
@@ -78,7 +78,7 @@
                             <div style="background-image: url({{ adSmallImageUrl }})" class="item"></div>
                         {% endfor %}
                         {% if allowAdEdit is defined and allowAdEdit %}
-                        <div class="add-photo hide-for-small-only">
+                        <div class="add-photo d-none d-md-block">
                             <a id="add_a_photo_link" class="tricky-link" href="javascript:void(0);">{{ altString }}</a>
                             <div class="add-photo-text">{{ 'Add a photo'|trans({}, 'frontend-show-ad') }}</div>
                         </div>

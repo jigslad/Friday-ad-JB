@@ -109,13 +109,13 @@
                             {% endif %}
                     </span>
                     {% if ad.status_id == adStatusInModeration and modToolTipText is defined %}
-                      <div class="image-tooltip-wrapper in-mod-tooltip hide-for-small-only">
+                      <div class="image-tooltip-wrapper in-mod-tooltip d-none d-md-block">
                           <span class="image-tooltip">{{ modToolTipText['inModeration'] }}</span>
                           <span class="info-icon">info</span>
                       </div>
                     {% endif %}
                     {% if adId in inModerationLiveAdIds and ad.status_id == adStatusLive and modToolTipText is defined %}
-                    <div class="image-tooltip-wrapper in-mod-tooltip hide-for-small-only">
+                    <div class="image-tooltip-wrapper in-mod-tooltip d-none d-md-block">
                       <span class="image-tooltip">{{ modToolTipText['liveEdit'] }}</span>
                       <span class="info-icon">info</span>
                     </div>

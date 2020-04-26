@@ -53,7 +53,7 @@
             <div class="list-col-2">
                 <h3>{% if attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::TITLE')) is defined %}{{ trim_text(attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::TITLE')), 60) }}{% endif %}</h3>
                 <div class="list-price">{% if attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::PRICE')) is defined and secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') %}{{ format_currency(attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::PRICE'))) }}{% endif %}{% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and attribute(ad, constant(solrMapping ~ 'EVENT_START')) is defined %}{% set eventStartDate = fetch_repository('FaAdBundle:AdCommunity').getEventDateForListing(attribute(ad, constant(solrMapping ~ 'EVENT_START')), (attribute(ad, constant(solrMapping ~ 'EVENT_END')) is defined ? attribute(ad, constant(solrMapping ~ 'EVENT_END')) : null), container) %}<span class="whats-on">{{ eventStartDate }}</span>{% endif %}</div>
-                <div class="list-distance hide-for-small-only">
+                <div class="list-distance d-none d-md-block">
                     <div class="clearfix">
                         {% if attribute(ad, 'away_from_location') is defined and attribute(ad, 'away_from_location') %}<div class="list-miles">{{ (attribute(ad, 'away_from_location') / 1.60934)|round }} {{ 'miles away'|trans({}, 'frontend-search-result')}}</div>{% endif %}
                         <div class="list-hr-ago">{% if secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and rootCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID') and attribute(ad, constant(solrMapping ~ 'WEEKLY_REFRESH_PUBLISHED_AT')) is defined %}{{attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::WEEKLY_REFRESH_PUBLISHED_AT'))|time_ago_in_words}}{% endif %}</div>
@@ -61,7 +61,7 @@
                 </div>
             </div>
         </div>
-        <div class="list-distance show-for-small-only">
+        <div class="list-distance d-block d-md-none">
             <div class="clearfix">
                 <div class="list-miles">{% if attribute(ad, 'away_from_location') is defined %}{{ (attribute(ad, 'away_from_location') / 1.60934)|round }} {{ 'miles away'|trans({}, 'frontend-search-result')}}{% endif %}</div>
                 <div class="list-hr-ago">{% if secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and rootCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID') and attribute(ad, constant(solrMapping ~ 'WEEKLY_REFRESH_PUBLISHED_AT')) is defined %}{{attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::WEEKLY_REFRESH_PUBLISHED_AT'))|time_ago_in_words}}{% endif %}</div>

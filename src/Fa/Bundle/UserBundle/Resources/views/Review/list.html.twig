@@ -5,7 +5,7 @@
 
 <div class="own-item">
     <div class="media review-media">
-        <a href="{{ path('user_review_show', {'id':review.id})}}" class="tricky-link show-for-small-only">{{ profileName }}</a>
+        <a href="{{ path('user_review_show', {'id':review.id})}}" class="tricky-link d-block d-md-none">{{ profileName }}</a>
         <div class="col-md-3 col-lg-3 l-block pad-none">
             {% if (review.reviewer_role_id == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or review.reviewer_role_id == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
                 {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), review.reviewer_company_image, review.reviewer_id, null, null, true, true, review.reviewer_status_id, profileName]) %}
@@ -65,7 +65,7 @@
                     <div class="large-6 columns outside-tricky">&nbsp;</div>
                 </div>
                 {% if respond|length and respond.status == 1 %}
-                <div class="clearfix reply-review hide-for-small-only">
+                <div class="clearfix reply-review d-none d-md-block">
                     <div class="large-3 columns">
                         {% set userLogo = null %}
                         {% set userProfileNameDetail = {'first_name': respond.responder_first_name, 'last_name': respond.responder_last_name, 'business_name': respond.responder_business_name} %}

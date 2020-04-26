@@ -521,11 +521,19 @@ z-index:999;
 .ui-menu.keyword-choices .ui-menu-item span{font-weight:bold;color:#a8dc28}
 
 .ui-menu.category-choices{margin-top:8px}
-.ui-menu.category-choices .ui-menu-item{ border-bottom:1px solid #fff;box-shadow:0 1px 0 #e3e3e3;line-height:18px;padding:11px 14px 10px; }
+.ui-menu.category-choices .ui-menu-item{ border-bottom:1px solid #fff;box-shadow:0 1px 0 #e3e3e3;line-height:18px;padding:11px 10px 10px !important; }
 .ui-menu.category-choices .ui-menu-item:hover{background-color:#fff;color:#313133}
 .ui-menu.category-choices .ui-menu-item:last-child{border-bottom:0}
 .ui-menu.category-choices .ui-menu-item div span{color:#a8dc28;font-weight:700}
 
+.ui-menu .ui-menu-item-wrapper { padding: 3px 0px 3px 0px !important; }
+.ui-menu .ui-state-focus, .ui-menu .ui-state-active {
+    margin: 0px !important;
+}
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
+    border: 0px solid transparent !important;
+    background: transparent !important;
+}
 
 .select2-results, .ui-autocomplete {
     max-height: 468px;

@@ -192,7 +192,7 @@
                         {% endif %}
                     </div>
                     {% if (attribute(ad, constant(solrMapping ~ 'IS_AFFILIATE_AD')) is defined and not attribute(ad, constant(solrMapping ~ 'IS_AFFILIATE_AD')) and attribute(ad, constant(solrMapping ~ 'IS_TRADE_AD')) is defined and attribute(ad, constant(solrMapping ~ 'IS_TRADE_AD')) == 1 and rootCategoryId is defined and rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID')) %}
-                        <div class="fad-shop-icon hide-for-small-only">AD SHOP</div>
+                        <div class="fad-shop-icon d-none d-md-block">AD SHOP</div>
                     {% endif %}
                 </div>
             </div>
@@ -220,6 +220,6 @@
 	 {% endif %}         
     
     {% if (attribute(ad, constant(solrMapping ~ 'IS_AFFILIATE_AD')) is defined and not attribute(ad, constant(solrMapping ~ 'IS_AFFILIATE_AD')) and attribute(ad, constant(solrMapping ~ 'IS_TRADE_AD')) is defined and attribute(ad, constant(solrMapping ~ 'IS_TRADE_AD')) == 1 and rootCategoryId is defined and rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID')) %}
-        <div class="fad-shop-icon show-for-small-only fa-shop-icon-small">AD SHOP</div>
+        <div class="fad-shop-icon d-block d-md-none fa-shop-icon-small">AD SHOP</div>
     {% endif %}
 </div>

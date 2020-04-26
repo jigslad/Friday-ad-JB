@@ -445,7 +445,7 @@
                     {% if app.session.has('back_to_search_url') %}
                     <li><a href="{{app.session.get('back_to_search_url')}}" class="back-link">{{'Back to search results'|trans({}, 'frontend-show-ad')}}</a></li>
                     {% endif %}
-                    <li class="hide-for-small-only {% if not app.session.has('back_to_search_url') %}breadcrumb-full{% endif %}">
+                    <li class="d-none d-md-block {% if not app.session.has('back_to_search_url') %}breadcrumb-full{% endif %}">
                         <a href="{% if location_id and location_slug and location_id is not null and location_slug is not null and location_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID') %} {{ path('location_home_page', {'location': location_slug}) }} {% else %}{{ path('fa_frontend_homepage') }} {% endif %}">{{'Home'|trans({}, 'frontend-show-ad')}}</a>
                         {% if adCategoryId is defined %}
                             {% set categoryPath = categoryRepository.getCategoryPathArrayById(adCategoryId, false, container) %}
@@ -605,7 +605,7 @@
             	{% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and attribute(adDetail, constant(solrMapping ~ 'EVENT_START')) is defined %}
                     {% set eventStartDate = fetch_repository('FaAdBundle:AdCommunity').getEventDateForListing(attribute(adDetail, constant(solrMapping ~ 'EVENT_START')), (attribute(adDetail, constant(solrMapping ~ 'EVENT_END')) is defined ? attribute(adDetail, constant(solrMapping ~ 'EVENT_END')) : null), container) %}
                     <div class="clearfix">
-                        <span class="whats-on item-preview-on show-for-small-only">{{ eventStartDate }}</span>
+                        <span class="whats-on item-preview-on d-block d-md-none">{{ eventStartDate }}</span>
                     </div>
                 {% endif %}
                 

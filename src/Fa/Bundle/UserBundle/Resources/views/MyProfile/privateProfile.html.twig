@@ -84,7 +84,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="profile-logo-ins private-profile">
-                                                            <span class="hide-for-small-only">{{"Add a photo of yourself to your profile. It doesn't just look nice - buyers prefer to see who they are buying from when deciding what to buy."|trans({}, 'frontend-my-profile')}}<br /></span>
+                                                            <span class="d-none d-md-block">{{"Add a photo of yourself to your profile. It doesn't just look nice - buyers prefer to see who they are buying from when deciding what to buy."|trans({}, 'frontend-my-profile')}}<br /></span>
                                                             <div id="profile_change_btn_with_opt" {% if not app.user.getImage() %}style="display:none;"{% endif %}>
                                                                 <a href="javascript:void(0);" data-dropdown="profile_image_upload" aria-controls="profile_image_upload" aria-expanded="false" class="primary-btn-3 button thin-btn dropdown">{{'Change image'|trans({}, 'frontend-my-profile')}}</a><br />
                                                                 <ul id="profile_image_upload" data-dropdown-content class="f-dropdown" aria-hidden="true">
@@ -98,12 +98,12 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="show-for-small-only mt15">
+                                                    <div class="d-block d-md-none mt15">
                                                         {{"Add a photo of yourself to your profile. It doesn't just look nice - buyers prefer to see who they are buying from when deciding what to buy."|trans({}, 'frontend-my-profile')}}
                                                     </div>
 
                                                     <div class="mt30 about-profile">
-                                                        {{ form_label(form.about_you) }}<br class="hide-for-small-only" />
+                                                        {{ form_label(form.about_you) }}<br class="d-none d-md-block" />
                                                         {{'Tell people more about yourself by adding some extra information to your profile!'|trans({}, 'frontend-my-profile')}}
                                                         <div class="field-530">
                                                             {{ form_widget(form.about_you, {'attr': {'class': 'white-field mt10 mb0 textcounter', 'rows': 3}}) }}
