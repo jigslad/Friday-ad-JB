@@ -55,6 +55,10 @@
     {{ app.request.uri|replace({('?'~app.request.queryString) : ''})}}
 {% endblock %}
 
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('build/css/addetail.css') }}"/>
+{% endblock %}
+
 {% block body %}
 {{ set_variables('userAdDetail', {'is_private_phone_number':adDetail['user']['is_private_phone_number'], 'phone':adDetail['user']['phone'], 'privacy_number':adDetail['privacy_number']}) }}
 {% set latitude = null %}
@@ -70,14 +74,16 @@
 <style>
     .f-topbar-fixed footer{margin-bottom:100px}
 </style>
-
-<div class="breadcrumb-area hide-for-small-only">
-    <div class="row">
-        <div class="columns">
-            <div class="breadcrumb">
-                   <ul class="clearfix">
-                       <li class="hide-for-small-only breadcrumb-full">
-                        <a href="{{ container.getParameter('base_url') }}">{{'Home'|trans({}, 'frontend-preview-ad')}}</a>
+<div class="ad-detail">
+    <div class="breadcrumb-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-24">
+                   <ul class="breadcrumb details-breadcrumb">
+                       <li>
+                           <a class="back-link" href="{{ container.getParameter('base_url') }}">{{'Home'|trans({}, 'frontend-preview-ad')}}</a>
+                       </li>
+                       <li class="d-none d-md-block">
                         {% if adDetail['category_id'] is defined and adDetail['category_id'] %}
                             {% set categoryPath = categoryRepository.getCategoryPathArrayById(adDetail['category_id'], false, container) %}
 
@@ -90,33 +96,33 @@
                         <span>{{adDetail['title']}}</span>
                     </li>
                    </ul>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-<div class="details-wrapper">
-    <div class="draft-item sticky">
-        <nav data-topbar>
-            <div class="row">
-                <div class="large-16 columns">
-                    <h2>{{'Your Free Ad so far...'|trans({}, 'frontend-preview-ad')}}</h2>
-                </div>
-                <div class="large-8 columns">
-                    <span class="draft-slogan">
-                        <span class="hide-for-small-only">{{'This is a draft of your advert'|trans({}, 'frontend-preview-ad')}}</span>
-                        <span class="show-for-small-only">{{'draft'|trans({}, 'frontend-preview-ad')}}</span>
-                    </span>
-                </div>
+    <div class="details-wrapper">
+        <div class="draft-item sticky">
+            <div class="container">
+                <nav data-topbar>
+                    <div class="row">
+                        <div class="col-md-16">
+                            <h2>{{'Your Free Ad so far...'|trans({}, 'frontend-preview-ad')}}</h2>
+                        </div>
+                        <div class="col-md-8">
+                            <span class="draft-slogan">
+                                <span class="hide-for-small-only">{{'This is a draft of your advert'|trans({}, 'frontend-preview-ad')}}</span>
+                                <span class="show-for-small-only">{{'draft'|trans({}, 'frontend-preview-ad')}}</span>
+                            </span>
+                        </div>
+                    </div>
+                </nav>
             </div>
-        </nav>
-    </div>
+        </div>
 
-    <div class="relative">
-        <div class="row">
-            <div class="columns">
+        <div class="details-wrapper ">
+            <div class="container">
                 <div class="row">
-                    <div class="large-16 columns">
+                    <div class="col-md-16">
                         <p class="listed-date show-for-small-only">
                         {% if adDetail['created_at'] is defined %}
                             <span class="ago-icon">ago</span>{{ adDetail['created_at']|time_ago_in_words }}
@@ -142,13 +148,13 @@
                         {% if adDetail['ad_locality_name'] is defined and adDetail['ad_locality_name'] %}
                            <div class="detail-location"><b>{{ adDetail['ad_locality_name'] }}</b></div>
                         {% elseif adDetail['ad_town_name'] is defined and adDetail['ad_town_name'] %}
-                        	{% if adDetail['area_id'] is defined and adDetail['is_special_area'] and adDetail['area_id'] != '' %}
-                        		<div class="detail-location"><b>{{ adDetail['area_name'] }}</b></div>
-                        	{% elseif adDetail['area_id'] is defined and adDetail['area_id'] != '' %}
-                        		<div class="detail-location"><b>{{ adDetail['area_name'] ~ ', ' ~ adDetail['ad_town_name'] }}</b></div>
-                        	{% else %}
-                        		<div class="detail-location"><b>{{ adDetail['ad_town_name'] }}</b></div>
-                        	{% endif %}
+                            {% if adDetail['area_id'] is defined and adDetail['is_special_area'] and adDetail['area_id'] != '' %}
+                                <div class="detail-location"><b>{{ adDetail['area_name'] }}</b></div>
+                            {% elseif adDetail['area_id'] is defined and adDetail['area_id'] != '' %}
+                                <div class="detail-location"><b>{{ adDetail['area_name'] ~ ', ' ~ adDetail['ad_town_name'] }}</b></div>
+                            {% else %}
+                                <div class="detail-location"><b>{{ adDetail['ad_town_name'] }}</b></div>
+                            {% endif %}
                         {% endif %}
                         <div class="clearfix"></div>
                         {% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')} and adDetail['user']['company_welcome_message'] is defined and adDetail['user']['company_welcome_message'] is not null %}
@@ -200,7 +206,7 @@
                                 <a href="javascript:void(0);" class="read-less" style="display:none;">{{ 'Read less'|trans({}, 'frontend-preview-ad') }}</a>
                             </div>
                         {% endif %}
-                        
+
                         {% set adDetailAndDimensionFields = adDetail %}
                         {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
                             {% set adJobsRepository = fetch_repository('FaAdBundle:AdJobs') %}
@@ -242,7 +248,7 @@
                             <h2 class="detail-sub-head show-for-small-only">"{{adDetail['personalized_title']}}"</h2>
                         {% endif %}
 
-                        
+
 
                         {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
                             {% set adForSaleDetail = {} %}
@@ -326,39 +332,39 @@
                             {% if adAdult and adAdult.getMetaData() is not null %}
                                 {% set metaData = array_unserialize(adAdult.getMetaData()) %}
                                 {% if metaData['my_service_id'] is defined %}
-                                	{% set myServiceIsFor = [] %} 
-                                	{% set serviceStr = metaData['my_service_id']|split(',') %}
+                                    {% set myServiceIsFor = [] %}
+                                    {% set serviceStr = metaData['my_service_id']|split(',') %}
                                     {% set serviceStrArr = '' %}
                                     {% set i = 0 %}
-                                	{% set serviceLabel = (adDetail['detail'][constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::LOOKING_FOR')] is defined)?constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::LOOKING_FOR'):'Service is for' %}
-                                	{% for key, serviceRecord in serviceStr %}  
+                                    {% set serviceLabel = (adDetail['detail'][constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::LOOKING_FOR')] is defined)?constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::LOOKING_FOR'):'Service is for' %}
+                                    {% for key, serviceRecord in serviceStr %}
                                         {% set serviceObj = adEntityRepository.findOneBy({'id': serviceRecord}) %}
-                                		{% if serviceObj is not null %} 
-                                			{% if i > 0 %} {% set serviceStrArr = serviceStrArr ~ ',' %} {% endif %}
-                                		    {% set serviceStrArr = serviceStrArr ~ serviceObj.getName() %}
-                                		{% endif %}
-                                		{% set i = i+1 %}
-                                	{% endfor %}
+                                        {% if serviceObj is not null %}
+                                            {% if i > 0 %} {% set serviceStrArr = serviceStrArr ~ ',' %} {% endif %}
+                                            {% set serviceStrArr = serviceStrArr ~ serviceObj.getName() %}
+                                        {% endif %}
+                                        {% set i = i+1 %}
+                                    {% endfor %}
                                 {% endif %}
-                              
+
                                 {% if metaData['rates_id'] is defined %}
-                                	{% if metaData['rates_id']['incall'] is defined %} 
-                                		{% set adultInCallRates =  metaData['rates_id']['incall'] %}
-                                	{% endif %}
-                                	{% if metaData['rates_id']['outcall'] is defined %} 
-                                	    {% set adultOutCallRates =  metaData['rates_id']['outcall'] %}
-                                	{% endif %}
+                                    {% if metaData['rates_id']['incall'] is defined %}
+                                        {% set adultInCallRates =  metaData['rates_id']['incall'] %}
+                                    {% endif %}
+                                    {% if metaData['rates_id']['outcall'] is defined %}
+                                        {% set adultOutCallRates =  metaData['rates_id']['outcall'] %}
+                                    {% endif %}
                                 {% endif %}
-                                
+
                             {% endif %}
-                                                        
+
                             {% if adAdult and adAdult.getTravelArrangementsId() is not null %}
-                            	{% set adPreviewTravelAgent = adAdult.getTravelArrangementsId() %}
-                            {% endif %}                            
-                            {% if adAdult and adAdult.getIndependentOrAgencyId() is not null %}
-                            	{% set adPreviewIndependentOrAgencyId = adAdult.getIndependentOrAgencyId() %}
+                                {% set adPreviewTravelAgent = adAdult.getTravelArrangementsId() %}
                             {% endif %}
-                            
+                            {% if adAdult and adAdult.getIndependentOrAgencyId() is not null %}
+                                {% set adPreviewIndependentOrAgencyId = adAdult.getIndependentOrAgencyId() %}
+                            {% endif %}
+
                             {% if adDetail['description'] is defined %}
                                 {% set adAdultDetail = adAdultDetail|merge({'description': adDetail['description']}) %}
                             {% endif %}
@@ -396,7 +402,7 @@
                                 </dl>
                             </div>
                         {% endif %}
-                        
+
                         {% if currentDevice == 'M' and youtubeVideoUrl|length %}
                             {% set youtubeVideoId = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getYouTubeVideoId', [youtubeVideoUrl]) %}
                             <div>
@@ -404,7 +410,7 @@
                             </div>
                         {% endif %}
                     </div>
-                    <div class="large-8 columns">
+                    <div class="col-md-8">
                         <div class="detail-right-pane">
                             <p class="listed-date hide-for-small-only">
                             {% if adDetail['created_at'] is defined %}
@@ -467,18 +473,19 @@
                         </div>
                     </div>
                 </div>
+                <div class="draft-buttons" id="ad_preview_bottom">
+                <div class="row">
+                    <div class="large-12 columns">
+                        <a href="{{path('ad_post_fourth_step', {'is_edit': 1})}}" class="primary-btn-1 button expand border-btn">{{'Edit details'|trans({}, 'frontend-preview-ad')}}</a>
+                    </div>
+                    <div class="large-12 columns">
+                        <a href="{{path('ad_package_purchase', {'adId': app.request.get('adId')})}}" class="primary-btn-1 button expand"><span class="show-for-small-only">{{'Save & publish'|trans({}, 'frontend-preview-ad')}}</span><span class="hide-for-small-only">{{'Save and publish'|trans({}, 'frontend-preview-ad')}}</span></a>
+                    </div>
+                </div>
+            </div>
             </div>
         </div>
-        <div class="draft-buttons" id="ad_preview_bottom">
-            <div class="row">
-                <div class="large-12 columns">
-                    <a href="{{path('ad_post_fourth_step', {'is_edit': 1})}}" class="primary-btn-1 button expand border-btn">{{'Edit details'|trans({}, 'frontend-preview-ad')}}</a>
-                </div>
-                <div class="large-12 columns">
-                    <a href="{{path('ad_package_purchase', {'adId': app.request.get('adId')})}}" class="primary-btn-1 button expand"><span class="show-for-small-only">{{'Save & publish'|trans({}, 'frontend-preview-ad')}}</span><span class="hide-for-small-only">{{'Save and publish'|trans({}, 'frontend-preview-ad')}}</span></a>
-                </div>
-            </div>
-        </div>
+
     </div>
 </div>
 {% endblock %}
