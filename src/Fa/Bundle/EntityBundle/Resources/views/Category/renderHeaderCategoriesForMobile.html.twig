@@ -2,13 +2,13 @@
 {% set entityCacheManager = container.get('fa.entity.cache.manager') %}
 {% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
 
-<dl class="accordion show-for-small-only" data-accordion>
+<dl class="accordion d-block d-md-none" data-accordion>
     {% if headerCategories|length %}
     {% cache 'header|menu|'~location_id~'front/header_menu_mobile' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0) 86400 %}
     <dd class="accordion-navigation">
         <a href="#cat-mob-menu">MENU</a>
         <div id="cat-mob-menu" class="content active">
-            <ul class="show-for-small-only">
+            <ul class="d-block d-md-none">
                 {% for categoryId, categoryArray in headerCategories %}
                     {% set secondLevelLength = 0 %}
                     {% if categoryArray['children'] is defined and categoryArray['children']|length %}
@@ -190,10 +190,7 @@ function showAdultPopup(modify = 0)
     .done(function(response) {
         if(response.success) {
             $("#show-confirm-age-main").html(response.htmlContent);
-            $('#eighteenPlusWarnningModel').foundation('reveal', 'open',{
-            	close_on_background_click: false,
-            	close_on_esc: false,
-            });
+            $('#eighteenPlusWarnningModel').modal({backdrop: "static"});
         }
     });
 	

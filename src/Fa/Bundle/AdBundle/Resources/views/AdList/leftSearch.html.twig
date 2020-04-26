@@ -54,7 +54,7 @@
               {% if attribute(form, 'item_property__rent_per_id') is defined %}
                   <ul class="distance-search clearfix">
                       <li class="col white-select">
-                          {{ form_widget(attribute(form, 'item_property__rent_per_id'), {'attr': {'class': 'fa-select-white'}}) }}
+                          {{ form_widget(attribute(form, 'item_property__rent_per_id'), {'attr': {'class': 'select-control'}}) }}
                       </li>
                   </ul>
               {% endif %}
@@ -77,7 +77,7 @@
                <ul class="distance-search clearfix" id="distance-left-search" style="display:none">
                   <li class="col white-select">
                       {{ form_widget(form.default_distance) }}
-                      {{ form_widget(form.item__distance, {'attr': {'class': 'fa-select-white'}}) }}
+                      {{ form_widget(form.item__distance, {'attr': {'class': 'select-control'}}) }}
                   </li>
                   <li>
                       <label>{{ 'from'|trans({}, 'frontend')}}</label>

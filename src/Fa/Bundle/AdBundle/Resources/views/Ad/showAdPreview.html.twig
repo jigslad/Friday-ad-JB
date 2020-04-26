@@ -110,8 +110,8 @@
                         </div>
                         <div class="col-md-8">
                             <span class="draft-slogan">
-                                <span class="hide-for-small-only">{{'This is a draft of your advert'|trans({}, 'frontend-preview-ad')}}</span>
-                                <span class="show-for-small-only">{{'draft'|trans({}, 'frontend-preview-ad')}}</span>
+                                <span class="d-none d-md-block">{{'This is a draft of your advert'|trans({}, 'frontend-preview-ad')}}</span>
+                                <span class="d-block d-md-none">{{'draft'|trans({}, 'frontend-preview-ad')}}</span>
                             </span>
                         </div>
                     </div>
@@ -123,7 +123,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-16">
-                        <p class="listed-date show-for-small-only">
+                        <p class="listed-date d-block d-md-none">
                         {% if adDetail['created_at'] is defined %}
                             <span class="ago-icon">ago</span>{{ adDetail['created_at']|time_ago_in_words }}
                         {% endif %}
@@ -142,7 +142,7 @@
                         {% endif %}
                         <h1 class="detail-head">{{adDetail['title']}}</h1>
                         {% if adDetail['personalized_title'] is defined and adDetail['personalized_title'] %}
-                            <h2 class="detail-sub-head hide-for-small-only">"{{adDetail['personalized_title']}}"</h2>
+                            <h2 class="detail-sub-head d-none d-md-block">"{{adDetail['personalized_title']}}"</h2>
                         {% endif %}
 
                         {% if adDetail['ad_locality_name'] is defined and adDetail['ad_locality_name'] %}
@@ -162,7 +162,7 @@
                         {% endif %}
                         {% if secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and adDetail['price'] is defined and adDetail['price'] %}
                             <div class="clearfix">
-                                <b class="item-price show-for-small-only left {% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') or metaData['rent_per_id'] is defined and metaData['rent_per_id'] is not null %}classes-tution-price{% endif %}">{{ format_currency(adDetail['price'])}}{% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') %}<span>{{'per hour'|trans({}, 'frontend-preview-ad')}}</span>{% endif %}{% if metaData['rent_per_id'] is defined and metaData['rent_per_id'] is not null %}<span>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', metaData['rent_per_id']) }}</span>{% endif %}</b>
+                                <b class="item-price d-block d-md-none left {% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') or metaData['rent_per_id'] is defined and metaData['rent_per_id'] is not null %}classes-tution-price{% endif %}">{{ format_currency(adDetail['price'])}}{% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') %}<span>{{'per hour'|trans({}, 'frontend-preview-ad')}}</span>{% endif %}{% if metaData['rent_per_id'] is defined and metaData['rent_per_id'] is not null %}<span>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', metaData['rent_per_id']) }}</span>{% endif %}</b>
                             </div>
                         {% endif %}
                         {% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') %}
@@ -179,13 +179,13 @@
                                 {% endif %}
                                 {% set eventStartDate = adCommunityRepository.getEventDateForListing(metaData['event_start'], (metaData['event_end'] is defined ? metaData['event_end'] : null), container) %}
                                 <div class="clearfix">
-                                    <span class="whats-on item-preview-on show-for-small-only">{{ eventStartDate }}</span>
+                                    <span class="whats-on item-preview-on d-block d-md-none">{{ eventStartDate }}</span>
                                 </div>
                             {% endif %}
                         {% endif %}
 
                         {% if rootCategoryId not in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID')} %}
-                            <div class="seller-mob-desc show-for-small-only">
+                            <div class="seller-mob-desc d-block d-md-none">
                                 <div id="ad_desc_mob">
                                     {% if adDetail['description'] is defined %}
                                         <p>{{adDetail['description']|replace({"\\n": "<br />", "&nbsp;": " "})|raw}}</p>
@@ -197,8 +197,8 @@
                         {% endif %}
 
                         {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') and adDetail['user']['about_us'] is defined and adDetail['user']['about_us'] is not null %}
-                            <b class="show-for-small-only">{{'About Us'|trans({}, 'frontend-preview-ad')}}</b>
-                            <div class="seller-mob-desc show-for-small-only">
+                            <b class="d-block d-md-none">{{'About Us'|trans({}, 'frontend-preview-ad')}}</b>
+                            <div class="seller-mob-desc d-block d-md-none">
                                 <div id="user_about_us_desc_mob">
                                     <p>{{ adDetail['user']['about_us']|replace({"\\n": "<br />", "&nbsp;": " "})|raw|nl2br }}</p>
                                 </div>
@@ -245,7 +245,7 @@
                         {{ include('FaAdBundle:Ad:showMapImages.html.twig', { 'googlemap_location_html': block('googlemap_location_html'), 'image_slider_html': block('image_slider_html'), 'extraParams': {'isSoldExpiredAdFlag': false, 'solrMapping': 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::', 'adFavoriteAdIds':adFavoriteAdIds }}) }}
 
                         {% if adDetail['personalized_title'] is defined and adDetail['personalized_title'] %}
-                            <h2 class="detail-sub-head show-for-small-only">"{{adDetail['personalized_title']}}"</h2>
+                            <h2 class="detail-sub-head d-block d-md-none">"{{adDetail['personalized_title']}}"</h2>
                         {% endif %}
 
 
@@ -377,7 +377,7 @@
                                 <dl class="accordion" data-accordion="">
                                     <dd class="accordion-navigation">
                                         <div class="content active" id="basic_info_panel">
-                                            <div class="hide-for-small-only">
+                                            <div class="d-none d-md-block">
                                                 <div id="ad_desc">
                                                     {% if adDetail['description'] is defined %}
                                                         <p>{{adDetail['description']|replace({"\\n": "<br />"})|raw|nl2br }}</p>
@@ -412,22 +412,22 @@
                     </div>
                     <div class="col-md-8">
                         <div class="detail-right-pane">
-                            <p class="listed-date hide-for-small-only">
+                            <p class="listed-date d-none d-md-block">
                             {% if adDetail['created_at'] is defined %}
                                <span class="ago-icon">ago</span>{{ adDetail['created_at']|time_ago_in_words }}
                             {% endif %}
                             </p>
                             <div class="details-price">
                                 {% if secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and adDetail['price'] is defined and adDetail['price'] %}
-                                    <b class="item-price hide-for-small-only {% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') or metaData['rent_per_id'] is defined and metaData['rent_per_id'] is not null %}classes-tution-price{% endif %}">{{ format_currency(adDetail['price'])}}{% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') %}<span>{{'per hour'|trans({}, 'frontend-preview-ad')}}</span>{% endif %}{% if metaData['rent_per_id'] is defined and metaData['rent_per_id'] is not null %}<span>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', metaData['rent_per_id']) }}</span>{% endif %}</b>
+                                    <b class="item-price d-none d-md-block {% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') or metaData['rent_per_id'] is defined and metaData['rent_per_id'] is not null %}classes-tution-price{% endif %}">{{ format_currency(adDetail['price'])}}{% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') %}<span>{{'per hour'|trans({}, 'frontend-preview-ad')}}</span>{% endif %}{% if metaData['rent_per_id'] is defined and metaData['rent_per_id'] is not null %}<span>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', metaData['rent_per_id']) }}</span>{% endif %}</b>
                                 {% endif %}
                                 {% if metaData['event_start'] is defined %}
                                     {% set eventStartDate = fetch_repository('FaAdBundle:AdCommunity').getEventDateForListing(metaData['event_start'], (metaData['event_end'] is defined ? metaData['event_end'] : null), container) %}
-                                    <div class="hide-for-small-only">
+                                    <div class="d-none d-md-block">
                                         <span class="whats-on item-preview-on">{{ eventStartDate }}</span>
                                     </div>
                                 {% endif %}
-                                <div class="hide-for-small-only">
+                                <div class="d-none d-md-block">
                                     {% if adDetail['delivery_method_name'] is defined and adDetail['delivery_method_name'] %}
                                         <span class="person-collection">{{ adDetail['delivery_method_name'] }}</span>
                                     {% endif %}
@@ -454,7 +454,7 @@
                                     {{ include('FaAdBundle:Ad:AdUserDetail.html.twig', {'adLatitude': latitude, 'adLongitude': longitude, 'is_preview': true}) }}
                                 {% endif %}
 
-                                <div class="interested-item hide-for-small-only">
+                                <div class="interested-item d-none d-md-block">
                                     {% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID'), 2: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ANIMALS_ID'), 3: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID')} %}
                                         <h3>{{'Got one like this?'|trans({}, 'frontend-preview-ad')}}</h3>
                                         <a href="javascript:void(0);" class="secondary-btn-2 button expand not-hover">{{'Sell it here!'|trans({}, 'frontend-preview-ad')}}</a>
@@ -479,7 +479,7 @@
                         <a href="{{path('ad_post_fourth_step', {'is_edit': 1})}}" class="primary-btn-1 button expand border-btn">{{'Edit details'|trans({}, 'frontend-preview-ad')}}</a>
                     </div>
                     <div class="large-12 columns">
-                        <a href="{{path('ad_package_purchase', {'adId': app.request.get('adId')})}}" class="primary-btn-1 button expand"><span class="show-for-small-only">{{'Save & publish'|trans({}, 'frontend-preview-ad')}}</span><span class="hide-for-small-only">{{'Save and publish'|trans({}, 'frontend-preview-ad')}}</span></a>
+                        <a href="{{path('ad_package_purchase', {'adId': app.request.get('adId')})}}" class="primary-btn-1 button expand"><span class="d-block d-md-none">{{'Save & publish'|trans({}, 'frontend-preview-ad')}}</span><span class="d-none d-md-block">{{'Save and publish'|trans({}, 'frontend-preview-ad')}}</span></a>
                     </div>
                 </div>
             </div>

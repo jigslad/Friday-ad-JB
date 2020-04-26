@@ -73,7 +73,7 @@
 
             if($('#'+targetElement).is(':visible')) {
                 var selectMenuId = ($(this).attr('id').replace('element_toggle', formName));
-                if ($('#'+selectMenuId).hasClass('fa-select')) {
+                if ($('#'+selectMenuId).hasClass('select-control')) {
                     $('#'+selectMenuId).selectmenu().selectmenu('refresh',true);
                 }
                 var equalizerId = ($(this).attr('id').replace('element_toggle_', ""))+'_equalizer';

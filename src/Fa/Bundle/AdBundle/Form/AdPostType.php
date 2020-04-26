@@ -796,7 +796,7 @@ class AdPostType extends AbstractType
                 'label' => $dimensionName,
                 'choices' => array_flip($fieldChoices),
                 'attr' => array(
-                    'class' => 'fa-select'
+                    'class' => 'select-control'
                 )
             );
 

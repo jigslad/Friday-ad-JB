@@ -1,5 +1,6 @@
 <div class="businessExposureCarousel">
-	<div class="listing-exposure">        
+	<div class="row">
+	    <div class="col-md-24 col-lg-24">      
         <div class="owl-carousel fa-slider bus-shop-user-item-slider" id="busshop-user-item-slider_{{ blockposition }}" data-equalizer>
     {% for businessExposureUsersDetail in businessExposureUsersDetails %}       
     {% if businessExposureUsersDetail is defined %}	
@@ -23,8 +24,7 @@
             {% set gaEventLabel = businessUserDetail['user_name'] ~ ' - Business ad' %}            
                 <div class="list-featured-bz item" data-equalizer-watch>
                     <div class="row">
-                        <div class="small-24 medium-24 large-24 columns">
-                        <div class="small-24  medium-5 large-5 columns bus-det-box">
+                        <div class="col-sm-24 col-md-5 col-lg-5  bus-det-box">
                             {% if businessUserDetail['business_category_id'] == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
                                 <div class="fad-shop-icon">AD SHOP</div>
                             {% endif %}
@@ -43,7 +43,7 @@
                             </div>                           
                             <a href="{{ userProfileUrl }}" onClick='visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");' class="button expand secondary-btn-1 mb0">{{ profileLabel }}</a>
                         </div>
-                        <div class="medium-19 large-19 columns hide-for-small-only">
+                        <div class="col-md-18 d-none d-md-block"> 
                             <div>
                                 {% set adBusPosition = 1 %}
                                 {% set break = false %}
@@ -83,7 +83,7 @@
                                             {% endif %}
                                         </div>
                                         <a href="{{ adUrl }}" onClick='javascript:visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");'>
-                                            <h3 style="color:#313133">{% if attribute(businessExposureUserAd, constant(businessExposureUserAdsolrMapping ~ 'TITLE')) is defined %}
+                                            <h3 style="color:#212527">{% if attribute(businessExposureUserAd, constant(businessExposureUserAdsolrMapping ~ 'TITLE')) is defined %}
                                                {{trim_text(attribute(businessExposureUserAd, constant(businessExposureUserAdsolrMapping ~ 'TITLE')), 65)|raw}}
                                             {% endif %}
                                         </h3></a>
@@ -93,11 +93,10 @@
                             </div>
                         </div>
                     </div>
-                 </div>  
-                 </div>              
+                 </div>               
         {% endif %}    
     {% endif %}
     {% endfor %}
      </div>
-            </div>
+      </div>      </div>
 </div>

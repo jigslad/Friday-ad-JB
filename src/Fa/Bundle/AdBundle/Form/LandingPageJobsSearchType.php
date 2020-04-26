@@ -94,7 +94,7 @@ class LandingPageJobsSearchType extends AbstractType
                 'label'       => 'Contract Type',
                 'placeholder' => 'Any',
                 'choices'     => array_flip($this->getContractTypes()),//$this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($contractTypeDimensionId, $this->container),
-                'attr'        => array('class' => 'fa-select-white')
+                'attr'        => array('class' => 'select-control')
             )
         )
         ->add(
@@ -103,7 +103,7 @@ class LandingPageJobsSearchType extends AbstractType
             array(
                 'choices'     => array_flip($jobCategoryArray),
                 'label'       => 'Job categories',
-                'attr' => array('class' => 'fa-select-white')
+                'attr' => array('class' => 'select-control')
             )
         )
         ->add('item__location', HiddenType::class)
@@ -143,7 +143,7 @@ class LandingPageJobsSearchType extends AbstractType
                 'choices' => array_flip($this->em->getRepository('FaEntityBundle:Location')->getDistanceOptionsArray($this->container)),
                 'placeholder' => $defDistance,
                 'data' => $defDistance,
-                'attr'    => array('class' => 'fa-select-white')
+                'attr'    => array('class' => 'select-control')
             )
         );
     }

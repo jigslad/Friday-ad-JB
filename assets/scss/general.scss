@@ -174,7 +174,7 @@ button:focus, a:focus {
 .btn-h-lg {
     height: 60px !important;
     font-size: 18px !important;
-    line-height: 48px !important;
+    line-height: 36px !important;
 }
 .btn-h-md {
     height: 40px !important;
@@ -358,18 +358,16 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
         color: $form-text-color;
       }
       &:hover a, a:focus {
-        background: $form-border-color;
         box-shadow: none;
+        background: $form-bg-color;
       }
       &.pager-prev a {
         &:hover, &:focus {
-          background: $form-border-color;
           box-shadow: none;
         }
       }
       &.pager-next a {
         &:hover, &:focus {
-          background: $form-border-color;
           box-shadow: none;
         }
       }
@@ -637,6 +635,9 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
     padding: 0;
     width: 100%;
     margin: 0 auto;
+    .modal-title {
+	padding: 10px 10px 10px 60px !important;
+    }
     .modal-content {
       background: $white;
       border: 1px solid $form-border-color;
@@ -651,7 +652,7 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
     .modal-header {
       padding: 0;
       .no-icon-title {
-        padding: 10px 15px;
+        padding: 10px 15px !important;
       }
     }
     .close-modal {
@@ -670,6 +671,15 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
       margin-bottom: 20px;
     }
 }
+.custom-modal .modal-body {
+    padding: 1.5rem;
+}
+.custom-modal .modal-body p {
+    padding: 5px 0;
+}
+.custom-modal .modal-body .button {
+    margin-top: 10px;
+}
 .modal-backdrop {
     background: rgba(168,168,168,0.5) !important;
 }
@@ -682,9 +692,7 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
 .custom-modal .modal-md .modal-content {
     width: 100% !important;
 }
-.custom-modal .modal-title {
-    padding: 10px 15px;
-}
+
 @media (min-width: 641px) and (max-width: 759px) {
   .custom-modal .modal-md {
       max-width: 75% !important;

@@ -184,7 +184,7 @@ class AdLeftSearchType extends AbstractType
                 'choices' => array_flip($this->em->getRepository('FaEntityBundle:Location')->getDistanceOptionsArray($this->container)),
                 'placeholder' => $defDistance,
                 'data' => $defDistance,
-                'attr'    => array('class' => 'fa-select-white')
+                'attr'    => array('class' => 'select-control')
             )
         );
         $form->add(
@@ -347,10 +347,10 @@ class AdLeftSearchType extends AbstractType
 
                     // add date period field
                     if ($rootCategoryName == 'property') {
-                        $fieldOptions = array(/** @Ignore */'label' => false, 'choices' => array_flip(CommonManager::getTimePeriodChoices('property', $this->container)), 'attr' => array('class' => 'fa-select-white'));
+                        $fieldOptions = array(/** @Ignore */'label' => false, 'choices' => array_flip(CommonManager::getTimePeriodChoices('property', $this->container)), 'attr' => array('class' => 'select-control'));
                         $form->add($dimensionFieldPrefix.'__'.$dimensionField.'_period', ChoiceType::class, $fieldOptions);
                     } elseif ($rootCategoryName == 'community') {
-                        $fieldOptions = array(/** @Ignore */'label' => false, 'choices' => array_flip(CommonManager::getTimePeriodChoices('community', $this->container)), 'attr' => array('class' => 'fa-select-white'));
+                        $fieldOptions = array(/** @Ignore */'label' => false, 'choices' => array_flip(CommonManager::getTimePeriodChoices('community', $this->container)), 'attr' => array('class' => 'select-control'));
                         $form->add($dimensionFieldPrefix.'__'.$dimensionField.'_period', ChoiceType::class, $fieldOptions);
                     }
                 } elseif ($dimension['search_type'] == 'range_text') {

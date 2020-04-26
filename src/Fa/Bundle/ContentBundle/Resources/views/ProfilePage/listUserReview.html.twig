@@ -44,7 +44,7 @@
                     <div class="large-24">{{ review.message }}</div>
                 </div>
                 {% if respond|length %}
-                    <div class="clearfix reply-review hide-for-small-only">
+                    <div class="clearfix reply-review d-none d-md-block">
                         <div class="large-3 columns">
                             {% set userLogo = null %}
                             {% set userProfileNameDetail = {'first_name': respond.responder_first_name, 'last_name': respond.responder_last_name, 'business_name': respond.responder_business_name} %}

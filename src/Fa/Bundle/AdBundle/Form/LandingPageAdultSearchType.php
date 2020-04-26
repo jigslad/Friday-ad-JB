@@ -81,7 +81,7 @@ class LandingPageAdultSearchType extends AbstractType
             array(
                 'choices' => array_flip($this->em->getRepository('FaEntityBundle:Location')->getDistanceOptionsArray($this->container)),
                 'data'    => 15,
-                'attr'    => array('class' => 'fa-select-white')
+                'attr'    => array('class' => 'select-control')
             )
         )
         /*->add(
@@ -90,7 +90,7 @@ class LandingPageAdultSearchType extends AbstractType
             array(
                 'choices' => array(),
                 'data'    => 15,
-                'attr'    => array('class' => 'fa-select-white'),
+                'attr'    => array('class' => 'select-control'),
                 'label' => 'Travel Arrangements',
             )
         )
@@ -100,7 +100,7 @@ class LandingPageAdultSearchType extends AbstractType
             array(
                 'choices' => array(),
                 'data'    => 15,
-                'attr'    => array('class' => 'fa-select-white'),
+                'attr'    => array('class' => 'select-control'),
                 'label' => 'Independent or Agency',
             )
         )*/

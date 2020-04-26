@@ -445,7 +445,7 @@
                     {% if app.session.has('back_to_search_url') %}
                     <li><a href="{{app.session.get('back_to_search_url')}}" class="back-link">{{'Back to search results'|trans({}, 'frontend-show-ad')}}</a></li>
                     {% endif %}
-                    <li class="hide-for-small-only {% if not app.session.has('back_to_search_url') %}breadcrumb-full{% endif %}">
+                    <li class="d-none d-md-block {% if not app.session.has('back_to_search_url') %}breadcrumb-full{% endif %}">
                         <a href="{% if location_id and location_slug and location_id is not null and location_slug is not null and location_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID') %} {{ path('location_home_page', {'location': location_slug}) }} {% else %}{{ path('fa_frontend_homepage') }} {% endif %}">{{'Home'|trans({}, 'frontend-show-ad')}}</a>
                         {% if adCategoryId is defined %}
                             {% set categoryPath = categoryRepository.getCategoryPathArrayById(adCategoryId, false, container) %}
@@ -605,7 +605,7 @@
             	{% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and attribute(adDetail, constant(solrMapping ~ 'EVENT_START')) is defined %}
                     {% set eventStartDate = fetch_repository('FaAdBundle:AdCommunity').getEventDateForListing(attribute(adDetail, constant(solrMapping ~ 'EVENT_START')), (attribute(adDetail, constant(solrMapping ~ 'EVENT_END')) is defined ? attribute(adDetail, constant(solrMapping ~ 'EVENT_END')) : null), container) %}
                     <div class="clearfix">
-                        <span class="whats-on item-preview-on show-for-small-only">{{ eventStartDate }}</span>
+                        <span class="whats-on item-preview-on d-block d-md-none">{{ eventStartDate }}</span>
                     </div>
                 {% endif %}
                 
@@ -801,9 +801,9 @@
 {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
 	{{ render(controller('FaAdBundle:Ad:showAdDetailSeoBlocks', {'categoryId': adCategoryId, 'seoPageRule': seoPageRule, 'adLocationName' : adLocationName})) }}
 {% else %}
-    {% cache 'addetail|page|seo'~adCategoryId 900 %}
+{# {% cache 'addetail|page|seo'~adCategoryId 900 %} #}
         {{ render(controller('FaAdBundle:Ad:showAdDetailSeoBlocks', {'categoryId': adCategoryId, 'seoPageRule': seoPageRule, 'adLocationName' : adLocationName})) }}
-    {% endcache %}
+        {# {% endcache %} #}
 {% endif %}
 
 <div class="right-banner">
@@ -999,12 +999,14 @@
             relatedBusinessesSlider.owlCarousel({
                 items : 2,
                 itemsCustom:[[320, 2], [568, 2], [768, 1], [1024, 1], [1025, 2]],
-                navigation: true,
                 pagination:false,
                 responsiveRefreshRate : 100,
-                navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
+                navText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
                 lazyLoad: true,
                 scrollPerPage: true,
+                dots:false,
+                nav:true,
+                loop: true
             });
 
             var relatedBusinessesMobileSlider = $("#related_businesses_mobile_slider");

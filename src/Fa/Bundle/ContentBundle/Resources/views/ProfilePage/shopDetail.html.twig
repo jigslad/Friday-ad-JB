@@ -16,7 +16,7 @@
                     {% set profileWebSite = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'addHttpToUrl', [userDetail['website_link']]) %} 
                    <a rel="nofollow" onclick="openUserWebsite('{{(userDetail['id'] ? userDetail['id'] : '-')}}', '{{ profileWebSite }}', '{{ userName }}')" href="javascript:void(0);" class="website-btn-1 button expand"><span class="website-icon"></span>{{ websiteLabel }}</a>
                 {% endif %} 
-    <a href="{{ profileAdsUrl }}" class="button secondary-btn-1 expand mt5 hide-for-small-only">View all our ads</a>
+    <a href="{{ profileAdsUrl }}" class="button secondary-btn-1 expand mt5 d-none d-md-block">View all our ads</a>
 </div>
  {% block dimension2 %}
 <script language="javascript" type="text/javascript">

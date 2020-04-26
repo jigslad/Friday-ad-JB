@@ -10,7 +10,7 @@
 
 {{ include('FaContentBundle:ProfilePage:shopHeader.html.twig') }}
 
-<div class="row show-for-small-only">
+<div class="row d-block d-md-none">
     <div class="columns">
         <a href="{{ profileUrl }}" class="shop-back-link mt10">{{'Back to shop homepage'|trans({}, 'frontend-profile-page')}}</a>
     </div>
@@ -19,7 +19,7 @@
 <div class="other-profile shop-search-results">
     <div class="row">
         <div class="large-6 columns" id="left_search">
-            <a href="{{ profileUrl }}" class="shop-back-link hide-for-small-only">{{'Back to shop homepage'|trans({}, 'frontend-profile-page')}}</a>
+            <a href="{{ profileUrl }}" class="shop-back-link d-none d-md-block">{{'Back to shop homepage'|trans({}, 'frontend-profile-page')}}</a>
             <div class="search-filters mt20">
                 <a href="javascript:void(0);" class="search-close" onclick="return showLeftSearch(false);">search-close</a>
                 {{ render(controller('FaAdBundle:AdList:leftSearch', { 'searchParams': searchParams is defined ? searchParams : {} , 'locationFacets': locationFacets, 'facetResult': facetResult, 'isShopPage': 1, 'cookieLocationDetails': cookieLocationDetails is defined ? cookieLocationDetails : {}} )) }}
@@ -41,17 +41,17 @@
                     {% if pagination.getNbResults() %}
                         {% set sortFields = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSortingArray', [fetch_container_instance(), null, searchParams]) %}
                         <div class="sortby-fields clearfix">
-                                <div class="hide-for-small-only white-select">
+                                <div class="d-none d-md-block white-select">
                                     {% if not app.request.get('map')%}
                                         <label>{{'Sort by'|trans({}, 'frontend-search-result')}}</label>
-                                        <select class="fa-select-white" name="sort_by" id="sort_by">
+                                        <select class="select-control" name="sort_by" id="sort_by">
                                             {% for sortFieldKey, sortFieldName in sortFields %}
                                                 <option value="{{sortFieldKey}}" {% if app.request.get('sort_field')~'|'~app.request.get('sort_ord') == sortFieldKey %} selected="selected" {% endif %}>{{sortFieldName}}</option>
                                             {% endfor %}
                                         </select>
                                     {% endif %}
                                 </div>
-                                <div class="show-for-small-only sorting-small clearfix">
+                                <div class="d-block d-md-none sorting-small clearfix">
                                     <a href="javascript:void(0);" class="secondary-btn-2 button left" onclick="return toggleLeftSearch();">{{'Refine'|trans({}, 'frontend-search-result')}}</a>
                                     <a href="javascript:void(0);" class="secondary-btn-2 button right" onclick="return showSortBy();">{{'Sort'|trans({}, 'frontend-search-result')}}</a>
                                     <div class="sortby-links" style="display:none;" id="sort_options_div">
@@ -60,7 +60,7 @@
                                         {% endfor %}
                                     </div>
                                 </div>
-                                <div class="left hide-for-small-only tablet-refine-btn">
+                                <div class="left d-none d-md-block tablet-refine-btn">
                                     <a href="javascript:void(0);" class="secondary-btn-2 button refine-search" onclick="return showLeftSearch(true);">{{'Refine your search'|trans({}, 'frontend-search-result')}}</a>
                                 </div>
                         </div>

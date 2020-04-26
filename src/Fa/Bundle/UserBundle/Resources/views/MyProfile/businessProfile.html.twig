@@ -137,7 +137,7 @@
                                                     </div>
 
                                                     <div class="mt30">
-                                                        {{ form_label(form.company_welcome_message) }}<br class="hide-for-small-only" />
+                                                        {{ form_label(form.company_welcome_message) }}<br class="d-none d-md-block" />
                                                         {{'A short paragraph describing your business. You can go into details in the next field.'|trans({}, 'frontend-my-profile')}}
                                                         <div class="field-530">
                                                             {{ form_widget(form.company_welcome_message, {'attr': {'class': 'white-field mt10 mb0 textcounter'}}) }}
@@ -151,7 +151,7 @@
                                                     </div>
 
                                                     <div class="mt30">
-                                                        {{ form_label(form.about_us) }}<br class="hide-for-small-only" />
+                                                        {{ form_label(form.about_us) }}<br class="d-none d-md-block" />
                                                         {{'Text us about your business here...'|trans({}, 'frontend-my-profile')}}
                                                         <div class="field-530">
                                                             {{ form_widget(form.about_us) }}

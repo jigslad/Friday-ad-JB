@@ -133,10 +133,10 @@
                                     {% set packagePrice = format_currency(packageActualPrice) %}
                                 {% else %}
                                     {% set packagePrice = 'Free'|trans({}, 'frontend-ad-package')%}
-                                {% endif %}		
+                                {% endif %}	
+                                	
 							<div class="col-md-6 col-sm-24 col-xs-24 mb20 pl10 pr10 tab-pad">
-						        <div class="paa-pkg-bg">
-						        	<span class="pkg-selection" id="package_selection_{{package.getPackage().getId()}}">Select Package</span>
+						        <div class="paa-pkg-bg">						        
                                         {% set pkgBoxColorClass = 'pkg-green-head' %}
                                         {% set pkgButtonColorClass = '' %}
                                         {% if (locationGroupIds is defined and constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationGroupRepository::NON_PRINT_LOCATION_GROUP_ID') in locationGroupIds) %}
@@ -150,11 +150,11 @@
 						          	<div class="pkg-title {{ pkgBoxColorClass}}">{{package.getPackage().getLabel()}}</div>
 						          	<div id="active_package_{{package.getPackage().getId()}}">
                                         <div class="pkg-subtitle">
-                                        	{#<div class="hide">
+                                        	<div class="hide">
                                                 <span class="custom-radio {% if selectedPackageId == package.getPackage().getId() %} checked {% endif %}">
                                                     <input type="radio" name="package_id" value="{{package.getPackage().getId()}}" {% if selectedPackageId == package.getPackage().getId() %} checked="checked" {% endif %} onclick="return highlightSelectedPackage('{{package.getPackage().getId()}}');" />
                                                 </span>
-                                            </div>#}
+                                            </div>
                                             {{package.getPackage().getTitle()}}
                                         </div>
                                         <div class="pkg-pricing {% if printPackageDuration[package.getPackage().getId()] is defined %}print-pkg{% elseif printPackageDuration is defined and printPackageDuration|length %}non-print-pkg{% endif %}">
@@ -166,6 +166,7 @@
                                                 </div>
                                                 {% if printPackageDuration[package.getPackage().getId()] is defined %}
                                                 <div class="weekly-pkg">
+                                                <div class="d-flex tab-d-flex">
                                                 {% for printDuration in printPackageDuration[package.getPackage().getId()] %}
                                                     {% set printDurationPrice = 0 %}
                                                     {% set printFirstDurationPrice = 0 %}
@@ -175,20 +176,19 @@
                                                     {% else %}
                                                         {% set printDurationPrice = printDuration['price'] %}
                                                         {% set printFirstDurationPrice = printPackageDuration[package.getPackage().getId()][0]['price'] %}
-                                                    {% endif %}
-                                                                
-                                                    <div class="d-flex tab-d-flex">
-                                                        <label class="horizontal-radio">
-                                                            <input type="hidden" name="package_print_price_{{printDuration['id']}}" id="package_print_price_{{printDuration['id']}}" value="{{format_currency(printDurationPrice)}}" />
-                                                            <input type="radio" {% if loop.index == 1 %} checked="checked" {% endif %} name="package_print_id_{{package.getPackage().getId()}}" id="package_print_id_{{printDuration['id']}}" value="{{printDuration['id']}}" onclick="return updatePackagePrice({{package.getPackage().getId()}}, {{printDuration['id']}})" />
-                                                            <span class="checkmark"></span>
-                                                            <label class="label-text" for="package_print_id_{{printDuration['id']}}">
-                                                                {% set fullDuration = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getFullDurationFromShortForm', [printDuration['duration']]) %}
-                                                                {{fullDuration}} {{'in print'|trans({}, 'frontend-ad-package')}} {% if loop.index != 1 %}(+{{format_currency(printDurationPrice - printFirstDurationPrice)}}){% endif %}
-                                                            </label>
+                                                    {% endif %}                                                                
+                                                    
+                                                    <label class="horizontal-radio">
+                                                        <input type="hidden" name="package_print_price_{{printDuration['id']}}" id="package_print_price_{{printDuration['id']}}" value="{{format_currency(printDurationPrice)}}" />
+                                                        <input type="radio" {% if loop.index == 1 %} checked="checked" {% endif %} name="package_print_id_{{package.getPackage().getId()}}" id="package_print_id_{{printDuration['id']}}" value="{{printDuration['id']}}" onclick="return updatePackagePrice({{package.getPackage().getId()}}, {{printDuration['id']}})" />
+                                                        <span class="checkmark"></span>
+                                                        <label class="label-text" for="package_print_id_{{printDuration['id']}}">
+                                                            {% set fullDuration = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getFullDurationFromShortForm', [printDuration['duration']]) %}
+                                                            {{fullDuration}} {{'in print'|trans({}, 'frontend-ad-package')}} {% if loop.index != 1 %}(+{{format_currency(printDurationPrice - printFirstDurationPrice)}}){% endif %}
                                                         </label>
-                                                    </div>
+                                                    </label>                                                    
                                                  {% endfor %}
+                                                </div>
                                                 </div>
                                                 
                                                 <div class="weekly-pkg d-none">
@@ -244,7 +244,7 @@
                                                     </div>
                                                     <div id="package_print_editions_{{ package.getPackage().getId() }}" style="display:none;" class="edition-fields">
                                                         {% for editionCntr in 1..printEditionLimits[package.getPackage().getId()] %}
-                                                            <select class="printSelect fa-select-white" name="print_editions_{{ package.getPackage().getId()~'_'~editionCntr }}" id="print_editions_{{ package.getPackage().getId()~'_'~editionCntr }}" onchange="updateSelects({{ package.getPackage().getId() }})">
+                                                            <select class="printSelect select-control" name="print_editions_{{ package.getPackage().getId()~'_'~editionCntr }}" id="print_editions_{{ package.getPackage().getId()~'_'~editionCntr }}" onchange="updateSelects({{ package.getPackage().getId() }})">
                                                                 <option value=''>{{'Select edition'|trans({}, 'frontend-ad-package')}}</option>
                                                                 {% set selectedFlag = false %}
                                                                 {% for editionId, editionName in printEditions %}
@@ -257,9 +257,9 @@
                                             {% endif %}
                                             </div>
                                             
-                                            <div class="choose-btn-block">
+                                            <div class="choose-btn-block">                                               
                                             	{% set userCreditId = fetch_repository('FaPromotionBundle:Package').isPackageValidForCredit(package.getPackage(), userActiveCredits, activeShopPackageDetail) %}
-                                                <button type="button" class="{% if pkgButtonColorClass is defined and pkgButtonColorClass != '' %}{{pkgButtonColorClass}}{% else %}primary-btn-1{% endif %} {% if not userCreditId or (userCreditId and package.getPackage().getPrice() <= 0) %} free-button-spacing{% endif %} btn btn-block choose_btn btn-h-lg" onclick="return selectPackage({{package.getPackage().getId()}}, '{{ package.getPackage().getPrice() }}');" onmouseover="$('#package_selection_{{package.getPackage().getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getPackage().getId()}}').attr('style', '');">
+                                                <button type="button" class="{% if pkgButtonColorClass is defined and pkgButtonColorClass != '' %}{{pkgButtonColorClass}}{% else %}primary-btn-1{% endif %} {% if not userCreditId or (userCreditId and package.getPackage().getPrice() <= 0) %} free-button-spacing{% endif %} btn btn-block choose_btn btn-h-lg" onclick="selectPackage({{package.getPackage().getId()}}, '{{ package.getPackage().getPrice() }}');return false;" onmouseover="$('#package_selection_{{package.getPackage().getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getPackage().getId()}}').attr('style', '');">
                                                 {% if package.getPackage().getPrice() > 0 and userCreditId %}
                                                     {{'Pay for advert'|trans({}, 'frontend-ad-package')}}
                                                 {% else %}
@@ -280,6 +280,7 @@
                                                 {% endif %}
                                             </div>
                                         </div>
+                                        {# <span class="pkg-selection" id="package_selection_{{package.getPackage().getId()}}" /></span> #}
                                         <div class="pkg-ins">
                                             {{package.getPackage().getSubTitle()}}
                                             <div class="pkg-includes d-block d-md-none">
@@ -397,7 +398,8 @@
 {% endblock %}
 
 {% block scriptbottom %}
-<script src="{{ asset_url('facore/js/jquery.query-object.js') }}"></script>
+{#<script src="{{ asset_url('fafrontend/js/jquery.equalizer.min.js') }}"></script>
+<script src="{{ asset_url('facore/js/jquery.query-object.js') }}"></script>#}
 {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
 <script language="javascript" type="text/javascript">
 //<![CDATA[
@@ -518,7 +520,7 @@
 
     function selectPackage(packageId, packagePrice)
     {
-    	{% if privateUserAdParams is defined and privateUserAdParams|length and not privateUserAdParams.allowPrivateUserToPostAdFlag %}
+        {% if privateUserAdParams is defined and privateUserAdParams|length and not privateUserAdParams.allowPrivateUserToPostAdFlag %}
             if (packagePrice <= 0) {
                 $('#privateUserMaxAdPostLimitModal').modal('show');
                 return false;

@@ -31,7 +31,7 @@
                     {% set showHideDates = 'inline' %}
                 {% endif %}
                 <div class="white-select">
-                    {{ form_widget(attribute(form, filter~'_period'), {'attr': {'class': 'date_period fa-select-white'}}) }}
+                    {{ form_widget(attribute(form, filter~'_period'), {'attr': {'class': 'date_period select-control'}}) }}
                 </div>
             {% endif %}
             <div class="event-dates" style="display:{{showHideDates}}">

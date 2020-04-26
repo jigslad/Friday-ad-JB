@@ -86,7 +86,7 @@ class LandingPagePropertySearchType extends AbstractType
                 'choices'     => array(),
                 'placeholder' => 'Any',
                 'label'       => 'Property Type',
-                'attr'        => array('class' => 'fa-select-white')
+                'attr'        => array('class' => 'select-control')
             )
         )
         ->add(
@@ -97,7 +97,7 @@ class LandingPagePropertySearchType extends AbstractType
                 'label'       => false,
                 'choices'     => array(),
                 'placeholder' => 'Rent per',
-                'attr'        => array('class' => 'fa-select-white')
+                'attr'        => array('class' => 'select-control')
             )
         )
         ->add('item__category_id', HiddenType::class)
@@ -135,7 +135,7 @@ class LandingPagePropertySearchType extends AbstractType
                 'choices' => array_flip($this->em->getRepository('FaEntityBundle:Location')->getDistanceOptionsArray($this->container)),
                 'placeholder' => $defDistance,
                 'data' => $defDistance,
-                'attr'    => array('class' => 'fa-select-white')
+                'attr'    => array('class' => 'select-control')
             )
         );
     }

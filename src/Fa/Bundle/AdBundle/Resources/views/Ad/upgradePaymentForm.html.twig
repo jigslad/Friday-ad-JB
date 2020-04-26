@@ -63,8 +63,8 @@
                 <div class="payment-row white-select">
                     {{ form_label(form.card_expity_month) }}
                     <div class="expiry-date" style="padding-top: 10px;">
-                        {{ form_widget(form.card_expity_month, {'attr': {'class': 'fa-select-white'}}) }}
-                        {{ form_widget(form.card_expity_year, {'attr': {'class': 'fa-select-white'}}) }}
+                        {{ form_widget(form.card_expity_month, {'attr': {'class': 'select-control'}}) }}
+                        {{ form_widget(form.card_expity_year, {'attr': {'class': 'select-control'}}) }}
                     </div>
                     {{ form_errors(form.card_expity_month) }}
                     {{ form_errors(form.card_expity_year) }}

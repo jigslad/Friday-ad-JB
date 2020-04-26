@@ -2,7 +2,7 @@
     {% set userLogo = null %}
     {% set userProfileNameDetail = {'first_name': review.user_first_name, 'last_name': review.user_last_name, 'business_name': review.user_business_name} %}
     {% set profileName = fetch_repository('FaUserBundle:User').getProfileNameFromArray(userProfileNameDetail) %}
-    <a href="javascript:void(0)" class="tricky-link show-for-small-only">{{ profileName }}</a>
+    <a href="javascript:void(0)" class="tricky-link d-block d-md-none">{{ profileName }}</a>
     <div class="clearfix">
         <div class="large-3 columns">
             

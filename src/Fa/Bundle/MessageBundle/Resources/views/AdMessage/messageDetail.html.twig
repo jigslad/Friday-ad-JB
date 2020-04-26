@@ -82,7 +82,7 @@
                     <b>{{ 'Respond to' }} {{userDisplayName}}:</b>
                     <div class="mt10">
                         <a href="javascript:void(0)" class="secondary-btn-1 button mb0" onclick="return replyOneClickEnq('{{arrayMessage['id']}}', '{{ arrayMessage['ad_id'] }}', 'Yes', 'Inbox_View');">{{'Yes'|trans({})}}</a>
-                        <a href="javascript:void(0)" class="secondary-btn-2 button mb0" onclick="return replyOneClickEnq('{{arrayMessage['id']}}', '{{ arrayMessage['ad_id'] }}', 'No', 'Inbox_View');"><span class="hide-for-small-only">{{'No - '|trans({})}}</span> {{'Mark as sold'|trans({})}}</a>
+                        <a href="javascript:void(0)" class="secondary-btn-2 button mb0" onclick="return replyOneClickEnq('{{arrayMessage['id']}}', '{{ arrayMessage['ad_id'] }}', 'No', 'Inbox_View');"><span class="d-none d-md-block">{{'No - '|trans({})}}</span> {{'Mark as sold'|trans({})}}</a>
                     </div>
                 </div>
             {% endif %}
