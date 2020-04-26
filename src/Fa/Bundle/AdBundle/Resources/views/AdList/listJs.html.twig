@@ -29,7 +29,7 @@
         {% endif %} 
 
         {% if (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) %}
-            var busShopUserItemSlider = $("#busshop-user-item-slider_5, #busshop-user-item-slider_15, #busshop-user-single-item-slider");
+            var busShopUserItemSlider = $("#busshop-user-item-slider_5, #busshop-user-item-slider_15");
             busShopUserItemSlider.owlCarousel({
                 items:1,
                 loop:true,
@@ -46,6 +46,21 @@
                 responsiveRefreshRate : 3000,
                 navText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
                 lazyLoad: true,
+            });
+
+            var busShopUserSingleItemSlider = $("#busshop-user-single-item-slider");
+            busShopUserSingleItemSlider.owlCarousel({
+            	items : 1,
+                itemsCustom:[[320, 1]],
+                navigation: true,
+                pagination:false,
+                responsiveRefreshRate : 100,
+                navText: ['<img src="fafrontend/images/small-slider-prev.svg" alt="" />', '<img src="//static.friday-ad.co.uk/bundles/fafrontend/images/small-slider-next.svg" alt="" />'],
+                lazyLoad: true,
+                scrollPerPage: true,
+                dots:false,
+                nav:true,
+                loop: true                
             });
 
             $('.businessExposureCarousel .owl-item, .businessExposureCarousel .owl-prev, .businessExposureCarousel .owl-next').on('click', function () {
