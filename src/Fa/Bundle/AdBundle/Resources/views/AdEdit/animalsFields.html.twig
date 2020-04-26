@@ -97,7 +97,7 @@
                         <div class="btm-pa-0">
                             <h3 class="text-center" id="price_label">{{ attribute(form, field).vars.label }}</h3>
                         </div>
-                        <div class="small-wrapper">
+                        <div class="small-wrapper grey-select">
                             <div class="paa-enter-price clearfix">
                                 <div class="price-icon">&pound;</div>
                                 {{ form_widget(attribute(form, field)) }}
@@ -192,8 +192,8 @@
                                     {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
                                 </div>
                             {% endif %}
-                            <div id="gender_choice_div" style="display:none">
-                                {{ form_widget(attribute(form, field)) }}
+                            <div id="gender_choice_div" class="capsule-links radio-capsule payment-method-links text-center">
+                                {{ form_widget(attribute(form, field), {'attr': {'class' : 'radio-capsule-btn'}}) }}
                             </div>
                             <div class="capsule-links gender-links">
                                 {% set selectedGenderId = attribute(form, field).vars.data %}
@@ -218,7 +218,7 @@
                                     {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
                                 </div>
                             {% endif %}
-                            <div class="small-wrapper">
+                            <div class="small-wrapper grey-select">
                                 {{ form_widget(attribute(form, field)) }}
                                 {{ form_errors(attribute(form, field)) }}
                             </div>
