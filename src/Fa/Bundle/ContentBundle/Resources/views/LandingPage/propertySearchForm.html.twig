@@ -57,17 +57,15 @@
                     <label>{{ 'Distance I\'m happy to travel'|trans({}, 'frontend-left-search')}}</label>
                     <div>
                         <ul class="budget-box clearfix d-inline-flex f-width">
-                            <li class="budget-field">
-                                <div class="select">
-                                    {{ form_widget(form.item__distance) }}
-                                </div>
+                            <li class="white-select">
+                                {{ form_widget(form.item__distance) }}
                             </li>
                             <li class="budget-to-caption">
                                 {{ 'from'|trans({}, 'frontend')}}
                             </li>
                             <li>
                                 {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'white-field'}}) }}
-                                <a href="javascript:void(0);" id="fa_landing_page_property_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                                <a href="javascript:void(0);" id="fa_landing_page_property_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close" style="top: 55%;right: 3%;">Close</a>
                             </li>
                         </ul>
                     </div>
@@ -85,7 +83,9 @@
                                 <span>&pound;</span>{{ form_widget(form.item__price_to, {'attr': {'class': 'white-field', 'autocomplete': 'off'}}) }}
                             </li>
                             <li id="rent_per_container" style="display:none" >
-                                {{ form_widget(form.item_property__rent_per_id) }}
+                                <div class="white-select">
+                                    {{ form_widget(form.item_property__rent_per_id) }}
+                                </div>
                             </li>
                         </ul>
                     </div>
@@ -160,17 +160,14 @@
             {% for value,text in forRentRentPerOptions %}
                 rent_per_selector.append('<option value="'+ '{{ value }}'+'">'+ '{{ text }}' +'</option>');
             {% endfor %}
-            rent_per_selector.selectmenu().selectmenu('refresh',true);
         } else if (id == '{{ property_share_id }}') {
             $('#rent_per_container').show();
             $('#rent_per_container').parent().addClass('rent-per-field');
             {% for value,text in shareRentPerOptions %}
                 rent_per_selector.append('<option value="'+ '{{ value }}'+'">'+ '{{ text }}' +'</option>');
             {% endfor %}
-            rent_per_selector.selectmenu().selectmenu('refresh',true);
         } else {
             rent_per_selector.html('<option value="">{{ 'Rent per'|trans({}, 'frontend-landing-page') }}</option>');
-            rent_per_selector.selectmenu().selectmenu('refresh',true);
             $('#rent_per_container').parent().removeClass('rent-per-field');
             $('#rent_per_container').hide();
         }
