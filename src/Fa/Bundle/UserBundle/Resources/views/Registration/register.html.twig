@@ -165,16 +165,19 @@
             
             <div class="col-md-11 col-lg-8 login-right">
                 <div class="mobile-block-reg">
-                    <div>
-                        <button type="reset" class="signup-fb-btn button expand" onclick="javascript:fbLoginPopup('{{ facebookLoginUrl }}');">
-                            <span class="signup-fb-icon">&nbsp;</span>{{ 'Sign Up with Facebook'|trans({}, 'frontend') }}
-                        </button>
+                	<div class="text-center mb20">
+                        <a href="javascript:fbLoginPopup('{{ facebookLoginUrl }}');" class="button special signup-fb-btn">
+                            <span class="fb-icon"></span> 
+                            <span class="btn-text">{{ 'Sign Up with Facebook'|trans({}, 'frontend') }}</span>
+                        </a>
                     </div>
-                    <div>
-                        <button type="reset" class="signup-google-btn button expand" onclick="javascript:googleLoginPopup('{{ googleLoginUrl }}');">
-                            <span class="signup-google-icon">&nbsp;</span>{{ 'Sign Up with Google'|trans({}, 'frontend') }}
-                        </button>
+                    <div class="text-center">
+                        <a href="javascript:googleLoginPopup('{{ googleLoginUrl }}');" class="button special signup-google-btn">
+                            <span class="google-icon"></span> 
+                            <span class="btn-text">{{ 'Sign Up with Google'|trans({}, 'frontend') }}</span>
+                        </a>
                     </div>
+
                     <span class="signup-ins">
                         {{'We won\'t post anything <b>without your permission.</b>'|trans({}, 'frontend-login')|raw}}{{ include('FaAdBundle:AdPost:paaToolTipHelp.html.twig', {'paaBlockSlug': 'registration-login-help'}) }}</b>            
                     </span>

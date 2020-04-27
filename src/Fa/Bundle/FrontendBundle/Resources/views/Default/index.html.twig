@@ -246,11 +246,12 @@
                 <div class="col-md-24">
                     <h3 class="homepage-title">{{'Find out what your friends are selling'|trans({}, 'frontend-homepage')}}</h3>
                     <div class="clearfix"></div>
-                    <div class="text-center">
-                    	<button type="reset" class="signup-fb-btn button"  onclick="javascript:fbLoginPopup('{{ facebookLoginUrl }}');">
-                            <span class="signup-fb-icon">&nbsp;</span>{{ 'Sign In with Facebook'|trans({}, 'frontend-homepage')}}
-                        </button>                        
-                    </div>
+                    <div class="text-center mb20">
+                        <a href="javascript:fbLoginPopup('{{ facebookLoginUrl }}');" class="button special signup-fb-btn">
+                            <span class="fb-icon"></span> 
+                            <span class="btn-text">{{ 'Sign In with Facebook'|trans({}, 'frontend-homepage')}}</span>
+                        </a>
+                    </div>                   
                 </div>
             </div>
         </div>

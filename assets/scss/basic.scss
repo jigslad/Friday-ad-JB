@@ -369,7 +369,7 @@ input.checkbox {
 }
 .reg-profile-btn {
     width: auto;
-    padding: 40px 0 0 25px;
+    padding: 40px 0 0 15px;
 }
 
 /* tooltip */
@@ -484,7 +484,7 @@ ul.pagination li.pager-prev:hover a, ul.pagination li.pager-next:hover a {
     /* background-color: #e3e3e3 !important; */
 }
 .site-search .change-location #top_search_location {
-   width: 224px !important; z-index: 999 !important;
+   width: 224px !important; z-index: 999 !important; position: relative;
 }
 .site-search .input-group { width: max-content !important; }
 .site-search .change-location #top_search_location .clearfix {
