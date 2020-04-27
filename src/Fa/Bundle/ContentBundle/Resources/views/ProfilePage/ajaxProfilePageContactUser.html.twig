@@ -4,7 +4,7 @@
 {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
 <div class="modal-dialog"><div class="modal-content">
 		<div class="modal-header">
-			<h5 class="modal-title save-search-title no-icon-title">{{'Ask %user_name% a question..'|trans({'%user_name%': adOwnerName}, 'frontend-contact-seller')}}</h5>
+			<h5 class="modal-title save-search-title">{{'Ask %user_name% a question..'|trans({'%user_name%': adOwnerName}, 'frontend-contact-seller')}}</h5>
 		    <button class="close-modal" class="close" data-dismiss="modal">×</button>
 		</div>
 {% set adOwnerName = contactUserObj ? contactUserObj.getProfileName() : null %}
