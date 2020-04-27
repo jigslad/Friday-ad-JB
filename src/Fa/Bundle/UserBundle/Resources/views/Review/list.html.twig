@@ -32,7 +32,7 @@
                 <div class="clearfix">
                     <div class="my-review-title">
                         {% if review.user_review_ad_id > 0 %}
-                            <a class="outside-tricky" href="{{ container.get('router').generate('ad_detail_page_by_id', {'id': review.ad_id}, true) }}">{{ review.ad_title }}</a>
+                            <a class="outside-tricky" href="{{ container.get('router').generate('ad_detail_page_by_id', {'id': review.user_review_ad_id}, true) }}">{{ review.ad_title }}</a>
                         {% else %}
                             {{ review.subject }}
                         {% endif %}
