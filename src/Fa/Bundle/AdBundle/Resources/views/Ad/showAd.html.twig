@@ -524,7 +524,7 @@
                  </h1>
 
                  {% if attribute(adDetail, constant(solrMapping ~ 'PERSONALIZED_TITLE')) is defined %}
-                    <h2 class="detail-sub-head d-block d-md-none">"{{attribute(adDetail, constant(solrMapping ~ 'PERSONALIZED_TITLE'))}}"</h2>
+                    <h2 class="detail-sub-head d-none d-md-block">"{{attribute(adDetail, constant(solrMapping ~ 'PERSONALIZED_TITLE'))}}"</h2>
                  {% endif %}
 
                  {% if attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')) is defined  %}

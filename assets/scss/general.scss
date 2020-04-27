@@ -1838,3 +1838,27 @@ footer {
   box-shadow: none;
   border-radius: 0;
 }
+
+/* Help sticky btn starts */
+@media (max-width: 760px) {
+  .custom_hc_widget_trigger {
+    display: block;
+    position: fixed;
+    right: -70px;
+    bottom: 50%;
+    z-index: 98;
+  }
+  .custom_hc_widget_trigger img {
+    -webkit-transform: rotate(-90deg) translate(-27px, -26px);
+    -moz-transform: rotate(-90deg) translate(-27px, -26px);
+    -ms-transform: rotate(-90deg) translate(-27px, -26px);
+    -o-transform: rotate(-90deg) translate(-27px, -26px);
+    transform: rotate(-90deg) translate(-27px, -26px);
+  }
+}
+@media (max-width: 759px) {
+  .custom_hc_widget_trigger {
+    display: none !important;
+  }
+}
+/* help sticky btn ends*/
