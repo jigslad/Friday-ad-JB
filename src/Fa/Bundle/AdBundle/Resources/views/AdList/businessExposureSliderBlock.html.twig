@@ -23,7 +23,7 @@
             {% endif %}
             {% set gaEventLabel = businessUserDetail['user_name'] ~ ' - Business ad' %}            
                 <div class="list-featured-bz item" data-equalizer-watch>
-                    <div class="row">                    	
+                    <div class="row" style="margin:0px !important;">                    	
                         <div class="col-sm-24 col-md-6 bus-det-box">
                             {% if businessUserDetail['business_category_id'] == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
                                 <div class="fad-shop-icon">AD SHOP</div>
@@ -41,7 +41,7 @@
                               {{ include('FaCoreBundle::showStarRating.html.twig', {'rating': businessUserDetail['user_rating']}) }}
                             {% endif %}
                             </div>                           
-                            <a href="{{ userProfileUrl }}" onClick='visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");' class="button expand secondary-btn-1 mb0">{{ profileLabel }}</a>
+                            <a href="{{ userProfileUrl }}" onClick='visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");' class="button btn-block text-center secondary-btn-1 mb0">{{ profileLabel }}</a>
                         </div>
                         <div class="col-md-18 d-none d-md-block busad-item-block"> 
                                 {% set adBusPosition = 1 %}

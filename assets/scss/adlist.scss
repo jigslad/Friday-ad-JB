@@ -918,12 +918,12 @@
 .crawlable-checkbox li a { position: absolute; width: 100%; left: 0; top: 0; z-index: -1; }
 
 /* Featured Business */
-.bus-shop-user-item-slider .owl-prev, .bus-shop-user-item-slider .owl-next {
+.bus-shop-user-item-slider .owl-prev, bus-shop-user-item-slider .owl-next {
 	height: 100%;
 }
-.bus-shop-user-item-slider .item .item {
+#bus-shop-user-item-slider .item {
 	margin: auto;
-	padding: 20px;
+	padding: 20px 0px;
 }
 .exposure-logo {
 	width: 138px;
