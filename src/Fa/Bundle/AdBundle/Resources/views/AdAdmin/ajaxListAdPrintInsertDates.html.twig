@@ -8,7 +8,7 @@
     {% set adPrintDetails = adPrintRepository.getAllPaidPrintEntryForAd(ad.getId()) %}
 {% endif %}
 <a class="close-reveal-modal" aria-label="Close">&#215;</a>
-<h5 id="modalTitle" class="modal-title no-icon-title" >{{ 'Ad print insert dates list for ad id: %ad_id%'|trans({'%ad_id%': ad.getId()}) }}</h5>
+<h5 id="modalTitle" class="modal-title">{{ 'Ad print insert dates list for ad id: %ad_id%'|trans({'%ad_id%': ad.getId()}) }}</h5>
 <div class="modal-content2" id="print_dates_list">
     {% if adPrintDetails|length %}
         <ul class="info_list csv-list" id="cvs_list_ul">
