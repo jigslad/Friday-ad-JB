@@ -71,12 +71,12 @@
                                 {% set queryParams = dimensionParams|merge({(filter): (child.vars.value)}) %}
                                 {% set queryParams = queryParams|merge({(filter~'_open'): ''}) %}
                                 {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams, null, false, null, false, parentFullSlug, secondLevelParentFullSlug) %}
-                                {{ form_widget(child,{'attr':{'class':'checkbox'}}) }}
-                                {% if dimensionIsIndexable and child.vars.value not in nonCrawlableDimensionValues %}
-                                    <a href="{{ listurl }}" class="crowable_checkbox_link" onclick="return false;" {% if app.request.get('searchQueryString') or getNoFollowLink or 'item_' in listurl %}rel="nofollow"{% endif %}>{{ child.vars.label~extraLabel }}</a>
-                                {% endif %}
+                                {{ form_widget(child,{'attr':{'class':'checkbox'}}) }}                               
                                 <label for="{{ child.vars.id }}" class="crowable_checkbox_link_label"></label>{{ child.vars.label }}
                                 ({{ adCount }})
+                                 {% if dimensionIsIndexable and child.vars.value not in nonCrawlableDimensionValues %}
+                                    <a href="{{ listurl }}" class="crowable_checkbox_link" onclick="return false;" {% if app.request.get('searchQueryString') or getNoFollowLink or 'item_' in listurl %}rel="nofollow"{% endif %}>{{ child.vars.label~extraLabel }}</a>
+                                {% endif %}
                                 {% set childCount = childCount + 1 %}
                             </li>
                         {% endif %}

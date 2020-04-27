@@ -142,21 +142,24 @@
             {% endif %} #}
 
             <ul class="receive-alert">
-                <li>
-                    {{ form_widget(form.search_agent, {'attr':{'tabindex': 4}}) }}
-                    {{ form_label(form.search_agent) }}
+                <li class="grey-check">
+                    {{ form_widget(form.search_agent, {'attr':{'tabindex': 4, 'class':'checkbox'}}) }}
+                    <label for="{{ form.search_agent.vars.id  }}"></label>
+                    <span class="label-span">{{ form.search_agent.vars.label }}</span>
                 </li>
-                <li id="form_contact_seller_email_alert" style="display:{{emailAlertStyle}}">
-                    {{ form_widget(form.email_alert, {'attr':{'tabindex': 5}}) }}
-                    {{ form_label(form.email_alert) }}
+                <li id="form_contact_seller_email_alert" class="grey-check" style="display:{{emailAlertStyle}}">
+                    {{ form_widget(form.email_alert, {'attr':{'tabindex': 5, 'class':'checkbox'}}) }}
+                    <label for="{{ form.email_alert.vars.id  }}"></label>
+                    <span class="label-span">{{ form.email_alert.vars.label }}</span>
                 </li>
-                <li id="form_contact_seller_third_party_email_alert" style="display:{{thirdpartyEmailAlertStyle}}">
-                    {{ form_widget(form.third_party_email_alert, {'attr':{'tabindex': 6}}) }}
-                    {{ form_label(form.third_party_email_alert) }}
+                <li id="form_contact_seller_third_party_email_alert" class="grey-check" style="display:{{thirdpartyEmailAlertStyle}}">
+                    {{ form_widget(form.third_party_email_alert, {'attr':{'tabindex': 6, 'class':'checkbox'}}) }}
+					<label for="{{ form.third_party_email_alert.vars.id  }}"></label>
+					<span class="label-span">{{ form.third_party_email_alert.vars.label }}</span>
                 </li>
             </ul>
 
-            {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 button expand','tabindex': 7}}) }}
+            {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 button btn-block text-center','tabindex': 7}}) }}
         {% else %}
             {% for fieldName, fieldValue in form.children %}
                 {% do attribute(form, fieldName).setRendered %}
