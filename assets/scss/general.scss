@@ -359,7 +359,7 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
       }
       &:hover a, a:focus {
         box-shadow: none;
-        background: $form-bg-color;
+        background: $form-border-color;
       }
       &.pager-prev a {
         &:hover, &:focus {
