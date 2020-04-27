@@ -533,6 +533,8 @@ z-index:999;
 .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
     border: 0px solid transparent !important;
     background: transparent !important;
+    color: #212529 ;
+    font-weight: bold;
 }
 
 .select2-results, .ui-autocomplete {
