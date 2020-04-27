@@ -142,15 +142,18 @@
                     <div class="label-inline mt10">
                         <div class="white-check mb10">
                         	{{ form_widget(form.is_email_alert_enabled, {'attr': {'class': 'checkbox'}}) }}
-                        	<label class="mb0" for="{{ form.is_email_alert_enabled.vars.id }}"></label>I'd like to receive news, offers and promotions by email from Friday-Ad                                                        
+                        	<label class="mb0" for="{{ form.is_email_alert_enabled.vars.id }}"></label>
+                        	<span class="label-span">I'd like to receive news, offers and promotions by email from Friday-Ad </span>                                                       
                         </div> 
                         <div class="white-check mb10">    
                         	{{ form_widget(form.is_third_party_email_alert_enabled, {'attr': {'class': 'checkbox'}}) }}
-                        	<label class="mb0" for="{{ form.is_third_party_email_alert_enabled.vars.id }}"></label>I'd like to receive offers and promotions by email on behalf of carefully chosen partners                                                        
+                        	<label class="mb0" for="{{ form.is_third_party_email_alert_enabled.vars.id }}"></label>
+                        	<span class="label-span">I'd like to receive offers and promotions by email on behalf of carefully chosen partners</span>                                                        
                         </div> 
                         <div class="white-check mb10">
                            {{ form_widget(form.is_terms_agreed, {'attr': {'class': 'checkbox'}}) }}
-                           <label class="mb0" for="{{ form.is_terms_agreed.vars.id }}"></label>I have read and agree to the <a href="/terms-and-conditions/" target="_blank">terms and conditions</a>                            
+                           <label class="mb0" for="{{ form.is_terms_agreed.vars.id }}"></label>
+                           <span class="label-span">I have read and agree to the <a href="/terms-and-conditions/" target="_blank">terms and conditions</a></span>                            
                         </div> 
                     </div>
                 </div>

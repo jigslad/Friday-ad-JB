@@ -198,8 +198,9 @@ input.checkbox {
 	clip: rect(0 0 0 0);
 }
 .grey-radio .checkbox, .white-radio .checkbox { background:transparent !important; border:none !important; }
-.grey-radio span, .white-radio span { display: block; }
-.grey-radio, .white-radio, .grey-check, .white-check { font-size:13px !important; color: #a4a4a4 !important; margin-bottom:5px !important;}
+.grey-radio, .white-radio, .grey-check, .white-check { font-size:13px !important; color: #a4a4a4 !important; margin-bottom:5px !important;margin-right:5px !important;  }
+.grey-check span, .white-check span { display: inline-flex !important; }
+.grey-radio span, .white-radio span { display: block !important; }
 
 .select2-container { width: 100% !important; }
 .grey-select .select2-container--default .select2-selection--single, .paa-block .select2-container--default .select2-selection--single {
@@ -221,7 +222,7 @@ input.checkbox {
 	text-align: left !important;
 	padding: 10px 30px 10px 14px !important;
 	display: block !important;
-	line-height: 1.4 !important;
+	line-height: 14px !important;
 	overflow: hidden !important;
 	text-overflow: ellipsis !important;
 	white-space: nowrap !important;
@@ -273,6 +274,9 @@ input.checkbox {
 }
  .select2-container--default .select2-results__option[aria-selected="true"] {
 	background-color: #EAEFF0 !important;
+}
+.select2-container--default .select2-selection--single:hover, .select2-container--default .select2-selection--single:focus, .select2-container--default .select2-selection--single:active {
+	border: 1px solid #A8DC28 !important;
 }
 .top-bar-section .navbar-nav .nav-item .dropdown-menu .row {
 	flex: content !important;
@@ -614,7 +618,37 @@ z-index:999;
 footer .search-box-col .newsletter-lbl, .white-check .label-span, .grey-check .label-span  {
 	line-height: 17px;
 	position: relative;
-	top: -7px;
+	top: -3px;
 }
 .pd20 { padding:20px !important; }
+.clear-both { clear:both !important; }
+.detail-sub-head {
+    font-size: 25px;
+    line-height: 25px;
+    color: #ABABA8;
+    font-style: italic;
+    margin-bottom: 15px;
+}
+@media (max-width: 760px) {
+    .custom_hc_widget_trigger {
+        display: block;
+        position: fixed;
+        right: -70px;
+        bottom: 50%;
+        z-index: 98;
+    }
+    .custom_hc_widget_trigger img {
+        -webkit-transform: rotate(-90deg) translate(-27px, -26px);
+        -moz-transform: rotate(-90deg) translate(-27px, -26px);
+        -ms-transform: rotate(-90deg) translate(-27px, -26px);
+        -o-transform: rotate(-90deg) translate(-27px, -26px);
+        transform: rotate(-90deg) translate(-27px, -26px);
+    }
+}
+@media (max-width: 759px) {
+    .custom_hc_widget_trigger {
+        display: none !important;
+    }
+}
+
 
