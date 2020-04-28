@@ -650,19 +650,4 @@ footer .search-box-col .newsletter-lbl, .white-check .label-span, .grey-check .l
         display: none !important;
     }
 }
-.top-bar-section ul.login-menu {
-	column-count: 2 !important;
-	column-gap: 0 !important;
-}
-.top-bar-section li:not(.has-form) a:not(.button) {
-    font-size: 12px;
-    font-weight: 600 !important;
-}
-.top-bar-section .accordion dd > a, .top-bar-section .accordion dd > a:hover, .top-bar-section .accordion dd.active > a {
-    font-size: 12px;
-    font-weight: 600 !important;
-}
-.top-bar-section li:not(.has-form).place-item-btn a {
-	font-size: 18px  !important;
-}
 
