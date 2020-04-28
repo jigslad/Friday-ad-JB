@@ -1,7 +1,7 @@
 {% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
 <div class="modal-dialog"><div class="modal-content">
 	<div class="modal-header">
-		<h5 class="modal-title save-search-title">
+		<h5 class="modal-title no-icon-title">
 			{% if userAddressBook.getId() %}
                 {{'Edit an address'|trans({}, 'frontend-user-address-book')}}
             {% else %}
@@ -16,9 +16,13 @@
         {{ form_row(form.street_address) }}
         <div class="payment-row">
             {{ form_label(form.zip) }}
-            <div class="postcode clearfix">
-                {{ form_widget(form.zip) }}
-                <button type="button" class="button secondary-btn-1 right" onclick="return getUserAddress();">{{'Find address'|trans({},'frontend-cyber-source')}}</button>
+            <div class="postcode row">
+                <div class="col-md-15">
+                    {{ form_widget(form.zip) }}
+                </div>
+                <div class="col-md-9 pull-right">
+                    <button type="button" class="btn secondary-btn-1 right" onclick="return getUserAddress();">{{'Find address'|trans({},'frontend-cyber-source')}}</button>
+                </div>
             </div>
             <small id="zip_error_div" class="error" style="display:none"></small>
             <span id="form_zip_error">{{ form_errors(form.zip) }}</span>
@@ -26,7 +30,7 @@
         {{ form_row(form.street_address_2) }}
         {{ form_row(form.town) }}
         {{ form_row(form.county) }}
-        {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 button expand mb0'}}) }}
+        {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 btn-block text-center mb0'}}) }}
     {{ form_end(form) }}
 </div>
 </div></div>
@@ -41,6 +45,7 @@
         $('#zip_error_div').hide()
     });
     $("#user_address_id").submit(function(event) {
+        blockPage();
         blockElement('#addressBookModal');
         // Stop form from submitting normally
         event.preventDefault();

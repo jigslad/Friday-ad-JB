@@ -646,7 +646,7 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
       color: $form-text-color;
       line-height: 19px;
       border-radius: 0px;
-      width: 365px;
+      width: 100%;
       margin: 0 auto;
     }
     .modal-header {
