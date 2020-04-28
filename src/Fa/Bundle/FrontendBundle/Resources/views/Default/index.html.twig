@@ -106,7 +106,7 @@
     </div>
 
     {% if recommendedAds|length >= 3 %}
-    <div class="homepage-row white-bg">
+    <div class="homepage-row ">
         <div class="container">
             <div class="row">
                 <div class="col-md-24">
@@ -161,7 +161,7 @@
     {# {% cache 'home|page|'~locationId~'front/home_page_popular_shops' 120 %} #}
             {% set popularShops = adForSaleRepository.getPopularShops(container, popularShopsSearchParams) %}
             {% if popularShops is defined and popularShops|length %}
-                <div class="homepage-row  white-bg">
+                <div class="homepage-row  ">
             	<div class="container">
                 <div class="row">
                     <div class="col-md-24">
@@ -240,7 +240,7 @@
     {% endif %}
 
     {% if facebookLoginUrl is not null %}
-    <div class="homepage-row white-bg">
+    <div class="homepage-row">
         <div class="container">
             <div class="row">
                 <div class="col-md-24">

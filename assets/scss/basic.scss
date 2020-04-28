@@ -198,7 +198,7 @@ input.checkbox {
 	clip: rect(0 0 0 0);
 }
 .grey-radio .checkbox, .white-radio .checkbox { background:transparent !important; border:none !important; }
-.grey-radio, .white-radio, .grey-check, .white-check { font-size:13px !important; color: #a4a4a4 !important; margin-bottom:5px !important;margin-right:5px !important;  }
+.grey-radio, .white-radio, .grey-check, .white-check { font-size:13px !important; color: #a4a4a4 !important; margin-bottom:5px !important;margin-right:5px !important; display: inline-flex !important; }
 .grey-check span, .white-check span { display: inline-flex !important; }
 .grey-radio span, .white-radio span { display: block !important; }
 

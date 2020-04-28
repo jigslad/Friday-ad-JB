@@ -399,14 +399,22 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
     left: 0;
     width: 100%;
     background: $dark-gray;
-    border-top: 1px solid $dark-gray;
+    border-top: 1px solid $black;
     color: $white;
     display: none;
-    z-index: 999;
+    z-index: 1005;
 }
 .cookie-wrapper {
     min-height: 60px;
     margin: 0 auto;
+}
+.cookie-col {
+  display: inline-flex;
+  padding: 15px 15px 5px;
+}
+.btn-cookie {
+  width: 155px;
+  display: inline-block;
 }
 .cookie-content {
     width: calc(100%);
@@ -419,6 +427,19 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
 .cookie_notification_bar .cookie-btn {
     margin: 9px 0 0 0;
     float: right;
+}
+@media only screen and (min-width: 320px) and (max-width: 640px) {
+  .cookie-col {
+    display: inline-block;
+    padding: 15px 15px;
+    text-align: center;
+  }
+  .btn-cookie {
+    width: 100%;
+  }
+  .cookie-content {
+    margin-bottom: 15px;
+  }
 }
 
 
@@ -646,7 +667,7 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
       color: $form-text-color;
       line-height: 19px;
       border-radius: 0px;
-      width: 385px;
+      width: 100%;
       margin: 0 auto;
     }
     .modal-header {
@@ -1361,6 +1382,9 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
 	letter-spacing: 0;
 	line-height: 20px;
 	padding: 0 10px;
+}
+@media (max-width: 640px) {
+  .button.special { padding: 17px 6px 22px 6px !important;  }
 }
 
 //Icons

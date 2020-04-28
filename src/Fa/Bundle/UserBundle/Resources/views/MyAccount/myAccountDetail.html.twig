@@ -15,7 +15,7 @@
             {{ include('FaUserBundle:MyAccount:myAccountMessage.html.twig', {'msgName': 'account_detail_success'}) }}
             <h5 class="db-myacc-title">{{ 'Update your contact details'|trans({}, 'frontend-user-account-detail') }}</h5>
             <span class="db-ins">{{ '(not publicly displayed)'|trans({}, 'frontend-user-account-detail') }}</span>
-            <div class="col-md-14 col-lg-9 pad-none mt20">
+            <div class="col-md-15 col-lg-10 pad-none mt20">
                 <div>
                     {{ form_row(userDetailForm.email, {'attr': {'class': 'white-field'}}) }}
                 </div>
@@ -45,14 +45,18 @@
                 <div class="buyer-contact mt20">
                      <label>{{'I would like buyers to contact me by:'|trans({}, 'frontend-paa-register')}}</label>
                      <div class="label-inline d-inline-flex">
-                         <ul class="custom-control custom-checkbox search-type mr10">
-                             <li>
-                                 {{ form_row(userDetailForm.contact_through_phone,{'attr':{'class': 'custom-control-input'},'label_attr': {'class': 'custom-control-label'} }) }}
+                         <ul class="search-type mr10">
+                             <li class="white-check">
+                                 {{ form_widget(userDetailForm.contact_through_phone,{'attr':{'class': 'checkbox'} }) }}
+                                 <label for="{{ userDetailForm.contact_through_phone.vars.id }}"></label>
+                                 {{ userDetailForm.contact_through_phone.vars.label }}
                              </li>
                          </ul>
-                         <ul class="custom-control custom-checkbox search-type">
-                             <li>
-                                 {{ form_row(userDetailForm.contact_through_email,{'attr':{'class': 'custom-control-input'},'label_attr': {'class': 'custom-control-label'} }) }}
+                         <ul class="search-type">
+                             <li class="white-check">
+                                 {{ form_widget(userDetailForm.contact_through_email,{'attr':{'class': 'checkbox'} }) }}
+                                 <label for="{{ userDetailForm.contact_through_email.vars.id }}"></label>
+                                 {{ userDetailForm.contact_through_email.vars.label }}
                              </li>
                          </ul>
                      </div>
@@ -63,7 +67,7 @@
                     <h5 class="db-myacc-title">{{ 'Change password'|trans({}, 'frontend-user-account-detail') }}</h5>
                 </div>
             {% endif %}
-            <div class="col-md-14 col-lg-9 pad-none mt20">
+            <div class="col-md-15 col-lg-10 pad-none mt20">
             <div class="myacc-details white-checkbox">
                 {% if userDetailForm.old_password is defined %}
                     {{ form_row(userDetailForm.old_password, {'attr': {'class': 'white-field'}}) }}

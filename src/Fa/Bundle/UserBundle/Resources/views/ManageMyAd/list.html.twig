@@ -276,7 +276,8 @@
                                             {% endfor %}
                                             {% else %}
                                                 <div class="row">
-                                                    <div class="columns">
+                                                    <div class="col">
+                                                        <br>
                                                         {% if app.request.attributes.get('type') == 'inactive' %}
                                                             {{ 'You currently have no inactive adverts.'|trans({}, 'frontend-manage-my-ad') }}
                                                         {% else %}

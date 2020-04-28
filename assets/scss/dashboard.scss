@@ -2587,3 +2587,33 @@
     padding: 40px 15px;
     background: #fff;
 }
+
+/* move this class to media where its desktop */
+.myacc-address-box{
+    height: 100%;
+}
+
+
+.myacc-address-box p{
+    margin: 15px 0px;
+}
+.myacc-address-box .xs-btn-2 {
+    margin: 0;
+    padding: 5px 10px;
+    text-align: center;
+    width: 96px;
+}
+.myacc-address-box .xs-btn-2:first-of-type {
+    margin: 0 11px 0 0;
+}
+
+@media only screen and (min-width: 960px) {
+    .address-btn{
+        min-height: 200px;
+        padding: 80px 20px 0;
+        margin: 18px 0 0 0;
+    }
+    .myacc-address-box p{
+        min-height: 100px;
+    }
+}

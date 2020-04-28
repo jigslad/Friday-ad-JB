@@ -12,11 +12,7 @@
     </a>
     <div id="panel6b" class="collapse collapse-body-content">
         <div>{{ 'Manage your saved addresses'|trans({}, 'frontend-user-address-book') }}</div>
-
-
-        <div class="col-md-14 col-lg-9 pad-none mt20">
-            {{ include('FaUserBundle:MyAccount:listAddress.html.twig') }}
-        </div>
+        {{ include('FaUserBundle:MyAccount:listAddress.html.twig') }}
         <div id="addressBookDeleteModal" class="modal custom-modal">
             <div class="modal-dialog">
                 <div class="modal-content">
