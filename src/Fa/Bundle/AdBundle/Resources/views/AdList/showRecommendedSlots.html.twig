@@ -5,8 +5,7 @@
 <div style="cursor:pointer" onclick="gaSendForRecommendedSlotSearch('{{ recommendedSlotResult[slotIndex]['url'] }}', '{{ only_domains }}','{{ recommendedSlotResult[slotIndex]['title'] }}','{{ slotIndex }}','{{ recommendedSlotResult[slotIndex]['creative_ord'] }}');">    
     <div class="recommended-div media listing featured  ">
         <div class="media-left align-self-center">
-           {% set imagePath = container.getParameter('fa.static.asset.url')~'/uploads/category_recommended_slots/'~recommendedSlotResult[slotIndex]['slot_filename'] %}
-
+            {% set imagePath = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getOtherImageUrl', [container, 'category_recommended_slots', recommendedSlotResult[slotIndex]['slot_filename']]) %}
             {% if imagePath %}
                 <div class="list-img list-placeholder"><img data-original="{{ imagePath }}" alt="{{ recommendedSlotResult[slotIndex]['title'] }}" class="lazy" src="{{ asset_url('facore/images/ajax_loader.gif') }}" /></div>
             {% else %}

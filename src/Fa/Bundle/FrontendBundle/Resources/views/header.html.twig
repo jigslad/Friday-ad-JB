@@ -81,10 +81,10 @@
             </div>
         </div>
 	</div>
-    </div>
     {# FFR-4031 starts Here #}
    {% set isSetCovidSession =0 %}
    {% set showCovidBanner = 1 %}
+   {% set assignedCategoryId = 0 %}
    {% if app.request.cookies.has('is_over_18') %}
         {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null  %}
         	{% set assignedCategoryId = searchParams.item__category_id %}
@@ -116,11 +116,11 @@
    		{% set isSetCovidSession = container.get('session').get('CovidSession') %}
    {% endif %}
    {% if isSetCovidSession==0 and showCovidBanner==1 and currentRoute not in {0: 'fa_frontend_homepage', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote' } %}
-   <div class="covid-19-block top-border hide-for-small-only">
-        <div class="row">
-            <div class="columns text-center">
-                <div class="medium-17 large-18 columns align-text"><div class="head">Covid-19. <span class="ask-for-offer-help">Ask for & Offer Help in our <a href="https://www.friday-ad.co.uk/uk/community/coronavirus-support/" class="ga-covid-19-support-link-all-pages">Coronavirus Support section</a></span></div></div>
-                <div class="medium-7 large-6 columns mt-space"><a href="https://www.friday-ad.co.uk/paa/first_step?categoryName=Coronavirus%20Support" class="button place-free-ad-btn thin-btn ga-covid-19-paa-link-all-pages">Place Help Ad</a><span class="cross-btn align-text" onclick="setCovidSession()"></span></div>
+   <div class="covid-19-block top-border d-none d-md-block">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-sm-24 col-md-17 col-lg-18 align-text"><div class="head">Covid-19. <span class="ask-for-offer-help">Ask for & Offer Help in our <a href="https://www.friday-ad.co.uk/uk/community/coronavirus-support/" class="ga-covid-19-support-link-all-pages">Coronavirus Support section</a></span></div></div>
+                <div class="col-sm-24 col-md-7 col-lg-6 mt-space"><a href="https://www.friday-ad.co.uk/paa/first_step?categoryName=Coronavirus%20Support" class="button place-free-ad-btn thin-btn ga-covid-19-paa-link-all-pages">Place Help Ad</a><span class="cross-btn align-text" onclick="setCovidSession()"></span></div>
             </div>
         </div>
     </div>
@@ -191,13 +191,13 @@
    </div>
         <div class="dropdown-bg"></div>
     </div>
-</div>
+
    {% if isSetCovidSession==0 and showCovidBanner==1 and currentRoute not in {0: 'fa_frontend_homepage', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote' } %}
-   <div class="covid-19-block top-border show-for-small-only">
-        <div class="row">
-            <div class="columns text-left">
-                <div class="medium-17 large-18 columns align-left"><div class="head">Covid-19. <span class="ask-for-offer-help">Ask for & Offer Help in our <a href="https://www.friday-ad.co.uk/uk/community/coronavirus-support/" class="ga-covid-19-support-link-all-pages">Coronavirus Support section</a></span><span class="cross-btn align-text" onclick="setCovidSession()"></span></div></div>
-                <div class="medium-7 large-6 columns mt-space"><a href="https://www.friday-ad.co.uk/paa/first_step?categoryName=Coronavirus%20Support" class="button place-free-ad-btn thin-btn ga-covid-19-paa-link-all-pages">Place Help Ad</a></div>
+   <div class="covid-19-block top-border d-block d-md-none">
+        <div class="container">
+            <div class="row text-left">
+                <div class="col-sm-24 col-md-17 col-lg-18 align-left"><div class="head">Covid-19. <span class="ask-for-offer-help">Ask for & Offer Help in our <a href="https://www.friday-ad.co.uk/uk/community/coronavirus-support/" class="ga-covid-19-support-link-all-pages">Coronavirus Support section</a></span><span class="cross-btn align-text" onclick="setCovidSession()"></span></div></div>
+                <div class="col-sm-24 col-md-7 col-lg-6 mt-space"><a href="https://www.friday-ad.co.uk/paa/first_step?categoryName=Coronavirus%20Support" class="button place-free-ad-btn thin-btn ga-covid-19-paa-link-all-pages">Place Help Ad</a></div>
             </div>
         </div>
     </div>
