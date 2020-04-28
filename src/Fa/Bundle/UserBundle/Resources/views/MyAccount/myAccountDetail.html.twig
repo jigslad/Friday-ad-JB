@@ -15,7 +15,7 @@
             {{ include('FaUserBundle:MyAccount:myAccountMessage.html.twig', {'msgName': 'account_detail_success'}) }}
             <h5 class="db-myacc-title">{{ 'Update your contact details'|trans({}, 'frontend-user-account-detail') }}</h5>
             <span class="db-ins">{{ '(not publicly displayed)'|trans({}, 'frontend-user-account-detail') }}</span>
-            <div class="col-md-14 col-lg-9 pad-none mt20">
+            <div class="col-md-15 col-lg-10 pad-none mt20">
                 <div>
                     {{ form_row(userDetailForm.email, {'attr': {'class': 'white-field'}}) }}
                 </div>
@@ -63,7 +63,7 @@
                     <h5 class="db-myacc-title">{{ 'Change password'|trans({}, 'frontend-user-account-detail') }}</h5>
                 </div>
             {% endif %}
-            <div class="col-md-14 col-lg-9 pad-none mt20">
+            <div class="col-md-15 col-lg-10 pad-none mt20">
             <div class="myacc-details white-checkbox">
                 {% if userDetailForm.old_password is defined %}
                     {{ form_row(userDetailForm.old_password, {'attr': {'class': 'white-field'}}) }}

@@ -1362,6 +1362,9 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
 	line-height: 20px;
 	padding: 0 10px;
 }
+@media (max-width: 640px) {
+  .button.special { padding: 17px 6px 22px 6px !important;  }
+}
 
 //Icons
 .payment-cards {
