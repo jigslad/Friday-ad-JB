@@ -46,6 +46,7 @@
 		padding: 50px 0 25px 40px !important;
 	}
 }
+
 @media (min-width: 320px) and (max-width: 759px) {
     .login-left, .login-right {
         padding: 15px;
@@ -81,5 +82,5 @@
 }
     
 .login-register-block .signup-fb-btn, .login-register-block .signup-google-btn {
-    width: 100%;
+    /* width: 100%; */
 }

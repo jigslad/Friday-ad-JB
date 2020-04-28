@@ -23,8 +23,8 @@
             {% endif %}
             {% set gaEventLabel = businessUserDetail['user_name'] ~ ' - Business ad' %}            
                 <div class="list-featured-bz item" data-equalizer-watch>
-                    <div class="row">
-                        <div class="col-sm-24 col-md-5 col-lg-5  bus-det-box">
+                    <div class="row" style="margin:0px !important;">                    	
+                        <div class="col-sm-24 col-md-6 bus-det-box">
                             {% if businessUserDetail['business_category_id'] == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
                                 <div class="fad-shop-icon">AD SHOP</div>
                             {% endif %}
@@ -41,10 +41,9 @@
                               {{ include('FaCoreBundle::showStarRating.html.twig', {'rating': businessUserDetail['user_rating']}) }}
                             {% endif %}
                             </div>                           
-                            <a href="{{ userProfileUrl }}" onClick='visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");' class="button expand secondary-btn-1 mb0">{{ profileLabel }}</a>
+                            <a href="{{ userProfileUrl }}" onClick='visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");' class="button btn-block text-center secondary-btn-1 mb0">{{ profileLabel }}</a>
                         </div>
-                        <div class="col-md-18 d-none d-md-block"> 
-                            <div>
+                        <div class="col-md-18 d-none d-md-block busad-item-block"> 
                                 {% set adBusPosition = 1 %}
                                 {% set break = false %}
                                 {% for businessExposureUserAd in businessExposureUserAds if not break %}
@@ -60,6 +59,7 @@
                                     {% if seoRule['image_alt'] is defined %}
                                         {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], businessExposureUserAd]) %}
                                     {% endif %}
+                                                                       
                                     <div class="busad-item">
                                         {% set gaEventLabel = businessUserDetail['user_name'] ~ ' - ' ~ adBusPosition %}
                                        
@@ -90,7 +90,6 @@
                                     </div>
                                     {% set adBusPosition = adBusPosition + 1 %}
                                 {% endfor %}
-                            </div>
                         </div>
                     </div>
                  </div>               

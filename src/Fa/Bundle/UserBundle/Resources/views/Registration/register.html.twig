@@ -90,7 +90,7 @@
                     {{ form_label(form.phone) }}
                     {{ form_widget(form.phone, {'attr': {'class': 'form-control white-field'}}) }}
                 </div>
-                <div class="mb05">
+                <div class="mb10">
                     <label>{{'I would like buyers to contact me by:'|trans({}, 'frontend-paa-register')}}</label>
                     <div class="label-inline d-inline-flex">
                         <div class="white-check">
@@ -104,7 +104,7 @@
                     </div>
                 </div>
 
-                <div class="mb05">
+                <div class="mb10">
                 	<label>Account status</label>
                     {{ form_widget(form.user_roles, {'attr': {'class': 'white-radio radio-circle-btn'}}) }}                 
                 </div>
@@ -142,15 +142,18 @@
                     <div class="label-inline mt10">
                         <div class="white-check mb10">
                         	{{ form_widget(form.is_email_alert_enabled, {'attr': {'class': 'checkbox'}}) }}
-                        	<label class="mb0" for="{{ form.is_email_alert_enabled.vars.id }}"></label>I'd like to receive news, offers and promotions by email from Friday-Ad                                                        
+                        	<label class="mb0" for="{{ form.is_email_alert_enabled.vars.id }}"></label>
+                        	<span class="label-span">I'd like to receive news, offers and promotions by email from Friday-Ad </span>                                                       
                         </div> 
                         <div class="white-check mb10">    
                         	{{ form_widget(form.is_third_party_email_alert_enabled, {'attr': {'class': 'checkbox'}}) }}
-                        	<label class="mb0" for="{{ form.is_third_party_email_alert_enabled.vars.id }}"></label>I'd like to receive offers and promotions by email on behalf of carefully chosen partners                                                        
+                        	<label class="mb0" for="{{ form.is_third_party_email_alert_enabled.vars.id }}"></label>
+                        	<span class="label-span">I'd like to receive offers and promotions by email on behalf of carefully chosen partners</span>                                                        
                         </div> 
                         <div class="white-check mb10">
                            {{ form_widget(form.is_terms_agreed, {'attr': {'class': 'checkbox'}}) }}
-                           <label class="mb0" for="{{ form.is_terms_agreed.vars.id }}"></label>I have read and agree to the <a href="/terms-and-conditions/" target="_blank">terms and conditions</a>                            
+                           <label class="mb0" for="{{ form.is_terms_agreed.vars.id }}"></label>
+                           <span class="label-span">I have read and agree to the <a href="/terms-and-conditions/" target="_blank">terms and conditions</a></span>                            
                         </div> 
                     </div>
                 </div>
@@ -165,16 +168,19 @@
             
             <div class="col-md-11 col-lg-8 login-right">
                 <div class="mobile-block-reg">
-                    <div>
-                        <button type="reset" class="signup-fb-btn button expand" onclick="javascript:fbLoginPopup('{{ facebookLoginUrl }}');">
-                            <span class="signup-fb-icon">&nbsp;</span>{{ 'Sign Up with Facebook'|trans({}, 'frontend') }}
-                        </button>
+                	<div class="text-center mb20">
+                        <a href="javascript:fbLoginPopup('{{ facebookLoginUrl }}');" class="button special signup-fb-btn">
+                            <span class="fb-icon"></span> 
+                            <span class="btn-text">{{ 'Sign Up with Facebook'|trans({}, 'frontend') }}</span>
+                        </a>
                     </div>
-                    <div>
-                        <button type="reset" class="signup-google-btn button expand" onclick="javascript:googleLoginPopup('{{ googleLoginUrl }}');">
-                            <span class="signup-google-icon">&nbsp;</span>{{ 'Sign Up with Google'|trans({}, 'frontend') }}
-                        </button>
+                    <div class="text-center mb20">
+                        <a href="javascript:googleLoginPopup('{{ googleLoginUrl }}');" class="button special signup-google-btn">
+                            <span class="google-icon"></span> 
+                            <span class="btn-text">{{ 'Sign Up with Google'|trans({}, 'frontend') }}</span>
+                        </a>
                     </div>
+
                     <span class="signup-ins">
                         {{'We won\'t post anything <b>without your permission.</b>'|trans({}, 'frontend-login')|raw}}{{ include('FaAdBundle:AdPost:paaToolTipHelp.html.twig', {'paaBlockSlug': 'registration-login-help'}) }}</b>            
                     </span>

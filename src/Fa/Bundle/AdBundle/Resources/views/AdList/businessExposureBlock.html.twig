@@ -1,19 +1,9 @@
-<style>
-.exposure-block .list-featured-bz {padding:0 !important}
-.exposure-block .list-featured-bz .columns {padding:0 !important}
-#bus-shop-user-item-slider .owl-item .item{width:164px;border:0;padding:0;margin:auto}
-#bus-shop-user-item-slider .list-img{width:164px;height:123px;padding-top:10px; }
-#bus-shop-user-item-slider .list-img img{max-width:164px;max-height:123px}
-#bus-shop-user-item-slider h3{float:none;font-family:'Fira Sans',sans-serif;font-size:14px;font-weight:700;height:80px;text-align:center;padding-bottom:10px;}
-#bus-shop-user-item-slider .owl-prev,#bus-shop-user-item-slider .owl-next{height:207px;opacity:.5}
-</style>
 {% if businessExposureUsersDetails is defined and businessExposureUsersDetails|length %}
-    <div class="exposure-block">
-        <div class="gray-text text-right">{{'Featured business'|trans({}, 'frontend-profile-exposure')}}</div>
-     	<div class="list-featured-bz">
-     		<div class="row">
-     			<div class="large-24 columns">
-                	<div class="owl-carousel fa-slider" id="bus-shop-user-item-slider" data-equalizer>
+<div class="businessExposureCarousel">
+	<div class="row">
+	    <div class="col-md-24 col-lg-24">      
+		<div class="gray-text text-right">{{'Featured business'|trans({}, 'frontend-profile-exposure')}}</div>
+                	<div class="owl-carousel fa-slider bus-shop-user-item-slider" id="bus-shop-user-item-slider" data-equalizer>
                         {% set profilePosition = 1 %}
                         {% for businessExposureUsersDetail in businessExposureUsersDetails %}
                             {% set userProfileUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(businessExposureUsersDetail['user_id']) %}                               
@@ -21,24 +11,27 @@
                             {% set gaEventAction    = 'Featured Business Ad - ' ~ rootCategoryName %}
                             {% set gaEventLabel     = businessExposureUsersDetail['user_name'] ~ ' - ' ~ profilePosition %}
                             {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [container, businessExposureUsersDetail['company_logo'], businessExposureUsersDetail['user_id'], null, null, true, true, businessExposureUsersDetail['status_id'], businessExposureUsersDetail['user_name']]) %}
-                            <div class="item" data-equalizer-watch>
-                            	<a href="{{ userProfileUrl }}" onClick='visitUserProfileOrAd("Click Ad position", "{{ gaEventAction }}", "{{ gaEventLabel }}");' class="tricky-link">{{ businessExposureUsersDetail['user_name']|raw }}</a>                            
-                                <div class="list-img {% if not userCompanyLogo %}similar-placeholder{% endif %}">
-                                    {{ userCompanyLogo|raw }}
-                                </div>
-                                <h3>
-                                    {% if businessExposureUsersDetail['company_welcome_message'] is defined and businessExposureUsersDetail['company_welcome_message']|length > 0 %}
-                                        {{trim_text(businessExposureUsersDetail['company_welcome_message']|striptags, 45)|raw}}
-                                    {% elseif businessExposureUsersDetail['about_us'] is defined and businessExposureUsersDetail['about_us']|length > 0 %}
-                                        {{trim_text(businessExposureUsersDetail['about_us']|striptags, 45)|raw}}                                        
-                                    {% else %}
-                                        {{trim_text(businessExposureUsersDetail['user_name'])|raw}}
-                                    {% endif %}
-                                </h3>
-                            </div>                    
+                            <div class="list-featured-bz item" data-equalizer-watch>
+                            	<div class="row">                    	
+                        			<div class="col-sm-24 col-md-6 bus-det-box">
+                                    	<a href="{{ userProfileUrl }}" onClick='visitUserProfileOrAd("Click Ad position", "{{ gaEventAction }}", "{{ gaEventLabel }}");' class="tricky-link">{{ businessExposureUsersDetail['user_name']|raw }}</a>                            
+                                        <div class="list-img {% if not userCompanyLogo %}similar-placeholder{% endif %}">
+                                            {{ userCompanyLogo|raw }}
+                                        </div>
+                                        <h3>
+                                            {% if businessExposureUsersDetail['company_welcome_message'] is defined and businessExposureUsersDetail['company_welcome_message']|length > 0 %}
+                                                {{trim_text(businessExposureUsersDetail['company_welcome_message']|striptags, 45)|raw}}
+                                            {% elseif businessExposureUsersDetail['about_us'] is defined and businessExposureUsersDetail['about_us']|length > 0 %}
+                                                {{trim_text(businessExposureUsersDetail['about_us']|striptags, 45)|raw}}                                        
+                                            {% else %}
+                                                {{trim_text(businessExposureUsersDetail['user_name'])|raw}}
+                                            {% endif %}
+                                        </h3>
+                            		</div>  
+                            	</div>
+                             </div>                
                             {% set profilePosition = profilePosition + 1 %}
                         {% endfor %}
-                	</div>
                 </div>
             </div>
         </div>
