@@ -338,7 +338,12 @@ class AdImageRepository extends EntityRepository
             $document = $this->addField($document, AdSolrFieldMapping::ORD, $image->getOrd());
             $document = $this->addField($document, AdSolrFieldMapping::HASH, $image->getHash());
             $document = $this->addField($document, AdSolrFieldMapping::AWS, $image->getAws());
-            $document = $this->addField($document, AdSolrFieldMapping::IMAGE_NAME, $image->getImageName());
+            if($image->getImageName()=='') {
+                $document = $this->addField($document, AdSolrFieldMapping::IMAGE_NAME, $image->getHash());
+            } else {
+                $document = $this->addField($document, AdSolrFieldMapping::IMAGE_NAME, $image->getImageName());
+            }
+            
         }
 
         // Store total images counter.
@@ -705,7 +710,8 @@ class AdImageRepository extends EntityRepository
                 //create cope thumbnails
                 $adImageManager->createCropedThumbnail();
             }
-        }
+            $adImageManager->uploadImagesToS3($image);
+        }        
     }
 
     /**

@@ -213,6 +213,12 @@ class WightbayParser
                 $adImageManager = new AdImageManager($this->container, $ad->getId(), $hash, $imagePath);
                 $adImageManager->createThumbnail();
                 $adImageManager->createCropedThumbnail();
+                
+                $adImgPath = $imagePath.'/'.$ad->getId().'_'.$hash.'.jpg';
+                if (file_exists($adImgPath)) {
+                    $adImageManager->uploadImagesToS3($image);
+                    unlink($filePath);
+                } 
 
                 $i++;
             }

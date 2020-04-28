@@ -21,6 +21,7 @@ use Fa\Bundle\UserBundle\Repository\RoleRepository;
 use Fa\Bundle\PromotionBundle\Repository\PackageDiscountCodeRepository;
 use Symfony\Component\HttpFoundation\Response;
 use ZipArchive;
+use Aws\S3\S3Client;
 
 /**
  * This manager is used to handle common functionalities.
@@ -909,7 +910,6 @@ class CommonManager
                     if ($isCompany) {
                         $noImageName = 'user-no-logo.svg';
                     }
-
                     if (!$imageWidth && !$imageHeight) {
                         return '<img src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.'" alt="'.$userName.'" '.'class="pvt-no-img rounded-circle"'.' />';
                     } else {
@@ -917,11 +917,22 @@ class CommonManager
                     }
                 }
             } else {
-                $imagePath  = $container->get('kernel')->getRootDir().'/../web/'.$path.'/'.$userId.'.jpg';
+                $imagePath  = $container->get('kernel')->getRootDir().'/../web/'.$path.'/'.$userId.'.jpg';               
             }
         }
-
-        if (is_file($imagePath)) {
+ 
+        if(self::checkImageExistOnAws($container,$path.'/'.$userId.'.jpg')) {
+            if (($imageWidth==null && $imageHeight== null) || ($imageWidth =='' && $imageHeight=='') || ($imageWidth ==0 || $imageHeight==0)) {
+                $newImagePath = $container->getParameter('fa.static.aws.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null);
+            } else {
+                $newImagePath = $container->getParameter('fa.static.aws.url').'/'.$path.'/'.$userId.'_'.$imageWidth.'X'.$imageHeight.'.jpg'.($appendTime ? '?'.time() : null);
+            }
+            if ($isCompany) {
+                return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img src="'.$newImagePath.'" width="'.$imageWidth.'" height="'.$imageHeight.'" alt="'.$userName.'" />';
+            } else {
+                return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<span style="background-image: url('.$newImagePath.')" title="'.$userName.'"></span>';
+            }
+        } elseif (is_file($imagePath)) {
             if (($imageWidth==null && $imageHeight== null) || ($imageWidth =='' && $imageHeight=='') || ($imageWidth ==0 || $imageHeight==0)) {
                 if ($isCompany) {
                     return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img src="'.$container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).'" alt="'.$userName.'" />';
@@ -935,7 +946,7 @@ class CommonManager
                     } else {
                         $orgImagPath = $container->getParameter('fa.user.image.dir').'/'.CommonManager::getGroupDirNameById($userId, 5000);
                     }
-                    exec('convert '.$orgImagPath.DIRECTORY_SEPARATOR.$userId.'.jpg -resize '.$imageWidth.'X'.$imageHeight.' -background white -gravity center -extent '.$imageWidth.'X'.$imageHeight.' '.$orgImagPath.DIRECTORY_SEPARATOR.$userId.'_'.$imageWidth.'X'.$imageHeight.'.jpg');
+                    //exec('convert '.$orgImagPath.DIRECTORY_SEPARATOR.$userId.'.jpg -resize '.$imageWidth.'X'.$imageHeight.' -background white -gravity center -extent '.$imageWidth.'X'.$imageHeight.' '.$orgImagPath.DIRECTORY_SEPARATOR.$userId.'_'.$imageWidth.'X'.$imageHeight.'.jpg');
                 }
 
                 $newImagePath = $container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'_'.$imageWidth.'X'.$imageHeight.'.jpg'.($appendTime ? '?'.time() : null);
@@ -997,8 +1008,19 @@ class CommonManager
             $path = $container->getParameter('fa.user.image.dir').'/'.self::getGroupDirNameById($userId, 5000);
             $imagePath  = $container->get('kernel')->getRootDir().'/../web/'.'/'.$path.'/'.$userId.'.jpg';
         }
-
-        if (is_file($imagePath)) {
+        
+        if(self::checkImageExistOnAws($container, $path.'/'.$userId.'.jpg')) {
+            $newAwsImagePath = $container->getParameter('fa.static.aws.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null);
+            if ($getUrlOnly) {
+                return $newAwsImagePath;
+            } else {
+                if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
+                    return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img src="'.$newAwsImagePath.'" alt="'.$userName.'" />';
+                } else {
+                    return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<span style="background-image: url('.$newAwsImagePath.')" title="'.$userName.'"></span>';
+                }
+            }
+        } elseif (is_file($imagePath)) {
             if ($getUrlOnly) {
                 return $container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null);
             } else {
@@ -1325,7 +1347,7 @@ class CommonManager
     public static function getAdImageUrl($container, $adId, $imagePath, $imageHash, $size = null, $processed = 0, $image_name = null)
     {
         if ($processed == 1) {
-            if ($image_name != '') {
+            if ($image_name != '' && $image_name != $imageHash) {
                 $imageUrl = $container->getParameter('fa.static.aws.url').'/'.$imagePath.'/'.$image_name.($size ? '_'.$size : '').'.jpg?'.$imageHash;
             } else {
                 $imageUrl = $container->getParameter('fa.static.aws.url').'/'.$imagePath.'/'.$adId.'_'.$imageHash.($size ? '_'.$size : '').'.jpg';
@@ -1366,11 +1388,69 @@ class CommonManager
      */
     public static function getUserSiteImageUrl($container, $userSiteId, $imagePath, $imageHash, $size = null)
     {
-        $imageUrl = $container->getParameter('fa.static.shared.url').'/'.$imagePath.'/'.$userSiteId.'_'.$imageHash.($size ? '_'.$size : '').'.jpg';
-
+        if(self::checkImageExistOnAws($container, $imagePath.'/'.$userSiteId.'_'.$imageHash.($size ? '_'.$size : '').'.jpg')) {
+            $imageUrl = $container->getParameter('fa.static.aws.url').'/'.$imagePath.'/'.$userSiteId.'_'.$imageHash.($size ? '_'.$size : '').'.jpg';
+        } else {
+            $imageUrl = $container->getParameter('fa.static.shared.url').'/'.$imagePath.'/'.$userSiteId.'_'.$imageHash.($size ? '_'.$size : '').'.jpg';
+        }
         return $imageUrl;
     }
-
+    
+    /**
+     * Get user site image.
+     *
+     * @param object   $container  Container identifier.
+     * @param interger $userSiteId User site id.
+     * @param string   $imagePath  Ad image path.
+     * @param string   $imageHash  Ad image hash.
+     * @param string   $size       Ad image size.
+     *
+     * @return string
+     */
+    public static function getUserSiteBannerUrl($container, $userSiteId,$isOrg = null)
+    {
+        $imageBaseUrl = $container->getParameter('fa.static.shared.url');
+        $imageDir = self::getGroupDirNameById($userSiteId);
+        if($isOrg) {
+            $imageName = 'banner_'.$userSiteId.'_org.jpg';
+        } else {
+            $imageName = 'banner_'.$userSiteId.'.jpg';
+        }
+        
+        $newImageUrl = $container->getParameter('fa.user.site.image.dir').'/'.$imageDir.'/'.$imageName;
+        if(self::checkImageExistOnAws($container,$newImageUrl)) {
+            $imageBaseUrl = $container->getParameter('fa.static.aws.url');
+        }
+        
+        $imageUrl = $imageBaseUrl.'/'.$newImageUrl;
+        
+        return $imageUrl; 
+    }
+    
+    public static function getLandingImageUrl($container, $filename)
+    {
+        $imageBaseUrl = $container->getParameter('fa.static.shared.url');
+        $newImageUrl = $filename;
+        if(self::checkImageExistOnAws($container,$newImageUrl)) {
+            $imageBaseUrl = $container->getParameter('fa.static.aws.url');
+        }
+        
+        $imageUrl = $imageBaseUrl.'/'.$newImageUrl;
+        return $imageUrl;
+    }
+    
+    public static function getOtherImageUrl($container, $foldername, $filename)
+    {
+        $imageBaseUrl = $container->getParameter('fa.static.shared.url');
+        $newImageUrl = 'uploads/'.$foldername.'/'.$filename;
+        if(self::checkImageExistOnAws($container,$newImageUrl)) {
+            $imageBaseUrl = $container->getParameter('fa.static.aws.url');
+        }
+        
+        $imageUrl = $imageBaseUrl.'/'.$newImageUrl;
+        return $imageUrl;
+    }
+    
     /**
      * Format price with currency.
      *
@@ -1623,7 +1703,15 @@ class CommonManager
      */
     public static function getUserCompanyLogoUrl($container, $userId, $path, $size = null)
     {
-        return $container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.($size ? '_'.$size : '').'.jpg';
+        $imageBaseUrl = $container->getParameter('fa.static.shared.url');
+        $newImageUrl = $path.'/'.$userId.($size ? '_'.$size : '').'.jpg';
+        if(self::checkImageExistOnAws($container,$newImageUrl)) {
+            $imageBaseUrl = $container->getParameter('fa.static.aws.url');
+        }
+        
+        $imageUrl = $imageBaseUrl.'/'.$newImageUrl;
+        return $imageUrl;
+        //return $container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.($size ? '_'.$size : '').'.jpg';
     }
 
     /**
@@ -1637,7 +1725,15 @@ class CommonManager
      */
     public static function getUserImageUrl($container, $userId, $path, $size = null)
     {
-        return $container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.($size ? '_'.$size : '').'.jpg';
+        $imageBaseUrl = $container->getParameter('fa.static.shared.url');
+        $newImageUrl = $path.'/'.$userId.($size ? '_'.$size : '').'.jpg';
+        if(self::checkImageExistOnAws($container,$newImageUrl)) {
+            $imageBaseUrl = $container->getParameter('fa.static.aws.url');
+        }
+        
+        $imageUrl = $imageBaseUrl.'/'.$newImageUrl;
+        return $imageUrl;
+        //return $container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.($size ? '_'.$size : '').'.jpg';
     }
 
     /**
@@ -1917,7 +2013,15 @@ class CommonManager
      */
     public static function getSharedImageUrl($container, $path, $imageName)
     {
-        return $container->getParameter('fa.static.shared.url').'/'.$path.'/'.$imageName;
+        $imageBaseUrl = $container->getParameter('fa.static.shared.url');
+        $newImageUrl = $path.'/'.$imageName;
+        if(self::checkImageExistOnAws($container,$newImageUrl)) {
+            $imageBaseUrl = $container->getParameter('fa.static.aws.url');
+        }
+        
+        $imageUrl = $imageBaseUrl.'/'.$newImageUrl;
+        return $imageUrl;
+        //return $container->getParameter('fa.static.shared.url').'/'.$path.'/'.$imageName;
     }
 
     /**
@@ -3268,7 +3372,7 @@ HTML;
     {
         //if(file_exists($path)) { return true; }
         //else { return false; }
-        $file_headers = @get_headers($url);
+        $file_headers = @get_headers($path);
         if ($file_headers[0] == 'HTTP/1.0 404 Not Found') { // or "HTTP/1.1 404 Not Found" etc.
             $file_exists = false;
         } else {
@@ -3296,7 +3400,7 @@ HTML;
         }
         return $closest;
     }
-
+ 
     /**
      * Check if a given substring exists in the given string - Case sensitive.
      *
@@ -3313,5 +3417,71 @@ HTML;
         }
 
         return !is_bool(strpos($haystack, $needle));
+    }
+    
+    public static function checkImageExistOnAws($container, $imageUrl)
+    {
+        $client = new S3Client([
+            'version'     => 'latest',
+            'region'      => $container->getParameter('fa.aws_region'),
+            'credentials' => [
+                'key'    => $container->getParameter('fa.aws_key'),
+                'secret' => $container->getParameter('fa.aws_secret'),
+            ],
+        ]);
+        $response = $client->doesObjectExist($container->getParameter('fa.aws_bucket'), $imageUrl);
+        return $response;
+    }
+    
+    public function does_url_exists($url) {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_NOBODY, true);
+        curl_exec($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        
+        if ($code == 200) {
+            $status = true;
+        } else {
+            $status = false;
+        }
+        curl_close($ch);
+        return $status;
+    }
+    
+    public static function path_exists($container, $path) {
+        $file_exists = false;
+        
+        if($path) {
+            $explodePath = explode('uploads',$path);            
+            if(strpos($explodePath[0], $container->getParameter('fa.static.aws.path') !== false)) {
+                $newPath = 'uploads/'.$explodePath[1];
+                $awsPathExists = self::checkImageExistOnAws($newPath);
+                if($awsPathExists) { $file_exists = true; }
+            } else {
+                $localPathExists = self::checkFileExists($path);
+                if($localPathExists) { $file_exists = true; }
+            }
+        }
+        return $file_exists;
+    }
+    
+    /**
+     * @param integer $adId
+     * @param string  $imagePath
+     * @param string  $imageHash
+     * @param string  $size
+     * @param string  $image_name
+     * @return string
+     * @author Akash M. Pai <akash.pai@fridaymediagroup.com>
+     */
+    public static function getImageRelativePath($adId, $imagePath, $imageHash, $size = null, $image_name = null)
+    {
+        $imgRelPath = "";
+        if ($image_name != '') {
+            $imgRelPath = $imagePath . '/' . $image_name . ($size ? '_' . $size : '') . '.jpg?' . $imageHash;
+        } else {
+            $imgRelPath = $imagePath . '/' . $adId . '_' . $imageHash . ($size ? '_' . $size : '') . '.jpg';
+        }
+        return $imgRelPath;
     }
 }
