@@ -188,9 +188,8 @@
    {% if status_code == 200 and currentRoute is defined and currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'listing_page', 3: 'landing_page_category_location', 4: 'landing_page_category'}  and not app.request.attributes.get('static_page') %}
         </div>
     {% endif %}
-   </div>
-        <div class="dropdown-bg"></div>
-    </div>
+
+  <div class="dropdown-bg"></div>
 
    {% if isSetCovidSession==0 and showCovidBanner==1 and currentRoute not in {0: 'fa_frontend_homepage', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote' } %}
    <div class="covid-19-block top-border d-block d-md-none">
