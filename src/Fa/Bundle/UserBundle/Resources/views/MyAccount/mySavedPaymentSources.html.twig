@@ -30,7 +30,7 @@
         <div id="card_detail" style="display: none">
             <h2 class="s-h2">{{'Enter new card'|trans({}, 'frontend-payment-sources')}}:</h2>
             {{ form_start(userCardForm, {'attr': {'novalidate': '', 'id': 'user_card_form'}}) }}
-                <div class="col-md-16 col-lg-10 mx-auto">
+                <div class="col-md-16 col-lg-11 mx-auto">
                     <div class="small-wrapper">
                         <div class="paa-bdr-box bdr-none mt20">
                             <h3 class="s-h3 text-center mb20">{{'Billing details'|trans({},'frontend-cyber-source')}}</h3>
@@ -39,9 +39,13 @@
                             </div>
                             <div class="payment-row">
                                 {{ form_label(userCardForm.zip) }}
-                                <div class="postcode clearfix">
-                                    {{ form_widget(userCardForm.zip, {'attr': {'class': 'white-field'}}) }}
-                                    <button type="button" class="btn secondary-btn-1 right" onclick="return getUserCardAddress();">{{'Find address'|trans({},'frontend-cyber-source')}}</button>
+                                <div class="postcode row">
+                                    <div class="col-md-12 ">
+                                        {{ form_widget(userCardForm.zip, {'attr': {'class': 'white-field'}}) }}
+                                    </div>
+                                    <div class="col-md-12 pad-none">
+                                        <button type="button" class="btn secondary-btn-1 right" onclick="return getUserCardAddress();">{{'Find address'|trans({},'frontend-cyber-source')}}</button>
+                                    </div>
                                 </div>
                                 <small id="card_zip_error_div" class="error" style="display:none"></small>
                                 <span id="form_zip_error">{{ form_errors(userCardForm.zip) }}</span>
