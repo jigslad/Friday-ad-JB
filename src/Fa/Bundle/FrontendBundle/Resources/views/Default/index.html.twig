@@ -215,9 +215,12 @@
     {% if facebookLoginUrl is not null %}
         <div class="homepage-row">
             <h3 class="homepage-title-small">{{'Find out what your friends are selling'|trans({}, 'frontend-homepage')}}</h3>
-            <div class="small-wrapper">
-                <button class="signup-fb-btn button expand mb0" onclick="javascript:fbLoginPopup('{{ facebookLoginUrl }}');"><span class="signup-fb-icon">&nbsp;</span>{{'Sign In with Facebook'|trans({}, 'frontend-homepage')}}</button>
-            </div>
+            <div class="text-center small-wrapper m-auto pad-none">
+                <a href="javascript:fbLoginPopup('{{ facebookLoginUrl }}');" class="button special signup-fb-btn">
+                    <span class="fb-icon"></span> 
+                    <span class="btn-text">{{ 'Sign In with Facebook'|trans({}, 'frontend-homepage')}}</span>
+                </a>
+            </div>    
         </div>
     {% endif %}
     
