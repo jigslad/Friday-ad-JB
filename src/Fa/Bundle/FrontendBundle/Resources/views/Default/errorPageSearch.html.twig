@@ -1,6 +1,34 @@
 {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'fa_top_search'}}) }}
     {{ form_errors(form) }}
-        <div id="home-search" class="large-14 columns">
+    	<div id="home-search" class="col-sm-18 col-md-18 col-lg-14 home-search m-auto">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend home-category-list">
+                               {{ form_widget(attribute(form, 'item__category_id'), {'attr': {'class':'find-all select-ctrl' }}) }}
+                            </div>
+                            {{ form_widget(form.keywords, {'attr': {'class': 'white-field form-control', 'placeholder':'Looking for...'|trans({}, 'frontend-homepage') }}) }}
+                            <div style="position: relative;"><a href="javascript:void(0);" rel="nofollow" id="fa_top_search_keywords_close" class="ui-autocomplete-close select2-search-choice-close">Close</a></div>
+                            <div class="input-group-append">
+                            	<button class="input-group-text search-btn secondary-btn-1" type="submit">{{'Search'|trans({}, 'frontend-homepage')}}</button>
+                            </div>
+                        </div>
+    					<div id="header_search_editable_location_reveal_modal" class="modal custom-modal tiny">
+                            {{ include('FaCoreBundle:Default:invalidLocationModal.html.twig', {'modalId': 'header_search_editable_location_reveal_modal'}) }}
+                        </div>
+                        <div class="location">
+                                <span class="search-pin"></span>
+                                <span id="in_text_span">{{ 'in'|trans({}, 'frontend-homepage') }}</span> <span id="header_search_editable_location_span">United Kingdom</span>
+                                <a href="javascript:void(0)" rel="nofollow" id="header_search_editable_location_a">({{ 'change'|trans({}, 'frontend-homepage') }})</a>
+                                <div id="top_search_location" class="white-autocomplete" style="display:none">
+                                   {{ form_widget(form.item__location_autocomplete) }}
+                                   <a href="javascript:void(0);" rel="nofollow" id="fa_top_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                                    <div class="clearfix">
+                                        <button class="button xs-btn-1 expand left" type="button" id="top_search_location_homepage_ok">Ok</button>
+                                        <button class="button xs-btn-1 expand right" type="button" id="top_search_location_cancel">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                     </div>
+        {#<div id="home-search" class="col-sm-18 col-md-18 col-lg-14 home-search">
             <table>
                 <tr>
                     <td class="all-cat-select">{{ form_widget(attribute(form, 'item__category_id'), {'attr': {'class':'find-all custom_select' }}) }}</td>
@@ -24,7 +52,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>#}
     {% do attribute(form, 'item__price_from').setRendered %}
     {% do attribute(form, 'item__price_to').setRendered %}
     {% do attribute(form, 'item__distance').setRendered %}

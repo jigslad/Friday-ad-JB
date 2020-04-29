@@ -1,12 +1,12 @@
 {% set userRepository = fetch_repository('FaUserBundle:User') %}
-{% set  recommendedSlotCls = 'small-24 medium-24 large-24' %}
+{% set  recommendedSlotCls = 'col-sm-24 col-md-24 col-lg-24' %}
 {% set  recommendedSlotCnt = 1 %} {% set centersmallCnt =24 %}
 {% if recommendedSlotArray is defined and recommendedSlotArray|length == 2 %}
-	{% set  recommendedSlotCls = 'small-24 medium-12 large-12' %}
+	{% set  recommendedSlotCls = 'col-sm-24 col-md-12 col-lg-12' %}
 	 {% set  recommendedSlotCnt = 2 %}
 {% set centersmallCnt =12 %}
 {% elseif recommendedSlotArray is defined and recommendedSlotArray|length == 3 %}
-	{% set  recommendedSlotCls = 'small-24 medium-8 large-8' %}
+	{% set  recommendedSlotCls = 'col-sm-24 col-md-8 col-lg-8' %}
 	 {% set  recommendedSlotCnt = 3 %}
 {% set centersmallCnt =3 %}	
 {% endif %}
@@ -45,7 +45,7 @@
                     {{ recommendedSlot['sub_title']|length > 150 ? trim_text(recommendedSlot['sub_title'], 150)|raw ~ '...': recommendedSlot['sub_title'] }}
                 </div>
                 {% if recommendedSlot['cta_text'] !='' %}
-                <div class="outer-btn"><div class="button secondary-btn-1 right-block expand d-none d-md-block">{{ recommendedSlot['cta_text'] }}</div></div>
+                <div class="outer-btn"><div class="button secondary-btn-1 right-block btn-block d-none d-md-block">{{ recommendedSlot['cta_text'] }}</div></div>
            		{% endif %}
            </div>                      
         </div>
@@ -62,14 +62,14 @@
                 {% set only_domains = no_protocol|split('/')[0] ?: no_protocol %}
                 {% set only_domains = only_domains|replace({'www.': ''})%}                
                 <div class="{{ recommendedSlotCls }} columns t-s-column fullblock-cls-recommend-{{recommendedSlotCnt}}" style="cursor: pointer;" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}','{{ recommendedSlot['title'] }}');">
-                	<div class="small-10 medium-5 large-5 columns t-s-subblock-left img-cls-recommend-{{recommendedSlotCnt}}" >
+                	<div class="col-sm-10 col-md-5 col-lg-5 t-s-subblock-left img-cls-recommend-{{recommendedSlotCnt}}" >
                         {% if userLogo is null%}
                                 <div class="img-img-cls-recommend-{{recommendedSlotCnt}}"><div class="profile-placeholder-{{recommendedSlotCnt}}"><img src="{{container.getParameter('fa.static.url')}}/fafrontend/images/user-no-logo.svg" alt="{{ userName }}" /></div></div>
                             {% else %}
                                 <div class="img-img-cls-recommend-{{recommendedSlotCnt}}"><div class="img-cls-ad-recommend-{{recommendedSlotCnt}}"><img src="{{ userLogo }}" alt="{{ userName }}" /></div></div>
                             {% endif %}
                     </div>
-                    <div class="small-14  medium-19 large-19 columns t-s-subblock-right content-cls-recommend-{{recommendedSlotCnt}}">
+                    <div class="col-sm-14 col-md-19 col-lg-19 t-s-subblock-right content-cls-recommend-{{recommendedSlotCnt}}">
                         {% if(recommendedSlot['show_sponsored_lbl']) %}
                         <div class="recommendedtxt gray-text sponsored-2-3">
                             Sponsored Ad<span class="sponsored-ad-icon"></span>
@@ -91,8 +91,6 @@
 <!--  Mobile Starts Here -->
 <div class="d-block d-md-none">
 {% if recommendedSlotCnt>1 %}
-	{{ include('FaFrontendBundle:Default:home-css.html.twig') }}
-	<script src="{{ asset_url('facore/js/owl.carousel.min.js') }}"></script>
 	<div class="recommended-div listing mb20 recommended-ad-detail owl-carousel" id="recommended-slot-slider" data-equalizer style="display:block">
 {% endif %}
 {% for recommendedSlot in recommendedSlotArray%}

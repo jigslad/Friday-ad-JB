@@ -1172,9 +1172,7 @@ $change-widht: 100%;
     margin-top: 7px;
     border-radius: 2px;
 }
-.motor-info .info-row:nth-child(2n+1) {
-    background: #efefef;
-}
+
 .flexy-box .parent_box {
     display: table;
     table-layout: fixed;
@@ -1185,23 +1183,361 @@ $change-widht: 100%;
 .flexy-box .child_box:last-child {
     border-right: 0 solid #fff;
 }
+.motor-info .info-row:nth-child(even) {
+    background: #EAEFF0
+}
+.motor-info .info-row:nth-child(odd) {
+    background: #EAEFF0
+}
 .motor-info .info-box {
     text-align: center;
-    font-size: 14px;
+    float: left;
+    border-right: 1px solid #fff;
+    width: 25%;
+    padding: 16px 0 10px;
+    font-size: 14px
 }
+
 .motor-info .info-box label {
     margin-bottom: 6px;
-    cursor: default;
+    cursor: default
 }
-.adult-independent {
-    background: url(/bundles/fafrontend/images/independent.png) no-repeat;
+
+.motor-info .info-box:last-child {
+    border-right: 0
 }
 .motor-info-icon {
     display: block;
     width: 81px;
     height: 81px;
     vertical-align: middle;
-    margin: 6px auto 2px;
+    margin: 6px auto 2px
+}
+
+.info-year {
+    background: url('/Frontend/images/icons/info-year.svg') 50% 50% no-repeat
+}
+
+.info-mileage {
+    background: url('/Frontend/images/icons/info-mileage.svg') 50% 50% no-repeat
+}
+
+.info-fuel {
+    background: url('/Frontend/images/icons/info-fuel.svg') 50% 50% no-repeat
+}
+
+.info-engine {
+    background: url('/Frontend/images/icons/info-engine.svg') 50% 50% no-repeat
+}
+
+.info-item-type {
+    background: url('/Frontend/images/icons/info-item-type.svg') 50% 50% no-repeat
+}
+
+.info-bedroom {
+    background: url('/Frontend/images/icons/info-bedroom.svg') 50% 50% no-repeat
+}
+
+.info-bathroom {
+    background: url('/Frontend/images/icons/info-bathroom.svg') 50% 50% no-repeat
+}
+
+.motor-info .color-row {
+    text-align: center;
+    padding: 10px 0
+}
+
+.motor-info .color-row .info-box {
+    padding: 0;
+    float: none;
+    width: 100%
+}
+
+.motor-info .color-row label {
+    margin: 0;
+    display: inline-block
+}
+
+.safety-block {
+    background: #EAEFF0;
+    float: left;
+    width: 48%;
+    margin: 60px 25px 25px 0;
+    position: relative;
+    padding: 50px 0 20px;
+    text-align: center
+}
+
+.safety-block.single-block {
+    width: 100%;
+    margin-right: 0
+}
+
+.safety-block:last-child {
+    margin-right: 0
+}
+
+.safety-block .safety-icon {
+    width: 81px;
+    height: 81px;
+    position: absolute;
+    margin-left: -40.5px;
+    left: 50%;
+    top: -36px
+}
+
+.safety-rating {
+    background: #EAEFF0;
+    margin: 3px auto 14px;
+    width: 91px;
+    height: 16px;
+    position: relative;
+    z-index: 1
+}
+
+.safety-stars {
+    background: url('/bundles/fafrontend/images/rating-stars.png') repeat-x;
+    background-size: 90px 16px;
+    width: 91px;
+    height: 16px;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0
+}
+
+.safety-star-fill {
+    background: #212527;
+    position: absolute;
+    z-index: 1;
+    height: 16px;
+    top: 0;
+    left: 0
+}
+
+.safety-content {
+    font-size: 13px;
+    color: #ACB0B7;
+    line-height: 19px;
+    padding: 20px 25px 0
+}
+
+.safety-fe-check {
+    width: 26px;
+    height: 25px;
+    display: inline-block;
+    vertical-align: middle;
+    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2226%22%20height%3D%2225%22%20viewBox%3D%220%200%2026%2025%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%2382C249%3B%7D%0D%0A%09.st1%7Bfill%3Anone%3Bstroke%3A%23FFFFFF%3Bstroke-width%3A3%3B%7D%0D%0A%3C/style%3E%3Ctitle%3EFeatures-Check%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-689.000000%2C%20-1965.000000%29%22%3E%3Cg%20transform%3D%22translate%28183.000000%2C%20447.000000%29%22%3E%3Cg%20transform%3D%22translate%280.000000%2C%2022.000000%29%22%3E%3Cg%20transform%3D%22translate%280.000000%2C%20953.000000%29%22%3E%3Cg%20transform%3D%22translate%2819.000000%2C%2073.000000%29%22%3E%3Cg%20transform%3D%22translate%280.000000%2C%20462.000000%29%22%3E%3Cg%20transform%3D%22translate%28487.000000%2C%208.000000%29%22%3E%3Cg%20transform%3D%22translate%280.734783%2C%200.000000%29%22%3E%3Ccircle%20class%3D%22st0%22%20cx%3D%2212.5%22%20cy%3D%2212.5%22%20r%3D%2212.5%22/%3E%3Cpath%20class%3D%22st1%22%20d%3D%22M7.4%2012l4%204L18%208%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat
+}
+
+.safety-features {
+    border: 1px solid #EAEFF0;
+    border-radius: 2px
+}
+
+.safety-features ul {
+    margin: 0
+}
+
+.safety-title {
+    margin: 55px 0 12px
+}
+
+.ncap-icon {
+    background: url('/bundles/fafrontend/images/ncap-icon.svg') no-repeat
+}
+
+.iso-icon {
+    background: url('/bundles/fafrontend/images/iso-icon.svg') no-repeat
+}
+
+.iso-title {
+    margin: 33px 0 0 0
+}
+.adult-incall-icon {
+    width: 30px;
+    height: 22px;
+    float: left;
+    background: url('/Frontend/images/icons/adult/adul-incalls.svg') no-repeat
+}
+
+.adult-outcall-icon {
+    width: 30px;
+    height: 22px;
+    float: left;
+    background: url('/Frontend/images/icons/adult/adul-outcalls.svg') no-repeat
+}
+
+#element_my_service_id {
+    height: 140px
+}
+
+.safety-fe-incall {
+    width: 26px;
+    height: 25px;
+    display: inline-block;
+    vertical-align: middle;
+    background: url('/Frontend/images/icons/adult/adul-incall.svg') no-repeat
+}
+
+.safety-fe-outcall {
+    width: 26px;
+    height: 25px;
+    display: inline-block;
+    vertical-align: middle;
+    background: url('/Frontend/images/icons/adult/adul-outcall.svg') no-repeat
+}
+
+.adult_services_box tbody tr td {
+    max-width: 25%;
+    width: 25%
+}
+
+table.responsive-card-table {
+    border-collapse: collapse;
+    width: 100%;
+    border: solid 1px #ddd;
+    margin-bottom: 0
+}
+
+.responsive-card-table .boder-rates {
+    border: 1px solid #ddd;
+    margin-bottom: 15px
+}
+
+.responsive-card-table tbody tr td {
+    border-right: 1px solid #fff
+}
+
+.responsive-card-table tbody tr td:last-child {
+    border-right: 0 solid #ddd
+}
+
+.responsive-card-table tbody tr td input {
+    background: #fff
+}
+
+.responsive-card-table tbody {
+    margin-top: 10px
+}
+
+table.responsive-card-table tr.odd,
+table.responsive-card-table tr:nth-of-type(n) {
+    background: #EAEFF0 !important
+}
+
+table.responsive-card-table tr.even,
+table.responsive-card-table tr.alt,
+table.responsive-card-table tr:nth-of-type(2n) {
+    background: #EAEFF0 !important
+}
+
+.in-out-calls-text {
+    font-size: 14px;
+    font-weight: 700;
+    color: #212527;
+    line-height: 16px;
+    border: 1px solid #d4d4d4;
+    padding: 5px 10px
+}
+
+.responsive-card-table .m-r-10 {
+    margin-right: 10px
+}
+
+.responsive-card-table .in-out-detail-text-f {
+    color: #212527;
+    font-weight: 700;
+    text-align: center
+}
+
+.responsive-card-table .in-out-detail-text-l {
+    text-align: center
+}
+
+.responsive-card-table .in-out-detail-text-f p {
+    margin: 0
+}
+
+.responsive-card-table .in-out-detail-text-l .rates-pound-symbl {
+    float: left;
+    width: 10%
+}
+
+.responsive-card-table .in-out-detail-text-l .rates-fld {
+    float: right;
+    width: 80%
+}
+
+.responsive-card-table .in-out-detail-text-l {
+    text-align: center
+}
+
+.responsive-card-table .in-out-detail-text-l input[type="text"] {
+    padding-left: 5px !important
+}
+
+.responsive-card-table .in-out-calls-block {
+    display: block
+}
+
+.responsive-card-table .in-out-calls-subblock {
+    width: 100%
+}
+
+.responsive-card-table .in-out-detail-text-l .currency_rate {
+    display: inline-flex;
+    width: 100%
+}
+
+.responsive-card-table .rates-pound-symbl {
+    line-height: 38px;
+    margin-right: 5px
+}
+
+.adult-male {
+    background: url('/Frontend/images/icons/adult/adul-male.svg') no-repeat
+}
+
+.adult-female {
+    background: url('/Frontend/images/icons/adult/adul-female.svg') no-repeat
+}
+
+.adult-transexual {
+    background: url('/Frontend/images/icons/adult/adul-trans.svg') no-repeat
+}
+
+.adult-agency {
+    background: url('/Frontend/images/icons/adult/adul-agency.svg') no-repeat
+}
+
+.service-for-male,
+.service-for-men {
+    background: url('/Frontend/images/icons/adult/adul-men.svg') no-repeat
+}
+
+.service-for-women {
+    background: url('/Frontend/images/icons/adult/adul-women.svg') no-repeat
+}
+
+.service-for-couples {
+    background: url('/Frontend/images/icons/adult/couples.svg') no-repeat
+}
+
+.travel-arrangement-in-call {
+    background: url('/Frontend/images/icons/adult/adul-travel-incall.svg') no-repeat
+}
+
+.travel-arrangement-out-call {
+    background: url('/Frontend/images/icons/adult/adul-travel-outcall.svg') no-repeat
+}
+
+.travel-arrangement-either {
+    background: url('/Frontend/images/icons/adult/adul-in-out-call.svg') no-repeat
+}
+
+.adult-independent {
+    background: url('/Frontend/images/icons/adult/adul-independent.svg') no-repeat
 }
 .detail-tabpart-2 .accordion .content h5:first-child {
     margin-top: 15px;
