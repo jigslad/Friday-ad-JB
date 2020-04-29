@@ -238,6 +238,8 @@
                  {% set assignedCategoryId = objUserSite.getUser().getBusinessCategoryId() %}
         	{% elseif (appUserRole is defined and (appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') or appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION'))) %}
             	{% set assignedCategoryId = app.user.getBusinessCategoryId() %}
+        	{% elseif (appUserRole is defined and appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION')) %}
+        		{% set showAdultPages = 1 %}
         	{% endif %}
     
         	{% if assignedCategoryId!=0 %}
