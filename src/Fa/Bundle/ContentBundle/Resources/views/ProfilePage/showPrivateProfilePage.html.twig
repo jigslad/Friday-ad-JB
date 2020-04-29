@@ -10,68 +10,126 @@
 {% set entityCacheManager = container.get('fa.entity.cache.manager') %}
 {% set userRepository = fetch_repository('FaUserBundle:User') %}
 {% set profileAdsUrl = container.get('fa_ad.manager.ad_routing').getProfilePageAdsUrl(userDetail['id']) %}
-<div class="other-profile">
-    <div class="row">
-        <div class="large-6 columns" id="show_message_div">
-            <div class="user-pro-pic rounded">
-                <span>
-                    {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), userDetail['image'], userDetail['id'], null, null, true, false, userDetail['status_id'], userDetail['user_name']]) %}
-                    {% if userLogo %}
-                        {{userLogo|raw}}
-                    {% endif %}
-                </span>
-            </div>
-            <h2 class="pro-user-name">{{ (userDetail['user_name'] ? userDetail['user_name'] : '-') }}</h2>
-            {% if (userDetail and userDetail['user_rating'] is defined and userDetail['user_rating'] > 0) %}
-            <div class="pro-rating"><span>{{'Rating'|trans({}, 'frontend-profile-page')}}:</span> {{ userDetail['user_rating'] }}</div>
-            <div class="pro-rating-stars rating-white-stars">
-                {{ include('FaCoreBundle::showStarRating.html.twig', {'rating': userDetail['user_rating']}) }}
-            </div>
-            {% endif %}
-            <div class="sold-n-reviews">
+    <div class="dash-block">
+        <div class="other-profile">
+            <div class="container">
                 <div class="row">
-                    {% if userDetail['sold_ad_count'] > 0 %}
-                        <div class="large-12 columns text-center">
-                            <span class="sold-icon">{{'Sold'|trans({}, 'frontend-profile-page')}}</span><br />
-                            {{'Items sold'|trans({}, 'frontend-profile-page')}}: <b>{{userDetail['sold_ad_count']}}</b>
+                    <div class="col-md-6" id="show_message_div">
+                        <div class="user-pro-pic rounded">
+                    <span>
+                        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), userDetail['image'], userDetail['id'], null, null, true, false, userDetail['status_id'], userDetail['user_name']]) %}
+                        {% if userLogo %}
+                            {{userLogo|raw}}
+                        {% endif %}
+                    </span>
                         </div>
-                    {% endif %}
-                    <div class="{% if userDetail['sold_ad_count'] > 0 %}large-12{%else%}large-24{% endif %} columns text-center">
-                        <span class="review-sold-icon">Reviews</span><br />
-                        {{'Reviews'|trans({}, 'frontend-profile-page')}}: <b>{{ userDetail['total_review'] }}</b>
+
+                        <div class="about-shop">
+                            <h2 class="s-h2 pro-user-name">{{ (userDetail['user_name'] ? userDetail['user_name'] : '-') }}</h2>
+                            <div class="other-pro-location" id="business_location_div">
+                                <i>Member since Sep 2019</i>
+                                <div class="profile-edit">
+                                    <div class="relative right">
+                                        <a href="javascript:void(0);">Edit</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dealer-badge trusted-user">
+                                <span>?</span>
+                                <div class="trusted-user-tooltip">Rest assured we do our utmost to ensure a safe marketplace for all to enjoy. This user meets all of our moderation requirements.</div>
+                            </div>
+                            <div class="mb20">
+                                <button class="primary-btn-1 btn btn-block uppercase btn-h-lg" name="profilepage_contactuser" id="profilepage_contactuser" type="button">Contact us</button>
+                            </div>
+                            <div class="mb20">
+                                <a href="/business/adult-ns-business/ads/" class="btn secondary-btn-1 btn-vlock d-none d-md-block">View all our ads</a>
+                            </div>
+                        </div>
+                        <div class="shop-cont-info" id="business_address_detail_div">
+                            <ul class="seller-cont-info"></ul>
+                            <div class="mb10">
+                                <a href="javascript:void(0);" data-toggle="modal" data-target="#addContactModal">+ Add contact details</a>
+                            </div>
+                        </div>
+                        <div id="business_social_icons_div">
+                            <div class="shop-share">
+                                <h5>Find us on</h5>
+                            </div>
+                            <div class="mb10">
+                                <a href="javascript:void(0);" data-toggle="modal" data-target="#addSocialMediaModal">+ Add social media profiles</a>
+                            </div>
+                        </div>
+                        <div id="business_gallery_div">
+                            <div class="shop-gallery">
+                                <h5>Photo Gallery</h5>
+                            </div>
+                            <div class="mt10 mb10">
+                                <a href="javascript:void(0);" data-toggle="modal" data-target="#addPhotoModal">+ Add photos to your gallery</a>
+                            </div>
+                        </div>
+                        <div id="business_video_div">
+                            <div class="shop-video">
+                                <h5>Video</h5>
+                            </div>
+                            <div class="mt10 mb10">
+                                <a href="javascript:void(0);" data-toggle="modal" data-target="#addVideoModal">+ Add a video</a>
+                            </div>
+                        </div>
+
+
+
+                        {% if (userDetail and userDetail['user_rating'] is defined and userDetail['user_rating'] > 0) %}
+                            <div class="pro-rating"><span>{{'Rating'|trans({}, 'frontend-profile-page')}}:</span> {{ userDetail['user_rating'] }}</div>
+                            <div class="pro-rating-stars rating-white-stars">
+                                {{ include('FaCoreBundle::showStarRating.html.twig', {'rating': userDetail['user_rating']}) }}
+                            </div>
+                        {% endif %}
+                        <div class="sold-n-reviews">
+                            <div class="row">
+                                {% if userDetail['sold_ad_count'] > 0 %}
+                                    <div class="large-12 columns text-center">
+                                        <span class="sold-icon">{{'Sold'|trans({}, 'frontend-profile-page')}}</span><br />
+                                        {{'Items sold'|trans({}, 'frontend-profile-page')}}: <b>{{userDetail['sold_ad_count']}}</b>
+                                    </div>
+                                {% endif %}
+                                <div class="{% if userDetail['sold_ad_count'] > 0 %}large-12{%else%}large-24{% endif %} columns text-center">
+                                    <span class="review-sold-icon">Reviews</span><br />
+                                    {{'Reviews'|trans({}, 'frontend-profile-page')}}: <b>{{ userDetail['total_review'] }}</b>
+                                </div>
+                            </div>
+                        </div>
+                        {% if userDetail['contact_through_email'] is defined and userDetail['contact_through_email'] == 1 %}
+                            <button class="primary-btn-1 expand button uppercase mt20 mb10" name="profilepage_contactuser" id="profilepage_contactuser" type="button">{{'Contact us'|trans({}, 'frontend-profile-page')}}</button>
+                        {% endif %}
+                        {% if userDetail['website_link'] is defined  and userDetail['website_link']|length %}
+                            {% set websiteLabel = 'Visit website'|trans({}, 'frontend-profile-page') %}
+                            {% set profileWebSite = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'addHttpToUrl', [userDetail['website_link']]) %}
+                            <a rel="nofollow" onclick="openUserWebsite('{{(userDetail['id'] ? userDetail['id'] : '-')}}', '{{ profileWebSite }}', '{{ userName }}')" href="javascript:void(0);" class="website-btn-1 button expand mt20 mb0"><span class="website-icon"></span>{{ websiteLabel }}</a>
+                        {% endif %}
+                        <a href="{{ profileAdsUrl }}" class="secondary-btn-1 button expand mt20">{{'View latest ads'|trans({}, 'frontend-profile-page')}}</a>
+                    </div>
+                    <div class="col-md-18">
+                        <h1 class="other-pro-title">{{"Hi, I'm %profile_name%"|trans({'%profile_name%': (userDetail['user_name'] ? userDetail['user_name'] : '-')}, 'frontend-profile-page')}}</h1>
+                        <div class="other-pro-location">
+                            {% if userDetail['town_name']|length %}
+                                <b>{{ userDetail['town_name'] }},</b>
+                            {% endif %}
+                            {% if userDetail['domicile_name']|length %}
+                                {{ userDetail['domicile_name'] }},
+                                {{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID')) }} -
+                            {% endif %}
+                            <i>{{'Member since'|trans({}, 'frontend-profile-page')}} {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [userDetail['created_at'], container, null, null, 'MMM Y']) }}</i>
+                        </div>
+                        {% if userDetail['about_you']|length %}
+                            <p>{{ userDetail['about_you']|raw }}</p>
+                        {% endif %}
+
+                        {{ render(controller('FaContentBundle:ProfilePage:showUserReview', {'userId': userDetail['id'], 'reviewHeading':'My reviews'|trans({}, 'frontend-profile-page') })) }}
                     </div>
                 </div>
             </div>
-            {% if userDetail['contact_through_email'] is defined and userDetail['contact_through_email'] == 1 %}
-                <button class="primary-btn-1 expand button uppercase mt20 mb10" name="profilepage_contactuser" id="profilepage_contactuser" type="button">{{'Contact us'|trans({}, 'frontend-profile-page')}}</button>
-            {% endif %}
-            {% if userDetail['website_link'] is defined  and userDetail['website_link']|length %}
-                {% set websiteLabel = 'Visit website'|trans({}, 'frontend-profile-page') %}  
-                {% set profileWebSite = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'addHttpToUrl', [userDetail['website_link']]) %}    
-                <a rel="nofollow" onclick="openUserWebsite('{{(userDetail['id'] ? userDetail['id'] : '-')}}', '{{ profileWebSite }}', '{{ userName }}')" href="javascript:void(0);" class="website-btn-1 button expand mt20 mb0"><span class="website-icon"></span>{{ websiteLabel }}</a>
-            {% endif %}
-            <a href="{{ profileAdsUrl }}" class="secondary-btn-1 button expand mt20">{{'View latest ads'|trans({}, 'frontend-profile-page')}}</a>
         </div>
-        <div class="large-18 columns">
-            <h1 class="other-pro-title">{{"Hi, I'm %profile_name%"|trans({'%profile_name%': (userDetail['user_name'] ? userDetail['user_name'] : '-')}, 'frontend-profile-page')}}</h1>
-            <div class="other-pro-location">
-                {% if userDetail['town_name']|length %}
-                <b>{{ userDetail['town_name'] }},</b>
-                {% endif %}
-                {% if userDetail['domicile_name']|length %}
-                    {{ userDetail['domicile_name'] }},
-                    {{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID')) }} -
-                {% endif %}
-                <i>{{'Member since'|trans({}, 'frontend-profile-page')}} {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [userDetail['created_at'], container, null, null, 'MMM Y']) }}</i>
-            </div>
-            {% if userDetail['about_you']|length %}
-                <p>{{ userDetail['about_you']|raw }}</p>
-            {% endif %}
-            
-            {{ render(controller('FaContentBundle:ProfilePage:showUserReview', {'userId': userDetail['id'], 'reviewHeading':'My reviews'|trans({}, 'frontend-profile-page') })) }}
-        </div>
-    </div>    
-</div>
+    </div>
 <div id="profilePageContactUserModal" class="modal custom-modal small"></div>
 {% endblock %}
 
