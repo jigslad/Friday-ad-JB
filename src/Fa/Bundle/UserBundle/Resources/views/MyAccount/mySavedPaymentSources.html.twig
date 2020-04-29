@@ -75,13 +75,13 @@
                                 {{ form_widget(userCardForm.card_number, {'attr': {'class': 'white-field'}}) }}
                                 {{ form_errors(userCardForm.card_number) }}
                             </div>
-                            <div class="payment-row white-select">
+                            <div class="payment-row">
                                 {{ form_label(userCardForm.card_expity_month) }}
-                                <div class="expiry-date">
-                                    <div class="l-select">
+                                <div class="expiry-date row">
+                                    <div class="l-select white-select col-md-12">
                                         {{ form_widget(userCardForm.card_expity_month, {'attr': {'class': 'select-control'}}) }}
                                     </div>
-                                    <div class="r-select">
+                                    <div class="r-select white-select col-md-12">
                                         {{ form_widget(userCardForm.card_expity_year, {'attr': {'class': 'select-control'}}) }}
                                     </div>
                                 </div>
