@@ -1,0 +1,13 @@
+{% if mobileStaticPages|length %}
+    {% set staticPageCounter = 1 %}
+    {% for staticPage in mobileStaticPages %}
+        {% if staticPage['slug'] matches '/^[a-z-]+$/i' %}
+            {% if staticPage['include_in_mobile_footer'] == 1 %}
+                <a href="{{ path('location_home_page', {'location': staticPage['slug']}) }}">{{staticPage['title']}}</a>
+                {% if staticPage['slug'] == 'about-us' %}
+                    <a href="https://help.friday-ad.co.uk/hc/en-us" target="__blank">{{ 'Help Centre'|trans }}</a>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endif %}

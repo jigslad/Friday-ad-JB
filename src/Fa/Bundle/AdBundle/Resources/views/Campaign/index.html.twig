@@ -129,7 +129,8 @@
 </header>
     
 <section>
-<div class="paa-hero-full-screen" style="background:url('/uploads/campaigns/{{CampaignBackgroundFileName}}') center center no-repeat;background-size:cover">
+{% set campaignBckgrndImgUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSharedImageUrl', [fetch_container_instance(), 'uploads/campaigns', CampaignBackgroundFileName]) %}
+<div class="paa-hero-full-screen" style="background:url('{{campaignBckgrndImgUrl}}') center center no-repeat;background-size:cover">
     <div class="hero-block">
         <div class="row">
             <div class="medium-12 large-10 large-push-2 columns">

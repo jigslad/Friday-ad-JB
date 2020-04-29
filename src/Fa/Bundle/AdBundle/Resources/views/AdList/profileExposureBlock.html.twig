@@ -3,10 +3,12 @@
     {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), profileUserDetail['company_logo'], profileUserDetail['user_id'], null, null, true, true, profileUserDetail['status_id'], profileUserDetail['user_name']]) %}
     {% set adPropertyRepository = fetch_repository('FaAdBundle:AdProperty') %}
     <div class="listing-exposure">
+       	<div class="row">
+	    <div class="col-md-24 col-lg-24">
         <div class="gray-text text-right">{{'Featured business'|trans({}, 'frontend-profile-exposure')}}</div>
-        <div class="list-featured-bz">
-            <div class="row">
-                <div class="large-6 columns">
+        <div class="list-featured-bz item" data-equalizer-watch>
+            <div class="row" style="margin:0px !important;">
+                <div class="col-sm-24 col-md-6 bus-det-box">
                     {% if profileUserDetail['business_category_id'] == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
                         <div class="fad-shop-icon">AD SHOP</div>
                     {% endif %}
@@ -34,10 +36,10 @@
                         {% endif %}
                     {% endif %}
                     {% set gaEventLabel = profileUserDetail['user_name'] ~ ' - Business ad' %}
-                    <a href="{{ userProfileUrl }}" onClick='visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");' class="button expand secondary-btn-1 mb0">{{ profileLabel }}</a>
+                    <a href="{{ userProfileUrl }}" onClick='visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");' class="button btn-block text-center secondary-btn-1 mb0">{{ profileLabel }}</a>
                 </div>
-                <div class="large-18 columns">
-                    <div class="owl-carousel fa-slider" id="shop-user-item-slider" data-equalizer>
+                <div class="col-md-18 d-none d-md-block busad-item-block">
+                    <div class="owl-carousel fa-slider  bus-shop-user-item-slider" id="shop-user-item-slider" data-equalizer>
                         {% set adPosition = 1 %}
                         {% for profileExposureUserAd in profileExposureUserAds %}
                             {% set adCategoryId = attribute(profileExposureUserAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::CATEGORY_ID')) %}
@@ -51,7 +53,7 @@
                             {% if seoRule['image_alt'] is defined %}
                                 {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], profileExposureUserAd]) %}
                             {% endif %}
-                            <div class="item" data-equalizer-watch>
+                            <div class="busad-item" data-equalizer-watch>
                                 {% set gaEventLabel = profileUserDetail['user_name'] ~ ' - ' ~ adPosition %}
                                 <a class="tricky-link" href="{{ adUrl }}" onClick='visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");'>
                                 	{% if attribute(profileExposureUserAd, constant(profileExposureUserAdSolrMapping ~ 'TITLE')) is defined %}
@@ -87,4 +89,5 @@
             </div>
         </div>
     </div>
+</div></div>
 {% endif %}

@@ -41,7 +41,7 @@
 
         function initImageUpload(removeFileList)
         {
-            var mainUploader = setUpUploader('pickfile', removeFileList);
+            var mainUploader = setUpProfileUploader('pickfile', removeFileList);
             mainUploader.init();
 
             if (removeFileList) {
@@ -49,7 +49,7 @@
             }
         }
 
-        function setUpUploader(id, removeFileList)
+        function setUpProfileUploader(id, removeFileList)
         {
             var errorFlag  = false;
             var userId     = '{{userId}}';
@@ -154,7 +154,7 @@
             });
         }
 
-        function deleteImage(url)
+        function deleteProfileImage(url)
         {
             $('.remove-logo-btn').unbind("click");
             $.ajax({
