@@ -378,12 +378,51 @@ button.signup-fb-btn.expand {
 .select2-drop, .ui-autocomplete {  margin-top: 0px !important; }
 .choice-display-flex { display:inline-flex !important; }
 .choice-display-flex label { margin-right:10px !important; line-height:25px !important; }
+
+.discover-categories a,.discover-categories a:hover, .discover-categories a:focus  {
+	background-size: cover !important;
+}
+
 #home-search .looking-for input[type="text"], .site-search .search-box input[type="text"] {
     border-radius: 0 !important;
 }
 .paa-footer-links {column-count: 4;} 
 
-
+@media only screen and (min-width: 320px) and (max-width: 759px) {
+	#home-search .all-cat-select, #home-search .looking-for {
+		min-width: 52px !important;
+		width: 52px !important;
+	}
+	#home-search .find-all .select2-choice {
+		min-width: 52px !important;
+		width: 52px !important;
+	}
+	#home-search .search-btn button {
+	    background: url(/bundles/fafrontend/images/search-icon.svg) no-repeat center center / 16px 16px, linear-gradient(135deg, #A8DC28 0%, #79D378 100%) !important;
+	}
+	#home-search .search-btn button:hover {
+		background: url(/bundles/fafrontend/images/search-icon.svg) no-repeat center center / 16px 16px, linear-gradient(135deg, #85B021 0%, #61A85F 100%) !important;
+	}
+	.homepage-title, .homepage-title-small {
+	    font-size: 18px;
+	    font-weight: 600 !important;
+	    letter-spacing: 0;
+	    line-height: 24px;
+	    margin: 0 0px 20px;
+	}
+	.sub-head-text {
+		color: #212527;
+		font-size: 14px;
+		letter-spacing: 0;
+		line-height: 22px;
+		text-align: center;
+	}
+}
+@media only screen and (min-width: 320px) and (max-width: 399px) {
+    #popular_shops_slider .item, #popular_shops_slider .list-img, #featured-item-slider .item, #featured-item-slider .list-img {
+        width: 100% !important;
+    }
+}
 @media only screen and (max-width: 640px) {
     .help-links {
         margin: 10px 0px 0 !important !important;
