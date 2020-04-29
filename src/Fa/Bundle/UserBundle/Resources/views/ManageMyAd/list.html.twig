@@ -28,12 +28,6 @@
 	{% set userBusType = 'private' %}
 {% endif %}
 
-{% set adultButton = 0 %}
-{% if userBusType is defined and userBusType == 'netsuite' %}
-	{% set adultButton = 1 %}
-{% elseif app.user.  %}
-{% endif %}
-
 {% set totalFeaturedCredit = 0 %}
 {% set usedFeaturedCredits = 0 %}
 {% set remainingFeaturedCredits = 0 %}
