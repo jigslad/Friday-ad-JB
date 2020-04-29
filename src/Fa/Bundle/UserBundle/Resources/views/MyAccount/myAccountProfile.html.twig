@@ -14,26 +14,27 @@
     </a>
     <div id="panel4b" class="collapse collapse-body-content">
         <div class="col-md-14 col-lg-9 pad-none">
+
             {{ form_start(userAccountProfileForm, {'attr': {'novalidate': 'novalidate'}}) }}
                 {{ include('FaUserBundle:MyAccount:myAccountMessage.html.twig', {'msgName': 'user_account_profile_success'}) }}
 
                 {{ form_label(userAccountProfileForm.user_roles) }}
                 <div class="label-inline">
+                    <ul class="search-type ">
                     {% for userRoles in userAccountProfileForm.user_roles %}
-                        <ul class="custom-control custom-radio search-type white-radio">
-                            <li>
-                                {{ form_row(userRoles) }}
-{#                                <input type="radio" class="custom-control-input white-feild" id="customradio1_a" name="private-user">#}
-{#                                <label class="custom-control-label" for="customradio1_a">I'm a private advertiser</label>#}
+                            <li class="white-radio" >
+                                {{ form_widget(userRoles,{'attr':{'class':'checkbox radio-circle-box'}}) }}
+                                <label for="{{ userRoles.vars.id }}"></label>
+                                {{ userRoles.vars.label }}
                             </li>
-                        </ul>
                     {% endfor %}
+                    </ul>
                 </div>
                 <div class="mt10">
                     {{ form_label(userAccountProfileForm.business_category_id) }}
                 </div>
-                <div>
-                    {{ form_widget(userAccountProfileForm.business_category_id) }}
+                <div class="white-select">
+                    {{ form_widget(userAccountProfileForm.business_category_id,{'attr':{'class':'select-control'}}) }}
                 </div>
                 {% if shopPackageDetail is not null and shopPackageDetail.getPayment() and  paymentTokens|length %}
                     {% set paymentValue = array_unserialize(shopPackageDetail.getPayment().getValue()) %}
