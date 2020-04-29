@@ -159,7 +159,7 @@
                 </div>
                 
                 {% if ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_IN_MODERATION_ID') %}
-                     <div class="right-manage-buttons adRemoveBlock"><a class="xs-red-btn expand button" href="javascript:void(0);" onclick="removeAdConfirmation('{{adId}}', '{{ad.status_id}}');">{% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') %} Stop this ad {% else %} Delete {% endif %}</a></div>
+                     <div class="right-manage-buttons adRemoveBlock"><a class="xs-black-btn expand button" href="javascript:void(0);" onclick="removeAdConfirmation('{{adId}}', '{{ad.status_id}}');">{% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') %} Stop this ad {% else %} Delete {% endif %}</a></div>
                 {% endif %}
             </div>
         </div>
