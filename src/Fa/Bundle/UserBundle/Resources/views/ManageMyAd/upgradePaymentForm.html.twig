@@ -1,0 +1,76 @@
+ {% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+ <div id="post-all-errors"></div> 
+<div id="card_detail" style="display: block;">
+    	<div class="small-24 medium-12 large-12 columns upsell-l-block">
+    		<div class="paa-bdr-box bdr-none">
+    			<h3 class="text-left mb0">{{'Billing details'|trans({},'frontend-cyber-source')}}</h3>
+    		</div>
+			<div class="payment-row">
+				 {{ form_label(form.street_address) }}
+                 {{ form_widget(form.street_address) }}
+                 {{ form_errors(form.street_address) }}
+    		</div>
+    		<div class="payment-row">
+    			{{ form_label(form.zip) }}
+                <div class="postcode clearfix">
+                    {{ form_widget(form.zip) }}
+                    <button type="button" class="button secondary-btn-1 right" onclick="return getUserAddress();">{{'Find address'|trans({},'frontend-cyber-source')}}</button>
+                </div>
+                <small id="zip_error_div" class="error" style="display:none"></small>
+                <span id="form_zip_error">{{ form_errors(form.zip) }}</span>
+            </div>
+            <div class="payment-row">
+                    {{ form_label(form.street_address_2) }}
+                    {{ form_widget(form.street_address_2) }}
+                    {{ form_errors(form.street_address_2) }}            
+            </div>
+    
+	        <div class="payment-row">
+                     {{ form_label(form.town) }}
+                    {{ form_widget(form.town) }}
+                    {{ form_errors(form.town) }}            
+           </div>
+    
+	        <div class="payment-row">
+                    {{ form_label(form.county) }}
+                    {{ form_widget(form.county) }}
+                    {{ form_errors(form.county) }}           </div>
+    	</div>
+    	<div class="small-24 medium-12 large-12 columns upsell-r-block">
+    		<div class="paa-bdr-box bdr-none">
+    			<h3 class="text-left mb0">Card details</h3>
+    		</div>
+
+    		<div class="payment-row"><div class="available-payment-options"></div></div>
+
+    		<div class="payment-row">
+                    {{ form_label(form.card_holder_name) }}
+                    {{ form_widget(form.card_holder_name) }}
+                    {{ form_errors(form.card_holder_name) }}			</div>
+
+			<div class="payment-row card-num">
+                    {{ form_label(form.card_number) }}
+                    {{ form_widget(form.card_number) }}
+                    {{ form_errors(form.card_number) }}           </div>
+
+		    <div class="payment-row">
+		    	    {{ form_label(form.card_expity_month) }}
+                    <div class="expiry-date" style="padding-top: 10px;">
+                        {{ form_widget(form.card_expity_month, {'attr': {'class': 'form-control fa-select-white'}}) }}
+                        {{ form_widget(form.card_expity_year, {'attr': {'class': 'form-control fa-select-white'}}) }}
+                    </div>
+                    {{ form_errors(form.card_expity_month) }}
+                    {{ form_errors(form.card_expity_year) }}
+            </div>
+
+		    <div class="payment-row security-code">
+		    	    {{ form_label(form.card_security_code) }}
+		    	    <div class="sec-code-inline">
+                        {{ form_widget(form.card_security_code) }}
+                        <div class="sec-code-icon">{{'Security code'|trans({},'frontend-cyber-source')}}</div>
+                    </div>
+                    {{ form_errors(form.card_security_code) }}
+            </div>
+    	</div>
+    </div>
+</div>
