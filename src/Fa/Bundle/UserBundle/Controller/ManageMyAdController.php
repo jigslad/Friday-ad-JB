@@ -972,7 +972,7 @@ class ManageMyAdController extends CoreController
                                 'form' => $form->createView(),
                                 'individualUpsellArr' => $individualUpsellArr,
                                 'isAdultAdvertPresent' => $isAdultAdvertPresent,
-                                'individualUpsellModalDetails' => $individualUpsellModalDetails,
+                                'individualUpsellModalDetails' => $individualUpsellModalDetails,         
                              );
                              $htmlContent = $this->renderView('FaUserBundle:ManageMyAd:individualUpsellmodalBox.html.twig', $parameters);                    
                         }
