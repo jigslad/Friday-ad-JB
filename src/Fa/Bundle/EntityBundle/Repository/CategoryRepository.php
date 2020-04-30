@@ -1301,12 +1301,12 @@ class CategoryRepository extends NestedTreeRepository
     {
         $categoryClassArray = array();
         $categoryClassArray[self::ADULT_ID]     = 'mob-adult';
-        $categoryClassArray[self::ADULT_MASSAGE_ID]     = 'mob-adult-massage';
-        $categoryClassArray[self::ESCORT_SERVICES_ID]     = 'mob-adult-escorts';
-        $categoryClassArray[self::FETISH_AND_ROLE_PLAY_ID]     = 'mob-adult-fetish-role';
-        $categoryClassArray[self::GAY_MALE_ESCORT_ID]     = 'mob-adult-agy-male';
-        $categoryClassArray[self::ADULT_INDUSTRY_JOBS_ID]     = 'mob-adult-industry-jobs';
-        $categoryClassArray[self::ADULT_CONTACTS_ID]     = 'mob-adult-contacts';
+        $categoryClassArray[self::ADULT_MASSAGE_ID]     = 'mob-adul-massage';
+        $categoryClassArray[self::ESCORT_SERVICES_ID]     = 'mob-adul-escorts';
+        $categoryClassArray[self::FETISH_AND_ROLE_PLAY_ID]     = 'mob-adul-fetish-role';
+        $categoryClassArray[self::GAY_MALE_ESCORT_ID]     = 'mob-adul-gay-male';
+        $categoryClassArray[self::ADULT_INDUSTRY_JOBS_ID]     = 'mob-adul-industry-jobs';
+        $categoryClassArray[self::ADULT_CONTACTS_ID]     = 'mob-adul-contacts';
         return $categoryClassArray;
     }
 
@@ -2515,7 +2515,7 @@ class CategoryRepository extends NestedTreeRepository
             $this->categoryCountArray = $categoryCountArray;
             $this->leafLevelCategoryCount = $leafLevelCategoryCount;
         }
-        
+
         $tableName = $this->_em->getClassMetadata('FaEntityBundle:Category')->getTableName();
         $headerCategoryArray = array();
         $query = 'SELECT parent.id,parent.name,parent.lvl,parent.slug,parent.parent_id,parent.full_slug,node.include_as_main_category_in_header,parent.is_children_header_sortable,node.header_sort_order
@@ -2544,7 +2544,7 @@ class CategoryRepository extends NestedTreeRepository
                     }
                     
                     $categoryArray = array('name' => $category['name'], 'id' => $category['id'], 'slug' => $category['slug'], 'count' => $count, 'full_slug' => $category['full_slug'], 'children' => array(),'header_sortable'=>$category['is_children_header_sortable'],'sort_ord'=> $category['header_sort_order'] );
-                    
+
                     if ($category['lvl'] == 1 && !array_key_exists($category['id'], $headerCategoryArray)) {
                         if (isset($categoryClassArray[$category['id']])) {
                             $categoryArray['class'] = $categoryClassArray[$category['id']];
