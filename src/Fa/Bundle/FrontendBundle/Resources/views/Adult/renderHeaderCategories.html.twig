@@ -181,7 +181,7 @@
                             {% else %}
                                 {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, secondLevelCategoryArray['full_slug']) %}
                             {% endif %}
-                            <a href="{{ listurl1 }}" class="main_category">{% if categoryArray['class'] is defined %}<span class="{{categoryArray['class']}}">&nbsp;</span>{% endif %}{% if secondLevelCategoryArray['is_static'] is defined and secondLevelCategoryArray['is_static'] %} {{secondLevelCategoryArray['link_text']}} {% else %}{{secondLevelCategoryArray['name']}}{% endif %} <span>({{ categoryArray['count'] is defined?categoryArray['count']|number_format:0}} {{'ads'|trans()}})</span></a>
+                            <a href="{{ listurl1 }}" class="main_category">{% if secondLevelCategoryArray['class'] is defined %}<span class="{{secondLevelCategoryArray['class']}} mob-adul-menu-icons">&nbsp;</span>{% endif %}{% if secondLevelCategoryArray['is_static'] is defined and secondLevelCategoryArray['is_static'] %} {{secondLevelCategoryArray['link_text']}} {% else %}{{secondLevelCategoryArray['name']}}{% endif %} <span>({{ secondLevelCategoryArray['count'] is defined?secondLevelCategoryArray['count']|number_format:0}} {{'ads'|trans()}})</span></a>
                             {% if thirdLevelLength %}
                                  <ul class="dropdown">
                                      {% for thirdLevelCategoryId, thirdLevelCategoryArray in secondLevelCategoryArray['children'] %}

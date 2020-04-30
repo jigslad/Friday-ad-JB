@@ -690,27 +690,74 @@ class CategoryRepository extends NestedTreeRepository
      */
     public function getPostadCategoryArrayByText($term, $container = null)
     {
-        $categoryArray      = array();
+        $categoryArray      = $categories = array();
         $categoryFinalArray = array();
-        $limit              = 9;
+        $limit              = 9;      
         $term               = preg_replace('/[^A-Za-z0-9\s]/', '', trim($term));
-        $keywords           = explode(' ', strtolower($term));
-
-        if (count($keywords)) {
-            $keywords                 = array_slice($keywords, 0, 5);
+        $exactKeywords           = explode(' ', strtolower($term));
+        
+        if (!empty($exactKeywords)) {
+            $excludedStopWordsKeywords = array_diff($exactKeywords, CommonManager::stopwordsList());
+            $keywords                 = array_slice($excludedStopWordsKeywords, 0, 5);
             $bottomLevelCategoryArray = array();
             $parentLevelCategoryArray = array();
             $keywordString            = implode('|', $keywords);
             $keywordsPattern          = '^('.$keywordString.').*$|^.*[[:space:]]('.$keywordString.').*$';
+            $exactKeywordsCnt = count($exactKeywords);
 
-            $categories = $this->getBaseQueryBuilder()
+            /*$categories = $this->getBaseQueryBuilder()
                                ->andWhere("regexp(".self::ALIAS.".name, '".$keywordsPattern."') != false or regexp(".self::ALIAS.".synonyms_keywords, '".$keywordsPattern."') != false")
                                ->andWhere(self::ALIAS.'.lvl > :level')
                                ->setParameter('level', 1)
                                ->orderBy(self::ALIAS.'.lvl', 'asc')
-                               ->getQuery()->getResult();
-
-            if (count($categories)) {
+                               ->getQuery()->getResult();*/
+            
+            //Paa search keyword logic changes as per FFR-3901
+            if($exactKeywordsCnt==1) {
+                $categories = $this->getBaseQueryBuilder()->Where(self::ALIAS.".name ='".$term."'")->andWhere(self::ALIAS.'.lvl > :level')->setParameter('level', 1)->orderBy(self::ALIAS.'.id', 'asc')->getQuery()->getResult();
+                if(empty($categories)) {
+                    $categories = $this->getBaseQueryBuilder()->Where("FIND_IN_SET('".$term."',".self::ALIAS.".synonyms_keywords) > 0")->andWhere(self::ALIAS.'.lvl > :level')->setParameter('level', 1)->orderBy(self::ALIAS.'.name', 'asc')->getQuery()->getResult();
+                }                
+            } else {
+                CommonManager::$permuteresult = array();
+                CommonManager::pc_permute($exactKeywords);
+                $permutationKeywords = CommonManager::$permuteresult;
+                foreach ($permutationKeywords as $permutationKeyword) {
+                    $categories = $this->getBaseQueryBuilder()->Where(self::ALIAS.".name like '".$permutationKeyword."'")->andWhere(self::ALIAS.'.lvl > :level')->setParameter('level', 1)->orderBy(self::ALIAS.'.id', 'asc')->getQuery()->getResult();
+                    if(!empty($categories)) {
+                        break;
+                    }
+                }
+                if(empty($categories)) {
+                    foreach ($permutationKeywords as $permutationKeyword) {
+                        $categories = $this->getBaseQueryBuilder()->Where("FIND_IN_SET('".$permutationKeyword."',".self::ALIAS.".synonyms_keywords) > 0")->andWhere(self::ALIAS.'.lvl > :level')->setParameter('level', 1)->orderBy(self::ALIAS.'.name', 'asc')->getQuery()->getResult();
+                        if(!empty($categories)) {
+                            break;
+                        }
+                    }
+                }
+            }
+            if(empty($categories)) {
+                if($exactKeywordsCnt==1) {
+                    $categories = $this->getBaseQueryBuilder()->Where(self::ALIAS.".name like '".$term."%'")->andWhere(self::ALIAS.'.lvl > :level')->setParameter('level', 1)->orderBy(self::ALIAS.'.id', 'asc')->getQuery()->getResult();
+                    if(empty($categories)) {
+                        $categories = $this->getBaseQueryBuilder()->Where(self::ALIAS.".synonyms_keywords like '%".$term."%'")->andWhere(self::ALIAS.'.lvl > :level')->setParameter('level', 1)->orderBy(self::ALIAS.'.name', 'asc')->getQuery()->getResult();
+                    }
+                } else {
+                    foreach ($keywords as $keyword) {
+                        $categories = $this->getBaseQueryBuilder()->Where(self::ALIAS.".name like '".$keyword."%'")->andWhere(self::ALIAS.'.lvl > :level')->setParameter('level', 1)->orderBy(self::ALIAS.'.id', 'asc')->getQuery()->getResult();
+                        if(empty($categories)) {
+                            $categories = $this->getBaseQueryBuilder()->Where(self::ALIAS.".synonyms_keywords like '%".$keyword."%'")->andWhere(self::ALIAS.'.lvl > :level')->setParameter('level', 1)->orderBy(self::ALIAS.'.name', 'asc')->getQuery()->getResult();
+                            if(!empty($categories)) {
+                                break;
+                            }
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+            if (!empty($categories)) {
                 foreach ($categories as $category) {
                     $showTwoParentName    = false;
                     $secondRootCategoryId = $this->getSecondRootCategoryId($category->getId(), $container);
@@ -1254,12 +1301,12 @@ class CategoryRepository extends NestedTreeRepository
     {
         $categoryClassArray = array();
         $categoryClassArray[self::ADULT_ID]     = 'mob-adult';
-        $categoryClassArray[self::ADULT_MASSAGE_ID]     = 'mob-adult-massage';
-        $categoryClassArray[self::ESCORT_SERVICES_ID]     = 'mob-adult-escorts';
-        $categoryClassArray[self::FETISH_AND_ROLE_PLAY_ID]     = 'mob-adult-fetish-role';
-        $categoryClassArray[self::GAY_MALE_ESCORT_ID]     = 'mob-adult-agy-male';
-        $categoryClassArray[self::ADULT_INDUSTRY_JOBS_ID]     = 'mob-adult-industry-jobs';
-        $categoryClassArray[self::ADULT_CONTACTS_ID]     = 'mob-adult-contacts';
+        $categoryClassArray[self::ADULT_MASSAGE_ID]     = 'mob-adul-massage';
+        $categoryClassArray[self::ESCORT_SERVICES_ID]     = 'mob-adul-escorts';
+        $categoryClassArray[self::FETISH_AND_ROLE_PLAY_ID]     = 'mob-adul-fetish-role';
+        $categoryClassArray[self::GAY_MALE_ESCORT_ID]     = 'mob-adul-gay-male';
+        $categoryClassArray[self::ADULT_INDUSTRY_JOBS_ID]     = 'mob-adul-industry-jobs';
+        $categoryClassArray[self::ADULT_CONTACTS_ID]     = 'mob-adul-contacts';
         return $categoryClassArray;
     }
 
@@ -2339,6 +2386,71 @@ class CategoryRepository extends NestedTreeRepository
         }
     }
     
+    public function getChildrenIdsFromParentIds($categoryIds) {
+        $categories = $rescategories = $categoryPathArray = array();
+        $res_child_categories = $res_parent_categories = $categoriesRes = array();
+        $categoriesRes1 = array();
+        
+        $tableName = $this->_em->getClassMetadata('FaEntityBundle:Category')->getTableName();
+       
+        foreach($categoryIds as $categoryId) {
+            $res_child_categories = $this->getNestedChildrenIdsByCategoryId($categoryId);
+            
+            if ($categoryId) {
+                $categoryObj = $this->find($categoryId);
+                
+                if ($categoryObj) {
+                    $categories = $this->getPath($categoryObj);
+                    
+                    foreach ($categories as $category) {
+                        if ($category->getLvl() > 0 && $category->getStatus() ==1) {
+                            $res_parent_categories[] = $category->getId();
+                        }
+                    }
+                }
+            }  
+            $rescategories = array_merge($res_child_categories,$res_parent_categories);
+                        
+            if (!empty($rescategories)) {
+                $categoriesRes = array_unique($rescategories);    
+                $categoriesRes1 = array_merge($categoriesRes,$categoriesRes1);
+            }
+        }
+        
+        if(!empty($categoriesRes1)) {
+            $categories = array_unique($categoriesRes1);
+        }
+
+        return $categories;
+    }
+    
+    /**
+     * Get entity type array.
+     *
+     * @param integet $categoryId Category id.
+     *
+     * @return array
+     */
+    public function getCategoryParentArrayById($categoryId)
+    {
+        $categoryPathArray = array();
+        
+        if ($categoryId) {
+            $categoryObj = $this->find($categoryId);
+            
+            if ($categoryObj) {
+                $categories = $this->getPath($categoryObj);
+                
+                foreach ($categories as $category) {
+                    if ($category->getLvl() > 0 && $category->getStatus() ==1) {
+                        $categoryPathArray[] = $category->getId();
+                    }
+                }
+            }
+        }
+        
+        return $categoryPathArray;
+    }
     /**
      * Get adult categories.
      *
@@ -2403,7 +2515,7 @@ class CategoryRepository extends NestedTreeRepository
             $this->categoryCountArray = $categoryCountArray;
             $this->leafLevelCategoryCount = $leafLevelCategoryCount;
         }
-        
+
         $tableName = $this->_em->getClassMetadata('FaEntityBundle:Category')->getTableName();
         $headerCategoryArray = array();
         $query = 'SELECT parent.id,parent.name,parent.lvl,parent.slug,parent.parent_id,parent.full_slug,node.include_as_main_category_in_header,parent.is_children_header_sortable,node.header_sort_order
@@ -2432,7 +2544,7 @@ class CategoryRepository extends NestedTreeRepository
                     }
                     
                     $categoryArray = array('name' => $category['name'], 'id' => $category['id'], 'slug' => $category['slug'], 'count' => $count, 'full_slug' => $category['full_slug'], 'children' => array(),'header_sortable'=>$category['is_children_header_sortable'],'sort_ord'=> $category['header_sort_order'] );
-                    
+
                     if ($category['lvl'] == 1 && !array_key_exists($category['id'], $headerCategoryArray)) {
                         if (isset($categoryClassArray[$category['id']])) {
                             $categoryArray['class'] = $categoryClassArray[$category['id']];
@@ -2488,5 +2600,5 @@ class CategoryRepository extends NestedTreeRepository
         }
         
         return $headerCategoryArray;
-    }
+     }
 }
