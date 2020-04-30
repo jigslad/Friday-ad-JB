@@ -1,0 +1,60 @@
+{% if blocks|length %}
+    {% set container = fetch_container_instance() %}
+    {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+    {% set currentDevice = 'D' %}
+    {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+        {% set currentDevice = 'M' %}
+    {% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
+        {% set currentDevice = 'T' %}
+    {% endif %}
+
+    {% set container = fetch_container_instance() %}
+    {% set customized_url = app.request.get('customized_url')  %}
+    {% set entityCacheManager = container.get('fa.entity.cache.manager') %}
+    <div id="list_home_location_box" class="fa-accordion">
+        <dl class="accordion" data-accordion>
+            {% set panelCnt = 0 %}
+            {% for solrFieldName, block in blocks %}
+                {% if block['facet'] is defined and block['facet']|length %}
+                    <dd class="accordion-navigation{% if (currentDevice == 'D' and panelCnt == 0) %} active{% endif %}">
+                        <a href="#panelBlock{{panelCnt}}" class="clearfix"><h5 class="left">{{ block['heading'] }}</h5> <i class="{% if (currentDevice == 'D' and panelCnt == 0) %} fi-minus{% else %}fi-plus{% endif %} right"></i></a>
+                        <div id="panelBlock{{panelCnt}}" class="content clearfix{% if (currentDevice == 'D' and panelCnt == 0) %} active{% endif %}">
+                            <ul class="link-list">
+                                <li>
+                                    {% set facetIdArray = block['facet']|keys %}
+                                    {% if currentDevice == 'T'%}
+                                        {% set columns = 5 %}
+                                    {% else %}
+                                        {% set columns = 6 %}
+                                    {% endif %}
+                                    {% set ctr = 0 %}
+                                    {% set totalItems = facetIdArray|length %}
+                                    {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
+                                    {% set extraColumn = (totalItems % columns) %}
+                                    {% set colCounter = {} %}
+                                    {% for i in 0..columns-1 %}
+                                        {% if loop.index0 < extraColumn %}
+                                            {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
+                                        {% else  %}
+                                            {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% for i in 0..totalItems-1 %}                                               
+                                            {% if facetIdArray[ctr] is defined %}
+                                                {% set facetId = facetIdArray[ctr] %}
+                                                {% set searchResultUrl = container.get('fa_ad.manager.ad_routing').getCustomListingUrl({ (block['search_field_name']): facetId},'adult-services/escorts') %}
+                                                {# {% set searchResultUrl =  path('location_home_page', {'location': entityCacheManager.getEntitySlugById('FaEntityBundle:Location', facetId)}) %} #}
+                                                <a href="{{ searchResultUrl }}">{{ entityCacheManager.getEntityNameById(block['repository'], facetId) }} {# ({{ block['facet'][facetId] }}) #}</a>
+                                            {% endif %}
+                                            {% set ctr = ctr + 1 %}                                               
+                                    {% endfor %}
+                                </li>
+                          </ul>
+                        </div>
+                    </dd>
+                    {% set panelCnt = panelCnt + 1 %}
+                {% endif %}
+            {% endfor %}
+        </dl>
+    </div>
+{% endif %}

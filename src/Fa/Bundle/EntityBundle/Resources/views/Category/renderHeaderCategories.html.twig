@@ -23,12 +23,14 @@
                             or categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID')
                             or categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
                             {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParam) %}
+                        {% elseif categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+                        	{% set listurl = path('fa_adult_homepage') %}
                         {% else %}
                             {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['full_slug']) %}
                         {% endif %}
 			             <li class="inside-top-category-menu">
 			                 <a href="{{ listurl }}" class="main_category inside-top-category-menu">{{categoryArray['name']}}</a>
-			                 {% if categoryArray['children'] is defined and categoryArray['children']|length %}
+			                 {% if categoryArray['children'] is defined and categoryArray['children']|length and categoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
                                 {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}
                                     {% set staticPageUrls = fetch_repository('FaContentBundle:SeoTool').getLandingPageStaticPageUrlArray('motors', container, location_id) %}
                                     {% set categoryArray  = append_to_array_by_index(categoryArray, {'10000': {'is_static': true, 'link_url' : (staticPageUrls['Classic cars']), 'link_text' : 'Classic Cars'}}, 'children') %}
@@ -99,7 +101,7 @@
 </div>
 <div id="desktop-header-menus">
 {% if headerCategories|length %}
-{% cache 'header|menu|'~location_id|replace({' ':''})~'front/header_menu' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0 ) (staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isBot', [container]) ? 600 : 86400) %}
+{# {% cache 'header|menu|'~location_id|replace({' ':''})~'front/header_menu' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0 ) (staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isBot', [container]) ? 600 : 86400) %} #}
     <ul class="left hide-for-small-only real-desktop" id="top_category_menu">
         {% for categoryId, categoryArray in headerCategories %}
         {% set linkParam = { 'item__location': location_id, 'item__category_id': categoryId} %}
@@ -109,12 +111,14 @@
             or categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID')
             or categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
             {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParam) %}
+        {% elseif categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+            {% set listurl = path('fa_adult_homepage') %}
         {% else %}
             {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['full_slug']) %}
         {% endif %}
             <li class="has-dropdown">
                 <a href="{{ listurl }}" class="main_category">{{categoryArray['name']}}</a>
-                {% if categoryArray['children'] is defined and categoryArray['children']|length %}
+                {% if categoryArray['children'] is defined and categoryArray['children']|length and categoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
                     {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}
                         {% set staticPageUrls = fetch_repository('FaContentBundle:SeoTool').getLandingPageStaticPageUrlArray('motors', container, location_id) %}
                         {% set categoryArray  = append_to_array_by_index(categoryArray, {'10000': {'is_static': true, 'link_url' : (staticPageUrls['Classic cars']), 'link_text' : 'Classic Cars'}}, 'children') %}
@@ -182,7 +186,7 @@
             </li>
         {% endfor %}
     </ul>
-{% endcache %}
+   {# {% endcache %} #}
 {% endif %}
 </div>
 <div>

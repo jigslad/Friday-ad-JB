@@ -95,6 +95,12 @@ class AdRouteListener
                 }
                 $url = $routeManager->getListingUrl($carSearchParams, $request->get('page'));
                 $event->setResponse(new RedirectResponse($url));
+            } elseif ($request->get('fa_adult_home_page_search') && count($request->get('fa_adult_home_page_search'))) {
+                $adultSearchParams = $request->get('fa_adult_home_page_search');
+                $adultSearchParams = array_map('trim', $adultSearchParams);
+                $adultSearchParams = array_filter($adultSearchParams);
+                $url = $routeManager->getListingUrl($adultSearchParams, $request->get('page'));
+                $event->setResponse(new RedirectResponse($url));
             }
         }
     }

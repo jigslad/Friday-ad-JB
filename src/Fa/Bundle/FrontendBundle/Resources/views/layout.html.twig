@@ -36,7 +36,7 @@
     {% if ((app.request.uri == container.getParameter('base_url')~'/bristol/') and app.request.get('ti_url')) %}
         {% set showTiPopup = true %}
     {% endif %}
-
+    
     {% if not app.request.cookies.has('is_over_18') and searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
         {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(searchParams.item__category_id, false, fetch_container_instance()) %}
         {% set catCnt = 0 %}
@@ -220,8 +220,53 @@
         {% if status_code == 200 %}
             {{ include('FaFrontendBundle::cookiePolicy.html.twig') }}
         {% endif %}
-
-        {{ include('FaFrontendBundle::header.html.twig', {'status_code': status_code}) }}
+        
+        {% set showAdultPages = 0 %}
+        {% set appUserRole = '' %}
+        {% set assignedCategoryId = 0 %}
+        {% if (app.user.getId() is defined) %}
+        	{% set appUserRole = fetch_repository('FaUserBundle:User').getUserRole(app.user.getId(), container) %}
+        {% endif %}
+    
+        {% if app.request.cookies.has('is_over_18') %}
+            {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null  %}
+            	{% set assignedCategoryId = searchParams.item__category_id %}
+        	{% elseif currentRoute == 'ad_detail_page' and app.request.get('category_string') %}
+        		{% set assignedCategoryId = fetch_repository('FaEntityBundle:Category').getIdBySlug(app.request.get('category_string'), fetch_container_instance()) %}
+        	{% elseif (currentRoute == 'show_business_profile_page' or currentRoute == 'show_business_user_ads') and app.request.get('profileNameSlug') %}
+                 {% set objUserSite = fetch_repository('FaUserBundle:UserSite').findOneBy({'slug':app.request.get('profileNameSlug')}) %}
+                 {% set assignedCategoryId = objUserSite.getUser().getBusinessCategoryId() %}
+        	{% elseif (appUserRole is defined and (appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') or appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION'))) %}
+            	{% set assignedCategoryId = app.user.getBusinessCategoryId() %}
+        	{% elseif (appUserRole is defined and appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION')) %}
+        		{% set showAdultPages = 1 %}
+        	{% endif %}
+    
+        	{% if assignedCategoryId!=0 %}
+            	{% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(assignedCategoryId, false, fetch_container_instance()) %}
+                {% set catCnt = 0 %}
+                {% if categoryPath|length %}
+                    {% for categoryId, categoryName in categoryPath %}
+                        {% if catCnt == 0 %}
+                            {% if (categoryId == ADULT_CATEGORY_ID) %}
+                                {% set showAdultPages = 1 %}
+                            {% endif %}
+                        {% endif %}
+                        {% set catCnt = catCnt + 1 %}
+                    {% endfor %}
+                {% endif %}
+            {% endif %}	
+        {% endif %}
+        
+        {% if '/adult-services/' in app.request.uri %}
+        	{% set showAdultPages=1 %}
+        {% endif %}
+        
+        {% if showAdultPages==1 %}
+            {{ include('FaFrontendBundle:Adult:header.html.twig', {'status_code': status_code}) }}
+        {% else %}
+        	{{ include('FaFrontendBundle::header.html.twig', {'status_code': status_code}) }}
+        {% endif %}
 	
         {% if status_code == 200 %}
             {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page'} %}
@@ -259,7 +304,11 @@
             	{% if searchParams is not defined %}
             		{% set searchParams = [] %}
             	{% endif %}
-                {{ include('FaFrontendBundle::footer.html.twig', {'searchParams':searchParams}) }}
+                {% if showAdultPages==1 %}
+                    {{ include('FaFrontendBundle:Adult:footer.html.twig', {'searchParams':searchParams}) }}
+                {% else %}
+                    {{ include('FaFrontendBundle::footer.html.twig', {'searchParams':searchParams}) }}
+                {% endif %}
             {% else %}
                 {% if showMblFooterFlag %}
                     {% if searchParams is not defined %}

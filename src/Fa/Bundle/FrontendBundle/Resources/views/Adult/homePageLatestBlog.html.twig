@@ -1,0 +1,18 @@
+<div class="blog-block medium-20 medium-offset-2 large-16 large-offset-4 columns">
+ 	{% for externalSiteBlogDetail in externalSiteBlogDetails %}
+        <div class="medium-12 columns">
+            <div class="blog-item-block">
+                <div class="blog-item active">
+                    <div class="list-img">
+                        <img src="{{ externalSiteBlogDetail['mediaUrl'] }}" class="lazyOwl">
+                    </div>
+                    <div class="blog-cont">
+                        <div class="list-title">{{ externalSiteBlogDetail['title'] }}</div>
+                        <div class="list-author-pub-date">by {{ externalSiteBlogDetail['author']|title }} - {{ externalSiteBlogDetail['publishdate']|date("d M, Y") }}</div>
+                    </div>
+                </div>
+                <div class="text-center"><button class="xs-btn-1 thin-btn button ga-ahpBlogLatest">{{ externalSiteBlogDetail['buttonLabel'] }}</button></div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
