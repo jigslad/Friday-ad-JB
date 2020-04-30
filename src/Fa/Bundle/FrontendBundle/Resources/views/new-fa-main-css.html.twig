@@ -1,22 +1,56 @@
-<link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900,Poppins-SemiBold&display=swap" rel="stylesheet"> 
+<link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600&display=swap" rel="stylesheet"> 
 <style>
-body, html { font-family: 'Poppins' !important }
-a { color: #91D851; }
-a:hover, a:focus:hover, a:focus { color: #82C249 !important; }
-.ad-edit a:hover.xs-btn-2, .ad-edit a:focus.xs-btn-2, .ad-remove a:hover.xs-btn-2, .ad-remove a:focus.xs-btn-2 { color: #212527 !important; }
-
-label { color: #ACB0B7 !important; }
-input { border-radius:4px !important; }
-#manage-my-ads-list-only .tab-menu li a {
-    color: #ACB0B7 !important;
-    font-weight: 500 !important;
+a {
+	color: #82C249;
 }
-h1, .abt-other-profile h1 {color: #212527; font-family: "Poppins";font-weight: 500 !important; font-size: 36px; line-height: 46px;}
-h2 {color: #212527; font-family: "Poppins";font-weight: 500 !important; font-size: 20px; line-height: 27px;}
+a:hover,
+a:focus:hover,
+a:focus {
+	color: #82C249 !important;
+}
+.ad-edit a:hover.xs-btn-2, .ad-edit a:focus.xs-btn-2, .ad-remove a:hover.xs-btn-2, .ad-remove a:focus.xs-btn-2 {   
+    color: #a4a4a4 !important;
+}
+h1, .abt-other-profile h1 {
+	font-family: 'Poppins', serif !important;
+	font-weight: 500 !important;
+}
 h3, .show-review-detail .reply-msg-heading h3, #shop-user-item-slider h3, .map-wrapper .listing h3, .my-msg-heading h3, 
-.manage-item-list h3, .featured-profile-list h3, .map-wrapper .listing h3 {color: #212527; font-family: "Poppins";font-weight: 600 !important; font-size: 18px; line-height: 24px;}
-h4, .paa-help-text h4, .vif-rec-slider .slots-3 .rec-slider-info h4, .rec-slider-info h4 {color: #212527; font-family: "Poppins";font-weight: 600 !important; font-size: 16px; line-height: 21px;}
-h5 {color: #212527; font-family: "Poppins";font-weight: 600 !important; font-size: 14px; line-height: 21px;}
+.manage-item-list h3, .featured-profile-list h3, .map-wrapper .listing h3 {
+	font-family: 'Poppins', serif !important;
+	font-weight: 600 !important;
+}
+h4, .paa-help-text h4, .vif-rec-slider .slots-3 .rec-slider-info h4, .rec-slider-info h4 {
+	font-family: 'Poppins', serif !important;
+	font-weight: 600 !important !important;
+}
+button, .button {
+	font-family: 'Poppins', serif !important;
+	font-weight: 600 !important;
+	border-radius: 4px !important;
+	background-color: linear-gradient(135deg, #A8DC28 0%,#79D378 100%) !important;
+	border-color: transparent !important;
+}
+a:hover.button, a:focus.button,a:hover.secondary-btn-1, a:focus.secondary-btn-1,a:hover.primary-btn-1, a:focus.primary-btn-1 {
+	color:#ffffff !important;
+}
+.secondary-btn-1, .footer-newsletter-btn, .xs-btn-1{
+	background: linear-gradient(135deg, #A8DC28 0%,#79D378 100%) !important;
+	border: linear-gradient(135deg, #A8DC28 0%,#79D378 100%) !important;
+}
+.secondary-btn-1:hover, .secondary-btn-1:focus, .footer-newsletter-btn:hover, .footer-newsletter-btn:focus,
+.xs-btn-1:hover, .xs-btn-1:focus {
+	background: linear-gradient(-135deg, #A8DC28 0%,#79D378 100%) !important;
+	border: linear-gradient(-135deg, #A8DC28 0%,#79D378 100%) !important;
+}
+.primary-btn-1, .primary-btn-2 {
+	background: linear-gradient(135deg, #6AD093 0%,#31C5F2 100%) !important;
+	border: linear-gradient(135deg, #6AD093 0%,#31C5F2 100%) !important;
+}
+.primary-btn-1:hover, .primary-btn-1:focus, .primary-btn-2:hover, .primary-btn-2:focus {
+	background: linear-gradient(-135deg, #6AD093 0%,#31C5F2 100%) !important;
+	border: linear-gradient(-135deg, #6AD093 0%,#31C5F2 100%) !important;
+}
 
 .top-bar-section li:not(.has-form).place-item-btn a, .find-label, .change-location, .pkg-subtitle, 
 .list-price, .details-similar-item h2, .promo-code .show-code, .promo-code .show-code:hover, .promo-code .show-code:focus, 
@@ -24,11 +58,24 @@ h5 {color: #212527; font-family: "Poppins";font-weight: 600 !important; font-siz
 .near-location, .section-head, .accordion dd>a.section-head, .section-head, .accordion dd>div.section-head, .manage-price, 
 .finance-btn, .no-photo-heading, .private-business-modal h2, .detail-thumb-img .img-placeholder span, 
 .total-credits-remaining, .adult-parallax h1 span  {
-	font-family: 'Poppins' !important;
+	font-family: 'Poppins', sans-serif !important;
 	font-weight: 400 !important;
 }
-button, .button { font-family: "Poppins" !important; }
 
+.top-bar-section li:not(.has-form).place-item-btn a {
+    background: linear-gradient(135deg, #6AD093 0%,#31C5F2 100%) !important;
+    border: transparent !important;
+}
+
+.top-bar-section li:not(.has-form).place-item-btn a:hover, .top-bar-section li:not(.has-form).place-item-btn a:focus {
+	background: linear-gradient(-135deg, #6AD093 0%,#31C5F2 100%) !important;
+	border: transparent !important;
+	color: #ffffff !important;
+}
+
+#home-search .search-btn button, .notify-me.opened button, .site-search .search-icon  {
+    border-radius: 0 4px 4px 0 !important;
+}
 .simple-footer .fad-logo span { background: url('/bundles/fafrontend/images/FAD-register.svg') no-repeat !important; }
 footer .fad-logo span { background: url('/bundles/fafrontend/images/Fad-footer.svg') no-repeat !important; }
 .f-ad-sign { background: url('/bundles/fafrontend/images/Fad-logo-compact.svg') no-repeat !important; }
@@ -42,352 +89,21 @@ footer .fad-logo span { background: url('/bundles/fafrontend/images/Fad-footer.s
     background-size: auto !important;
 }
 
-button, .button {
-	font-weight: 600 !important;
-	border-radius: 4px !important;
-}
-
-a:hover.button, a:focus.button,a:hover.secondary-btn-1, a:focus.secondary-btn-1,a:hover.primary-btn-1, a:focus.primary-btn-1 {
-	color: #FFFFFF !important; font-weight:600px !important;  
-}
-a:hover.secondary-btn-1, a:focus.secondary-btn-1 {
-	font-size: 16px  !important; 
-}
-a:hover.primary-btn-1, a:focus.primary-btn-1 { font-size: 18px !important; line-height: 20px !important; }
-
-.secondary-btn-1, .footer-newsletter-btn, .xs-btn-1{
-	background: linear-gradient(135deg, #A8DC28 0%, #79D378 100%) !important;
-	border: 1px solid #91D851 !important;
-	
-}
-.secondary-btn-1, .footer-newsletter-btn {
-	line-height:22px !important;
-}
-.secondary-btn-1:hover, .secondary-btn-1:focus, .footer-newsletter-btn:hover, .footer-newsletter-btn:focus,
-.xs-btn-1:hover, .xs-btn-1:focus {
-	background: linear-gradient(135deg, #85B021 0%, #61A85F 100%) !important;
-	border: 1px solid #85B021 !important;
-}
-
-.primary-btn-1, .primary-btn-2, .primary-btn-1.not-hover, .xs-blue-btn {
-	background: linear-gradient(135deg, #EE316F 0%, #FE8A7A 100%) !important;
-	border: 0px solid transparent !important;
-}
-.primary-btn-1:hover, .primary-btn-1:focus, .primary-btn-2:hover, .primary-btn-2:focus, .xs-blue-btn:focus, .xs-blue-btn:hover {
-	background: linear-gradient(135deg, #BE2858 0%, #CA6D61 100%) !important;
-	border: 0px solid transparent !important;
-}
-
-#home-search .search-btn button, .notify-me.opened button, .site-search .search-icon  {
-    border-radius: 0 4px 4px 0 !important;
-}
-
-.top-bar-section li:not(.has-form).place-item-btn a {
-    background: linear-gradient(135deg, #EE316F 0%, #FE8A7A 100%) !important;
-    border: transparent !important;
-}
-
-.top-bar-section li:not(.has-form).place-item-btn a:hover, .top-bar-section li:not(.has-form).place-item-btn a:focus {
-	background: linear-gradient(135deg, #BE2858 0%, #CA6D61 100%) !important;
-	border: transparent !important;
-	color: #FFFFFF !important;
-}
-
 .budget-go-btn {
     background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' x='0' y='0' width='40' height='40' viewBox='-459 261 40 40' xml:space='preserve'%3e%3cstyle type='text/css'%3e .st0%7bfill:none;stroke:%23FFFFFF;%7d .st1%7bfill:none;stroke:%23FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;%7d .st2%7bfill:none;stroke:%23FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;%7d %3c/style%3e%3ctitle%3ebutton filters%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cg transform='translate(-362.000000, -910.000000)'%3e%3cg transform='translate(182.000000, 627.000000)'%3e%3cg transform='translate(1.000000, 243.000000)'%3e%3cg transform='translate(179.000000, 40.000000)'%3e%3cpath class='st0' d='M-457 261h36c1.1 0 2 0.9 2 2v36c0 1.1-0.9 2-2 2h-36c-1.1 0-2-0.9-2-2v-36C-459 261.9-458.1 261-457 261z'/%3e%3cg transform='translate(15.000000, 16.000000)'%3e%3cg transform='translate(8.000000, 0.000000)'%3e%3cpath class='st1' d='M-459 261l4 5 -4 5'/%3e%3c/g%3e%3cpath class='st2' d='M-459 261l4 5 -4 5'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e") no-repeat center center, linear-gradient(135deg, #A8DC28 0%,#79D378 100%);
     background-color: transparent !important;
 }
 .budget-go-btn:hover,.budget-go-btn:focus {
-    background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' x='0' y='0' width='40' height='40' viewBox='-459 261 40 40' xml:space='preserve'%3e%3cstyle type='text/css'%3e .st0%7bfill:none;stroke:%23FFFFFF;%7d .st1%7bfill:none;stroke:%23FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;%7d .st2%7bfill:none;stroke:%23FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;%7d %3c/style%3e%3ctitle%3ebutton filters%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cg transform='translate(-362.000000, -910.000000)'%3e%3cg transform='translate(182.000000, 627.000000)'%3e%3cg transform='translate(1.000000, 243.000000)'%3e%3cg transform='translate(179.000000, 40.000000)'%3e%3cpath class='st0' d='M-457 261h36c1.1 0 2 0.9 2 2v36c0 1.1-0.9 2-2 2h-36c-1.1 0-2-0.9-2-2v-36C-459 261.9-458.1 261-457 261z'/%3e%3cg transform='translate(15.000000, 16.000000)'%3e%3cg transform='translate(8.000000, 0.000000)'%3e%3cpath class='st1' d='M-459 261l4 5 -4 5'/%3e%3c/g%3e%3cpath class='st2' d='M-459 261l4 5 -4 5'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e") no-repeat center center, linear-gradient(135deg, #A8DC28 0%,#79D378 100%);
+    background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' x='0' y='0' width='40' height='40' viewBox='-459 261 40 40' xml:space='preserve'%3e%3cstyle type='text/css'%3e .st0%7bfill:none;stroke:%23FFFFFF;%7d .st1%7bfill:none;stroke:%23FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;%7d .st2%7bfill:none;stroke:%23FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;%7d %3c/style%3e%3ctitle%3ebutton filters%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cg transform='translate(-362.000000, -910.000000)'%3e%3cg transform='translate(182.000000, 627.000000)'%3e%3cg transform='translate(1.000000, 243.000000)'%3e%3cg transform='translate(179.000000, 40.000000)'%3e%3cpath class='st0' d='M-457 261h36c1.1 0 2 0.9 2 2v36c0 1.1-0.9 2-2 2h-36c-1.1 0-2-0.9-2-2v-36C-459 261.9-458.1 261-457 261z'/%3e%3cg transform='translate(15.000000, 16.000000)'%3e%3cg transform='translate(8.000000, 0.000000)'%3e%3cpath class='st1' d='M-459 261l4 5 -4 5'/%3e%3c/g%3e%3cpath class='st2' d='M-459 261l4 5 -4 5'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e") no-repeat center center, linear-gradient(-135deg, #A8DC28 0%,#79D378 100%);
 }
 
-.top-bar-section .has-dropdown a { padding-left:10px !important; }
-
-.search-pin { background: url("data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' x='0' y='0' width='21' height='25' viewBox='-469 268 21 25' xml:space='preserve'%3E%3Cstyle type='text/css'%3E .st0%7Bfill:%2391d851;%7D%0A%3C/style%3E%3Ctitle%3Esearch-pin%3C/title%3E%3Cdesc%3ECreated with Sketch.%3C/desc%3E%3Cpath class='st0' d='M-458.5 268c-5.5 0-10 4.3-10 9.6 0.1 7.2 10 15.4 10 15.4 -0.1 0 9.8-7.7 10-15.4C-448.5 272.3-453 268-458.5 268zM-458.5 281.3c-1.8 0-3.3-1.5-3.3-3.3s1.5-3.3 3.3-3.3 3.3 1.5 3.3 3.3S-456.7 281.3-458.5 281.3z'/%3E%3C/svg%3E") no-repeat !important; }
-
-#eighteenPlusWarnningModel .primary-btn-2 { background:linear-gradient(135deg, #A75BD8 0%, #C60A84 100%) !important;border: 0px solid transparent !important; }
-#eighteenPlusWarnningModel .primary-btn-2:hover { background:linear-gradient(135deg, #8645AA 0%, #9D086A 100%) !important; }
-.secondary-btn-1, .secondary-btn-2, .secondary-btn-3  { padding:8px 20px 8px 20px !important; }
-.secondary-btn-2, .secondary-btn-3  { height: 40px !important; }
-.interested-item a.button:hover { color: #82C249 !important; }
-.paypal-box { background-color: transparent !important;border: solid 1px #CBD5D9 !important; }
-.ui-selectmenu-button { border-radius: 4px !important; }
-.paa-bdr-box input[type="text"] { margin-bottom: 15px !important; }
-
-/* Paa Step Numbers */
-.step-nav .step-num { float: left;width: 52px;height: 52px;margin-right: 13px;text-align: center;border: 3px solid #fff;border-radius: 50%;position: relative;padding: 10px 0px;text-indent: unset; }
-.step-nav .step-1, .step-nav .step-2, .step-nav .step-3, .step-nav .step-4 { background: transparent !important; }
-.step-nav .step-on .step-1, .step-nav .step-on .step-2, .step-nav .step-on .step-3, .step-nav .step-on .step-2 { background: transparent !important; border: 3px solid #82C249;color: #82C249; }
-.step-nav .step-on .step-text { color: #ffffff; }
-
-/* PAA second step */
-.big-wrapper { width: 470px !important; }
-.change-category .breadcrumb { padding: 0px !important;}
-.change-category a {font-size: 12px !important;}
-.change-category .breadcrumb a {color: #212527 !important; }
-.breadcrumb a:last-child {background: transparent !important; padding-right: 0px !important;}
-.change-category .cat-name-wrap {width: auto !important;}
-.paa-bdr-box {border-bottom: 0px !important; }
-.paa-enter-price input[type="number"] {width: 157px !important;}
-.change-category:first-child {margin-bottom: 30px;}
-.change-category .separator, .breadcrumb span.separator:last-child {
-    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%226%22%20height%3D%2210%22%20viewBox%3D%220%200%206%2010%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3Anone%3Bstroke%3A%23ACB0B7%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Ebreadcrumbs%20arrow%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-253.000000%2C%20-531.000000%29%22%3E%3Cg%20transform%3D%22translate%28-42.000000%2C%20406.000000%29%22%3E%3Cg%20transform%3D%22translate%280.000000%2C%20119.000000%29%22%3E%3Cg%20transform%3D%22translate%28296.000000%2C%206.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M0%200l4%205%20-4%205%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat 100% 7px !important;
-    width: 10px;height: 20px;padding-right: 15px !important;
- }
-.category-text { font-size: 12px;line-height: 22px; }
-.find-all .select2-choice, .find-all .select2-choice:hover, .find-all .select2-choice:focus, .find-all .select2-choice:active {
-    color: #ACB0B7 !important;border-top-left-radius: 4px !important;border-bottom-left-radius: 4px !important;
+.secondary-btn-1, .secondary-btn-2, .primary-btn-1,
+.secondary-btn-1:hover, .secondary-btn-2:hover, .primary-btn-1:hover,
+.secondary-btn-1:focus, .secondary-btn-2:focus, .primary-btn-1:focus,
+:not(.primary-btn-1.xs-thin-btn), :not(.primary-btn-1.xs-thin-btn:focus), :not(.primary-btn-1.xs-thin-btn:hover)  {
+    padding: 10px 20px 10px 20px !important;
+    text-align:center !important;
 }
-.primary-btn-1.disabled, .btn-disabled { background: #EAEFF0 !important; }
-    
-/* Category Images */
-.discover-forsale, .cat-forsale { background: url(/bundles/fafrontend/images/categories/Ic-btn-For-Sale.svg) no-repeat !important; }
-.discover-motors, .cat-motors { background: url(/bundles/fafrontend/images/categories/Ic-btn-Motors.svg) no-repeat !important; }
-.discover-jobs, .cat-jobs { background: url(/bundles/fafrontend/images/categories/Ic-btn-Jobs.svg) no-repeat !important; }
-.discover-services, .cat-services { background: url(/bundles/fafrontend/images/categories/Ic-btn-Services.svg) no-repeat !important; }
-.discover-property, .cat-property { background: url(/bundles/fafrontend/images/categories/Ic-btn-Property.svg) no-repeat !important; }
-.discover-animals, .cat-animals { background: url(/bundles/fafrontend/images/categories/Ic-btn-Animals.svg) no-repeat !important; }
-.discover-community, .cat-community { background: url(/bundles/fafrontend/images/categories/Ic-btn-Community.svg) no-repeat !important; }
-.discover-adult, .cat-adult { background: url(/bundles/fafrontend/images/categories/Ic-btn-Adult.svg) no-repeat !important; }
-
-.discover-forsale:hover, .cat-forsale:hover { background: url(/bundles/fafrontend/images/categories/Ic-btn-For-Sale-Hover.svg) no-repeat !important; }
-.discover-motors:hover, .cat-motors:hover { background: url(/bundles/fafrontend/images/categories/Ic-btn-Motors-Hover.svg) no-repeat !important; }
-.discover-jobs:hover, .cat-jobs:hover { background: url(/bundles/fafrontend/images/categories/Ic-btn-Jobs-Hover.svg) no-repeat !important; }
-.discover-services:hover, .cat-services:hover { background: url(/bundles/fafrontend/images/categories/Ic-btn-Services-Hover.svg) no-repeat !important; }
-.discover-property:hover, .cat-property:hover { background: url(/bundles/fafrontend/images/categories/Ic-btn-Property-Hover.svg) no-repeat !important; }
-.discover-animals:hover, .cat-animals:hover { background: url(/bundles/fafrontend/images/categories/Ic-btn-Animals-Hover.svg) no-repeat !important; }
-.discover-community:hover, .cat-community:hover { background: url(/bundles/fafrontend/images/categories/Ic-btn-Community-Hover.svg) no-repeat !important; }
-.discover-adult:hover, .cat-adult:hover { background: url(/bundles/fafrontend/images/categories/Ic-btn-Adult-Hover.svg) no-repeat !important; }
-
-.discover-forsale.active, .cat-forsale.active { background: url(/bundles/fafrontend/images/categories/Ic-btn-For-Sale-ON.svg) no-repeat !important; border-radius: 5px !important; }
-.discover-motors.active, .cat-motors.active { background: url(/bundles/fafrontend/images/categories/Ic-btn-Motors-ON.svg) no-repeat !important; border-radius: 5px !important; }
-.discover-jobs.active, .cat-jobs.active { background: url(/bundles/fafrontend/images/categories/Ic-btn-Jobs-ON.svg) no-repeat !important; border-radius: 5px !important; }
-.discover-services.active, .cat-services.active { background: url(/bundles/fafrontend/images/categories/Ic-btn-Services-ON.svg) no-repeat !important; border-radius: 5px !important; }
-.discover-property.active, .cat-property.active { background: url(/bundles/fafrontend/images/categories/Ic-btn-Property-ON.svg) no-repeat !important; border-radius: 5px !important; }
-.discover-animals.active, .cat-animals.active { background: url(/bundles/fafrontend/images/categories/Ic-btn-Animals-ON.svg) no-repeat !important; border-radius: 5px !important; }
-.discover-community.active, .cat-community.active { background: url(/bundles/fafrontend/images/categories/Ic-btn-Community-ON.svg) no-repeat !important; border-radius: 5px !important; }
-.discover-adult.active, .cat-adult.active { background: url(/bundles/fafrontend/images/categories/Ic-btn-Adult-ON.svg) no-repeat !important; border-radius: 5px !important; }
-
-/* Animals Images */
-.pets-dogs { background: url(/bundles/fafrontend/images/animals/Ic-btn-Dogs.svg) no-repeat !important; }
-.pets-cats { background: url(/bundles/fafrontend/images/animals/Ic-btn-Cats.svg) no-repeat !important; }
-.pets-birds { background: url(/bundles/fafrontend/images/animals/Ic-btn-Birds.svg) no-repeat !important; }
-.pets-rabbits { background: url(/bundles/fafrontend/images/animals/Ic-btn-Rabbits.svg) no-repeat !important; }
-.pets-guinea-pigs { background: url(/bundles/fafrontend/images/animals/Ic-btn-Guinea-Pigs.svg) no-repeat !important; }
-.pets-reptiles { background: url(/bundles/fafrontend/images/animals/Ic-btn-Reptiles.svg) no-repeat !important; }
-.pets-fish { background: url(/bundles/fafrontend/images/animals/Ic-btn-Fish.svg) no-repeat !important; }
-.pets-insects { background: url(/bundles/fafrontend/images/animals/Ic-btn-Insects.svg) no-repeat !important; }
-.pets-exotic-pets { background: url(/bundles/fafrontend/images/animals/Ic-btn-Exotic.svg) no-repeat !important; }
-.pets-other-pets { background: url(/bundles/fafrontend/images/animals/Ic-btn-Other.svg) no-repeat !important; }
-.pets-pet-accessories { background: url(/bundles/fafrontend/images/animals/Ic-btn-Pet-accessories.svg) no-repeat !important; }
-.pets-pet-supplies { background: url(/bundles/fafrontend/images/animals/Ic-btn-Pet-supplies.svg) no-repeat !important; }
-
-.pets-dogs:active, .pets-dogs:hover { background: url(/bundles/fafrontend/images/animals/Ic-btn-Dogs-Hover.svg) no-repeat !important; }
-.pets-cats:active, .pets-cats:hover { background: url(/bundles/fafrontend/images/animals/Ic-btn-Cats-Hover.svg) no-repeat !important; }
-.pets-birds:active, .pets-birds:hover { background: url(/bundles/fafrontend/images/animals/Ic-btn-Birds-Hover.svg) no-repeat !important; }
-.pets-rabbits:active, .pets-rabbits:hover { background: url(/bundles/fafrontend/images/animals/Ic-btn-Rabbits-Hover.svg) no-repeat !important; }
-.pets-guinea-pigs:active, .pets-guinea-pigs:hover { background: url(/bundles/fafrontend/images/animals/Ic-btn-Guinea-Pigs-Hover.svg) no-repeat !important; }
-.pets-reptiles:active, .pets-reptiles:hover { background: url(/bundles/fafrontend/images/animals/Ic-btn-Reptiles-Hover.svg) no-repeat !important; }
-.pets-fish:active, .pets-fish:hover { background: url(/bundles/fafrontend/images/animals/Ic-btn-Fish-Hover.svg) no-repeat !important; }
-.pets-insects:active, .pets-insects:hover { background: url(/bundles/fafrontend/images/animals/Ic-btn-Insects-Hover.svg) no-repeat !important; }
-.pets-exotic-pets:active, .pets-exotic-pets:hover { background: url(/bundles/fafrontend/images/animals/Ic-btn-Exotic-Hover.svg) no-repeat !important; }
-.pets-other-pets:active, .pets-other-pets:hover { background: url(/bundles/fafrontend/images/animals/Ic-btn-Other-Hover.svg) no-repeat !important; }
-.pets-pet-accessories:active, .pets-pet-accessories:hover { background: url(/bundles/fafrontend/images/animals/Ic-btn-Pet-accessories-Hover.svg) no-repeat !important; }
-.pets-pet-supplies:active, .pets-pet-supplies:hover { background: url(/bundles/fafrontend/images/animals/Ic-btn-Pet-supplies-Hover.svg) no-repeat !important; }
-
-/* Motors Images */
-.any-category { background: url(/bundles/fafrontend/images/Ic-btn-Any.svg) no-repeat !important; }
-.car-hatchback { background: url(/bundles/fafrontend/images/motors/Ic-btn-Hatchback.svg) no-repeat !important; }
-.car-coupes { background: url(/bundles/fafrontend/images/motors/Ic-btn-Coupes1.svg) no-repeat !important; }
-.car-saloons { background: url(/bundles/fafrontend/images/motors/Ic-btn-Saloons.svg) no-repeat !important; }
-.car-convertibles { background: url(/bundles/fafrontend/images/motors/Ic-btn-Convertibles.svg) no-repeat !important; }
-.car-estates { background: url(/bundles/fafrontend/images/motors/Ic-btn-Estates.svg) no-repeat !important; }
-.car-mpvs { background: url(/bundles/fafrontend/images/motors/Ic-btn-MPVs.svg) no-repeat !important; }
-.car-4x4 { background: url(/bundles/fafrontend/images/motors/Ic-btn-4x4.svg) no-repeat !important; }
-
-.any-category:hover { background: url(/bundles/fafrontend/images/Ic-btn-Any-Hover.svg) no-repeat !important; }
-.car-hatchback:hover { background: url(/bundles/fafrontend/images/motors/Ic-btn-Hatchback-Hover.svg) no-repeat !important; }
-.car-coupes:hover { background: url(/bundles/fafrontend/images/motors/Ic-btn-Coupes-Hover.svg) no-repeat !important; }
-.car-saloons:hover { background: url(/bundles/fafrontend/images/motors/Ic-btn-Saloons-Hover.svg) no-repeat !important; }
-.car-convertibles:hover { background: url(/bundles/fafrontend/images/motors/Ic-btn-Convertibles-Hover.svg) no-repeat !important; }
-.car-estates:hover { background: url(/bundles/fafrontend/images/motors/Ic-btn-Estates-Hover.svg) no-repeat !important; }
-.car-mpvs:hover { background: url(/bundles/fafrontend/images/motors/Ic-btn-MPVs-Hover.svg) no-repeat !important; }
-.car-4x4:hover { background: url(/bundles/fafrontend/images/motors/Ic-btn-4x4-Hover.svg) no-repeat !important; }
-
-.any-category.active { background: url(/bundles/fafrontend/images/Ic-btn-Any-ON.svg) no-repeat !important;border-radius: 5px !important;  }
-.car-hatchback.active { background: url(/bundles/fafrontend/images/motors/Ic-btn-Hatchback-ON.svg) no-repeat !important;border-radius: 5px !important; }
-.car-coupes.active { background: url(/bundles/fafrontend/images/motors/Ic-btn-Coupes-ON.svg) no-repeat !important;border-radius: 5px !important; }
-.car-saloons.active { background: url(/bundles/fafrontend/images/motors/Ic-btn-Saloons-ON.svg) no-repeat !important;border-radius: 5px !important; }
-.car-convertibles.active { background: url(/bundles/fafrontend/images/motors/Ic-btn-Convertibles-ON.svg) no-repeat !important;border-radius: 5px !important; }
-.car-estates.active { background: url(/bundles/fafrontend/images/motors/Ic-btn-Estates-ON.svg) no-repeat !important;border-radius: 5px !important; }
-.car-mpvs.active { background: url(/bundles/fafrontend/images/motors/Ic-btn-MPVs-ON.svg) no-repeat !important;border-radius: 5px !important; }
-.car-4x4.active { background: url(/bundles/fafrontend/images/motors/Ic-btn-4x4-ON.svg) no-repeat !important;border-radius: 5px !important; }
-
-/* Property Images */
-.pt-commercial { background: url(/bundles/fafrontend/images/Properties/Commercial.svg) no-repeat !important; }
-.pt-flats { background: url(/bundles/fafrontend/images/Properties/Flats.svg) no-repeat !important; }
-.pt-garages { background: url(/bundles/fafrontend/images/Properties/Garages.svg) no-repeat !important; }
-.pt-houses { background: url(/bundles/fafrontend/images/Properties/Houses.svg) no-repeat !important; }
-.pt-land { background: url(/bundles/fafrontend/images/Properties/Land.svg) no-repeat !important; }
-.pt-mobile-homes { background: url(/bundles/fafrontend/images/Properties/Mobile-Homes.svg) no-repeat !important; }
-.pt-overseas { background: url(/bundles/fafrontend/images/Properties/Overseas.svg) no-repeat !important; }
-.pt-parking { background: url(/bundles/fafrontend/images/Properties/Parking.svg) no-repeat !important; }
-.pt-rooms { background: url(/bundles/fafrontend/images/Properties/Rooms.svg) no-repeat !important; }
-
-.pt-commercial:hover { background: url(/bundles/fafrontend/images/Properties/Commercial-Hover.svg) no-repeat !important; }
-.pt-flats:hover { background: url(/bundles/fafrontend/images/Properties/Flats-Hover.svg) no-repeat !important; }
-.pt-garages:hover { background: url(/bundles/fafrontend/images/Properties/Garages-Hover.svg) no-repeat !important; }
-.pt-houses:hover { background: url(/bundles/fafrontend/images/Properties/Houses-Hover.svg) no-repeat !important; }
-.pt-land:hover { background: url(/bundles/fafrontend/images/Properties/Land-Hover.svg) no-repeat !important; }
-.pt-mobile-homes:hover { background: url(/bundles/fafrontend/images/Properties/Mobile-Homes-Hover.svg) no-repeat !important; }
-.pt-overseas:hover { background: url(/bundles/fafrontend/images/Properties/Overseas-Hover.svg) no-repeat !important; }
-.pt-parking:hover { background: url(/bundles/fafrontend/images/Properties/Parking-Hover.svg) no-repeat !important; }
-.pt-rooms:hover { background: url(/bundles/fafrontend/images/Properties/Rooms-Hover.svg) no-repeat !important; }
-
-.pt-commercial.active { background: url(/bundles/fafrontend/images/Properties/Commercial-ON.svg) no-repeat !important; }
-.pt-flats.active { background: url(/bundles/fafrontend/images/Properties/Flats-ON.svg) no-repeat !important; }
-.pt-garages.active { background: url(/bundles/fafrontend/images/Properties/Garages-ON.svg) no-repeat !important; }
-.pt-houses.active { background: url(/bundles/fafrontend/images/Properties/Houses-ON.svg) no-repeat !important; }
-.pt-land.active { background: url(/bundles/fafrontend/images/Properties/Land-ON.svg) no-repeat !important; }
-.pt-mobile-homes.active { background: url(/bundles/fafrontend/images/Properties/Mobile-Homes-ON.svg) no-repeat !important; }
-.pt-overseas.active { background: url(/bundles/fafrontend/images/Properties/Overseas-ON.svg) no-repeat !important; }
-.pt-parking.active { background: url(/bundles/fafrontend/images/Properties/Parking-ON.svg) no-repeat !important; }
-.pt-rooms.active { background: url(/bundles/fafrontend/images/Properties/Rooms-ON.svg) no-repeat !important; }
-
-/* Job Images */
-.job-full-time { background: url(/bundles/fafrontend/images/Jobs/Full-Time.svg) no-repeat !important; }
-.job-part-time { background: url(/bundles/fafrontend/images/Jobs/Part-Time.svg) no-repeat !important; }
-.job-contract { background: url(/bundles/fafrontend/images/Jobs/Contract.svg) no-repeat !important; }
-.job-weekend { background: url(/bundles/fafrontend/images/Jobs/Weekends.svg) no-repeat !important; }
-.job-evenings { background: url(/bundles/fafrontend/images/Jobs/Evenings.svg) no-repeat !important; }
-.job-home-working { background: url(/bundles/fafrontend/images/Jobs/Home-Working.svg) no-repeat !important; }
-.job-freelance { background: url(/bundles/fafrontend/images/Jobs/Freelance.svg) no-repeat !important; }
-.job-wanted { background: url(/bundles/fafrontend/images/Jobs/Wanted.svg) no-repeat !important; }
-.job-temporary { background: url(/bundles/fafrontend/images/Jobs/Temporary.svg) no-repeat !important; }
-
-.job-full-time:hover { background: url(/bundles/fafrontend/images/Jobs/Full-Time-Hover.svg) no-repeat !important; }
-.job-part-time:hover { background: url(/bundles/fafrontend/images/Jobs/Part-Time-Hover.svg) no-repeat !important; }
-.job-contract:hover { background: url(/bundles/fafrontend/images/Jobs/Contract-Hover.svg) no-repeat !important; }
-.job-weekend:hover { background: url(/bundles/fafrontend/images/Jobs/Weekends-Hover.svg) no-repeat !important; }
-.job-evenings:hover { background: url(/bundles/fafrontend/images/Jobs/Evenings-Hover.svg) no-repeat !important; }
-.job-home-working:hover { background: url(/bundles/fafrontend/images/Jobs/Home-Working-Hover.svg) no-repeat !important; }
-.job-freelance:hover { background: url(/bundles/fafrontend/images/Jobs/Freelance-Hover.svg) no-repeat !important; }
-.job-wanted:hover { background: url(/bundles/fafrontend/images/Jobs/Wanted-Hover.svg) no-repeat !important; }
-.job-temporary:hover { background: url(/bundles/fafrontend/images/Jobs/Temporary-Hover.svg) no-repeat !important; }
-
-.job-full-time.active { background: url(/bundles/fafrontend/images/Jobs/Full-Time-ON1.svg) no-repeat !important; }
-.job-part-time.active { background: url(/bundles/fafrontend/images/Jobs/Part-Time-ON1.svg) no-repeat !important; }
-.job-contract.active { background: url(/bundles/fafrontend/images/Jobs/Contract-ON.svg) no-repeat !important; }
-.job-weekend.active { background: url(/bundles/fafrontend/images/Jobs/Weekends-ON.svg) no-repeat !important; }
-.job-evenings.active { background: url(/bundles/fafrontend/images/Jobs/Evenings-ON.svg) no-repeat !important; }
-.job-home-working.active { background: url(/bundles/fafrontend/images/Jobs/Home-Working-ON.svg) no-repeat !important; }
-.job-freelance.active { background: url(/bundles/fafrontend/images/Jobs/Freelance-ON.svg) no-repeat !important; }
-.job-wanted.active { background: url(/bundles/fafrontend/images/Jobs/Wanted-ON.svg) no-repeat !important; }
-.job-temporary.active { background: url(/bundles/fafrontend/images/Jobs/Temporary-ON.svg) no-repeat !important; }
-
-/* mob icons */
-.mob-animals { 
-	background: url('data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding='utf-8'?%3e%3c!-- Generator: Adobe Illustrator 19.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3e%3c!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3e%3csvg version='1.1' id='Layer_1' xmlns:sketch='http://www.bohemiancoding.com/sketch/ns' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='29px' height='27px' viewBox='-465 267 29 27' style='enable-background:new -465 267 29 27;' xml:space='preserve'%3e%3cstyle type='text/css'%3e .st0%7bfill:%2382C249;%7d .st1%7bfill:%23EAEFF0;%7d %3c/style%3e%3ctitle%3eAnimals%3c/title%3e%3cdesc%3eCreated with Sketch Beta.%3c/desc%3e%3cg id='PAA' sketch:type='MSPage'%3e%3cg id='menu-mobile' transform='translate(-16.000000, -318.000000)' sketch:type='MSArtboardGroup'%3e%3cg id='Navigation-Menu-_x2B_-cross-close-_x2B_-Menu-panel-1' transform='translate(-561.000000, -36.000000)' sketch:type='MSLayerGroup'%3e%3cg id='Menu-panel-1' transform='translate(557.000000, 96.000000)' sketch:type='MSShapeGroup'%3e%3cg id='Animals-_x2B_-paw-icon' transform='translate(16.000000, 254.000000)'%3e%3cg id='Animals' transform='translate(18.500000, 18.000000) rotate(13.000000) translate(-18.500000, -18.000000) translate(4.000000, 3.000000)'%3e%3cpath id='Fill-1' class='st0' d='M-386,391.3c-0.9-3.8,3.7-10.9,7.4-11.7c3.1-0.7,10.9,3.4,11.9,7.3c1.2,5.3-4.3,2.6-9.3,3.7 S-384.8,396.5-386,391.3'/%3e%3cpath id='Fill-2' class='st1' d='M-381.7,371.1c1.4,2.7,1,5.5-0.8,6.4s-4.4-0.5-5.7-3.2c-1.4-2.7-1-5.5,0.8-6.4 C-385.6,367-383.1,368.4-381.7,371.1'/%3e%3cpath id='Fill-3' class='st1' d='M-386,384.5c-1.4,1.1-4,0.4-5.7-1.8c-1.7-2.1-2-4.8-0.5-5.9c1.4-1.1,4-0.3,5.7,1.8 S-384.6,383.3-386,384.5z'/%3e%3cpath id='Fill-4' class='st1' d='M-379.6,370.6c0,3,1.6,5.4,3.6,5.4s3.7-2.4,3.7-5.3c0-3-1.6-5.4-3.6-5.4 C-377.9,365.2-379.6,367.6-379.6,370.6'/%3e%3cpath id='Fill-5' class='st1' d='M-369.8,380.7c1.8,0.4,3.8-1.4,4.4-4.1s-0.4-5.1-2.2-5.5c-1.8-0.4-3.8,1.4-4.4,4.1 S-371.6,380.3-369.8,380.7z'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e') no-repeat !important;
-}
-
-/* other css */
-.recommended-div.listing .recommended-more .right-block {  padding:8px 5px 8px 5px !important; }
-.nav-bg.homepage-nav { background: rgba(255,255,255,1) !important; }
-.alert-box.info { border: 1px solid #31c5f2 !important; color: #31c5f2 !important;}
-.footer-subscribe-label { line-height: 14px !important;font-size: 12px !important;color: #FFFFFF !important; }
-.find-all .select2-choice { border-top-left-radius: 4px !important; border-bottom-left-radius: 4px !important; }
-.find-all .select2-choice:after {
-    top: 16px !important;
-    right: 8px !important;
-}
-.choose-all-categories a, .choose-all-categories a.active, .choose-all-categories a:hover, .choose-all-categories a:focus, .choose-all-categories a:active 
-{ background-size: 111px 111px !important; border-radius: 5px !important; }
-.intro-text { font-size:17px !important; }
-.link-list a, .top-links .f-dropdown li a  { font-size:13px !important; }
-.top-links .f-dropdown { min-width: 190px !important; }
-
-.pkg-box label {
-	color: #ffffff !important;
-}
-.edition-link a {
-	color: #82C249 !important;
-}
-
-.cookie-wrapper {
-    margin: 15px auto 0px !important;
-}
-.cookie-content {
-    line-height: 21px !important;
-}
-.cookie_notification_bar .secondary-btn-1 {
-    margin: 0px !important;
-}
-.recommended-div.listing.recommended-ad-detail .content-cls-recommend-2 .list-title {  
-	font-size: 12px !important;
-    line-height: 16px !important;
-}
-.recommended-2-slot-ad-detail-btn.recommended-2-3-slot-ad-detail-btn {
-    margin-top: 10px !important;
-    height: 30px !important;
-    line-height: 16px !important;
-}
-.recommended-div.listing.recommended-ad-detail .content-cls-recommend-3 .show-title-r-ad-det {
-    font-size: 12px !important;
-}
-.capsule-links a:hover, .capsule-links a.active { color:#ffffff !important; }
-
-button.signup-fb-btn.expand {
-    padding: 17px 0px 22px 80px !important;
-}
-.landing-circles a, .landing-circles a:hover, .landing-circles a:focus, .landing-circles a:active, .landing-circles a.active {
-    background-size: 100% !important;
-}
-.manage-item-btns a:hover.primary-btn-1, .manage-item-btns a:focus.primary-btn-1 {
-    font-size: 14px !important;
-    line-height: 16px !important;
-}
-.paa-user-type label, .buyer-contact label { width: 85% !important; }
-.paa-user-type span, .buyer-contact span { width: 24px !important; }
-.own-item .large-6 .xs-btn-2 { padding: 5px 5px 7px !important; }
-
-.img-status-overlay .img-status-overlay-text {
-    font-size: 14px !important;
-}
-.reveal-modal .close-reveal-modal, dialog .close-reveal-modal {
-    background: url('/bundles/fafrontend/images/cross-new.svg') no-repeat center !important;
-}
-.secondary-btn-4, .secondary-btn-4:focus, .secondary-btn-4:hover {
-    height: 40px !important;
-    padding: 8px !important;
-}
-.payment-card-option-block li:last-child {
-    margin-bottom: 20px !important;
-}
-
-.custom-checkbox, .custom-checkbox.checked {
-    background-size: cover !important;
-}
-.manage-lst .all-sel-text {
-    font-weight: normal !important;
-}
-.individual-upsell-modal-content { padding-top:20px !important}
-
-.paa-back-arrow-pkg, .paa-back-arrow { color: #82C149 !important; } 
-.signup-fb-btn { font-family: 'Poppins' !important; }
-.top-bar-section .has-dropdown > a::after{ right: -10px !important; }
-.select2-drop, .ui-autocomplete {  margin-top: 0px !important; }
-.choice-display-flex { display:inline-flex !important; }
-.choice-display-flex label { margin-right:10px !important; line-height:25px !important; }
-
-.discover-categories a,.discover-categories a:hover, .discover-categories a:focus  {
-	background-size: cover !important;
-}
-
-#home-search .looking-for input[type="text"], .site-search .search-box input[type="text"] {
-    border-radius: 0 !important;
-}
-.paa-footer-links {column-count: 4;} 
-
 
 //FB an Goggle button
 .button.signup-fb-btn {
@@ -398,8 +114,17 @@ button.signup-fb-btn.expand {
 	background-color: #2b4a7a !important;
 	background: #2b4a7a !important;
 }
-.button.signup-google-btn {
-	background-color: #FFFFFF;
+//FB an Goggle button
+.button.signup-fb-btn {
+	background-color: #3B5998;
+	color: #ffffff;
+}
+.signup-fb-btn:focus, .signup-fb-btn:hover {
+	background-color: #2b4a7a !important;
+	background: #2b4a7a !important;
+}
+.button.signup-google-btn, .button.signup-google-btn:hover, .button.signup-google-btn:focus {
+	background-color: #FFFFFF !important;
 	box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 1px 1px 0 rgba(0,0,0,0.24) !important;
 	color: #ACB0B7;
 }
@@ -440,55 +165,23 @@ button.signup-fb-btn.expand {
 	line-height: 20px;
 	padding: 0 10px;
 }
-.top-bar .toggle-topbar.menu-icon a span { background: url(/bundles/fafrontend/images/menu-icon.svg) no-repeat !important; }
-.mob-forsale, .forsale-badge {
-	background: url('/bundles/fafrontend/images/badges/for-sale.png') no-repeat !important;
-}
-.mob-motors, .motors-badge {
-	background: url('/bundles/fafrontend/images/badges/motors.png') no-repeat !important;
-}
-.mob-jobs, .job-badge {
-	background: url('/bundles/fafrontend/images/badges/jobs.png') no-repeat !important;
-}
-.mob-services, .services-badge {
-	background: url('/bundles/fafrontend/images/badges/services.png') no-repeat !important;
-}
-.mob-property, .property-badge {
-	background: url('/bundles/fafrontend/images/badges/properties.png') no-repeat !important;
-}
-.mob-animals, .animals-badge {
-	background: url('/bundles/fafrontend/images/badges/animals.png') no-repeat !important;
-}
-.mob-community, .community-badge {
-	background: url('/bundles/fafrontend/images/badges/community.png') no-repeat !important;
-}
-
 @media (max-width: 640px) {
   .button.special { padding: 17px 6px 22px 6px !important;  }
 }
-
+.find-all .select2-choice {
+	border-top-right-radius: 0px !important;
+	border-bottom-right-radius: 0px !important;
+}
+.find-all .select2-choice::after {
+	border-top: 0px solid #CBD5D9;
+	border-left: 0px solid transparent;
+	border-right: 0px solid transparent;
+	background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns%3D"http%3A//www.w3.org/2000/svg" version%3D"1.1" x%3D"0" y%3D"0" width%3D"8" height%3D"6" viewBox%3D"0 0 8 6" xml%3Aspace%3D"preserve"%3E%3Cstyle type%3D"text/css"%3E%0D%0A%09.st0%7Bfill%3Anone%3Bstroke%3A%23EFEFEF%3Bstroke-width%3A2%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Earrow-down-white%3C/title%3E%3Cdesc%3ECreated with Sketch.%3C/desc%3E%3Cg transform%3D"translate(-1029.000000%2C -132.000000)"%3E%3Cg transform%3D"translate(-1.000000%2C 0.000000)"%3E%3Cg transform%3D"translate(1.000000%2C 0.000000)"%3E%3Cg transform%3D"translate(1030.000000%2C 133.000000)"%3E%3Cpath class%3D"st0" d%3D"M6 0.9l-3 3 -3-3"/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat center center;
+}
+.find-all .select2-container .select2-choice:hover, #home-search .find-all .select2-container .select2-choice:focus {
+    border: 0px !important;
+}
 @media only screen and (min-width: 320px) and (max-width: 759px) {
-	#home-search .all-cat-select, #home-search .looking-for {
-		min-width: 52px !important;
-		width: 52px !important;
-	}
-	#home-search .find-all .select2-choice {
-		min-width: 52px !important;
-		width: 52px !important;
-	}
-	#home-search .search-btn button {
-	    background: url(/bundles/fafrontend/images/search-icon.svg) no-repeat center center / 16px 16px, linear-gradient(135deg, #A8DC28 0%, #79D378 100%) !important;
-	}
-	#home-search .search-btn button:hover {
-		background: url(/bundles/fafrontend/images/search-icon.svg) no-repeat center center / 16px 16px, linear-gradient(135deg, #85B021 0%, #61A85F 100%) !important;
-	}
-	.homepage-title, .homepage-title-small {
-	    font-size: 18px;
-	    font-weight: 600 !important;
-	    letter-spacing: 0;
-	    line-height: 24px;
-	    margin: 0 0px 20px;
-	}
 	.sub-head-text {
 		color: #212527;
 		font-size: 14px;
@@ -497,49 +190,4 @@ button.signup-fb-btn.expand {
 		text-align: center;
 	}
 }
-@media only screen and (min-width: 320px) and (max-width: 399px) {
-    #popular_shops_slider .item, #popular_shops_slider .list-img, #featured-item-slider .item, #featured-item-slider .list-img {
-        width: 100% !important;
-    }
-}
-@media only screen and (max-width: 640px) {
-    .help-links {
-        margin: 10px 0px 0 !important !important;
-        column-count: 1 !important !important;
-        width: 100% !important !important;
-    }
-   .paa-footer-links { column-count: 2; }                   
-   .big-wrapper { width: auto !important;}  
-}
-@media only screen and (min-width: 520px) and (max-width: 759px) {
-    .paa-user-type label, .buyer-contact label {
-        width: 90% !important;
-    }
-}
-@media only screen and (max-width: 759px) {
-    .discover-categories a {
-        background-size: cover !important;
-    }
-    #home-search .search-btn button {
-        background: url(/bundles/fafrontend/images/search-icon.svg) no-repeat center center / 16px 16px, linear-gradient(135deg, #85B021 0%, #61A85F 100%) !important; 
-    	border:0px !important;
-    }
-}
-@media only screen and (min-width: 641px) and (max-width: 959px) {  
-  .big-wrapper { width: auto !important;}                
-} 
-@media only screen and (min-width:760px) and (max-width: 959px) {
-	#home-search .search-btn button { text-indent:unset !important; }
-}
-@media only screen and (min-width:960px) and (max-width: 1151px) {
-    .top-bar-section .real-desktop .has-dropdown a {
-    	padding: 0 12px 0px 5px !important;
-    }
-}
-@media only screen and (min-width: 1152px) {
-    .big-wrapper.choose-list {
-        width: 100% !important;
-    }
-}
 </style>
-
