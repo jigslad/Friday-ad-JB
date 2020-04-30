@@ -70,7 +70,7 @@
                         <li><a href="{{ path('logout') }}" id="logout-header-id">{{'Log Out'|trans({}, 'frontend-header-usermenu')}}</a></li>
                     </ul>
                 {% else %}
-                    <ul class="clearfix">
+                    <ul class="clearfix login-reg-flex">
                         <li><a href="{{ path('login') }}" id="login-header-id">{{'Log In'|trans({}, 'frontend-header-usermenu')}}</a>|</li>
                         <li><a href="{{ path('fa_user_register') }}" id="register-header-id">{{'Register'|trans({}, 'frontend-header-usermenu')}}</a></li>
                     </ul>
