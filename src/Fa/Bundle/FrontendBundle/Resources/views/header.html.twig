@@ -162,8 +162,9 @@
                                 {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':0, 'is_mobile':0, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
                             {% endif %}
                         </div>
-                        <ul class="show-for-small-only login-menu">
+                       
                             {% if app.user %}
+                             <ul class="show-for-small-only login-menu">
                                 <li>
                                     <a href="javascript:void(0);" class="logged-in-user">
                                     {% if app.user.getFirstName() or  app.user.getLastName() %}
@@ -185,13 +186,16 @@
                                 {% endif %}
                                 
                                 <li><a href="{{ path('logout') }}" id="mob-logout-header-id">{{'Log Out'|trans({}, 'frontend-top-menu')}}</a></li>
-                            {% else %}
+                            </ul>
+                                {% else %}
+                            <ul class="show-for-small-only login-menu login-reg-flex">
                                 <li><a href="{{ path('login') }}" id="mob-login-header-id">{{'Log In'|trans({}, 'frontend-top-menu')}}</a></li>
                                 <li><a href="{{ path('fa_user_register') }}" id="mob-register-header-id">{{'Register'|trans({}, 'frontend-top-menu')}}</a></li>
-                            {% endif %}
-                        </ul>
-                        <ul class="right place-item ga-buttonPAA">
-                            <li class="place-item-btn ga-buttonPAA"><a class="ga-buttonPAA" href="{{ path('ad_post_first_step') }}" title="{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}">{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}</a></li>
+                            </ul>
+                                {% endif %}
+                        
+                        <ul class="right place-item">
+                            <li class="place-item-btn"><a href="{{ path('ad_post_first_step') }}" title="{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}">{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}</a></li>
                         </ul>
                     </section>
                 </nav>
