@@ -26,73 +26,23 @@
 
                         <div class="about-shop">
                             <h2 class="s-h2 pro-user-name">{{ (userDetail['user_name'] ? userDetail['user_name'] : '-') }}</h2>
-                            <div class="other-pro-location" id="business_location_div">
-                                <i>Member since Sep 2019</i>
-                                <div class="profile-edit">
-                                    <div class="relative right">
-                                        <a href="javascript:void(0);">Edit</a>
-                                    </div>
+                            {% if (userDetail and userDetail['user_rating'] is defined and userDetail['user_rating'] > 0) %}
+                                <div class="pro-rating"><span>{{'Rating'|trans({}, 'frontend-profile-page')}}:</span> {{ userDetail['user_rating'] }}</div>
+                                <div class="pro-rating-stars rating-white-stars">
+                                    {{ include('FaCoreBundle::showStarRating.html.twig', {'rating': userDetail['user_rating']}) }}
                                 </div>
-                            </div>
-                            <div class="dealer-badge trusted-user">
-                                <span>?</span>
-                                <div class="trusted-user-tooltip">Rest assured we do our utmost to ensure a safe marketplace for all to enjoy. This user meets all of our moderation requirements.</div>
-                            </div>
-                            <div class="mb20">
-                                <button class="primary-btn-1 btn btn-block uppercase btn-h-lg" name="profilepage_contactuser" id="profilepage_contactuser" type="button">Contact us</button>
-                            </div>
-                            <div class="mb20">
-                                <a href="/business/adult-ns-business/ads/" class="btn secondary-btn-1 btn-vlock d-none d-md-block">View all our ads</a>
-                            </div>
-                        </div>
-                        <div class="shop-cont-info" id="business_address_detail_div">
-                            <ul class="seller-cont-info"></ul>
-                            <div class="mb10">
-                                <a href="javascript:void(0);" data-toggle="modal" data-target="#addContactModal">+ Add contact details</a>
-                            </div>
-                        </div>
-                        <div id="business_social_icons_div">
-                            <div class="shop-share">
-                                <h5>Find us on</h5>
-                            </div>
-                            <div class="mb10">
-                                <a href="javascript:void(0);" data-toggle="modal" data-target="#addSocialMediaModal">+ Add social media profiles</a>
-                            </div>
-                        </div>
-                        <div id="business_gallery_div">
-                            <div class="shop-gallery">
-                                <h5>Photo Gallery</h5>
-                            </div>
-                            <div class="mt10 mb10">
-                                <a href="javascript:void(0);" data-toggle="modal" data-target="#addPhotoModal">+ Add photos to your gallery</a>
-                            </div>
-                        </div>
-                        <div id="business_video_div">
-                            <div class="shop-video">
-                                <h5>Video</h5>
-                            </div>
-                            <div class="mt10 mb10">
-                                <a href="javascript:void(0);" data-toggle="modal" data-target="#addVideoModal">+ Add a video</a>
-                            </div>
+                            {% endif %}
                         </div>
 
-
-
-                        {% if (userDetail and userDetail['user_rating'] is defined and userDetail['user_rating'] > 0) %}
-                            <div class="pro-rating"><span>{{'Rating'|trans({}, 'frontend-profile-page')}}:</span> {{ userDetail['user_rating'] }}</div>
-                            <div class="pro-rating-stars rating-white-stars">
-                                {{ include('FaCoreBundle::showStarRating.html.twig', {'rating': userDetail['user_rating']}) }}
-                            </div>
-                        {% endif %}
                         <div class="sold-n-reviews">
                             <div class="row">
                                 {% if userDetail['sold_ad_count'] > 0 %}
-                                    <div class="large-12 columns text-center">
+                                    <div class="col-md-12 text-center">
                                         <span class="sold-icon">{{'Sold'|trans({}, 'frontend-profile-page')}}</span><br />
                                         {{'Items sold'|trans({}, 'frontend-profile-page')}}: <b>{{userDetail['sold_ad_count']}}</b>
                                     </div>
                                 {% endif %}
-                                <div class="{% if userDetail['sold_ad_count'] > 0 %}large-12{%else%}large-24{% endif %} columns text-center">
+                                <div class="{% if userDetail['sold_ad_count'] > 0 %}col-md-12{%else%}col-md-24{% endif %} columns text-center">
                                     <span class="review-sold-icon">Reviews</span><br />
                                     {{'Reviews'|trans({}, 'frontend-profile-page')}}: <b>{{ userDetail['total_review'] }}</b>
                                 </div>
