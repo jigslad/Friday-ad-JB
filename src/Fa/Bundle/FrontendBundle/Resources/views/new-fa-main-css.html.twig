@@ -107,7 +107,7 @@ a:hover.primary-btn-1, a:focus.primary-btn-1 { font-size: 18px !important; line-
 
 #eighteenPlusWarnningModel .primary-btn-2 { background:linear-gradient(135deg, #A75BD8 0%, #C60A84 100%) !important;border: 0px solid transparent !important; }
 #eighteenPlusWarnningModel .primary-btn-2:hover { background:linear-gradient(135deg, #8645AA 0%, #9D086A 100%) !important; }
-.secondary-btn-1, .secondary-btn-2, .secondary-btn-3  { padding:8px 20px 8px 20px !important; }
+.secondary-btn-1, .secondary-btn-2, .secondary-btn-3, .secondary-btn-4  { padding:8px 10px 8px 10px !important; }
 .secondary-btn-2, .secondary-btn-3  { height: 40px !important; }
 .interested-item a.button:hover { color: #82C249 !important; }
 .paypal-box { background-color: transparent !important;border: solid 1px #CBD5D9 !important; }
@@ -137,6 +137,8 @@ a:hover.primary-btn-1, a:focus.primary-btn-1 { font-size: 18px !important; line-
 .category-text { font-size: 12px;line-height: 22px; }
 .find-all .select2-choice, .find-all .select2-choice:hover, .find-all .select2-choice:focus, .find-all .select2-choice:active {
     color: #ACB0B7 !important;border-top-left-radius: 4px !important;border-bottom-left-radius: 4px !important;
+    border-top-right-radius: 0px !important;border-bottom-right-radius: 0px !important;
+	border-color: #CBD5D9 !important;border-right: 0px !important;
 }
 .primary-btn-1.disabled, .btn-disabled { background: #EAEFF0 !important; }
     
@@ -205,6 +207,7 @@ a:hover.primary-btn-1, a:focus.primary-btn-1 { font-size: 18px !important; line-
 .intro-text { font-size:17px !important; }
 .link-list a, .top-links .f-dropdown li a  { font-size:13px !important; }
 .top-links .f-dropdown { min-width: 190px !important; }
+.parent-link, .parent-link span { color:#82C249 !important; }
 
 .pkg-box label {
 	color: #ffffff !important;
@@ -371,6 +374,24 @@ button.signup-fb-btn.expand {
 	background: url('/bundles/fafrontend/images/badges/community.png') no-repeat !important;
 }
 
+/* Accordian addetails page */
+.accordion .accordion-navigation, .accordion dd {
+    border-bottom: solid 1px #e3e3e3 !important;
+    box-shadow: none !important;
+}
+.accordion .accordion-navigation li a {
+    color: #212527 !important;
+}
+.accordion .accordion-navigation li a:hover, .accordion .accordion-navigation li a:focus, .accordion .accordion-navigation li a:active {
+    color: #9C1F9F !important
+}
+.accordion .accordion-navigation .search-type label {
+    color: #212527 !important;
+    font-size: 13px !important: 
+    margin: 0 0px 6px !important;
+    font-weight: normal !important; 
+}
+
 @media (max-width: 640px) {
   .button.special { padding: 17px 6px 22px 6px !important;  }
 }
@@ -520,10 +541,10 @@ button.signup-fb-btn.expand {
     border-bottom-left-radius: 4px !important;
 }
 /* remove arrow for adul */
-.top-bar-section .has-dropdown .desktop-header-menus .real-desktop li:last-child .main_category{
+.top-bar-section .real-desktop li:last-child .main_category{
     padding-right: 15px !important;
 }
-.top-bar-section .has-dropdown .desktop-header-menus .real-desktop li:last-child a::after {
+.top-bar-section .real-desktop li:last-child a::after {
     content: none !important;
 }
 .search-filters {
@@ -540,7 +561,7 @@ button.signup-fb-btn.expand {
 
 @media only screen and (min-width: 320px) and (max-width: 640px) {
     .mob-forsale, .mob-motors, .mob-jobs, .mob-services, .mob-property, .mob-animals, .mob-community, .mob-adult {
-        background-size: 32px 32px !important;
+        background-size: 32px 32px !important; width:32px !important; height:32px !important;
     }
     .top-bar-section .accordion dd > a, .top-bar-section .accordion dd > a:hover, .top-bar-section .accordion dd.active > a {
         background: #4D5052 !important;
