@@ -18,11 +18,11 @@
     			<ul class="inside-top-category-menu">
 			         {% for categoryId, categoryArray in headerCategories %}
 			            {% set linkParam = { 'item__location': location_id, 'item__category_id': categoryId} %}		                
-                        {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+			            {# {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
                         	{% set listurl = path('fa_adult_homepage') %}
-                        {% else %}
+                        {% else %}#}
                             {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['full_slug']) %}
-                        {% endif %}
+                            {# {% endif %} #}
 			             <li class="inside-top-category-menu">
 			                 <a href="{{ listurl }}" class="main_category inside-top-category-menu">{{categoryArray['name']}}</a>
 			                 {% if categoryArray['children'] is defined and categoryArray['children']|length %}                                
@@ -89,11 +89,11 @@
 		</li>
         {% for categoryId, categoryArray in headerCategories %}
         {% set linkParam = { 'item__location': location_id, 'item__category_id': categoryId} %}
-        {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+        {# {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
             {% set listurl = path('fa_adult_homepage') %}
-        {% else %}
+        {% else %} #}
             {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['full_slug']) %}
-        {% endif %}
+            {# {% endif %} #}
             <li class="has-dropdown">
                 <a href="{{ listurl }}" class="main_category ga-ahpCatDropdown">Adult Categories</a>
                 {% if categoryArray['children'] is defined and categoryArray['children']|length %}                    
