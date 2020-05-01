@@ -907,6 +907,7 @@ class AdListController extends CoreController
      */
     private function setSearchParamsCookie($data,$request)
     {
+        $currentRoute = $request->get('_route');
         if ((isset($data['search']) && count($data['search'])) || (isset($data['query_filters']) && count($data['query_filters']))) {
             if (isset($data['search']['item__category_id']) || isset($data['search']['keywords'])) {
                 $rootCategoryId = null;
