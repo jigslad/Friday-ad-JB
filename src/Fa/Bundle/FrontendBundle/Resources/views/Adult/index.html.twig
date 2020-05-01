@@ -65,6 +65,7 @@
 {% endif %}
                 
 {% block body %}
+<div class="adul-hp">
     <div class="{% if currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2:'fa_adult_homepage'} %}homepage-hero{% endif %}">
         <div class="hero-img">
             {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {}, 'isAdultHomeSearch': true } )) }}
@@ -191,6 +192,7 @@
             </div>
         </div>
     </div>
+</div>
 {% endblock %}
 
 
