@@ -970,7 +970,25 @@ footer a:hover{
 .mob-adul-massage {
 	background: url('/bundles/fafrontend/images/adult/mob-adul-massage.png') no-repeat !important;
 }
-
+.find-all .select2-choice, .find-all .select2-container .select2-choice:hover, .find-all .select2-container .select2-choice:focus {
+    border-top-right-radius: 0px !important;
+	border-bottom-right-radius: 0px !important;
+	color: #ACB0B7 !important;
+	border-radius: 4px;
+	border-color: #CBD5D9 !important;
+	border-right: 0px !important;
+}
+.find-all .select2-choice::after {
+	border-top: 0px solid #CBD5D9;
+	border-left: 0px solid transparent;
+	border-right: 0px solid transparent;
+}
+.top-bar-section .real-desktop li:last-child .main_category{
+	padding-right: 20px !important;
+}
+.top-bar-section  .real-desktop li:last-child a::after {
+	content: "" !important;
+}
 @media only screen and (min-width: 320px) and (max-width: 640px) {
     .adult-search { display: inline-block;width: 100% !important;}
    .search-input-box {width: 100%;}
