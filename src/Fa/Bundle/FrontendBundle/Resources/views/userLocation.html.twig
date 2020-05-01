@@ -182,12 +182,16 @@
                  success: function(data) {
                      if (!$.isEmptyObject(data)) {
                          $('#header_search_editable_location_span').html(data.text);
+                         console.log(id)
                          if (id == 'top_search_location_ok') {
                         	 $('#fa_top_search_leafLevelCategoryId').val($('#fa_top_search_tmpLeafLevelCategoryId').val());
                              $('form[name="fa_top_search"]').submit();
                          } else if (id == 'top_search_location_homepage_ok') {
                              if (!topSearchKeywords && !topSearchCategoryId) {
                                  window.location = "{{ path('fa_frontend_homepage') }}";
+                             }
+                             else {
+                                 location.reload();
                              }
                          } else {
                              location.reload();
