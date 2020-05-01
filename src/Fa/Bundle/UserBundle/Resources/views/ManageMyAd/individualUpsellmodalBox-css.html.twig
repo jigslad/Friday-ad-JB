@@ -2,6 +2,9 @@
 .fe-modal-content {
 			padding: 20px 40px 40px;
 		}
+		.payment-card-option-block {
+        	margin-left: 0 !important;
+        }
 		.upsell-l-block {
 			padding-right: 25px;
 			padding-left: 0px;
@@ -18,12 +21,18 @@
             padding: 0px;
         }
         .upsell-subtitle {
-            font-size: 14px;
+            font-size: 12px;
             line-height: 18px;
+            color: #fff;
+        }
+        .featured-switch .toggle-bg-on {
+        	background-color: #82C249 !important;
         }
 		.upsell-pkg-inner-box {
 		    padding: 15px 15px 20px;
-		}
+			position: relative !important;
+        	display: inline-block !important;
+        }
 		.upsell-head{
 			  color: #FFFFFF;
 			  font-family: Poppins;
@@ -34,6 +43,43 @@
 			  text-align: center;
 			  margin-bottom: 20px;
 		}
+		.upsell-price-corner {
+        	width: 0;
+        	height: 0;
+        	border-bottom: 76px solid #91D851;
+        	border-left: 76px solid transparent;
+        	position: absolute;
+        	right: 0;
+        	bottom: 0;
+        }
+        .upgrade-payments ul label {
+        	font-size: 14px;
+        	font-weight: 700;
+        	letter-spacing: 0;
+        	line-height: 16px;
+        }
+        .upsell-price {
+        	position: absolute;
+        	bottom: 8px;
+        	color: #ffffff;
+        	right: 8px;
+        	font-weight: 600;
+        }
+        .price-count {
+        	color: #38383A;
+        	font-size: 18px;
+        	font-weight: 600;
+        	letter-spacing: 0;
+        	line-height: 20px;
+        	text-align: right;
+        }
+        .per-ad-text {
+        	color: #212527;
+        	font-size: 12px;
+        	letter-spacing: 0;
+        	line-height: 18px;
+        	text-align: right;
+        }
 		.individual-upsell-modal-content ul li {
 			padding-bottom: 18px;
 			padding-top: 18px;
@@ -42,6 +88,13 @@
 		.sec-code-inline {
 			display: inline-flex;
 		}
+		.paypal-box {
+        	height: 60px !important;
+        	margin-bottom: 0 !important;
+        }
+        .expiry-date .ui-selectmenu-button {
+        	margin-right: 12px !important;
+        }
 		.sec-code-inline input, .postcode input[type="text"] {
 			max-width: 90px;
 			margin-right: 15px;
@@ -66,7 +119,9 @@
             width: 25%;
             height: 124px;
             float: left;
-            background: url('bundles/fafrontend/images/featured-top-modal-icon.png') no-repeat !important;
+            margin-right: 15px;
+			background-size: cover !important;
+            background: url('/bundles/fafrontend/images/featured-top-modal-icon.png') no-repeat !important;
         }
 		@media only screen and (max-width: 640px) {
 			.modal-form-body {
