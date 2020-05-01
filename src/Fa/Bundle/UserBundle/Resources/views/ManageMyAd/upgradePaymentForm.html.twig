@@ -56,8 +56,8 @@
 		    <div class="payment-row">
 		    	    {{ form_label(form.card_expity_month) }}
                     <div class="expiry-date" style="padding-top: 10px;">
-                        {{ form_widget(form.card_expity_month, {'attr': {'class': 'form-control fa-select'}}) }}
-                        {{ form_widget(form.card_expity_year, {'attr': {'class': 'form-control fa-select'}}) }}
+                        {{ form_widget(form.card_expity_month, {'attr': {'class': 'select-control'}}) }}
+                        {{ form_widget(form.card_expity_year, {'attr': {'class': 'select-control'}}) }}
                     </div>
                     {{ form_errors(form.card_expity_month) }}
                     {{ form_errors(form.card_expity_year) }}
@@ -71,7 +71,7 @@
                     </div>
                     {{ form_errors(form.card_security_code) }}
             </div>
-            <div id="card_detail_save" class="small-wrapper">
+            <div id="card_detail_save">
                 <div class="payment-row">
                     <div class="label-inline gray-checkbox">
                         {{ form_widget(form.is_save_credit_card) }}
