@@ -133,7 +133,7 @@
                                 {% else %}
                                     {% set packagePrice = 'Free'|trans({}, 'frontend-ad-package')%}
                                 {% endif %}								
-                                <div class="{% if packages|length ==3 %} large-8 {% elseif packages|length ==2 %} large-12 {% elseif packages|length ==1 %} large-24 {% else %} large-6 {% endif %} columns">
+                                <div class="pkg-columns {% if packages|length ==3 %} large-8 {% elseif packages|length ==2 %} large-12 {% elseif packages|length ==1 %} large-24 {% else %} large-6  {% endif %} columns">
                                     <div class="paa-pkg-bg">
                                         <span class="pkg-selection" id="package_selection_{{package.getPackage().getId()}}">Select Package</span>
                                         {% set pkgBoxColorClass = 'pkg-green-head' %}

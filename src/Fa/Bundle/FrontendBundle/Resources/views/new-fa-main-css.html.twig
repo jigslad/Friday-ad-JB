@@ -201,7 +201,7 @@ a:hover.primary-btn-1, a:focus.primary-btn-1 { font-size: 18px !important; line-
     right: 8px !important;
 }
 .choose-all-categories a, .choose-all-categories a.active, .choose-all-categories a:hover, .choose-all-categories a:focus, .choose-all-categories a:active 
-{ border-radius: 5px !important;background-size: cover !important; }
+{ border-radius: 5px !important;background-size: cover !important;margin: 0px 8px 20px 8px !important; }
 .intro-text { font-size:17px !important; }
 .link-list a, .top-links .f-dropdown li a  { font-size:13px !important; }
 .top-links .f-dropdown { min-width: 190px !important; }
@@ -289,6 +289,10 @@ button.signup-fb-btn.expand {
 }
 .paa-footer-links {column-count: 4;} 
 
+.equalizer-inner, .pkg-columns{
+	display: grid !important;
+    align-items: stretch !important;
+}
 
 //FB an Goggle button
 .button.signup-fb-btn {
@@ -501,12 +505,20 @@ button.signup-fb-btn.expand {
     border-top: 0px solid #CBD5D9;
 	border-left: 0px solid transparent;
 	border-right: 0px solid transparent;
+	top: 16px;
 	/*background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns%3D"http%3A//www.w3.org/2000/svg" version%3D"1.1" x%3D"0" y%3D"0" width%3D"8" height%3D"6" viewBox%3D"0 0 8 6" xml%3Aspace%3D"preserve"%3E%3Cstyle type%3D"text/css"%3E%0D%0A%09.st0%7Bfill%3Anone%3Bstroke%3A%23EFEFEF%3Bstroke-width%3A2%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Earrow-down-white%3C/title%3E%3Cdesc%3ECreated with Sketch.%3C/desc%3E%3Cg transform%3D"translate(-1029.000000%2C -132.000000)"%3E%3Cg transform%3D"translate(-1.000000%2C 0.000000)"%3E%3Cg transform%3D"translate(1.000000%2C 0.000000)"%3E%3Cg transform%3D"translate(1030.000000%2C 133.000000)"%3E%3Cpath class%3D"st0" d%3D"M6 0.9l-3 3 -3-3"/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat center center;*/
+}
+.find-all, .find-all:hover, .find-all:focus, .find-all:active {
+	border-top-left-radius: 4px !important;
+	border-bottom-left-radius: 4px !important;
 }
 .find-all .select2-container .select2-choice:hover, #home-search .find-all .select2-container .select2-choice:focus {
     border: 0px !important;
 }
-
+.find-all .select2-choice, .find-all .select2-choice:hover, .find-all .select2-choice:focus, .find-all .select2-choice:active {
+    border-top-left-radius: 4px !important;
+    border-bottom-left-radius: 4px !important;
+}
 /* remove arrow for adul */
 .top-bar-section .has-dropdown .desktop-header-menus .real-desktop li:last-child .main_category{
     padding-right: 15px !important;
@@ -514,7 +526,9 @@ button.signup-fb-btn.expand {
 .top-bar-section .has-dropdown .desktop-header-menus .real-desktop li:last-child a::after {
     content: none !important;
 }
-
+.search-filters {
+    border: 0px solid #CBD5D9 !important;
+}
 @media only screen and (min-width: 320px) and (max-width: 399px) {   
 	#popular_shops_slider .item, #featured-item-slider .item {
         width: 100% !important;
