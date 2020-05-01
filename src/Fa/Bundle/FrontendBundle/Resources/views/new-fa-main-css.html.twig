@@ -351,7 +351,7 @@ button.signup-fb-btn.expand {
 .custom-checkbox, .custom-checkbox.checked {
 	background-size: cover !important;
 }
-.top-bar .toggle-topbar.menu-icon a span { background: url(/bundles/fafrontend/images/menu-icon.svg) no-repeat !important; }
+
 .mob-forsale, .forsale-badge {
 	background: url('/bundles/fafrontend/images/badges/for-sale.png') no-repeat !important;
 }
@@ -382,12 +382,17 @@ button.signup-fb-btn.expand {
 .accordion .accordion-navigation li a {
     color: #212527 !important;
 }
-.accordion .accordion-navigation li a:hover, .accordion .accordion-navigation li a:focus, .accordion .accordion-navigation li a:active {
+.accordion .accordion-navigation li a:hover, 
+.accordion .accordion-navigation li a:focus, 
+.accordion .accordion-navigation li a:active,
+.accordion .accordion-navigation .search-type label:hover,
+.accordion .accordion-navigation .search-type label:focus,
+.accordion .accordion-navigation .search-type label:active  {
     color: #9C1F9F !important
 }
 .accordion .accordion-navigation .search-type label {
     color: #212527 !important;
-    font-size: 13px !important: 
+    font-size: 13px !important;
     margin: 0 0px 6px !important;
     font-weight: normal !important; 
 }
@@ -550,6 +555,8 @@ button.signup-fb-btn.expand {
 .search-filters {
     border: 0px solid #CBD5D9 !important;
 }
+
+
 @media only screen and (min-width: 320px) and (max-width: 399px) {   
 	#popular_shops_slider .item, #featured-item-slider .item {
         width: 100% !important;
@@ -561,7 +568,7 @@ button.signup-fb-btn.expand {
 
 @media only screen and (min-width: 320px) and (max-width: 640px) {
     .mob-forsale, .mob-motors, .mob-jobs, .mob-services, .mob-property, .mob-animals, .mob-community, .mob-adult {
-        background-size: 32px 32px !important; width:32px !important; height:32px !important;
+        background-size: 23px 23px !important; width:23px !important; height:23px !important;
     }
     .top-bar-section .accordion dd > a, .top-bar-section .accordion dd > a:hover, .top-bar-section .accordion dd.active > a {
         background: #4D5052 !important;
@@ -583,6 +590,11 @@ button.signup-fb-btn.expand {
         column-count: 2 !important;
         column-gap: 0 !important;
     }
+    .top-bar .toggle-topbar.menu-icon a span { background: url('/bundles/fafrontend/images/menu-icon.svg') no-repeat !important; }
+    .top-bar .toggle-topbar.menu-icon a span.menu-on {
+        background: url('/bundles/fafrontend/images/menu-icon-on.svg') no-repeat !important;
+    }
+    .top-bar-section .accordion .accordion-navigation #cat-mob-menu li a { color:#ffffff !important; }
 }
 @media only screen and (max-width: 640px) {
     .help-links {
