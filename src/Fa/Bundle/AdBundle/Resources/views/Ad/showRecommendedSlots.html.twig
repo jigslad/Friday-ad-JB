@@ -10,7 +10,7 @@
 	 {% set  recommendedSlotCnt = 3 %}
 {% set centersmallCnt =3 %}	
 {% endif %}
-
+<link href="{{ asset('/build/css/addetail-recommended.css') }}" rel="stylesheet">
 <div class="recommended-div listing mb20 recommended-ad-detail d-none d-md-block">
 {% if recommendedSlotCnt==1 %}
 	{% for recommendedSlot in recommendedSlotArray%}
