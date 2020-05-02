@@ -91,7 +91,8 @@ ul.ui-sortable ul { list-style-type:none !important; width:90% !important;margin
                         </div>
                         <div class="large-6 columns">
                          {% if entity.id %}
-                           <img src="{{shared_url(entity.getUploadDir()~'/'~entity.getCampaignBackgroundFileName())}}?{{ random(1000) }}" width="100px" /><br /><br />
+                           {% set campaignBckgrndImgUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSharedImageUrl', [fetch_container_instance(), entity.getUploadDir(), entity.getCampaignBackgroundFileName()]) %}
+                           <img src="{{campaignBckgrndImgUrl}}?{{ random(1000) }}" width="100px" /><br /><br />
                        {% endif %}
                         </div>
                     </div>

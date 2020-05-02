@@ -15,14 +15,21 @@
                 <h1 class="text-center paa-title">{{ 'Describe your item and choose your price'|trans({}, 'frontend-paa-second-step') }} </h1>
                 <div class="big-wrapper">
                     <div class="change-category clearfix">
-                        <div class="left cat-name-wrap">
+                        {#<div class="left cat-name-wrap">#}
+                        <div class=" left cat-name-wrap media-object" style="display: inline-flex;">
+                            <div class="media-object-section">
+                                <span>{{ 'Category'|trans({}, 'frontend-paa-second-step') }}:</span>
+                            </div>
                             {% set categoryId = attribute(first_step_data, 'category_id') %}
-                            <span>{{ 'Category'|trans({}, 'frontend-paa-second-step') }}:</span> {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|join('<span class="seperator"></span>')|raw }}
+                            <div class="media-object-section">
+                                <p>{{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|last('<span class="seperator"></span>')|raw }}</p>
+                            </div>
                         </div>
                         <div class="right">
                             <a href="{{ path('ad_post_first_step', {'is_edit' : 1}) }}" title="{{ 'Change category'|trans({}, 'frontend-paa-second-step') }}">{{ 'Change'|trans({}, 'frontend-paa-second-step') }}</a>
                         </div>
                     </div>
+
                     {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
                         {{ form_errors(form) }}
                         {% set orderedFields = form.second_step_ordered_fields.vars.value|split(',') %}

@@ -375,6 +375,7 @@ class CampaignsAdminType extends AbstractType
         if ($fileName) {
             $campaign->setCampaignBackgroundFileName($fileName);
             $campaign->getBackgroundFile()->move($campaign->getUploadRootDir(), $fileName);
+            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:move:single-image-s3 --file_path=campaigns/'.$fileName.' >/dev/null &');            
             $campaign->setBackgroundFile(null);
         }
     }

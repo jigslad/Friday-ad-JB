@@ -42,3 +42,10 @@ fa_content:
 fa_error_404:
     path:     /error/404
     defaults: { _controller: FaFrontendBundle:Error:error404 }
+    
+ajax_covid_set_session_data:
+    path:     /ajax/covid_set_session_data/
+    defaults: { _controller: "FaFrontendBundle:Default:ajaxCovidSetSessionData" }
+    options:
+        expose: true
+        

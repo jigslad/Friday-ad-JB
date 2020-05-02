@@ -206,4 +206,38 @@ class StaticPageRepository extends EntityRepository
 
         return $staticPages;
     }
+
+
+    /**
+     * Get static page link array.
+     *
+     * @param object $container Container identifier.
+     *
+     * @return array
+     */
+    public function getStaticPagesForMobileFooter($container = null)
+    {
+        if ($container) {
+            $culture     = CommonManager::getCurrentCulture($container);
+            $tableName   = $this->getStaticPageTableName();
+            $cacheKey    = $tableName.'|'.__FUNCTION__.'|'.$culture;
+            $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
+
+            if ($cachedValue !== false) {
+                return $cachedValue;
+            }
+        }
+
+        $mobileStaticPages = $this->getBaseQueryBuilder()
+            ->where(self::ALIAS.'.status = 1')
+            ->andWhere(self::ALIAS.'.type = '.self::STATIC_PAGE_TYPE_ID)
+            ->andWhere(self::ALIAS.'.include_in_mobile_footer = 1')
+            ->getQuery()
+            ->getArrayResult();
+
+        if ($container) {
+            CommonManager::setCacheVersion($container, $cacheKey, $mobileStaticPages);
+        }
+        return $mobileStaticPages;
+    }
 }

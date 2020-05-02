@@ -85,4 +85,17 @@ class StaticPageController extends CoreController
 
         return $this->render('FaContentBundle:StaticPage:renderStaticPageLink.html.twig', $parameters);
     }
+
+    /**
+     * Show static pages.
+     *
+     * @param Request $request
+     */
+    public function renderMobileStaticPageLinkAction(Request $request)
+    {
+        $mobileStaticPages = $this->getRepository('FaContentBundle:StaticPage')->getStaticPagesForMobileFooter($this->container);
+        $parameters  = array('mobileStaticPages' => $mobileStaticPages, 'currentRoute' => $request->get('currentRoute'));
+
+        return $this->render('FaContentBundle:StaticPage:renderMobileStaticPageLink.html.twig', $parameters);
+    }
 }

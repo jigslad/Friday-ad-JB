@@ -185,7 +185,7 @@ class AdPostType extends AbstractType
             }
 
             if ($showAllFields) {
-                $paaFieldRules = $this->em->getRepository('FaAdBundle:PaaFieldRule')->getPaaFieldRulesArrayByCategoryAncestor($categoryId, $this->container, null, 'both');
+                $paaFieldRules = $this->em->getRepository('FaAdBundle:PaaFieldRule')->getPaaFieldRulesArrayByCategoryAncestor($categoryId, $this->container, 'edit', 'both');
             } else {
                 $paaFieldRules = $this->em->getRepository('FaAdBundle:PaaFieldRule')->getPaaFieldRulesArrayByCategoryAncestor($categoryId, $this->container, $this->step);
             }
@@ -194,6 +194,7 @@ class AdPostType extends AbstractType
                 // First: if field is defined in PAA field rules of parent category.
                 foreach ($paaFieldRules as $paaFieldRule) {
                     $paaField = $paaFieldRule['paa_field'];
+
                     // show only active fields from rule
                     if ($paaFieldRule['status'] && (! $this->step || ($paaFieldRule['step'] == $this->step))) {
                         if ($paaField['field'] == 'location') {
@@ -484,6 +485,7 @@ class AdPostType extends AbstractType
             $fieldOptions['placeholder'] = false;
         } elseif ($paaField['field'] == 'ad_type_id') {
             $fieldOptions['data'] = EntityRepository::AD_TYPE_FORSALE_ID;
+            $fieldOptions['attr']['class'] = 'choice-display-flex';
         } elseif ($paaField['field'] == 'delivery_method_option_id') {
             $fieldOptions['choices'] = array_flip($this->em->getRepository('FaPaymentBundle:DeliveryMethodOption')->getDeliveryMethodOptionArray($this->container));
             $fieldOptions['data'] = DeliveryMethodOptionRepository::COLLECTION_ONLY_ID;
@@ -979,6 +981,11 @@ class AdPostType extends AbstractType
             $fieldOptions['attr']['placeholder'] = $paaFieldRule['placeholder_text'];
         }
 
+        if (isset($paaFieldRule['help_text']) && $paaFieldRule['help_text']) {
+            $fieldOptions['attr']['field-help'] = $paaFieldRule['help_text'];
+        }
+
+
         $form->add('location_autocomplete', TextType::class, $fieldOptions);
         $form->add('location_lat_lng', HiddenType::class, array(
             'data' => $latlng,
@@ -1469,8 +1476,10 @@ class AdPostType extends AbstractType
      */
     protected function validateYoutubeField($form)
     {
-        $youtubeVideoUrl = trim($form->get('youtube_video_url')->getData());
-
+        $youtubeVideoUrl = '';
+        if ($form->has('youtube_video_url') && $form->get('youtube_video_url')->getData()) {
+            $youtubeVideoUrl = trim($form->get('youtube_video_url')->getData());
+        }
         // validate youtube video url.
         if ($youtubeVideoUrl) {
             $youtubeVideoId = CommonManager::getYouTubeVideoId($youtubeVideoUrl);
