@@ -18,9 +18,9 @@ $grid-columns: 24 !default;
 @import "../../node_modules/bootstrap-scss/bootstrap.scss";
 $white : #FFFFFF !default;
 $black : #000000 !default;
-$common-text-color: #4a4a4a !default;
-$common-bg-color: #EFEFEF !default;
-$dark-gray: #313133 !default;
+$common-text-color: #212527  !default;
+$common-bg-color: #EAEFF0 !default;
+$dark-gray: #212527 !default;
 
 $primary-color: #31c5f2 !default;
 $primary-h-color: #2AB6E0 !default;
@@ -48,10 +48,10 @@ $error-h-color: #F74D4D !default;
 $highlight-color: #FF233E !default; 
 
 //Form control colors
-$form-label-color: #a4a4a4 !default;
-$form-text-color: #A8A8A8 !default;
-$form-border-color: #e3e3e3 !default;
-$form-bg-color: #FBFBFB !default;
+$form-label-color: #212527  !default;
+$form-text-color: #ACB0B7 !default;
+$form-border-color: #CBD5D9 !default;
+$form-bg-color: #EAEFF0 !default;
 
 //Fonts
 $font-family-default: 'Poppins' !default;
