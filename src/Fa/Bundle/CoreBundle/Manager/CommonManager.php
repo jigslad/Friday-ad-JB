@@ -3695,4 +3695,70 @@ HTML;
             }
         }
     }
+
+    public static function checkImageExistOnAws($container, $imageUrl)
+    {
+        $client = new S3Client([
+            'version'     => 'latest',
+            'region'      => $container->getParameter('fa.aws_region'),
+            'credentials' => [
+                'key'    => $container->getParameter('fa.aws_key'),
+                'secret' => $container->getParameter('fa.aws_secret'),
+            ],
+        ]);
+        $response = $client->doesObjectExist($container->getParameter('fa.aws_bucket'), $imageUrl);
+        return $response;
+    }
+    
+    public function does_url_exists($url) {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_NOBODY, true);
+        curl_exec($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        
+        if ($code == 200) {
+            $status = true;
+        } else {
+            $status = false;
+        }
+        curl_close($ch);
+        return $status;
+    }
+    
+    public static function path_exists($container, $path) {
+        $file_exists = false;
+        
+        if($path) {
+            $explodePath = explode('uploads',$path);            
+            if(strpos($explodePath[0], $container->getParameter('fa.static.aws.path') !== false)) {
+                $newPath = 'uploads/'.$explodePath[1];
+                $awsPathExists = self::checkImageExistOnAws($newPath);
+                if($awsPathExists) { $file_exists = true; }
+            } else {
+                $localPathExists = self::checkFileExists($path);
+                if($localPathExists) { $file_exists = true; }
+            }
+        }
+        return $file_exists;
+    }
+    
+    /**
+     * @param integer $adId
+     * @param string  $imagePath
+     * @param string  $imageHash
+     * @param string  $size
+     * @param string  $image_name
+     * @return string
+     * @author Akash M. Pai <akash.pai@fridaymediagroup.com>
+     */
+    public static function getImageRelativePath($adId, $imagePath, $imageHash, $size = null, $image_name = null)
+    {
+        $imgRelPath = "";
+        if ($image_name != '') {
+            $imgRelPath = $imagePath . '/' . $image_name . ($size ? '_' . $size : '') . '.jpg?' . $imageHash;
+        } else {
+            $imgRelPath = $imagePath . '/' . $adId . '_' . $imageHash . ($size ? '_' . $size : '') . '.jpg';
+        }
+        return $imgRelPath;
+    }
 }
