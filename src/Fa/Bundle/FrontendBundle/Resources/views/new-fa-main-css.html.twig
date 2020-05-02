@@ -292,9 +292,11 @@ button.signup-fb-btn.expand {
 }
 .paa-footer-links {column-count: 4;} 
 
-.equalizer-inner, .pkg-columns{
-	display: grid !important;
-    align-items: stretch !important;
+@media only screen and (min-width: 760px) {
+	#package_purchase_form .equalizer-inner, #package_purchase_form .pkg-columns {
+	    display: grid !important;
+	    align-items: stretch !important;
+	}
 }
 
 //FB an Goggle button
@@ -348,8 +350,13 @@ button.signup-fb-btn.expand {
 	line-height: 20px;
 	padding: 0 10px;
 }
-.custom-checkbox, .custom-checkbox.checked {
+.custom-checkbox, .custom-checkbox.checked, .checkbox-disabled.custom-checkbox, .checkbox-disabled.custom-checkbox.checked {
 	background-size: cover !important;
+	width:20px !important;
+	height:20px !important;
+}
+.myacc-details {
+    width: 320px !important;
 }
 
 .mob-forsale, .forsale-badge {
@@ -400,7 +407,11 @@ button.signup-fb-btn.expand {
 @media (max-width: 640px) {
   .button.special { padding: 17px 6px 22px 6px !important;  }
 }
-
+@media (min-width: 600px)
+    .myacc-details {
+        width: 320px !important;
+    }
+}
 @media only screen and (min-width: 320px) and (max-width: 759px) {
 	#home-search .all-cat-select {
 		min-width: 52px !important;
