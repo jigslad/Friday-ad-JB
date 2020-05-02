@@ -56,7 +56,16 @@
             <div class="parallax-window" id="header_image_div"></div>
         </div>
     </div>
-
+    {# FFR-4030 starts Here #}
+    <div class="covid-19-block bottom-border">
+        <div class="row">
+            <div class="columns text-center">
+                <div class="medium-17  large-18 columns align-text"><div class="head">Covid-19. <span class="ask-for-offer-help">Ask for & Offer Help in our <a href="https://www.friday-ad.co.uk/uk/community/coronavirus-support/" class="ga-covid-19-support-link-homepage">Coronavirus Support section</a></span></div></div>
+                <div class="medium-7 large-6 columns align-text mt-space"><a class="button place-free-ad-btn thin-btn ga-covid-19-paa-link-homepage" href="https://www.friday-ad.co.uk/paa/first_step?categoryName=Coronavirus%20Support">Place Help Ad</a></div>
+            </div>
+        </div>
+    </div>
+    {# FFR-4030 ends Here #}
     <div class="what-u-discover">
         <div class="row">
             <div class="columns">
@@ -137,7 +146,20 @@
         </div>
         {% endcache %}
     {% endif %}
-    
+
+    {% cache 'home|page|'~locationId~'front/home_page_read_fridayad_online' 120 %}
+        <div class="homepage-row ga-fadPrintWidget">
+            <div class="row">
+                <div class="columns">
+                    <h3 class="homepage-title">
+                        {{'Read the Friday-Ad Online'|trans({}, 'frontend-homepage')}}
+                    </h3>
+                    {{ include('FaFrontendBundle:Default:readFridayAdOnline.html.twig') }}
+                </div>
+            </div>
+        </div>
+    {% endcache %}
+
     {% if popularShopsSearchParams is defined and popularShopsSearchParams|length %}
         {% cache 'home|page|'~locationId~'front/home_page_popular_shops' 120 %}
             {% set popularShops = adForSaleRepository.getPopularShops(container, popularShopsSearchParams) %}
@@ -342,16 +364,6 @@
             });
         }
 
-        $( window ).scroll(function() {
-            if ($("#sticky_nav").hasClass('fixed')) {
-                $("#sticky_nav_top").addClass('fixed');
-                $("#sticky_nav_top").addClass('top-bar-shadow');
-            } else {
-                $("#sticky_nav_top").removeClass('fixed');
-                $("#sticky_nav_top").removeClass('top-bar-shadow');
-            }
-        });
-
         $(document).foundation({
             accordion: {
                 multi_expand: true,
@@ -360,6 +372,16 @@
                 }
             }
         });
+    });
+
+    $( window ).scroll(function() {
+        if ($("#sticky_nav").hasClass('fixed')) {
+            $("#sticky_nav_top").addClass('fixed');
+            $("#sticky_nav_top").addClass('top-bar-shadow');
+        } else {
+            $("#sticky_nav_top").removeClass('fixed');
+            $("#sticky_nav_top").removeClass('top-bar-shadow');
+        }
     });
 
     function accordionCallback(accordion)

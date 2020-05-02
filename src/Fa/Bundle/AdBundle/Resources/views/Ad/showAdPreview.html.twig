@@ -37,7 +37,7 @@
 {% endif %}
 
 {% set youtubeVideoUrl = null %}
-{% if ad.getYoutubeVideoUrl() %}
+{% if 'youtube_video_url' in paaFieldArray and ad.getYoutubeVideoUrl() %}
     {% set youtubeVideoUrl = ad.getYoutubeVideoUrl() %}
 {% endif %}
 
@@ -121,7 +121,8 @@
                         </p>
                         {% set noImage = 0 %}
                         {% if adDetail['images'] is defined and adDetail['images']|length > 0 %}
-                            {% set imagePath = '/' ~ adDetail['images'][0]['path'] ~ '/' ~ adId ~ '_' ~ adDetail['images'][0]['hash'] ~ '_300X225.jpg' %}
+                        	{% set imagePath = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageUrl', [container, adId, adDetail['images'][0]['path'], adDetail['images'][0]['hash'], '', adDetail['images'][0]['aws'], adDetail['images'][0]['image_name']]) %}
+                        	{# {% set imagePath = '/' ~ adDetail['images'][0]['path'] ~ '/' ~ adId ~ '_' ~ adDetail['images'][0]['hash'] ~ '_300X225.jpg' %} #}
                         {% else %}
                             {% set imagePath = asset_url('fafrontend/images/no-image.svg') %}
                             {% set noImage = 1 %}

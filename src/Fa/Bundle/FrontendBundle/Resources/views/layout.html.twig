@@ -269,10 +269,12 @@
 
 		{% if (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration',4: 'show_draft_ad',5: 'ad_package_purchase',6: 'show_cart',7: 'cybersource_checkout'}) %}
 			{{ include('FaFrontendBundle::paaFooter.html.twig') }}
-		{% else %}
+		{% else %}           
             {% if status_code == 200 %}
                 {% set showFooterFlag = true %}
+                {% set showMblFooterFlag = false %}
                 {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() and currentRoute in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote'} %}
+                    {% set showMblFooterFlag = true %}
                     {% set showFooterFlag = false %}
                 {% endif %}
                 {% if showFooterFlag %}
@@ -280,16 +282,26 @@
                 		{% set searchParams = [] %}
                 	{% endif %}
                     {{ include('FaFrontendBundle::footer.html.twig', {'searchParams':searchParams}) }}
+                {% else %}
+                    {% if showMblFooterFlag %}
+                        {% if searchParams is not defined %}
+                            {% set searchParams = [] %}
+                        {% endif %}
+                        {{ include('FaFrontendBundle::mobile-footer.html.twig', {'searchParams':searchParams}) }}
+                    {% endif %}
                 {% endif %}
-            {% else %}
+             {% else %}
                 {{ include('FaFrontendBundle::userLocation.html.twig') }}
-            {% endif %}
-         {% endif %}
-
+             {% endif %}
+		{% endif %}
+		
         {% if (showAdultPopup == 1) %}
             {{ include('FaFrontendBundle::adultWarnningPopup.html.twig') }}
         {% endif %}
 
+        {% if (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration',4: 'show_draft_ad',5: 'ad_package_purchase',6: 'show_cart',7: 'cybersource_checkout'}) %}
+            {{ include('FaFrontendBundle::layout-css.html.twig') }}
+        {% endif %}
         {#{ include('FaFrontendBundle::pushNotificationsJs.html.twig') }#}
 
         <script type="text/javascript">
@@ -315,6 +327,15 @@
                 	});
             {% endif %}
         });
+        function setCovidSession() {
+        	$.ajax({
+                type: "GET",
+                url: "{{path('ajax_covid_set_session_data')}}",
+            })
+            .done(function(response) {
+            	location.reload();
+            });
+        }
         {% if app.request.get('ti_url') %}
             function clearTiUrlFromRedis()
             {
@@ -359,9 +380,11 @@
                 $(document).on('closed', '[data-reveal]', function () {
                     $('body').removeClass('transbgtrade');
                 });
-            });
+               
+            });            
             </script>
         {% endif %}
+
         {% if (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration',4: 'show_draft_ad',5: 'ad_package_purchase',6: 'show_cart',7: 'cybersource_checkout'}) %}
             {% set zendeskUrl = 'https://help.friday-ad.co.uk/hc/en-us/sections/360000265514-Placing-an-Advert' %}
             {{ include('FaFrontendBundle::zendeskHelp.html.twig', {'url': zendeskUrl}) }}

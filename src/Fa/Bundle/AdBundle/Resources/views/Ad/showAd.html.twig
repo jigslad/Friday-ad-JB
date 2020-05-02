@@ -36,7 +36,8 @@
     {% set secondLevelCategoryId = attribute(adDetail, 'a_parent_category_lvl_2_id_i') %}
 {% endif %}
 {% set youtubeVideoUrl = null %}
-{% if attribute(adDetail, constant(solrMapping ~ 'YOUTUBE_VIDEO_URL')) is defined and attribute(adDetail, constant(solrMapping ~ 'YOUTUBE_VIDEO_URL'))|length %}
+
+{% if 'youtube_video_url' in paaFieldArray and attribute(adDetail, constant(solrMapping ~ 'YOUTUBE_VIDEO_URL')) is defined and attribute(adDetail, constant(solrMapping ~ 'YOUTUBE_VIDEO_URL'))|length %}
     {% set youtubeVideoUrl = attribute(adDetail, constant(solrMapping ~ 'YOUTUBE_VIDEO_URL')) %}
 {% endif %}
 
@@ -115,7 +116,12 @@
             {% endif %}
 
             {% if attribute(adDetail, constant(solrMapping ~ 'IMAGE_NAME'))[index] is defined %}
-                {% set image_name = attribute(adDetail, constant(solrMapping ~ 'IMAGE_NAME'))[index] %}
+                {% if  attribute(adDetail, constant(solrMapping ~ 'IMAGE_NAME'))[index] == attribute(adDetail, constant(solrMapping ~ 'HASH'))[index] %}
+                       {% set image_name = null %}
+                {% else %}
+                    {% set image_name = attribute(adDetail, constant(solrMapping ~ 'IMAGE_NAME'))[index] %}
+               {% endif %}
+            
             {% endif %}
 
             {% set adImages = adImages|merge([{'path': path, 'hash': attribute(adDetail, constant(solrMapping ~ 'HASH'))[index], 'ord': attribute(adDetail, constant(solrMapping ~ 'ORD'))[index], 'aws' : aws, 'image_name': image_name }]) %}

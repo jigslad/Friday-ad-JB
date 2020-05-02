@@ -150,7 +150,7 @@ class AdImageType extends AbstractType
             //create cope thumbnails
             $adImageManager->createCropedThumbnail();
 
-            //$adImageManager->uploadImagesToS3($image);
+            $adImageManager->uploadImagesToS3($image);
         }
     }
 

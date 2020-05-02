@@ -11,6 +11,7 @@
 
 namespace Fa\Bundle\AdBundle\Repository;
 
+use SimpleXMLElement;
 use Doctrine\ORM\EntityRepository;
 use Fa\Bundle\UserBundle\Repository\UserRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
@@ -1595,7 +1596,8 @@ class AdRepository extends EntityRepository
                         $adDetailAndDimensionFields[$key][$adDetailFieldLabel] = $fieldValue.$unit;
                     }
                 }
-            } elseif (array_key_exists($adDetailField, $metaDataValues) && $adDetailField != 'RATES_ID') {
+            }
+            elseif (array_key_exists($adDetailField, $metaDataValues) && $adDetailField != 'RATES_ID') {
                 if ($repositoryName) {
                     $fieldValues = explode(',', $metaDataValues[$adDetailField]);
                     if (count($fieldValues) > 1) {
@@ -1651,7 +1653,19 @@ class AdRepository extends EntityRepository
                 }
             }
         }
-
+        if(isset($adDetailAndDimensionFields['detail']['Ethnicity '])){
+            $link = new SimpleXMLElement($adDetailAndDimensionFields['detail']['Category']);
+            $nlink = $link['href'].$adDetailAndDimensionFields['detail']['Ethnicity '].'/';
+            $nlink = explode('/',$nlink);
+            if($nlink[1] === 'app_dev.php'){
+                $nlink[2] = 'uk';
+            }
+            else {
+                $nlink[1] = 'uk';
+            }
+            $nlink = implode('/',$nlink);
+            $adDetailAndDimensionFields['detail']['Ethnicity '] = '<a href="'.$nlink.'">'.$adDetailAndDimensionFields['detail']['Ethnicity '].'</a>';
+        }
         return $adDetailAndDimensionFields;
     }
 
@@ -4145,6 +4159,26 @@ class AdRepository extends EntityRepository
 
         $container->get('fa.mail.manager')->send($user->getEmail(), 'ad_expires_tomorrow', $parameters, CommonManager::getCurrentCulture($container));
     }
+    
+    public function sendExpireTomorrowFreeAlertEmail($ad, $container)
+    {
+        $user        = $ad->getUser();
+        $entityCache = $container->get('fa.entity.cache.manager');
+        $editAdURL   = $container->get('router')->generate('fa_frontend_homepage', array(), true);
+        
+        $parameters = array(
+            'user_first_name'          => $user->getFirstName(),
+            'user_last_name'           => $user->getLastName(),
+            'text_ad_title'            => $ad->getTitle(),
+            'text_ad_category'         => $entityCache->getEntityNameById('FaEntityBundle:Category', $ad->getCategory()->getId()),
+            'text_ad_description'      => $ad->getDescription(),
+            'url_ad_main_photo'        => $this->getMainImageThumbUrlFromAd($ad, $container),
+            'url_ad_mark_sold'         => $container->get('router')->generate('manage_my_ads_mark_as_sold', array('adId' => $ad->getId()), true),
+            'url_ad_upsell'            => $container->get('router')->generate('ad_promote', array('type' => 'all', 'adId' => $ad->getId()), true),
+        );
+        
+        $container->get('fa.mail.manager')->send($user->getEmail(), 'ad_expires_tomorrow_free', $parameters, CommonManager::getCurrentCulture($container));
+    }
 
     /**
      *  Send ad expiration alert before one day user wise.
@@ -4186,6 +4220,42 @@ class AdRepository extends EntityRepository
 
             $container->get('fa.mail.manager')->send($user->getEmail(), 'ad_expires_tomorrow', $parameters, CommonManager::getCurrentCulture($container));
             $this->_em->getRepository('FaEmailBundle:EmailQueue')->removeFromEmailQueue('ad_expires_tomorrow', $user, $emailQueueIds);
+        }
+    }
+    
+    public function sendExpireTomorrowFreeAlertEmailByUser($user, $container)
+    {
+        $entityCache = $container->get('fa.entity.cache.manager');
+        $ads = array();
+        $emailQueueIds = array();
+        $emailQueues = $this->_em->getRepository('FaEmailBundle:EmailQueue')->findBy(array('user' => $user->getId(), 'identifier' => 'ad_expires_tomorrow_free', 'status' => 1));
+        foreach ($emailQueues as $emailQueue) {
+            $emailQueueIds[] = $emailQueue->getId();
+            $ad = $emailQueue->getAd();
+            $ads[] = array(
+                'text_ad_title'            => $ad->getTitle(),
+                'text_ad_category'         => $entityCache->getEntityNameById('FaEntityBundle:Category', $ad->getCategory()->getId()),
+                'text_ad_description'      => $ad->getDescription(),
+                'url_ad_main_photo'        => $this->getMainImageThumbUrlFromAd($ad, $container),
+                'url_ad_mark_sold'         => $container->get('router')->generate('manage_my_ads_mark_as_sold', array('adId' => $ad->getId()), true),
+                'url_ad_upsell'            => $container->get('router')->generate('ad_promote', array('type' => 'all', 'adId' => $ad->getId()), true),
+                'url_ad_view'               => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $ad->getId()), true),
+                'url_ad_preview'            => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $ad->getId()), true),
+                
+            );
+            //send push notifications
+            CommonManager::sendPushNotificationMessage('Your ad expires tomorrow. Repost it today!', 'Expires-tomorrow', $container->get('router')->generate('ad_promote', array('type' => 'renew', 'adId' => $ad->getId()), true), $user, $container);
+        }
+        if (!empty($ads)) {
+            $parameters = array(
+                'user_first_name'          => $user->getFirstName(),
+                'user_last_name'           => $user->getLastName(),
+                'ads' => $ads,
+                'total_ads' => (count($ads) - 1),
+            );
+            
+            $container->get('fa.mail.manager')->send($user->getEmail(), 'ad_expires_tomorrow_free', $parameters, CommonManager::getCurrentCulture($container));
+            $this->_em->getRepository('FaEmailBundle:EmailQueue')->removeFromEmailQueue('ad_expires_tomorrow_free', $user, $emailQueueIds);
         }
     }
 
