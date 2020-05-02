@@ -117,56 +117,63 @@ class UserImageType extends AbstractType
             $profileImage = $form->get('profileImage')->getData();
             $user      = $this->em->getRepository('FaUserBundle:User')->find($userId);
 
-            $imageObj = null;
-            if ($isCompany) {
-                $imagePath = $this->container->getParameter('fa.company.image.dir').'/'.CommonManager::getGroupDirNameById($userId, 5000);
-                $imageObj  = $this->em->getRepository('FaUserBundle:UserSite')->findOneBy(array('user' => $userId));
-            } else {
-                $imagePath = $this->container->getParameter('fa.user.image.dir').'/'.CommonManager::getGroupDirNameById($userId, 5000);
-                $imageObj  = $user;
-            }
-
-            // Check if user site entry not found then create first
-            if (!$imageObj && $isCompany) {
-                $imageObj = new UserSite();
-                $imageObj->setUser($user);
-            }
-
-            if ($isCompany) {
-                $imageObj->setPath($imagePath);
-            } else {
+            $imageObj = null; 
+            if($user) {
+                if ($isCompany) {
+                    $imagePath = $this->container->getParameter('fa.company.image.dir').'/'.CommonManager::getGroupDirNameById($user->getId(), 5000);
+                    $imageObj  = $this->em->getRepository('FaUserBundle:UserSite')->findOneBy(array('user' => $user->getId()));
+                } else {
+                    $imagePath = $this->container->getParameter('fa.user.image.dir').'/'.CommonManager::getGroupDirNameById($user->getId(), 5000);
+                    $imageObj  = $user;
+                }
+    
+                // Check if user site entry not found then create first
+                if (!$imageObj && $isCompany) {
+                    $imageObj = new UserSite();
+                    $imageObj->setUser($user);
+                }
+    
+                if ($isCompany) {
+                    $imageObj->setPath($imagePath);
+                } else {
+                    if ($imageObj) {
+                        $imageObj->setImage($imagePath);
+                    }
+                }
+                //$imageObj->setAws(0);
                 if ($imageObj) {
-                    $imageObj->setImage($imagePath);
+                    $this->em->persist($imageObj);
+                    $this->em->flush($imageObj);
+                }
+    
+                $webPath      = $this->container->get('kernel')->getRootDir().'/../web';
+                $orgImageName = $uploadedFile->getClientOriginalName();
+                $orgImageName = str_replace(array('"', "'"), '', $orgImageName);
+                $orgImagePath = $webPath.DIRECTORY_SEPARATOR.$imagePath;
+                $orgImageName = escapeshellarg($orgImageName);
+    
+                //upload original image.
+                $uploadedFile->move($orgImagePath, $orgImageName);
+    
+                $userImageManager = new UserImageManager($this->container, $user->getId(), $orgImagePath, $isCompany);
+    
+                // remove image if its from profile page.
+                if ($profileImage) {
+                    $userImageManager->removeImage();
+                }
+                //save original jpg image.
+                $userImageManager->saveOriginalJpgImage($orgImageName);
+    
+                //create thumbnails
+                $userImageManager->createThumbnail();
+    
+                //$userImageManager->uploadImagesToS3($image);
+                if($isCompany) {
+                    $userImageManager->uploadImagesToS3($user->getId(),'company');
+                } else {
+                    $userImageManager->uploadImagesToS3($user->getId(),'user');
                 }
             }
-            //$imageObj->setAws(0);
-            if ($imageObj) {
-                $this->em->persist($imageObj);
-                $this->em->flush($imageObj);
-            }
-
-            $webPath      = $this->container->get('kernel')->getRootDir().'/../web';
-            $orgImageName = $uploadedFile->getClientOriginalName();
-            $orgImageName = str_replace(array('"', "'"), '', $orgImageName);
-            $orgImagePath = $webPath.DIRECTORY_SEPARATOR.$imagePath;
-            $orgImageName = escapeshellarg($orgImageName);
-
-            //upload original image.
-            $uploadedFile->move($orgImagePath, $orgImageName);
-
-            $userImageManager = new UserImageManager($this->container, $userId, $orgImagePath, $isCompany);
-
-            // remove image if its from profile page.
-            if ($profileImage) {
-                $userImageManager->removeImage();
-            }
-            //save original jpg image.
-            $userImageManager->saveOriginalJpgImage($orgImageName);
-
-            //create thumbnails
-            $userImageManager->createThumbnail();
-
-            //$userImageManager->uploadImagesToS3($image);
         }
     }
 

@@ -210,7 +210,7 @@ class HeaderImageAdminController extends CrudController implements ResourceAutho
         } catch (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e) {
             return $this->handleException($e, 'error', $this->getRouteName(''));
         }
-
+        
         $oldFileName = $entity->getFileName();
         $file        = $entity->getAbsolutePath();
 
@@ -234,6 +234,7 @@ class HeaderImageAdminController extends CrudController implements ResourceAutho
             if (file_exists($phoneFile)) {
                 unlink($phoneFile);
             }
+           
         }
 
         return parent::handleMessage($this->get('translator')->trans('%displayWord% was successfully deleted.', array('%displayWord%' => $this->getDisplayWord()), 'success'), ($backUrl ? $backUrl : $this->getRouteName('')));
@@ -270,7 +271,7 @@ class HeaderImageAdminController extends CrudController implements ResourceAutho
         if ($imageCount <= 1) {
             if (file_exists($phoneFile)) {
                 unlink($phoneFile);
-            }
+            }            
         }
         
         return parent::handleMessage($this->get('translator')->trans('Right-Hand-Side Image was successfully deleted.', array('%displayWord%' => $this->getDisplayWord()), 'success'), ($backUrl ? $backUrl : $this->getRouteName('')));
