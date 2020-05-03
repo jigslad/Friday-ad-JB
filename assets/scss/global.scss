@@ -20,12 +20,29 @@ $white : #FFFFFF !default;
 $black : #000000 !default;
 $common-text-color: #212527  !default;
 $common-bg-color: #EAEFF0 !default;
-$dark-gray: #212527 !default;
+
+$htag-color: #212527 !default;
+$atag-color: #82C249 !default;
+$accent1-color: #91D851 !default;
+$accent1-dark-color: #82C249 !default;
+$accent2-color: #FF5E74 !default;
+$text-color: #212527 !default;
+$dark-grey: #ACB0B7 !default;
+$grey-color: #CBD5D9 !default;
+$light-grey-color: #EAEFF0 !default;
+$primary-bg-color: #eef8d4 !default;
+$site-dark-bg-color: #212527 !default;
+$pagination-bg-color: #FBFBFB !default;
+$covid-bg-color: #FFBE09 !default;
+$covid-btn-txt-color: #343738 !default;
+$eighteenPlus-bg-start:#A75BD8 !default;
+$eighteenPlus-bg-end:#C60A84 !default;
 
 $primary-color: #31c5f2 !default;
 $primary-h-color: #2AB6E0 !default;
-$secondary-color: #A8DC28 !default;
+$secondary-color: #82C249 !default;
 $secondary-h-color: #9BCC21 !default;
+
 
 $primary-btn-l-color: #EE316F !default;
 $primary-btn-r-color: #FE8A7A !default;
@@ -48,8 +65,8 @@ $error-h-color: #F74D4D !default;
 $highlight-color: #FF233E !default; 
 
 //Form control colors
-$form-label-color: #212527  !default;
-$form-text-color: #ACB0B7 !default;
+$form-label-color: #ACB0B7  !default;
+$form-text-color: #212527 !default;
 $form-border-color: #CBD5D9 !default;
 $form-bg-color: #EAEFF0 !default;
 
@@ -91,5 +108,5 @@ $gplus-bg-color: #3265D1 !default;
 
 $imgplaceholder-bgcolor: #EAEFF0 !default;
 $anchr-color: #82C249 !default;
-
+$full-width: 100%;
 

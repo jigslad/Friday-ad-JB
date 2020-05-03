@@ -1,7 +1,5 @@
-@import "global";
-
 .simple-header {
-    background: $white;
+    background: #ffffff;
     text-align: center;
     padding: 32px 0;
     width: 100%;
@@ -15,8 +13,7 @@
 }
 .login-left {
     float: left;
-    border-right: 1px solid $form-border-color;
-    box-shadow: inset -1px 0 0 $white;
+    box-shadow: inset -1px 0 0 #FFFFFF;
 }
 .login-right {
     float: right;
@@ -27,7 +24,6 @@
     line-height: 20px;
 }
 .signup-ins {
-    color: $form-text-color;
     font-size: 13px;
     clear: both;
 }
@@ -38,25 +34,7 @@
     padding: 40px 0;
     text-align: center;
 }
-@media only screen and (min-width: 760px) {
-	.login-left {
-	    padding: 24px 39px 25px 0 !important;
-	}
-	.login-right {
-		padding: 50px 0 25px 40px !important;
-	}
-}
-
-@media (min-width: 320px) and (max-width: 759px) {
-    .login-left, .login-right {
-        padding: 15px;
-        border-right: 0px;
-        box-shadow: none;
-    }
-}
-
 .simple-footer {
-    background: $common-bg-color;
     border: 0;
     box-shadow: none;
     padding: 0;
@@ -83,4 +61,20 @@
     
 .login-register-block .signup-fb-btn, .login-register-block .signup-google-btn {
     /* width: 100%; */
+}
+@media only screen and (min-width: 760px) {
+	.login-left {
+	    padding: 24px 39px 25px 0 !important;
+	}
+	.login-right {
+		padding: 50px 0 25px 40px !important;
+	}
+}
+
+@media (min-width: 320px) and (max-width: 759px) {
+    .login-left, .login-right {
+        padding: 15px;
+        border-right: 0px;
+        box-shadow: none;
+    }
 }

@@ -1,5 +1,3 @@
-@import "global";
-
 .landing-header {
     position: relative;
     background-size: cover;
@@ -41,26 +39,23 @@
 .landing-header h1 {
     font-size: 72px;
     line-height: 78px;
-    color: $white;
+    color: #FFFFFF;
     margin: 0px 0 0 0;
-    font-family: $font-family-secondary;
     font-weight: 400;
 }
 .intro-text {
     margin: 15px auto 0;
-    font-family: $font-family-secondary;
     font-size: 18px;
-    color: $white;
+    color: #FFFFFF;
     line-height: 26px;
     background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3Asketch%3D%22http%3A//www.bohemiancoding.com/sketch/ns%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20version%3D%221.1%22%20id%3D%22Layer_1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%22526%22%20height%3D%222%22%20viewBox%3D%22-136%20235%20526%202%22%20xml%3Aspace%3D%22preserve%22%20enable-background%3D%22new%20-136%20235%20526%202%22%3E%0D%0A%20%20%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%20%20%20%20%0D%0A%09.st0%7Bfill%3Anone%3Bstroke%3A%23FFFFFF%3Bstroke-width%3A2%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3Bstroke-dasharray%3A1%2C5%3B%7D%0D%0A%0D%0A%20%20%3C/style%3E%0D%0A%20%20%3Ctitle%3E%0D%0A%20%20%20%20Hero-dotted-Line%0D%0A%20%20%3C/title%3E%0D%0A%20%20%3Cdesc%3E%0D%0A%20%20%20%20Created%20with%20Sketch.%0D%0A%20%20%3C/desc%3E%0D%0A%20%20%3Cg%20id%3D%22landing-page%22%20sketch%3Atype%3D%22MSPage%22%3E%0D%0A%20%20%20%20%3Cg%20id%3D%22Desktop---Landing-Page-For-Sales-%22%20transform%3D%22translate%28-456.000000%2C%20-312.000000%29%22%20sketch%3Atype%3D%22MSArtboardGroup%22%3E%0D%0A%20%20%20%20%20%20%3Cg%20id%3D%22Hero%22%20transform%3D%22translate%28-280.000000%2C%20-557.000000%29%22%20sketch%3Atype%3D%22MSLayerGroup%22%3E%0D%0A%20%20%20%20%20%20%20%20%3Cg%20id%3D%22p-_x2B_-for-sale-active-2-_x2B_-For-sale-_x2B_-Line%22%20transform%3D%22translate%28737.000000%2C%20732.000000%29%22%20sketch%3Atype%3D%22MSShapeGroup%22%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%3Cpath%20id%3D%22Hero-dotted-Line%22%20class%3D%22st0%22%20d%3D%22M-135.5%20373h525%22/%3E%0D%0A%20%20%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%3C/g%3E%0D%0A%20%20%3C/g%3E%0D%0A%3C/svg%3E%0D%0A') no-repeat;
 
 }
 .intro-text .item-count {
-    color: $secondary-color;
     margin: 0 0 11px;
     padding: 17px 0 0 0;
 }
-
+.landing-circles { margin:auto; width: 'fit-content'; }
 /* Animals Images */
 .pets-dogs { background: url('/Frontend/images/animals/Ic-btn-Dogs.svg') no-repeat !important; }
 .pets-cats { background: url('/Frontend/images/animals/Ic-btn-Cats.svg') no-repeat !important; }
@@ -267,17 +262,14 @@
     position: absolute;
     left: 0;
     bottom: 15px;
-    font-family: $font-family-secondary;
     font-size: 20px;
-    color: $secondary-color;
     line-height: 26px;
     text-align: center;
     width: 100%;
     z-index: 3;
 }
 .homepage-more-items {
-    background: $white;
-    border: 1px solid $form-border-color;
+    background: #FFFFFF;
     border-radius: 2px;
     position: relative;
     min-height: 340px;
@@ -288,9 +280,8 @@
 .landing-block .list-location-box .link-list {
     column-count: 4;
 }
-.landing-divider {
-    border-bottom: solid 1px $form-border-color;
-    box-shadow: 0 1px 0 $white;
+.landing-divider {    
+    box-shadow: 0 1px 0 #FFFFFF;
 }
 .budget-box {
     list-style: none;
@@ -317,10 +308,6 @@
 .body_type_choice {
 cursor: pointer;
 }
-
-.border-botttom {
-    border-bottom: 1px solid $form-border-color;
-}
 .landing-circles li {
     margin: 0 20px 20px 0px
 }
@@ -344,9 +331,6 @@ cursor: pointer;
 }
 
 // For sale
-.border-botttom {
-    border-bottom: 1px solid $form-border-color;
-}
 .for-sale .popular-items .item-box {
     height: 206px;
     overflow: hidden;
@@ -381,13 +365,9 @@ cursor: pointer;
     vertical-align: middle;
     border-radius: 20px;
     white-space: nowrap;
-    color: $white;
-    display: inline-block;
-    background: $form-text-color;
+    color: #FFFFFF;
+    display: inline-block;    
     text-align: center;
-}
-.capsule-links a:hover, .capsule-links a.active {
-    background: $secondary-color;
 }
 .property .landing-circles li, .jobs .landing-circles li {
     margin: 0 20px 20px 0px !important;
@@ -441,16 +421,11 @@ cursor: pointer;
         background-size: 130px 131px !important;
     }
 }
-
-.custom-card .card-body {
-    border-top: 1px solid #e3e3e3;
-}
 .custom-card .card-img-top {
     object-fit: none;
 }
 .custom-card .similar-placeholder {
     border: 0;
-    background-color: #efefef;
     max-height: 160px;
 }
 .custom-card .card-img-top {
@@ -460,10 +435,8 @@ cursor: pointer;
     z-index: 5;
 }
 .homepage-title, .homepage-title-small {
-  font-family: $font-family-secondary;
   font-size: 36px;
   font-weight: 400;
-  color: $dark-gray;
   line-height: 46px;
   text-align: center;
   margin-bottom: 49px;

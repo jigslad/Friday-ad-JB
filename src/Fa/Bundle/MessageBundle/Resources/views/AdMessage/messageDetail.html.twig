@@ -78,11 +78,11 @@
                 <b>{{ 'Attached CV' }}: </b><a class="outside-tricky" href="javascript:downloadAttachment('{{arrayMessage['id']}}');">{{arrayMessage['attachment_org_file_name']}}</a>
             {% endif %}
             {% if arrayMessage['receiver_id'] == app.user.getId() and arrayMessage['is_oneclickenq_message'] and arrayMessage['oneclickenq_reply'] == NULL %}
-                <div class="my-respond-content mt10 hide-for-small">
+                <div class="my-respond-content mt10 d-none d-md-block">
                     <b>{{ 'Respond to' }} {{userDisplayName}}:</b>
                     <div class="mt10">
-                        <a href="javascript:void(0)" class="secondary-btn-1 button mb0" onclick="return replyOneClickEnq('{{arrayMessage['id']}}', '{{ arrayMessage['ad_id'] }}', 'Yes', 'Inbox_View');">{{'Yes'|trans({})}}</a>
-                        <a href="javascript:void(0)" class="secondary-btn-2 button mb0" onclick="return replyOneClickEnq('{{arrayMessage['id']}}', '{{ arrayMessage['ad_id'] }}', 'No', 'Inbox_View');"><span class="d-none d-md-block">{{'No - '|trans({})}}</span> {{'Mark as sold'|trans({})}}</a>
+                        <a href="javascript:void(0)" class="secondary-btn-1 btn mb0" onclick="return replyOneClickEnq('{{arrayMessage['id']}}', '{{ arrayMessage['ad_id'] }}', 'Yes', 'Inbox_View');">{{'Yes'|trans({})}}</a>
+                        <a href="javascript:void(0)" class="secondary-btn-2 btn mb0" onclick="return replyOneClickEnq('{{arrayMessage['id']}}', '{{ arrayMessage['ad_id'] }}', 'No', 'Inbox_View');">{{'No-Mark as sold'|trans({})}}</a>
                     </div>
                 </div>
             {% endif %}
