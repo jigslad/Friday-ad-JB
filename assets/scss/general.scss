@@ -862,9 +862,7 @@ footer {
   	 	box-shadow: inset 0 1px 0 $common-text-color;
   	}
 	.footer-head {
-	    font-family: $font-family-default;
 	    a {
-	      	font-family: $font-family-default;
 	      	color: $common-bg-color;
 	      	&:hover, &:focus {
 	      		color: $secondary-h-color;
@@ -872,7 +870,7 @@ footer {
 	    }
 	}
 	a {
-	    color: $form-text-color;
+	    color: $dark-grey;
 	}
 	.category-links {
 	    border-bottom: 1px solid $black;
