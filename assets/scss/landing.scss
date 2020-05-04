@@ -55,7 +55,8 @@
     margin: 0 0 11px;
     padding: 17px 0 0 0;
 }
-.landing-circles { margin:auto; width: 'fit-content'; }
+.landing-circles { margin:auto !important; width: fit-content !important; }
+.landing-circles li.active { border-radius:4px; }
 /* Animals Images */
 .pets-dogs { background: url('/Frontend/images/animals/Ic-btn-Dogs.svg') no-repeat !important; }
 .pets-cats { background: url('/Frontend/images/animals/Ic-btn-Cats.svg') no-repeat !important; }
@@ -85,83 +86,75 @@
 
 /* Motors Images */
 .any-category {
-  background: url('/Frontend/images/Ic-btn-Any.svg') no-repeat;
+  background: url('/Frontend/images/Ic-btn-Any.png') no-repeat;
   &:hover {
-    background: url('/Frontend/images/Ic-btn-Any-Hover.svg') no-repeat;
+    background: url('/Frontend/images/Ic-btn-Any-Hover.png') no-repeat;
   }
   &.active {
-    background: url('/Frontend/images/Ic-btn-Any-ON.svg') no-repeat;
-    border-radius: 5px !important;
+    background: url('/Frontend/images/Ic-btn-Any-ON.png') no-repeat;
   }
 }
 .car-hatchback {
-  background: url('/Frontend/images/motors/Ic-btn-Hatchback.svg') no-repeat;
+  background: url('/Frontend/images/motors/Ic-btn-Hatchback.png') no-repeat;
   &:hover {
-    background: url('/Frontend/images/motors/Ic-btn-Hatchback-Hover.svg') no-repeat;
+    background: url('/Frontend/images/motors/Ic-btn-Hatchback-Hover.png') no-repeat;
   }
   &.active {
-    background: url('/Frontend/images/motors/Ic-btn-Hatchback-ON.svg') no-repeat;
-    border-radius: 5px !important;
+    background: url('/Frontend/images/motors/Ic-btn-Hatchback-ON.png') no-repeat;
   }
 }
 .car-coupes {
-  background: url('/Frontend/images/motors/Ic-btn-Coupes1.svg') no-repeat;
+  background: url('/Frontend/images/motors/Ic-btn-Coupes.png') no-repeat;
   &:hover {
-    background: url('/Frontend/images/motors/Ic-btn-Coupes-Hover.svg') no-repeat;
+    background: url('/Frontend/images/motors/Ic-btn-Coupes-Hover.png') no-repeat;
   }
   &.active {
-    background: url('/Frontend/images/motors/Ic-btn-Coupes-ON.svg') no-repeat;
-    border-radius: 5px !important;
+    background: url('/Frontend/images/motors/Ic-btn-Coupes-ON.png') no-repeat;
   }
 }
 .car-saloons {
-  background: url('/Frontend/images/motors/Ic-btn-Saloons.svg') no-repeat;
+  background: url('/Frontend/images/motors/Ic-btn-Saloons.png') no-repeat;
   &:hover {
-    background: url('/Frontend/images/motors/Ic-btn-Saloons-Hover.svg') no-repeat;
+    background: url('/Frontend/images/motors/Ic-btn-Saloons-Hover.png') no-repeat;
   }
   &.active {
-    background: url('/Frontend/images/motors/Ic-btn-Saloons-ON.svg') no-repeat;
-    border-radius: 5px !important;
+    background: url('/Frontend/images/motors/Ic-btn-Saloons-ON.png') no-repeat;
   }
 }
 .car-convertibles {
-  background: url('/Frontend/images/motors/Ic-btn-Convertibles.svg') no-repeat;
+  background: url('/Frontend/images/motors/Ic-btn-Convertibles.png') no-repeat;
   &:hover {
-    background: url('/Frontend/images/motors/Ic-btn-Convertibles-Hover.svg') no-repeat;
+    background: url('/Frontend/images/motors/Ic-btn-Convertibles-Hover.png') no-repeat;
   }
   &.active {
-    background: url('/Frontend/images/motors/Ic-btn-Convertibles-ON.svg') no-repeat;
-    border-radius: 5px !important;
+    background: url('/Frontend/images/motors/Ic-btn-Convertibles-ON.png') no-repeat;
   }
 }
 .car-estates {
-  background: url('/Frontend/images/motors/Ic-btn-Estates.svg') no-repeat;
+  background: url('/Frontend/images/motors/Ic-btn-Estates.png') no-repeat;
   &:hover {
-    background: url('/Frontend/images/motors/Ic-btn-Estates-Hover.svg') no-repeat;
+    background: url('/Frontend/images/motors/Ic-btn-Estates-Hover.png') no-repeat;
   }
   &.active {
-    background: url('/Frontend/images/motors/Ic-btn-Estates-ON.svg') no-repeat;
-    border-radius: 5px !important;
+    background: url('/Frontend/images/motors/Ic-btn-Estates-ON.png') no-repeat;
   }
 }
 .car-mpvs {
-  background: url('/Frontend/images/motors/Ic-btn-MPVs.svg') no-repeat;
+  background: url('/Frontend/images/motors/Ic-btn-MPVs.png') no-repeat;
   &:hover {
-    background: url('/Frontend/images/motors/Ic-btn-MPVs-Hover.svg') no-repeat;
+    background: url('/Frontend/images/motors/Ic-btn-MPVs-Hover.png') no-repeat;
   }
   &.active {
-    background: url('/Frontend/images/motors/Ic-btn-MPVs-ON.svg') no-repeat;
-    border-radius: 5px !important;
+    background: url('/Frontend/images/motors/Ic-btn-MPVs-ON.png') no-repeat;
   }
 }
 .car-4x4 {
-  background: url('/Frontend/images/motors/Ic-btn-4x4.svg') no-repeat;
+  background: url('/Frontend/images/motors/Ic-btn-4x4.png') no-repeat;
   &:hover {
-    background: url('/Frontend/images/motors/Ic-btn-4x4-Hover.svg') no-repeat;
+    background: url('/Frontend/images/motors/Ic-btn-4x4-Hover.png') no-repeat;
   }
   &.active {
-    background: url('/Frontend/images/motors/Ic-btn-4x4-ON.svg') no-repeat;
-    border-radius: 5px !important;
+    background: url('/Frontend/images/motors/Ic-btn-4x4-ON.png') no-repeat;
   }
 }
 
