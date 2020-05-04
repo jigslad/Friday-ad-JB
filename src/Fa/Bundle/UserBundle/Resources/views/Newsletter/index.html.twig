@@ -5,8 +5,10 @@
 {% set newsletterMainCategoryArray = newsletterTypeRepository.getMainCategoryArray(container) %}
 
 {% block body %}
- {{ include('FaUserBundle:Newsletter:newsletter-css.html.twig')}}
- {{ include('FaUserBundle:Newsletter:newsletter.html.twig', {'userNewsletterPrefForm': form, 'newsletterMainCategoryArray': newsletterMainCategoryArray|keys, 'is_unsubscribe': 1}) }}
+    <div class="newsletter-main-section">
+{#        {{ include('FaUserBundle:Newsletter:newsletter-css.html.twig')}}#}
+        {{ include('FaUserBundle:Newsletter:newsletter.html.twig', {'userNewsletterPrefForm': form, 'newsletterMainCategoryArray': newsletterMainCategoryArray|keys, 'is_unsubscribe': 1}) }}
+    </div>
 {% endblock %}
 
 {% block scriptbottom %}
