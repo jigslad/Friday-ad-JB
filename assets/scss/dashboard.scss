@@ -2617,3 +2617,66 @@
         min-height: 100px;
     }
 }
+
+
+// Private Profile
+.other-profile {
+    padding: 24px 0 76px;
+}
+.user-pro-pic.rounded {
+    width: 106px;
+    height: 106px;
+    border-radius: 50%;
+    text-align: center;
+    padding: 4px;
+}
+.user-pro-pic span {
+    width: 103px;
+    height: 103px;
+    padding: 4px;
+    background: #fff;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+    border-radius: 50%;
+}
+.user-pro-pic.rounded img.pvt-no-img {
+    width: 103px;
+    height: 103px;
+}
+.other-profile .pro-user-name {
+    font-size: 20px;
+    color: #212527;
+    margin: 19px 0 12px;
+    text-align: center;
+}
+.sold-n-reviews {
+    padding: 20px 0 18px;
+    color: #ACB0B7;
+    border-top: 1px solid #CBD5D9;
+    border-bottom: 1px solid #fff;
+    box-shadow: inset 0 1px 0 0 #fff, inset 0 -1px 0 0 #CBD5D9;
+}
+.sold-icon {
+    background: url(/bundles/fafrontend/images/shops-sold-icon-grey.svg) no-repeat;
+    width: 41px;
+    height: 19px;
+    display: inline-block;
+    vertical-align: middle;
+    text-indent: -9999px;
+}
+.review-sold-icon {
+    width: 22px;
+    height: 22px;
+    display: inline-block;
+    vertical-align: middle;
+    text-indent: -9999px;
+    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2222%22%20height%3D%2222%22%20viewBox%3D%22-1406%20460.9%2022%2022%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%238A8A8A%3B%7D%0D%0A%09.st1%7Bfill%3A%23EFEFEF%3B%7D%0D%0A%3C/style%3E%3Ctitle%3EIcon%20reviews%20Copy%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-1387%20477.1c1.9-1.7%203-4%203-6.6%200-5.3-4.9-9.6-11-9.6s-11%204.3-11%209.6c0%204.9%204.2%208.9%209.6%209.5l13.5%200L-1387%20477.1z%22/%3E%3Cpolygon%20class%3D%22st1%22%20points%3D%22-1394.8%20473.5%20-1398.1%20475.2%20-1397.5%20471.5%20-1400.2%20468.9%20-1396.5%20468.3%20-1394.8%20464.9%20-1393.1%20468.3%20-1389.3%20468.9%20-1392.1%20471.5%20-1391.4%20475.2%20%22/%3E%3C/svg%3E') no-repeat;
+}
+.other-pro-title {
+    margin: 22px 0 15px;
+}
+.other-pro-location {
+    margin: 0 0 28px;
+}
