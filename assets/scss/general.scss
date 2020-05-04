@@ -617,16 +617,6 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
     text-overflow: ellipsis;
     padding-right: 20px;
 }
-.select-styled:after {
-    content: "";
-    width: 0;
-    height: 0;
-    border: 5px solid transparent;
-    border-color: $common-text-color transparent transparent transparent;
-    position: absolute;
-    top: 17px;
-    right: 8px;
-}
 .select-styled:hover {
     background-color: $white;
 }
@@ -2029,7 +2019,7 @@ footer p { color:$grey-color; }
 #uploaded_images_div .main-photo b {
     background: $secondary-color;
 }
-
+.chcw_header a, .chcw_header a:hover, .chcw_header a:focus, .chcw_header a:active { color: $common-text-color !important; }
 @media only screen and (max-width: 640px) {
   .ad-list-block .reset-search{
     border-bottom: 1px solid $form-border-color;
