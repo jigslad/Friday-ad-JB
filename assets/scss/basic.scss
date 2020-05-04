@@ -164,77 +164,78 @@ div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, p, blockquote, t
 
 /* Category Images */
 .discover-forsale, .cat-forsale {
-  background: url('/Frontend/images/categories/Ic-btn-For-Sale.svg') no-repeat;
+  background: url('/Frontend/images/categories/Ic-btn-For-Sale.png') no-repeat;
   &:hover {
-    background: url('/Frontend/images/categories/Ic-btn-For-Sale-Hover.svg') no-repeat;
+    background: url('/Frontend/images/categories/Ic-btn-For-Sale-Hover.png') no-repeat;
   }
   &.active {
-    background: url('/Frontend/images/categories/Ic-btn-For-Sale-ON.svg') no-repeat;
+    background: url('/Frontend/images/categories/Ic-btn-For-Sale-ON.png') no-repeat;
   }
 }
 .discover-motors, .cat-motors {
-  background: url('/Frontend/images/categories/Ic-btn-Motors.svg') no-repeat;
+  background: url('/Frontend/images/categories/Ic-btn-Motors.png') no-repeat;
   &:hover {
-    background: url('/Frontend/images/categories/Ic-btn-Motors-Hover.svg') no-repeat;
+    background: url('/Frontend/images/categories/Ic-btn-Motors-Hover.png') no-repeat;
   }
   &.active {
-    background: url('/Frontend/images/categories/Ic-btn-Motors-ON.svg') no-repeat;
+    background: url('/Frontend/images/categories/Ic-btn-Motors-ON.png') no-repeat;
   }
 }
 .discover-jobs, .cat-jobs {
-  background: url('/Frontend/images/categories/Ic-btn-Jobs.svg') no-repeat;
+  background: url('/Frontend/images/categories/Ic-btn-Jobs.png') no-repeat;
   &:hover {
-    background: url('/Frontend/images/categories/Ic-btn-Jobs-Hover.svg') no-repeat;
+    background: url('/Frontend/images/categories/Ic-btn-Jobs-Hover.png') no-repeat;
   }
   &.active {
-    background: url('/Frontend/images/categories/Ic-btn-Jobs-ON.svg') no-repeat;
+    background: url('/Frontend/images/categories/Ic-btn-Jobs-ON.png') no-repeat;
   }
 }
 .discover-services, .cat-services {
-  background: url('/Frontend/images/categories/Ic-btn-Services.svg') no-repeat;
+  background: url('/Frontend/images/categories/Ic-btn-Services.png') no-repeat;
   &:hover {
-    background: url('/Frontend/images/categories/Ic-btn-Services-Hover.svg') no-repeat;
+    background: url('/Frontend/images/categories/Ic-btn-Services-Hover.png') no-repeat;
   }
   &.active {
-    background: url('/Frontend/images/categories/Ic-btn-Services-ON.svg') no-repeat;
+    background: url('/Frontend/images/categories/Ic-btn-Services-ON.png') no-repeat;
   }
 }
 .discover-property, .cat-property {
-  background: url('/Frontend/images/categories/Ic-btn-Property.svg') no-repeat;
+  background: url('/Frontend/images/categories/Ic-btn-Property.png') no-repeat;
   &:hover {
-    background: url('/Frontend/images/categories/Ic-btn-Property-Hover.svg') no-repeat;
+    background: url('/Frontend/images/categories/Ic-btn-Property-Hover.png') no-repeat;
   }
   &.active {
-    background: url('/Frontend/images/categories/Ic-btn-Property-ON.svg') no-repeat;
+    background: url('/Frontend/images/categories/Ic-btn-Property-ON.png') no-repeat;
   }
 }
 .discover-animals, .cat-animals {
   background: url('/Frontend/images/categories/Ic-btn-Animals.png') no-repeat;
   &:hover {
-    background: url('/Frontend/images/categories/Ic-btn-Animals-Hover.svg') no-repeat;
+    background: url('/Frontend/images/categories/Ic-btn-Animals-Hover.png') no-repeat;
   }
   &.active {
-    background: url('/Frontend/images/categories/Ic-btn-Animals-ON.svg') no-repeat;
+    background: url('/Frontend/images/categories/Ic-btn-Animals-ON.png') no-repeat;
   }
 }
 .discover-community, .cat-community {
-  background: url('/Frontend/images/categories/Ic-btn-Community.svg') no-repeat;
+  background: url('/Frontend/images/categories/Ic-btn-Community.png') no-repeat;
   &:hover {
-    background: url('/Frontend/images/categories/Ic-btn-Community-Hover.svg') no-repeat;
+    background: url('/Frontend/images/categories/Ic-btn-Community-Hover.png') no-repeat;
   }
   &.active {
-    background: url('/Frontend/images/categories/Ic-btn-Community-ON.svg') no-repeat;
+    background: url('/Frontend/images/categories/Ic-btn-Community-ON.png') no-repeat;
   }
 }
 .discover-adult, .cat-adult  {
-  background: url('/Frontend/images/categories/Ic-btn-Adult.svg') no-repeat;
+  background: url('/Frontend/images/categories/Ic-btn-Adult.png') no-repeat;
   &:hover {
-    background: url('/Frontend/images/categories/Ic-btn-Adult-Hover.svg') no-repeat;
+    background: url('/Frontend/images/categories/Ic-btn-Adult-Hover.png') no-repeat;
   }
   &.active {
-    background: url('/Frontend/images/categories/Ic-btn-Adult-ON.svg') no-repeat;
+    background: url('/Frontend/images/categories/Ic-btn-Adult-ON.png') no-repeat;
   }
 }
+.discover-categories a.active, .discover-categories a.active { border-radius:4px; }
 
 .custom-checkbox label, .custom-checkbox label.custom-control-label {
     margin: 5px 5px 5px 22px;
