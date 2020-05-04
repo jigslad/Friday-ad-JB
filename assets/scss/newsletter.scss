@@ -1,6 +1,3 @@
-@import "global";
-
-
 .newsletter-block {
     position: absolute;
     float: right;
@@ -30,13 +27,11 @@
     background-size: contain;
 }
 .newsletter_info_txt {
-    color: $form-text-color;
     font-size: 12px;
     line-height: 18px;
 }
 .news-form-l {
-	border-right: 1px solid $form-border-color;
-	box-shadow: inset -1px 0 0 $white;
+	box-shadow: inset -1px 0 0 #FFFFFF;
 }
 .pr100 {
 	padding-right: 100px;
@@ -80,11 +75,7 @@
     padding-left: 25px;
     background-position: center center;
 }
-.border-btm {
-    border-bottom: 1px solid $form-border-color;
-}
 .newsletter-main-section .arrow-block {
-    color: $dark-gray;
     position: relative !important;
     top: 0 !important;
 }

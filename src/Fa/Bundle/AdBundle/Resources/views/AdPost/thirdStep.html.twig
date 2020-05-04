@@ -69,12 +69,20 @@
                                 </div>
                                 <div class="col-md-24 d-flex justify-content-center paa-box">
                                     <div class="paa-login-box m-paa-social-box">
-                                        {% if facebookLoginUrl %}
-                                            <button type="reset" class="fb-btn" onclick="javascript:fbLoginPopupLocal('{{ facebookLoginUrl }}');">{{ 'Login With FB'|trans({}, 'frontend-paa-login') }}</button>
-                                        {% endif %}
-                                        {% if googleLoginUrl %}
-                                            <button type="reset" class="gplus-btn" onclick="javascript:googleLoginPopupLocal('{{ googleLoginUrl }}');">{{ 'Login With Google'|trans({}, 'frontend-paa-login') }}</button>
-                                        {% endif %}
+                                    <div class="mobile-block-reg">
+                                    	<div class="text-center mb20">
+                                            <a href="javascript:fbLoginPopupLocal('{{ facebookLoginUrl }}');" class="button special signup-fb-btn">
+                                                <span class="fb-icon"></span> 
+                                                <span class="btn-text">{{ 'Login with Facebook'|trans({}, 'frontend-paa-login') }}</span>
+                                            </a>
+                                        </div>
+                                        <div class="text-center mb20">
+                                            <a href="javascript:googleLoginPopupLocal('{{ googleLoginUrl }}');" class="button special signup-google-btn">
+                                                <span class="google-icon"></span> 
+                                                <span class="btn-text">{{ 'Login with Google'|trans({}, 'frontend-paa-login') }}</span>
+                                            </a>
+                                        </div>
+                                      </div>                                       
                                     </div>
                                 </div>
                                 <p class="post-info">{{"We won't post anything <b>without your permission.</b>"|trans({}, 'frontend-paa-login')|raw}}</p>

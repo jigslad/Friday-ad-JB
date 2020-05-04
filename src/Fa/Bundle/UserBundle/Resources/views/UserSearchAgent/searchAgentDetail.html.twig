@@ -45,10 +45,10 @@
                 <a href="{{ searchResultUrl }}" class="secondary-btn-1 xs-thin-btn btn btn-block small-btn">{{'Search now'|trans({}, 'frontend-my-saved-searches')}}</a>
             </div>
             <div class="label-inline">
-                <ul class="custom-control custom-checkbox search-type crawlable-checkbox">
-                    <li>
-                        <input class="custom-control-input" type="checkbox" name="emailAlert_{{ searchAgent.id }}" id="emailAlert_{{ searchAgent.id }}" onclick="return updateSavedSearchAgent({{ searchAgent.id }});" value="1" {% if searchAgent.is_email_alerts %} checked="checked" {% endif %} />
-                        <label for="emailAlert_{{ searchAgent.id }}" class="custom-control-label">{{'Send me email alerts'|trans({}, 'frontend-my-saved-searches')}}</label>
+                <ul>
+                    <li class="grey-check">
+                        <input class="checkbox" type="checkbox" name="emailAlert_{{ searchAgent.id }}" id="emailAlert_{{ searchAgent.id }}" onclick="return updateSavedSearchAgent({{ searchAgent.id }});" value="1" {% if searchAgent.is_email_alerts %} checked="checked" {% endif %} />
+                        <label for="emailAlert_{{ searchAgent.id }}"></label>{{'Send me email alerts'|trans({}, 'frontend-my-saved-searches')}}
                     </li>
                 </ul>
             </div>

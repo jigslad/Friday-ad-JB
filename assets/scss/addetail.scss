@@ -1,10 +1,3 @@
-@import "global";
-
-.ad-detail .breadcrumb-area{
-	background: $form-bg-color;
-	border-bottom: 1px solid $form-border-color;
-  border-top: 1px solid $form-border-color;
-}
 .ad-detail .breadcrumb {
 	list-style: none;
 	display: inherit;
@@ -12,19 +5,11 @@
 	display: inline-flex;
 	padding: 8px 0 4px !important;
 }
-@media (min-width: 760px) {
-    .details-wrapper .two-grid-col {
-        width: 100%;
-        display: flex;
-    }
-}
 .details-wrapper {
   .detail-head {
     margin: 13px 0;
-    font-family: $font-family-secondary;
     font-size: 36px;
     font-weight: 400;
-    color: $dark-gray;
     line-height: 46px;
   }
   .left-col {
@@ -41,13 +26,7 @@
     min-height: 25px;
     margin-bottom: 24px;
     background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2220%22%20height%3D%2225%22%20viewBox%3D%220%200%2020%2025%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%234A4A4A%3B%7D%0D%0A%3C/style%3E%3Ctitle%3EBig%20pin%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M10%200C4.5%200%200%204.3%200%209.6%200.1%2016.8%2010%2025%2010%2025c-0.1%200%209.8-7.7%2010-15.4C20%204.3%2015.5%200%2010%200zM10%2013.3c-1.8%200-3.3-1.5-3.3-3.3S8.2%206.7%2010%206.7s3.3%201.5%203.3%203.3S11.8%2013.3%2010%2013.3z%22/%3E%3C/svg%3E') no-repeat;
-  }
-  .detail-location a {
-    color: $common-text-color;
-    &:hover, &:focus {
-      color: $common-text-color;
-    }
-  }
+  }  
   .report-tab {
     position: absolute;
     margin-top: 6px;
@@ -55,7 +34,7 @@
   }
   .report {
     border-radius: 2px;
-    color: $white;
+    color: #FFFFFF;
     display: inline-block;
     font-size: 14px;
     height: 25px;
@@ -64,7 +43,6 @@
     text-align: right;
     width: 80px;
     cursor: pointer;
-    background: $form-text-color url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2217%22%20height%3D%2216%22%20viewBox%3D%22-1409%20463.9%2017%2016%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23FFFFFF%3Bstroke%3A%23FFFFFF%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%09.st1%7Bfill%3A%23D8D8D8%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Ereport%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-815.000000%2C%20-518.000000%29%22%3E%3Cg%20transform%3D%22translate%28-1.000000%2C%20272.000000%29%22%3E%3Cg%20transform%3D%22translate%28184.000000%2C%2076.000000%29%22%3E%3Cg%20transform%3D%22translate%281.000000%2C%20158.000000%29%22%3E%3Cg%20transform%3D%22translate%28625.000000%2C%208.000000%29%22%3E%3Cg%20transform%3D%22translate%286.000000%2C%204.000000%29%22%3E%3Cg%20transform%3D%22translate%280.923077%2C%200.307692%29%22%3E%3Cpolygon%20class%3D%22st0%22%20points%3D%22-1401.4%20464.6%20-1393.9%20478.6%20-1408.9%20478.6%20%22/%3E%3Crect%20x%3D%22-1402.1%22%20y%3D%22466.9%22%20class%3D%22st1%22%20width%3D%221.6%22%20height%3D%227.4%22/%3E%3Crect%20x%3D%22-1402.1%22%20y%3D%22475.8%22%20class%3D%22st1%22%20width%3D%221.6%22%20height%3D%221.5%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat 6px 4px;
   }
 }
 @media (min-width: 320px) and (max-width: 759px) {
@@ -80,10 +58,8 @@
 
 
 .save-item-btn, .saved-item-btn {
-    background: $white;
-    border: 1px solid $form-border-color;
+    background: #FFFFFF;
     vertical-align: middle;
-    color: $form-text-color;
     font-weight: 700;
     font-size: 14px;
     display: inline-block;
@@ -92,14 +68,6 @@
     border-radius: 30px;
     min-width: 157px;
     text-align: center;
-}
-.saved-item-btn, 
-.saved-item-btn:hover, 
-.saved-item-btn:focus, 
-.save-item-btn:hover, 
-.save-item-btn:focus {
-    border-color: $secondary-btn-brdr-h-color;
-    color: $secondary-h-color;
 }
 .save-icon, .saved-icon {
     background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2221%22%20height%3D%2220%22%20viewBox%3D%22-1407%20461.9%2021%2020%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23A8A8A8%3B%7D%0D%0A%3C/style%3E%3Ctitle%3EHeart%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-213.000000%2C%20-1241.000000%29%22%3E%3Cg%20transform%3D%22translate%28183.000000%2C%20447.000000%29%22%3E%3Cg%20transform%3D%22translate%280.000000%2C%2022.000000%29%22%3E%3Cg%20transform%3D%22translate%280.000000%2C%20762.000000%29%22%3E%3Cg%20transform%3D%22translate%2830.000000%2C%2010.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-1390.7%20462c2.1%200.2%204.4%202.1%204.7%205.7v1.2c-0.3%203.5-2.9%207.7-10.5%2013.1%20-7.6-5.3-10.2-9.6-10.5-13.1v-1.2c0.3-3.6%202.7-5.5%204.7-5.7%200.3%200%200.7%200%201%200%202.4%200%203.5%201%204.8%202.6%201.3-1.6%202.4-2.6%204.8-2.6C-1391.4%20461.9-1391.1%20462-1390.7%20462z%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat;
@@ -122,17 +90,15 @@
     background-position: center center;
 }
 
-
-
 .detail-tabpart-2 {
   .custom-tabs .nav-link {
-    background: $white;
+    background: #FFFFFF;
   }
   .nav-tabs .nav-item {
     margin-bottom: 0px;
   }
   .tab-content {
-    background: $white;
+    background: #FFFFFF;
     padding: 18px 25px;
     font-size: 14px;
   }
@@ -151,16 +117,8 @@
   .details-info {
     margin: 10px 0 0 0;
     list-style: none;
-    border: 1px solid $common-bg-color;
     border-radius: 2px;
-    background: $common-bg-color;
-    li {
-      &:nth-child(2n) .detail-text {
-        background: $form-bg-color;
-      }
-      &:nth-child(2n+1) .detail-text {
-        background: $common-bg-color;
-      }
+    li {     
       &:first-child {
         border-radius: 2px 2px 0 0;
       }
@@ -168,16 +126,12 @@
         float: left;
         width: 50%;
         padding: 7px 19px;
-        font-size: 14px;
-        a {
-          color: $secondary-color;
-        }
+        font-size: 14px;       
         &:first-child {
-          color: $form-text-color;
           font-weight: 700;
         }
         &:last-child {
-          border-left: 1px solid $white;
+          border-left: 1px solid #FFFFFF;
         }
       }
     }
@@ -190,26 +144,20 @@
     margin-top: 40px;
 }
 .nimber-box-bdr {
-    background: $form-bg-color;
-    border: 1px solid $form-border-color;
     border-radius: 2px;
     padding: 17px 20px;
 }
 .nimber-logo {
-    background: url("https://www.friday-ad.co.uk/bundles/fafrontend/images/nimber-logo.png") no-repeat 0 0 / 132px 28px;
+    background: url("/bundles/fafrontend/images/nimber-logo.png") no-repeat 0 0 / 132px 28px;
     display: block;
     width: 132px;
     height: 28px;
     float: left;
 }
 .nimber-text {
-    color: $common-text-color;
     padding: 0 0 0 20px;
     float: left;
     width: 482px;
-}
-.nimber-text a {
-	color: $secondary-color;
 }
 .nimber-fields {
     margin-top: 13px;
@@ -226,18 +174,15 @@
     width: 280px;
 }
 .add-photo {
-    background: $form-bg-color;
     width: 112px;
     height: 84px;
     float: right;
     margin-top: 4px;
-    border: 1px solid $form-border-color;
     position: relative
 }
 
 .add-photo:hover {
-    background: $white;
-    border-color: $form-border-color;
+    background: #FFFFFF;
 }
 
 .add-photo-text {
@@ -245,13 +190,12 @@
     margin-top: 20px;
     text-align: center;
     font-size: 14px;
-    color: $white;
+    color: #FFFFFF;
     font-weight: 700;
     background: url('data:image/svg+xml;charset=US-ASCII,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22UTF-8%22%20standalone%3D%22no%22%3F%3E%0A%3Csvg%20width%3D%2221px%22%20height%3D%2221px%22%20viewBox%3D%220%200%2021%2021%22%20version%3D%221.1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%3E%0A%20%20%20%20%3C%21--%20Generator%3A%20Sketch%203.8.3%20%2829802%29%20-%20http%3A//www.bohemiancoding.com/sketch%20--%3E%0A%20%20%20%20%3Ctitle%3EPAA%20cross@3x%3C/title%3E%0A%20%20%20%20%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%0A%20%20%20%20%3Cdefs%3E%3C/defs%3E%0A%20%20%20%20%3Cg%20id%3D%22Page-1%22%20stroke%3D%22none%22%20stroke-width%3D%221%22%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%0A%20%20%20%20%20%20%20%20%3Cg%20id%3D%222-Shop-Profile_Change-profile-hover%22%20transform%3D%22translate%28-846.000000%2C%20-1503.000000%29%22%20fill%3D%22%23FFFFFF%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Group%22%20transform%3D%22translate%28-27.000000%2C%20621.000000%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20transform%3D%22translate%28356.000000%2C%20107.000000%29%22%20id%3D%22Latest-ads-Copy-+-Group%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20transform%3D%22translate%280.000000%2C%2051.000000%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Group%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Screen-Shot-2015-01-28-at-17.33-Copy-12%22%20transform%3D%22translate%28402.000000%2C%20603.000000%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22PAA-cross%22%20transform%3D%22translate%28113.000000%2C%20119.000000%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M4.44173616%2C15.7524262%20L15.7417362%2C4.4524262%20C16.5417362%2C3.6524262%2017.7417362%2C3.6524262%2018.5417362%2C4.4524262%20L19.9417362%2C5.8524262%20C20.7417362%2C6.6524262%2020.7417362%2C7.8524262%2019.9417362%2C8.6524262%20L8.64173616%2C19.9524262%20C7.84173616%2C20.7524262%206.64173616%2C20.7524262%205.84173616%2C19.9524262%20L4.44173616%2C18.5524262%20C3.74173616%2C17.7524262%203.74173616%2C16.4524262%204.44173616%2C15.7524262%20L4.44173616%2C15.7524262%20Z%22%20id%3D%22Rectangle-718%22%20transform%3D%22translate%2812.229236%2C%2012.202426%29%20rotate%28-45.000000%29%20translate%28-12.229236%2C%20-12.202426%29%20%22%3E%3C/path%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M15.8234303%2C19.908232%20L4.52343033%2C8.60823202%20C3.72343033%2C7.80823202%203.72343033%2C6.60823202%204.52343033%2C5.80823202%20L5.92343033%2C4.40823202%20C6.72343033%2C3.60823202%207.92343033%2C3.60823202%208.72343033%2C4.40823202%20L20.0234303%2C15.708232%20C20.8234303%2C16.508232%2020.8234303%2C17.708232%2020.0234303%2C18.508232%20L18.6234303%2C19.908232%20C17.8234303%2C20.708232%2016.5234303%2C20.708232%2015.8234303%2C19.908232%20L15.8234303%2C19.908232%20Z%22%20id%3D%22Rectangle-719%22%20transform%3D%22translate%2812.273430%2C%2012.158232%29%20rotate%28-45.000000%29%20translate%28-12.273430%2C%20-12.158232%29%20%22%3E%3C/path%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%3C/g%3E%0A%3C/svg%3E') no-repeat center 0 / 21px 21px
 }
 
 .add-photo:hover .add-photo-text {
-    color: $anchr-color;
     background: url('data:image/svg+xml;charset=US-ASCII,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22UTF-8%22%20standalone%3D%22no%22%3F%3E%0A%3Csvg%20width%3D%2221px%22%20height%3D%2221px%22%20viewBox%3D%220%200%2021%2021%22%20version%3D%221.1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%3E%0A%20%20%20%20%3C%21--%20Generator%3A%20Sketch%203.8.3%20%2829802%29%20-%20http%3A//www.bohemiancoding.com/sketch%20--%3E%0A%20%20%20%20%3Ctitle%3EPAA%20cross%20green@3x%3C/title%3E%0A%20%20%20%20%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%0A%20%20%20%20%3Cdefs%3E%3C/defs%3E%0A%20%20%20%20%3Cg%20id%3D%22Page-1%22%20stroke%3D%22none%22%20stroke-width%3D%221%22%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%0A%20%20%20%20%20%20%20%20%3Cg%20id%3D%227-Shop-Profile_Edit-Place-ad%22%20transform%3D%22translate%28-846.000000%2C%20-1503.000000%29%22%20fill%3D%22%2382C249%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Group%22%20transform%3D%22translate%28-27.000000%2C%20621.000000%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20transform%3D%22translate%28356.000000%2C%20107.000000%29%22%20id%3D%22Latest-ads-Copy-+-Group%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20transform%3D%22translate%280.000000%2C%2051.000000%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Group%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Screen-Shot-2015-01-28-at-17.33-Copy-12%22%20transform%3D%22translate%28402.000000%2C%20603.000000%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22PAA-cross-green%22%20transform%3D%22translate%28113.000000%2C%20119.000000%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M4.44173616%2C15.7524262%20L15.7417362%2C4.4524262%20C16.5417362%2C3.6524262%2017.7417362%2C3.6524262%2018.5417362%2C4.4524262%20L19.9417362%2C5.8524262%20C20.7417362%2C6.6524262%2020.7417362%2C7.8524262%2019.9417362%2C8.6524262%20L8.64173616%2C19.9524262%20C7.84173616%2C20.7524262%206.64173616%2C20.7524262%205.84173616%2C19.9524262%20L4.44173616%2C18.5524262%20C3.74173616%2C17.7524262%203.74173616%2C16.4524262%204.44173616%2C15.7524262%20L4.44173616%2C15.7524262%20Z%22%20id%3D%22Rectangle-718%22%20transform%3D%22translate%2812.229236%2C%2012.202426%29%20rotate%28-45.000000%29%20translate%28-12.229236%2C%20-12.202426%29%20%22%3E%3C/path%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M15.8234303%2C19.908232%20L4.52343033%2C8.60823202%20C3.72343033%2C7.80823202%203.72343033%2C6.60823202%204.52343033%2C5.80823202%20L5.92343033%2C4.40823202%20C6.72343033%2C3.60823202%207.92343033%2C3.60823202%208.72343033%2C4.40823202%20L20.0234303%2C15.708232%20C20.8234303%2C16.508232%2020.8234303%2C17.708232%2020.0234303%2C18.508232%20L18.6234303%2C19.908232%20C17.8234303%2C20.708232%2016.5234303%2C20.708232%2015.8234303%2C19.908232%20L15.8234303%2C19.908232%20Z%22%20id%3D%22Rectangle-719%22%20transform%3D%22translate%2812.273430%2C%2012.158232%29%20rotate%28-45.000000%29%20translate%28-12.273430%2C%20-12.158232%29%20%22%3E%3C/path%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%3C/g%3E%0A%3C/svg%3E') no-repeat center 0 / 21px 21px
 }
 
@@ -259,14 +203,11 @@
 .ad-detail .details-similar-item {
     margin: 39px 0 39px 0;
     padding: 53px 0 0 0;
-    border-top: 1px solid $white;
-    box-shadow: inset 0 1px 0 $form-border-color;
+    border-top: 1px solid #FFFFFF;
 }
 .details-similar-item-title {
-	font-family: $font-family-secondary;
 	font-size: 36px;
 	font-weight: 400;
-	color: $dark-gray;
 	line-height: 46px;
 	text-align: center;
 	margin-bottom: 49px;
@@ -303,7 +244,6 @@
     height: 40px;
     overflow: hidden;
     font-size: 12px;
-    color: $form-text-color;
   }
   .two-grid-col {
     display: inline-flex;
@@ -322,8 +262,6 @@
     line-height: 22px;
     float: right;
     text-align: right;
-    color: $secondary-color;
-    font-family: $font-family-secondary;
     word-wrap: break-word;
   }
   .list-hr-ago {
@@ -331,7 +269,6 @@
     font-size: 12px;
     margin-right: 0;
     float: right;
-    color: $form-text-color;
     font-style: italic;
     font-weight: 400;
   }
@@ -343,16 +280,14 @@
 /* Right Block */
 .ad-detail {
   .detail-right-pane {
-    border: 1px solid $form-border-color;
     border-top: 0;
-    background: $white;
+    background: #FFFFFF;
     text-align: center;
     padding-bottom: 20px;
   }
   .listed-date {
     font-size: 14px;
     padding: 18px 0 9px 0;
-    color: $form-text-color;
     font-weight: 700;
     font-style: italic;
     margin: 0;
@@ -374,18 +309,14 @@
   .item-price {
     display: block;
     font-size: 49px;
-    color: $secondary-color;
     line-height: 49px;
     margin-bottom: 20px;
   }
   .person-collection, .pvt-seller-cap span {
-    background: $white;
-    border: 1px solid $form-border-color;
+    background: #FFFFFF;
     display: inline-block;
     border-radius: 20px;
-    font-family: $font-family-default;
     font-size: 13px;
-    color: $form-text-color;
     height: 23px;
     line-height: 20px;
     padding: 0 10px;
@@ -397,18 +328,15 @@
   }
   .cont-seller-btn {
     padding: 15px 0 17px !important;
-    background: linear-gradient(135deg, $primary-btn-l-color 0%, $primary-btn-r-color 100%) !important;
     border: 0px solid transparent !important;
     height: 60px !important;
     border-radius: 2px !important;
-    font-family: $font-family-secondary;
     font-size: 18px !important;
     line-height: 20px;
-    color: $white;
+    color: #FFFFFF;
     &:hover {
-      background: linear-gradient(135deg, $primary-btn-lh-color 0%, $primary-btn-rh-color 100%) !important;
       border: 0px solid transparent !important;
-      color: $white !important;
+      color: #FFFFFF !important;
     }
   }
   .contact-phone-icon {
@@ -425,16 +353,12 @@
   .pvt-seller-box {
     margin: 20px auto 0;
     width: 100%;
-    border: 1px solid $form-border-color;
     border-radius: 2px;
-    background: $form-bg-color;
     position: relative;
     z-index: 1;
   }
   .pvt-seller-cap {
-    background: $common-text-color;
     height: 106px;
-    border-bottom: 1px solid $form-border-color;
     padding-top: 12px;
   }
   .pvt-seller-img {
@@ -442,7 +366,7 @@
     height: 115px;
     line-height: 101px;
     padding: 4px;
-    background: $white;
+    background: #FFFFFF;
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
     position: absolute;
     left: 50%;
@@ -463,7 +387,6 @@
   .pvt-seller-info {
     padding: 60px 26px 15px 26px;
     h2 {
-      color: $dark-gray;
       margin: 1px auto 10px;
       width: 100%;
       word-wrap: break-word;
@@ -473,14 +396,11 @@
     padding: 10px 0 20px 0;
     font-size: 13px;
     .posting-year {
-      border-top: 2px solid $form-border-color;
-      border-bottom: 2px solid $form-border-color;
       display: inline-block;
       padding: 7px 14px;
       margin-bottom: 10px;
       line-height: 15px;
       font-style: italic;
-      color: $form-text-color;
     }
   }
   .pvt-seller-info .secondary-btn-1 {
@@ -507,8 +427,6 @@
     padding: 16px 20px 20px;
   }
   .create-alert {
-    background: $common-bg-color url("https://www.friday-ad.co.uk/bundles/fafrontend/images/alert-illustration.svg?v=1") no-repeat center 33px;
-    border: 1px solid $form-border-color;
     border-radius: 2px;
     padding: 218px 24px 24px;
     h5 {
@@ -544,7 +462,6 @@
     padding: 4px 15px 10px;
   }
   #contactSellerModal .contact-box, #profilePageContactUserModal .contact-box {
-    background: $common-bg-color;
     text-align: center;
     padding: 4px 0 10px;
     margin-bottom: 20px;
@@ -565,9 +482,6 @@
     vertical-align: middle;
     margin: 0 10px 4px 0;
     background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2231%22%20height%3D%2231%22%20viewBox%3D%22-1402%20456.9%2031%2031%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23A8DC28%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Ephone%20icon%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-594.000000%2C%20-556.000000%29%22%3E%3Cg%20transform%3D%22translate%28505.000000%2C%20470.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-1282.6%20568.6l-4.3%204.3c-0.2%200.2-0.5%200.4-0.8%200.6%20-0.3%200.2-0.6%200.3-0.9%200.3%200%200-0.1%200-0.2%200%20-0.1%200-0.3%200-0.4%200%20-0.4%200-1.1-0.1-2-0.2%20-0.9-0.1-2.1-0.5-3.4-1%20-1.3-0.6-2.9-1.4-4.6-2.5s-3.5-2.6-5.4-4.6c-1.5-1.5-2.8-2.9-3.8-4.3%20-1-1.4-1.8-2.6-2.4-3.8%20-0.6-1.2-1.1-2.2-1.4-3.2%20-0.3-0.9-0.5-1.8-0.6-2.5%20-0.1-0.7-0.2-1.2-0.1-1.6%200-0.4%200-0.6%200-0.7%200-0.3%200.1-0.6%200.3-0.9%200.2-0.3%200.3-0.6%200.6-0.8l4.3-4.3c0.3-0.3%200.7-0.5%201-0.5%200.3%200%200.5%200.1%200.8%200.2%200.2%200.2%200.4%200.4%200.6%200.6l3.5%206.6c0.2%200.3%200.3%200.7%200.2%201.1%20-0.1%200.4-0.3%200.8-0.6%201l-1.6%201.6c0%200-0.1%200.1-0.1%200.2%200%200.1%200%200.2%200%200.2%200.1%200.5%200.3%201%200.6%201.6%200.3%200.5%200.7%201.2%201.2%201.9%200.5%200.8%201.3%201.6%202.3%202.6%201%201%201.9%201.8%202.6%202.3%200.8%200.6%201.4%201%201.9%201.2%200.5%200.3%200.9%200.4%201.2%200.5l0.4%200.1c0%200%200.1%200%200.2%200%200.1%200%200.2-0.1%200.2-0.1l1.9-1.9c0.4-0.3%200.9-0.5%201.4-0.5%200.4%200%200.7%200.1%200.9%200.2l6.3%203.7c0.5%200.3%200.7%200.6%200.8%201.1C-1282.1%20567.8-1282.2%20568.2-1282.6%20568.6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat;
-  }
-  #contactSellerModal .contact-box-2 span span, #profilePageContactUserModal .contact-box-2 span span {
-    color: $secondary-color;
   }
   #contactSellerModal .contact-box-2 .xs-btn-1, #profilePageContactUserModal .contact-box-2 .xs-btn-1 {
     margin: 10px 0 0 10px;
@@ -633,12 +547,12 @@
 	}
 }
 @media (min-width: 320px) and (max-width:759px) {
-	.ad-detail {
+  .ad-detail {
       #similar-item-slider .item {
         margin: 0 auto;
       }
       .two-grid-col.dtl-user-links {
-        dispaly: block !important;
+        display: block !important;
       }
       .dtl-user-links {
         .left-col, .right-col {
@@ -687,7 +601,6 @@
 .details-top-banner {
   background: rgba(255, 255, 255, 0.95);
   height: 80px;
-  border: 1px solid $form-border-color;
   position: fixed;
   left: 0;
   bottom: 0;
@@ -709,7 +622,6 @@
     white-space: nowrap;
     font-size: 18px;
     font-weight: 400;
-    color: $dark-gray;
     line-height: 24px;
   }
   .detail-location {
@@ -721,10 +633,8 @@
 }
 
 .detail-location a {
-  color: $common-text-color;
   font-size: 20px;
   &:hover, &:focus {
-    color: $common-text-color;
     font-size: 20px;
   }
 }
@@ -732,7 +642,6 @@
 .details-top-banner {
   .item-price {
     font-size: 36px;
-    color: $secondary-color;
     float: right;
     font-weight: 700;
     margin: -8px 0 0 0;
@@ -759,14 +668,12 @@
   margin-top: 10px;
 }
 
-$change-widht: 100%;
 // height sizes fixed
 * {
     box-sizing: border-box;
 }
 .photo-panel-in {
     .all {
-        width: $change-widht;
         height: auto;
         display: inline-block;
         .slider-photo {
@@ -778,7 +685,6 @@ $change-widht: 100%;
             overflow: hidden;
             border-radius: 0px;
             position: relative;
-            background: $form-border-color;
             &:hover {
                 .left {
                     visibility: visible;
@@ -823,13 +729,13 @@ $change-widht: 100%;
                 opacity: 0;
                 transition: left ease .25s;
                 transform: rotate(0deg);
-                background: url("//static.friday-ad.co.uk/bundles/fafrontend/images/photo-prev.svg") center center;
+                background: url("/bundles/fafrontend/images/photo-prev.svg") center center;
                 background-repeat: no-repeat;
                 &:hover {
                     visibility: visible;
                     opacity: 1;
                     left: 20px;
-                    background: url("//static.friday-ad.co.uk/bundles/fafrontend/images/photo-prev.svg") center center;
+                    background: url("/bundles/fafrontend/images/photo-prev.svg") center center;
                     transform: rotate(0deg);
                     background-repeat: no-repeat;
                 }
@@ -850,14 +756,14 @@ $change-widht: 100%;
                 visibility: hidden;
                 opacity: 0;
                 transition: right ease .25s;
-                background: url("//static.friday-ad.co.uk/bundles/fafrontend/images/photo-next.svg") center center;
+                background: url("/bundles/fafrontend/images/photo-next.svg") center center;
                 transform: rotate(0deg);
                 background-repeat: no-repeat;
                 &:hover {
                     visibility: visible;
                     opacity: 1;
                     right: 20px;
-                    background: url("//static.friday-ad.co.uk/bundles/fafrontend/images/photo-next.svg") center center;
+                    background: url("/bundles/fafrontend/images/photo-next.svg") center center;
                     transform: rotate(0deg);
                     background-repeat: no-repeat;
                 }
@@ -965,7 +871,6 @@ $change-widht: 100%;
     overflow: hidden;
     border-radius: 0px;
     position: relative;
-    background: $form-border-color;
     &:hover {
         .left {
             visibility: visible;
@@ -1010,13 +915,13 @@ $change-widht: 100%;
         opacity: 0;
         transition: left ease .25s;
         transform: rotate(0deg);
-        background: url("//static.friday-ad.co.uk/bundles/fafrontend/images/photo-prev.svg") center center;
+        background: url("/bundles/fafrontend/images/photo-prev.svg") center center;
         background-repeat: no-repeat;
         &:hover {
             visibility: visible;
             opacity: 1;
             left: 20px;
-            background: url("//static.friday-ad.co.uk/bundles/fafrontend/images/photo-prev.svg") center center;
+            background: url("/bundles/fafrontend/images/photo-prev.svg") center center;
             transform: rotate(0deg);
             background-repeat: no-repeat;
         }
@@ -1037,14 +942,14 @@ $change-widht: 100%;
         visibility: hidden;
         opacity: 0;
         transition: right ease .25s;
-        background: url("//static.friday-ad.co.uk/bundles/fafrontend/images/photo-next.svg") center center;
+        background: url("/bundles/fafrontend/images/photo-next.svg") center center;
         transform: rotate(0deg);
         background-repeat: no-repeat;
         &:hover {
             visibility: visible;
             opacity: 1;
             right: 20px;
-            background: url("//static.friday-ad.co.uk/bundles/fafrontend/images/photo-next.svg") center center;
+            background: url("/bundles/fafrontend/images/photo-next.svg") center center;
             transform: rotate(0deg);
             background-repeat: no-repeat;
         }
@@ -1063,7 +968,7 @@ $change-widht: 100%;
   border-bottom: 0;
 }
 .zoomphotoModal .close, .zoomphotoModal .close:hover, .zoomphotoModal .close:focus {
-  color: $white;
+  color: #FFFFFF;
   font-size: 60px;
   opacity: 1;
   padding: 0 !important;
@@ -1098,28 +1003,24 @@ $change-widht: 100%;
     float: right;
     padding-left: 25px;
     font-size: 14px;
-    color: $anchr-color;
     font-weight: bold;
     line-height: 20px;
     background: url('data:image/svg+xml;charset=US-ASCII,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%0A%3C%21--%20Generator%3A%20Adobe%20Illustrator%2020.0.0%2C%20SVG%20Export%20Plug-In%20.%20SVG%20Version%3A%206.00%20Build%200%29%20%20--%3E%0A%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20x%3D%220px%22%20y%3D%220px%22%0A%09%20width%3D%2219px%22%20height%3D%2218px%22%20viewBox%3D%220%200%2019%2018%22%20style%3D%22enable-background%3Anew%200%200%2019%2018%3B%22%20xml%3Aspace%3D%22preserve%22%3E%0A%3Cstyle%20type%3D%22text/css%22%3E%0A%09.st0%7Bfill%3A%2382C249%3B%7D%0A%3C/style%3E%0A%3Ctitle%3EEdit%20green@3x%3C/title%3E%0A%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%0A%3Cg%20id%3D%22Page-1%22%3E%0A%09%3Cg%20id%3D%22Tablet-Ad-details---Edit---Add-photo%22%20transform%3D%22translate%28-407.000000%2C%20-659.000000%29%22%3E%0A%09%09%3Cg%20id%3D%22ad-_x2B_-Right-bar%22%20transform%3D%22translate%28-202.000000%2C%20479.000000%29%22%3E%0A%09%09%09%3Cg%20id%3D%22ad%22%20transform%3D%22translate%280.000000%2C%2019.000000%29%22%3E%0A%09%09%09%09%3Cg%20id%3D%22Edit%22%20transform%3D%22translate%28609.000000%2C%20160.000000%29%22%3E%0A%09%09%09%09%09%3Cg%20id%3D%22Edit-green%22%3E%0A%09%09%09%09%09%09%3Cg%20id%3D%22Clip-2%22%3E%0A%09%09%09%09%09%09%3C/g%3E%0A%09%09%09%09%09%09%3Cg%20id%3D%22Clip-7%22%3E%0A%09%09%09%09%09%09%3C/g%3E%0A%09%09%09%09%09%3C/g%3E%0A%09%09%09%09%3C/g%3E%0A%09%09%09%3C/g%3E%0A%09%09%3C/g%3E%0A%09%3C/g%3E%0A%3C/g%3E%0A%3Cg%3E%0A%09%3Cpath%20class%3D%22st0%22%20d%3D%22M12.8%2C16.2h-11v-11h6.9L8.5%2C5l1.6-1.6H0.3C0.1%2C3.4%2C0%2C3.6%2C0%2C3.7v13.9c0%2C0.2%2C0.1%2C0.3%2C0.3%2C0.3h13.9%0A%09%09c0.2%2C0%2C0.3-0.1%2C0.3-0.3v-7.2l-1.7%2C1.7V16.2z%22/%3E%0A%09%3Cpath%20class%3D%22st0%22%20d%3D%22M6.8%2C8.8c0%2C0-0.1%2C0.1-0.1%2C0.2l-0.4%2C3c0%2C0.1%2C0%2C0.2%2C0.1%2C0.2c0%2C0%2C0.1%2C0.1%2C0.2%2C0.1c0%2C0%2C0%2C0%2C0%2C0l3-0.4%0A%09%09c0.1%2C0%2C0.1%2C0%2C0.2-0.1L16.5%2C5l-2.9-2.9L6.8%2C8.8z%22/%3E%0A%09%3Cpath%20class%3D%22st0%22%20d%3D%22M18.5%2C2.6l-2.6-2.6c-0.1-0.1-1.6%2C1.2-1.6%2C1.2l2.9%2C2.9L18.5%2C3c0%2C0%2C0.1-0.1%2C0.1-0.2S18.6%2C2.7%2C18.5%2C2.6z%22/%3E%0A%3C/g%3E%0A%3C/svg%3E%0A') no-repeat 0 0
 }
 .upgrade-box {
-    background: $white;
-    border: solid 1px $form-border-color;
+    background: #FFFFFF;
     padding: 15px;
     margin-bottom: 20px;
     font-size: 16px;
 }
-.contact-box h1 { font-size: 36px; font-weight: 400; color: #313133; line-height: 46px; }
+.contact-box h1 { font-size: 36px; font-weight: 400; line-height: 46px; }
 
 .ad-detail #contactSellerModal .contact-box-2 h1, .ad-detail #profilePageContactUserModal .contact-box-2 h1 {
   font-size: 27px;
   font-weight: 600;
-  color: #313133;
   line-height: 48px;
 }
 .ad-detail #contactSellerModal .contact-box, .ad-detail #profilePageContactUserModal .contact-box {
-  background: #EFEFEF;
   text-align: center;
   padding: 6px 9px 4px;
   margin-bottom: 20px;
@@ -1168,7 +1069,6 @@ $change-widht: 100%;
 }
 /*Info*/
 .motor-info {
-    border: 1px solid #efefef;
     margin-top: 7px;
     border-radius: 2px;
 }
@@ -1177,17 +1077,10 @@ $change-widht: 100%;
     display: table;
     table-layout: fixed;
     width: 100%;
-    background: #efefef;
     text-align: center;
 }
 .flexy-box .child_box:last-child {
     border-right: 0 solid #fff;
-}
-.motor-info .info-row:nth-child(even) {
-    background: #EAEFF0
-}
-.motor-info .info-row:nth-child(odd) {
-    background: #EAEFF0
 }
 .motor-info .info-box {
     text-align: center;
@@ -1259,7 +1152,6 @@ $change-widht: 100%;
 }
 
 .safety-block {
-    background: #EAEFF0;
     float: left;
     width: 48%;
     margin: 60px 25px 25px 0;
@@ -1287,7 +1179,6 @@ $change-widht: 100%;
 }
 
 .safety-rating {
-    background: #EAEFF0;
     margin: 3px auto 14px;
     width: 91px;
     height: 16px;
@@ -1307,7 +1198,6 @@ $change-widht: 100%;
 }
 
 .safety-star-fill {
-    background: #212527;
     position: absolute;
     z-index: 1;
     height: 16px;
@@ -1317,7 +1207,6 @@ $change-widht: 100%;
 
 .safety-content {
     font-size: 13px;
-    color: #ACB0B7;
     line-height: 19px;
     padding: 20px 25px 0
 }
@@ -1331,7 +1220,6 @@ $change-widht: 100%;
 }
 
 .safety-features {
-    border: 1px solid #EAEFF0;
     border-radius: 2px
 }
 
@@ -1396,12 +1284,10 @@ $change-widht: 100%;
 table.responsive-card-table {
     border-collapse: collapse;
     width: 100%;
-    border: solid 1px #ddd;
     margin-bottom: 0
 }
 
 .responsive-card-table .boder-rates {
-    border: 1px solid #ddd;
     margin-bottom: 15px
 }
 
@@ -1410,7 +1296,7 @@ table.responsive-card-table {
 }
 
 .responsive-card-table tbody tr td:last-child {
-    border-right: 0 solid #ddd
+    border-right: 0px;
 }
 
 .responsive-card-table tbody tr td input {
@@ -1420,24 +1306,10 @@ table.responsive-card-table {
 .responsive-card-table tbody {
     margin-top: 10px
 }
-
-table.responsive-card-table tr.odd,
-table.responsive-card-table tr:nth-of-type(n) {
-    background: #EAEFF0 !important
-}
-
-table.responsive-card-table tr.even,
-table.responsive-card-table tr.alt,
-table.responsive-card-table tr:nth-of-type(2n) {
-    background: #EAEFF0 !important
-}
-
 .in-out-calls-text {
     font-size: 14px;
     font-weight: 700;
-    color: #212527;
     line-height: 16px;
-    border: 1px solid #d4d4d4;
     padding: 5px 10px
 }
 
@@ -1446,7 +1318,6 @@ table.responsive-card-table tr:nth-of-type(2n) {
 }
 
 .responsive-card-table .in-out-detail-text-f {
-    color: #212527;
     font-weight: 700;
     text-align: center
 }
@@ -1542,13 +1413,16 @@ table.responsive-card-table tr:nth-of-type(2n) {
 .detail-tabpart-2 .accordion .content h5:first-child {
     margin-top: 15px;
 }
+@media (min-width: 760px) {
+    .details-wrapper .two-grid-col {
+        width: 100%;
+        display: flex;
+    }
+}
 @media only screen and (min-width: 320px) and (max-width: 640px) { 
     .flexy-box .parent_box {
         display: table;
         table-layout: inherit;
-    }
-    .motor-info .info-box:nth-child(2n+1) {
-        background: #efefef;
     }
     .motor-info .info-box {
         text-align: left;
@@ -1568,5 +1442,6 @@ table.responsive-card-table tr:nth-of-type(2n) {
         padding: 10px 0 7px 12px;
     }
 }
+
 
 

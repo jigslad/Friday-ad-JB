@@ -297,6 +297,9 @@
 {% endblock %}
 {% block stylesheet %}
 	<link rel="stylesheet" href="{{ asset('/build/css/addetail.css') }}">
+	{% if recommendedSlotArray is defined and recommendedSlotArray|length %}
+        <link rel="stylesheet" href="{{ asset('/build/css/addetail-recommended.css') }}">
+    {% endif %}
 {% endblock %}
 {% if promotePackages is defined and promotePackages|length %}
     {% set packageIdArray = {} %}
@@ -360,9 +363,7 @@
 {% if attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
     {% set orgAdDesc = attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) %}
 {% endif %}
-{% if recommendedSlotArray is defined and recommendedSlotArray|length %}
-    {{ include('FaAdBundle:AdList:recommended_slot_css.html.twig') }}
-{% endif %}
+
 {% if currentDevice == 'D' or currentDevice == 'T' %}
     <div class="details-top-banner" id="sticky_item_information_id" style="display:none">
         <div class="container">

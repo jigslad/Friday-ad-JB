@@ -14,7 +14,7 @@
     }
     a {
         font-size: 12px;
-        display: inline-block;
+        display: inline-block; 
         padding: 0 5px;
         height: 34px;
         line-height: 32px;
@@ -438,7 +438,6 @@
     margin-right: 0;
 }
 .dl-menuwrapper button {
-    background: #ccc;
     border: none;
     width: 48px;
     height: 45px;
@@ -448,11 +447,6 @@
     cursor: pointer;
     outline: none;
     text-align: left;
-}
-.dl-menuwrapper button:hover,
-.dl-menuwrapper button.dl-active,
-.dl-menuwrapper ul {
-    background: #aaa;
 }
 .dl-menuwrapper button:after {
     content: none;
@@ -676,23 +670,12 @@ All this is done for any sub-level being entered.
 .no-js .dl-menuwrapper li > a:not(:only-child):after {
     content: '';
 }
-/* Colors for demos */
-/* Demo 2 */
+/* Colors */
 .demo-2 .dl-menuwrapper button {
     text-transform: uppercase;
     font-size: 14px;
     padding: 0px 15px;
     font-family: 'Asap',sans-serif;
-}
-.mob-forsale {
-    display: inline-block;
-    width: 30px;
-    height: 23px;
-    vertical-align: middle;
-    margin-right: 12px;
-    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3Asketch%3D%22http%3A//www.bohemiancoding.com/sketch/ns%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20version%3D%221.1%22%20id%3D%22Layer_1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2231%22%20height%3D%2223%22%20viewBox%3D%22-282%20408.9%2031%2023%22%20xml%3Aspace%3D%22preserve%22%20enable-background%3D%22new%20-282%20408.9%2031%2023%22%3E%0D%0A%20%20%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%20%20%20%20%0D%0A%09.st0%7Bfill%3A%23A8DC28%3B%7D%0D%0A%09.st1%7Bfill%3A%23EFEFEF%3B%7D%0D%0A%0D%0A%20%20%3C/style%3E%0D%0A%20%20%3Ctitle%3E%0D%0A%20%20%20%20for%20sale%0D%0A%20%20%3C/title%3E%0D%0A%20%20%3Cdesc%3E%0D%0A%20%20%20%20Created%20with%20Sketch.%0D%0A%20%20%3C/desc%3E%0D%0A%20%20%3Cg%20id%3D%22Page-1%22%20sketch%3Atype%3D%22MSPage%22%3E%0D%0A%20%20%20%20%3Cg%20id%3D%22for-sale%22%20sketch%3Atype%3D%22MSLayerGroup%22%3E%0D%0A%20%20%20%20%20%20%3Cpath%20id%3D%22Fill-1%22%20sketch%3Atype%3D%22MSShapeGroup%22%20class%3D%22st0%22%20d%3D%22M-278.9%20417.2c-1.7%200-3%201.4-3%203%200%201%200.5%201.9%201.2%202.4v7.6c0%201.3%201.1%202.4%202.4%202.4%201.3%200%202.4-1.1%202.4-2.4v-10C-275.8%20418.6-277.2%20417.2-278.9%20417.2%22/%3E%0D%0A%20%20%20%20%20%20%3Cpath%20id%3D%22Fill-2%22%20sketch%3Atype%3D%22MSShapeGroup%22%20class%3D%22st0%22%20d%3D%22M-255%20417.2c1.7%200%203%201.4%203%203%200%201-0.5%201.9-1.2%202.4v7.6c0%201.3-1.1%202.4-2.4%202.4%20-1.3%200-2.4-1.1-2.4-2.4v-10C-258%20418.6-256.6%20417.2-255%20417.2%22/%3E%0D%0A%20%20%20%20%20%20%3Cpath%20id%3D%22Fill-3%22%20sketch%3Atype%3D%22MSShapeGroup%22%20class%3D%22st1%22%20d%3D%22M-275.6%20409.8c-1.5%200-2.8%201.2-2.8%202.7v3.5c1.9%200.5%203.3%202.2%203.3%204.3v2.2h16.2v-2.2c0-2.1%201.4-3.8%203.3-4.3v-3.5c0-1.5-1.2-2.7-2.8-2.7H-275.6L-275.6%20409.8zM-275%20430.2h16.2v-7H-275V430.2L-275%20430.2z%22/%3E%0D%0A%20%20%20%20%3C/g%3E%0D%0A%20%20%3C/g%3E%0D%0A%3C/svg%3E%0D%0A') no-repeat;
-        background-size: auto;
-    background-size: 30px 23px;
 }
 .menu-head-ad {
     font-weight: 700;
@@ -710,7 +693,6 @@ All this is done for any sub-level being entered.
 }
 .dl-menu li .dl-back a {
     text-transform: uppercase !important;
-    background: #4a4a4a !important;
 }
 .dl-menu .active-subcat::after{
     position: absolute;
@@ -736,7 +718,6 @@ All this is done for any sub-level being entered.
 
 /* Header after login */
 .top-links .notification-link a span, .top-links .msg-link a span, .top-links .cart-link a span {
-        color: #a8dc28;
         font-weight: bold;
     }
     a.basket-icon {
@@ -754,7 +735,6 @@ All this is done for any sub-level being entered.
     .top-links .f-dropdown {
         min-width: 220px !important;
         border: 0;
-        background: #313133;
         margin-left: -75px;
         margin-top: 0;
         z-index: 9999 !important;
@@ -763,7 +743,6 @@ All this is done for any sub-level being entered.
         float: none;
         text-align: left;
         border-top: 1px solid #000;
-        box-shadow: inset 0 1px 0 #4a4a4a;
         padding: 2px 0 0 0;
     }
     .top-links .f-dropdown li a {
@@ -821,9 +800,7 @@ All this is done for any sub-level being entered.
         max-height: 26px;
     }
     .top-links .notification-counter {
-        background: #313133;
         border-top: 1px solid #000;
-        box-shadow: inset 0 1px 0 #4a4a4a;
         padding: 10px;
         color: #fff;
         text-align: left;
@@ -841,7 +818,6 @@ All this is done for any sub-level being entered.
 	}
     .top-links a span.unread-msg {
         display: inline-block;
-        background: #a8dc28;
         width: 12px;
         height: 12px;
         vertical-align: top;

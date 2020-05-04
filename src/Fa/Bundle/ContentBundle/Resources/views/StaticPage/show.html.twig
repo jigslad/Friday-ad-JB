@@ -36,33 +36,76 @@
 {% endblock %}
 
 {% block body %}
-
-{% if seoFields.h1_tag is defined %}
-    <h1 class="simple-heading">{{ seoManager.parseSeoString(seoFields.h1_tag, {'{location}': seoLocationName}) }}</h1>
-{% endif %}
-
-<div class="testimonial-main">
-    <div class="banner-wrapper clearfix">
-        <div class="left-banner">
-            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_LEFT') %}
-            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'d-none d-md-block'}}) }}
-        </div>
-        <div class="row">
-            <div class="large-17 columns">
-                {{staticPage.getDescription()|raw}}
-            </div>
-            {% if staticPage.getAdditionalInfo() %}
-            <div class="large-7 columns">
-                <div class="staticpage-graybox">
-                    {{staticPage.getAdditionalInfo()|raw}}
+    <style>
+        .simple-heading {
+            margin: 48px 0;
+            text-align: center;
+        }
+        .testimonial-main {
+            background: #fff;
+            padding: 35px 0;
+        }
+        .staticpage-graybox {
+            background: #EAEFF0;
+            border: 1px solid #CBD5D9;
+            border-radius: 2px;
+            padding: 30px 20px 0;
+            min-height: 428px;
+        }
+        p {
+            font-size: 14px;
+            line-height: 22px;
+            font-family: inherit;
+            font-weight: normal;
+            margin-bottom: 1.25rem;
+            text-rendering: optimizeLegibility;
+        }
+        table {
+            background: white;
+            margin-bottom: 1.25rem;
+            border: solid 1px #ddd;
+            table-layout: auto;
+        }
+        table thead tr th, table tfoot tr th, table tfoot tr td, table tbody tr th, table tbody tr td, table tr td {
+            display: table-cell;
+            line-height: 1.125rem;
+        }
+        table tr th, table tr td {
+            padding: .5625rem .625rem;
+            font-size: .875rem;
+            color: #222;
+            text-align: left;
+        }
+    </style>
+    <div class="container">
+        {% if seoFields.h1_tag is defined %}
+            <h1 class="s1 simple-heading text-center">{{ seoManager.parseSeoString(seoFields.h1_tag, {'{location}': seoLocationName}) }}</h1>
+        {% endif %}
+    </div>
+    <div class="testimonial-main white-bg">
+        <div class="container">
+            <div class="banner-wrapper">
+                <div class="left-banner">
+                    {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_LEFT') %}
+                    {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'d-none d-md-block'}}) }}
+                </div>
+                <div class="row">
+                    <div class="col-md-17">
+                        {{staticPage.getDescription()|raw}}
+                    </div>
+                    {% if staticPage.getAdditionalInfo() %}
+                    <div class="col-md-7">
+                        <div class="staticpage-graybox">
+                            {{staticPage.getAdditionalInfo()|raw}}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="right-banner">
+                    {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_RIGHT') %}
+                    {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'d-none d-md-block'}}) }}
                 </div>
             </div>
-            {% endif %}
-        </div>
-        <div class="right-banner">
-            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_RIGHT') %}
-            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'d-none d-md-block'}}) }}
         </div>
     </div>
-</div>
 {% endblock %}

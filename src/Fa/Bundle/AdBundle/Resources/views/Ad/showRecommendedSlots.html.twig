@@ -1,161 +1,91 @@
 {% set userRepository = fetch_repository('FaUserBundle:User') %}
-{% set  recommendedSlotCls = 'col-sm-24 col-md-24 col-lg-24' %}
-{% set  recommendedSlotCnt = 1 %} {% set centersmallCnt =24 %}
+{% set  recommendedSlotCls = 'recommend-slot-1' %}
+{% set recommendedSlotCnt = recommendedSlotArray|length %}
 {% if recommendedSlotArray is defined and recommendedSlotArray|length == 2 %}
-	{% set  recommendedSlotCls = 'col-sm-24 col-md-12 col-lg-12' %}
-	 {% set  recommendedSlotCnt = 2 %}
-{% set centersmallCnt =12 %}
+	{% set  recommendedSlotCls = 'recommend-slot-2' %}
 {% elseif recommendedSlotArray is defined and recommendedSlotArray|length == 3 %}
-	{% set  recommendedSlotCls = 'col-sm-24 col-md-8 col-lg-8' %}
-	 {% set  recommendedSlotCnt = 3 %}
-{% set centersmallCnt =3 %}	
+	{% set  recommendedSlotCls = 'recommend-slot-3' %}
 {% endif %}
 
-<div class="recommended-div listing mb20 recommended-ad-detail d-none d-md-block">
-{% if recommendedSlotCnt==1 %}
+{% if recommendedSlotCnt>0 %}
+<div id="recom-item-slider-slot2" class="owl-carousel owl-theme fa-slider recommended-div listing">
 	{% for recommendedSlot in recommendedSlotArray%}
         {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), recommendedSlot['user_id'], true, true]) %}
         {% set userName = userRepository.getUserProfileName(recommendedSlot['user_id'], container)~' - Friday-Ad' %}
         {% set no_protocol = recommendedSlot['url']|split('//')[1] ?: recommendedSlot['url'] %}
         {% set only_domains = no_protocol|split('/')[0] ?: no_protocol %}
         {% set only_domains = only_domains|replace({'www.': ''})%}
-        <div class="clearfix"  style="cursor: pointer;" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}','{{ recommendedSlot['title'] }}');">
-
-    	<div class="img-cls-recommend-1" >
-            {% if userLogo is null%}
-                    <div class="img-img-cls-recommend-1"><div class="profile-placeholder-1"><img src="{{container.getParameter('fa.static.url')}}/fafrontend/images/user-no-logo.svg" alt="{{ userName }}" /></div></div>
-                {% else %}
-                    <div class="img-img-cls-recommend-1"><div class="img-cls-ad-recommend-1"><img src="{{ userLogo }}" alt="{{ userName }}" /></div></div>
-                {% endif %}
-        </div>
-        <div class="content-cls-recommend-1">
-            {%   if(recommendedSlot['show_sponsored_lbl']) %}
-            <div class="recommendedtxt gray-text text-right sponsored-1">
-                Sponsored Ad<span class="sponsored-ad-icon"></span>
-            </div>
-            {% endif %}
-            <div class="mt5 list-title"> 
-              	<h3>{{ recommendedSlot['title'] }}</h3>
-                {% if recommendedSlot['display_url'] !='' %}
-                	<h5 class="mt5 list-display-url show-for-large-up">{{ recommendedSlot['display_url'] }}</h5>
-                {% endif %} 
-            </div> 
-            <div class="mt5 recommended-more">
-                <div class="list-desc show-for-large-up left-block">
-                    {{ recommendedSlot['sub_title']|length > 150 ? trim_text(recommendedSlot['sub_title'], 150)|raw ~ '...': recommendedSlot['sub_title'] }}
-                </div>
-                {% if recommendedSlot['cta_text'] !='' %}
-                <div class="outer-btn"><div class="button secondary-btn-1 right-block btn-block d-none d-md-block">{{ recommendedSlot['cta_text'] }}</div></div>
-           		{% endif %}
-           </div>                      
-        </div>
-       </div>
-    {% endfor %}
-{% else %}
-	<div class="clearfix">
-    <div class="s-block clearfix">
-    {% for recommendedSlot in recommendedSlotArray%}   	
-        <div class="t-s-block">                         
-                {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), recommendedSlot['user_id'], true, true]) %}
-                {% set userName = userRepository.getUserProfileName(recommendedSlot['user_id'], container)~' - Friday-Ad' %}
-                {% set no_protocol = recommendedSlot['url']|split('//')[1] ?: recommendedSlot['url'] %}
-                {% set only_domains = no_protocol|split('/')[0] ?: no_protocol %}
-                {% set only_domains = only_domains|replace({'www.': ''})%}                
-                <div class="{{ recommendedSlotCls }} columns t-s-column fullblock-cls-recommend-{{recommendedSlotCnt}}" style="cursor: pointer;" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}','{{ recommendedSlot['title'] }}');">
-                	<div class="col-sm-10 col-md-5 col-lg-5 t-s-subblock-left img-cls-recommend-{{recommendedSlotCnt}}" >
-                        {% if userLogo is null%}
-                                <div class="img-img-cls-recommend-{{recommendedSlotCnt}}"><div class="profile-placeholder-{{recommendedSlotCnt}}"><img src="{{container.getParameter('fa.static.url')}}/fafrontend/images/user-no-logo.svg" alt="{{ userName }}" /></div></div>
+        <div class="item recommended-addetail-div" data-equalizer-watch="">
+            <div class="{{ recommendedSlotCls }}">
+                <div class="col-md-24 media">
+                    <div class="col-md-6 pad-none recom-l-col">
+                        <div class="media-left align-self-center">
+                        	{% if userLogo is null%}
+                                <div class="list-img list-placeholder"><img class="img-responsive" src="{{container.getParameter('fa.static.url')}}/fafrontend/images/user-no-logo.svg" alt="{{ userName }}" /></div>
                             {% else %}
-                                <div class="img-img-cls-recommend-{{recommendedSlotCnt}}"><div class="img-cls-ad-recommend-{{recommendedSlotCnt}}"><img src="{{ userLogo }}" alt="{{ userName }}" /></div></div>
-                            {% endif %}
-                    </div>
-                    <div class="col-sm-14 col-md-19 col-lg-19 t-s-subblock-right content-cls-recommend-{{recommendedSlotCnt}}">
-                        {% if(recommendedSlot['show_sponsored_lbl']) %}
-                        <div class="recommendedtxt gray-text sponsored-2-3">
-                            Sponsored Ad<span class="sponsored-ad-icon"></span>
+                                <div class="list-img"><img class="img-responsive" src="{{ userLogo }}" alt="{{ userName }}" /></div>
+                            {% endif %}                            
                         </div>
-                        {% endif %}
-                        <div class="list-title show-title-r-ad-det"> {{ recommendedSlot['title']|length > 50 ? trim_text(recommendedSlot['title'], 50)|raw ~ '...': recommendedSlot['title'] }}</div>
-                        <div class="list-title show-mob-title-r-ad-det"> {{ recommendedSlot['mobile_title']|length > 50 ? trim_text(recommendedSlot['mobile_title'], 50)|raw ~ '...': recommendedSlot['mobile_title'] }}</div>
-                        {% if recommendedSlot['cta_text'] !='' and recommendedSlotArray|length == 2 %}
-                            <div class="outer-btn"><div class="button expand secondary-btn-1 recommended-2-slot-ad-detail-btn recommended-2-3-slot-ad-detail-btn">{{ recommendedSlot['cta_text'] }}</div></div>
-                       	{% endif %}
-                    </div> 
-    			</div>           
-       </div>
-       {% endfor %}
-    </div>
-    </div>
- {% endif %}
-</div>
-<!--  Mobile Starts Here -->
-<div class="d-block d-md-none">
-{% if recommendedSlotCnt>1 %}
-	<div class="recommended-div listing mb20 recommended-ad-detail owl-carousel" id="recommended-slot-slider" data-equalizer style="display:block">
-{% endif %}
-{% for recommendedSlot in recommendedSlotArray%}
-    {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), recommendedSlot['user_id'], true, true]) %}
-    {% set userName = userRepository.getUserProfileName(recommendedSlot['user_id'], container)~' - Friday-Ad' %}
-    {% set no_protocol = recommendedSlot['url']|split('//')[1] ?: recommendedSlot['url'] %}
-    {% set only_domains = no_protocol|split('/')[0] ?: no_protocol %}
-    {% set only_domains = only_domains|replace({'www.': ''})%}
-    
-    {% if recommendedSlotCnt==1 %}
-        <div class="recommended-div listing mb20 recommended-ad-detail" style="cursor: pointer;" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}','{{ recommendedSlot['title'] }}');">
-            <div class="mobile-recommended-ad-detail">
-            	<div class="img-cls-recommend-1" >
-                    {% if userLogo is null%}
-                            <div class="img-img-cls-recommend-1"><div class="profile-placeholder-1"><img src="{{container.getParameter('fa.static.url')}}/fafrontend/images/user-no-logo.svg" alt="{{ userName }}" /></div></div>
-                        {% else %}
-                            <div class="img-img-cls-recommend-1"><div class="img-cls-ad-recommend-1"><img src="{{ userLogo }}" alt="{{ userName }}" /></div></div>
-                        {% endif %}
-                </div>
-                <div class="content-cls-recommend-1">
-                	{%   if(recommendedSlot['show_sponsored_lbl']) %}
-                    <div class="recommendedtxt gray-text text-right sponsored-1">
-                        Sponsored Ad<span class="sponsored-ad-icon"></span>
                     </div>
-                    {% endif %}
-                    <div class="mt5 list-title"> {{ recommendedSlot['mobile_title']|length > 50 ? trim_text(recommendedSlot['mobile_title'], 50)|raw ~ '...': recommendedSlot['mobile_title'] }}</div>                       
+                    <div class="col-md-18 pad-none recom-r-col">
+                        <div class="media-body">
+                            <h3 class="list-title show-title-r-ad-det d-none d-md-block">
+                                {{ recommendedSlot['title']|length > 50 ? trim_text(recommendedSlot['title'], 50)|raw ~ '...': recommendedSlot['title'] }}
+                            </h3>
+                            <h3 class="list-title show-title-r-ad-det d-block d-md-none">
+                                {{ recommendedSlot['mobile_title']|length > 50 ? trim_text(recommendedSlot['mobile_title'], 50)|raw ~ '...': recommendedSlot['mobile_title'] }}
+                            </h3>
+                            {% if recommendedSlot['display_url'] !='' and recommendedSlotCnt==1 %}
+                            	<h5 class="mt5 list-display-url d-none d-md-block">{{ recommendedSlot['display_url'] }}</h5>
+                            {% endif %} 
+                            {% if(recommendedSlot['show_sponsored_lbl']) %}
+                                <div class="recommendedtxt gray-text text-right">
+                                    Sponsored Ad<span class="sponsored-ad-icon"></span>
+                                </div>
+                            {% endif %}
+                            
+                            <div class="outer-btn d-none d-md-block">
+                            	{% if recommendedSlot['sub_title'] !='' and recommendedSlotCnt==1 %}
+                                	<div class="list-desc">
+                                        {{ recommendedSlot['sub_title']|length > 150 ? trim_text(recommendedSlot['sub_title'], 150)|raw ~ '...': recommendedSlot['sub_title'] }}
+                                    </div>
+                                {% endif %}
+                                {% if recommendedSlot['cta_text'] !='' %}
+                                	<div class="button secondary-btn-1 btn-h-md" style="cursor: pointer;">{{ recommendedSlot['cta_text'] }}</div>
+                           		{% endif %}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-    		</div>
+            </div>
         </div>
-    {% else %}
-    	<div class="item" data-equalizer-watch style="cursor: pointer;" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}','{{ recommendedSlot['title'] }}');">        	
-             <div class="mobile-recommended-ad-detail">
-            	<div class="img-cls-recommend-1" >
-                    {% if userLogo is null%}
-                            <div class="img-img-cls-recommend-1"><div class="profile-placeholder-1"><img src="{{container.getParameter('fa.static.url')}}/fafrontend/images/user-no-logo.svg" alt="{{ userName }}" /></div></div>
-                        {% else %}
-                            <div class="img-img-cls-recommend-1"><div class="img-cls-ad-recommend-1"><img src="{{ userLogo }}" alt="{{ userName }}" /></div></div>
-                        {% endif %}
-                </div>
-                <div class="content-cls-recommend-1">
-                    {%   if(recommendedSlot['show_sponsored_lbl']) %}
-                    <div class="recommendedtxt gray-text text-right sponsored-1">
-                        Sponsored Ad<span class="sponsored-ad-icon"></span>
-                    </div>
-                    {% endif %}
-                    <div class="mt5 list-title"> {{ recommendedSlot['mobile_title']|length > 50 ? trim_text(recommendedSlot['mobile_title'], 50)|raw ~ '...': recommendedSlot['mobile_title'] }}</div>                       
-                </div>
-    		</div>        
-        </div>    
-    {% endif %}
-{% endfor %}
-{% if recommendedSlotCnt>1 %}
-	</div>
-    <script>
-    	$("#recommended-slot-slider").owlCarousel({
-            items : 1,
-            itemsCustom:[[320, 1], [568, 2], [768, 3], [1024, 3]],
-            navigation: true,
-            pagination:false,
-            responsiveRefreshRate : 100,
-            navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
-            lazyLoad: true,
-            scrollPerPage: true,
-        });
-    </script>
- {% endif %}
+    {% endfor %}
 </div>
+    {% if recommendedSlotCnt>1 %}
+    <script>
+    $(document).ready(function() {
+        var recomslot2Slider = $("#recom-item-slider-slot2");
+        if (recomslot2Slider) {
+            recomslot2Slider.owlCarousel({
+                loop:true,
+                items:2,
+                responsiveClass:true,
+                dots: false,
+                navText: ['<img src="/bundles/fafrontend/images/small-slider-prev.svg" alt="" />', '<img src="/bundles/fafrontend/images/small-slider-next.svg" alt="" />'],
+                responsive:{
+                    0:{
+                        items:1,
+                        nav:true,
+                    },
+                    760:{
+                        items:3,
+                        nav:false
+                    },
+                }
+            });
+        }
+    });
+    </script>
+    {% endif %}
+{% endif %}
 

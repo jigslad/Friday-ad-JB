@@ -41,6 +41,7 @@
                 </form>
                 </div>
                 <div class="col-md-11 col-lg-8 login-right">
+                    <div class="mobile-block-reg">
                     {% if facebookLoginUrl %} 
                     <div class="text-center mb20">
                         <a href="javascript:fbLoginPopup('{{ facebookLoginUrl }}');" class="button special signup-fb-btn">
@@ -60,6 +61,7 @@
                     <span class="signup-ins">
                         {{'We won\'t post anything <b>without your permission.</b>'|trans({}, 'frontend-login')|raw}}{{ include('FaAdBundle:AdPost:paaToolTipHelp.html.twig', {'paaBlockSlug': 'registration-login-help'}) }}     
                     </span>
+                   </div>
                 </div>
             </div>
             <div class="row justify-content-center">
