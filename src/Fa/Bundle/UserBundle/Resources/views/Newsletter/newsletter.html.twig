@@ -84,138 +84,138 @@
                 <h1 class="s-h1 mb20">What would you like to hear about?</h1>
                 <div class="mb20">Tailor your Friday-Ad email experience by ticking the areas below that interest you. Find the cutest pets, hottest cars or upcoming events in your area, or get involved with our competitions.</div>
             </div>
-            <div class="row">
-                <div class="col paa-block">
-                         {% set totalChoices = newsletterMainCategoryArray|length %}
-                        {% set totalColumns = 3 %}
-                        {% set choicesPerColumn = (totalChoices / totalColumns)|round(0, 'ceil') %}
-                        {% set choiceCount = 0 %}
-                        {% set strForThirdParty = '' %}
-                        {% for mainCatId in newsletterMainCategoryArray %}
-                            {% set child = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(mainCatId - 1)] %}
-                            <ul class="d-flex justify-content-center ul-news-blk mt20" style="list-style: none;">
-                                <li class="col-md-8">
-                                        <div class="col-md-24 paa-box">
-                                            <div class="f-width mb30" id="element_personalized_{{ child.vars.name }}" style="border: 0px;">
-                                                <div class="text-center f-width border-btm">
-                                                    <a id="element_toggle_personalized_{{ child.vars.name }}" href="#list-toggle-type-id-01" class="panel-heading collapsed" data-toggle="collapse" data-target="#element_toggle_personalized_{{ child.vars.name }}_target">
-                                                        <span class="detail-location icon-{{ child.vars.label|striptags|lower|replace({' ':''})  }} list-icons" style=""></span>
-                                                        <div class="clearfix">
-                                                            <h3 class="s-h3 text-center">{{ child.vars.label|striptags }}</h3>
+        </div>
+        <div class="row">
+            <div class="col paa-block">
+                     {% set totalChoices = newsletterMainCategoryArray|length %}
+                    {% set totalColumns = 3 %}
+                    {% set choicesPerColumn = (totalChoices / totalColumns)|round(0, 'ceil') %}
+                    {% set choiceCount = 0 %}
+                    {% set strForThirdParty = '' %}
+                    {% for mainCatId in newsletterMainCategoryArray %}
+                        {% set child = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(mainCatId - 1)] %}
+                        <ul class="d-flex justify-content-center ul-news-blk mt20" style="list-style: none;">
+                            <li class="col-md-8">
+                                    <div class="col-md-24 paa-box">
+                                        <div class="f-width mb30" id="element_personalized_{{ child.vars.name }}" style="border: 0px;">
+                                            <div class="text-center f-width border-btm">
+                                                <a id="element_toggle_personalized_{{ child.vars.name }}" href="#list-toggle-type-id-01" class="panel-heading collapsed" data-toggle="collapse" data-target="#element_toggle_personalized_{{ child.vars.name }}_target">
+                                                    <span class="detail-location icon-{{ child.vars.label|striptags|lower|replace({' ':''})  }} list-icons" style=""></span>
+                                                    <div class="clearfix">
+                                                        <h3 class="s-h3 text-center">{{ child.vars.label|striptags }}</h3>
+                                                    </div>
+                                                    <div class="mb20">
+                                                        <div class="arrow-block">
+                                                            <i class="fa fa-chevron-up"></i>
+                                                            <i class="fa fa-chevron-down"></i>
                                                         </div>
-                                                        <div class="mb20">
-                                                            <div class="arrow-block">
-                                                                <i class="fa fa-chevron-up"></i>
-                                                                <i class="fa fa-chevron-down"></i>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <div class="collapse collapse-body-content" id="element_toggle_personalized_{{ child.vars.name }}_target" style="display:none;">
-                                                    <div class="mt20 pl20">
-                                                        {% set childrenArray = newsletterTypeRepository.getChildrens(mainCatId, container)|keys %}
-                                                        <div class="label-inline">
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="collapse collapse-body-content" id="element_toggle_personalized_{{ child.vars.name }}_target" style="display:none;">
+                                                <div class="mt20 pl20">
+                                                    {% set childrenArray = newsletterTypeRepository.getChildrens(mainCatId, container)|keys %}
+                                                    <div class="label-inline">
+                                                        <ul class="custom-control custom-checkbox search-type crawlable-checkbox">
+                                                            <li class="grey-check">
+                                                                {{ form_widget(child, {'attr': {'class':'parent_newsletter checkbox'}}) }}
+                                                                <label for="{{ child.vars.id }}"></label>
+                                                                <b>{{ child.vars.label|striptags }}</b>
+                                                            </li>
+                                                        </ul>
+                                                        {% for subCatId in childrenArray %}
+                                                            {% set subChild = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(subCatId - 1)] %}
                                                             <ul class="custom-control custom-checkbox search-type crawlable-checkbox">
                                                                 <li class="grey-check">
-                                                                    {{ form_widget(child, {'attr': {'class':'parent_newsletter checkbox'}}) }}
-                                                                    <label for="{{ child.vars.id }}"></label>
-                                                                    <b>{{ child.vars.label|striptags }}</b>
+                                                                    {{ form_widget(subChild, {'attr': {'class':'checkbox child_newsletter_'~mainCatId}}) }}
+                                                                    <label for="{{ subChild.vars.id }}"></label>
+                                                                    {{ subChild.vars.label|striptags }}
                                                                 </li>
                                                             </ul>
-                                                            {% for subCatId in childrenArray %}
-                                                                {% set subChild = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(subCatId - 1)] %}
-                                                                <ul class="custom-control custom-checkbox search-type crawlable-checkbox">
-                                                                    <li class="grey-check">
-                                                                        {{ form_widget(subChild, {'attr': {'class':'checkbox child_newsletter_'~mainCatId}}) }}
-                                                                        <label for="{{ subChild.vars.id }}"></label>
-                                                                        {{ subChild.vars.label|striptags }}
-                                                                    </li>
-                                                                </ul>
-                                                            {% endfor %}
-                                                        </div>
+                                                        {% endfor %}
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    <div>
                                     </div>
-                                  </li>
-                                  {% if mainCatId == 43 %}
-                                     <li class="col-md-8">
-                                         <div class="col-md-24 paa-box">
-                                             <div class="f-width mb30" id="list-type-id-1">
-                                                 <div class="text-center f-width border-btm">
-                                                     <a id="element_toggle_personalized_non_mappped" class="panel-heading collapsed" data-toggle="collapse" data-target="#element_toggle_personalized_non_mappped_target">
-                                                         <span class="detail-location icon-competitions list-icons" style=""><!-- <img src="preference-center_files/images/newslettre-icon.png" width="80px" height="80px"> --></span>
-                                                         <span class="detail-location icon-forsale list-icons"></span>
-                                                         <div class="clearfix">
-                                                             <h3 class="s-h3 text-center">{{ 'Competitions and deals'|trans({}, 'frontend-newsletter-pref') }}</h3>
+                                <div>
+                                </div>
+                              </li>
+                              {% if mainCatId == 43 %}
+                                 <li class="col-md-8">
+                                     <div class="col-md-24 paa-box">
+                                         <div class="f-width mb30" id="list-type-id-1">
+                                             <div class="text-center f-width border-btm">
+                                                 <a id="element_toggle_personalized_non_mappped" class="panel-heading collapsed" data-toggle="collapse" data-target="#element_toggle_personalized_non_mappped_target">
+                                                     <span class="detail-location icon-competitions list-icons" style=""><!-- <img src="preference-center_files/images/newslettre-icon.png" width="80px" height="80px"> --></span>
+                                                     <span class="detail-location icon-forsale list-icons"></span>
+                                                     <div class="clearfix">
+                                                         <h3 class="s-h3 text-center">{{ 'Competitions and deals'|trans({}, 'frontend-newsletter-pref') }}</h3>
+                                                     </div>
+                                                     <div class="mb20">
+                                                         <div class="arrow-block">
+                                                             <i class="fa fa-chevron-up"></i>
+                                                             <i class="fa fa-chevron-down"></i>
                                                          </div>
-                                                         <div class="mb20">
-                                                             <div class="arrow-block">
-                                                                 <i class="fa fa-chevron-up"></i>
-                                                                 <i class="fa fa-chevron-down"></i>
-                                                             </div>
-                                                         </div>
-                                                     </a>
-                                                 </div>
-                                                 <div class="collapse collapse-body-content" id="element_toggle_personalized_non_mappped_target">
-                                                     <div class="mt20 pb10"  style="display:none;">
-                                                         <div class="label-inline">
-                                                             <ul class="custom-control custom-checkbox search-type crawlable-checkbox">
-                                                                 {% set nonMappedChildrenArray = newsletterTypeRepository.getNonMappedCategories(container)|keys %}
-                                                                 {% set strForThirdParty = null %}
+                                                     </div>
+                                                 </a>
+                                             </div>
+                                             <div class="collapse collapse-body-content" id="element_toggle_personalized_non_mappped_target">
+                                                 <div class="mt20 pb10"  style="display:none;">
+                                                     <div class="label-inline">
+                                                         <ul class="custom-control custom-checkbox search-type crawlable-checkbox">
+                                                             {% set nonMappedChildrenArray = newsletterTypeRepository.getNonMappedCategories(container)|keys %}
+                                                             {% set strForThirdParty = null %}
 
-                                                                 {% for nonMappedCatId in nonMappedChildrenArray %}
-                                                                     {% set nonMappedCatChild = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(nonMappedCatId - 1)] %}
-                                                                     <li class="grey-check">
-                                                                         {% if nonMappedCatChild.vars.name|raw == "47" %}
-                                                                             {% set strForThirdParty = nonMappedCatChild %}
-                                                                         {% else %}
-                                                                             {{ form_widget(nonMappedCatChild,{'attr':{'class':'checkbox'}}) }}
-                                                                             <label for="{{ nonMappedCatChild.vars.id }}"></label>
-                                                                             {{ nonMappedCatChild.vars.label|striptags }}
-                                                                         {% endif %}
-                                                                     </li>
-                                                                 {% endfor %}
-                                                             </ul>
-                                                         </div>
+                                                             {% for nonMappedCatId in nonMappedChildrenArray %}
+                                                                 {% set nonMappedCatChild = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(nonMappedCatId - 1)] %}
+                                                                 <li class="grey-check">
+                                                                     {% if nonMappedCatChild.vars.name|raw == "47" %}
+                                                                         {% set strForThirdParty = nonMappedCatChild %}
+                                                                     {% else %}
+                                                                         {{ form_widget(nonMappedCatChild,{'attr':{'class':'checkbox'}}) }}
+                                                                         <label for="{{ nonMappedCatChild.vars.id }}"></label>
+                                                                         {{ nonMappedCatChild.vars.label|striptags }}
+                                                                     {% endif %}
+                                                                 </li>
+                                                             {% endfor %}
+                                                         </ul>
                                                      </div>
                                                  </div>
                                              </div>
                                          </div>
-                                   </li>
-                                {% endif %}
-                                {% set choiceCount = choiceCount + 1 %}
-                            </ul>
-                        {% endfor %}
+                                     </div>
+                               </li>
+                            {% endif %}
+                            {% set choiceCount = choiceCount + 1 %}
+                        </ul>
+                    {% endfor %}
+            </div>
+        </div>
+        <div class="row justify-content-center offers-promotions mt30">
+            <div class="col-md-10">
+                <h3 class="s-h3 mb20">Offers and promotions from trusted partners</h3>
+                <div class="label-inline">
+                    <ul class="custom-control custom-checkbox checked search-type crawlable-checkbox">
+                        <li class="grey-check">
+                            {{ form_widget(strForThirdParty,{'attr':{'class':'checkbox'}}) }}
+                            <label for="user_newsletterupdate_dotmailer_newsletter_type_id_47"></label>
+                            {{ "I'd like to receive offers and promotions by email on behalf of carefully chosen partners."|trans }}
+                        </li>
+                    </ul>
+                </div>
+                <div class="mt10 privacy-pol">
+                    By ticking this box, we will send you emails on behalf of trusted local partners,
+                    bringing you offers, promotions and local events that we think you may be interested in.
+                    <b>We will never share your personal information with these partners.</b>
+                    Learn more in our <a href="{{ path('location_home_page', {'location': 'privacy-policy'}) }}" target="__blank"> privacy policy</a>.
                 </div>
             </div>
-            <div class="row justify-content-center offers-promotions mt30">
-                <div class="col-md-10">
-                    <h3 class="s-h3 mb20">Offers and promotions from trusted partners</h3>
-                    <div class="label-inline">
-                        <ul class="custom-control custom-checkbox checked search-type crawlable-checkbox">
-                            <li class="grey-check">
-                                {{ form_widget(strForThirdParty,{'attr':{'class':'checkbox'}}) }}
-                                <label for="user_newsletterupdate_dotmailer_newsletter_type_id_47"></label>
-                                {{ "I'd like to receive offers and promotions by email on behalf of carefully chosen partners."|trans }}
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="mt10 privacy-pol">
-                        By ticking this box, we will send you emails on behalf of trusted local partners,
-                        bringing you offers, promotions and local events that we think you may be interested in.
-                        <b>We will never share your personal information with these partners.</b>
-                        Learn more in our <a href="{{ path('location_home_page', {'location': 'privacy-policy'}) }}" target="__blank"> privacy policy</a>.
-                    </div>
-                </div>
-                <div class="col-md-10 text-center">
-                    <img class="img-fluid" src="{{ asset_url('fafrontend/images/desktop-mobile-view.png') }}" alt="Desktop-Mobile-View">
-                </div>
-                <div class="col-md-6">
-                    {{ form_widget(form.update_newsletter_preferences, {'label': 'Update'|trans, 'attr': {'class':'primary-btn-1 btn btn-block btn-h-lg', 'onClick': "newsletterUpdate(this)"}}) }}
-                </div>
+            <div class="col-md-10 text-center">
+                <img class="img-fluid" src="{{ asset_url('fafrontend/images/desktop-mobile-view.png') }}" alt="Desktop-Mobile-View">
+            </div>
+            <div class="col-md-6">
+                {{ form_widget(form.update_newsletter_preferences, {'label': 'Update'|trans, 'attr': {'class':'primary-btn-1 btn btn-block btn-h-lg', 'onClick': "newsletterUpdate(this)"}}) }}
             </div>
         </div>
     </div>
