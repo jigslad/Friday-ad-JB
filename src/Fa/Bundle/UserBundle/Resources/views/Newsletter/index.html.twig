@@ -4,6 +4,11 @@
 {% set container = fetch_container_instance() %}
 {% set newsletterMainCategoryArray = newsletterTypeRepository.getMainCategoryArray(container) %}
 
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('build/css/newsletter.css') }}"/>
+{% endblock %}
+
 {% block body %}
     <div class="newsletter-main-section">
 {#        {{ include('FaUserBundle:Newsletter:newsletter-css.html.twig')}}#}

@@ -30,7 +30,7 @@ Encore
     .addStyleEntry('css/landing', './assets/scss/landing.scss')
     .addStyleEntry('css/dashboard', './assets/scss/dashboard.scss')
     .addStyleEntry('css/addetail-recommended', './assets/scss/addetail-recommended.scss')
-    
+    .addStyleEntry('css/newsletter', './assets/scss/newsletter.scss')
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 
