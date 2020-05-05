@@ -128,7 +128,7 @@
                 <div class="homepage-row">
                     <div class="row">
                         <div class="columns">
-                            <h3 class="homepage-title">{{ 'Explore...'|trans({}, 'frontend-landing-page') }}</h3>
+                            <div class="homepage-title">{{ 'Explore...'|trans({}, 'frontend-landing-page') }}</div>
                             <div id="explore-items" class="row popular-items">
                             {% for imageInfo in attribute(landingPageImages, exloreId) %}
                                 {% set queryParams = searchParams %}
@@ -174,7 +174,7 @@
             {% if attribute(landingPageImages, motor_other_vehicles_id) is defined %}
                 {% set prevSectionBgClass = 'white-bg' %}
                 <div class="homepage-row white-bg">
-                    <h3 class="homepage-title">{{ 'Other vehicles'|trans({}, 'frontend-landing-page') }}</h3>
+                    <div class="homepage-title">{{ 'Other vehicles'|trans({}, 'frontend-landing-page') }}</div>
                     <div id="other-vehicles" class="row popular-items">
                     {% for imageInfo in attribute(landingPageImages, motor_other_vehicles_id) %}
                         {% set queryParams = searchParams %}
@@ -218,7 +218,7 @@
             <div class="homepage-row">
                 <div class="row">
                     <div class="columns">
-                        <h3 class="homepage-title">{{ 'Pets'|trans({}, 'frontend-landing-page') }}</h3>
+                        <div class="homepage-title">{{ 'Pets'|trans({}, 'frontend-landing-page') }}</div>
                         <div class="landing-pet-circles">
                             <ul class="clearfix">
                             {% for pet_id, class in petsCircleClass %}
@@ -240,7 +240,7 @@
                 <div class="homepage-row white-bg">
                     <div class="row">
                         <div class="columns">
-                            <h3 class="homepage-title">{{ 'Horses & equestion'|trans({}, 'frontend-landing-page') }}</h3>
+                            <div class="homepage-title">{{ 'Horses & equestion'|trans({}, 'frontend-landing-page') }}</div>
                             <div id="explore-items" class="row popular-items horses-equestion">
                             {% for imageInfo in attribute(landingPageImages, animal_horses_and_euestion_id) %}
                                 {% set queryParams = searchParams %}
@@ -297,7 +297,7 @@
                 {% endif %}
                 {% set prevSectionBgClass = bgColour %}
                 <div class="homepage-row {{ bgColour }}">
-                    <h3 class="homepage-title">{{ 'Livestock'|trans({}, 'frontend-landing-page') }}</h3>
+                    <div class="homepage-title">{{ 'Livestock'|trans({}, 'frontend-landing-page') }}</div>
                     <div class="row text-center centered-columns livestock">
                         {% for imageInfo in attribute(landingPageImages, animal_livestock_id) %}
                             {% set queryParams = searchParams %}
@@ -342,7 +342,7 @@
                 <div class="homepage-row white-bg">
                     <div class="row">
                         <div class="columns">
-                            <h3 class="homepage-title">{{ 'Discover...'|trans({}, 'frontend-landing-page') }}</h3>
+                            <div class="homepage-title">{{ 'Discover...'|trans({}, 'frontend-landing-page') }}</div>
                             <div id="discover-populars" class="row popular-items">
                             {% for imageInfo in attribute(landingPageImages, property_discover_id) %}
                                 {% set queryParams = searchParams %}
@@ -403,9 +403,9 @@
                 <div class="homepage-row {{ bgColour }}">
                     <div class="row">
                         <div class="columns">
-                            <h3 class="homepage-title">
+                            <div class="homepage-title">
                                 {{'Featured employers'|trans({}, 'frontend-landing-page')}}
-                            </h3>
+                            </div>
                             <div class="owl-carousel fa-slider" id="featured_employers_slider" data-equalizer>
                                 {% set userRepository = fetch_repository('FaUserBundle:User') %}
                                 {% for featuredEmployer in featuredEmployers %}
@@ -442,13 +442,13 @@
                 <div class="homepage-row {{ bgColour }}">
                     <div class="row">
                         <div class="columns">
-                            <h3 class="homepage-title">
+                            <div class="homepage-title">
                                 {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
                                     {{'Featured Business'|trans({}, 'frontend-landing-page')}}
                                 {% else %}
                                     {{'Popular shops'|trans({}, 'frontend-landing-page')}}
                                 {% endif %}
-                            </h3>
+                            </div>
                             <div class="owl-carousel fa-slider" id="popular_shops_slider" data-equalizer>
                                 {% set userRepository = fetch_repository('FaUserBundle:User') %}
                                 {% for popularShop in popularShops %}
@@ -491,13 +491,13 @@
             <div class="homepage-row {{ smallSlider }} {{ bgColour }}">
                 <div class="row">
                     <div class="columns">
-                        <h3 class="homepage-title">
+                        <div class="homepage-title">
                             {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
                                 {{'Jobs of the week'|trans({}, 'frontend-landing-page')}}
                             {% else %}
                                 {{'Latest ads'|trans({}, 'frontend-landing-page')}}
                             {% endif %}
-                        </h3>
+                        </div>
                         {{ include('FaContentBundle:LandingPage:latestAdsSlider.html.twig', {'divId': 'latest-item-slider'}) }}
                         <div class="small-wrapper">
                             {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(searchParams) %}
@@ -536,7 +536,7 @@
             <div class="homepage-row {{ bgColour }}">
                 <div class="row">
                     <div class="columns">
-                        <h3 class="homepage-title">{{'Most popular'|trans({}, 'frontend-landing-page')}}</h3>
+                        <div class="homepage-title">{{'Most popular'|trans({}, 'frontend-landing-page')}}</div>
                         {{ include('FaContentBundle:LandingPage:mostPopularAdsSlider.html.twig', {'divId': 'most-popular-slider'}) }}
                     </div>
                 </div>
@@ -553,7 +553,7 @@
                 {% endif %}
                 {% set prevSectionBgClass = bgColour %}
                 <div class="homepage-row other-ways-shop {{ bgColour }}">
-                    <h3 class="homepage-title">{{ 'Other ways to shop...'|trans({}, 'frontend-landing-page') }}</h3>
+                    <div class="homepage-title">{{ 'Other ways to shop...'|trans({}, 'frontend-landing-page') }}</div>
                     <div class="row">
                         {% for imageInfo in attribute(landingPageImages, other_ways_id) %}
                         {% set queryParams = searchParams %}
@@ -601,7 +601,7 @@
                 {% endif %}
                 {% set prevSectionBgClass = bgColour %}
                 <div class="homepage-row {{ bgColour }}">
-                    <h3 class="homepage-title">{{ 'More in motors'|trans({}, 'frontend-landing-page') }}</h3>
+                    <div class="homepage-title">{{ 'More in motors'|trans({}, 'frontend-landing-page') }}</div>
                     <div class="row text-center centered-columns livestock">
                     {% for imageInfo in attribute(landingPageImages, motor_more_in_motor_id) %}
                         {% set queryParams = searchParams %}
@@ -652,7 +652,7 @@
         {% endif %}
         {% set prevSectionBgClass = bgColour %}
         <div class="homepage-row {{ bgColour }}">
-            <h3 class="homepage-title">{{ 'Popular searches'|trans({}, 'frontend-landing-page') }}</h3>
+            <div class="homepage-title">{{ 'Popular searches'|trans({}, 'frontend-landing-page') }}</div>
             <div class="row">
                 <div class="columns">
                     {% set staticPageLocationSlug = 'uk' %}
@@ -702,9 +702,9 @@
                 {% set prevSectionBgClass = bgColour %}
             <div class="homepage-row {{ bgColour }}">
                 {% if location is defined and location is not null %}
-                    <h3 class="homepage-title">{{ 'Browse used cars in %location%'|trans({'%location%': (location_text)}, 'frontend-landing-page') }}</h3>
+                    <div class="homepage-title">{{ 'Browse used cars in %location%'|trans({'%location%': (location_text)}, 'frontend-landing-page') }}</div>
                 {% else %}
-                    <h3 class="homepage-title">{{ 'Browse used cars'|trans({}, 'frontend-landing-page') }}</h3>
+                    <div class="homepage-title">{{ 'Browse used cars'|trans({}, 'frontend-landing-page') }}</div>
                 {% endif %}
                 <div class="row">
                     <div class="columns">
@@ -781,9 +781,9 @@
             {% set prevSectionBgClass = bgColour %}
             <div class="homepage-row {{ bgColour }}">
                 {% if location is defined and location is not null %}
-                    <h3 class="homepage-title">{{ 'Browse by category in %location%'|trans({'%location%': (location_text)}, 'frontend-landing-page') }}</h3>
+                    <div class="homepage-title">{{ 'Browse by category in %location%'|trans({'%location%': (location_text)}, 'frontend-landing-page') }}</div>
                 {% else %}
-                    <h3 class="homepage-title">{{ 'Browse by category'|trans({}, 'frontend-landing-page') }}</h3>
+                    <div class="homepage-title">{{ 'Browse by category'|trans({}, 'frontend-landing-page') }}</div>
                 {% endif %}
                 {% set columns = 4 %}
                 {% set ctr = 0 %}
