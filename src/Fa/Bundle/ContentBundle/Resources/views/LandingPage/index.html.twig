@@ -537,9 +537,9 @@
                                                 <div class="card custom-card">
                                                     <div style="padding:20px;" class="border-botttom">
                                                         {% if userLogo %}
-                                                            <img class="card-img-top" data-src="{{ userLogo }}" alt="{{ userName }}" />
+                                                            <img class="card-img-top" src="{{ userLogo }}" alt="{{ userName }}" />
                                                         {% else %}
-                                                            <img class="card-img-top" data-src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ userName }}" />
+                                                            <img class="card-img-top" src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ userName }}" />
                                                         {% endif %}
                                                     </div>
                                                     <div class="card-body pt0">
