@@ -800,8 +800,8 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
 .intro-text .item-count, .explore-price { color: $secondary-color; }
 .homepage-more-items { border: 1px solid $form-border-color; }
 .landing-divider, .border-botttom { border-bottom: solid 1px $form-border-color; }
+.find-property .capsule-links a { background: $dark-grey; }
 .capsule-links a:hover, .capsule-links a.active { background: $secondary-color; }
-.find-property .capsule-links a { background: $form-text-color; }
 .custom-card .card-body { border-top: 1px solid $grey-color; }
 .custom-card .similar-placeholder { background-color: $light-grey-color; }
 

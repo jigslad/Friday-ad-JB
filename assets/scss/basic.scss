@@ -837,27 +837,53 @@ color: #ffffff;cursor: pointer;position: absolute;right: 0;width: 20px;height: 3
 }
 
 /* Badges */
-.mob-forsale, .forsale-badge {
+.forsale-badge {
 	background: url('/Frontend/images/badges/for-sale.png') no-repeat !important;
 }
-.mob-motors, .motors-badge {
+.motors-badge {
 	background: url('/Frontend/images/badges/motors.png') no-repeat !important;
 }
-.mob-jobs, .job-badge {
+.job-badge {
 	background: url('/Frontend/images/badges/jobs.png') no-repeat !important;
 }
-.mob-services, .services-badge {
+.services-badge {
 	background: url('/Frontend/images/badges/services.png') no-repeat !important;
 }
-.mob-property, .property-badge {
+.property-badge {
 	background: url('/Frontend/images/badges/properties.png') no-repeat !important;
 }
-.mob-animals, .animals-badge {
+.animals-badge {
 	background: url('/Frontend/images/badges/animals.png') no-repeat !important;
 }
-.mob-community, .community-badge {
+.community-badge {
 	background: url('/Frontend/images/badges/community.png') no-repeat !important;
 }
+/* menu Icons */
+.mob-forsale {
+	background: url('/Frontend/images/icons/main/for-sale.png') no-repeat !important;
+}
+.mob-motors {
+	background: url('/Frontend/images/icons/main/motors.png') no-repeat !important;
+}
+.mob-jobs {
+	background: url('/Frontend/images/icons/main/jobs.png') no-repeat !important;
+}
+.mob-services {
+	background: url('/Frontend/images/icons/main/services.png') no-repeat !important;
+}
+.mob-property {
+	background: url('/Frontend/images/icons/main/properties.png') no-repeat !important;
+}
+.mob-animals {
+	background: url('/Frontend/images/icons/main/animals.png') no-repeat !important;
+}
+.mob-community {
+	background: url('/Frontend/images/icons/main/community.png') no-repeat !important;
+}
+.mob-adult {
+	background: url('/Frontend/images/icons/main/adult-green.png') no-repeat !important;
+}
+
 .subtitle {
     margin-top: 37px;
 }

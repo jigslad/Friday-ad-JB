@@ -1000,6 +1000,7 @@ class CommonManager
 
         $userName .= ' - Friday-Ad';
         $imagePath = null;
+        $path = null;
 
         if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
             $path = $container->getParameter('fa.company.image.dir').'/'.self::getGroupDirNameById($userId, 5000);

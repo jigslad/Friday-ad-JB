@@ -31,26 +31,13 @@
 <div class="landing-divider">
     <div class="container">
         <div class="row mt20 mb20">
-            <div class="col-lg-16 col-md-24">
-                {{ form_label(attribute(form, 'item__property_type_id')) }}
-                <div id="property-type-circles" class="d-clock d-md-none">
-                    {{ form_widget(attribute(form, 'item__property_type_id')) }}
+            <div class="col-lg-16 col-md-24">                                
+    			{{ form_label(attribute(form, 'item__property_type_id')) }}
+                <div id="property-type-circles" class="discover-categories property-landing-circles d-none d-md-block"></div>
+                
+                <div id="property_type_choices" class="d-block d-md-none white-select">
+                    {{ form_widget(attribute(form, 'item__property_type_id'),{'attr':{'class':'select-control'}}) }}
                 </div>
-                <ul id="property-type-circles" class="discover-categories landing-circles d-none d-md-block">
-                    <li class="any-category body_type_choice active" id="body_type_choice_">
-                        <a href="javascript:void(0)">{{ 'Any'|trans({}, 'frontend-landing-page') }}</a>
-                    </li>
-                    {% set selectedPropertyTypeId = attribute(form, 'item__property_type_id').vars.data %}
-                    {% for choice in attribute(form, 'item__property_type_id').vars.choices %}
-                        {% set activeClass = '' %}
-                        {% if choice.value == selectedPropertyTypeId %}
-                            {% set activeClass = 'active' %}
-                        {% endif %}
-                        <li class="property-{{ choice.label|lower }} body_type_choice {{ activeClass }}" id="property_type_choice_{{ choice.value }}">
-                            <a href="javascript:void(0)" >{{ choice.label }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
             </div>
             <div class="col-lg-8 col-md-24 distance-budget-md-block">
                 <div class="col-sm-24 col-md-12 col-lg-24 pad-none">
