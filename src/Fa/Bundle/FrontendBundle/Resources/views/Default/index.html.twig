@@ -116,7 +116,7 @@
         <div class="homepage-row">
             <div class="row">
                 <div class="columns">
-                    <h3 class="homepage-title">{{'Recommended for you'|trans({}, 'frontend-homepage')}}</h3>
+                    <div class="homepage-title">{{'Recommended for you'|trans({}, 'frontend-homepage')}}</div>
                     {{ include('FaFrontendBundle:Default:homePageRecommendedAdsSlider.html.twig', {'divId': 'recommended-item-slider', 'ads': recommendedAds}) }}
                 </div>
             </div>
@@ -128,13 +128,13 @@
         <div class="homepage-row latest-items">
             <div class="row">
                 <div class="columns">
-                    <h3 class="homepage-title">
+                    <div class="homepage-title">
                         {% if locationName is not null %}
                             {{'Latest in %locationName%'|trans({'%locationName%': locationName}, 'frontend-homepage')}}
                         {% else %}
                             {{'Latest ads'|trans({}, 'frontend-homepage')}}
                         {% endif %}
-                    </h3>
+                    </div>
                     {{ include('FaFrontendBundle:Default:homePageLatestAdsSlider.html.twig', {'divId': 'latest-item-slider'}) }}
                     {% if searchResultUrl is not null%}
                         <div class="small-wrapper">
@@ -151,9 +151,9 @@
         <div class="homepage-row ga-fadPrintWidget">
             <div class="row">
                 <div class="columns">
-                    <h3 class="homepage-title">
+                    <div class="homepage-title">
                         {{'Read the Friday-Ad Online'|trans({}, 'frontend-homepage')}}
-                    </h3>
+                    </div>
                     {{ include('FaFrontendBundle:Default:readFridayAdOnline.html.twig') }}
                 </div>
             </div>
@@ -167,9 +167,9 @@
                 <div class="homepage-row">
                     <div class="row">
                         <div class="columns">
-                            <h3 class="homepage-title">
+                            <div class="homepage-title">
                                 {{'Popular shops'|trans({}, 'frontend-homepage')}}
-                            </h3>
+                            </div>
                             <div class="owl-carousel fa-slider" id="popular_shops_slider" data-equalizer>
                                 {% set userRepository = fetch_repository('FaUserBundle:User') %}
                                 {% for popularShop in popularShops %}
@@ -204,7 +204,7 @@
         <div class="homepage-row">
             <div class="row">
                 <div class="columns">
-                    <h3 class="homepage-title">{{"What's popular"|trans({}, 'frontend-homepage')}}</h3>
+                    <div class="homepage-title">{{"What's popular"|trans({}, 'frontend-homepage')}}</div>
                     {{ include('FaFrontendBundle:Default:homePagePopular.html.twig') }}
                 </div>
             </div>
@@ -215,7 +215,7 @@
         <div class="homepage-row">
             <div class="row">
                 <div class="columns">
-                    <h3 class="homepage-title">{{'Best from our Friday adventurers'|trans({}, 'frontend-homepage')}}</h3>
+                    <div class="homepage-title">{{'Best from our Friday adventurers'|trans({}, 'frontend-homepage')}}</div>
                     <h2 class="text-center sub-head-text">{{'Here are some of the best ads from our community members.'|trans({}, 'frontend-homepage')}}</h2>
                     {{ include('FaFrontendBundle:Default:homePageFeaturedAdsSlider.html.twig', {'divId': 'featured-item-slider'}) }}
                 </div>
@@ -227,7 +227,7 @@
         <div class="homepage-row recently-viewed">
             <div class="row">
                 <div class="columns">
-                    <h3 class="homepage-title">{{'Recently viewed'|trans({}, 'frontend-homepage')}}</h3>
+                    <div class="homepage-title">{{'Recently viewed'|trans({}, 'frontend-homepage')}}</div>
                     {{ include('FaFrontendBundle:Default:homePageRecommendedAdsSlider.html.twig', {'divId': 'recently-viwed-item-slider', 'ads': recentlyViewedAds, noImageColor:'grey'}) }}
                 </div>
             </div>
@@ -236,7 +236,7 @@
 
     {% if facebookLoginUrl is not null %}
         <div class="homepage-row">
-            <h3 class="homepage-title-small">{{'Find out what your friends are selling'|trans({}, 'frontend-homepage')}}</h3>
+            <div class="homepage-title-small">{{'Find out what your friends are selling'|trans({}, 'frontend-homepage')}}</div>
             <div class="text-center small-wrapper m-auto pad-none">
                 <a href="javascript:fbLoginPopup('{{ facebookLoginUrl }}');" class="button special signup-fb-btn">
                     <span class="fb-icon"></span> 
@@ -249,7 +249,7 @@
     <div class="homepage-row">
         <div class="row">
             <div class="columns">
-                <h3 class="homepage-title">{{'Browse adverts in popular locations'|trans({}, 'frontend-homepage')}}</h3>
+                <div class="homepage-title">{{'Browse adverts in popular locations'|trans({}, 'frontend-homepage')}}</div>
                 {% cache 'home|page|location|block'~currentDevice 3600 %}
                     {#{ render(controller('FaFrontendBundle:Default:showHomePageLocationBlocks')) }#}
                 {% endcache %}
