@@ -6,6 +6,10 @@
     {{ set_variables('metaRobots', {'metaRobotsArray': metaRobotsArray}) }}
 {% endblock %}
 
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('build/css/dashboard.css') }}"/>
+{% endblock %}
+
 {% block body %}
 {% set entityCacheManager = container.get('fa.entity.cache.manager') %}
 {% set userRepository = fetch_repository('FaUserBundle:User') %}
@@ -27,13 +31,12 @@
                         <div class="about-shop">
                             <h2 class="s-h2 pro-user-name">{{ (userDetail['user_name'] ? userDetail['user_name'] : '-') }}</h2>
                             {% if (userDetail and userDetail['user_rating'] is defined and userDetail['user_rating'] > 0) %}
-                                <div class="pro-rating"><span>{{'Rating'|trans({}, 'frontend-profile-page')}}:</span> {{ userDetail['user_rating'] }}</div>
+                                <div class="pro-rating text-center"><span>{{'Rating'|trans({}, 'frontend-profile-page')}}:</span> {{ userDetail['user_rating'] }}</div>
                                 <div class="pro-rating-stars rating-white-stars">
                                     {{ include('FaCoreBundle::showStarRating.html.twig', {'rating': userDetail['user_rating']}) }}
                                 </div>
                             {% endif %}
                         </div>
-
                         <div class="sold-n-reviews">
                             <div class="row">
                                 {% if userDetail['sold_ad_count'] > 0 %}
@@ -42,7 +45,7 @@
                                         {{'Items sold'|trans({}, 'frontend-profile-page')}}: <b>{{userDetail['sold_ad_count']}}</b>
                                     </div>
                                 {% endif %}
-                                <div class="{% if userDetail['sold_ad_count'] > 0 %}col-md-12{%else%}col-md-24{% endif %} columns text-center">
+                                <div class="{% if userDetail['sold_ad_count'] > 0 %} col-md-12 {%else%} col-md-24 {% endif %} text-center">
                                     <span class="review-sold-icon">Reviews</span><br />
                                     {{'Reviews'|trans({}, 'frontend-profile-page')}}: <b>{{ userDetail['total_review'] }}</b>
                                 </div>

@@ -12,33 +12,37 @@
 
 {% block body -%}
     <div class="testimonial-heading">
-       <h1 class="text-center">{{'Testimonials'|trans({}, 'frontend-testimonials')}}</h1>
-       <h2 class="text-center">{{'Here are the latest testimonials from people like you'|trans({}, 'frontend-testimonials')}}</h2>
+        <div class="container">
+           <h1 class="text-center">{{'Testimonials'|trans({}, 'frontend-testimonials')}}</h1>
+           <h2 class="text-center">{{'Here are the latest testimonials from people like you'|trans({}, 'frontend-testimonials')}}</h2>
+        </div>
     </div>
     <div class="testimonial-main">
-        <div class="row" id="testimonials_list_id">
-            <div class="large-17 columns">
-                {% if pagination.getNbResults() %}
-                    <ul class="testimonial-list">
-                        {% for testimonial in pagination.getCurrentPageResults() %}
-                            <li>
-                                <span class="testimonial-icon"></span>{{ testimonial['comment']|raw }}
-                                <h5>{% if testimonial['user_name'] %}{{testimonial['user_name']}}, {% endif%}{{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [testimonial['created_at'], container]) }}</h5>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    {{ 'No records found.'|trans({}, 'frontend-testimonials') }}
-                {% endif %}
-                <div class="pagination-centered">
-                    {{ include('FaFrontendBundle:Default:googlePager.html.twig', {'pagination': pagination, 'addToEndPage': 0, 'seoPager': false}) }}
-                </div>
-           </div>
-           <div class="large-7 columns">
-               <div class="send-comment">
-                   <button class="primary-btn-2 button expand" onclick="return addTestimonial();">{{'Send us your comment'|trans({}, 'frontend-testimonials')}}</button>
+        <div class="container">
+            <div class="row" id="testimonials_list_id">
+                <div class="col-md-17">
+                    {% if pagination.getNbResults() %}
+                        <ul class="testimonial-list">
+                            {% for testimonial in pagination.getCurrentPageResults() %}
+                                <li>
+                                    <span class="testimonial-icon"></span>{{ testimonial['comment']|raw }}
+                                    <h5>{% if testimonial['user_name'] %}{{testimonial['user_name']}}, {% endif%}{{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [testimonial['created_at'], container]) }}</h5>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        {{ 'No records found.'|trans({}, 'frontend-testimonials') }}
+                    {% endif %}
+                    <div class="pagination-centered">
+                        {{ include('FaFrontendBundle:Default:googlePager.html.twig', {'pagination': pagination, 'addToEndPage': 0, 'seoPager': false}) }}
+                    </div>
                </div>
-           </div>
+               <div class="col-md-7">
+                   <div class="send-comment">
+                       <button class="primary-btn-2 button expand" onclick="return addTestimonial();">{{'Send us your comment'|trans({}, 'frontend-testimonials')}}</button>
+                   </div>
+               </div>
+            </div>
         </div>
     </div>
     <div id="addTestimonialModal" class="modal custom-modal small"></div>

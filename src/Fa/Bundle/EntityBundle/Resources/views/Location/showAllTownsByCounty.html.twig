@@ -9,42 +9,87 @@
 {% endblock %}
 
 {% block body -%}
-		{# check county if belongs to greater London will get London areas those having atleast one advert  #}
-		{% if countyId == constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_GREATER_LONDON_ID') %}
-            {% set towns = locationRepository.getTownByCounty(countyId, container) %}
-        {% else %}
-        	{% set towns = locationRepository.findBy({'parent': countyId}, {'name': 'ASC'}) %}
-        {% endif %}
-        {% set townIds = {} %}
-        {% set townLocalityArray = {} %}
-        {% if towns|length %}
-            {% for town in towns %}
-                {% set townLvls = '' %}
-                {% set townLvls = town.getLvl() %}
-                {% if(townLvls==2) %}
-                    {% set townIds = townIds|merge({0 : town.getId()}) %}
-                {% endif %}
-                {% set townLocalityArray = townLocalityArray|merge({0 : {'name': town.getName(), 'url': town.getUrl()}}) %}
-            {% endfor %}
-            {% set localities = localityRepository.getLocalitiesArrayByTwonIds(townIds) %}
-            {% for locality in localities %}
-                {% set townLocalityArray = townLocalityArray|merge({0 : {'name': locality.getName(), 'url': locality.getUrl()}}) %}
-            {% endfor %}
-            {% set townLocalityArray = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'msort', [townLocalityArray, 'name']) %}
-        {% endif %}
-        <h1 class="simple-heading location-heading">{{'Choose your location'|trans({}, 'frontend-location')}}</h1>
-        
-        {% if countyInfo|length %}
-        <div class="choose-location counties">
+    <style>
+        .location-heading {
+            margin: 30px 0;
+        }
+        .counties {
+            background: #fff;
+        }
+        .choose-location {
+            padding: 34px 0;
+        }
+        .link-list {
+            margin: 0;
+            list-style: none;
+        }
+        .link-list a {
+            font-size: 14px;
+            color: #4a4a4a;
+            display: block;
+            margin: 4px 0;
+        }
+        .choose-location h3 {
+            margin: 28px 0 24px;
+        }
+        @media (max-width: 640px) {
+            .mobile-col{
+                width: 50% !important;
+            }
+        }
+    </style>
+
+    {# check county if belongs to greater London will get London areas those having atleast one advert  #}
+    {% if countyId == constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_GREATER_LONDON_ID') %}
+        {% set towns = locationRepository.getTownByCounty(countyId, container) %}
+    {% else %}
+        {% set towns = locationRepository.findBy({'parent': countyId}, {'name': 'ASC'}) %}
+    {% endif %}
+    {% set townIds = {} %}
+    {% set townLocalityArray = {} %}
+    {% if towns|length %}
+        {% for town in towns %}
+            {% set townLvls = '' %}
+            {% set townLvls = town.getLvl() %}
+            {% if(townLvls==2) %}
+                {% set townIds = townIds|merge({0 : town.getId()}) %}
+            {% endif %}
+            {% set townLocalityArray = townLocalityArray|merge({0 : {'name': town.getName(), 'url': town.getUrl()}}) %}
+        {% endfor %}
+        {% set localities = localityRepository.getLocalitiesArrayByTwonIds(townIds) %}
+        {% for locality in localities %}
+            {% set townLocalityArray = townLocalityArray|merge({0 : {'name': locality.getName(), 'url': locality.getUrl()}}) %}
+        {% endfor %}
+        {% set townLocalityArray = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'msort', [townLocalityArray, 'name']) %}
+    {% endif %}
+    <div class="homepage-row pad-none">
+        <div class="container">
             <div class="row">
-                <div class="columns">
-                {% set locationHomePageUrl = container.get('fa_ad.manager.ad_routing').getLocationHomePageUrl(countyInfo['slug']) %}
-                {% set locationLink = '<a href="'~path('show_all_locations')~'">'~'Locations'|trans({}, 'frontend-location')~'</a>' %}
-                {{ 'Select your local area below or view all ads from %county_link% or go to %locations_link%'|trans({'%county_link%': '<a href="'~locationHomePageUrl~'">'~countyInfo['county']~'</a>', '%locations_link%': locationLink}, 'frontend-location')|raw }} 
+                <div class="col">
+                    <h1 class="text-center simple-heading location-heading">{{'Choose your location'|trans({}, 'frontend-location')}}</h1>
                 </div>
             </div>
-               {{ include('FaEntityBundle:Location:renderLocations.html.twig', {'locations': townLocalityArray, 'blockName': 'Towns in %county_name%'|trans({'%county_name%': countyInfo['county']}, 'frontend-location')}) }}
         </div>
-        {% endif %}
+    </div>
+    <div class="homepage-row white-bg pad-none">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    {% if countyInfo|length %}
+                        <div class="choose-location counties">
+                            <div class="row">
+                                <div class="columns">
+                                {% set locationHomePageUrl = container.get('fa_ad.manager.ad_routing').getLocationHomePageUrl(countyInfo['slug']) %}
+                                {% set locationLink = '<a href="'~path('show_all_locations')~'">'~'Locations'|trans({}, 'frontend-location')~'</a>' %}
+                                {{ 'Select your local area below or view all ads from %county_link% or go to %locations_link%'|trans({'%county_link%': '<a href="'~locationHomePageUrl~'">'~countyInfo['county']~'</a>', '%locations_link%': locationLink}, 'frontend-location')|raw }}
+                                </div>
+                            </div>
+                               {{ include('FaEntityBundle:Location:renderLocations.html.twig', {'locations': townLocalityArray, 'blockName': 'Towns in %county_name%'|trans({'%county_name%': countyInfo['county']}, 'frontend-location')}) }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
     
 {% endblock %}
