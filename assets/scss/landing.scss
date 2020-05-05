@@ -57,6 +57,10 @@
 }
 .landing-circles { margin:auto !important; width: fit-content !important; }
 .landing-circles li.active { border-radius:4px; }
+.pets_choice {
+    background-size: 152px 153px !important;
+}
+
 /* Animals Images */
 .pets-dogs { background: url('/Frontend/images/animals/Ic-btn-Dogs.png') no-repeat !important; }
 .pets-cats { background: url('/Frontend/images/animals/Ic-btn-Cats.png') no-repeat !important; }
@@ -401,9 +405,7 @@ cursor: pointer;
     float: left;
     margin: 0 26px 19px 0;
 }
-.pets_choice {
-    background-size: 152px 153px !important;
-}
+
 
 @media (min-width: 320px) and (max-width: 385px) {
     .landing-pet-circles a {
