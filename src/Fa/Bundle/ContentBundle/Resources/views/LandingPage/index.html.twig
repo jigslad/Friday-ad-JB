@@ -525,26 +525,27 @@
                                             {{'Popular shops'|trans({}, 'frontend-landing-page')}}
                                         {% endif %}
                                     </h3>
-                                    <div class="owl-carousel fa-slider" id="popular_shops_slider" data-equalizer>
+                                    <div class="owl-carousel owl-theme fa-slider" id="popular_shops_slider" data-equalizer>
                                         {% set userRepository = fetch_repository('FaUserBundle:User') %}
                                         {% for popularShop in popularShops %}
                                             {% set adUserId = popularShop['id'] %}
                                             {% set shopName = popularShop['shop_name'] %}
                                             {% set profilePageUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(adUserId) %}
                                             <div class="item" data-equalizer-watch>
-                                                <a class="tricky-link" href="{{ profilePageUrl }}">{{ shopName }}</a>
                                                 {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), adUserId, true, true]) %}
                                                 {% set userName = userRepository.getUserProfileName(adUserId, container)~' - Friday-Ad' %}
-                                                <div class="list-img">
-                                                    {% if userLogo %}
-                                                        <img class="lazyOwl" data-src="{{ userLogo }}" alt="{{ userName }}" />
-                                                    {% else %}
-                                                        <img class="lazyOwl" data-src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ userName }}" />
-                                                    {% endif %}
+                                                <div class="card custom-card">
+                                                    <div style="padding:20px;" class="border-botttom">
+                                                        {% if userLogo %}
+                                                            <img class="card-img-top" data-src="{{ userLogo }}" alt="{{ userName }}" />
+                                                        {% else %}
+                                                            <img class="card-img-top" data-src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ userName }}" />
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="card-body pt0">
+                                                        <h3 class="card-title s-h3"><a class="tricky-link" href="{{ profilePageUrl }}">{{ shopName }}</a></h3>
+                                                    </div>
                                                 </div>
-                                                <h3>
-                                                   {{ shopName }}
-                                                </h3>
                                             </div>
                                         {% endfor %}
                                     </div>
