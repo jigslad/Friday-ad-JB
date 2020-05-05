@@ -31,7 +31,7 @@
     font-weight: normal;
     font-style: normal;
 }
-body, html { font-family: 'PoppinsRegular' !important }
+body, html, input, textarea, select { font-family: 'PoppinsRegular' !important }
 a { color: #82C249; }
 a:hover, a:focus:hover, a:focus { color: #82C249 !important; }
 .ad-edit a:hover.xs-btn-2, .ad-edit a:focus.xs-btn-2, .ad-remove a:hover.xs-btn-2, .ad-remove a:focus.xs-btn-2 { color: #a4a4a4 !important; }
@@ -55,10 +55,29 @@ h5 {color: #212527; font-family: "PoppinsSemiBold";font-size: 14px; line-height:
 .near-location, .section-head, .accordion dd>a.section-head, .section-head, .accordion dd>div.section-head, .manage-price, 
 .finance-btn, .no-photo-heading, .private-business-modal h2, .detail-thumb-img .img-placeholder span, 
 .total-credits-remaining, .adult-parallax h1 span  {
-	font-family: 'Poppins' !important;
+	font-family: 'PoppinsRegular' !important;
 	font-weight: 400 !important;
 }
-button, .button { font-family: "Poppins" !important; }
+button, .button { font-family: "PoppinsSemiBold" !important; border-radius: 4px !important; }
+.primary-btn-1, a:hover.primary-btn-1, a:focus.primary-btn-1, .primary-btn-1:focus, .primary-btn-1:hover
+{ 
+	font-family: "PoppinsSemiBold" !important; border-radius: 4px !important;text-align:center; height:60px !important; padding:0px !important;font-size:18px !important; line-height:20px !important; 
+}
+.secondary-btn-1, .secondary-btn-2, .secondary-btn-3, .secondary-btn-4,
+.primary-btn-2, a:hover.primary-btn-2, a:focus.primary-btn-2, .primary-btn-2:focus, .primary-btn-2:hover
+a:hover.secondary-btn-1, a:hover.secondary-btn-2, a:hover.secondary-btn-3, a:hover.secondary-btn-4,
+a:focus.secondary-btn-1, a:focus.secondary-btn-2, a:focus.secondary-btn-3, a:focus.secondary-btn-4,
+.secondary-btn-1:focus, .secondary-btn-1:hover, .secondary-btn-2:focus, .secondary-btn-2:hover,
+.secondary-btn-3:focus, .secondary-btn-3:hover, .secondary-btn-4:focus, .secondary-btn-4:hover,
+.footer-newsletter-btn, .footer-newsletter-btn:hover, .footer-newsletter-btn:focus
+{ 
+    font-family: "PoppinsSemiBold" !important; border-radius: 4px !important;text-align:center; height:40px !important; padding:9px 16px !important; font-size:16px !important; line-height:18px !important;
+}
+.xs-blue-btn, .xs-btn-1, .xs-black-btn 
+{
+    font-family: "PoppinsSemiBold" !important; border-radius: 4px !important;text-align:center; height:30px !important; padding:5px 20px !important; font-size:14px !important; line-height:16px !important; 
+}
+.reply-msg-heading .report, .reply-msg-heading .mark-sold, .paypal-box, .credit-cards-box { border-radius: 4px !important; }
 
 .simple-footer .fad-logo span { background: url('/bundles/fafrontend/images/FAD-register.svg') no-repeat !important; }
 footer .fad-logo span { background: url('/bundles/fafrontend/images/Fad-footer.svg') no-repeat !important; }
@@ -73,33 +92,19 @@ footer .fad-logo span { background: url('/bundles/fafrontend/images/Fad-footer.s
     background-size: auto !important;
 }
 
-button, .button {
-	font-weight: 600 !important;
-	border-radius: 4px !important;
-}
-
 a:hover.button, a:focus.button,a:hover.secondary-btn-1, a:focus.secondary-btn-1,a:hover.primary-btn-1, a:focus.primary-btn-1 {
-	color: #FFFFFF !important; font-weight:600px !important;  
+	color: #FFFFFF !important;   
 }
-a:hover.secondary-btn-1, a:focus.secondary-btn-1 {
-	font-size: 16px  !important; 
-}
-a:hover.primary-btn-1, a:focus.primary-btn-1 { font-size: 18px !important; line-height: 20px !important; }
-
 .secondary-btn-1, .footer-newsletter-btn, .xs-btn-1{
 	background: linear-gradient(135deg, #A8DC28 0%, #79D378 100%) !important;
 	border: 1px solid #91D851 !important;
 	
-}
-.secondary-btn-1, .footer-newsletter-btn {
-	line-height:22px !important;
 }
 .secondary-btn-1:hover, .secondary-btn-1:focus, .footer-newsletter-btn:hover, .footer-newsletter-btn:focus,
 .xs-btn-1:hover, .xs-btn-1:focus {
 	background: linear-gradient(135deg, #85B021 0%, #61A85F 100%) !important;
 	border: 1px solid #85B021 !important;
 }
-
 .primary-btn-1, .primary-btn-2, .primary-btn-1.not-hover, .xs-blue-btn {
 	background: linear-gradient(135deg, #EE316F 0%, #FE8A7A 100%) !important;
 	border: 0px solid transparent !important;
@@ -108,22 +113,18 @@ a:hover.primary-btn-1, a:focus.primary-btn-1 { font-size: 18px !important; line-
 	background: linear-gradient(135deg, #BE2858 0%, #CA6D61 100%) !important;
 	border: 0px solid transparent !important;
 }
-
 #home-search .search-btn button, .notify-me.opened button, .site-search .search-icon  {
     border-radius: 0 4px 4px 0 !important;
 }
-
 .top-bar-section li:not(.has-form).place-item-btn a {
     background: linear-gradient(135deg, #EE316F 0%, #FE8A7A 100%) !important;
     border: transparent !important;
 }
-
 .top-bar-section li:not(.has-form).place-item-btn a:hover, .top-bar-section li:not(.has-form).place-item-btn a:focus {
 	background: linear-gradient(135deg, #BE2858 0%, #CA6D61 100%) !important;
 	border: transparent !important;
 	color: #FFFFFF !important;
 }
-
 .budget-go-btn {
     background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' x='0' y='0' width='40' height='40' viewBox='-459 261 40 40' xml:space='preserve'%3e%3cstyle type='text/css'%3e .st0%7bfill:none;stroke:%23FFFFFF;%7d .st1%7bfill:none;stroke:%23FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;%7d .st2%7bfill:none;stroke:%23FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;%7d %3c/style%3e%3ctitle%3ebutton filters%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cg transform='translate(-362.000000, -910.000000)'%3e%3cg transform='translate(182.000000, 627.000000)'%3e%3cg transform='translate(1.000000, 243.000000)'%3e%3cg transform='translate(179.000000, 40.000000)'%3e%3cpath class='st0' d='M-457 261h36c1.1 0 2 0.9 2 2v36c0 1.1-0.9 2-2 2h-36c-1.1 0-2-0.9-2-2v-36C-459 261.9-458.1 261-457 261z'/%3e%3cg transform='translate(15.000000, 16.000000)'%3e%3cg transform='translate(8.000000, 0.000000)'%3e%3cpath class='st1' d='M-459 261l4 5 -4 5'/%3e%3c/g%3e%3cpath class='st2' d='M-459 261l4 5 -4 5'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e") no-repeat center center, linear-gradient(135deg, #A8DC28 0%,#79D378 100%);
     background-color: transparent !important;
@@ -138,8 +139,6 @@ a:hover.primary-btn-1, a:focus.primary-btn-1 { font-size: 18px !important; line-
 
 #eighteenPlusWarnningModel .primary-btn-2 { background:linear-gradient(135deg, #A75BD8 0%, #C60A84 100%) !important;border: 0px solid transparent !important; }
 #eighteenPlusWarnningModel .primary-btn-2:hover { background:linear-gradient(135deg, #8645AA 0%, #9D086A 100%) !important; }
-.secondary-btn-1, .secondary-btn-2, .secondary-btn-3, .secondary-btn-4  { padding:8px 10px 8px 10px !important; }
-.secondary-btn-2, .secondary-btn-3  { height: 40px !important; }
 .interested-item a.button:hover { color: #82C249 !important; }
 .paypal-box { background-color: transparent !important;border: solid 1px #CBD5D9 !important; }
 .ui-selectmenu-button { border-radius: 4px !important; }
@@ -291,10 +290,7 @@ button.signup-fb-btn.expand {
 .reveal-modal .close-reveal-modal, dialog .close-reveal-modal {
     background: url('/bundles/fafrontend/images/cross-new.svg') no-repeat center !important;
 }
-.secondary-btn-4, .secondary-btn-4:focus, .secondary-btn-4:hover {
-    height: 40px !important;
-    padding: 8px !important;
-}
+
 .payment-card-option-block li:last-child {
     margin-bottom: 20px !important;
 }
@@ -307,8 +303,8 @@ button.signup-fb-btn.expand {
 }
 .individual-upsell-modal-content { padding-top:20px !important}
 
-.paa-back-arrow-pkg, .paa-back-arrow { color: #82C149 !important; } 
-.signup-fb-btn { font-family: 'Poppins' !important; }
+.paa-back-arrow-pkg, .paa-back-arrow { color: #82C249 !important; } 
+.signup-fb-btn { font-family: 'PoppinsRegular' !important; }
 .top-bar-section .has-dropdown > a::after{ right: -10px !important; }
 .select2-drop, .ui-autocomplete {  margin-top: 0px !important; }
 .choice-display-flex { display:inline-flex !important; }
