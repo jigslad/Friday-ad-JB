@@ -63,7 +63,7 @@
         {% endif %}
         {% set landingPageImages = fetch_repository('FaContentBundle:LandingPageInfo').getLandingPageImagesBySecton(landingPage.id, fetch_container_instance()) %}
 
-            <div class="wp-block-cover-image has-background-dim landing-header {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}adult-parallax{% endif %}" >
+            <div class="wp-block-cover-image landing-page-bg has-background-dim landing-header {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}adult-parallax{% endif %}" >
                 <div class="container">
                     <div class="row">
                         <div class="col landing-header-content">
@@ -88,6 +88,11 @@
                             {% endif %}
                         </div>
                         {% set bannerimageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getOtherImageUrl', [container, 'landingpage', landingPage.getFileName()]) %}
+                        <style>
+                            .landing-page-bg{
+                                background-image: url("{{ bannerimageUrl }}");
+                            }
+                        </style>
                         <div class="parallax-window" data-speed="0.6" data-parallax="scroll" data-image-src="{{ bannerimageUrl }}"></div>
                         <div class="overlay"></div>
                     </div>
