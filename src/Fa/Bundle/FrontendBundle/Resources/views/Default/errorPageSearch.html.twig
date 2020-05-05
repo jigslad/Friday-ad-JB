@@ -3,7 +3,9 @@
     	<div id="home-search" class="col-sm-18 col-md-18 col-lg-14 home-search m-auto">
                         <div class="input-group mb-3">
                             <div class="input-group-prepend home-category-list">
-                               {{ form_widget(attribute(form, 'item__category_id'), {'attr': {'class':'find-all select-ctrl' }}) }}
+                                <div class="grey-select">
+                                    {{ form_widget(attribute(form, 'item__category_id'), {'attr': {'class':'find-all select-control'}}) }}
+                                </div>
                             </div>
                             {{ form_widget(form.keywords, {'attr': {'class': 'white-field form-control', 'placeholder':'Looking for...'|trans({}, 'frontend-homepage') }}) }}
                             <div style="position: relative;"><a href="javascript:void(0);" rel="nofollow" id="fa_top_search_keywords_close" class="ui-autocomplete-close select2-search-choice-close">Close</a></div>
