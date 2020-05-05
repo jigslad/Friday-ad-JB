@@ -12,8 +12,11 @@
 	padding: 10px 0px 10px 15px;
 }
 .recommended-div.listing .recommended-addetail-div .list-title {
-	margin-top: 10px !important;
-	margin-bottom: 5px !important;
+	font-size: 14px;
+	line-height: 21px;
+	margin-top: 0px !important;
+	max-height: 35px !important;
+	margin-bottom: 0px !important;
 }
 .recommended-div.listing .item.recommended-addetail-div {
 	border: 0px !important;
@@ -27,9 +30,12 @@
 	font-weight: 400 !important;
 }
 .recommended-div.listing .recommended-addetail-div .recommendedtxt {
-	position: absolute !important;
-	right: 0 !important;
-	top: -2px !important;
+	position: relative !important;
+	left: 0;
+	top: 0px !important;
+	text-align: left !important;
+	margin-bottom: 10px;
+	margin-top: 2px;
 }
 .sponsored-ad-icon {
 	display: inline-block;
@@ -46,9 +52,9 @@
 	}
 	.recommended-div.listing .recommended-addetail-div .media {
 	    padding: 0px 40px !important;
-	}
+	}	
 	.recommended-div.listing .recommended-addetail-div .list-title {
-	    margin-top: 18px !important;
+	    font-size: 13px; line-height: 16px; margin-top: 18px !important;
 	    max-height: 35px !important;
 	    margin-bottom: 0px !important;
 	}
@@ -73,6 +79,8 @@
 	.recommended-div.listing .recommended-addetail-div .list-img {
 	    padding: 0px;
 	    height: 85px !important;
+            margin: 0 auto;
+	    border: 0px !important;
 	}
 	.recommended-div.listing .recommended-addetail-div .recommendedtxt {
 	    top: 3px !important;

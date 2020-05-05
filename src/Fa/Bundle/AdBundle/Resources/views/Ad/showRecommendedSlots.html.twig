@@ -29,6 +29,11 @@
                     </div>
                     <div class="col-md-18 pad-none recom-r-col">
                         <div class="media-body">
+                        	{% if(recommendedSlot['show_sponsored_lbl']) %}
+                                <div class="recommendedtxt gray-text text-right">
+                                    Sponsored Ad<span class="sponsored-ad-icon"></span>
+                                </div>
+                            {% endif %}
                             <h3 class="list-title show-title-r-ad-det d-none d-md-block">
                                 {{ recommendedSlot['title']|length > 50 ? trim_text(recommendedSlot['title'], 50)|raw ~ '...': recommendedSlot['title'] }}
                             </h3>
@@ -38,11 +43,7 @@
                             {% if recommendedSlot['display_url'] !='' and recommendedSlotCnt==1 %}
                             	<h5 class="mt5 list-display-url d-none d-md-block">{{ recommendedSlot['display_url'] }}</h5>
                             {% endif %} 
-                            {% if(recommendedSlot['show_sponsored_lbl']) %}
-                                <div class="recommendedtxt gray-text text-right">
-                                    Sponsored Ad<span class="sponsored-ad-icon"></span>
-                                </div>
-                            {% endif %}
+                            
                             
                             <div class="outer-btn d-none d-md-block">
                             	{% if recommendedSlot['sub_title'] !='' and recommendedSlotCnt==1 %}
