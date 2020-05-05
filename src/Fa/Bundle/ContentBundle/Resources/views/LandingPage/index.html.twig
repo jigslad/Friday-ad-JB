@@ -113,7 +113,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col">
-                                    <h3 class="homepage-title">{{ 'Other vehicles'|trans({}, 'frontend-landing-page') }}</h3>
+                                    <div class="homepage-title">{{ 'Other vehicles'|trans({}, 'frontend-landing-page') }}</div>
                                     <div id="other-vehicles" class="row popular-items">
                                         {% for imageInfo in attribute(landingPageImages, motor_other_vehicles_id) %}
                                             {% set queryParams = searchParams %}
@@ -167,7 +167,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col">
-                                    <h3 class="homepage-title">{{ 'More in motors'|trans({}, 'frontend-landing-page') }}</h3>
+                                    <div class="homepage-title">{{ 'More in motors'|trans({}, 'frontend-landing-page') }}</div>
                                 </div>
                             </div>
                             <div class="row justify-content-center">
@@ -217,7 +217,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col">
-                                    <h3 class="homepage-title">{{ 'Discover...'|trans({}, 'frontend-landing-page') }}</h3>
+                                    <div class="homepage-title">{{ 'Discover...'|trans({}, 'frontend-landing-page') }}</div>
                                     <div id="discover-populars" class="row popular-items">
                                         {% for imageInfo in attribute(landingPageImages, property_discover_id) %}
                                             {% set queryParams = searchParams %}
@@ -284,9 +284,9 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col">
-                                    <h3 class="homepage-title">
+                                    <div class="homepage-title">
                                         {{'Featured employers'|trans({}, 'frontend-landing-page')}}
-                                    </h3>
+                                    </div>
                                     <div class="owl-carousel owl-theme fa-slider" id="featured_employers_slider" data-equalizer>
                                         {% set userRepository = fetch_repository('FaUserBundle:User') %}
                                         {% for featuredEmployer in featuredEmployers %}
@@ -306,7 +306,7 @@
                                                         {% endif %}
                                                     </div>
                                                     <div class="card-body pt0">
-                                                        <h3 class="card-title s-h3">{{ shopName }}</h3>
+                                                        <div class="card-title s-h3">{{ shopName }}</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -327,7 +327,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col">
-                                    <h3 class="homepage-title">{{ 'Explore...'|trans({}, 'frontend-landing-page') }}</h3>
+                                    <div class="homepage-title">{{ 'Explore...'|trans({}, 'frontend-landing-page') }}</div>
                                     <div id="explore-items" class="row popular-items">
                                         {% for imageInfo in attribute(landingPageImages, exloreId) %}
                                             {% set queryParams = searchParams %}
@@ -373,7 +373,7 @@
                 {% set petsCircleClass = fetch_repository('FaEntityBundle:Category').getLandingPagePetsCircleClassArray() %}
                 <div class="homepage-row">
                     <div>
-                        <h3 class="homepage-title">{{ 'Pets'|trans({}, 'frontend-landing-page') }}</h3>
+                        <div class="homepage-title">{{ 'Pets'|trans({}, 'frontend-landing-page') }}</div>
                     </div>
                     <div class="container">
                         <div class="row mt20 mb20">
@@ -401,7 +401,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col">
-                                    <h3 class="homepage-title">{{ 'Horses & equestion'|trans({}, 'frontend-landing-page') }}</h3>
+                                    <div class="homepage-title">{{ 'Horses & equestion'|trans({}, 'frontend-landing-page') }}</div>
                                     <div id="explore-items" class="row popular-items">
                                     {% for imageInfo in attribute(landingPageImages, animal_horses_and_euestion_id) %}
                                         {% set queryParams = searchParams %}
@@ -460,7 +460,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col">
-                                    <h3 class="homepage-title">{{ 'Livestock'|trans({}, 'frontend-landing-page') }}</h3>
+                                    <div class="homepage-title">{{ 'Livestock'|trans({}, 'frontend-landing-page') }}</div>
                                 </div>
                             </div>
                             <div class="row justify-content-center">
@@ -523,13 +523,13 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col">
-                                    <h3 class="homepage-title">
+                                    <div class="homepage-title">
                                         {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
                                             {{'Featured Business'|trans({}, 'frontend-landing-page')}}
                                         {% else %}
                                             {{'Popular shops'|trans({}, 'frontend-landing-page')}}
                                         {% endif %}
-                                    </h3>
+                                    </div>
                                     <div class="owl-carousel owl-theme fa-slider" id="popular_shops_slider" data-equalizer>
                                         {% set userRepository = fetch_repository('FaUserBundle:User') %}
                                         {% for popularShop in popularShops %}
@@ -549,9 +549,9 @@
                                                             {% endif %}
                                                         </div>
                                                         <div class="card-body pt0">
-                                                            <h3 class="card-title s-h3">
+                                                            <div class="card-title s-h3">
                                                                 {{ shopName }}
-                                                            </h3>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </a>
@@ -579,13 +579,13 @@
                     <div class="container">
                         <div class="row">
                             <div class="col">
-                                <h3 class="homepage-title">
+                                <div class="homepage-title">
                                     {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
                                         {{'Jobs of the week'|trans({}, 'frontend-landing-page')}}
                                     {% else %}
                                         {{'Latest ads'|trans({}, 'frontend-landing-page')}}
                                     {% endif %}
-                                </h3>
+                                </div>
                                 {{ include('FaContentBundle:LandingPage:latestAdsSlider.html.twig', {'divId': 'latest-item-slider'}) }}
                             </div>
                         </div>
@@ -630,7 +630,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col">
-                                <h3 class="homepage-title">{{'Most popular'|trans({}, 'frontend-landing-page')}}</h3>
+                                <div class="homepage-title">{{'Most popular'|trans({}, 'frontend-landing-page')}}</div>
                                 {{ include('FaContentBundle:LandingPage:mostPopularAdsSlider.html.twig', {'divId': 'most-popular-slider'}) }}
                             </div>
                         </div>
@@ -651,7 +651,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col">
-                                    <h3 class="homepage-title">{{ 'Other ways to shop...'|trans({}, 'frontend-landing-page') }}</h3>
+                                    <div class="homepage-title">{{ 'Other ways to shop...'|trans({}, 'frontend-landing-page') }}</div>
                                 </div>
                             </div>
                             <div class="row justify-content-center">
@@ -715,7 +715,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col list-location-box">
-                        <h3 class="homepage-title">{{ 'Popular searches'|trans({}, 'frontend-landing-page') }}</h3>
+                        <div class="homepage-title">{{ 'Popular searches'|trans({}, 'frontend-landing-page') }}</div>
                         {% set staticPageLocationSlug = 'uk' %}
                         {% if location_slug is defined and location_slug is not null %}
                             {% set staticPageLocationSlug = location_slug %}
@@ -767,9 +767,9 @@
                     <div class="row">
                         <div class="col list-location-box">
                             {% if location is defined and location is not null %}
-                                <h3 class="homepage-title">{{ 'Browse used cars in %location%'|trans({'%location%': (location_text)}, 'frontend-landing-page') }}</h3>
+                                <div class="homepage-title">{{ 'Browse used cars in %location%'|trans({'%location%': (location_text)}, 'frontend-landing-page') }}</div>
                             {% else %}
-                                <h3 class="homepage-title">{{ 'Browse used cars'|trans({}, 'frontend-landing-page') }}</h3>
+                                <div class="homepage-title">{{ 'Browse used cars'|trans({}, 'frontend-landing-page') }}</div>
                             {% endif %}
                             {% set totalChoices = topCarMakes|length %}
                             {% set totalColumns = 4 %}
@@ -847,9 +847,9 @@
                     <div class="row">
                         <div class="col list-location-box">
                             {% if location is defined and location is not null %}
-                                <h3 class="homepage-title">{{ 'Browse by category in %location%'|trans({'%location%': (location_text)}, 'frontend-landing-page') }}</h3>
+                                <div class="homepage-title">{{ 'Browse by category in %location%'|trans({'%location%': (location_text)}, 'frontend-landing-page') }}</div>
                             {% else %}
-                                <h3 class="homepage-title">{{ 'Browse by category'|trans({}, 'frontend-landing-page') }}</h3>
+                                <div class="homepage-title">{{ 'Browse by category'|trans({}, 'frontend-landing-page') }}</div>
                             {% endif %}
                             {% set columns = 4 %}
                             {% set ctr = 0 %}

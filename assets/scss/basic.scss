@@ -28,7 +28,7 @@ body, html { font-size: 14px; }
 body, html, input, textarea, select { font-family: 'Poppins-Regular'; }
 a { text-decoration: none;line-height: inherit; }
 a:hover, a:focus, .a-tag, .a-tag:hover, .a-tag:focus {  text-decoration: none; }
-h1, .s-h1 { font-size: 36px;line-height: 46px;font-family: 'Poppins-Medium'; }
+h1, .s-h1, .homepage-title, .homepage-title-small { font-size: 36px;line-height: 46px;font-family: 'Poppins-Medium'; }
 h2, .s-h2 { font-size: 20px;line-height: 27px;font-family: 'Poppins-Medium'; }
 h3, .s-h3 { font-size: 18px;line-height: 24px;font-family: 'Poppins-SemiBold'; }
 h4 { font-size: 16px;line-height: 21px;font-family: 'Poppins-SemiBold'; }
@@ -44,7 +44,8 @@ button:focus, a:focus { outline: 0px dotted; }
 
 label { font-weight: 700;line-height: 20px;margin-bottom: 10px; }
 
-.primary-btn-1, a:hover.primary-btn-1, a:focus.primary-btn-1, .primary-btn-1:focus, .primary-btn-1:hover
+.primary-btn-1, a:hover.primary-btn-1, a:focus.primary-btn-1, .primary-btn-1:focus, .primary-btn-1:hover,
+.top-bar-section li.place-item-btn a
 { 
 	font-family: "Poppins-SemiBold" !important; border-radius: 4px !important;text-align:center; height:60px !important; padding:0px !important;font-size:18px !important; line-height:20px !important; 
 }

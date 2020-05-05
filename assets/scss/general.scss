@@ -758,7 +758,6 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
    li.place-item-btn {
         background: linear-gradient(135deg, $primary-btn-l-color 0%, $primary-btn-r-color 100%) !important;
         a {
-            font-family: $font-family-secondary;
             color: $white;
         }
     }
