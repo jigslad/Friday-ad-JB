@@ -82,7 +82,7 @@
                                             {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(searchParams) %}
                                             <div class="item-count"><a href="{{ listurl }}">{{ 'See all %adCount% ads'|trans({'%adCount%' : (attribute(adCounts.a_parent_category_lvl_1_id_i, categoryId)|number_format)}, 'frontend-landing-page') }}</a></div>
                                         {% endif %}
-                                        <span class="landing-desc">{{ landingPage.description }}</span>
+                                        <span class="landing-desc d-none d-md-block">{{ landingPage.description }}</span>
                                     </div>
                                 </div>
                             {% endif %}
