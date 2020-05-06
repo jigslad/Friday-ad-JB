@@ -8,9 +8,9 @@
                     <h1 class="s-h1 mt30 mb30 text-center">{{'Log In'|trans({}, 'frontend-login')}}</h1>
                 </div>
             </div>
+            {{ include('FaCoreBundle::message.html.twig') }}
             <div class="row justify-content-center">
                 <div class="col-md-22 col-lg-16">
-                    {{ include('FaCoreBundle::message.html.twig') }}
                     {% if error %}
                         <div class="alert alert-box alert-danger" role="alert">
                             <span class="alert-icon">&nbsp;</span>
