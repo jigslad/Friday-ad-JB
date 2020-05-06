@@ -983,6 +983,7 @@ class CommonManager
      */
     public static function getUserLogoByUserId($container, $userId, $appendTime = false, $getUrlOnly = false, $userName = null)
     {
+        $path = null;
         if (!is_numeric($userId)) {
             $imagePath  = $container->get('kernel')->getRootDir().'/../web/uploads/tmp/'.$userId.'_org.jpg';
             if (is_file($imagePath)) {
