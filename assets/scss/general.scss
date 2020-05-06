@@ -748,7 +748,7 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
     color: $white;
     a {
         color: $common-bg-color;
-        font-family: $font-family-default;
+        font-family: $font-family-top-menu;
         &:hover {
             color: $secondary-color;
         }
