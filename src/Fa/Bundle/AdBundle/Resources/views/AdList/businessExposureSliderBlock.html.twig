@@ -61,18 +61,19 @@
                                         {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], businessExposureUserAd]) %}
                                     {% endif %}
                                     <div class="busad-item">
+                                    	<a href="{{ adUrl }}" class="tricky-link" style="width:auto !important;" onClick='javascript:visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");'></a>
                                         {% set gaEventLabel = businessUserDetail['user_name'] ~ ' - ' ~ adBusPosition %}
                                        
                                         {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, businessExposureUserAd, '300X225', 1) %}
                                         
                                         <div class="list-img {% if not imagePath %}similar-placeholder{% endif %}">
-                                            <a href="{{ adUrl }}" onClick='javascript:visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");'>
+                                            
                                         {% if imagePath %}
                                                 <img class="lazyOwl" src="{{ imagePath }}" alt="{{ imageAltString }}"/>
                                             {% else %}
                                                 <img class="lazyOwl" src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}"/>
                                             {% endif %}
-                                            </a>
+                                            
                                         </div>
                                         <div class="list-price">
                                             {% if attribute(businessExposureUserAd, constant(businessExposureUserAdsolrMapping ~ 'PRICE')) is defined %}
@@ -82,11 +83,10 @@
                                                 {% endif %}
                                             {% endif %}
                                         </div>
-                                        <a href="{{ adUrl }}" onClick='javascript:visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");'>
-                                            <h3 style="color:#313133">{% if attribute(businessExposureUserAd, constant(businessExposureUserAdsolrMapping ~ 'TITLE')) is defined %}
+                                        <h3 style="color:#313133">{% if attribute(businessExposureUserAd, constant(businessExposureUserAdsolrMapping ~ 'TITLE')) is defined %}
                                                {{trim_text(attribute(businessExposureUserAd, constant(businessExposureUserAdsolrMapping ~ 'TITLE')), 65)|raw}}
                                             {% endif %}
-                                        </h3></a>
+                                        </h3>
                                     </div>
                                     {% set adBusPosition = adBusPosition + 1 %}
                                 {% endfor %}
