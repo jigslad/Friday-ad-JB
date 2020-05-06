@@ -11,7 +11,7 @@
                         <div class="list-author-pub-date">by {{ externalSiteBlogDetail['author']|title }} - {{ externalSiteBlogDetail['publishdate']|date("d M, Y") }}</div>
                     </div>
                 </div>
-                <div class="text-center"><button class="xs-btn-1 button ga-ahpBlogLatest"><a href="{{ externalSiteBlogDetail['link'] }}">{{ externalSiteBlogDetail['buttonLabel'] }}</a></button></div>
+                <div class="text-center"><a href="{{ externalSiteBlogDetail['link'] }}" class="xs-btn-1 button ga-ahpBlogLatest">{{ externalSiteBlogDetail['buttonLabel'] }}</a></div>
             </div>
         </div>
     {% endfor %}
