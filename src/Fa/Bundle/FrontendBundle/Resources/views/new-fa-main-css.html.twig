@@ -25,7 +25,7 @@
   font-style: normal;
 }
 
-body, html, input, textarea, select { font-family: 'Poppins-Regular' !important }
+body, html, input, textarea, select { font-family: 'Poppins-Regular' !important;font-weight: normal !important; }
 a { color: #82C249; }
 a:hover, a:focus:hover, a:focus { color: #82C249 !important; }
 .ad-edit a:hover.xs-btn-2, .ad-edit a:focus.xs-btn-2, .ad-remove a:hover.xs-btn-2, .ad-remove a:focus.xs-btn-2 { color: #a4a4a4 !important; }
@@ -36,14 +36,14 @@ input { border-radius:4px !important; }
     color: #ACB0B7 !important;
     font-weight: 500 !important;
 }
-h1, .abt-other-profile h1, .homepage-title, .homepage-title-small {color: #212527; font-family: "Poppins-Medium"; font-size: 36px; line-height: 46px;}
-h2 {color: #212527; font-family: "Poppins-Medium";font-size: 20px; line-height: 27px;}
+h1, .abt-other-profile h1, .homepage-title, .homepage-title-small {font-weight: normal !important;color: #212527; font-family: "Poppins-Medium"; font-size: 36px; line-height: 46px;}
+h2 {color: #212527; font-family: "Poppins-Medium";font-size: 20px; line-height: 27px;font-weight: normal !important;}
 h3, .show-review-detail .reply-msg-heading h3, #shop-user-item-slider h3, .map-wrapper .listing h3, .my-msg-heading h3, 
-.manage-item-list h3, .featured-profile-list h3, .map-wrapper .listing h3, h3.homepage-title {color: #212527; font-family: "Poppins-SemiBold";font-size: 18px; line-height: 24px;}
-h4, .paa-help-text h4, .vif-rec-slider .slots-3 .rec-slider-info h4, .rec-slider-info h4 {color: #212527; font-family: "Poppins-SemiBold";font-size: 16px; line-height: 21px;}
-h5 {color: #212527; font-family: "Poppins-SemiBold";font-size: 14px; line-height: 21px;}
+.manage-item-list h3, .featured-profile-list h3, .map-wrapper .listing h3, h3.homepage-title {font-weight: normal !important;color: #212527; font-family: "Poppins-SemiBold";font-size: 18px; line-height: 24px;}
+h4, .paa-help-text h4, .vif-rec-slider .slots-3 .rec-slider-info h4, .rec-slider-info h4 {font-weight: normal !important;color: #212527; font-family: "Poppins-SemiBold";font-size: 16px; line-height: 21px;}
+h5 {font-weight: normal !important;color: #212527; font-family: "Poppins-SemiBold";font-size: 14px; line-height: 21px;}
 
-.top-bar-section li:not(.has-form).place-item-btn a, .find-label, .change-location, .pkg-subtitle, 
+.find-label, .change-location, .pkg-subtitle, 
 .list-price, .details-similar-item h2, .promo-code .show-code, .promo-code .show-code:hover, .promo-code .show-code:focus, 
 #home-search .location, , .small-slider .small-content b, .intro-text, .explore-price, 
 .near-location, .section-head, .accordion dd>a.section-head, .section-head, .accordion dd>div.section-head, .manage-price, 
@@ -52,10 +52,10 @@ h5 {color: #212527; font-family: "Poppins-SemiBold";font-size: 14px; line-height
 	font-family: 'Poppins-Regular' !important;
 	font-weight: 400 !important;
 }
-button, .button,.secondary-btn-1, .secondary-btn-2, .secondary-btn-3, .secondary-btn-4,
+button, .button, .secondary-btn-1, .secondary-btn-2, .secondary-btn-3, .secondary-btn-4,
 .primary-btn-1, .primary-btn-2, .primary-btn-3, .primary-btn-4,.footer-newsletter-btn
 { 
-  font-family: "Poppins-SemiBold" !important; border-radius: 4px !important; border-radius: 4px !important;text-align:center;  
+  font-family: "Poppins-SemiBold" !important; border-radius: 4px !important; text-align:center;  
 }
 .primary-btn-1, a:hover.primary-btn-1, a:focus.primary-btn-1, .primary-btn-1:focus, .primary-btn-1:hover,
 .primary-btn-2, a:hover.primary-btn-2, a:focus.primary-btn-2, .primary-btn-2:focus, .primary-btn-2:hover,
@@ -79,6 +79,10 @@ a:focus.secondary-btn-1, a:focus.secondary-btn-2, a:focus.secondary-btn-3, a:foc
     height:30px !important; padding:5px 20px !important; font-size:14px !important; line-height:16px !important; 
 }
 .reply-msg-heading .report, .reply-msg-heading .mark-sold, .paypal-box, .credit-cards-box { border-radius: 4px !important; }
+.top-bar-section li:not(.has-form).place-item-btn a { 
+	font-family: "Poppins-SemiBold" !important; text-align:center;height:60px !important; padding:15px 0px !important;font-size:18px !important; line-height:20px !important;
+    font-weight: normal !important;text-transform: capitalize !important;
+}
 
 .db-section .accordion dd>.content.address-book {
     padding: 24px 0 20px !important;
@@ -498,7 +502,6 @@ button.signup-fb-btn.expand {
 	}
 	.homepage-title, .homepage-title-small {
 	    font-size: 18px !important;
-	    font-weight: 600 !important;
 	    letter-spacing: 0 !important;
 	    line-height: 24px !important;
 	    margin: 0 0px 20px !important;

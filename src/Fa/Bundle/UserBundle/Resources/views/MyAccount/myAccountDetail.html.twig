@@ -16,13 +16,13 @@
                 	<div class="text-center mb20">
                         <a href="#" {% if not app.user.getFacebookId() %}onclick="javascript:fbLoginPopup('{{ facebookLoginUrl }}');"{% endif %} class="button special signup-fb-btn">
                             <span class="fb-icon"></span> 
-                            <span class="btn-text">{{ 'Connect with Facebook'|trans({}, 'frontend-user-account-detail') }}{% if app.user.getFacebookId() %}<span class="tickmark-icon right">&nbsp;</span>{% endif %}</span>
+                            <span class="btn-text">{{ 'Connect with Facebook'|trans({}, 'frontend-user-account-detail') }}{% if app.user.getFacebookId() %}{% endif %}</span><span class="tickmark-icon right">&nbsp;</span>
                         </a>
                     </div>
                     <div class="text-center mb20">
                         <a href="#" {% if not app.user.getGoogleId() %}onclick="javascript:googleLoginPopup('{{ googleLoginUrl }}');"{% endif %} class="button special signup-google-btn">
                             <span class="google-icon"></span> 
-                            <span class="btn-text">{{ 'Connected with Google'|trans({}, 'frontend-user-account-detail') }}{% if app.user.getGoogleId() %}<span class="tickmark-icon right">&nbsp;</span>{% endif %}</span>
+                            <span class="btn-text">{{ 'Connected with Google'|trans({}, 'frontend-user-account-detail') }}{% if app.user.getGoogleId() %}{% endif %}</span><span class="tickmark-icon right">&nbsp;</span>
                         </a>
                     </div>
                 </div>
