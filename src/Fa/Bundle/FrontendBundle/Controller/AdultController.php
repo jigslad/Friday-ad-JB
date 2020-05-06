@@ -57,6 +57,14 @@ class AdultController extends ThirdPartyLoginController
             $cookieLocationDetails = json_decode($request->cookies->get('location'), true);
         }
         
+        if (isset($cookieLocationDetails['location']) && $cookieLocationDetails['location']) {
+            $searchParams['item__location'] = $cookieLocationDetails['location'];
+            
+            $distance = CategoryRepository::OTHERS_DISTANCE;
+            
+            $searchParams['item__distance'] = $distance;
+        }
+        
         //get latest adult ads
         $latestAdultAds = array();
         $latestAdultAds = $this->getLatestAds($searchParams);

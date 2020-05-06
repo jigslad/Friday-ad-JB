@@ -4804,7 +4804,7 @@ class AdRepository extends EntityRepository
      */
     private function getRecentAdByCategory($category, $searchParams){
         $townId= $adId = null;
-        $townIds = $searchParams['search']['item__location'];
+        $townIds = $searchParams['item__location'];
         if($townIds) {
             $explodetownIds = explode(',',$townIds);
             $townId = $explodetownIds[0];
@@ -4819,14 +4819,14 @@ class AdRepository extends EntityRepository
         ->andWhere('(' . self::ALIAS . '.created_at <= ' . $dayBeforeDate . ' OR '. self::ALIAS . '.updated_at <= ' . $dayBeforeDate . ')');
         $query->andWhere('IDENTITY('.self::ALIAS.'.status) ='.BaseEntityRepository::AD_STATUS_LIVE_ID);
         $query->andWhere(self::ALIAS.'.is_blocked_ad=0');
-        
+
         if ($townId) {
             $location = $this->_em->getRepository('FaEntityBundle:Location')->find($townId); 
             if (!empty($location)) {
                 $query->leftJoin(self::ALIAS.'.ad_locations', AdLocationRepository::ALIAS);
                 $query->leftJoin(AdLocationRepository::ALIAS.'.location_town', LocationRepository::ALIAS);
                 $query->andWhere('IDENTITY('.AdLocationRepository::ALIAS.'.location_town) IS NOT NULL');
-                $query->andWhere(AdLocationRepository::ALIAS.'.location_town not in ('.$townId.')'); 
+                $query->andWhere(AdLocationRepository::ALIAS.'.location_town in ('.$townId.')'); 
             }
         }
         $query->orderBy(self::ALIAS.'.id', 'DESC');

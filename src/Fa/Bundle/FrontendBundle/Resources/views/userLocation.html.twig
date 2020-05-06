@@ -175,7 +175,8 @@
 		var topLocationArea = $.trim($('#fa_top_search_item__area').val());
         var topSearchKeywords   = $.trim($('#fa_top_search_keywords').val());
         var topSearchCategoryId = $('#fa_top_search_item__category_id').val();
-
+        alert(topSearchCategoryId);
+        
         if (searchLocation) {
             $.ajax({
                  type: "post",
