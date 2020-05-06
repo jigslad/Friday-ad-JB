@@ -40,6 +40,9 @@
         {% set showTiPopup = true %}
     {% endif %}
     
+    {% if not app.request.cookies.has('is_over_18') and currentRoute == 'fa_adult_homepage' %}
+    	{% set showAdultPopup = 1 %}
+    {% endif %}
     {% if not app.request.cookies.has('is_over_18') and searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
         {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(searchParams.item__category_id, false, fetch_container_instance()) %}
         {% set catCnt = 0 %}
@@ -309,7 +312,7 @@
         	{% set showAdultPages=1 %}
         {% endif %}
         
-        {% if showAdultPages==1 %}
+        {% if showAdultPages==1 and currentRoute not in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote', 11: 'fa_frontend_homepage'} %}
             {{ include('FaFrontendBundle:Adult:header.html.twig', {'status_code': status_code}) }}
         {% else %}
         	{{ include('FaFrontendBundle::header.html.twig', {'status_code': status_code}) }}
