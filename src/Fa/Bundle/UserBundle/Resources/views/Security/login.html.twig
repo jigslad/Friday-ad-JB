@@ -26,7 +26,10 @@
                     </div>
                     <div>
                     	<label>{{'Password'|trans({}, 'frontend-login')}}</label>
-                        <span class="float-right"><a href="{{ path('forgot_password') }}" data-toggle="modal" data-target="#forgotpasswordModal">{{'Forgotten password?'|trans({}, 'frontend-login')}}</a></span>
+                        <span class="float-right">
+                            <a href="#forgotPassword" onclick="javascript:forgotPassword();">{{'Forgotten password?'|trans({}, 'frontend-login')}}</a>
+                            <div id="forgotPasswordDiv"></div>
+                        </span>
                         <input placeholder="{{'Password'|trans({}, 'frontend-login')}}" class="form-control white-field" id="user_login_password" name="_password" type="password" value="" tabindex="2"/>
                     </div>
                     <div>
@@ -74,7 +77,6 @@
             </div>
         </div>        
     </section>
- <div id="forgotPasswordModal" class="modal custom-modal"></div>
 {% endblock %}
 
 {% block scriptbottom %}

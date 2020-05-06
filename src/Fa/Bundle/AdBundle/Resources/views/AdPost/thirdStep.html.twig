@@ -46,7 +46,8 @@
                                         <div class="paa-login-box">
                                             <div id="paa_password_field_div" class="relative paa-forgot-pwd">
                                                 {{ form_row(form.password, {'attr': {'tabindex':'2'}}) }}
-                                                <a href="{{ path('forgot_password') }}" data-reveal-id="forgotPasswordModal" data-reveal-ajax="true">{{'Forgot password?'|trans({}, 'frontend-paa-login')}}</a>
+                                                <a href="#forgotPassword" onclick="javascript:forgotPassword();">{{'Forgot password?'|trans({}, 'frontend-paa-login')}}</a>
+                                                <div id="forgotPasswordDiv"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -89,7 +90,6 @@
                             {{ form_end(form) }}
                         </div>
                     </div>
-                    <div id="forgotPasswordModal" class="modal custom-modal small" style="display:none"></div>
                 </div>
                 {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {'paaBlockSlug': 'paa-login-third-step'}) }}
             </div>

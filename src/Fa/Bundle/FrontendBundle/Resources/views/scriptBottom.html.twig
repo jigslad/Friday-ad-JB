@@ -303,5 +303,23 @@
     }
    
 //]]>
+function forgotPassword(){
+    $.ajax({
+        type: "GET",
+        url : '{{ path('forgot_password') }}',
+    })
+        .always(function(response) {
+            // unblockPage();
+        })
+        .done(function(response) {
+            if (response.length) {
+                $('#forgotPasswordDiv').html(response);
+                $('#forgotPasswordModal').modal();
+            }
+            else if (response.error) {
+                alert(response.error);
+            }
+        });
+}
 </script>
 {# <script src="//maps.googleapis.com/maps/api/js?v=3.exp&key={{container.getParameter('fa.googlemap.api.key')}}&sensor=true&libraries=adsense"></script> #}
