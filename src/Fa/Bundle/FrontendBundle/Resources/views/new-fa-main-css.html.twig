@@ -30,11 +30,11 @@ a { color: #82C249; }
 a:hover, a:focus:hover, a:focus { color: #82C249 !important; }
 .ad-edit a:hover.xs-btn-2, .ad-edit a:focus.xs-btn-2, .ad-remove a:hover.xs-btn-2, .ad-remove a:focus.xs-btn-2 { color: #a4a4a4 !important; }
 
-label { color: #ACB0B7 !important; }
+label { color: #ACB0B7 !important; font-family: "Poppins-SemiBold"; font-weight: normal !important;}
 input { border-radius:4px !important; }
 #manage-my-ads-list-only .tab-menu li a {
     color: #ACB0B7 !important;
-    font-weight: 500 !important;
+    font-weight: normal !important;
 }
 h1, .abt-other-profile h1, .homepage-title, .homepage-title-small {font-weight: normal !important;color: #212527; font-family: "Poppins-Medium"; font-size: 36px; line-height: 46px;}
 h2 {color: #212527; font-family: "Poppins-Medium";font-size: 20px; line-height: 27px;font-weight: normal !important;}
@@ -50,19 +50,19 @@ h5 {font-weight: normal !important;color: #212527; font-family: "Poppins-SemiBol
 .finance-btn, .no-photo-heading, .private-business-modal h2, .detail-thumb-img .img-placeholder span, 
 .total-credits-remaining, .adult-parallax h1 span  {
 	font-family: 'Poppins-Regular' !important;
-	font-weight: 400 !important;
+	font-weight: normal !important;
 }
 button, .button, .secondary-btn-1, .secondary-btn-2, .secondary-btn-3, .secondary-btn-4,
 .primary-btn-1, .primary-btn-2, .primary-btn-3, .primary-btn-4,.footer-newsletter-btn
 { 
-  font-family: "Poppins-SemiBold" !important; border-radius: 4px !important; text-align:center;  
+  font-family: "Poppins-SemiBold" !important; border-radius: 4px !important; text-align:center; font-weight: normal !important;  
 }
 .primary-btn-1, a:hover.primary-btn-1, a:focus.primary-btn-1, .primary-btn-1:focus, .primary-btn-1:hover,
 .primary-btn-2, a:hover.primary-btn-2, a:focus.primary-btn-2, .primary-btn-2:focus, .primary-btn-2:hover,
 .primary-btn-3, a:hover.primary-btn-3, a:focus.primary-btn-3, .primary-btn-3:focus, .primary-btn-3:hover,
 .primary-btn-4, a:hover.primary-btn-4, a:focus.primary-btn-4, .primary-btn-4:focus, .primary-btn-4:hover
 { 
-	height:60px !important; padding:15px 0px !important;font-size:18px !important; line-height:20px !important; 
+	height:60px !important; padding:15px 0px !important;font-size:18px !important; line-height:20px !important; font-weight: normal !important; 
 }
 .secondary-btn-1, .secondary-btn-2, .secondary-btn-3, .secondary-btn-4,
 .thin-btn, a:hover.thin-btn, a:focus.thin-btn, .thin-btn:focus, .thin-btn:hover
@@ -72,7 +72,7 @@ a:focus.secondary-btn-1, a:focus.secondary-btn-2, a:focus.secondary-btn-3, a:foc
 .secondary-btn-3:focus, .secondary-btn-3:hover, .secondary-btn-4:focus, .secondary-btn-4:hover,
 .footer-newsletter-btn, .footer-newsletter-btn:hover, .footer-newsletter-btn:focus
 { 
-    height:40px !important; padding:9px 16px !important; font-size:16px !important; line-height:18px !important;
+    height:40px !important; padding:9px 16px !important; font-size:16px !important; line-height:18px !important;font-weight: normal !important; 
 }
 .xs-blue-btn, .xs-btn-1, .xs-black-btn 
 {
@@ -80,7 +80,7 @@ a:focus.secondary-btn-1, a:focus.secondary-btn-2, a:focus.secondary-btn-3, a:foc
 }
 .reply-msg-heading .report, .reply-msg-heading .mark-sold, .paypal-box, .credit-cards-box { border-radius: 4px !important; }
 .top-bar-section li:not(.has-form).place-item-btn a { 
-	font-family: "Poppins-SemiBold" !important; text-align:center;height:60px !important; padding:15px 0px !important;font-size:18px !important; line-height:20px !important;
+	font-family: "Poppins-SemiBold" !important; text-align:center;height:60px !important; padding:18px 20px !important;font-size:18px !important; line-height:20px !important;
     font-weight: normal !important;text-transform: capitalize !important;
 }
 
@@ -330,11 +330,10 @@ button.signup-fb-btn.expand {
 .paypal-acc-btn {
 	display: contents !important;
 }
-.signup-google-btn .tickmark-icon {
-    position: absolute !important;
+.signup-google-btn .tickmark-icon, .signup-fb-btn .tickmark-icon {
+	position: absolute !important;
 	right: -30px !important;
 }
-
 @media only screen and (min-width: 760px) {
 	#package_purchase_form .equalizer-inner, #package_purchase_form .pkg-columns {
 	    display: grid !important;
@@ -345,6 +344,7 @@ button.signup-fb-btn.expand {
 //FB an Goggle button
 .button.signup-fb-btn {
 	background-color: #3B5998;
+	font-family: 'Poppins-SemiBold' !important;
 	color: #ffffff;
 }
 .signup-fb-btn:focus, .signup-fb-btn:hover {
@@ -365,7 +365,7 @@ button.signup-fb-btn.expand {
 	width: 100%;
 	text-align: center;
 	font-size: 18px;
-	font-weight: 600;
+	font-weight: normal;
 	letter-spacing: 0;
 	line-height: 20px;
 	padding: 17px 20px 22px 20px;
@@ -391,7 +391,7 @@ button.signup-fb-btn.expand {
 	position: relative;
 	top: -6px;
 	font-size: 18px;
-	font-weight: 600;
+	font-weight: normal !important;
 	letter-spacing: 0;
 	line-height: 20px;
 	padding: 0 10px;
@@ -658,11 +658,11 @@ button.signup-fb-btn.expand {
     .top-bar-section .accordion dd > a, .top-bar-section .accordion dd > a:hover, .top-bar-section .accordion dd.active > a {
         background: #4D5052 !important;
         font-size: 12px;
-        font-weight: 600 !important;
+        font-weight: normal !important;
     }
     .top-bar-section li:not(.has-form) a:not(.button) {
         font-size: 12px;
-        font-weight: 600 !important;
+        font-weight: normal !important;
     }
     .top-bar-section .login-menu li:not(.has-form) a:not(.button) {
         background: #4D5052 !important;
