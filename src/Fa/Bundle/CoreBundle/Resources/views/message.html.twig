@@ -1,31 +1,31 @@
 {% for flashMessage in app.session.flashbag.get('success') %}
-<div data-alert class="alert-box alert-success">
+<div data-alert class="alert-box success radius position-relative">
 	<span class="alert-icon">&nbsp;</span>
     {{ flashMessage|raw }}
-    <a data-dismiss="alert" class="close"></a>
+    <a data-dismiss="alert" class="close">&times;</a>
 </div>
 {% endfor %}
 
 {% for flashMessage in app.session.flashbag.get('info') %}
-<div data-alert class="alert alert-box alert-info">
+<div data-alert class="alert-box info radius position-relative">
 	<span class="alert-icon">&nbsp;</span>
     {{ flashMessage|raw }}
-    <a data-dismiss="alert" class="close"></a>
+    <a data-dismiss="alert" class="close">&times;</a>
 </div>
 {% endfor %}
 
 {% for flashMessage in app.session.flashbag.get('notice') %}
-<div data-alert class="alert alert-box alert-warning">
+<div data-alert class="alert-box warning radius position-relative">
 	<span class="alert-icon">&nbsp;</span>
     {{ flashMessage|raw }}
-    <a data-dismiss="alert" class="close"></a>
+    <a data-dismiss="alert" class="close">&times;</a>
 </div>
 {% endfor %}
 
 {% for flashMessage in app.session.flashbag.get('error') %}
-<div data-alert class="alert alert-box alert-light">
+<div data-alert class="alert-box alert radius position-relative">
 	<span class="alert-icon">&nbsp;</span>
     {{ flashMessage|raw }}
-    <a data-dismiss="alert" class="close"></a>
+    <a data-dismiss="alert" class="close">&times;</a>
 </div>
 {% endfor %}
