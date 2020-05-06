@@ -48,6 +48,7 @@ class AdultController extends ThirdPartyLoginController
     {
          // set location in cookie.
         $cookieValue = $this->setLocationInCookie($request);
+        $searchParams     = $request->get('searchParams');
         
         // get location from cookie
         if ($cookieValue) {
@@ -58,7 +59,7 @@ class AdultController extends ThirdPartyLoginController
         
         //get latest adult ads
         $latestAdultAds = array();
-        $latestAdultAds = $this->getLatestAds();
+        $latestAdultAds = $this->getLatestAds($searchParams);
         
         //get featured advertisers
         $featuredAdvertisers = array();
@@ -531,11 +532,11 @@ class AdultController extends ThirdPartyLoginController
     /**
      * @return array
      */
-    private function getLatestAds()
+    private function getLatestAds($searchParams)
     {
         $latestAdultAds = array();
         $categoryList = $this->getRepository('FaEntityBundle:Category')->getNestedLeafChildrenIdsByCategoryId(CategoryRepository::ADULT_ID);
-        $latestAdultAdsList = $this->getHistoryRepository('FaReportBundle:AdReportDaily')->getRecentAdByCategoryArray($categoryList);
+        $latestAdultAdsList = $this->getRepository('FaAdBundle:Ad')->getRecentAdByCategoryArray($categoryList,$searchParams);
         if(!empty($latestAdultAdsList)){
             foreach ($latestAdultAdsList as $latestAd){
                 $solrData = $this->getlatestAdSolrResultbyId($latestAd);

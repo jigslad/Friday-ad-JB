@@ -5112,4 +5112,62 @@ class AdRepository extends EntityRepository
         }
     }
     
+    /** getRecentAdByCategory
+     *  find one last created ad by category from history
+     * @param $category
+     * @return mixed
+     */
+    private function getRecentAdByCategory($category, $searchParams){
+        $townId= $adId = null;
+        $townIds = $searchParams['search']['item__location'];
+        if($townIds) {
+            $explodetownIds = explode(',',$townIds);
+            $townId = $explodetownIds[0];
+        }
+        
+        $dayBeforeDate = CommonManager::getTimeStampFromStartDate(date('Y-m-d', strtotime('-1 day')));
+        
+        $query = $this->createQueryBuilder(self::ALIAS)
+        ->select(self::ALIAS.'.id')
+        ->andWhere(self::ALIAS.'.category = (:catId)')
+        ->setParameter('catId', $category)
+        ->andWhere('(' . self::ALIAS . '.created_at <= ' . $dayBeforeDate . ' OR '. self::ALIAS . '.updated_at <= ' . $dayBeforeDate . ')');
+        $query->andWhere('IDENTITY('.self::ALIAS.'.status) ='.BaseEntityRepository::AD_STATUS_LIVE_ID);
+        $query->andWhere(self::ALIAS.'.is_blocked_ad=0');
+        
+        if ($townId) {
+            $location = $this->_em->getRepository('FaEntityBundle:Location')->find($townId); 
+            if (!empty($location)) {
+                $query->leftJoin(self::ALIAS.'.ad_locations', AdLocationRepository::ALIAS);
+                $query->leftJoin(AdLocationRepository::ALIAS.'.location_town', LocationRepository::ALIAS);
+                $query->andWhere('IDENTITY('.AdLocationRepository::ALIAS.'.location_town) IS NOT NULL');
+                $query->andWhere(AdLocationRepository::ALIAS.'.location_town not in ('.$townId.')'); 
+            }
+        }
+        $query->orderBy(self::ALIAS.'.id', 'DESC');
+        $adList = $query->getQuery()->getArrayResult();
+        shuffle($adList);
+        if (!empty($adList)) {
+            $adId = $adList[0]['id'];
+        }
+        return $adId;
+    }
+    
+    /** getRecentAdByCategoryArray
+     * find one last created ad by category list from history
+     * @param $categoryList
+     * @return array
+     */
+    public function getRecentAdByCategoryArray($categoryList, $searchParams){
+        
+        $recentAd  = array();
+        $recentAdByCatArr = null;
+        foreach ($categoryList as $category){
+            $recentAdByCatArr = $this->getRecentAdByCategory($category, $searchParams);
+            if($recentAdByCatArr!='') {
+                $recentAd[$category] = $recentAdByCatArr;
+            }
+        }
+        return $recentAd;
+    }
 }
