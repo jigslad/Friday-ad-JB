@@ -297,9 +297,7 @@
 {% endblock %}
 {% block stylesheet %}
 	<link rel="stylesheet" href="{{ asset('/build/css/addetail.css') }}">
-	{% if recommendedSlotArray is defined and recommendedSlotArray|length %}
-        <link rel="stylesheet" href="{{ asset('/build/css/addetail-recommended.css') }}">
-    {% endif %}
+    <link rel="stylesheet" href="{{ asset('/build/css/addetail-recommended.css') }}">
 {% endblock %}
 {% if promotePackages is defined and promotePackages|length %}
     {% set packageIdArray = {} %}
