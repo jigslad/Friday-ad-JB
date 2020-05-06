@@ -8,15 +8,19 @@
                     <h1 class="s-h1 mt30 mb30 text-center">{{'Log In'|trans({}, 'frontend-login')}}</h1>
                 </div>
             </div>
-			{{ include('FaCoreBundle::message.html.twig') }}           
-            {% if error %}
-                <div data-alert class="alert-box alert radius">
-                    <span class="alert-icon">&nbsp;</span>
-                    {{ error.message }}
-                    <a href="javascript:void(0)" class="close">&times;</a>
+            <div class="row justify-content-center">
+                <div class="col-md-22 col-lg-16">
+                    {{ include('FaCoreBundle::message.html.twig') }}
+                    {% if error %}
+                        <div class="alert alert-box alert-danger" role="alert">
+                            <span class="alert-icon">&nbsp;</span>
+                            {{ error.message }}
+                            <a data-dismiss="alert" class="close"></a>
+                        </div>
+                    {% endif %}
                 </div>
-            {% endif %}
-            
+            </div>
+
             <div class="row justify-content-center">
                 <div class="col-md-11 col-lg-8 login-left reg-process">
                 <form action="{{ path('login_check') }}" method="post">
@@ -35,7 +39,7 @@
                     <div>
                         <div class="white-check">
                         	<input type="checkbox" value="1" class="checkbox" name="show_password" id="user_login_show_password">
-                        	<label for="user_login_show_password"></label>{{'Show password'|trans({}, 'frontend-login')}}                                                                                    
+                        	<label for="user_login_show_password"></label>{{'Show password'|trans({}, 'frontend-login')}}
                         </div>
                     </div>
                     <div class="mt20">

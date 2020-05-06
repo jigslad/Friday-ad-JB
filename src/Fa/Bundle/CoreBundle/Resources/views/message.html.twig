@@ -1,31 +1,31 @@
 {% for flashMessage in app.session.flashbag.get('success') %}
-<div data-alert class="alert-box success radius position-relative">
+<div data-alert class="alert-box alert-success">
 	<span class="alert-icon">&nbsp;</span>
     {{ flashMessage|raw }}
-    <a href="javascript:void(0)" class="close">&times;</a>
+    <a data-dismiss="alert" class="close"></a>
 </div>
 {% endfor %}
 
 {% for flashMessage in app.session.flashbag.get('info') %}
-<div data-alert class="alert-box info radius position-relative">
+<div data-alert class="alert alert-box alert-info">
 	<span class="alert-icon">&nbsp;</span>
     {{ flashMessage|raw }}
-    <a href="javascript:void(0)" class="close">&times;</a>
+    <a data-dismiss="alert" class="close"></a>
 </div>
 {% endfor %}
 
 {% for flashMessage in app.session.flashbag.get('notice') %}
-<div data-alert class="alert-box warning radius position-relative">
+<div data-alert class="alert alert-box alert-warning">
 	<span class="alert-icon">&nbsp;</span>
     {{ flashMessage|raw }}
-    <a href="javascript:void(0)" class="close">&times;</a>
+    <a data-dismiss="alert" class="close"></a>
 </div>
 {% endfor %}
 
 {% for flashMessage in app.session.flashbag.get('error') %}
-<div data-alert class="alert-box alert radius position-relative">
+<div data-alert class="alert alert-box alert-light">
 	<span class="alert-icon">&nbsp;</span>
     {{ flashMessage|raw }}
-    <a href="javascript:void(0)" class="close">&times;</a>
+    <a data-dismiss="alert" class="close"></a>
 </div>
 {% endfor %}
