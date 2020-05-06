@@ -321,5 +321,10 @@ function forgotPassword(){
             }
         });
 }
+window.setTimeout(function() {
+    $(".alert-box.warning").fadeTo(500, 0).slideUp(500, function(){
+        $(this).remove();
+    });
+}, 2000);
 </script>
 {# <script src="//maps.googleapis.com/maps/api/js?v=3.exp&key={{container.getParameter('fa.googlemap.api.key')}}&sensor=true&libraries=adsense"></script> #}

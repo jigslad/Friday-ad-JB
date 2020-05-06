@@ -117,7 +117,7 @@
                 $('#createNewsletterBlockError').remove();
                 if (response.errorMessage.length) {
                     $("#fa_user_newsletter_email").addClass("error");
-                    $('<div data-alert="" class="alert-box warning radius outside-tricky" style="padding: 21px 48px !important;"><span class="alert-icon">&nbsp;</span>'+response.errorMessage+'</div>').insertAfter('.newsletter-search-box').delay(3000).fadeOut();
+                    $('<div data-alert="" class="alert-box warning radius outside-tricky position-relative" style="padding: 21px 48px !important;"><span class="alert-icon">&nbsp;</span>'+response.errorMessage+'</div>').insertAfter('.newsletter-search-box').delay(3000).fadeOut();
                 }
             }
         });
