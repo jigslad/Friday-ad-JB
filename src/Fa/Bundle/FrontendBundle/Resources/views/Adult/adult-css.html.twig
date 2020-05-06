@@ -834,7 +834,7 @@ footer a:hover{
 .blog-item .list-img img { max-width: 100%;max-height: 235px;height: 100%;width: 100%; }
 .blog-item .list-img img { position: relative;top: 50%;-webkit-transform: translateY(-50%);-o-transform: translateY(-50%);transform: translateY(-50%); }
 .blog-item .blog-cont { padding: 10px 15px;min-height: 94px; }
-.blog-item .list-title { color: #212527;font-size: 16px;line-height: 21px;font-weight: 600;max-height: 48px;overflow: hidden;margin-bottom: 10px; }
+.blog-item .list-title { color: #212527;font-size: 16px;line-height: 21px;font-weight: normal;max-height: 48px;overflow: hidden;margin-bottom: 10px; }
 .blog-item .list-author-pub-date { font-size: 14px;line-height: 22px;color: #9C1F9F;font-weight: normal; }
 .ga-ahpBlogLatest {
 	background:linear-gradient(135deg, #A75BD8 0%, #C60A84 100%) !important;
@@ -844,10 +844,13 @@ footer a:hover{
 	background: linear-gradient(135deg, #8645AA 0%, #9D086A 100%) !important;
 	border: 1px solid #9D086A !important;
 }
+.top-bar-section li:not(.has-form).place-item-btn a { 
+	font-family: "Poppins-SemiBold" !important; text-align:center;height:60px !important; padding:18px 20px !important;font-size:18px !important; line-height:20px !important;
+    font-weight: normal !important;text-transform: capitalize !important;
+}
+ a.mobpaabtn { font-family: "Poppins-SemiBold" !important; text-align:center;font-weight: normal !important;text-transform: capitalize !important; }
 .top-bar-section li:not(.has-form).place-item-btn a, a.mobpaabtn {
     background: linear-gradient(135deg, #A75BD8 0%, #C60A84 100%) !important;
-    font-weight: 600 !important;
-    text-transform: capitalize !important;
 }
 /* Popular Searches Homepage */
 .btn-transparent {
@@ -899,7 +902,7 @@ footer a:hover{
 .top-bar-section a.backtofad { color:#212527; }
 /* Adult Homepage */
 .browse-by-category {
-    color: #ACB0B7;font-family: Poppins;font-size: 14px;font-weight: 500;letter-spacing: 0;line-height: 21px;margin-bottom: 15px;
+    color: #ACB0B7;font-size: 14px;font-weight: normal !important;letter-spacing: 0;line-height: 21px;margin-bottom: 15px;
 } 
 .text-center {
     text-align: center !important;
@@ -945,6 +948,7 @@ footer a:hover{
 #more_options .radio-inline-flex label { line-height: 21px; color: #FFFFFF !important; font-size: 12px; letter-spacing: 0; font-weight: normal; }
 #s2id_fa_adult_home_page_search_item_adult__services_id .select2-search-choice-close {
   background: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding='UTF-8'?%3e%3csvg width='24px' height='24px' viewBox='0 0 24 24' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3c!-- Generator: Sketch 63.1 (92452) - https://sketch.com --%3e%3ctitle%3eIcon / 24 / Functional / Cross%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cg id='Icon-/-24-/-Functional-/-Cross' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3e%3cpolygon id='Shape' fill='%23ffffff' points='19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12'/%3e%3c/g%3e%3c/svg%3e") no-repeat !important;
+  right: 4px !important;top: 3px !important;background-size: 22px 24px !important;
 }
 
 #list_home_location_box .link-list {
@@ -993,6 +997,9 @@ footer a:hover{
 }
 .top-bar-section  .real-desktop li:last-child a::after {
 	content: "" !important;
+}
+.featured .featured-ribbon { 
+	background: url('/bundles/fafrontend/images/adult/featured-ribbon.png') no-repeat !important;
 }
 @media only screen and (min-width: 320px) and (max-width: 640px) {
     .adult-search { display: inline-block;width: 100% !important;}
