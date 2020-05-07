@@ -79,14 +79,27 @@ a:focus.secondary-btn-1, a:focus.secondary-btn-2, a:focus.secondary-btn-3, a:foc
 .primary-btn-3.thin-btn, a:hover.primary-btn-3.thin-btn, a:focus.primary-btn-3.thin-btn, .primary-btn-3.thin-btn:focus, .primary-btn-3.thin-btn:hover,
 .primary-btn-4.thin-btn, a:hover.primary-btn-4.thin-btn, a:focus.primary-btn-4.thin-btn, .primary-btn-4.thin-btn:focus, .primary-btn-4.thin-btn:hover
 { 
-    height:40px !important; padding:10px 10px !important; font-size:16px !important; line-height:21px !important;font-weight: normal !important; 
+    height:40px !important; padding:8px 10px !important; font-size:16px !important; line-height:21px !important;font-weight: normal !important; 
 }
-.xs-blue-btn, .xs-btn-1, .xs-black-btn, .secondary-btn-1.thin-btn, a:hover.secondary-btn-1.thin-btn, a:focus.secondary-btn-1.thin-btn, .secondary-btn-1.thin-btn:focus, .secondary-btn-1.thin-btn:hover,
+.xs-blue-btn, .xs-btn-1, .xs-black-btn,  .secondary-btn-1.thin-btn, a:hover.secondary-btn-1.thin-btn, a:focus.secondary-btn-1.thin-btn, .secondary-btn-1.thin-btn:focus, .secondary-btn-1.thin-btn:hover,
 .secondary-btn-2.thin-btn, a:hover.secondary-btn-2.thin-btn, a:focus.secondary-btn-2.thin-btn, .secondary-btn-2.thin-btn:focus, .secondary-btn-2.thin-btn:hover,
 .secondary-btn-3.thin-btn, a:hover.secondary-btn-3.thin-btn, a:focus.secondary-btn-3.thin-btn, .secondary-btn-3.thin-btn:focus, .secondary-btn-3.thin-btn:hover,
 .secondary-btn-4.thin-btn, a:hover.secondary-btn-4.thin-btn, a:focus.secondary-btn-4.thin-btn, .secondary-btn-4.thin-btn:focus, .secondary-btn-4.thin-btn:hover
 {
     height:30px !important; padding:5px 20px !important; font-size:14px !important; line-height:16px !important; 
+}
+.xs-black-btn, , .xs-black-large-btn {
+    background: transparent;
+    border: 1px solid #212527 !important;
+    color: #212527;
+    font-size: 14px;
+    line-height: 16px;
+    padding: 5px 20px 7px 20px;
+}
+.xs-black-btn:focus, .xs-black-btn:hover, .xs-black-large-btn:focus, .xs-black-large-btn:hover {
+    background: #212527;
+    border: 1px solid #212527;
+    color: #FFFFFF;
 }
 .reply-msg-heading .report, .reply-msg-heading .mark-sold, .paypal-box, .credit-cards-box { border-radius: 4px !important; }
 .top-bar-section ul { font-size:14px !important; }
@@ -159,7 +172,7 @@ a:hover.button, a:focus.button,a:hover.secondary-btn-1, a:focus.secondary-btn-1,
 .top-bar-section .has-dropdown a { padding-left:10px !important; }
 
 .search-pin { background: url("data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' x='0' y='0' width='21' height='25' viewBox='-469 268 21 25' xml:space='preserve'%3E%3Cstyle type='text/css'%3E .st0%7Bfill:%2391d851;%7D%0A%3C/style%3E%3Ctitle%3Esearch-pin%3C/title%3E%3Cdesc%3ECreated with Sketch.%3C/desc%3E%3Cpath class='st0' d='M-458.5 268c-5.5 0-10 4.3-10 9.6 0.1 7.2 10 15.4 10 15.4 -0.1 0 9.8-7.7 10-15.4C-448.5 272.3-453 268-458.5 268zM-458.5 281.3c-1.8 0-3.3-1.5-3.3-3.3s1.5-3.3 3.3-3.3 3.3 1.5 3.3 3.3S-456.7 281.3-458.5 281.3z'/%3E%3C/svg%3E") no-repeat !important; }
-
+.featured .featured-ribbon { background: url('/bundles/fafrontend/images/featured-ribbon-pink.svg') no-repeat !important; }
 .website-btn-1, .website-btn-1:hover, .website-btn-1:focus, .website-btn-1:active, .website-btn-1:visited {
     padding: 9px 10px 9px 10px !important;
     height: 40px !important;
@@ -181,10 +194,12 @@ ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {  text
 .paa-bdr-box input[type="text"] { margin-bottom: 15px !important; }
 
 /* Paa Step Numbers */
-.step-nav .step-num { float: left;width: 52px;height: 52px;margin-right: 13px;text-align: center;border: 3px solid #fff;border-radius: 50%;position: relative;padding: 10px 0px;text-indent: unset; }
+.step-nav .step-num { float: left;width: 52px;height: 52px;margin-right: 13px;text-align: center;border: 1px solid #fff;border-radius: 50%;position: relative;padding: 10px 0px;text-indent: unset; }
 .step-nav .step-1, .step-nav .step-2, .step-nav .step-3, .step-nav .step-4 { background: transparent !important; }
 .step-nav .step-on .step-1, .step-nav .step-on .step-2, .step-nav .step-on .step-3, .step-nav .step-on .step-2 { background: transparent !important; border: 3px solid #82C249;color: #82C249; }
 .step-nav .step-on .step-text { color: #ffffff; }
+.step-off {  opacity: .5 !important; }
+.step-text { width: 110px !important; }
 
 /* PAA second step */
 .big-wrapper { width: 470px !important; }
@@ -538,6 +553,42 @@ button.signup-fb-btn.expand {
 	    line-height: 22px !important;
 	    text-align: center !important;
 	}
+	.equalizer-inner, .pkg-columns {
+        height: auto !important;
+    }
+    .step-nav {
+	    margin: 0px !important;
+		text-align: center !important;
+		max-height: 55px !important;
+		padding: 7px 0px !important;
+	}
+	.step-nav li {
+		color: #ACB0B7 !important;
+		font-size: 16px !important;
+		letter-spacing: 0 !important;
+		line-height: 21px !important;
+		text-align: center !important;
+		font-family: "Poppins-SemiBold" !important;
+		margin: 0 !important;
+	}
+	.step-nav .step-num {
+		width: 40px !important;
+		height: 40px !important;
+		border: 1px solid #CBD5D9 !important;
+		padding: 7px 0px !important;
+		margin-left: 10px !important;
+		margin-right: 10px !important;
+	}
+	li.step-complete .step-num, li.step-complete .step-text {
+		opacity: 0.5 !important;
+	}
+	.step-nav .step-on .step-1, .step-nav .step-on .step-2, .step-nav .step-on .step-3, .step-nav .step-on .step-2 {
+	    background: transparent !important;
+	    border: 3px solid #91D851 !important;
+	    color: #91D851 !important;
+	}
+    	
+    
 }
 @media only screen and (min-width: 320px) and (max-width: 599px) {
     .myacc-details {
@@ -712,12 +763,6 @@ button.signup-fb-btn.expand {
         background: url('/bundles/fafrontend/images/menu-icon-on.svg') no-repeat !important;
     }
     .top-bar-section .accordion .accordion-navigation #cat-mob-menu li a { color:#ffffff !important; }
-    h1, .abt-other-profile h1 {
-		font-size: 24px !important;
-		line-height: 28px !important;
-		font-family: "Poppins-SemiBold" !important;
-		font-weight: normal !important;
-	}
 	.homepage-title, .homepage-title-small {
 		font-size: 18px !important;
 		line-height: 24px !important;
