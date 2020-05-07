@@ -25,16 +25,16 @@
                     </div>
                     <div class="medium-7 large-6 columns mobile-p-0 mt10">
                         <div class="form-control adult-radio-form">
-                            <span class="custom-checkbox radio-inline-flex">
-                                <input type="checkbox" id="fa_adult_home_page_search_independent_or_agency_id_0" class="independent-or-agency-cls" name="independent_or_agency_id" required="required" value="7317">                                
+                            <span class="custom-checkbox">
+                                <input type="checkbox" id="fa_adult_home_page_search_independent_or_agency_id_0" name="fa_adult_home_page_search[item_adult__independent_or_agency_id][]" required="required" value="7317">                                
                             </span>
                             <label for="fa_adult_home_page_search_independent_or_agency_id_0" class="required radio-label">Independent</label>
-                            <span class="custom-checkbox radio-inline-flex">
-                                <input type="checkbox" id="fa_adult_home_page_search_independent_or_agency_id_1" class="independent-or-agency-cls" name="independent_or_agency_id" required="required" value="7318">                                
+                            <span class="custom-checkbox">
+                                <input type="checkbox" id="fa_adult_home_page_search_independent_or_agency_id_1" name="fa_adult_home_page_search[item_adult__independent_or_agency_id][]" required="required" value="7318">                                
                             </span>
                             <label for="fa_adult_home_page_search_independent_or_agency_id_1" class="required radio-label">Agency</label>
                         </div>
-                        {{ form_widget(form.item_adult__independent_or_agency_id) }}
+                        {# { form_widget(form.item_adult__independent_or_agency_id) } #}
                     </div>
                     <div class="medium-7 large-7 columns mobile-p-0" style="display: inline-flex;">
                         {{ form_widget(attribute(form, 'item_adult__ethnicity_id'),{'attr':{ 'class': 'form-control select-control without-sel-box'  }}) }}

@@ -7,6 +7,7 @@ body button .button { font-family:'Poppins' !important; }
 a:hover, a:focus:hover, a:focus, .db-view-all, .alert-box a, .content.active a, .total-credits-remaining a {
     color: #9C1F9F !important;
 }
+.content.active .link-list a { color: #212527 !important; }
 .accordion .accordion-navigation li a:hover, .accordion .accordion-navigation li a:focus, .accordion .accordion-navigation li a:active, .accordion .accordion-navigation .search-type label:hover, .accordion .accordion-navigation .search-type label:focus, .accordion .accordion-navigation .search-type label:active {
     color: #9C1F9F !important;
 }
@@ -927,7 +928,12 @@ footer a:hover{
 .from-sec {
     padding: 10px 10px 10px 10px; color: #ffffff !important;
 }
-.adult-radio-form { display: flex; }
+.adult-radio-form { display: flex;margin: auto;width: fit-content; }
+
+.adult-radio-form .custom-checkbox, .adult-radio-form .custom-checkbox.checked {
+    width: 22px;height: 22px;margin: 0 8px 2px 0;
+}
+.adult-radio-form label { margin-right:10px; }
 #more_options .radio-inline-flex{ display: inline-flex;width: 100%; }
 #more_options .radio-inline-flex label { line-height: 21px; color: #FFFFFF !important; font-size: 12px; letter-spacing: 0; font-weight: normal; }
 #s2id_fa_adult_home_page_search_item_adult__services_id .select2-search-choice-close {
@@ -1418,7 +1424,7 @@ footer a:hover{
         width: 32px !important;
         height: 32px !important;
         background-size: cover !important;
-        background: url('/bundles/fafrontend/images/icons/main/adult-purple.svg') no-repeat !important;
+        background: url('/bundles/fafrontend/images/adult/adult-purple.svg') no-repeat !important;
     }
     .mob-no-icon { width:32px !important; height:32px !important; }
     .top-bar .toggle-topbar.menu-icon a span.menu-on {
