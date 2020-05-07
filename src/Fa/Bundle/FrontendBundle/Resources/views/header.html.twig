@@ -139,8 +139,8 @@
                         {% endif %}
                         	{% if showTiLogo %}
                                  <a href="{{ path('fa_frontend_homepage') }}" class="logo tradeit-logo"><img src="{{ asset_url('fafrontend/images/fad-ti-logo.png') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" /></a>
-                            {% elseif showAdultCss==1 %}
-                            	<a href="{{ path('fa_adult_homepage') }}"><img src="{{ asset_url('fafrontend/images/fadult-onlight.png') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" /></a>
+                           {# {% elseif showAdultCss==1 %}
+                            	<a href="{{ path('fa_adult_homepage') }}"><img src="{{ asset_url('fafrontend/images/fadult-onlight.png') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" /></a> #}
                             {% else %}
                             	<a href="{{ path('fa_frontend_homepage') }}"><img src="{{ asset_url('fafrontend/images/fad-logo.svg') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" /></a>
                             {% endif %}
