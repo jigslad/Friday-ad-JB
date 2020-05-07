@@ -240,9 +240,9 @@
                             {% endfor %}
                         	<li class="last-level">
                         		{% if thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox %}
-                            		<a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" >Live Sex Cams</a>
+                            		<a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" ><span class="mob-adult mob-adul-menu-icons">&nbsp;</span>Live Sex Cams</a>
                             	{% else %}
-                            		<a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" >Live Sex Cams</a>
+                            		<a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" ><span class="mob-adult mob-adul-menu-icons">&nbsp;</span>Live Sex Cams</a>
                 	            {% endif %}
                     		</li>
                         {% endif %}
