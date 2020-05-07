@@ -3464,6 +3464,7 @@ HTML;
                     $blogDetails[] = array(
                         'title'=>$blogTitle,
                         'link'=>$blogLink,
+                        'siteurl'=>$blog['url'],
                         'mediaUrl'=>$blogFeaturedMediaUrl,
                         'publishdate' => $blogPublishDate,
                         //'desc' => htmlentities($blogDesc),

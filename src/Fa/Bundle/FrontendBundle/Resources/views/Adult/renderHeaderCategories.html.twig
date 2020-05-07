@@ -154,10 +154,12 @@
 {% endif %}
 </div>
 <div class="fullwidth show-for-small-only">
+<ul class="show-for-small-only login-menu">
+    <li class="m-back-to-hp"><a href="{{ path('fa_frontend_homepage') }}"><span class="back-arrow-icon">&nbsp;</span>FRIDAY-AD HOMEPAGE</a></li>
+</ul>
 <dl class="accordion show-for-small-only" data-accordion>
     {% if headerCategories|length %}
     {# {% cache 'header|menu|'~location_id~'front/header_menu_mobile' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0) 86400 %} #}
-    <dd class="accordion-navigation show-for-small-only m-back-to-hp"><a href="{{ path('fa_frontend_homepage') }}"><span class="back-arrow-icon">&nbsp;</span>FRIDAY-AD HOMEPAGE</a></dd>
     <dd class="accordion-navigation">
         <a href="#cat-mob-menu ga-ahpCatDropdown">MENU</a>
         <div id="cat-mob-menu" class="content active">
