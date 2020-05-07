@@ -62,14 +62,14 @@
 {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
 <script language="javascript" type="text/javascript">
 //<![CDATA[
-    function removeCartItem(transactionId, categoryPath)
+    function removeCartItem(transactionId, categoryPath,Package)
     {
         window.dataLayer = window.dataLayer || []
         dataLayer.push({
             'event' : 'PAA Cart',
             'eventCategory':  'PAA - Step Cart',
             'eventAction': 'Delete',
-            'eventLabel': categoryPath - {Package}
+            'eventLabel': categoryPath - Package
         });
         ga('send', 'event', 'PAA - Step Cart', 'Delete', categoryPath);
         if (confirm('{{'Are you sure you want to remove selected item?'|trans({}, 'frontend-cart')}}')) {
