@@ -6,10 +6,10 @@
                 <div class="browse-by-category mt20">Choose by category</div>
                 <div>
                     <div class="medium-11 large-12 columns mobile-p-0" style="padding-left: 0px;">
-                        {{ form_widget(attribute(form, 'item__category_id'),{'attr':{ 'class': 'form-control select-control'  }}) }}
+                        {{ form_widget(attribute(form, 'item__category_id'),{'attr':{ 'class': 'form-control select-control without-sel-box'  }}) }}
                     </div>
                     <div class="small-9 medium-7 large-7 columns mobile-p-0">
-                        {{ form_widget(form.item__distance,{'attr':{'class':'form-control select-control'}}) }}
+                        {{ form_widget(form.item__distance,{'attr':{'class':'form-control select-control without-sel-box'}}) }}
                     </div>
                     <div class="small-15 medium-6 large-5 columns mobile-p-0" style="display: inline-flex;">
                         <label class="from-sec">{{ 'from'|trans({}, 'frontend')}}</label>
@@ -21,23 +21,23 @@
                 </div>
                 <div id="more_options" style="display: none">
                     <div class="medium-10 large-11 columns mobile-p-0" style="padding-left: 0px;">
-                        {{ form_widget(attribute(form, 'item_adult__services_id'),{'attr':{ 'class': 'select-control'  }}) }}
+                        {{ form_widget(attribute(form, 'item_adult__services_id'),{'attr':{ 'class': 'select-control without-sel-box'  }}) }}
                     </div>
                     <div class="medium-7 large-6 columns mobile-p-0 mt10">
                         <div class="form-control adult-radio-form">
-                            <span class="custom-radio radio-inline-flex">
-                                <input type="radio" id="fa_adult_home_page_search_independent_or_agency_id_0" class="independent-or-agency-cls" name="independent_or_agency_id" required="required" value="7317">
+                            <span class="custom-checkbox radio-inline-flex">
+                                <input type="checkbox" id="fa_adult_home_page_search_independent_or_agency_id_0" class="independent-or-agency-cls" name="independent_or_agency_id" required="required" value="7317">
                                 <label for="fa_adult_home_page_search_independent_or_agency_id_0" class="required radio-label">Independent</label>
                             </span>
-                            <span class="custom-radio radio-inline-flex">
-                                <input type="radio" id="fa_adult_home_page_search_independent_or_agency_id_1" class="independent-or-agency-cls" name="independent_or_agency_id" required="required" value="7318">
+                            <span class="custom-checkbox radio-inline-flex">
+                                <input type="checkbox" id="fa_adult_home_page_search_independent_or_agency_id_1" class="independent-or-agency-cls" name="independent_or_agency_id" required="required" value="7318">
                                 <label for="fa_adult_home_page_search_independent_or_agency_id_1" class="required radio-label">Agency</label>
                             </span>
                         </div>
                         {{ form_widget(form.item_adult__independent_or_agency_id) }}
                     </div>
                     <div class="medium-7 large-7 columns mobile-p-0" style="display: inline-flex;">
-                        {{ form_widget(attribute(form, 'item_adult__ethnicity_id'),{'attr':{ 'class': 'form-control select-control'  }}) }}
+                        {{ form_widget(attribute(form, 'item_adult__ethnicity_id'),{'attr':{ 'class': 'form-control select-control without-sel-box'  }}) }}
                     </div>
                 </div>
             </div>
@@ -52,7 +52,7 @@
 //<![CDATA[
     $(document).ready(function(){
         setDefaultLocatonFromCookie();
-        $('#fa_adult_home_page_search_item_adult__services_id').attr('placeholder','Choose services');
+        $('#fa_adult_home_page_search_item_adult__services_id').attr('placeholder','Services');
         $('#fa_adult_home_page_search_item_adult__services_id').addClass('placeholderTxt');
 
         $('.independent-or-agency-cls').click(function(){
