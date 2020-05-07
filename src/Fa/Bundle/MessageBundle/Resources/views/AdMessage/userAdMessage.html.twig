@@ -22,7 +22,9 @@
                             {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
                             <div id="db-right-part" class="col-md-19 d-right-col">
                                 <h1 class="s-h1 db-title mt30 mb20">{{'My Messages'|trans({}, 'frontend-inbox')}}</h1>
-                                <h2 class="s-h2 mb10">Keep up to date with messages about your ads and the ads you are interested in.</h2>
+                                <h2 class="s-h2 mb10 message-sub-title">
+                                    Keep up to date with messages about your ads and the ads you are interested in.
+                                </h2>
 
                                 {{ include('FaMessageBundle:AdMessage:messageTabs.html.twig') }}
                                 <div class="tab-content">

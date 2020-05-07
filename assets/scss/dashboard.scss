@@ -2506,3 +2506,16 @@
     white-space: nowrap;
     overflow: hidden;
 }
+
+// Start FFR-4168
+// message subtitle space issue
+.message-sub-title{
+    min-height: 133px;
+    color: #313133;
+}
+@media (min-width:320px) and (max-width: 559px) {
+    .message-sub-title{
+        min-height: 105px;
+    }
+}
+// End FFR-4168
