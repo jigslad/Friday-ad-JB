@@ -1342,7 +1342,6 @@
     }
     .reply-msg-heading {
         .back-link {
-            width: 65px;
             line-height: 26px;
             padding: 8px;
         }
@@ -2519,3 +2518,18 @@
     }
 }
 // End FFR-4168
+
+// Start FFR-4173
+.my-msg-tabs a br {
+    display: none;
+}
+@media (min-width:320px) and (max-width: 559px) {
+    .my-msg-tabs a br {
+        display: block;
+    }
+}
+// End FFR-4173
+
+.my-msg-tabs .custom-tabs .nav-link{
+    font-family: "Poppins-Regular";
+}
