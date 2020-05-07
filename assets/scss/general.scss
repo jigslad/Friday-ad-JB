@@ -1483,14 +1483,14 @@ table.responsive-card-table tr:nth-of-type(2n) {
     border: 1px solid $form-border-color;
 }
 .gray-text {
-    color: $form-text-color;
+    color: $form-label-color;
 }
 .img-attch-block-3 {
     .img-attach-thumb {
         background: $grey-color;
     }
 }
-.download-link { color: $form-text-color; }
+.download-link { color: $form-label-color; }
 .newsletter-pref { box-shadow: 0 -1px 0 $form-text-color; }
 .own-item { border: 1px solid $form-border-color; }
 .list-dimensions { color: $form-text-color; }

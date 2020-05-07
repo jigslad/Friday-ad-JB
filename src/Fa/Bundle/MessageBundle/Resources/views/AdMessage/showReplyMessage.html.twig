@@ -116,9 +116,9 @@
                             {% endif %}
                         </div>
 
-                        <div class="clearfix d-inline-flex f-width">
+                        <div class="clearfix">
                             {% if (message['oneclickenq_reply'] == NULL) %}
-                                <div class="text-left h-width">
+                                <div class="pull-left">
                                     <a target="_blank" href="{{profileUrl}}">
                                         {% if app.user.getId() == message['sender_user_id'] %} {{'You'|trans({}, 'frontend-inbox')}} {% else %} {{message['sender_first_name']}} {{message['sender_last_name']}} {% endif %}
                                     </a> 
@@ -131,7 +131,7 @@
                             {% endif %}
                             
                             {% if (messageAttachmentsOthers or messageAttachmentsImages) %}
-                            <div class="text-right h-width">
+                            <div class="pull-right">
                                 {% if (totalAttachments > 1) %}
                                     <a href="javascript:downloadAttachments('{{ message['id'] }}', '');" class="download-link">Download all</a>
                                 {% else %}
