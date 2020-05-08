@@ -1447,3 +1447,26 @@ input[type=number] {
   position: relative;
   z-index: 2;
 }
+.red-button2 {
+  background: #fef1f1;
+  border: 1px solid #f74d4d;
+  color: #f74d4d;
+}
+@media only screen and (min-width: 320px) and (max-width: 640px) {
+  .dash-block {
+    .d-right-col {
+      float: right;
+      padding: 0px !important;
+      .message-sub-title{
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+      .db-title {
+        margin: 32px 0 17px;
+        padding-left: 10px;
+        padding-right: 10px;
+        font-size: 22px;
+      }
+    }
+  }
+}

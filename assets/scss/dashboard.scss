@@ -290,8 +290,14 @@
         padding: 20px;
         position: relative;
     }
-    .custom-tabs .nav-link {
-        background: #FFFFFF;
+    .custom-tabs .nav-link.active {
+        border: 1px solid #CBD5D9 !important;
+        background-color: #fff !important;
+        color: #212527 !important;
+    }
+    .custom-tabs .nav-link:hover {
+        color: #82C249 !important;
+        background-color: transparent;
     }
 }
 

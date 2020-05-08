@@ -153,16 +153,66 @@
                                 <li class="db-left-submenu">
                                     <a class="submenu-list collapsed" href="#db-mob-menu" data-toggle="collapse" data-target="#db-mob-menu">MY DASHBOARD</a>
                                         <ul id="db-mob-menu" class="collapse">
-                                            <li><a href="{{ path('dashboard_home') }}" class="home-icon">{{ 'Dashboard home'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                                            <li><a href="{{ path('user_ad_message_all') }}" class="messages-icon">{{ 'Messages'|trans({}, 'frontend-header-usermenu') }}{% if totalUnreadMsg > 0 %}&nbsp;<span class="notification-digit">({{totalUnreadMsg}})</span>{% endif %}</a></li>
-                                            <li><a href="{{ path('user_review_list') }}" class="reviews-icon">{{ 'Reviews'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                                            <li><a href="{{ path('manage_my_ads_active') }}" id="manage-my-ad-id" class="manage-item-icon">{{'Manage my ads'|trans({}, 'frontend-header-usermenu')}}</a></li>
-                                            <li><a href="{{ path('my_profile') }}" class="manage-profile-icon">{{ 'Edit profile'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                                            <li><a href="{{ path('my_orders') }}" class="orders-icon">{{ 'Orders'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                                            <li><a href="{{ path('my_favourite') }}" class="my-favourites-icon">{{ 'My favourites'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                                            <li><a href="{{ path('list_search_agent') }}" id="saved-search-header-id" class="saved-searches-icon">{{'Alerts and searches'|trans({}, 'frontend-header-usermenu')}}</a></li>
-                                            <li><a href="{{ path('my_purchases') }}" id="shop-header-id" class="purchase-icon">{{ 'Purchases'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                                            <li><a href="{{ path('my_account') }}" id="account-header-id" class="account-icon">{{ 'Account'|trans({}, 'frontend-header-usermenu') }}</a></li>
+                                            <li>
+                                                <a href="{{ path('dashboard_home') }}">
+                                                    <span class="home-icon"></span>
+                                                    {{ 'Dashboard home'|trans({}, 'frontend-header-usermenu') }}
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ path('user_ad_message_all') }}">
+                                                    <span class="messages-icon"></span>
+                                                    {{ 'Messages'|trans({}, 'frontend-header-usermenu') }}{% if totalUnreadMsg > 0 %}&nbsp;<span class="notification-digit">({{totalUnreadMsg}})</span>{% endif %}
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ path('user_review_list') }}">
+                                                    <span class="reviews-icon"></span>
+                                                    {{ 'Reviews'|trans({}, 'frontend-header-usermenu') }}
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ path('manage_my_ads_active') }}" id="manage-my-ad-id">
+                                                    <span class="manage-item-icon"></span>
+                                                    {{'Manage my ads'|trans({}, 'frontend-header-usermenu')}}
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ path('my_profile') }}">
+                                                    <span class="manage-profile-icon"></span>
+                                                    {{ 'Edit profile'|trans({}, 'frontend-header-usermenu') }}
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ path('my_orders') }}">
+                                                    <span class="orders-icon"></span>
+                                                    {{ 'Orders'|trans({}, 'frontend-header-usermenu') }}
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ path('my_favourite') }}">
+                                                    <span  class="my-favourites-icon"></span>
+                                                    {{ 'My favourites'|trans({}, 'frontend-header-usermenu') }}
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ path('list_search_agent') }}" id="saved-search-header-id">
+                                                    <span class="alerts-icon"></span>
+                                                    {{'Alerts and searches'|trans({}, 'frontend-header-usermenu')}}
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ path('my_purchases') }}" id="shop-header-id">
+                                                    <span class="purchase-icon"></span>
+                                                    {{ 'Purchases'|trans({}, 'frontend-header-usermenu') }}
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ path('my_account') }}" id="account-header-id">
+                                                    <span  class="account-icon"></span>
+                                                    {{ 'Account'|trans({}, 'frontend-header-usermenu') }}
+                                                </a>
+                                            </li>
                                         </ul>
                                 </li>
                                 <li>
