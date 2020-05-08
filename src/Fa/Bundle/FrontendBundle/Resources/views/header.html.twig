@@ -146,11 +146,24 @@
                         {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':0, 'is_mobile':0, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
                     {% endif %}
                 	<div class="m-navbar-block">
-                        <ul class="d-block d-md-none mobile-menu-items">
-                            <li class="m-list-menu"></li>
-                        </ul>
+{#                        <ul class="d-block d-md-none mobile-menu-items">#}
+{#                            <li class="m-list-menu">#}
+
+
+{#                            </li>#}
+{#                        </ul>#}
                         <ul class="d-block d-md-none login-menu">
                             {% if app.user %}
+                                <li><a href="{{ path('dashboard_home') }}">{{ 'Dashboard home'|trans({}, 'frontend-header-usermenu') }}</a></li>
+                                <li>
+                                    <a href="javascript:void(0);" class="logged-in-user">
+                                        {% if app.user.getFirstName() or  app.user.getLastName() %}
+                                            {{app.user.getFirstName()}} {{app.user.getLastName()}}
+                                        {% else %}
+                                            {{app.user.getUsername()}}
+                                        {% endif %}
+                                    </a>
+                                </li>
                                 <li>
                                     <a href="javascript:void(0);" class="logged-in-user">
                                     {% if app.user.getFirstName() or  app.user.getLastName() %}
@@ -161,7 +174,7 @@
                                     </a>
                                 </li>
                                 {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
-                                {{ render(controller('FaUserBundle:Dashboard:notification', { 'template': 'mobile_menu' })) }}
+                                    {{ render(controller('FaUserBundle:Dashboard:notification', { 'template': 'mobile_menu' })) }}
                                 {% endif %}
                                 <li><a href="{{ path('user_ad_message') }}" id="mob-inbox-header-id">{{'MESSAGES'|trans({}, 'inbox')}}{% if totalUnreadMsg > 0 %}&nbsp;<span class="notification-digit">({{totalUnreadMsg}})</span>{% endif %}</a></li>
                                 

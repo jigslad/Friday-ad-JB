@@ -45,9 +45,8 @@ button:focus, a:focus { outline: 0px dotted; }
 label { font-weight: 700;line-height: 20px;margin-bottom: 10px; }
 
 .primary-btn-1, a:hover.primary-btn-1, a:focus.primary-btn-1, .primary-btn-1:focus, .primary-btn-1:hover,
-.top-bar-section li.place-item-btn a
-{ 
-	font-family: "Poppins-SemiBold" !important; border-radius: 4px !important;text-align:center; height:60px !important; padding:0px !important;font-size:18px !important; line-height:20px !important; 
+.top-bar-section li.place-item-btn a {
+	font-family: "Poppins-SemiBold" !important; border-radius: 4px !important;text-align:center; height:60px !important; padding:0px !important;font-size:18px !important; line-height:20px !important;
 }
 .secondary-btn-1, .secondary-btn-2, .secondary-btn-3, .secondary-btn-4,
 .primary-btn-2, a:hover.primary-btn-2, a:focus.primary-btn-2, .primary-btn-2:focus, .primary-btn-2:hover
@@ -1260,7 +1259,11 @@ input[type=number] {
 
 @media (max-width: 759px) {
   .custom_hc_widget_trigger {
-    display: none !important;
+    right: -50px !important;
+  }
+  .custom_hc_widget_trigger img{
+    height: 40px;
+    max-width: 93px;
   }
 }
 @media only screen and (max-width: 640px) {
@@ -1381,7 +1384,7 @@ input[type=number] {
         border-radius: 5px;
         overflow: hidden;
         transition: all .2s linear;
-        z-index: 99
+        z-index: 1040
     }
     .custom_hc_widget.expanded {
         width: 320px;

@@ -1596,9 +1596,9 @@ table.responsive-card-table tr:nth-of-type(2n) {
 .newsletter-pref {
     box-shadow: 0 -1px 0 $form-text-color;
 }
-.section-head:hover, .section-head:focus, .section-head:active {
+.db-list a .section-head:hover, .db-list a .section-head:focus, .db-list a .section-head:active {
     background-color: $form-border-color;
-    color: $site-dark-bg-color;
+    //color: $site-dark-bg-color;
 }
 .db-list a:hover .arrow-block, .db-list a:focus .arrow-block, .db-list a:active .arrow-block {
     color: $site-dark-bg-color;
