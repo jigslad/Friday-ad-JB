@@ -258,6 +258,8 @@
         $(document).ready(function() {
             $('div.homepage-row:even').addClass('white-bg');
             getHeaderImage();
+            
+            $('.without-sel-box').select2({ minimumResultsForSearch: -1 });
 
             $('#fa_top_search_item__category_id').val({{ categoryAdultId }});
             $('.select-control').select2();
@@ -385,6 +387,9 @@
                 x.hide();
             } else {
                 x.show();
+                $('html, body').animate({
+                   	scrollTop: $('#adult_search_form').offset().top                 
+                }, 1000);
             }
         }
         var selectedCategory = $("#fa_adult_home_page_search_item__category_id");
