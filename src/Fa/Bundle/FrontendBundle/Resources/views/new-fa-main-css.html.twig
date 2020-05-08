@@ -136,19 +136,25 @@ a:hover.button, a:focus.button,a:hover.secondary-btn-1, a:focus.secondary-btn-1,
 	border: 1px solid #91D851 !important;
 	
 }
-.secondary-btn-1:hover, .secondary-btn-1:focus, .footer-newsletter-btn:hover, .footer-newsletter-btn:focus,
-.xs-btn-1:hover, .xs-btn-1:focus {
+.secondary-btn-2,.secondary-btn-3, .secondary-btn-4, .xs-blue-btn, .primary-btn-3, .primary-btn-4 {
+	border: 1px solid #91D851 !important;
+	color: #82C249 !important;
+}
+.secondary-btn-1:hover, .secondary-btn-1:focus, .footer-newsletter-btn:hover, .footer-newsletter-btn:focus, .primary-btn-2,
+.xs-btn-1:hover, .xs-btn-1:focus,.secondary-btn-2:hover, .secondary-btn-2:focus,.secondary-btn-3:hover, .secondary-btn-3:focus,.secondary-btn-4:hover, .secondary-btn-4:focus
+{
 	background: linear-gradient(135deg, #85B021 0%, #61A85F 100%) !important;
 	border: 1px solid #85B021 !important;
 }
-.primary-btn-1, .primary-btn-2, .primary-btn-1.not-hover, .xs-blue-btn {
-	background: linear-gradient(135deg, #EE316F 0%, #FE8A7A 100%) !important;
+.primary-btn-1, .primary-btn-1.not-hover {
+	background: linear-gradient(135deg, #EE316F 0%, #FE8A7A 100%);
 	border: 0px solid transparent !important;
 }
 .primary-btn-1:hover, .primary-btn-1:focus, .primary-btn-2:hover, .primary-btn-2:focus, .xs-blue-btn:focus, .xs-blue-btn:hover {
-	background: linear-gradient(135deg, #BE2858 0%, #CA6D61 100%) !important;
+	background: linear-gradient(135deg, #EE316F 0%, #FE8A7A 100%);
 	border: 0px solid transparent !important;
 }
+
 #home-search .search-btn button, .notify-me.opened button, .site-search .search-icon  {
     border-radius: 0 4px 4px 0 !important;
 }
@@ -375,13 +381,6 @@ button.signup-fb-btn.expand {
 .signup-google-btn .tickmark-icon, .signup-fb-btn .tickmark-icon {
 	position: absolute !important; right: -20px !important;top: 0px !important;
 }
-@media only screen and (min-width: 760px) {
-	#package_purchase_form .equalizer-inner, #package_purchase_form .pkg-columns {
-	    display: grid !important;
-	    align-items: stretch !important;
-	}
-}
-
 //FB an Goggle button
 .button.signup-fb-btn {
 	background-color: #3B5998;
@@ -481,7 +480,7 @@ button.signup-fb-btn.expand {
 	background: url('/bundles/fafrontend/images/icons/main/services.png') no-repeat !important;
 }
 .mob-property {
-	background: url('/bundles/fafrontend/images/icons/main/properties.png') no-repeat !important;
+	background: url('/bundles/fafrontend/images/icons/main/property.png') no-repeat !important;
 }
 .mob-animals {
 	background: url('/bundles/fafrontend/images/icons/main/animals.png') no-repeat !important;
@@ -514,7 +513,21 @@ button.signup-fb-btn.expand {
     margin: 0 0px 6px !important;
     font-weight: normal !important; 
 }
-
+.xs-black-btn, .xs-black-large-btn {
+    background: transparent !important;
+    border: 1px solid #212527 !important;
+    color: #212527 !important;
+}
+.xs-black-btn, .xs-black-large-btn {
+    background: #212527 !important;
+    color: #FFFFFF !important;
+}
+@media only screen and (min-width: 760px) {
+	#package_purchase_form .equalizer-inner, #package_purchase_form .pkg-columns {
+	    display: grid !important;
+	    align-items: stretch !important;
+	}
+}
 @media (max-width: 640px) {
   .button.special { padding: 17px 6px 22px 6px !important;  }
 }
