@@ -186,6 +186,11 @@
                     {% endif %}
                     {{'Ad views'|trans({}, 'frontend-manage-my-ad')}}: {{ adViewCounter }}<br />
                 </div>
+                <div>
+                    {% if ad['status_id'] == adStatusLive %}
+                        <a href="javascript:void(0);" onclick="openSocialSharePopup('{{ adId }}', '{{container.getParameter('base_url')}}{{adUrl}}', '{{ad['title']}}')" class="mobile-share">&nbsp;</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
 
