@@ -45,7 +45,7 @@
                     {{ recommendedSlot['sub_title']|length > 150 ? trim_text(recommendedSlot['sub_title'], 150)|raw ~ '...': recommendedSlot['sub_title'] }}
                 </div>
                 {% if recommendedSlot['cta_text'] !='' %}
-                <div class="outer-btn mt10"><div class="button secondary-btn-1 right-block expand hide-for-small-only">{{ recommendedSlot['cta_text'] }}</div></div>
+                <div class="outer-btn mt10"><div class="button secondary-btn-1 thin-btn right-block expand hide-for-small-only">{{ recommendedSlot['cta_text'] }}</div></div>
            		{% endif %}
            </div>                      
         </div>
@@ -78,7 +78,7 @@
                         <div class="list-title show-title-r-ad-det"> {{ recommendedSlot['title']|length > 50 ? trim_text(recommendedSlot['title'], 50)|raw ~ '...': recommendedSlot['title'] }}</div>
                         <div class="list-title show-mob-title-r-ad-det"> {{ recommendedSlot['mobile_title']|length > 50 ? trim_text(recommendedSlot['mobile_title'], 50)|raw ~ '...': recommendedSlot['mobile_title'] }}</div>
                         {% if recommendedSlot['cta_text'] !='' and recommendedSlotArray|length == 2 %}
-                            <div class="outer-btn mt10"><div class="button expand secondary-btn-1 recommended-2-slot-ad-detail-btn recommended-2-3-slot-ad-detail-btn">{{ recommendedSlot['cta_text'] }}</div></div>
+                            <div class="outer-btn mt10"><div class="button expand secondary-btn-1  thin-btn recommended-2-slot-ad-detail-btn recommended-2-3-slot-ad-detail-btn">{{ recommendedSlot['cta_text'] }}</div></div>
                        	{% endif %}
                     </div> 
     			</div>           
