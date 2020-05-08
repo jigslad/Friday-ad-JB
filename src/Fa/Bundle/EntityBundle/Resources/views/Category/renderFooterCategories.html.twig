@@ -1,5 +1,5 @@
 {% set container = fetch_container_instance() %}
-{% cache 'home|page|'~location_id~'front/home_page_footer' (staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isBot', [container]) ? 600 : 1800) %}
+{# {% cache 'home|page|'~location_id~'front/home_page_footer' (staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isBot', [container]) ? 600 : 1800) %} #}
 {% set getNoFollowLink = fetch_repository('FaEntityBundle:Category').getCategoryNoFollowLink(app.request.get('searchQueryString')) %}
 <div class="large-18 columns">
 {% if footerCategories|length %}
@@ -73,4 +73,5 @@
     {% endfor %}
 {% endif %}
 </div>
-{% endcache %}
+
+{# {% endcache %} #}
