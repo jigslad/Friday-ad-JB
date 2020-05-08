@@ -88,6 +88,7 @@ a:focus.secondary-btn-1, a:focus.secondary-btn-2, a:focus.secondary-btn-3, a:foc
 {
     height:30px !important; padding:5px 10px !important; font-size:14px !important; line-height:16px !important; 
 }
+.xs-blue-btn { background: #FFFFFF !important; }
 .xs-black-btn, , .xs-black-large-btn {
     background: transparent;
     border: 1px solid #212527 !important;
@@ -107,7 +108,10 @@ a:focus.secondary-btn-1, a:focus.secondary-btn-2, a:focus.secondary-btn-3, a:foc
 	font-family: "Poppins-SemiBold" !important; text-align:center;height:60px !important; padding:18px 20px !important;font-size:18px !important; line-height:20px !important;
     font-weight: normal !important;text-transform: capitalize !important;
 }
-
+.top-bar .name h1 a {
+    width: auto !important;
+    padding: 0 !important;
+}
 .db-section .accordion dd>.content.address-book {
     padding: 24px 0 20px !important;
 }
@@ -145,6 +149,7 @@ a:hover.button, a:focus.button,a:hover.secondary-btn-1, a:focus.secondary-btn-1,
 {
 	background: linear-gradient(135deg, #85B021 0%, #61A85F 100%) !important;
 	border: 1px solid #85B021 !important;
+	color:#FFFFFF !important;
 }
 .primary-btn-1, .primary-btn-1.not-hover {
 	background: linear-gradient(135deg, #EE316F 0%, #FE8A7A 100%);
@@ -513,15 +518,17 @@ button.signup-fb-btn.expand {
     margin: 0 0px 6px !important;
     font-weight: normal !important; 
 }
+
 .xs-black-btn, .xs-black-large-btn {
     background: transparent !important;
     border: 1px solid #212527 !important;
     color: #212527 !important;
 }
-.xs-black-btn, .xs-black-large-btn {
-    background: #212527 !important;
-    color: #FFFFFF !important;
+.xs-black-btn:hover, .xs-black-btn:focus, .xs-black-btn:active, .xs-black-large-btn;hover, .xs-black-large-btn;focus, .xs-black-large-btn;active {
+	background: #212527 !important;
+	color: #FFFFFF !important;
 }
+
 @media only screen and (min-width: 760px) {
 	#package_purchase_form .equalizer-inner, #package_purchase_form .pkg-columns {
 	    display: grid !important;
