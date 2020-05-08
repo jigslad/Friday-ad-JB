@@ -148,7 +148,7 @@
                 	<div class="m-navbar-block">
                         <ul class="d-block d-md-none login-menu">
                             {% if app.user %}
-                                <li><a href="{{ path('dashboard_home') }}">{{ 'Dashboard home'|trans({}, 'frontend-header-usermenu') }}</a></li>
+                                <li><a href="{{ path('dashboard_home') }}">{{ 'My Dashboard'|trans({}, 'frontend-header-usermenu') }}</a></li>
                                 <li>
                                     <a href="javascript:void(0);" class="logged-in-user">
                                     {% if app.user.getFirstName() or  app.user.getLastName() %}
