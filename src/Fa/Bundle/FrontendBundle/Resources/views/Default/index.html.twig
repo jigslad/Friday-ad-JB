@@ -302,6 +302,9 @@
     $(document).ready(function() {
         $('div.homepage-row:even').addClass('white-bg');
         getHeaderImage();
+
+        $('#s2id_fa_top_search_item__category_id').attr('placeholder', 'All');
+        
         var recommendedItemSlider = $("#recommended-item-slider");
         recommendedItemSlider.owlCarousel({
             items : 6,
