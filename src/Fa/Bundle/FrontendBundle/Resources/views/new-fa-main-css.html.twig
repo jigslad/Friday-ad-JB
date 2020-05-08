@@ -100,7 +100,7 @@ a:focus.secondary-btn-1, a:focus.secondary-btn-2, a:focus.secondary-btn-3, a:foc
 .xs-black-btn:focus, .xs-black-btn:hover, .xs-black-large-btn:focus, .xs-black-large-btn:hover {
     background: #212527;
     border: 1px solid #212527;
-    color: #FFFFFF;
+    color: #FFFFFF !important;
 }
 .reply-msg-heading .report, .reply-msg-heading .mark-sold, .paypal-box, .credit-cards-box { border-radius: 4px !important; }
 .top-bar-section ul { font-size:14px !important; }
@@ -544,9 +544,10 @@ button.signup-fb-btn.expand {
 	background: #212527 !important;
 	color: #FFFFFF !important;
 }
+.manage-price { font-size: 20px !important; }
 
 @media only screen and (min-width: 760px) {
-	#package_purchase_form .equalizer-inner, #package_purchase_form .pkg-columns {
+	#package_purchase_form .-inner, #package_purchase_form .pkg-columns {
 	    display: grid !important;
 	    align-items: stretch !important;
 	}
@@ -554,7 +555,7 @@ button.signup-fb-btn.expand {
 @media (max-width: 640px) {
   .button.special { padding: 17px 6px 22px 6px !important;  }
 }
-@media (min-width: 600px)
+@media (min-width: 600px) {
     .myacc-details {
         width: 320px !important;
     }
@@ -781,6 +782,7 @@ button.signup-fb-btn.expand {
     .top-bar-section li:not(.has-form) a:not(.button) {
         font-size: 12px;
         font-weight: normal !important;
+        color:#FFFFFF !important;
         font-family: "Poppins-SemiBold" !important;
     }
     .top-bar-section .login-menu li:not(.has-form) a:not(.button) {
