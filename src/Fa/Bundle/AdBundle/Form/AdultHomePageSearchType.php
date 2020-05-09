@@ -24,6 +24,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
+
 /**
  * This form is used for search adult from landing page.
  *
@@ -135,11 +136,13 @@ class AdultHomePageSearchType extends AbstractType
         
         $form->add(
             'item_adult__independent_or_agency_id',
-            JsChoiceType::class,
-            array(
+            HiddenType::class
+            /*array(
                 'choices'     => array_flip($indOrAgencyArray),
-                'expanded' => true
-            )
+                'expanded' => true,
+                'multiple' => true,
+                'attr'    => array('class' => 'fa-white-checkbox')
+            )*/
         );
         $form->add(
             'item_adult__ethnicity_id',

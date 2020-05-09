@@ -7,7 +7,7 @@
         <div class="category-links">
             {% if categoryArray['category_name'] is defined %}
                 <div class="row">
-                {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+                {% if categoryArray['category_id'] == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
                     {% set listurl = path('fa_adult_homepage') %}
                 {% else %}
                     {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['category_full_slug']) %}

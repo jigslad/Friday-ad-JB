@@ -257,12 +257,10 @@
         var headerParallax;
         $(document).ready(function() {
             $('div.homepage-row:even').addClass('white-bg');
-            getHeaderImage();
-            
-            $('.without-sel-box').select2({ minimumResultsForSearch: -1 });
+            getHeaderImage();            
 
             $('#fa_top_search_item__category_id').val({{ categoryAdultId }});
-            $('.select-control').select2();
+            $('.select-control').select2({ minimumResultsForSearch: -1 });
             
             var featuredAdvertisersItemSlider = $("#featured_advertisers_slider");
             featuredAdvertisersItemSlider.owlCarousel({
@@ -327,7 +325,24 @@
     			var adulSrchCat = $('#fa_adult_home_page_search_item__category_id option:selected').html();
     		    var adulSrchDist = $('#fa_adult_home_page_search_item__distance option:selected').html();
     		    var adulSrchCity = $('#fa_adult_home_page_search_item__location_autocomplete').val();
-    			    
+
+    		    var val = [];
+                var opted_value = '';
+                $('.independent-or-agency-cls').parent('span.checked').each(function(i){
+                	$(this).attr('checked', true);  
+                  	val[] = $(this).val();
+                });
+
+                if(val.length>0) {
+    				if(val.length>1) {
+    				    opted_value = val.join('__');
+    				} else {
+    					opted_value = val[0];
+    				}
+    				$('#fa_adult_home_page_search_item_adult__independent_or_agency_id').val(opted_value);
+                }
+    			alert($('#fa_adult_home_page_search_item_adult__independent_or_agency_id').val());
+    			
             	window.dataLayer = window.dataLayer || []
                 dataLayer.push({              
                 'event' : 'ahp-search',

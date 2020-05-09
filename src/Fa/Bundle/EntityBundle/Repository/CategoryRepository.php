@@ -926,7 +926,8 @@ class CategoryRepository extends NestedTreeRepository
 
                     $rootCategoryId   = $category['id'];
                     $rootCategorySlug = $category['slug'];
-
+                    
+                    $footerCategoryArray[$rootCategoryId]['category_id']        = $category['id'];
                     $footerCategoryArray[$rootCategoryId]['category_name']      = $category['name'];
                     $footerCategoryArray[$rootCategoryId]['category_slug']      = $rootCategorySlug;
                     $footerCategoryArray[$rootCategoryId]['category_full_slug'] = $category['full_slug'];
@@ -974,6 +975,7 @@ class CategoryRepository extends NestedTreeRepository
         $mainCategories = $this->getCategoryByLevel(1);
         foreach ($mainCategories as $mainCategoryObj) {
             if ($mainCategoryObj->getDisplayOnFooter() && !isset($footerCategoryArray[$mainCategoryObj->getId()])) {
+                $footerCategoryArray[$mainCategoryObj->getId()]['category_id'] = $mainCategoryObj->getId();
                 $footerCategoryArray[$mainCategoryObj->getId()]['category_name'] = $mainCategoryObj->getName();
                 $footerCategoryArray[$mainCategoryObj->getId()]['children'] = array();
                 $footerCategoryArray[$mainCategoryObj->getId()]['category_slug'] = $this->getSlugById($mainCategoryObj->getId(), $container);
