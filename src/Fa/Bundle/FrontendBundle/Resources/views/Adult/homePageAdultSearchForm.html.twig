@@ -24,7 +24,6 @@
                         {{ form_widget(attribute(form, 'item_adult__services_id'),{'attr':{ 'class': 'select-control without-sel-box'  }}) }}
                     </div>
                     <div class="medium-7 large-6 columns mobile-p-0 mt10">
-                        {% if form.item_adult__independent_or_agency_id is defined %}
                     		<div class="form-control adult-radio-form white-checkbox">
                                <span class="custom-checkbox">
                                     <input type="checkbox" id="fa_adult_home_page_search_item_adult__independent_or_agency_id_0" class="independent-or-agency-cls" name="fa_adult_home_page_search[item_adult__independent_or_agency_id][]" required="required" value="7317">                                
@@ -35,8 +34,6 @@
                                 </span>
                                 <label for="fa_adult_home_page_search_item_adult__independent_or_agency_id_1" class="required radio-label">Agency</label>
                             </div>
-                    	{% endif %} 
-                        {# { form_widget(form.item_adult__independent_or_agency_id) } #}
                     </div>
                     <div class="medium-7 large-7 columns mobile-p-0" style="display: inline-flex;">
                         {{ form_widget(attribute(form, 'item_adult__ethnicity_id'),{'attr':{ 'class': 'form-control select-control without-sel-box'  }}) }}

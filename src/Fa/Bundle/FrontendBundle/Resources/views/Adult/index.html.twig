@@ -322,35 +322,29 @@
             });
 
             $('#adul-hp-adv-srch').click(function(){
-    			var adulSrchCat = $('#fa_adult_home_page_search_item__category_id option:selected').html();
-    		    var adulSrchDist = $('#fa_adult_home_page_search_item__distance option:selected').html();
-    		    var adulSrchCity = $('#fa_adult_home_page_search_item__location_autocomplete').val();
+            	var adulSrchCat = $('#fa_adult_home_page_search_item__category_id option:selected').html();
+            	var adulSrchDist = $('#fa_adult_home_page_search_item__distance option:selected').html();
+            	var adulSrchCity = $('#fa_adult_home_page_search_item__location_autocomplete').val();
 
-    		    var val = [];
-                var opted_value = '';
-                $('.independent-or-agency-cls').parent('span.checked').each(function(i){
-                	$(this).attr('checked', true);  
-                  	val[] = $(this).val();
-                });
-
-                if(val.length>0) {
-    				if(val.length>1) {
-    				    opted_value = val.join('__');
-    				} else {
-    					opted_value = val[0];
-    				}
-    				$('#fa_adult_home_page_search_item_adult__independent_or_agency_id').val(opted_value);
-                }
-    			alert($('#fa_adult_home_page_search_item_adult__independent_or_agency_id').val());
-    			
+            	var opted_value = '';
+            	if ($('#fa_adult_home_page_search_item_adult__independent_or_agency_id_0').parent('span').hasClass('checked')) {
+            		opted_value += $('#fa_adult_home_page_search_item_adult__independent_or_agency_id_0').val();
+            	}
+            	if(opted_value!='') { opted_value = opted_value+'__'; }
+            	if ($('#fa_adult_home_page_search_item_adult__independent_or_agency_id_1').parent('span').hasClass('checked')) {
+            		opted_value += $('#fa_adult_home_page_search_item_adult__independent_or_agency_id_1').val();
+            	}
+            	$('#fa_adult_home_page_search_item_adult__independent_or_agency_id').val(opted_value);
+            	$("form[name='fa_adult_home_page_search']").submit();
+            	
             	window.dataLayer = window.dataLayer || []
-                dataLayer.push({              
-                'event' : 'ahp-search',
-                'eventCategory':  'Site Search',     
-                'eventAction': 'Adult Homepage Advanced',
-                'eventLabel': adulSrchCat+' : '+adulSrchDist+' : '+adulSrchCity
-                }); 
-            });
+            	dataLayer.push({
+            	'event' : 'ahp-search',
+            	'eventCategory':  'Site Search',
+            	'eventAction': 'Adult Homepage Advanced',
+            	'eventLabel': adulSrchCat+' : '+adulSrchDist+' : '+adulSrchCity
+            	});
+         	});	
 
             $('#adul-top-srch-btn').click(function() {
             	window.dataLayer = window.dataLayer || []
