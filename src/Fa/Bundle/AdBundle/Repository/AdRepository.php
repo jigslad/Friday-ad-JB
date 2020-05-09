@@ -4805,7 +4805,7 @@ class AdRepository extends EntityRepository
     private function getRecentAdByCategory($category, $searchParams){
         $townId= $adId = null;
         $townIds = isset($searchParams['item__location'])?$searchParams['item__location']:null;
-        if($townIds) {
+        if($townIds && $townIds!=2) {
             $explodetownIds = explode(',',$townIds);
             $townId = $explodetownIds[0];
         }
