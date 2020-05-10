@@ -450,6 +450,15 @@
             $('#fa_adult_home_page_search_item__location_autocomplete').val(locationCookie.location_text);
         }
     }
+        $(document).ready(function(){
+            var selectedCategory = $("#fa_adult_home_page_search_item__category_id");
+            if(selectedCategory.val() == {{ escortServicesId }}){
+                $("#more_options").css("display", "block");
+            }
+            else {
+                $("#more_options").css("display", "none");
+            }
+        });
     </script>
 {% endblock %}
 {% block dimension2 %}
