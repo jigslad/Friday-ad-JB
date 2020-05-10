@@ -4817,7 +4817,7 @@ class AdRepository extends EntityRepository
         ->select(self::ALIAS.'.id')
         ->andWhere(self::ALIAS.'.category = (:catId)')
         ->setParameter('catId', $category)
-        ->andWhere('(' . self::ALIAS . '.created_at <= ' . $dayBeforeStartDate . ' OR '. self::ALIAS . '.updated_at <= ' . $dayBeforeStartDate . ')');
+        ->andWhere('(' . self::ALIAS . '.created_at <= ' . $dayBeforeStartDate . ' OR '. self::ALIAS . '.updated_at <= ' . $dayBeforeStartDate . ')')
         ->andWhere('(' . self::ALIAS . '.created_at >= ' . $dayBeforeEndDate . ' OR '. self::ALIAS . '.updated_at >= ' . $dayBeforeEndDate . ')');
         $query->andWhere('IDENTITY('.self::ALIAS.'.status) ='.BaseEntityRepository::AD_STATUS_LIVE_ID);
         $query->andWhere(self::ALIAS.'.is_blocked_ad=0');
