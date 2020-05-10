@@ -96,7 +96,7 @@ class AdultController extends ThirdPartyLoginController
         $bannersArray = $this->getRepository("FaContentBundle:Banner")->getBannersArrayByPage('homepage', $this->container);
 
         $featureAds =array();
-        $featureAds  = $this->getAdultFeatureAds($request, $cookieLocationDetails);
+        $featureAds  = $this->getAdultFeatureAds($request, $searchParams);
 
         $formManager  = $this->get('fa.formmanager');
         $form               = $formManager->createForm(AdultHomePageSearchType::class, null, array('method' => 'GET', 'action' => $this->generateUrl('ad_landing_page_search_result')));
@@ -346,16 +346,15 @@ class AdultController extends ThirdPartyLoginController
      * @param array $cookieLocationDetails Location cookie array.
      * @return array $featureAds Feature ad list.
      */
-    private function getAdultFeatureAds($request, $cookieLocationDetails)
+    private function getAdultFeatureAds($request, $searchParams)
     {
         // get location from cookie
         $location = null;
-        if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['location']) && $cookieLocationDetails['location']) {
-            $location = $cookieLocationDetails['location'];
-        }
-        $featureAds = $this->getFeatureAdsSolrResult($location, $cookieLocationDetails, 30);
+        $location = isset($searchParams['item__location'])?$searchParams['item__location']:null;
+
+        $featureAds = $this->getFeatureAdsSolrResult($location, $searchParams, 30);
         if ($location && count($featureAds) < 12) {
-            $featureAds = $this->getFeatureAdsSolrResult($location, $cookieLocationDetails, 200);
+            $featureAds = $this->getFeatureAdsSolrResult($location, $searchParams, 200);
         }
         if (count($featureAds) < 12) {
             $featureAds = $this->getFeatureAdsSolrResult();
