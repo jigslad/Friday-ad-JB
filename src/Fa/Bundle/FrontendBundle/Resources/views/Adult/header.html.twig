@@ -78,13 +78,9 @@
                 <nav class="top-bar" id="top_bar_nav" data-topbar="" data-options="sticky_on: large">
                     <ul class="title-area">
                         <li class="name">
-                        {% if currentRoute not in {0: 'landing_page_category', 1: 'landing_page_category_location', 2: 'listing_page', 3: 'motor_listing_page', 4: 'ad_detail_page'} %}
                         <h1>
-                        {% endif %}
                              <a href="{{ path('fa_adult_homepage') }}" class="adul-logo"><img src="{{ asset_url('fafrontend/images/fadult-onlight.png') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" /></a>
-                        {% if currentRoute not in {0: 'landing_page_category', 1: 'landing_page_category_location', 2: 'listing_page', 3: 'motor_listing_page', 4: 'ad_detail_page'} %}
                         </h1>
-                        {% endif %}
                         </li>
                         <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
                         <li class="toggle-topbar menu-icon" id="mobile_menu_li"><a href="javascript:void(0);"><span class="menu" id="top_bar_nav_menu_span"></span></a></li>
