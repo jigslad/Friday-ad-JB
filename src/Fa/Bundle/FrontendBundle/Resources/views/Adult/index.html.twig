@@ -258,7 +258,7 @@
             getHeaderImage();            
 
             setDefaultLocatonFromCookie();
-            
+            $('#fa_top_search_item__distance').val(5);
             $('#fa_top_search_item__category_id').val({{ categoryAdultId }});
             $('.select-control').select2({ minimumResultsForSearch: -1 });
             
@@ -440,27 +440,6 @@
             setDistance();
         });
 
-        function setTopSrchDistance() {
-            var catId = selectedCategory.val();
-            var searchLocation = $('#fa_top_search_item__location').val();
-            searchLocation = (searchLocation)?searchLocation:2;
-            $.ajax({
-                type: "post",
-                dataType: "json",
-                url: "{{ path('fa_frontend_ajax_user_location') }}",
-                data: {'location': searchLocation, 'catId' : catId},
-                success: function(data) {
-                    if (!$.isEmptyObject(data)) {
-                        $('#fa_top_search_item__distance').val(data.default_distance);
-                    }
-                }
-            });
-        }
-
-        $('#adul-top-srch-btn').click(function(e) {
-        	setTopSrchDistance();
-        });
-        
         $('#fa_adult_home_page_search_item__location_autocomplete').keypress(function(event){
         var keycode = (event.keyCode ? event.keyCode : event.which);
         if(keycode == '13'){
