@@ -110,7 +110,7 @@ class AdultHomePageSearchType extends AbstractType
         }
         
         $dimensionIdsArray = $indOrAgencyArray = $ethinicityArray = $servicesArray = array();
-        $ethinicityArray[''] = 'Any Ethinicity';
+        $ethinicityArray[''] = 'Ethinicity';
         $servicesArray[''] = 'Any Service';
         $dimensionIdsArray = $this->em->getRepository('FaEntityBundle:CategoryDimension')->getDimesionIdsByCategoryIdAndName(CategoryRepository::ESCORT_SERVICES_ID, array('Ethnicity', 'Services','Independent or Agency'), $this->container);
         if (!empty($dimensionIdsArray)) {
