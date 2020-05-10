@@ -96,7 +96,7 @@ class AdultController extends ThirdPartyLoginController
         $bannersArray = $this->getRepository("FaContentBundle:Banner")->getBannersArrayByPage('homepage', $this->container);
 
         $featureAds =array();
-        $featureAds  = $this->getAdultFeatureAds($request, $searchParams);
+        $featureAds  = $this->getAdultFeatureAds($request, $cookieLocationDetails);
 
         $formManager  = $this->get('fa.formmanager');
         $form               = $formManager->createForm(AdultHomePageSearchType::class, null, array('method' => 'GET', 'action' => $this->generateUrl('ad_landing_page_search_result')));
@@ -132,7 +132,7 @@ class AdultController extends ThirdPartyLoginController
         
         $data           = array();
         if ($location) {
-            $data['query_filters']['item']['location'] = $location.'|15';
+            $data['query_filters']['item']['location'] = $location.'|'.CategoryRepository::OTHERS_DISTANCE;
         }
         $data['query_filters']['item']['category_id'] = $categoryId;
         
@@ -346,19 +346,20 @@ class AdultController extends ThirdPartyLoginController
      * @param array $cookieLocationDetails Location cookie array.
      * @return array $featureAds Feature ad list.
      */
-    private function getAdultFeatureAds($request, $searchParams)
+    private function getAdultFeatureAds($request, $cookieLocationDetails)
     {
         // get location from cookie
         $location = null;
-        $location = isset($searchParams['item__location'])?$searchParams['item__location']:null;
-
-        $featureAds = $this->getFeatureAdsSolrResult($location, $searchParams, 30);
-        if ($location && count($featureAds) < 12) {
-            $featureAds = $this->getFeatureAdsSolrResult($location, $searchParams, 200);
+        if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['location']) && $cookieLocationDetails['location']) {
+            $location = $cookieLocationDetails['location'];
+        }
+        $featureAds = $this->getFeatureAdsSolrResult($location, $cookieLocationDetails, 30);
+        /*if ($location && count($featureAds) < 12) {
+            $featureAds = $this->getFeatureAdsSolrResult($location, $cookieLocationDetails, 200);
         }
         if (count($featureAds) < 12) {
             $featureAds = $this->getFeatureAdsSolrResult();
-        }
+        }*/
         return $featureAds;
     }
 
