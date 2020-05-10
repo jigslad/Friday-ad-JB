@@ -164,12 +164,14 @@ class AdultHomePageSearchType extends AbstractType
         
         $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
         $defDistance = ($getDefaultRadius)?$getDefaultRadius:'';
+        $distanceArray = $this->em->getRepository('FaEntityBundle:Location')->getDistanceOptionsArray($this->container);
+        $distanceArray = str_replace('Select distance','Distance',$distanceArray);
 
         $form->add(
             'item__distance',
             ChoiceType::class,
             array(
-                'choices' => array_flip($this->em->getRepository('FaEntityBundle:Location')->getDistanceOptionsArray($this->container)),
+                'choices' => array_flip($distanceArray),
                 'placeholder' => $defDistance,
                 'data' => $defDistance,
                 'attr'    => array('class' => 'fa-select-white')
