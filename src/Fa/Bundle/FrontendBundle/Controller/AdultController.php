@@ -353,7 +353,7 @@ class AdultController extends ThirdPartyLoginController
         if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['location']) && $cookieLocationDetails['location']) {
             $location = $cookieLocationDetails['location'];
         }
-        $featureAds = $this->getFeatureAdsSolrResult($location, $cookieLocationDetails, 30);
+        $featureAds = $this->getFeatureAdsSolrResult($location, $cookieLocationDetails, CategoryRepository::OTHERS_DISTANCE);
         /*if ($location && count($featureAds) < 12) {
             $featureAds = $this->getFeatureAdsSolrResult($location, $cookieLocationDetails, 200);
         }
@@ -372,12 +372,13 @@ class AdultController extends ThirdPartyLoginController
      * @param int $distanceRange Distance limit range.
      * @return array
      */
-    private function getFeatureAdsSolrResult($location = null, $cookieLocationDetails = null, $distanceRange = 30)
+    private function getFeatureAdsSolrResult($location = null, $cookieLocationDetails = null, $distanceRange = 15)
     {
         $data           = array();
         $keywords       = null;
         $page           = 1;
         $recordsPerPage = 12;
+        $resultdata     = array();
 
         //set ad criteria to search
         $data['query_filters']['item']['status_id']              = EntityRepository::AD_STATUS_LIVE_ID;
@@ -397,7 +398,14 @@ class AdultController extends ThirdPartyLoginController
         }
         $solrResponse = $solrSearchManager->getSolrResponse();
 
-        return $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponse);
+        $resultdata = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponse);
+        if(empty($resultdata) || count($resultdata)<=3) {
+            $data['query_filters']['item']['is_top_ad'] = '0';
+            $solrSearchManager->init('ad', $keywords, $data, $page, $recordsPerPage);            
+            $solrResponse = $solrSearchManager->getSolrResponse();
+            $resultdata = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponse);
+        }
+        return $resultdata;
     }
     
     /**
