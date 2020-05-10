@@ -1671,14 +1671,22 @@
     {% endfor %}
 
     {# Response Type @Jigar Lad #}
-    {% if adDetail.user.contact_through_phone == 'true' and adDetail.user.contact_through_email == 'true' %}
-        {% set responseType = 'both' %}
-    {% elseif adDetail.user.contact_through_phone == 'true' %}
-        {% set responseType = 'phone' %}
-    {% elseif adDetail.user.contact_through_email == 'true' %}
-        {% set responseType = 'email' %}
+    {% if adDetail.user is defined %}
+        {% if adDetail.user.contact_through_phone == 'true' and adDetail.user.contact_through_email == 'true' %}
+            {% set responseType = 'both' %}
+        {% elseif adDetail.user.contact_through_phone == 'true' %}
+            {% set responseType = 'phone' %}
+        {% elseif adDetail.user.contact_through_email == 'true' %}
+            {% set responseType = 'email' %}
+        {% else %}
+            {% set responseType = 'node' %}
+        {% endif %}
     {% else %}
-        {% set responseType = 'node' %}
+        {% if adDetail.a_user_phone_number_s is defined %}
+            {% set responseType = 'phone' %}
+        {% else %}
+            {% set responseType = 'none' %}
+        {% endif %}
     {% endif %}
     {% if userTypeText == 'Business ad' %}
         {% set businessname = adDetail.a_s_business_name_s is defined ? adDetail.a_s_business_name_s :'Business advertiser' %}
