@@ -50,14 +50,8 @@
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     $(document).ready(function(){
-        setDefaultLocatonFromCookie();
-        $('#s2id_fa_adult_home_page_search_item__category_id').attr('placeholder','Categories');
-        $('#s2id_fa_adult_home_page_search_item__distance').attr('placeholder','Distance');
         $('#fa_adult_home_page_search_item_adult__services_id').attr('placeholder','Services');
-        $('#s2id_fa_adult_home_page_search_item_adult__ethnicity_id').attr('placeholder','Ethnicity');
-        $('#fa_adult_home_page_search_item_adult__services_id').addClass('placeholderTxt');
-        $('#s2id_fa_adult_home_page_search_item__distance').addClass('placeholderTxt');
-        
+        $('#fa_adult_home_page_search_item_adult__services_id').addClass('placeholderTxt');        
     });
 </script>
 {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_adult_home_page_search_item__location', 'placeHolder': 'City'|trans, 'route' : 'town_ajax_find_town_by_term', 'displayOnlyTown' : 'true'}) }}
