@@ -4810,13 +4810,14 @@ class AdRepository extends EntityRepository
             $townId = $explodetownIds[0];
         }
 
-
+        $dayBeforeStartDate = CommonManager::getTimeStampFromStartDate(date('Y-m-d', strtotime('-1 day')));
         
         $query = $this->createQueryBuilder(self::ALIAS)
         ->select(self::ALIAS.'.id')
         ->andWhere(self::ALIAS.'.category = (:catId)')
         ->setParameter('catId', $category)
         ->andWhere('IDENTITY('.self::ALIAS.'.status) ='.BaseEntityRepository::AD_STATUS_LIVE_ID)
+        ->andWhere('(' . self::ALIAS . '.created_at <= ' . $dayBeforeStartDate . ' OR '. self::ALIAS . '.updated_at <= ' . $dayBeforeStartDate . ')')
         ->andWhere(self::ALIAS.'.is_blocked_ad=0');
 
         if ($townId) {
