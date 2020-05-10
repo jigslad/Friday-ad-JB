@@ -144,6 +144,11 @@
     }
     </style>
     {# { include('FaFrontendBundle::new-fa-main-css.html.twig') } #}
+    {% if app.user.getBusinessCategoryId() == ADULT_CATEGORY_ID %}
+    	{{ fetch_repository('FaUserBundle:User').set18PlusCookies() }}
+    	{% set showAdultPopup = 0 %}
+    	{{ include('FaFrontendBundle:Adult:adult-css.html.twig') }}
+    {% endif %}
   
     {% block blockGaCode%}
         {{ include('FaFrontendBundle::gaCode.html.twig') }}

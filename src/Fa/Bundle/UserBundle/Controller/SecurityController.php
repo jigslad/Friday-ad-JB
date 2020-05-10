@@ -61,8 +61,15 @@ class SecurityController extends ThirdPartyLoginController
                 } catch (\Exception $e) {
                     $prevRouteName = null;
                 }
-                if ($prevRouteName && !in_array($prevRouteName, array('login', 'fa_user_register'))) {
+                if ($prevRouteName && !in_array($prevRouteName, array('login', 'fa_user_register'))) {                    
                     //set new cookies for redirect after login.
+                    if ($this->isAuth()) {
+                        if($this->getLoggedInUser()->getBusinessCategoryId()==CategoryRepository::ADULT_ID) {
+                            $response = new Response();
+                            $response->headers->setCookie(new Cookie('is_over_18', 1, time() + 1 * 86400));
+                            $response->sendHeaders();
+                        }
+                    }
                     $response = new Response();
                     $response->headers->setCookie(new Cookie('frontend_redirect_after_login_path_info', $refererUrl, time() + 3600 * 24 * 7));
                     $response->sendHeaders();
