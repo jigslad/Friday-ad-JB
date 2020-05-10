@@ -27,6 +27,7 @@ use Fa\Bundle\EntityBundle\Repository\EntityRepository as BaseEntityRepository;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\HttpFoundation\Cookie;
 use Fa\Bundle\UserBundle\Form\ForgotPasswordType;
+use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 
 /**
  * This controller is used for security management.
@@ -97,6 +98,14 @@ class SecurityController extends ThirdPartyLoginController
         }
 
         if ($this->isAuth()) {
+            if($this->getLoggedInUser()->getBusinessCategoryId()==CategoryRepository::ADULT_ID) {
+                $response = new Response();
+                $response->headers->setCookie(new Cookie('is_over_18', 1, time() + 1 * 86400));
+                $response->sendHeaders();
+                if($alreadyLoggedinRedirectRoute == 'fa_frontend_homepage') {
+                    $alreadyLoggedinRedirectRoute == 'fa_adult_homepage';
+                }
+            }
             return $this->redirect($this->generateUrl($alreadyLoggedinRedirectRoute));
         }
 
