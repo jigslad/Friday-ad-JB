@@ -355,6 +355,11 @@
                 'eventLabel': $("#fa_top_search_keywords").val()
                 }); 
             });
+
+            $('#top_search_location_homepage_ok').click(function() {
+            	$("form[name='fa_top_search']").submit();
+            }
+            
         });
 
         $( window ).scroll(function() {
