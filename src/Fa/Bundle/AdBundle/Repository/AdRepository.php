@@ -5124,18 +5124,15 @@ class AdRepository extends EntityRepository
             $explodetownIds = explode(',',$townIds);
             $townId = $explodetownIds[0];
         }
-        
-        $dayBeforeStartDate = CommonManager::getTimeStampFromStartDate(date('Y-m-d', strtotime('-1 day')));
-        $dayBeforeEndDate = CommonManager::getTimeStampFromEndDate(date('Y-m-d', strtotime('-1 day')));
+
+
         
         $query = $this->createQueryBuilder(self::ALIAS)
         ->select(self::ALIAS.'.id')
         ->andWhere(self::ALIAS.'.category = (:catId)')
         ->setParameter('catId', $category)
-        ->andWhere('(' . self::ALIAS . '.created_at <= ' . $dayBeforeStartDate . ' OR '. self::ALIAS . '.updated_at <= ' . $dayBeforeStartDate . ')');
-        ->andWhere('(' . self::ALIAS . '.created_at >= ' . $dayBeforeEndDate . ' OR '. self::ALIAS . '.updated_at >= ' . $dayBeforeEndDate . ')');
-        $query->andWhere('IDENTITY('.self::ALIAS.'.status) ='.BaseEntityRepository::AD_STATUS_LIVE_ID);
-        $query->andWhere(self::ALIAS.'.is_blocked_ad=0');
+        ->andWhere('IDENTITY('.self::ALIAS.'.status) ='.BaseEntityRepository::AD_STATUS_LIVE_ID)
+        ->andWhere(self::ALIAS.'.is_blocked_ad=0');
 
         if ($townId) {
             $location = $this->_em->getRepository('FaEntityBundle:Location')->find($townId); 
@@ -5147,8 +5144,8 @@ class AdRepository extends EntityRepository
             }
         }
         $query->orderBy(self::ALIAS.'.id', 'DESC');
+        $query->setMaxResults(1);
         $adList = $query->getQuery()->getArrayResult();
-        shuffle($adList);
         if (!empty($adList)) {
             $adId = $adList[0]['id'];
         }
