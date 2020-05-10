@@ -258,7 +258,7 @@
             getHeaderImage();            
 
             setDefaultLocatonFromCookie();
-            $('#fa_top_search_item__distance').val(15);
+            $('#fa_top_search_item__distance').val(5);
             $('#fa_top_search_item__category_id').val({{ categoryAdultId }});
             $('.select-control').select2({ minimumResultsForSearch: -1 });
             
@@ -384,13 +384,14 @@
             })
             .done(function(response) {
                 if (response.image) {
-                    headerParallax = $('#header_image_div').parallax({imageSrc: response.image, naturalWidth: response.width, naturalHeight: response.height});
+                	 $("#header_image_div").css("background-image", "url('"+response.image+"')");
+                   // headerParallax = $('#header_image_div').parallax({imageSrc: response.image, naturalWidth: response.width, naturalHeight: response.height});
                     if (response.phone_image && response.phone_image_url)
                         $(".forsale-phone").html('<a href="'+response.phone_image_url+'"><img src="'+response.phone_image+'"></a>');
                     else if (response.phone_image)
                         $(".forsale-phone").html('<img src="'+response.phone_image+'">');
-                } else {
-                    $('#header_image_div').parallax({imageSrc: "{{ asset_url('/fafrontend/images/home-slider.png') }}" });
+                } else {  
+                	 $("#header_image_div").css("background-image", "url('{{ asset_url('/fafrontend/images/home-slider.png') }}')");                  
                 }
             });
         }
