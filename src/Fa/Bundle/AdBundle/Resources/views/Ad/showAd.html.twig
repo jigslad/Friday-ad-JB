@@ -1696,8 +1696,14 @@
 
     {# Location @Jigar Lad #}
     {% set locationReposetry = fetch_repository('FaEntityBundle:Location') %}
-    {% set Town = locationReposetry.find(adDetail.a_l_main_town_id_i)%}
-    {% set Country = locationReposetry.getCountyByTownId(adDetail.a_l_main_town_id_i)%}
+    {% if adDetail.a_l_main_town_id_i is defined %}
+        {% set Country = locationReposetry.getCountyByTownId(adDetail.a_l_main_town_id_i)%}
+        {% set Town = locationReposetry.find(adDetail.a_l_main_town_id_i)%}
+        {% set Town = Town.name %}
+    {% else %}
+        {% set Country = 'UK' %}
+        {% set Town = 'null' %}
+    {% endif %}
     <script>
         {# get date and create as new #}
         var publishedDate = new Date(1000*{{ adDetail.a_published_at_i }});
@@ -1715,7 +1721,7 @@
                     "photos": '{{ adDetail.a_total_images_i }}',
                     "county": "{{ Country|raw }}",
                     "locationGroup": "{{ (locationGroup.name is defined ? locationGroup.name : locationGroup)|raw}}",
-                    "town": "{{ Town.name|raw }}",
+                    "town": "{{ Town|raw }}",
                     "video": '{{ youtubeVideoUrl is not  null ? 'True' : 'False' }}',
                     "paypalEnabled": '{{ showBuyNowWithPaypal ? 'True' : 'False'}}',
                     "publishDate": publishedDate.getFullYear() + "/" + (publishedDate.getMonth() + 1) + "/" + publishedDate.getDate(),
