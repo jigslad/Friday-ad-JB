@@ -298,7 +298,7 @@ class LocationRepository extends BaseEntityRepository
     {
         $translator  = CommonManager::getTranslator($container);
         $optionArray = array(
-                           ''       => $translator->trans('Select distance'),
+                           ''       => $translator->trans('Distance'),
                            '0'      => $translator->trans('0 mile'),
                            '2'      => $translator->trans('2 miles'),
                            '5'      => $translator->trans('5 miles'),
