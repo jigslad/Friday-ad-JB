@@ -191,12 +191,19 @@
     }
     </style>
     {# { include('FaFrontendBundle::new-fa-main-css.html.twig') } #}
-    {% if app.user.getBusinessCategoryId() == ADULT_CATEGORY_ID %}
-    	{{ fetch_repository('FaUserBundle:User').set18PlusCookies() }}
-    	{% set showAdultPopup = 0 %}
-    	{{ include('FaFrontendBundle:Adult:adult-css.html.twig') }}
+    {% set busCatId = null %}
+    {% if app.user is defined %}
+    	{% set busCatId = (app.user.getBusinessCategoryId() is defined)?app.user.getBusinessCategoryId():null %}
     {% endif %}
-  
+    
+    {% if busCatId %}
+        {% if busCatId == ADULT_CATEGORY_ID %}
+        	{{ fetch_repository('FaUserBundle:User').set18PlusCookies() }}
+        	{% set showAdultPopup = 0 %}
+        	{{ include('FaFrontendBundle:Adult:adult-css.html.twig') }}
+        {% endif %}
+    {% endif %}
+    
     {% block blockGaCode%}
         {{ include('FaFrontendBundle::gaCode.html.twig') }}
     {% endblock %}
@@ -298,18 +305,10 @@
         	{% endif %}
     
         	{% if assignedCategoryId!=0 %}
-            	{% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(assignedCategoryId, false, fetch_container_instance()) %}
-                {% set catCnt = 0 %}
-                {% if categoryPath|length %}
-                    {% for categoryId, categoryName in categoryPath %}
-                        {% if catCnt == 0 %}
-                            {% if (categoryId == ADULT_CATEGORY_ID) %}
-                                {% set showAdultPages = 1 %}
-                            {% endif %}
-                        {% endif %}
-                        {% set catCnt = catCnt + 1 %}
-                    {% endfor %}
-                {% endif %}
+            	{% set rootCategoryId = fetch_repository('FaEntityBundle:Category').getRootCategoryId(assignedCategoryId, fetch_container_instance()) %}
+                {% if (rootCategoryId == ADULT_CATEGORY_ID) %}
+                      {% set showAdultPages = 1 %}
+                {% endif %}                
             {% endif %}	
         {% endif %}
         
