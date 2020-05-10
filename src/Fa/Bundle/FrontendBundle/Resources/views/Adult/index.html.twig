@@ -259,6 +259,8 @@
             $('div.homepage-row:even').addClass('white-bg');
             getHeaderImage();            
 
+            setDefaultLocatonFromCookie();
+            
             $('#fa_top_search_item__category_id').val({{ categoryAdultId }});
             $('.select-control').select2({ minimumResultsForSearch: -1 });
             
