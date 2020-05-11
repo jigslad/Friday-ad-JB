@@ -11,7 +11,7 @@ a, a:hover, a:focus, .a-tag, .a-tag:hover, .a-tag:focus  {
     color: $common-text-color !important; 
 }
 
-h1, h2, h3, h4, h5, .s-h1, .s-h3, .s-h2 { color: $htag; }
+h1, h2, h3, h4, h5, .s-h1, .s-h3, .s-h2 { color: $htag-color; }
 h6 { color: $common-bg-color; }
 
 .white-bg { background: $white; }
