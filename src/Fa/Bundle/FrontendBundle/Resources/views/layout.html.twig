@@ -144,18 +144,6 @@
     }
     </style>
     {# { include('FaFrontendBundle::new-fa-main-css.html.twig') } #}
-    {% set busCatId = null %}
-    {% if app.user is defined %}
-    	{% set busCatId = (app.user.getBusinessCategoryId() is defined)?app.user.getBusinessCategoryId():null %}
-    {% endif %}
-    
-    {% if busCatId %}
-        {% if busCatId == ADULT_CATEGORY_ID %}
-        	{{ fetch_repository('FaUserBundle:User').set18PlusCookies() }}
-        	{% set showAdultPopup = 0 %}
-        	{{ include('FaFrontendBundle:Adult:adult-css.html.twig') }}
-        {% endif %}
-    {% endif %}
     
     {% block blockGaCode%}
         {{ include('FaFrontendBundle::gaCode.html.twig') }}
