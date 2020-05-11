@@ -376,24 +376,7 @@
         }
 
         function getHeaderImage() {
-            var viewPort = getViewport();
-            $.ajax({
-                type: "POST",
-                url : '{{ path('ajax_get_adul_header_image') }}',
-                data : {'screenWidth': viewPort.width, 'location': '{{ app.request.get('location') }}'},
-            })
-            .done(function(response) {
-                if (response.image) {
-                	 $("#header_image_div").css("background-image", "url('"+response.image+"')");
-                   // headerParallax = $('#header_image_div').parallax({imageSrc: response.image, naturalWidth: response.width, naturalHeight: response.height});
-                    if (response.phone_image && response.phone_image_url)
-                        $(".forsale-phone").html('<a href="'+response.phone_image_url+'"><img src="'+response.phone_image+'"></a>');
-                    else if (response.phone_image)
-                        $(".forsale-phone").html('<img src="'+response.phone_image+'">');
-                } else {  
-                	 $("#header_image_div").css("background-image", "url('{{ asset_url('/fafrontend/images/home-slider.png') }}')");                  
-                }
-            });
+        	
         }
         //]]>
         function showHideAdvanceSearch() {
