@@ -33,7 +33,7 @@
                 <div class="col-md-16 col-lg-11 mx-auto">
                     <div class="small-wrapper">
                         <div class="paa-bdr-box bdr-none mt20">
-                            <h3 class="s-h3 text-center mb20">{{'Billing details'|trans({},'frontend-cyber-source')}}</h3>
+                            <h3 class="s-h3 text-center mb40">{{'Billing details'|trans({},'frontend-cyber-source')}}</h3>
                             <div class="payment-row first-row">
                                 {{ form_row(userCardForm.street_address, {'attr': {'class': 'white-field'}}) }}
                             </div>
@@ -99,7 +99,7 @@
                             <div class="mb20">
                                 {{ form_widget(userCardForm.save, {'attr': {'class':'primary-btn-1 btn btn-block btn-place-ad'}}) }}
                             </div>
-                            <div class="mb20">
+                            <div class="mb30">
                                 {{ form_widget(userCardForm.cancel, {'attr': {'class':'primary-btn-3 btn btn-block thin-btn', 'onclick': 'showHideUserCard(false);'}}) }}
                             </div>
                         </div>

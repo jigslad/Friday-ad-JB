@@ -399,8 +399,19 @@
 	font-weight: 400;
 	border-bottom: 1px solid #FFFFFF;
 }
+.panel-heading .section-head .media-body:hover{
+    color: #82C249 !important;
+}
 .collapse-body-content {
-    padding: 24px 0 40px;
+    padding: 24px 0 70px;
+}
+@media only screen and (min-width: 320px) and (max-width: 559px) {
+    .collapse-body-content {
+        padding: 24px 0 50px;
+    }
+    .postcode{
+        flex-wrap: unset !important;
+    }
 }
 .db-list .list-icon-text {
 	padding: 0 0 0 49px;
@@ -743,6 +754,7 @@
 .small-wrapper {
     width: 300px;
     margin: 0 auto;
+    padding: 0 10px;
 }
 .small-wrapper.center-block{
     margin: 0 !important;
@@ -2321,6 +2333,7 @@ textarea[rows] {
 .dash-block .expiry-date {
     display: flex;
     margin-bottom: 20px;
+    flex-wrap :unset;
 }
 .dash-block .expiry-date .select {
     width: 110px;
@@ -2572,4 +2585,30 @@ textarea[rows] {
 
 .chat-usericon .profile-placeholder {
     background: transparent !important;
+}
+.visa {
+    background: url(/bundles/fafrontend/images/visa.png) no-repeat 0 0 / 67px 42px;
+    display: inline-block;
+    width: 67px;
+    height: 42px;
+    vertical-align: middle;
+    margin-right: 15px;
+}
+
+.alert-box.info {
+    background: #c5eff8;
+    border: 1px solid #31c5f2 !important;
+    color: #31c5f2 !important;
+}
+.alert-box{
+    background-color: #FFFFFF;
+}
+
+top-links .db-notifications {
+    max-height: 368px;
+    overflow-y: auto;
+    padding: 0;
+    .inner {
+        min-height: 100%;
+    }
 }
