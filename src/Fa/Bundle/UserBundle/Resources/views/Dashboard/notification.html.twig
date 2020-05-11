@@ -3,7 +3,7 @@
         <div data-alert class="alert alert-box {{ notification['notification_type']}}" role="alert">
             <span class="alert-icon">&nbsp;</span>
             {{ notification['message']| raw }}
-            <a href="javascript:hideAlertMessage()" class="close"></a>
+            <a data-dismiss="alert" class="close"></a>
 {#            <a href="javascript:void(0)" class="close" onclick="removeNotificationMessage({{ notification['id'] }});">&times;</a>#}
         </div>
     {% endfor %}
