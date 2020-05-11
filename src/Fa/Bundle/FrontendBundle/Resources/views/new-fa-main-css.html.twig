@@ -217,7 +217,7 @@ ul.pagination li.pager-prev.unavailable:hover a, ul.pagination li.pager-next.una
 ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {  text-indent: -9999px !important; }
 #eighteenPlusWarnningModel .primary-btn-2 { background:linear-gradient(135deg, #A75BD8 0%, #C60A84 100%) !important;border: 0px solid transparent !important; }
 #eighteenPlusWarnningModel .primary-btn-2:hover { background:linear-gradient(135deg, #8645AA 0%, #9D086A 100%) !important; }
-.interested-item a.button:hover { color: #82C249 !important; }
+.interested-item a.button:hover, .interested-item a.button:focus, .interested-item a.button:active { color: #FFFFFF !important; }
 .paypal-box { background-color: transparent !important;border: solid 1px #CBD5D9 !important; }
 .ui-selectmenu-button { border-radius: 4px !important; }
 .paa-bdr-box input[type="text"] { margin-bottom: 15px !important; }
@@ -252,7 +252,12 @@ ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {  text
 	border-color: #CBD5D9 !important;border-right: 0px !important;
 }
 .primary-btn-1.disabled, .btn-disabled { background: #EAEFF0 !important; }
-    
+
+.search-pref a.expand-search, .search-pref a.expand-search:hover { background:url('/bundles/fafrontend/images/setplus-green.png') no-repeat left center !important; }
+.search-pref a.collapse-search, .search-pref a.collapse-search:hover { background:url('/bundles/fafrontend/images/setminus.png') no-repeat left center !important; }
+.cart-item-price h4.total-price { padding: 60px 0 0 0 !important; }
+.notify-me.opened button {border-radius: 4px 4px 4px 4px !important;}
+
 /* Category Images */
 .discover-forsale, .cat-forsale { background: url(/bundles/fafrontend/images/categories/Ic-btn-For-Sale.png) no-repeat !important; }
 .discover-motors, .cat-motors { background: url(/bundles/fafrontend/images/categories/Ic-btn-Motors.png) no-repeat !important; }
@@ -578,6 +583,11 @@ button.signup-fb-btn.expand {
         width: 320px !important;
     }
 }
+@media only screen and (min-width: 320px) and (max-width: 559px) {
+	.listing h5 {
+		max-height: 25px !important;
+	}
+}
 @media only screen and (min-width: 320px) and (max-width: 759px) {
 	#home-search .all-cat-select {
 		min-width: 52px !important;
@@ -841,6 +851,10 @@ button.signup-fb-btn.expand {
 	.dtl-user-links .large-12.dtl-white-btn {
         width: 100%!important;
     }
+    .manage-item-list .featuredBlock, .manage-item-list .adEditBlock {
+	    margin-top: 0px !important;
+	    margin-bottom: 0px !important
+	}
 }
 @media only screen and (max-width: 640px) {
     .help-links {
@@ -862,7 +876,8 @@ button.signup-fb-btn.expand {
     }
 }
 @media only screen and (min-width: 641px) and (max-width: 959px) {  
-  .big-wrapper { width: auto !important;}                
+  .big-wrapper { width: auto !important;}   
+  .manage-item-list .large-5 a {  margin-bottom: 16px !important; }             
 } 
 @media only screen and (min-width:760px) and (max-width: 959px) {
 	#home-search .search-btn button { text-indent:unset !important; }
