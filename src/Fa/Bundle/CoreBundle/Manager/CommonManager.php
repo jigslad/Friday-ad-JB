@@ -1018,7 +1018,7 @@ class CommonManager
                 if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
                     return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img src="'.$newAwsImagePath.'" alt="'.$userName.'" />';
                 } else {
-                    return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<span style="background-image: url('.$newAwsImagePath.')" title="'.$userName.'"></span>';
+                    return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img src="'.$newAwsImagePath.'" title="'.$userName.'" />';
                 }
             }
         } elseif (is_file($imagePath)) {
