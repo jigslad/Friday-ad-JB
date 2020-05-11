@@ -312,7 +312,7 @@ class CategoryRepository extends NestedTreeRepository
         ->getQuery()->getResult();
 
 
-        $catArray = array($id => 'Category');
+        $catArray = array($id => 'Categories');
         foreach ($categories as $cat) {
             $catArray[$cat->getId()] = $cat->getName();
         }
