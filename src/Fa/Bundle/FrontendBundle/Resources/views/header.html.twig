@@ -21,8 +21,8 @@
                     {% set totalUnreadMsg = messageRepository.getMessageCount(app.user.getId(), 'all', fetch_container_instance()) %}
                     {% set userRole = fetch_repository('FaUserBundle:User').getUserRole(app.user.getId(), container) %}
                     <ul class="clearfix">
-                        <li>
-                            <a href="{{ path('dashboard_home') }}" class="dropdown-toggle my-db-desktop" data-toggle="dropdown">{{ 'My Dashboard'|trans({}, 'frontend-header-usermenu') }} <b class="f-caret"></b></a>
+                        <li id="db-dropdown-menu-link">
+                            <a href="{{ path('dashboard_home') }}" class="dropdown-toggle my-db-desktop" >{{ 'My Dashboard'|trans({}, 'frontend-header-usermenu') }} <b class="f-caret"></b></a>
                             <ul id="db-dropdown-menu" class="dropdown-menu f-dropdown">
                                 <li><a href="{{ path('dashboard_home') }}" class="home-icon">{{ 'Dashboard home'|trans({}, 'frontend-header-usermenu') }}</a></li>
                                 <li><a href="{{ path('user_ad_message_all') }}" class="messages-icon">{{ 'Messages'|trans({}, 'frontend-header-usermenu') }}&nbsp;<span id="total_unread_msg_div" class="show-for-small-only">({{totalUnreadMsg}})</span> </a></li>
@@ -35,6 +35,15 @@
                                 <li><a href="{{ path('my_purchases') }}" id="shop-header-id" class="purchase-icon">{{ 'Purchases'|trans({}, 'frontend-header-usermenu') }}</a></li>
                                 <li><a href="{{ path('my_account') }}" id="account-header-id" class="account-icon">{{ 'Account'|trans({}, 'frontend-header-usermenu') }}</a></li>
                             </ul>
+                            <script>
+                                $( "#db-dropdown-menu-link" )
+                                    .mouseenter(function() {
+                                        $("#db-dropdown-menu").addClass( "show" );
+                                    })
+                                    .mouseleave(function() {
+                                        $("#db-dropdown-menu").removeClass( "show" );
+                                    });
+                            </script>
                         </li>
                         <li>
                             {% set myProfileUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(app.user.getId()) %}
@@ -248,7 +257,8 @@
                     <ul class="place-item">
                         <li class="place-item-btn text-center"><a href="{{ path('ad_post_first_step') }}" title="{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}">{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}</a></li>
                     </ul>
-           </div>   
+           </div>
+        </div>
     </nav>
    {% if status_code == 200 and currentRoute is defined and currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'listing_page', 3: 'landing_page_category_location', 4: 'landing_page_category'}  and not app.request.attributes.get('static_page') %}
         </div>
