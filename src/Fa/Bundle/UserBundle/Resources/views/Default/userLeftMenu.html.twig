@@ -40,8 +40,10 @@
             {% set menuToggleClass = '' %}
             {% set menuToggleStyle = 'show' %}
         {% else %}
-            {% set menuToggleClass = 'collapsed' %}
-            {% set menuToggleStyle = '' %}
+            {% set menuToggleClass = '' %}
+            {% set menuToggleStyle = 'show' %}
+{#            {% set menuToggleClass = 'collapsed' %}#}
+{#            {% set menuToggleStyle = '' %}#}
         {% endif %}
         <li class="db-left-submenu">
             <a class="selling submenu-list {{ menuToggleClass }}" data-toggle="collapse" href="#selling" role="" aria-expanded="" aria-controls="selling">
