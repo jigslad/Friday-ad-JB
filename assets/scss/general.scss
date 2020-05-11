@@ -7,105 +7,55 @@ body, html {
 a, a:hover, a:focus, .a-tag, .a-tag:hover, .a-tag:focus  {
     color: $atag-color;
 }
-h1, h2, h3, h4, h5, .s-h1, .s-h3, .s-h2 { color: $common-text-color; }
+.ad-edit a:hover.xs-btn-2, .ad-edit a:focus.xs-btn-2, .ad-remove a:hover.xs-btn-2, .ad-remove a:focus.xs-btn-2 { 
+    color: $common-text-color !important; 
+}
+
+h1, h2, h3, h4, h5, .s-h1, .s-h3, .s-h2 { color: $htag-color; }
 h6 { color: $common-bg-color; }
 
 .white-bg { background: $white; }
 .gray-bg { background: $grey-color; }
 label { color: $dark-grey; }
-
-.secondary-btn-1 {
-    background: linear-gradient(135deg, $secondary-btn-l-color 0%, $secondary-btn-r-color 100%) !important;
-    border: 1px solid $secondary-btn-brdr-color;
-    color: $white;
-    &:focus, &:hover {
-        background: linear-gradient(135deg, $secondary-btn-lh-color 0%, $secondary-btn-rh-color 100%) !important;
-        border: 1px solid $secondary-btn-brdr-h-color;
-        color: $white;
-    }
-}
-.secondary-btn-2 {
-    background: $white;
-    border: 1px solid $secondary-color;
-    color: $secondary-color;
-    &:focus, &:hover {
-        background: $form-bg-color;
-        border: 1px solid $secondary-color;
-        color: $secondary-color;
-    }
-}
-.secondary-btn-3 {
-    background: $form-text-color;
-    border: 1px solid $form-text-color;
-    color: $white;
-    &:focus, &:hover {
-      background: $secondary-color;
-      border: 1px solid $secondary-color;
-      color: $white;
-  }
-}
-.secondary-btn-4 {
-    background: $common-bg-color;
-    border: 1px solid $form-border-color;
-    color: $form-text-color;
-    &:focus, &:hover {
-        background: $form-border-color;
-        border: 1px solid $form-border-color;
-        color: $form-text-color;
-    }
-}
+input,button, .button, .btn, .primary-btn-1, .primary-btn-2, .primary-btn-3, .secondary-btn-1, .secondary-btn-2,
+.reply-msg-heading .report, .reply-msg-heading .mark-sold, .paypal-box, .credit-cards-box, input.checkbox + label::after,
+.reply-msg-heading .report:hover, .reply-msg-heading .report:focus, .image-tooltip, .enquire-tooltip, .adult-pop-up-modal,
+.adult-modal.custom-modal .modal-content, .error-page .home-search, .popular-items .popular-graphic img, .button.special, .alert-box.radius,
+.discover-categories a.active, .discover-categories a.active
+{ border-radius:$border-radius; } 
 
 .primary-btn-1 {
     background: linear-gradient(135deg, $primary-btn-l-color 0%, $primary-btn-r-color 100%) !important;
-    border: 1px solid transparent;
-    border-radius: 2px;
+    border: 0px solid transparent;
     color: $white;
     &:focus, &:hover {
         background: linear-gradient(135deg, $primary-btn-lh-color 0%, $primary-btn-rh-color 100%) !important;
-        border: 1px solid transparent;
+        border: 0px solid transparent;
         color: $white;
     }
 }
-.primary-btn-3 {
-    background: $form-text-color;
-    border: 1px solid $form-text-color;
-    color: $white;
-    border-radius: 2px;
-    &:focus, &:hover {
-        background: $secondary-h-color;
-        border: 1px solid $secondary-h-color;
-        color: $white;
-    }
-}
-
-.xs-btn-1, .xs-btn-2, .xs-thin-btn {
-    font-family: $font-family-default;
-    font-size: 14px;
-    font-weight: 700;
-    color: $white;
-    line-height: 16px;
-    padding: 5px 20px 7px 20px;
-    border-radius: 2px;
-}
-
-.xs-btn-1 {
+.secondary-btn-1, .xs-btn-1, .primary-btn-2 {
     background: linear-gradient(135deg, $secondary-btn-l-color 0%, $secondary-btn-r-color 100%) !important;
     border: 1px solid $secondary-btn-brdr-color;
+    color: $white;
     &:focus, &:hover {
         background: linear-gradient(135deg, $secondary-btn-lh-color 0%, $secondary-btn-rh-color 100%) !important;
         border: 1px solid $secondary-btn-brdr-h-color;
         color: $white;
     }
 }
-.xs-btn-2 {
-    background: $common-bg-color;
-    border: 1px solid $form-border-color;
-    color: $form-label-color;
+.secondary-btn-2, .primary-btn-3, .xs-btn-2, .xs-thin-btn {
+    background: $white;
+    border: 1px solid $secondary-btn-brdr-color;
+    color: $secondary-color;
     &:focus, &:hover {
-      background: $form-border-color;
-      border: 1px solid $form-border-color;
-      color: $form-label-color;
+        background: linear-gradient(135deg, $secondary-btn-2-lh-color 0%, $secondary-btn-2-rh-color 100%) !important;
+        border: 1px solid $secondary-color;
+        color: $white;
     }
+}
+.xs-btn-1, .xs-btn-2, .xs-thin-btn {
+    color: $white;
 }
 input[type="text"], input[type="password"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="month"], input[type="week"], input[type="email"], input[type="number"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"], input[type="color"], textarea, .attachment-textbox {
     font-family: $font-family-default;
@@ -984,16 +934,16 @@ footer {
 	background: $light-grey-color !important;
 }
 .select2-container--default .select2-selection--single {
-	color: $text-color !important;border: 1px solid $grey-color !important;
+	color: $common-text-color !important;border: 1px solid $grey-color !important;
 }
 .select2-container--default .select2-search--dropdown .select2-search__field {
 	border: 1px solid $grey-color;background: $light-grey-color !important;
 }
 .select2-container--default .select2-results > .select2-results__options {
-	color: $text-color !important; background: $light-grey-color !important; border: 1px solid $grey-color !important;
+	color: $common-text-color !important; background: $light-grey-color !important; border: 1px solid $grey-color !important;
 }
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
-	color: $text-color !important;box-shadow: 0 1px 0 $grey-color !important;
+	color: $common-text-color !important;box-shadow: 0 1px 0 $grey-color !important;
 }
 .select2-container--open .select2-dropdown {
 	border: 1px solid $grey-color !important;
@@ -1035,7 +985,7 @@ ul.pagination li a, ul.pagination li button {
     color: $dark-grey;
 }
 ul.pagination li.current a, ul.pagination li.current button {
-    color: $text-color;
+    color: $common-text-color;
 }
 ul.pagination li.pager-prev a, ul.pagination li.pager-prev.unavailable a {
     background: $pagination-bg-color url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2213%22%20height%3D%2212%22%20viewBox%3D%220%200%2013%2012%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3Anone%3Bstroke%3A%23ACB0B7%3Bstroke-width%3A2%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Edouble%20arrow%20previous%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-498.000000%2C%20-506.000000%29%22%3E%3Cg%20transform%3D%22translate%28486.000000%2C%20396.000000%29%22%3E%3Cg%20transform%3D%22translate%280.000000%2C%2096.000000%29%22%3E%3Cg%20transform%3D%22translate%2812.000000%2C%2015.000000%29%22%3E%3Cg%20transform%3D%22translate%289.500000%2C%205.000000%29%20scale%28-1%2C%201%29%20translate%28-9.500000%2C%20-5.000000%29%20translate%287.000000%2C%200.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M0%200l4%205%20-4%205%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%282.500000%2C%205.000000%29%20scale%28-1%2C%201%29%20translate%28-2.500000%2C%20-5.000000%29%20%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M0%200l4%205%20-4%205%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat center center;
@@ -1043,20 +993,20 @@ ul.pagination li.pager-prev a, ul.pagination li.pager-prev.unavailable a {
 ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {
     background: $pagination-bg-color url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2214%22%20height%3D%2212%22%20viewBox%3D%220%200%2014%2012%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3Anone%3Bstroke%3A%23ACB0B7%3Bstroke-width%3A2%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Edouble%20arrow%20next%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-928.000000%2C%20-506.000000%29%22%3E%3Cg%20transform%3D%22translate%28486.000000%2C%20396.000000%29%22%3E%3Cg%20transform%3D%22translate%2896.000000%2C%200.000000%29%22%3E%3Cg%20transform%3D%22translate%28347.000000%2C%20111.000000%29%22%3E%3Cg%20transform%3D%22translate%288.000000%2C%200.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M0%200l4%205%20-4%205%22/%3E%3C/g%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M0%200l4%205%20-4%205%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat center center;
 }
-.ui-widget-content .ui-state-focus,.ui-widget-content .ui-state-hover{color:$text-color; }
+.ui-widget-content .ui-state-focus,.ui-widget-content .ui-state-hover{color:$common-text-color; }
 .ui-menu.white-dropdown .ui-menu-item{border-bottom:1px solid $grey-color;}
 .ui-menu.white-dropdown .ui-state-focus{background:$light-grey-color;}
 .ui-menu.keyword-choices .ui-menu-item span, .ui-menu.category-choices .ui-menu-item div span { color:$secondary-btn-l-color; }
 .ui-menu.category-choices .ui-menu-item{ box-shadow:0 1px 0 $grey-color; }
-.ui-menu.category-choices .ui-menu-item:hover{ color:$text-color }
-.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover { color: $text-color ; }
+.ui-menu.category-choices .ui-menu-item:hover{ color:$common-text-color }
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover { color: $common-text-color ; }
 .select2-drop, .ui-autocomplete { border: 1px solid $grey-color;background: $light-grey-color; }
 .select2-results li, .ui-autocomplete li { box-shadow: 0 1px 0 $grey-color; }
 .enquire-tooltip { background: $light-grey-color; border: 1px solid $grey-color; color: $dark-grey; }
 .enquire-tooltip::after { border-color: $grey-color transparent transparent transparent; }
 .detail-sub-head { color: $dark-grey; }
 /* Covid 19 */
-.covid-19-block { background: $text-color; }
+.covid-19-block { background: $common-text-color; }
 .ask-for-offer-help a, .ask-for-offer-help a:hover, .ask-for-offer-help a:focus { color: $covid-bg-color !important; }
 .place-free-ad-btn, .place-free-ad-btn:hover, .place-free-ad-btn:focus, a:hover.button.place-free-ad-btn, a:focus.button.place-free-ad-btn {  background-color: $covid-bg-color;color: $covid-btn-txt-color !important; }
 .covid-19-block.top-border { border-top: 4px solid $covid-bg-color }
@@ -1071,7 +1021,7 @@ ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {
     border-bottom: 1px solid $grey-color;
 }
 
-.bg-img404 + h1, .bg-img410 + h1, .bg-img500 + h1, .ptop_spac { color: $text-color; }
+.bg-img404 + h1, .bg-img410 + h1, .bg-img500 + h1, .ptop_spac { color: $common-text-color; }
 #fa_top_search .search-pref a { color: $common-text-color; }
 
 /* addetails */
@@ -1631,12 +1581,12 @@ footer p { color:$grey-color; }
     background: $dark-grey;
 }
 .dl-menu li .dl-back a {
-    background: $text-color !important;
+    background: $common-text-color !important;
 }
 .top-links .notification-link a span, .top-links .msg-link a span, .top-links .cart-link a span { font-weight: bold; }
-.top-links .f-dropdown { background: $text-color; }
-.top-links .f-dropdown li { box-shadow: inset 0 1px 0 $text-color; }
-.top-links .notification-counter { background: $text-color; box-shadow: inset 0 1px 0 $text-color; }
+.top-links .f-dropdown { background: $common-text-color; }
+.top-links .f-dropdown li { box-shadow: inset 0 1px 0 $common-text-color; }
+.top-links .notification-counter { background: $common-text-color; box-shadow: inset 0 1px 0 $common-text-color; }
 .top-links a span.unread-msg { background: $secondary-btn-l-color; }
 
 /* Newsletter */
@@ -1722,7 +1672,7 @@ footer p { color:$grey-color; }
 }
 /* AdList */
 .bus-abt-us-div a, .bus-abt-us-div a:hover, .bus-abt-us-div a:focus {
-	color: $text-color !important;
+	color: $common-text-color !important;
 }
 .bus-shop-user-item-slider .item .busad-item { border: 1px solid $light-grey-color; }
 .budget-go-btn {
