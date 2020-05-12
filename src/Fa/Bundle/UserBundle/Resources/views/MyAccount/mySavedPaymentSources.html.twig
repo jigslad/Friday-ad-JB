@@ -1,5 +1,14 @@
-<div class="db-list {% if not userCardForm.vars.valid or app.session.flashbag.has('card_success') %}active{% endif %}">
-    <a class="panel-heading collapsed" data-toggle="collapse" data-target="#panel2b">
+{% if not userCardForm.vars.valid or app.session.flashbag.has('card_success') %}
+    {% set activeClass = 'active' %}
+    {% set linkClass = '' %}
+    {% set contentClass = 'show' %}
+{% else %}
+    {% set activeClass = '' %}
+    {% set linkClass = 'collapsed' %}
+    {% set contentClass = '' %}
+{% endif %}
+<div class="db-list {{ activeClass }}">
+    <a class="panel-heading {{ linkClass }}" data-toggle="collapse" data-target="#panel2b">
         <div class="media section-head">
             <div class="media-body">
                 <span class="payment-sources-icon list-icon-text">{{ 'Saved payment sources'|trans({}, 'frontend-payment-sources') }}</span>
@@ -10,7 +19,7 @@
             </div>
         </div>
     </a>
-    <div id="panel2b" class="collapse collapse-body-content {% if not userCardForm.vars.valid or app.session.flashbag.has('card_success') %}active{% endif %}">
+    <div id="panel2b" class="collapse collapse-body-content {{ contentClass }}">
         {{ include('FaUserBundle:MyAccount:myAccountMessage.html.twig', {'msgName': 'card_success'}) }}
         <div class="saved-payment-sources ml10 mr10">
             {% if paymentTokens|length %}
@@ -80,13 +89,13 @@
                                 <div class="expiry-date row">
                                     <div class="l-select white-select col-md-12">
                                         {{ form_widget(userCardForm.card_expity_month, {'attr': {'class': 'select-control'}}) }}
+                                        {{ form_errors(userCardForm.card_expity_month) }}
                                     </div>
                                     <div class="r-select white-select col-md-12">
                                         {{ form_widget(userCardForm.card_expity_year, {'attr': {'class': 'select-control'}}) }}
+                                        {{ form_errors(userCardForm.card_expity_year) }}
                                     </div>
                                 </div>
-                                {{ form_errors(userCardForm.card_expity_month) }}
-                                {{ form_errors(userCardForm.card_expity_year) }}
                             </div>
                             <div class="payment-row security-code">
                                 {{ form_label(userCardForm.card_security_code) }}

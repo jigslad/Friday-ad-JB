@@ -22,11 +22,11 @@
             {% endif %}
         <div class="newsletter-pref">
             <div class="label-inline">
-                <ul class="custom-control custom-checkbox search-type">
-                    <li>
-                        {{ form_row(userNewsletterPrefForm.dotmailer_newsletter_unsubscribe) }}
-{#                        <input type="checkbox" class="custom-control-input white-feild" id="newsletter1_a">#}
-{#                        <label class="custom-control-label" for="newsletter1_a">Unsubscribe from all emails</label>#}
+                <ul class="search-type">
+                    <li class="white-check">
+                        {{ form_widget(userNewsletterPrefForm.dotmailer_newsletter_unsubscribe,{attr:{'class':'checkbox'}}) }}
+                        <label for='{{ userNewsletterPrefForm.dotmailer_newsletter_unsubscribe.vars.id }}' ></label>
+                        {{ form_label(userNewsletterPrefForm.dotmailer_newsletter_unsubscribe) }}
                     </li>
                 </ul>
             </div>
@@ -37,24 +37,26 @@
             {% set choicesPerColumn = (totalChoices / totalColumns)|round(0, 'ceil') %}
             {% set choiceCount = 0 %}
             <div class="clearfix fa-equalizer" id="newsletter_equalizer">
-                {% for mainCatId in newsletterMainCategoryArray %}
-                    {% set child = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(mainCatId - 1)] %}
-                    <div class="newsletter-pref">
+                <div class="newsletter-pref">
+                    {% for mainCatId in newsletterMainCategoryArray %}
+                        {% set child = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(mainCatId - 1)] %}
                         <div class="col-md-12 col-lg-8 pad-none d-inline-flex">
                             <div class="label-inline">
-                                <ul class="custom-control custom-checkbox search-type">
-                                    <li>
-                                        {{ form_widget(child) }}
-                                        <label for="{{ child.vars.id }}">{{ child.vars.label|raw }}</label>
+                                <ul class="search-type">
+                                    <li class="white-check">
+                                        {{ form_widget(child,{attr:{'class':'checkbox'}}) }}
+                                        <label for="{{ child.vars.id }}"></label>
+                                        {{ child.vars.label|raw }}
                                     </li>
                                 </ul>
                                 {% set childrenArray = newsletterTypeRepository.getChildrens(mainCatId, container)|keys %}
                                 {% for subCatId in childrenArray %}
                                     {% set subChild = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(subCatId - 1)] %}
-                                    <ul class="custom-control custom-checkbox search-type">
-                                        <li>
-                                            {{ form_widget(subChild) }}
-                                            <label for="{{ subChild.vars.id }}">{{ subChild.vars.label|raw }}</label>
+                                    <ul class="search-type">
+                                        <li class="white-check">
+                                            {{ form_widget(subChild,{attr:{'class':'checkbox'}}) }}
+                                            <label for="{{ subChild.vars.id }}"></label>
+                                            {{ subChild.vars.label|raw }}
                                         </li>
                                     </ul>
                                 {% endfor %}
@@ -66,10 +68,11 @@
                                     {% set nonMappedChildrenArray = newsletterTypeRepository.getNonMappedCategories(container)|keys %}
                                     {% for nonMappedCatId in nonMappedChildrenArray %}
                                         {% set nonMappedCatChild = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(nonMappedCatId - 1)] %}
-                                        <ul class="custom-control custom-checkbox search-type">
-                                            <li>
-                                                {{ form_widget(nonMappedCatChild) }}
-                                                <label for="{{ nonMappedCatChild.vars.id }}">{{ nonMappedCatChild.vars.label|raw }}</label>
+                                        <ul class="search-type">
+                                            <li class="white-check">
+                                                {{ form_widget(nonMappedCatChild,{attr:{'class':'checkbox'}}) }}
+                                                <label for="{{ nonMappedCatChild.vars.id }}"></label>
+                                                {{ nonMappedCatChild.vars.label|raw }}
                                             </li>
                                         </ul>
                                     {% endfor %}
@@ -77,8 +80,8 @@
                             </div>
                         {% endif %}
                         {% set choiceCount = choiceCount + 1 %}
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
                 {% do userNewsletterPrefForm.dotmailer_newsletter_type_id.setRendered %}
                 <div class="newsletter-pref">
                     <div class="col-md-8 pad-none">

@@ -26,8 +26,14 @@
                             {{ userAddress['country_name'] }}
                         {% endif %}
                     </p>
-                        <a href="javascript:void(0)" onclick="javascript:editAddressBook('{{ userAddressId }}')" class="xs-btn-2 button"><span class="edit-icon"></span>{{ 'Edit'|trans({}, 'frontend-user-address-book') }}</a>
-                        <a href="javascript:void(0)" class="xs-btn-2 button" onclick="javascript:confirmDeleteAddress('{{ userAddressId }}');"><span class="delete-icon"></span>{{ 'Remove'|trans({}, 'frontend-user-address-book') }}</a>
+                        <div class="row mb20 ml0">
+                            <div>
+                                <a href="javascript:void(0)" onclick="javascript:editAddressBook('{{ userAddressId }}')" class="xs-btn-2 button"><span class="edit-icon"></span>{{ 'Edit'|trans({}, 'frontend-user-address-book') }}</a>
+                            </div>
+                            <div>
+                                <a href="javascript:void(0)" class="xs-btn-2 button" onclick="javascript:confirmDeleteAddress('{{ userAddressId }}');"><span class="delete-icon"></span>{{ 'Remove'|trans({}, 'frontend-user-address-book') }}</a>
+                            </div>
+                        </div>
                         <div class="label-inline mt15">
                             <span class="custom-radio {% if userAddress['is_invoice_address']%}checked{% endif%}">
                                 <input type="radio" onchange="updateInvoiceAddress({{ userAddressId }});" name="is_invoice_address" id="is_invoice_address_{{ userAddressId }}" {% if userAddress['is_invoice_address']%}checked="checked"{% endif%} value="{{ userAddressId }}">
