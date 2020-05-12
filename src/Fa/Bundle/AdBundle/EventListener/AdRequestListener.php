@@ -694,7 +694,10 @@ class AdRequestListener
     private function getCatRedirects($redirectString, $categoryText, $locationId, $request, $event, $page = null)
     {
         $url = null;
-        
+        $uri = $event->getRequest()->getUri();
+        $explodeUri = explode('?',$uri);
+        $queryString = isset($explodeUri[1])?$explodeUri[1]:'';
+
         $redirect = $this->em->getRepository('FaAdBundle:Redirects')->getCategoryRedirects($categoryText, $this->container);
         if ($redirect) {
             if ($locationId) {
@@ -754,13 +757,14 @@ class AdRequestListener
                 }
             }
             $newRedirect = str_replace('[location]/','',$newRedirect);
+
             if($newRedirect!=$redirectString) {
                 $url = $this->container->get('router')->generate('listing_page', array(
                     'location' => $locationString,
                     'page_string' => str_replace($newCatText, $newRedirect, $redirectString),
                 ), true);
                 $url = str_replace('//', '/', $url);
-            
+                if($queryString) { $url = $url.'?'.$queryString; }
                 $response = new RedirectResponse($url, 301);
                 $event->setResponse($response);
             }
