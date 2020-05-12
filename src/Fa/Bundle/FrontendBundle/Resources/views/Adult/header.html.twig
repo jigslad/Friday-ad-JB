@@ -104,7 +104,8 @@
                             {% if app.user %}
                             <ul class="show-for-small-only login-menu">
                                 <li>
-                                    <a href="javascript:void(0);" class="logged-in-user">
+                                {% set myProfileUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(app.user.getId()) %}
+                            	<a href="{% if myProfileUrl %}{{ myProfileUrl }}{% else %}javascript:void(0);{% endif %}" class="logged-in-user">
                                     {% if app.user.getFirstName() or  app.user.getLastName() %}
                                         {{app.user.getFirstName()}} {{app.user.getLastName()}}
                                     {% else %}
