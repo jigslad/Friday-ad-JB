@@ -211,7 +211,12 @@
                         {% set secondLevelLength = categoryArray['children']|length %}
                     {% endif %}
                     <li {% if secondLevelLength %}class="has-dropdown"{% else %}class="last-level"{% endif %}>
-                        {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['full_slug']) %}
+                    	{% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+                        	{% set listurl1 = path('fa_adult_homepage') %}
+                        {% else %}
+                            {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['full_slug']) %}
+                        {% endif %}
+
                         <a href="{{ listurl1 }}" class="main_category">{% if categoryArray['class'] is defined %}<span class="{{categoryArray['class']}}">&nbsp;</span>{% endif %}{{categoryArray['name']}} <span>({{ categoryArray['count'] is defined?categoryArray['count']|number_format:0}} {{'ads'|trans()}})</span></a>
                         {% if secondLevelLength %}
                             <ul class="dropdown">
