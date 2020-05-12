@@ -12,7 +12,7 @@
     </a>
     <div id="panel2b" class="collapse collapse-body-content {% if not userCardForm.vars.valid or app.session.flashbag.has('card_success') %}active{% endif %}">
         {{ include('FaUserBundle:MyAccount:myAccountMessage.html.twig', {'msgName': 'card_success'}) }}
-        <div class="saved-payment-sources ml10 mr10">
+        <div class="saved-payment-sources ml10 mr10">:
             {% if paymentTokens|length %}
                 <ul class="choose-payment-method">
                     {% for paymentToken in paymentTokens %}
