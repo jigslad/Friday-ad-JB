@@ -1,4 +1,16 @@
 {{ include('FaFrontendBundle:Adult:adult-css.html.twig') }}
+{% if currentRoute in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote' } %}
+    <style>
+    @media only screen and (min-width: 320px) and (max-width: 640px) {
+    	.top-bar .toggle-topbar.menu-icon {
+    		display:none; !important;
+    	}
+    	.top-bar .toggle-topbar.menu-icon a span, .top-bar .toggle-topbar.menu-icon a:hover span {
+            background: none !important;
+        }
+    }
+    </style>
+{% endif %}
 <header class="relative">
     <div class="top-links hide-for-small-only">
         <div class="row">
