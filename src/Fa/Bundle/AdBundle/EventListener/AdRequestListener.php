@@ -862,6 +862,9 @@ class AdRequestListener
      */
     public function getMatchedCategory($category)
     {
+        if($category=='adult') {
+            $category = 'adult-services';
+        }
         $cat = $this->em->getRepository('FaEntityBundle:Category')->getCategoryByFullSlug($category, $this->container);
         if ($cat) {
             return $cat;
