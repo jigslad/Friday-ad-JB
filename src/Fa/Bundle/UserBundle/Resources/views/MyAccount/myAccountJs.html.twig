@@ -309,6 +309,7 @@
     
     function removePaymentSource(url)
     {
+        $('#paymentSourceDeleteModal').modal('show');
         $('#paymentSourceDeleteModal').equalizer();
         $('#remove_payment_source_btn').unbind();
         $('#remove_payment_source_btn').bind( "click", function() {

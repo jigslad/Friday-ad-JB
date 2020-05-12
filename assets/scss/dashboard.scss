@@ -2591,7 +2591,7 @@ textarea[rows] {
     width: 67px;
     height: 42px;
     vertical-align: middle;
-    margin-right: 15px;
+    margin-right: 105px;
 }
 
 .alert-box.info {
@@ -2604,11 +2604,21 @@ textarea[rows] {
     background-color: #FFFFFF !important;
 }
 
-top-links .db-notifications {
+.top-links .db-notifications {
     max-height: 368px;
     overflow-y: auto;
     padding: 0;
     .inner {
         min-height: 100%;
     }
+}
+.label-inline label {
+    margin-right: 10px;
+}
+.label-inline a {
+    color: #212527;
+}
+.modal-dialog.tiny{
+    width: 30%;
+    top: 10%
 }
