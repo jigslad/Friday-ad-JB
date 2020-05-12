@@ -246,6 +246,14 @@ class AdRequestListener
                 $response = new RedirectResponse($locationUrl, 301);
                 $event->setResponse($response);
             }
+        } elseif (preg_match('/uk\/adult\//', $uri)) {
+            $routeManager = $this->container->get('fa_ad.manager.ad_routing');
+            $url = $routeManager->getAdultHomePageUrl();
+            $event->setResponse(new RedirectResponse($url, 301));
+        } elseif (preg_match('/\/adult\//', $uri)) {
+            $locationUrl = str_replace('adult', 'adult-services/escorts', $uri);
+            $response = new RedirectResponse($locationUrl, 301);
+            $event->setResponse($response);
         } elseif (preg_match('/bristol\/celebrations-special-occasions\/20-years-old-male-prostitute-for-you-16359610/', $uri)) {
             throw new HttpException(410);
         }

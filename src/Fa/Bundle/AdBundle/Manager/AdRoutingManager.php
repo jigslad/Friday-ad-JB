@@ -966,4 +966,9 @@ class AdRoutingManager
             return null;
         }
     }
+
+    public function getAdultHomePageUrl()
+    {
+        return $this->router->generate('fa_adult_homepage',array(), true);
+    }
 }
