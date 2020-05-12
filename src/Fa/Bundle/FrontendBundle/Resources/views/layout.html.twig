@@ -239,21 +239,22 @@
         	{% elseif (currentRoute == 'show_business_profile_page' or currentRoute == 'show_business_user_ads') and app.request.get('profileNameSlug') %}
                  {% set objUserSite = fetch_repository('FaUserBundle:UserSite').findOneBy({'slug':app.request.get('profileNameSlug')}) %}
                  {% set assignedCategoryId = objUserSite.getUser().getBusinessCategoryId() %}
-        	{% elseif (appUserRole is defined and (appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') or appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION'))) %}
-            	{% set assignedCategoryId = app.user.getBusinessCategoryId() %}
-        	{% elseif (appUserRole is defined and appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION')) %}
-        		{% set assignedCategoryId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
-        	{% endif %}
-    
-        	{% if assignedCategoryId!=0 %}
-            	{% set rootCategoryId = fetch_repository('FaEntityBundle:Category').getRootCategoryId(assignedCategoryId, fetch_container_instance()) %}
-                {% if (rootCategoryId == ADULT_CATEGORY_ID) %}
-                      {% set showAdultPages = 1 %}
-                {% endif %}                
-            {% endif %}	
+            {% endif %}
         {% endif %}
-        
-        {% if '/adult-services/' in app.request.uri %}
+    	{% if (appUserRole is defined and (appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') or appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION'))) %}
+        	{% set assignedCategoryId = app.user.getBusinessCategoryId() %}
+    	{% elseif (appUserRole is defined and appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION')) %}
+    		{% set assignedCategoryId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+    	{% endif %}
+    
+    	{% if assignedCategoryId!=0 %}
+        	{% set rootCategoryId = fetch_repository('FaEntityBundle:Category').getRootCategoryId(assignedCategoryId, fetch_container_instance()) %}
+            {% if (rootCategoryId == ADULT_CATEGORY_ID) %}
+                  {% set showAdultPages = 1 %}
+            {% endif %}                
+        {% endif %}	
+                
+        {% if currentRoute=='fa_adult_homepage' %}
         	{% set showAdultPages=1 %}
         {% endif %}
         
