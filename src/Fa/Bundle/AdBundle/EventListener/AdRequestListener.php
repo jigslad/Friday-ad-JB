@@ -887,6 +887,8 @@ class AdRequestListener
     {
         if($category=='adult') {
             $category = 'adult-services';
+        } elseif ($category=='adult/escort-services') {
+            $category = 'adult-services/escorts';
         }
         $cat = $this->em->getRepository('FaEntityBundle:Category')->getCategoryByFullSlug($category, $this->container);
         if ($cat) {
