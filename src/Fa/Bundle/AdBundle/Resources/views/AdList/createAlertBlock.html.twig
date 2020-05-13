@@ -43,7 +43,8 @@
         <div class="input-group mb-3 notify-me">
 
         {% if (container.has('security.authorization_checker') and container.get('security.authorization_checker').isGranted("IS_AUTHENTICATED_REMEMBERED")) %}
-                {{ form_widget(form.save, {'attr': {'class': 'secondary-btn-1 button mb0', 'onclick': "return saveSearchAgent('', 'ListingBottom');"}}) }}
+                {# After login only btn#}
+                {{ form_widget(form.save, {'attr': {'class': 'secondary-btn-1 button mb0 logged-out-btn-radius', 'onclick': "return saveSearchAgent('', 'ListingBottom');"}}) }}
         {% else %}
             {% if currentDevice == 'M' %}
                 {{ form_widget(form.save, {'attr': {'class': 'secondary-btn-1 button mb0', 'onclick': "return createHalfAccount('', 'ListingBottom');"}}) }}
@@ -53,8 +54,9 @@
                     {{ form_errors(form) }}
                     <div class="input-group-append">
                     <div style="display:none">{{ form_row(form.email_alert) }}{{ form_row(form.third_party_email_alert) }}</div>
-                    {{ form_widget(form.email, {'attr': {'class':'form-control', 'placeholder': 'Enter your email address', 'maxlength': '255'} }) }}
-                    {{ form_widget(form.save, {'attr': {'class': 'btn btn-success secondary-btn-1'}}) }}
+                        {# before login emai btn #}
+                    {{ form_widget(form.email, {'attr': {'class':'form-control logged-in-input-radius', 'placeholder': 'Enter your email address', 'maxlength': '255'} }) }}
+                    {{ form_widget(form.save, {'attr': {'class': 'btn btn-success secondary-btn-1 logged-in-btn-radius'}}) }}
                     </div>
                 {{ form_end(form) }}
             {% endif %}
