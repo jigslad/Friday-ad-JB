@@ -147,7 +147,7 @@ class UserAddressBookController extends CoreController
                 $error = $this->get('translator')->trans('Invalid address.', array(), 'frontend-user-address-book');
             } else {
                 if (!$userAddressBook->getFirstName()) {
-                    $userAddressBook->setFirstName($loggedinUser->getFirstName().' '.$loggedinUser->getLastName());
+                    $userAddressBook->etFirstName($loggedinUser->getFirstName().' '.$loggedinUser->getLastName());
                 }
                 $formManager = $this->get('fa.formmanager');
                 $form        = $formManager->createForm(UserAddressBookType::class, $userAddressBook);

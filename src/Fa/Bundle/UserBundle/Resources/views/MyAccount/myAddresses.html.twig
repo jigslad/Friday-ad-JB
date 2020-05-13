@@ -12,22 +12,25 @@
     </a>
     <div id="panel6b" class="collapse collapse-body-content">
         <div>{{ 'Manage your saved addresses'|trans({}, 'frontend-user-address-book') }}</div>
-        {{ include('FaUserBundle:MyAccount:listAddress.html.twig') }}
+        <div id="address_book_main">
+            {{ include('FaUserBundle:MyAccount:listAddress.html.twig') }}
+        </div>
         <div id="addressBookDeleteModal" class="modal custom-modal">
-            <div class="modal-dialog">
+            <div class="modal-dialog tiny">
                 <div class="modal-content">
                     <!-- Modal Header -->
                     <div class="modal-header">
-                        <h5 class="modal-title save-search-title">{{'Remove an address?'|trans({}, 'frontend-user-address-book')}}</h5>
+                        <h5 class="modal-title no-icon-title">{{'Remove an address?'|trans({}, 'frontend-user-address-book')}}</h5>
                         <button class="close-modal" class="close" data-dismiss="modal">×</button>
                     </div>
                     <div class="modal-body">
+                        <h5 class="s-h5">{{'This will remove this address.'|trans({}, 'frontend-user-address-book')}}</h5>
                         <div class="mt20">
                             <div class="row">
-                                <div class="columns large-12">
+                                <div class="col-md-12">
                                     <button type="button" class="secondary-btn-1 btn btn-block" data-dismiss="modal">{{'Cancel'|trans({}, 'frontend-user-address-book')}}</button>
                                 </div>
-                                <div class="columns large-12">
+                                <div class="col-md-12">
                                     <button type="button" id="remove_address_btn" class="secondary-btn-1 btn btn-block">{{'Ok'|trans({}, 'frontend-user-address-book')}}</button>
                                 </div>
                             </div>
@@ -37,46 +40,6 @@
                 </div>
             </div>
         </div>
-        <div id="addressBookModal" class="modal custom-modal">
-{#            <div class="modal-dialog">#}
-{#                <div class="modal-content">#}
-{#                    <!-- Modal Header -->#}
-{#                    <div class="modal-header">#}
-{#                        <h5 class="modal-title save-search-title">Add an address </h5>#}
-{#                        <button class="close-modal" class="close" data-dismiss="modal">×</button>#}
-{#                    </div>#}
-{#                    <div class="modal-body">#}
-{#                        <div id="user_address_id">#}
-{#                            <form name="fa_user_half_account" method="post" novalidate="novalidate" class="outline">#}
-{#                                <div>#}
-{#                                    <div class="m-form-space">#}
-{#                                        <label for="" class="required">Full name</label>#}
-{#                                        <input type="text" class="form-control" id="" name="" required="required" maxlength="100">#}
-{#                                        <label for="" class="required">House name/number</label>#}
-{#                                        <input type="email" class="form-control" id="" name="" required="required" maxlength="255">#}
-
-{#                                        <label for="" class="required">Postcode</label>#}
-{#                                        <div class="postcode clearfix">#}
-{#                                            <input type="text" class="form-control" id="fa_payment_cyber_source_checkout_zip" name="fa_payment_cyber_source_checkout[zip]" required="required" maxlength="15">#}
-{#                                            <button type="button" class="btn secondary-btn-1 right" onclick="return getUserAddress();">Find address</button>#}
-{#                                        </div>#}
-
-{#                                        <label for="" class="required">Street name</label>#}
-{#                                        <input type="email" class="form-control" id="" name="" required="required" maxlength="255">#}
-
-{#                                        <label for="" class="required">Town/city</label>#}
-{#                                        <input type="email" class="form-control" id="" name="" required="required" maxlength="255">#}
-
-{#                                        <label for="" class="required">State/county</label>#}
-{#                                        <input type="email" class="form-control" id="" name="" required="required" maxlength="255">#}
-{#                                    </div>#}
-{#                                    <button type="submit" id="" name="" class="secondary-btn-1 btn btn-block">Add this Address</button>#}
-{#                                </div>#}
-{#                            </form>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-        </div>
+        <div id="addressBookModal" class="modal custom-modal"></div>
     </div>
 </div>

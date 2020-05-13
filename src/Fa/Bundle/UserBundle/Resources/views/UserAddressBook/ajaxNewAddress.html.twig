@@ -1,5 +1,5 @@
 {% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
-<div class="modal-dialog"><div class="modal-content">
+<div class="modal-dialog tiny"><div class="modal-content">
 	<div class="modal-header">
 		<h5 class="modal-title no-icon-title">
 			{% if userAddressBook.getId() %}
@@ -8,7 +8,7 @@
                 {{'Add an address'|trans({}, 'frontend-user-address-book')}}
             {% endif %}
 		</h5>
-	    <button class="close-modal" class="close" data-dismiss="modal">×</button>
+	    <button class="close-modal " data-dismiss="modal">×</button>
 	</div>
 	<div class="modal-body">
     {{ form_start(form, {'attr': {'novalidate': '', 'id': 'user_address_id'}}) }}
@@ -79,6 +79,7 @@
                 {% endif %}
                 scrollToElement('#panel6b', '1000', -150);
                 bindCustomRadioEvent();
+                unblockPage();
             }
         });
     });
