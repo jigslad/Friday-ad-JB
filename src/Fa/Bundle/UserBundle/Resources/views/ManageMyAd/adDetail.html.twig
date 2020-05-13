@@ -226,11 +226,11 @@
 
                 <div style="width:100%">
                 {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') or ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
-                        <a class="primary-btn-1 manage-item-button xs-thin-btn button  active" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'repost'}) }}">{{'Repost Ad'|trans({}, 'frontend-manage-my-ad')}}</a>
+                        <a class="secondary-btn-2 thin-btn manage-item-button xs-thin-btn button  active" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'repost'}) }}">{{'Repost Ad'|trans({}, 'frontend-manage-my-ad')}}</a>
                 {% endif %}
                 {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') and ((adPackageArray[adId] is defined and adPackageArray[adId]['price'] == 0) or adPackageArray[adId] is not defined) %}
                         {% if ((userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) and upgradePackagesCount > 1) or (userRoleId != constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
-                            <a class="primary-btn-1 manage-item-button xs-thin-btn button  active" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'promote'}) }}">{{'Upgrade'|trans({}, 'frontend-manage-my-ad')}}</a>
+                            <a class="secondary-btn-2 thin-btn manage-item-button xs-thin-btn button  active" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'promote'}) }}">{{'Upgrade'|trans({}, 'frontend-manage-my-ad')}}</a>
                 {% endif %}
                 {% endif %}
 
