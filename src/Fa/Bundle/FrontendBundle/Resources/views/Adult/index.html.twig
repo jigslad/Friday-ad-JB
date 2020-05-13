@@ -330,8 +330,9 @@
             	if ($('#fa_adult_home_page_search_item_adult__independent_or_agency_id_0').parent('span').hasClass('checked')) {
             		opted_value += $('#fa_adult_home_page_search_item_adult__independent_or_agency_id_0').val();
             	}
-            	if(opted_value!='') { opted_value = opted_value+'__'; }
+            	
             	if ($('#fa_adult_home_page_search_item_adult__independent_or_agency_id_1').parent('span').hasClass('checked')) {
+            		if(opted_value!='') { opted_value = opted_value+'__'; }
             		opted_value += $('#fa_adult_home_page_search_item_adult__independent_or_agency_id_1').val();
             	}
             	$('#fa_adult_home_page_search_item_adult__independent_or_agency_id').val(opted_value);
