@@ -57,6 +57,22 @@ input,button, .button, .btn, .primary-btn-1, .primary-btn-2, .primary-btn-3, .se
 .xs-btn-1, .xs-btn-2, .xs-thin-btn {
     color: $white;
 }
+.top-bar-section {
+   li {
+     .place-item-btn {
+	a {
+	    background: linear-gradient(135deg, $primary-btn-l-color 0%, $primary-btn-r-color 100%) !important;
+	    border: 0px solid transparent;
+	    color: $white;
+	    &:focus, &:hover {
+		background: linear-gradient(135deg, $primary-btn-lh-color 0%, $primary-btn-rh-color 100%) !important;
+		border: 0px solid transparent;
+		color: $white;
+	    }
+        }
+     }
+  }
+}
 input[type="text"], input[type="password"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="month"], input[type="week"], input[type="email"], input[type="number"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"], input[type="color"], textarea, .attachment-textbox {
     font-family: $font-family-default;
     font-size: 13px;
@@ -701,14 +717,6 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
         font-family: $font-family-top-menu;
         &:hover {
             color: $secondary-color;
-        }
-    }
-}
-.top-bar-section {
-   li.place-item-btn {
-        background: linear-gradient(135deg, $primary-btn-l-color 0%, $primary-btn-r-color 100%) !important;
-        a {
-            color: $white;
         }
     }
 }
