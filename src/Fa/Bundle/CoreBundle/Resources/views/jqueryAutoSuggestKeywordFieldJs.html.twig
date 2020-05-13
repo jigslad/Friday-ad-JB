@@ -39,7 +39,10 @@ $(function() {
                 keywordCategoryText = keywordCategoryTextRes[1];
                 keywordCategoryText = keywordCategoryText.replace("</span>", "");
             }
+            
             ga('send', 'event', 'Site Search', 'Suggestion Position '+ui.item.position, userKeywordText+' - '+keywordCategoryId[0]+(keywordCategoryText ? ' - '+keywordCategoryText : ''));
+            {% if addGtm is defined %} gaTopSearch(); {% endif %}
+            
             if (keywordCategoryId.length > 1) {
                 $("{{ field }}").val(keywordCategoryId[0]);
                 $("#fa_top_search_keyword_category_id").val(keywordCategoryId[1]);
@@ -79,6 +82,16 @@ $(function() {
          return $("<li>").append(item.label).appendTo( ul );
     };
 });
+
+function gaTopSearch() {
+	window.dataLayer = window.dataLayer || []
+    dataLayer.push({      
+    'event' : 'ahp-search',
+    'eventCategory':  'Site Search',     
+    'eventAction': 'Adult Homepage Basic',
+    'eventLabel': $("#fa_top_search_keywords").val()
+    }); 
+}
 
 $(document).ready(function(){
     {% if placeHolder is defined %}

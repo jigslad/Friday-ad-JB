@@ -74,7 +74,26 @@ class AdRequestListener
                 $event->setResponse($response);
             }
         }
-
+        
+        /* FFR-3683 Starts */
+        $lastChrUri = substr($uri, -1);
+        $redirectEscortUri = '';
+        if($lastChrUri=='/') {
+            $adulturi = substr($uri, -7);
+            if($adulturi === '/adult/') {
+                $redirectEscortUri = substr($uri,0,-7).'/adult-services/escorts/';
+            }
+        } else {
+            $adulturi = substr($uri, -6);
+            if($adulturi === '/adult') {
+                $redirectEscortUri = substr($uri,0,-6).'/adult-services/escorts/';
+            }            
+        }
+        if($redirectEscortUri!='') {
+            $response = new RedirectResponse($redirectEscortUri, 301);
+            $event->setResponse($response);
+        }
+        /* FFR-3683 Ends */
         
         //redirect greate-london slug
         if (preg_match('/greate-london/', $uri)) {
@@ -126,7 +145,7 @@ class AdRequestListener
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
         } elseif (preg_match('/adult\/phone-cam-chat\//', $uri)) {
-            $locationUrl = str_replace('adult/phone-cam-chat/', 'adult/', $uri);
+            $locationUrl = str_replace('adult/phone-cam-chat/', 'adult-services/escorts/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
         } elseif (preg_match('/avon/', $uri)) {
@@ -227,6 +246,14 @@ class AdRequestListener
                 $response = new RedirectResponse($locationUrl, 301);
                 $event->setResponse($response);
             }
+        } elseif (preg_match('/uk\/adult\//', $uri)) {
+            $routeManager = $this->container->get('fa_ad.manager.ad_routing');
+            $url = $routeManager->getAdultHomePageUrl();
+            $event->setResponse(new RedirectResponse($url, 301));
+        } elseif (preg_match('/\/adult\//', $uri)) {
+            $locationUrl = str_replace('adult', 'adult-services/escorts', $uri);
+            $response = new RedirectResponse($locationUrl, 301);
+            $event->setResponse($response);
         } elseif (preg_match('/bristol\/celebrations-special-occasions\/20-years-old-male-prostitute-for-you-16359610/', $uri)) {
             throw new HttpException(410);
         }
@@ -340,11 +367,11 @@ class AdRequestListener
         if ($currentRoute == 'landing_page_category' || $currentRoute == 'landing_page_category_location') {
             $catObj = $this->getMatchedCategory($request->get('category_string'));
 
-            if ($catObj && $catObj['id'] == CategoryRepository::ADULT_ID) {
+            /*if ($catObj && $catObj['id'] == CategoryRepository::ADULT_ID) {
                 $location = ($request->get('location') ? $request->get('location') : 'uk');
                 $url = $this->container->get('router')->generate('listing_page', array('location' => $location, 'page_string' => $request->get('category_string')), true);
                 $event->setResponse(new RedirectResponse($url, 301));
-            }
+            }*/
 
             if (isset($params['path'])) {
                 $this->redirectOldUrls(ltrim($params['path'], '/'), 'uk', $request, $event, 'location_home');

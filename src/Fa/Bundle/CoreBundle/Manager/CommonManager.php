@@ -33,7 +33,7 @@ use Aws\S3\S3Client;
 class CommonManager
 {
     const COOKIE_DELETED = 'deleted';
-    public static $SeoHardCodeForUrl = ['/bristol/', '/bristol/motors/cars/', '/bristol/for-sale/free-to-collector/', '/swindon/', '/bristol/animals/pets/cats-kittens/', '/bristol/animals/pets/', '/gloucester/', '/bristol/animals/pets/dogs-puppies/', '/bristol/adult/'];
+    public static $SeoHardCodeForUrl = ['/bristol/', '/bristol/motors/cars/', '/bristol/for-sale/free-to-collector/', '/swindon/', '/bristol/animals/pets/cats-kittens/', '/bristol/animals/pets/', '/gloucester/', '/bristol/animals/pets/dogs-puppies/', '/bristol/adult-services/escorts/'];
 
     /**
      * Converts and returns timestamp from given start date string.
@@ -732,7 +732,7 @@ class CommonManager
                 case '/bristol/animals/pets/dogs-puppies/':
                     $seoFieldArray['meta_description'] = 'Dogs and Puppies in Bristol. Find your perfect puppy from private sellers and ethical breeders in the Friday-Ad (formerly Trade It) pets section.';
                     break;
-                case '/bristol/adult/':
+                case '/bristol/adult-services/escorts/':
                     $seoFieldArray['meta_description'] = 'Find Adult Services in Bristol. There are thousands of adult services on Friday-Ad (formerly Trade It) and you can place an ad for free!';
                     break;
             }
@@ -983,6 +983,7 @@ class CommonManager
      */
     public static function getUserLogoByUserId($container, $userId, $appendTime = false, $getUrlOnly = false, $userName = null)
     {
+        $path = null;
         if (!is_numeric($userId)) {
             $imagePath  = $container->get('kernel')->getRootDir().'/../web/uploads/tmp/'.$userId.'_org.jpg';
             if (is_file($imagePath)) {
@@ -3419,6 +3420,140 @@ HTML;
         return !is_bool(strpos($haystack, $needle));
     }
     
+    public static function fetchDataByUrl($sourceUrl)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $sourceUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $data = curl_exec($ch);
+        curl_close($ch);
+        return $data;
+    }    
+    
+    public static function getWordpressBlogDetails($blogArray) {
+        $wordpressPostsUrl = '/wp-json/wp/v2/posts?per_page=1&status=publish';
+        $wordpressMediaUrl = '/wp-json/wp/v2/media/';
+        $wordpressUserUrl = '/wp-json/wp/v2/users/';
+        $blogDetails = array();
+        if(!empty($blogArray)) {
+            foreach($blogArray as $blog) {
+                $blogPostUrl = $blog['url'].$wordpressPostsUrl;
+                $blogData = self::fetchDataByUrl($blogPostUrl);
+                if(!empty($blogData)) {
+                    $blogData = json_decode($blogData);
+                    $blogTitle = $blogData[0]->title->rendered;
+                    $blogLink = $blogData[0]->link;
+                    $blogPublishDate = $blogData[0]->date;
+                    //$blogDesc = $blogData[0]->content->rendered;
+                    $blogAuthorId = $blogData[0]->author;
+                    $blogAuthorUrl = $blog['url'].$wordpressUserUrl.$blogAuthorId;
+                    $blogAuthorData = self::fetchDataByUrl($blogAuthorUrl);
+                    $blogAuthorName = '';
+                    if(!empty($blogAuthorData)) {
+                        $blogAuthorData = json_decode($blogAuthorData);
+                        $blogAuthorName = $blogAuthorData->name;
+                    }
+                    $blogFeaturedMedia = $blogData[0]->featured_media;
+                    $blogMediaUrl = $blog['url'].$wordpressMediaUrl.$blogFeaturedMedia;
+                    $blogMediaData = self::fetchDataByUrl($blogMediaUrl);
+                    $blogFeaturedMediaUrl = '';
+                    if(!empty($blogMediaData)) {                        
+                        $blogMediaData = json_decode($blogMediaData);
+                        $blogFeaturedMediaUrl = $blogMediaData->guid->rendered;
+                    }
+                    $blogDetails[] = array(
+                        'title'=>$blogTitle,
+                        'link'=>$blogLink,
+                        'siteurl'=>$blog['url'],
+                        'mediaUrl'=>$blogFeaturedMediaUrl,
+                        'publishdate' => $blogPublishDate,
+                        //'desc' => htmlentities($blogDesc),
+                        'author' => $blogAuthorName,
+                        'buttonLabel'=> isset($blog['btn'])?$blog['btn']:'',
+                    );
+                }
+            }
+        }
+        return $blogDetails;
+    }
+    
+    public static function getUserLogoForCarousel($container, $path, $userId, $imageWidth = "88", $imageHeight = '88', $appendTime = false, $isCompany = false, $userStatus = null, $userName = null)
+    {
+        if (!$userStatus) {
+            $userStatus = $container->get('doctrine')->getManager()->getRepository('FaUserBundle:User')->getUserStatus($userId, $container);
+        }
+        
+        if (!$userName) {
+            $userName = $container->get('doctrine')->getManager()->getRepository('FaUserBundle:User')->getUserProfileName($userId, $container);
+        }
+        
+        $userName .= ' - Friday-Ad';
+        
+        $imagePath = null;
+        
+        if ($userId) {
+            if (!is_numeric($userId)) {
+                if (is_file($container->get('kernel')->getRootDir().'/../web/uploads/tmp/'.$userId.'.jpg')) {
+                    if ($isCompany) {
+                        return '<img class="lazyOwl" data-src="'.$container->getParameter('fa.static.shared.url').'/uploads/tmp/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).'" alt="'.$userName.'"  />';
+                    } else {
+                        return '<img class="lazyOwl" data-src="'.$container->getParameter('fa.static.shared.url').'/uploads/tmp/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).'" title="'.$userName.'" />';
+                    }
+                } else {
+                    $noImageName = 'user-icon.svg';
+                    if ($isCompany) {
+                        $noImageName = 'user-no-logo.svg';
+                    }
+                    
+                    if (!$imageWidth && !$imageHeight) {
+                        return '<img class="lazyOwl profile-placeholder" data-src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.'" alt="'.$userName.'" />';
+                    } else {
+                        return '<img class="lazyOwl profile-placeholder" data-src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.'" width="'.$imageWidth.'" height="'.$imageHeight.'" alt="'.$userName.'" />';
+                    }
+                }
+            } else {
+                $imagePath  = $container->get('kernel')->getRootDir().'/../web/'.$path.'/'.$userId.'.jpg';
+            }
+        }
+        
+        if (is_file($imagePath)) {
+            if (($imageWidth==null && $imageHeight== null) || ($imageWidth =='' && $imageHeight=='') || ($imageWidth ==0 || $imageHeight==0)) {
+                if ($isCompany) {
+                    return '<img class="lazyOwl" data-src="'.$container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).'" alt="'.$userName.'" />';
+                } else {
+                    return '<img class="lazyOwl" data-src="'.$container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).')" title="'.$userName.'" />';
+                }
+            } else {
+                if (!file_exists($container->get('kernel')->getRootDir().'/../web/'.$path.'/'.$userId.'_'.$imageWidth.'X'.$imageHeight.'.jpg')) {
+                    if ($isCompany) {
+                        $orgImagPath = $container->getParameter('fa.company.image.dir').'/'.CommonManager::getGroupDirNameById($userId, 5000);
+                    } else {
+                        $orgImagPath = $container->getParameter('fa.user.image.dir').'/'.CommonManager::getGroupDirNameById($userId, 5000);
+                    }
+                    exec('convert '.$orgImagPath.DIRECTORY_SEPARATOR.$userId.'.jpg -resize '.$imageWidth.'X'.$imageHeight.' -background white -gravity center -extent '.$imageWidth.'X'.$imageHeight.' '.$orgImagPath.DIRECTORY_SEPARATOR.$userId.'_'.$imageWidth.'X'.$imageHeight.'.jpg');
+                }
+                
+                $newImagePath = $container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'_'.$imageWidth.'X'.$imageHeight.'.jpg'.($appendTime ? '?'.time() : null);
+                
+                if ($isCompany) {
+                    return '<img class="lazyOwl" data-src="'.$newImagePath.'" width="'.$imageWidth.'" height="'.$imageHeight.'" alt="'.$userName.'" />';
+                } else {
+                    return '<img class="lazyOwl" data-src="'.$newImagePath.'" title="'.$userName.'"></span>';
+                }
+            }
+        } else {
+            $noImageName = 'user-icon.svg';
+            if ($isCompany) {
+                $noImageName = 'user-no-logo.svg';
+            }
+            if (!$imageWidth && !$imageHeight) {
+                return '<img class="lazyOwl profile-placeholder" data-src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.'" alt="'.$userName.'"  />';
+            } else {
+                return '<img class="lazyOwl profile-placeholder" data-src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.'" width="'.$imageWidth.'" height="'.$imageHeight.'" alt="'.$userName.'"  />';
+            }
+        }
+    }
+
     public static function checkImageExistOnAws($container, $imageUrl)
     {
         $client = new S3Client([
