@@ -86,6 +86,7 @@
                                         </div>
                                             <h3 style="color:#212527">{% if attribute(businessExposureUserAd, constant(businessExposureUserAdsolrMapping ~ 'TITLE')) is defined %}
                                                {{trim_text(attribute(businessExposureUserAd, constant(businessExposureUserAdsolrMapping ~ 'TITLE')), 65)|raw}}
+                                           {% endif %}
                                         </h3>
                                     </div>
                                     {% set adBusPosition = adBusPosition + 1 %}
