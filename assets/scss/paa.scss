@@ -153,7 +153,7 @@
     width: 100%;
     margin-bottom: 10px;
     span {
-      font-weight: 700;
+
       padding-right: 10px;
       display: inline-block;
       &:first-child {
@@ -188,7 +188,7 @@
     h3 {
       margin-bottom: 24px;
       font-size: 18px;
-      font-weight: 600;
+
       line-height: 24px;
       span {
         font-size: 14px;
@@ -223,7 +223,7 @@
         margin-bottom: 0;
         font-size: 14px;
         line-height: 16px;
-        font-weight: 400;
+
         padding: 11px 5px 11px 50px;
         cursor: pointer;
         display: block;
@@ -252,7 +252,7 @@
     }
   }
   .paa-back-arrow {
-    font-weight: bold;
+
     padding-left: 12px;
     margin: 0 0 10px 10px;
     display: inline-block;
@@ -384,7 +384,7 @@
     h3 {
       margin-bottom: 14px;
       font-size: 18px;
-      font-weight: 400;
+
       line-height: 24px;
     }
     .small-wrapper {
@@ -433,7 +433,7 @@
     background: #FFFFFF;
   }
   .drag-ins-hr {
-    font-weight: bold;
+
     background: url('/bundles/fafrontend/images/upload-image.png') no-repeat;
     padding: 0 0 0 26px;
     margin-bottom: 10px;
@@ -443,7 +443,7 @@
     background-size: 20px 15px;
   }
   .drag-ins-vr {
-    font-weight: bold;
+
     background: url('/bundles/fafrontend/images/upload-image.png') no-repeat;
     padding: 43px 0 0 0;
     margin: 10px 0;
@@ -662,7 +662,7 @@
     border-bottom: 1px solid #FFFFFF;
     padding: 13px 15px;
     text-align: center;
-    font-weight: 700;
+
     line-height: 16px;
   }
   .pkg-points {
@@ -727,7 +727,7 @@
     }
     .pkg-includes {
       padding: 25px 0 6px;
-      font-weight: normal;
+
     }
     .pkg-selection {
       height: auto !important;
@@ -1081,7 +1081,7 @@
 .cat-mid-full { width:63% !important; margin:auto auto 20px auto !important;  }
 .paa-block .paa-features li.grey-check label { display:inline-flex !important; }
 .paa-usr-type .grey-radio span { display:inline-block !important;margin-right:20px; }
-.paa-block .subtitle { font-size: 20px;font-weight: 300;line-height: 26px;color: #4a4a4a; }
+.paa-block .subtitle { font-size: 20px;line-height: 26px;color: #4a4a4a; }
 .paa-bdr-box-btm-hd { border-bottom:0px !important; }
 
 .show-location-mapfit {

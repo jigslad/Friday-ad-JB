@@ -92,7 +92,7 @@
     background: #FFFFFF;
     font-size: 14px;
     line-height: 18px;
-    font-weight: normal;
+
     border-radius: 2px;
   }
 }
@@ -124,7 +124,7 @@
 
 .homepage-title, .homepage-title-small {
   font-size: 36px;
-  font-weight: 400;
+
   line-height: 46px;
   text-align: center;
   margin-bottom: 49px;
@@ -157,7 +157,7 @@
 }
 .sub-head-text {
   font-size: 20px;
-  font-weight: 400;
+
   line-height: 27px;
 }
 #featured-item-slider {
@@ -354,9 +354,8 @@
 @media (min-width:320px) and (max-width: 640px) {
     .homepage-title, .homepage-title-small {
         font-size: 18px;
-        font-weight: 600 !important;
-	letter-spacing: 0;
-	line-height: 24px;
+	    letter-spacing: 0;
+	    line-height: 24px;
         margin: 0 20px 20px;
     }
 

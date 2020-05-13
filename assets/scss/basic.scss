@@ -597,7 +597,6 @@ ul.pagination li a, ul.pagination li button {
     margin-left: -1px;
 }
 ul.pagination li.current a, ul.pagination li.current button {
-    font-weight: bold;
     cursor: default;
     background: #fff;
 }
@@ -642,13 +641,11 @@ z-index:999;
 
 .ui-menu.keyword-choices{ margin-top:7px}
 .ui-menu.keyword-choices .ui-menu-item{background-image:none;box-shadow:none;padding:11px 14px 10px}
-.ui-menu.keyword-choices .ui-menu-item span{font-weight:bold;}
 
 .ui-menu.category-choices{margin-top:8px}
 .ui-menu.category-choices .ui-menu-item{ border-bottom:1px solid #fff;line-height:18px;padding:11px 10px 10px !important; }
 .ui-menu.category-choices .ui-menu-item:hover{background-color:#fff;}
 .ui-menu.category-choices .ui-menu-item:last-child{border-bottom:0}
-.ui-menu.category-choices .ui-menu-item div span{ font-weight:700}
 
 .ui-menu .ui-menu-item-wrapper { padding: 3px 0px 3px 0px !important; }
 .ui-menu .ui-state-focus, .ui-menu .ui-state-active {
@@ -657,7 +654,6 @@ z-index:999;
 .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
     border: 0px solid transparent !important;
     background: transparent !important;
-    font-weight: bold;
 }
 
 .select2-results, .ui-autocomplete {
@@ -743,8 +739,8 @@ footer .search-box-col .newsletter-lbl, .white-check .label-span, .grey-check .l
 
 /* Covid 19 */
 .covid-19-block { padding: 15px 0; }
-.covid-19-block .head {color: #FFFFFF; font-family: Asap; font-size: 20px;font-weight: bold; letter-spacing: 0.83px;line-height: 23px; }
-.ask-for-offer-help { color: #FFFFFF;font-weight: normal !important;font-family: Asap; font-size: 18px;letter-spacing: 0; line-height: 21px;text-align: center;  }
+.covid-19-block .head {color: #FFFFFF; font-size: 20px; letter-spacing: 0.83px;line-height: 23px; }
+.ask-for-offer-help { color: #FFFFFF;font-weight: normal !important;font-size: 18px;letter-spacing: 0; line-height: 21px;text-align: center;  }
 .ask-for-offer-help a, .ask-for-offer-help a:hover, .ask-for-offer-help a:focus { text-decoration: underline !important; }
 .place-free-ad-btn, .place-free-ad-btn:hover, .place-free-ad-btn:focus, a:hover.button.place-free-ad-btn, a:focus.button.place-free-ad-btn { height: 30px; width: 162px; font-size: 14px; letter-spacing: 0;line-height: 16px;text-align: center; margin-bottom: 0px; }
 .align-text { text-align: right; }
@@ -786,7 +782,6 @@ color: #ffffff;cursor: pointer;position: absolute;right: 0;width: 20px;height: 3
     padding: 0 18px 5px;
     margin: 10px 0 20px;
     text-align: center;
-    font-weight: 500 !important;
     font-size: 20px;
     line-height: 27px;
 }
@@ -811,13 +806,11 @@ color: #ffffff;cursor: pointer;position: absolute;right: 0;width: 20px;height: 3
     margin: 50px 0 23px;
 }
 .bg-img404 + h1, .bg-img410 + h1, .bg-img500 + h1 {
-    font-weight: 500 !important;
     font-size: 36px;
     line-height: 46px;
 }
 .ptop_spac {
     padding-top: 14px;
-    font-weight: 500 !important;
     font-size: 20px;
     line-height: 27px;
 }
@@ -937,7 +930,6 @@ color: #ffffff;cursor: pointer;position: absolute;right: 0;width: 20px;height: 3
 	position: relative;
 	top: -6px;
 	font-size: 18px;
-	font-weight: 600;
 	letter-spacing: 0;
 	line-height: 20px;
 	padding: 0 10px;
@@ -997,7 +989,6 @@ color: #ffffff;cursor: pointer;position: absolute;right: 0;width: 20px;height: 3
 //Alert
 .alert-box {
     font-size: 13px;
-    font-weight: bold;
     line-height: 16px;
     //padding: 10px 50px 12px !important;
     padding: 21px 50px !important;
@@ -1238,7 +1229,6 @@ input[type=number] {
 	width: 100%;
 	text-align: center;
 	font-size: 18px;
-	font-weight: 600;
 	letter-spacing: 0;
 	line-height: 20px;
 	padding: 17px 20px 22px 20px;
@@ -1322,7 +1312,6 @@ input[type=number] {
 	    margin: 10px 0 0;
 	}
 	.bg-img404 + h1, .bg-img410 + h1, .bg-img500 + h1 {
-	    font-weight: bold;
 	    padding: 0 10px;
 	    font-size: 23px;
 	}

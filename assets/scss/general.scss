@@ -74,7 +74,6 @@ input,button, .button, .btn, .primary-btn-1, .primary-btn-2, .primary-btn-3, .se
   }
 }
 input[type="text"], input[type="password"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="month"], input[type="week"], input[type="email"], input[type="number"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"], input[type="color"], textarea, .attachment-textbox {
-    font-family: $font-family-default;
     font-size: 13px;
     color: $site-dark-bg-color;
     height: 40px;
@@ -149,7 +148,6 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
       background-color: $white !important;
       border-color: $form-border-color !important;
       cursor: default !important;
-      font-weight: 700 !important;
     }
     &:first-child .page-link {
       border-top-left-radius: 0 !important;
@@ -232,7 +230,7 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
       }
       span:last-child {
         background: 0;
-        font-weight: 700;
+
         cursor: default;
       }
       a:hover, a:focus {
@@ -243,7 +241,7 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
 
 .breadcrumb .back-link {
     font-size: 13px;
-    font-weight: 700;
+
     padding: 0 15px;
     color: $form-text-color !important;
     background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' x='0' y='0' width='7' height='12' viewBox='0 0 7 12' xml:space='preserve'%3e%3cstyle type='text/css'%3e .st0%7bfill:none;stroke:%23A8A8A8;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;%7d %3c/style%3e%3ctitle%3eBack arrow%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cg transform='translate(-184.000000, -285.000000)'%3e%3cg transform='translate(0.000000, 271.000000)'%3e%3cpath class='st0' d='M189.5 15.5l-4 4.5 4 4.5'/%3e%3c/g%3e%3c/g%3e%3c/svg%3e") no-repeat 0 3px !important;
@@ -253,7 +251,7 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
 }
 .green-back-link {
     font-size: 13px;
-    font-weight: 700;
+
     padding-left: 12px;
     margin: 0 15px;
     display: inline-block;
@@ -277,7 +275,7 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
       word-spacing: 3px;
       text-decoration: none;
       font-size: 14px;
-      font-weight: 700;
+
       color: $site-dark-bg-color;
       line-height: 16px;
       &:active {
@@ -287,7 +285,7 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
         word-spacing: 3px;
         text-decoration: none;
         font-size: 14px;
-        font-weight: 700;
+
         color: $site-dark-bg-color;
         line-height: 16px;
       }
@@ -450,14 +448,13 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
     padding: 2px 8px;
     color: $white;
     font-size: 14px;
-    font-weight: 700;
+
     line-height: 18px;
     visibility: hidden;
     b {
       color: $secondary-color;
       font-size: 20px;
       line-height: 30px;
-      font-family: $font-family-secondary;
       display: block;
     }
   }
@@ -519,10 +516,9 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
     color: $form-text-color;
     border: 1px solid $form-border-color !important;
     border-radius: 0px !important;
-    font-weight: 700;
+
     padding: .5rem 0;
     text-align: center;
-    font-family: $font-family-top-menu;
     font-size: 14px;
   }
   > a:hover {
@@ -714,7 +710,6 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
     color: $white;
     a {
         color: $common-bg-color;
-        font-family: $font-family-top-menu;
         &:hover {
             color: $secondary-color;
         }
@@ -728,7 +723,6 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
 .navbar-dark .navbar-nav {
     .nav-link {
         color: $common-text-color !important;
-        font-family: $font-family-default;
         &:hover, &:focus, &:active {
           color: $common-text-color;
         }
@@ -738,7 +732,6 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
 .parent-link {
     a {
         color: $common-text-color;
-        font-family: $font-family-default;
         &:hover, &:focus, &:active {
             color: $secondary-h-color;
             transition: all .2s ease-out;
@@ -801,7 +794,6 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
 .footer_ul_amrc li a:hover{ color:$white; }
 footer {
   	background: $site-dark-bg-color;
-  	font-family: $font-family-default;
   	border-top: 1px solid $black;
   	box-shadow: inset 0 1px 0 $common-text-color;
   	.top_border {
@@ -833,7 +825,6 @@ footer {
     position: relative;
 }
 .site-search .change-location {
-    font-family: $font-family-secondary;
     margin-left: 16px;
     color: $common-text-color;
     height: 38px;
@@ -866,8 +857,7 @@ footer {
     background: $white;
     font-size: 14px;
     line-height: 18px;
-    font-weight: normal;
-    font-family: $font-family-default;
+
     border-radius: 2px;
 }
 .site-search .ad-category-list .btn-outline-secondary {
@@ -875,9 +865,8 @@ footer {
 	border: 1px solid $form-border-color;
 	border-radius: 2px;
 	color: $common-text-color;
-    font-family: $font-family-default;
     font-size: 14px;
-    font-weight: 700;
+
 }
 .site-search .ad-category-list .btn-outline-secondary:active {
     color: $common-text-color;
@@ -1591,7 +1580,7 @@ footer p { color:$grey-color; }
 .dl-menu li .dl-back a {
     background: $common-text-color !important;
 }
-.top-links .notification-link a span, .top-links .msg-link a span, .top-links .cart-link a span { font-weight: bold; }
+.top-links .notification-link a span, .top-links .msg-link a span, .top-links .cart-link a span {  }
 .top-links .f-dropdown { background: $common-text-color; }
 .top-links .f-dropdown li { box-shadow: inset 0 1px 0 $common-text-color; }
 .top-links .notification-counter { background: $common-text-color; box-shadow: inset 0 1px 0 $common-text-color; }
@@ -1768,12 +1757,10 @@ footer p { color:$grey-color; }
     color: $secondary-h-color;
   }
   .list-title {
-    font-family: $font-family-secondary;
     color: $site-dark-bg-color;
   }
   .list-price {
     color: $secondary-color;
-    font-family: $font-family-secondary;
   }
   .list-dimensions {
     color: $form-text-color;    
@@ -2035,7 +2022,6 @@ footer p { color:$grey-color; }
         color: $common-text-color;
         background: $common-bg-color;
         a {
-          font-family: $font-family-default;
           color: $common-text-color;
         }
       }

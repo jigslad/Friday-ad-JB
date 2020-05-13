@@ -297,7 +297,7 @@
         padding: 0 13px !important;
     }
     .mobile-menu-items li a, .login-menu li a {
-        font-weight: 400;
+
         margin-bottom: 0;
         text-transform: uppercase;
     }
@@ -356,12 +356,12 @@
       }
       .link-head {
         font-size: 14px;
-        font-weight: 700;
+
         line-height: 18px;
         padding: 5px 0 0 0;
         a {
           font-size: 14px;
-          font-weight: 700;
+
         }
       }
       .dropdown-menu {
@@ -465,7 +465,7 @@
     padding: 10px 15px;
     font-size: 14px;
     line-height: 20px;
-    font-weight: 300;
+
     outline: none;
 }
 .no-touch .dl-menuwrapper li a:hover {
@@ -485,7 +485,6 @@
     position: absolute;
     top: 0;
     line-height: 40px;
-    font-family: 'FontAwesome';
     speak: none;
     -webkit-font-smoothing: antialiased;
     content: "\f054";
@@ -668,13 +667,12 @@ All this is done for any sub-level being entered.
     text-transform: uppercase;
     font-size: 14px;
     padding: 0px 15px;
-    font-family: 'Asap',sans-serif;
 }
 .menu-head-ad {
-    font-weight: 700;
+
 }
 .count-ads {
-    font-weight: 400;
+
 }
 @media only screen and (max-width: 759px) {
     .mob-container {
@@ -691,7 +689,6 @@ All this is done for any sub-level being entered.
     position: absolute;
     top: 0;
     line-height: 40px;
-    font-family: 'FontAwesome';
     speak: none;
     -webkit-font-smoothing: antialiased;
     content: "\f054";
@@ -711,7 +708,7 @@ All this is done for any sub-level being entered.
 
 /* Header after login */
 .top-links .notification-link a span, .top-links .msg-link a span, .top-links .cart-link a span {
-        font-weight: bold;
+
         color:#a8dc28;
     }
     a.basket-icon {
@@ -741,7 +738,7 @@ All this is done for any sub-level being entered.
     }
     .top-links .f-dropdown li a {
         font-size: 13px !important;
-        font-weight: 700;
+
         height: auto;
         line-height: 36px;
         padding: 0 15px 0 54px;
@@ -803,7 +800,7 @@ All this is done for any sub-level being entered.
     }
 	#notification-menu .alert-box {
 	    font-size: 13px;
-	    font-weight: bold;
+
 	    line-height: 5px;
 	    padding: 10px 10px 19px !important;
 	    border-radius: 0px !important;
