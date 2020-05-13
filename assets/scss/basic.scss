@@ -752,7 +752,9 @@ color: #ffffff;cursor: pointer;position: absolute;right: 0;width: 20px;height: 3
     z-index: 1050 !important;
     top: 0 !important;
     width: 100% !important;
-    height: 100% !important; 
+    height: 100% !important;
+    overflow: scroll;
+    scrollbar-width: none;
 }
 .adult-pop-up-modal {
     background: #fff url("/bundles/fafrontend/images/adult-warning.svg") no-repeat center 0;

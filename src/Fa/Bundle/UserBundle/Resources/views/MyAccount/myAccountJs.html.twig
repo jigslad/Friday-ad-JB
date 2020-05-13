@@ -221,7 +221,7 @@
             hideAlertMessage();
             if (response.htmlContent.length) {
                 $('#addressBookModal').html(response.htmlContent);
-                $('#addressBookModal').equalizer();
+                $('#addressBookModal').show();
             } else if (response.error.length) {
                 $(decorateMessage(response.error, 'alert')).prependTo('#panel6b');
                 scrollToElement('#panel6b', '1000', -150);
