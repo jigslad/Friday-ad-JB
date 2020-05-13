@@ -17,10 +17,10 @@
         <div class="payment-row">
             {{ form_label(form.zip) }}
             <div class="postcode row">
-                <div class="col-md-13">
+                <div class="col-md-10">
                     {{ form_widget(form.zip) }}
                 </div>
-                <div class="col-md-11 pull-right">
+                <div class="col-md-14 pull-right">
                     <button type="button" class="btn secondary-btn-1 right" onclick="return getUserAddress();">{{'Find address'|trans({},'frontend-cyber-source')}}</button>
                 </div>
             </div>
@@ -79,8 +79,8 @@
                 {% endif %}
                 scrollToElement('#panel6b', '1000', -150);
                 bindCustomRadioEvent();
-                unblockPage();
             }
+            unblockPage();
         });
     });
 //]]>

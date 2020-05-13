@@ -43,7 +43,14 @@ button:focus, a:focus { outline: 0px dotted; }
 .btn-h-md { height: 40px !important; }
 .btn-h-sm { height: 30px !important; }
 
-label { line-height: 20px;margin-bottom: 10px; }
+label {
+  line-height: 20px;
+  margin-bottom: 10px;
+  color: #ACB0B7 !important;
+  font-family: "Poppins-SemiBold" !important;
+  font-weight: normal !important;
+  font-size: 14px;
+}
 
 .primary-btn-1, a:hover.primary-btn-1, a:focus.primary-btn-1, .primary-btn-1:focus, .primary-btn-1:hover,
 .top-bar-section li.place-item-btn a {
