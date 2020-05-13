@@ -1,0 +1,36 @@
+.featured .featured-ribbon { 
+	background: url('/Frontend/images/adult/featured-ribbon.png') no-repeat;
+}
+/* Mobile Menu Icons */
+.mob-adul-menu-icons{
+    display: inline-block;width: 32px;height: 32px;vertical-align: middle;margin-right: 12px;background-size: 32px 32px;
+}
+.mob-adul-contacts { background: url('/Frontend/images/adult/mob-adul-contacts.png') no-repeat; }
+.mob-adul-escorts { background: url('/Frontend/images/adult/mob-adul-escorts.png') no-repeat; }
+.mob-adul-fetish-role { background: url('/Frontend/images/adult/mob-adul-fetish-role.png') no-repeat; }
+.mob-adul-gay-male { background: url('/Frontend/images/adult/mob-adul-gay-male.png') no-repeat; }
+.mob-adul-industry-jobs { background: url('/Frontend/images/adult/mob-adul-industry-jobs.png') no-repeat; }
+.mob-adul-massage { background: url('/Frontend/images/adult/mob-adul-massage.png') no-repeat; }
+/* Category Images */
+.discover-adult-categories { margin:auto; }
+.discover-adult-contacts, .cat-adult-contacts { background: url('/Frontend/images/adult/Ic-btn-contacts.png') no-repeat; }
+.discover-escorts, .cat-escorts { background: url('/Frontend/images/adult/Ic-btn-escorts.png') no-repeat; }
+.discover-fetish-and-roleplay, .cat-fetish-and-roleplay { background: url('/Frontend/images/adult/Ic-btn-fetish-and-roleplay.png') no-repeat; }
+.discover-gay-male-escort, .cat-gay-male-escort { background: url('/Frontend/images/adult/Ic-btn-gay-male-escort.png') no-repeat; }
+.discover-adult-industry-jobs, .cat-adult-industry-jobs { background: url('/Frontend/images/adult/Ic-btn-industry-jobs.png') no-repeat; }
+.discover-adult-massage, .cat-adult-massage { background: url('/Frontend/images/adult/Ic-btn-massage.png') no-repeat; }
+
+.discover-adult-contacts:hover, .cat-adult-contacts:hover { background: url('/Frontend/images/adult/Ic-btn-contacts-Hover.png') no-repeat; }
+.discover-escorts:hover, .cat-escorts:hover { background: url('/Frontend/images/adult/Ic-btn-escorts-Hover.png') no-repeat; }
+.discover-fetish-and-roleplay:hover, .cat-fetish-and-roleplay:hover { background: url('/Frontend/images/adult/Ic-btn-fetish-and-roleplay-Hover.png') no-repeat; }
+.discover-gay-male-escort:hover, .cat-gay-male-escort:hover { background: url('/Frontend/images/adult/Ic-btn-gay-male-escort-Hover.png') no-repeat; }
+.discover-adult-industry-jobs:hover, .cat-adult-industry-jobs:hover { background: url('/Frontend/images/adult/Ic-btn-industry-jobs-Hover.png') no-repeat; }
+.discover-adult-massage:hover, .cat-adult-massage:hover { background: url('/Frontend/images/adult/Ic-btn-massage-Hover.png') no-repeat; }
+
+.discover-adult-contacts.active, .cat-adult-contacts.active { background: url('/Frontend/images/adult/Ic-btn-contacts-ON.png') no-repeat;border-radius: 6px; }
+.discover-escorts.active, .cat-escorts.active { background: url('/Frontend/images/adult/Ic-btn-escorts-ON.png') no-repeat;border-radius: 6px; }
+.discover-fetish-and-roleplay.active, .cat-fetish-and-roleplay.active { background: url('/Frontend/images/adult/Ic-btn-fetish-and-roleplay-ON.png') no-repeat;border-radius: 6px; }
+.discover-gay-male-escort.active, .cat-gay-male-escort.active { background: url('/Frontend/images/adult/Ic-btn-gay-male-escort-ON.png') no-repeat;border-radius: 6px; }
+.discover-adult-industry-jobs.active, .cat-adult-industry-jobs.active { background: url('/Frontend/images/adult/Ic-btn-industry-jobs-ON.png') no-repeat;border-radius: 6px; }
+.discover-adult-massage.active, .cat-adult-massage.active { background: url('/Frontend/images/adult/Ic-btn-massage-ON.png') no-repeat;border-radius: 6px; }
+

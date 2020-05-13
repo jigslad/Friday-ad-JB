@@ -18,6 +18,7 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addStyleEntry('css/general', './assets/scss/general.scss')
+    .addStyleEntry('css/adul-general', './assets/scss/adul-general.scss')
     .addStyleEntry('css/basic', './assets/scss/basic.scss')
     .addStyleEntry('css/footer', './assets/scss/footer.scss')
     .addStyleEntry('css/header', './assets/scss/header.scss')
@@ -31,6 +32,8 @@ Encore
     .addStyleEntry('css/dashboard', './assets/scss/dashboard.scss')
     .addStyleEntry('css/addetail-recommended', './assets/scss/addetail-recommended.scss')
     .addStyleEntry('css/newsletter', './assets/scss/newsletter.scss')
+    .addStyleEntry('css/adult-homepage', './assets/scss/adult-homepage.scss')
+    .addStyleEntry('css/adult-images', './assets/scss/adult-images.scss')
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 

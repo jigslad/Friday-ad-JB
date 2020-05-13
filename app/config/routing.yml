@@ -187,7 +187,13 @@ show_business_user_ads_location:
     schemes:  [https]
     requirements:
         page_string: '.+'
-
+        
+fa_adult_homepage:
+    path:     /adult-services/
+    host: '%fa.main.host%'
+    schemes:  [https]
+    defaults: { _controller: FaFrontendBundle:Adult:index }
+    
 listing_page:
     path: /{location}/{page_string}/
     defaults: { _controller: 'FaAdBundle:AdList:searchResult'}

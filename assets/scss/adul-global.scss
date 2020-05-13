@@ -1,0 +1,110 @@
+// grid breakpoint
+$grid-breakpoints: (
+        xs: 0,
+        sm: 641px,
+        md: 760px,
+        lg: 960px,
+        xl: 1151px
+) !default;
+//  grid containers
+$container-max-widths: (
+        sm: 641px,
+        md: 760px,
+        lg: 960px,
+        xl: 1110px
+) !default;
+//grid coloms
+$grid-columns: 24 !default;
+@import "../../node_modules/bootstrap-scss/bootstrap.scss";
+$white : #FFFFFF !default;
+$black : #000000 !default;
+$common-text-color: #212527  !default;
+$common-bg-color: #EAEFF0 !default;
+
+$htag-color: #212527 !default;
+$atag-color: #9C1F9F !default;
+$accent1-color: #91D851 !default;
+$accent1-dark-color: #9C1F9F !default;
+$accent2-color: #FF5E74 !default;
+$text-color: #212527 !default;
+$dark-grey: #ACB0B7 !default;
+$grey-color: #CBD5D9 !default;
+$light-grey-color: #EAEFF0 !default;
+$primary-bg-color: #eef8d4 !default;
+$site-dark-bg-color: #212527 !default;
+$pagination-bg-color: #FBFBFB !default;
+$covid-bg-color: #FFBE09 !default;
+$covid-btn-txt-color: #343738 !default;
+$eighteenPlus-bg-start:#A75BD8 !default;
+$eighteenPlus-bg-end:#C60A84 !default;
+
+$primary-color: #E62EEB !default;
+$primary-h-color: #9C1F9F !default;
+$secondary-color: #9C1F9F !default;
+$secondary-h-color: #E62EEB !default;
+
+
+$primary-btn-l-color: #A75BD8 !default;
+$primary-btn-r-color: #C60A84 !default;
+$primary-btn-lh-color: #8646AB !default;
+$primary-btn-rh-color: #9E086B !default;
+$secondary-btn-l-color: #A75BD8 !default;
+$secondary-btn-r-color: #C60A84 !default;
+$secondary-btn-lh-color: #8646AB !default;
+$secondary-btn-rh-color: #9E086B !default;
+$secondary-btn-2-lh-color: #A75BD8 !default;
+$secondary-btn-2-rh-color: #C60A84 !default;
+$primary-btn-brdr-color: #9C1F9F !default;
+$primary-btn-brdr-h-color: #9C1F9F !default;
+$secondary-btn-brdr-color: #9C1F9F !default;
+$secondary-btn-brdr-h-color: #9C1F9F !default;
+
+//Error colors
+$error-color: #FFEBEB !default;
+$error-h-color: #F74D4D !default;
+
+//Highlight color
+$highlight-color: #FF233E !default; 
+
+//Form control colors
+$form-label-color: #ACB0B7  !default;
+$form-text-color: #212527 !default;
+$form-border-color: #CBD5D9 !default;
+$form-bg-color: #EAEFF0 !default;
+
+//Different Company Brand Colors
+$paypal-bg-color: #ffc439 !default;
+$paypal-border-color: #dc911d !default;
+$paypal-h-bg-color: #fbd989 !default;
+
+//Radius
+$border-radius: 4px !default;
+
+//other bg color
+$chat-bg-color: #9b9b9b !default;
+$chat-btn-color: #d8d8d8 !default;
+$slider-noui-handle-color: #a9a9a9 !default;
+$slider-noui-color: #abd145 !default;
+
+$alert-new-order: #f5a623 !default;
+$alert-preparing-dispatched: #81dcf8 !default;
+$alert-dispatched: #4a90e2 !default;
+$alert-delivered: #7ed321 !default;
+
+$live-status: #70ca0d !default;
+$draft-status: #9b9b9b !default;
+$moderation-status: #ffb001 !default;
+$reject-status: #f74d4d !default;
+
+//Social icon
+$fb-bg-color: #35578c !default;
+$fb-bg-h-color: #2b4a7a !default;
+$fb-border-h-color: #253f67 !default;
+$fb-shadow-h-color: #4772b4 !default;
+$google-bg-color: #4285F4 !default;
+$gplus-bg-color: #3265D1 !default;
+
+$imgplaceholder-bgcolor: #EAEFF0 !default;
+$anchr-color: #82C249 !default;
+$full-width: 100%;
+
