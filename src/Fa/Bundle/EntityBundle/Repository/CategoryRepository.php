@@ -126,6 +126,8 @@ class CategoryRepository extends NestedTreeRepository
     const ADULT_TOP_LOCATION_AT_DETAIL_BY_DISTANCE = 50;
     const GAY_MALE_ESCORT_NAME = 'Gay Male Escorts';
     const ADULT_CONTACTS_ID = 3412;
+    const GAY_MALE_ESCORT_ID = 4521;
+    const ADULT_INDUSTRY_JOBS_ID = 4522;
     
     //For Distance
     const MOTORS_DISTANCE = 30;
@@ -2302,4 +2304,179 @@ class CategoryRepository extends NestedTreeRepository
             return null;
         }
     }
+    /**
+     * Get category array by id for landing page.
+     *
+     * @param integer $id
+     *
+     * @return multitype:multitype:string NULL
+     */
+    public function getCategoryArraySimpleById($id)
+    {
+        $categories = $this->createQueryBuilder(self::ALIAS)
+        ->andWhere(self::ALIAS.'.parent = :id')
+        ->andWhere(self::ALIAS.'.status = 1')
+        ->setParameter('id', $id.'%')
+        ->getQuery()->getResult();
+
+
+        $catArray = array($id => 'Categories');
+        foreach ($categories as $cat) {
+            $catArray[$cat->getId()] = $cat->getName();
+        }
+        return $catArray;
+    }
+
+    public function getHeaderAdultCategoryClassArray()
+    {
+        $categoryClassArray = array();
+        $categoryClassArray[self::ADULT_ID]     = 'mob-adult';
+        $categoryClassArray[self::ADULT_MASSAGE_ID]     = 'mob-adul-massage';
+        $categoryClassArray[self::ESCORT_SERVICES_ID]     = 'mob-adul-escorts';
+        $categoryClassArray[self::FETISH_AND_ROLE_PLAY_ID]     = 'mob-adul-fetish-role';
+        $categoryClassArray[self::GAY_MALE_ESCORT_ID]     = 'mob-adul-gay-male';
+        $categoryClassArray[self::ADULT_INDUSTRY_JOBS_ID]     = 'mob-adul-industry-jobs';
+        $categoryClassArray[self::ADULT_CONTACTS_ID]     = 'mob-adul-contacts';
+        return $categoryClassArray;
+    }
+    
+     /**
+     * Get adult categories.
+     *
+     * @param object $container container identifier
+     *
+     * @return array
+     */
+    public function getAdultHeaderCategories($container = null, $locationDetails = array())
+    {
+        $em = $container->get('doctrine')->getManager();
+        if ($container) {
+            $locationSlug = null;
+            if (!empty($locationDetails) && isset($locationDetails['slug'])) {
+                $locationSlug = $locationDetails['slug'];
+            }
+            if (!$locationSlug) {
+                $locationSlug = $em->getRepository('FaEntityBundle:Location')->getSlugById(LocationRepository::COUNTY_ID, $container);
+            }
+            $culture     = CommonManager::getCurrentCulture($container);
+            $tableName   = $this->getCategoryTableName();
+            $cacheKey    = $tableName.'|'.__FUNCTION__.'|'.$locationSlug.'|'.$culture;
+            $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
+            
+            if ($cachedValue !== false) {
+                //return $cachedValue;
+            }
+        }
+        
+        $leafLevelCategoryCount = array();
+        if (is_array($this->categoryCountArray) && count($this->categoryCountArray)) {
+            $categoryCountArray = $this->categoryCountArray;
+        } else {
+            $locationId = $em->getRepository('FaEntityBundle:Location')->getIdBySlug($locationSlug, $container);
+            
+            if (!$locationId) {
+                $locationId = $em->getRepository('FaEntityBundle:Locality')->getColumnBySlug('id', $locationSlug, $container);
+            }
+            $data                 = array();
+            $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
+            if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
+                $data['query_filters']['item']['location'] = $locationId.'|15';
+            }
+            $data['static_filters'] = ' AND ('.AdSolrFieldMapping::ROOT_CATEGORY_ID.':'.CategoryRepository::ADULT_ID.' OR '.AdSolrFieldMapping::CATEGORY_ID.':'.CategoryRepository::ADULT_ID.')';
+            //$data['query_filters']['item']['category_id'] = self::ADULT_ID;
+            if (!empty($locationDetails)) {
+                if (isset($locationDetails['latitude']) && isset($locationDetails['longitude'])) {
+                    $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'].', '.$locationDetails['longitude']);
+                    $container->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
+                }
+            }
+            $data['facet_fields'] = array('a_category_id_i' => array('limit' => '5000'),'a_parent_category_lvl_1_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_2_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_3_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_4_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_5_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_6_id_i' => array('limit' => '5000'));
+            
+            // initialize solr search manager service and fetch data based of above prepared search options
+            $container->get('fa.solrsearch.manager')->init('ad', '', $data);
+            $solrResponse = $container->get('fa.solrsearch.manager')->getSolrResponse();
+            
+            // fetch result set from solr
+            $result = $container->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
+            $categoryCountArray = get_object_vars($result['a_parent_category_lvl_1_id_i']) + get_object_vars($result['a_parent_category_lvl_2_id_i']) + get_object_vars($result['a_parent_category_lvl_3_id_i']) + get_object_vars($result['a_parent_category_lvl_4_id_i']) + get_object_vars($result['a_parent_category_lvl_5_id_i']) + get_object_vars($result['a_parent_category_lvl_6_id_i']);
+            $leafLevelCategoryCount = get_object_vars($result['a_category_id_i']);
+            
+            $this->categoryCountArray = $categoryCountArray;
+            $this->leafLevelCategoryCount = $leafLevelCategoryCount;
+        }
+
+        $tableName = $this->_em->getClassMetadata('FaEntityBundle:Category')->getTableName();
+        $headerCategoryArray = array();
+        $query = 'SELECT parent.id,parent.name,parent.lvl,parent.slug,parent.parent_id,parent.full_slug,node.include_as_main_category_in_header,parent.is_children_header_sortable,node.header_sort_order
+                FROM '.$tableName.' AS node,
+                    '.$tableName.' AS parent FORCE INDEX (idx_lft,idx_status)
+                WHERE node.lft BETWEEN parent.lft AND parent.rgt
+                    AND parent.lvl <> 0
+                    AND parent.status = 1
+                ORDER BY node.lft, parent.lvl';
+        $stmt = $this->_em->getConnection()->prepare($query);
+        $stmt->execute();
+        $categories         = $stmt->fetchAll();
+        $categoryClassArray = $this->getHeaderAdultCategoryClassArray();
+        
+        if (count($categories)) {
+            
+            foreach ($categories as $index => $category) {
+                if ($category['parent_id'] == self::ADULT_ID || $category['id'] == self::ADULT_ID) {
+                    $count = (isset($categoryCountArray[$category['id']]) ? $categoryCountArray[$category['id']] : 0);
+                    $leafCatCount = (isset($leafLevelCategoryCount[$category['id']]) ? $leafLevelCategoryCount[$category['id']] : 0);
+                    if ($count < 1) {
+                        $count = (isset($leafLevelCategoryCount[$category['id']]) ? $leafLevelCategoryCount[$category['id']] : 0);
+                        if ($count < 1) {
+                            continue;
+                        }
+                    }
+                    
+                    $categoryArray = array('name' => $category['name'], 'id' => $category['id'], 'slug' => $category['slug'], 'count' => $count, 'full_slug' => $category['full_slug'], 'children' => array(),'header_sortable'=>$category['is_children_header_sortable'],'sort_ord'=> $category['header_sort_order'] );
+
+                    if ($category['lvl'] == 1 && !array_key_exists($category['id'], $headerCategoryArray)) {
+                        if (isset($categoryClassArray[$category['id']])) {
+                            $categoryArray['class'] = $categoryClassArray[$category['id']];
+                        }
+                        $headerCategoryArray[$category['id']] = $categoryArray;
+                        $categoryId1 = $category['id'];
+                    } elseif (($category['lvl'] == 2 || ($category['lvl'] == 3 && $category['include_as_main_category_in_header'] == 1)) && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'])) {
+                        if (isset($categoryClassArray[$category['id']])) {
+                            $categoryArray['class'] = $categoryClassArray[$category['id']];
+                        }
+                        if($leafCatCount>1) {
+                            $categoryArray['count'] = $leafCatCount;
+                        }
+                        $headerCategoryArray[$categoryId1]['children'][$category['id']] = $categoryArray;
+                        $categoryId2 = $category['id'];
+                    } elseif ($category['lvl'] == 3 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'])) {
+                        $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$category['id']] = $categoryArray;
+                        $categoryId3 = $category['id'];
+                        asort($headerCategoryArray[$categoryId1]['children'][$categoryId2]['children']);
+                    } elseif ($category['lvl'] == 4 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'])) {
+                        $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$category['id']] = $categoryArray;
+                        $categoryId4 = $category['id'];
+                        asort($headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children']);
+                    } elseif ($category['lvl'] == 5 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children'])) {
+                        $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children'][$category['id']] = $categoryArray;
+                        $categoryId5 = $category['id'];
+                        asort($headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children']);
+                    } elseif ($category['lvl'] == 6 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children'][$categoryId5]['children'])) {
+                        $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children'][$categoryId5]['children'][$category['id']] = $categoryArray;
+                        $categoryId6 = $category['id'];
+                        asort($headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children'][$categoryId5]['children']);
+                    }
+                }
+            }
+        }
+        
+        ksort($headerCategoryArray);
+        
+        if ($container) {
+            CommonManager::setCacheVersion($container, $cacheKey, $headerCategoryArray, self::CACHE_TTL);
+        }
+        
+        return $headerCategoryArray;
+     }
+
 }

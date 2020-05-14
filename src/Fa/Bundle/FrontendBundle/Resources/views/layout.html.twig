@@ -131,8 +131,45 @@
         {{blockTwitterMeta|raw}}
     {% endif %}
     
-    {{ include('FaFrontendBundle::styleTop.html.twig') }}  
-      
+    {{ include('FaFrontendBundle::styleTop.html.twig') }}      
+    
+    {% set showAdultPages = 0 %}
+    {% set appUserRole = '' %}
+    {% set assignedCategoryId = 0 %}
+    {% if (app.user.getId() is defined) %}
+    	{% set appUserRole = fetch_repository('FaUserBundle:User').getUserRole(app.user.getId(), container) %}
+    {% endif %}
+        
+    {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null  %}
+    	{% set assignedCategoryId = searchParams.item__category_id %}
+	{% elseif currentRoute == 'ad_detail_page' and app.request.get('category_string') %}
+		{% set assignedCategoryId = fetch_repository('FaEntityBundle:Category').getIdBySlug(app.request.get('category_string'), fetch_container_instance()) %}
+	{% elseif (currentRoute == 'show_business_profile_page' or currentRoute == 'show_business_user_ads') and app.request.get('profileNameSlug') %}
+         {% set objUserSite = fetch_repository('FaUserBundle:UserSite').findOneBy({'slug':app.request.get('profileNameSlug')}) %}
+         {% set assignedCategoryId = objUserSite.getUser().getBusinessCategoryId() %}          
+	{% elseif (appUserRole is defined and (appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') or appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION'))) %}
+    	{% set assignedCategoryId = app.user.getBusinessCategoryId() %}
+	{% elseif (appUserRole is defined and appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION')) %}
+		{% set assignedCategoryId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+	{% endif %}
+
+	{% if assignedCategoryId!=0 %}
+    	{% set rootCategoryId = fetch_repository('FaEntityBundle:Category').getRootCategoryId(assignedCategoryId, fetch_container_instance()) %}
+        {% if (rootCategoryId == ADULT_CATEGORY_ID) %}
+              {% set showAdultPages = 1 %}
+        {% endif %}                
+    {% endif %}	
+            
+    {% if currentRoute=='fa_adult_homepage' %}
+    	{% set showAdultPages=1 %}
+    {% endif %}
+    
+    {% if showAdultPages==1 and currentRoute not in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote', 11: 'fa_frontend_homepage'} %}
+        <link rel="stylesheet" href="{{ asset('/build/css/adul-general.css') }}">
+    {% else %}
+    	<link rel="stylesheet" href="{{ asset('/build/css/general.css') }}">
+    {% endif %}
+    
     {% if blockStylesheet %}
     	{{ blockStylesheet|raw }}
     {% endif %}
@@ -233,7 +270,11 @@
             {{ include('FaFrontendBundle::cookiePolicy.html.twig') }}
         {% endif %}
 
-        {{ include('FaFrontendBundle::header.html.twig', {'status_code': status_code}) }}
+        {% if showAdultPages==1 and currentRoute not in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote', 11: 'fa_frontend_homepage'} %}
+            {{ include('FaFrontendBundle:Adult:header.html.twig', {'status_code': status_code}) }}
+        {% else %}
+        	{{ include('FaFrontendBundle::header.html.twig', {'status_code': status_code}) }}
+        {% endif %}
 	
         {% if status_code == 200 %}
             {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page'} %}

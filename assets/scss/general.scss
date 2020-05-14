@@ -24,7 +24,7 @@ input,button, .button, .btn, .primary-btn-1, .primary-btn-2, .primary-btn-3, .se
 .discover-categories a.active, .discover-categories a.active
 { border-radius:$border-radius; } 
 
-.primary-btn-1 {
+.primary-btn-1, .top-bar-section li:not(.has-form).place-item-btn a {
     background: linear-gradient(135deg, $primary-btn-l-color 0%, $primary-btn-r-color 100%) !important;
     border: 0px solid transparent;
     color: $white;
