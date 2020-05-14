@@ -9,35 +9,23 @@
         }
     }
     </style>
-{% endif %} 
+{% endif %}
 <div>
-    {% if status_code == 200 %}
-        {% if currentRoute == 'ad_detail_page' %}
-            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_ABOVE_HEADER') %}
-            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
-            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_ABOVE_HEADER_TABLET') %}
-            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
-        {% else %}
-            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_ABOVE_HEADER') %}
-            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
-            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_ABOVE_HEADER_TABLET') %}
-            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
-        {% endif %}
-    {% endif %}    
-    <div class="top-links d-none d-sm-block">
+    <div class="top-links d-none d-md-block">
         <div class="container">
             <div class="row ml0 mr0">
-                <div class="col-xs-24 col-sm-24 col-md-24 pr0 pl0 pad-none">
-                   {% if app.user %}
+            	<div class="col-xs-24 col-sm-24 col-md-24 pr0 pl0 pad-none">
+                {% if app.user %}
                     {% set messageRepository = fetch_repository('FaMessageBundle:Message') %}
                     {% set totalUnreadMsg = messageRepository.getMessageCount(app.user.getId(), 'all', fetch_container_instance()) %}
                     {% set userRole = fetch_repository('FaUserBundle:User').getUserRole(app.user.getId(), container) %}
                     <ul class="clearfix">
-                        <li id="db-dropdown-menu-link">
-                            <a href="{{ path('dashboard_home') }}" class="dropdown-toggle my-db-desktop" >{{ 'My Dashboard'|trans({}, 'frontend-header-usermenu') }} <b class="f-caret"></b></a>
-                            <ul id="db-dropdown-menu" class="dropdown-menu f-dropdown">
+                        <li>
+                            <a href="{{ path('dashboard_home') }}" class="dropdown bold my-db-desktop">{{ 'My Dashboard'|trans({}, 'frontend-header-usermenu') }}</a>
+                            <a href="javascript:void(0);" class="dropdown bold my-db-tablet needsclick" data-dropdown="db-dropdown-menu" aria-controls="db-dropdown-menu">{{ 'My Dashboard'|trans({}, 'frontend-header-usermenu') }}</a>
+                            <ul id="db-dropdown-menu" data-dropdown-content class="f-dropdown" aria-hidden="true">
                                 <li><a href="{{ path('dashboard_home') }}" class="home-icon">{{ 'Dashboard home'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                                <li><a href="{{ path('user_ad_message_all') }}" class="messages-icon">{{ 'Messages'|trans({}, 'frontend-header-usermenu') }}&nbsp;<span id="total_unread_msg_div" class="show-for-small-only">({{totalUnreadMsg}})</span> </a></li>
+                                <li><a href="{{ path('user_ad_message_all') }}" class="messages-icon">{{ 'Messages'|trans({}, 'frontend-header-usermenu') }}&nbsp;<span id="total_unread_msg_div" class="d-block d-md-none">({{totalUnreadMsg}})</span> </a></li>
                                 <li><a href="{{ path('user_review_list') }}" class="reviews-icon">{{ 'Reviews'|trans({}, 'frontend-header-usermenu') }}</a></li>
                                 <li><a href="{{ path('manage_my_ads_active') }}" id="manage-my-ad-id" class="manage-item-icon">{{'Manage my ads'|trans({}, 'frontend-header-usermenu')}}</a></li>
                                 <li><a href="{{ path('my_profile') }}" class="manage-profile-icon">{{ 'Edit profile'|trans({}, 'frontend-header-usermenu') }}</a></li>
@@ -47,15 +35,6 @@
                                 <li><a href="{{ path('my_purchases') }}" id="shop-header-id" class="purchase-icon">{{ 'Purchases'|trans({}, 'frontend-header-usermenu') }}</a></li>
                                 <li><a href="{{ path('my_account') }}" id="account-header-id" class="account-icon">{{ 'Account'|trans({}, 'frontend-header-usermenu') }}</a></li>
                             </ul>
-                            <script>
-                                $( "#db-dropdown-menu-link" )
-                                    .mouseenter(function() {
-                                        $("#db-dropdown-menu").addClass( "show" );
-                                    })
-                                    .mouseleave(function() {
-                                        $("#db-dropdown-menu").removeClass( "show" );
-                                    });
-                            </script>
                         </li>
                         <li>
                             {% set myProfileUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(app.user.getId()) %}
@@ -66,13 +45,11 @@
                                         {{userLogo|replace({'<div': '<span', '</div>':'</span>'})|raw}}
                                     </span>
                                 </span>
-                                <span>
                                 {% if app.user.getFullName() %}
                                     {{app.user.getFullName()}}
                                 {% else %}
                                     {{app.user.getUsername()}}
                                 {% endif %}
-                                </span>
                             </a>|
                         </li>
 
@@ -98,147 +75,49 @@
                         <li><a href="{{ path('fa_user_register') }}" id="register-header-id">{{'Register'|trans({}, 'frontend-header-usermenu')}}</a></li>
                     </ul>
                 {% endif %}
-                </div>
+				</div>
             </div>
         </div>
-	</div>
-    {# FFR-4031 starts Here #}
-   {% set isSetCovidSession =0 %}
-   {% set showCovidBanner = 1 %}
-   {% set assignedCategoryId = 0 %}
-   {% if app.request.cookies.has('is_over_18') %}
-        {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null  %}
-        	{% set assignedCategoryId = searchParams.item__category_id %}
-    	{% elseif currentRoute == 'ad_detail_page' and app.request.get('category_string') %}
-    		{% set assignedCategoryId = fetch_repository('FaEntityBundle:Category').getIdBySlug(app.request.get('category_string'), fetch_container_instance()) %}
-    	{% elseif (currentRoute == 'show_business_profile_page' or currentRoute == 'show_business_user_ads') and app.request.get('profileNameSlug') %}
-             {% set objUserSite = fetch_repository('FaUserBundle:UserSite').findOneBy({'slug':app.request.get('profileNameSlug')}) %}
-             {% set assignedCategoryId = objUserSite.getUser().getBusinessCategoryId() %}
-    	{% elseif (appUserRole is defined and (appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') or appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION'))) %}
-        	{% set assignedCategoryId = app.user.getBusinessCategoryId() %}
-    	{% endif %}
-
-    	{% if assignedCategoryId!=0 %}
-        	{% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(assignedCategoryId, false, fetch_container_instance()) %}
-            {% set catCnt = 0 %}
-            {% if categoryPath|length %}
-                {% for categoryId, categoryName in categoryPath %}
-                    {% if catCnt == 0 %}
-                        {% if (categoryId == ADULT_CATEGORY_ID) %}
-                            {% set showCovidBanner = 0 %}
-                        {% endif %}
-                    {% endif %}
-                    {% set catCnt = catCnt + 1 %}
-                {% endfor %}
-            {% endif %}
-       {% endif %}	
-    {% endif %}
-   {% if container.get('session').has('CovidSession') %}
-   		{% set isSetCovidSession = container.get('session').get('CovidSession') %}
-   {% endif %}
-   {% if isSetCovidSession==0 and showCovidBanner==1 and currentRoute not in {0: 'fa_frontend_homepage', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote' } %}
-   <div class="covid-19-block top-border d-none d-md-block">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col-sm-24 col-md-17 col-lg-18 align-text"><div class="head">Covid-19. <span class="ask-for-offer-help">Ask for & Offer Help in our <a href="https://www.friday-ad.co.uk/uk/community/coronavirus-support/" class="ga-covid-19-support-link-all-pages">Coronavirus Support section</a></span></div></div>
-                <div class="col-sm-24 col-md-7 col-lg-6 mt-space"><a href="https://www.friday-ad.co.uk/paa/first_step?categoryName=Coronavirus%20Support" class="button place-free-ad-btn thin-btn ga-covid-19-paa-link-all-pages">Place Help Ad</a><span class="cross-btn align-text" onclick="setCovidSession()"></span></div>
-            </div>
-        </div>
-    </div>
-   {% endif %}
-   {# FFR-4031 Ends Here #}   
+    </div>   
    {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
-   {% if status_code == 200 and currentRoute is defined and currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'listing_page', 3: 'landing_page_category_location', 4: 'landing_page_category'}  and not app.request.attributes.get('static_page') %}
-    <div id="sticky_nav_top">
-    {% endif %}
-   	<nav class="navbar navbar-expand-sm navbar-dark top-bar-section" id="top_bar_nav">
-        <div class="container row mob-container">
-            <a href="{{ path('fa_adult_homepage') }}" class="adul-logo"><img src="{{ asset_url('fafrontend/images/Fad-Adult-logo.svg') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" /></a>
-            <button  onclick="" class="navbar-toggler nav-icon" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="menu" id="top_bar_nav_menu_span"></span>
-            </button>
-    
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                	{% if mobileDetectManager.isTablet() %}
-                        {{ render(controller('FaEntityBundle:Category:renderAdultHeaderCategories', {'is_tablet':1, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'}  ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
-                    {% elseif mobileDetectManager.isMobile() %}
-                        {{ render(controller('FaEntityBundle:Category:renderAdultHeaderCategories', {'is_tablet':0, 'is_mobile':1, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
-                    {% else %}
-                        {{ render(controller('FaEntityBundle:Category:renderAdultHeaderCategories', {'is_tablet':0, 'is_mobile':0, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
-                    {% endif %}
-                	<div class="m-navbar-block">
-                        <ul class="d-block d-md-none login-menu">
+   <div id="sticky_nav_top">
+    <div class="nav-bg {% if currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'listing_page', 3: 'landing_page_category_location', 4: 'landing_page_category'} %}homepage-nav{% endif %}">
+        <div class="container">
+            <div class="row">
+                {% if status_code == 200 and currentRoute is defined and currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'listing_page', 3: 'landing_page_category_location', 4: 'landing_page_category'}  and not app.request.attributes.get('static_page') %}
+                    <div id="sticky_nav" class="sticky">
+                {% endif %}
+                <nav class="top-bar" id="top_bar_nav" data-topbar="" data-options="sticky_on: large">
+                    <ul class="title-area">
+                        <li class="name">
+                        <h1 class="mob-logo-h1">
+                             <a href="{{ path('fa_adult_homepage') }}" class="adul-logo"><img src="{{ asset('/Frontend/images/adult/Fad-Adult-logo.svg') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" /></a>
+                        </h1>
+                        </li>
+                        <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+                        <li class="toggle-topbar menu-icon" id="mobile_menu_li"><a href="javascript:void(0);"><span class="menu" id="top_bar_nav_menu_span"></span></a></li>
+                        {% if currentRoute not in {0: 'cybersource_checkout', 1: 'fa_frontend_homepage'} %}
+                            <li class="d-block d-md-none search-icon" id="mobile_search_li"><a href="javascript:void(0)" class="search">Search</a></li>
+                        {% endif %}
+                    </ul>
+                    <section class="top-bar-section">
+                        <!-- Right Nav Section -->
+                        
+                       <div class="tablet-menu adul-tablet-menu">
+                            {% if mobileDetectManager.isTablet() %}
+                                {{ render(controller('FaEntityBundle:Category:renderAdultHeaderCategories', {'is_tablet':1, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'}  ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
+                            {% elseif mobileDetectManager.isMobile() %}
+                                {{ render(controller('FaEntityBundle:Category:renderAdultHeaderCategories', {'is_tablet':0, 'is_mobile':1, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
+                            {% else %}
+                                {{ render(controller('FaEntityBundle:Category:renderAdultHeaderCategories', {'is_tablet':0, 'is_mobile':0, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
+                            {% endif %}
+                        </div>
+                        
                             {% if app.user %}
-                                {% set messageRepository = fetch_repository('FaMessageBundle:Message') %}
-                                {% set totalUnreadMsg = messageRepository.getMessageCount(app.user.getId(), 'all', fetch_container_instance()) %}
-                                <li class="db-left-submenu">
-                                    <a class="submenu-list collapsed" href="#db-mob-menu" data-toggle="collapse" data-target="#db-mob-menu">MY DASHBOARD</a>
-                                        <ul id="db-mob-menu" class="collapse">
-                                            <li>
-                                                <a href="{{ path('dashboard_home') }}">
-                                                    <span class="home-icon"></span>
-                                                    {{ 'Dashboard home'|trans({}, 'frontend-header-usermenu') }}
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="{{ path('user_ad_message_all') }}">
-                                                    <span class="messages-icon"></span>
-                                                    {{ 'Messages'|trans({}, 'frontend-header-usermenu') }}{% if totalUnreadMsg > 0 %}&nbsp;<span class="notification-digit">({{totalUnreadMsg}})</span>{% endif %}
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="{{ path('user_review_list') }}">
-                                                    <span class="reviews-icon"></span>
-                                                    {{ 'Reviews'|trans({}, 'frontend-header-usermenu') }}
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="{{ path('manage_my_ads_active') }}" id="manage-my-ad-id">
-                                                    <span class="manage-item-icon"></span>
-                                                    {{'Manage my ads'|trans({}, 'frontend-header-usermenu')}}
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="{{ path('my_profile') }}">
-                                                    <span class="manage-profile-icon"></span>
-                                                    {{ 'Edit profile'|trans({}, 'frontend-header-usermenu') }}
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="{{ path('my_orders') }}">
-                                                    <span class="orders-icon"></span>
-                                                    {{ 'Orders'|trans({}, 'frontend-header-usermenu') }}
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="{{ path('my_favourite') }}">
-                                                    <span  class="my-favourites-icon"></span>
-                                                    {{ 'My favourites'|trans({}, 'frontend-header-usermenu') }}
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="{{ path('list_search_agent') }}" id="saved-search-header-id">
-                                                    <span class="alerts-icon"></span>
-                                                    {{'Alerts and searches'|trans({}, 'frontend-header-usermenu')}}
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="{{ path('my_purchases') }}" id="shop-header-id">
-                                                    <span class="purchase-icon"></span>
-                                                    {{ 'Purchases'|trans({}, 'frontend-header-usermenu') }}
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="{{ path('my_account') }}" id="account-header-id">
-                                                    <span  class="account-icon"></span>
-                                                    {{ 'Account'|trans({}, 'frontend-header-usermenu') }}
-                                                </a>
-                                            </li>
-                                        </ul>
-                                </li>
+                            <ul class="d-block d-md-none login-menu">
                                 <li>
                                 {% set myProfileUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(app.user.getId()) %}
-                                <a href="{% if myProfileUrl %}{{ myProfileUrl }}{% else %}javascript:void(0);{% endif %}" class="logged-in-user">
+                            	<a href="{% if myProfileUrl %}{{ myProfileUrl }}{% else %}javascript:void(0);{% endif %}" class="logged-in-user">
                                     {% if app.user.getFirstName() or  app.user.getLastName() %}
                                         {{app.user.getFirstName()}} {{app.user.getLastName()}}
                                     {% else %}
@@ -247,51 +126,40 @@
                                     </a>
                                 </li>
                                 {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
-                                    {{ render(controller('FaUserBundle:Dashboard:notification', { 'template': 'mobile_menu' })) }}
+                                {{ render(controller('FaUserBundle:Dashboard:notification', { 'template': 'mobile_menu' })) }}
                                 {% endif %}
-                                <li>
-                                    <a href="{{ path('user_ad_message') }}" id="mob-inbox-header-id">{{'MESSAGES'|trans({}, 'inbox')}}{% if totalUnreadMsg > 0 %}&nbsp;<span class="notification-digit">({{totalUnreadMsg}})</span>{% endif %}</a>
-                                </li>
+                                <li><a href="{{ path('user_ad_message') }}" id="mob-inbox-header-id">{{'MESSAGES'|trans({}, 'inbox')}}{% if totalUnreadMsg > 0 %}&nbsp;<span class="notification-digit">({{totalUnreadMsg}})</span>{% endif %}</a></li>
                                 
                                 {% if userDetail|length > 0 %}
 	                            <li>
                                     <a href="{{ path('show_cart') }}">Cart <span class="notification-digit">({{ userDetail|length }})</span></a>
                                 </li>
                                 {% endif %}
+                                
                                 <li><a href="{{ path('logout') }}" id="mob-logout-header-id">{{'Log Out'|trans({}, 'frontend-top-menu')}}</a></li>
-                            {% else %}
+                            	</ul>
+                                {% else %}
+                                <ul class="d-block d-md-none login-menu login-reg-flex">
+                            
                                 <li><a href="{{ path('login') }}" id="mob-login-header-id">{{'Log In'|trans({}, 'frontend-top-menu')}}</a></li>
                                 <li><a href="{{ path('fa_user_register') }}" id="mob-register-header-id">{{'Register'|trans({}, 'frontend-top-menu')}}</a></li>
-                            {% endif %}
+                            	</ul>
+                                {% endif %}
+                        <ul class="right place-item">
+                            <li class="place-item-btn"><a href="{{ path('ad_post_first_step') }}" title="{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}">{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}</a></li>
                         </ul>
+                    </section>
+                </nav>
+                {% if status_code == 200 and currentRoute is defined and currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'listing_page', 3: 'landing_page_category_location', 4: 'landing_page_category'} %}
                     </div>
-                    
-            
-                    <ul class="place-item">
-                        <li class="place-item-btn text-center"><a href="{{ path('ad_post_first_step') }}" title="{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}">{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}</a></li>
-                    </ul>
-           </div>
-        </div>
-    </nav>
-   {% if status_code == 200 and currentRoute is defined and currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'listing_page', 3: 'landing_page_category_location', 4: 'landing_page_category'}  and not app.request.attributes.get('static_page') %}
-        </div>
-    {% endif %}
-
-  <div class="dropdown-bg"></div>
-
-   {% if isSetCovidSession==0 and showCovidBanner==1 and currentRoute not in {0: 'fa_frontend_homepage', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote' } %}
-   <div class="covid-19-block top-border d-block d-md-none">
-        <div class="container">
-            <div class="row text-left">
-                <div class="col-sm-24 col-md-17 col-lg-18 align-left"><div class="head">Covid-19. <span class="ask-for-offer-help">Ask for & Offer Help in our <a href="https://www.friday-ad.co.uk/uk/community/coronavirus-support/" class="ga-covid-19-support-link-all-pages">Coronavirus Support section</a></span><span class="cross-btn align-text" onclick="setCovidSession()"></span></div></div>
-                <div class="col-sm-24 col-md-7 col-lg-6 mt-space"><a href="https://www.friday-ad.co.uk/paa/first_step?categoryName=Coronavirus%20Support" class="button place-free-ad-btn thin-btn ga-covid-19-paa-link-all-pages">Place Help Ad</a></div>
+                {% endif %}
             </div>
         </div>
+        <div class="dropdown-bg"></div>
     </div>
-   {% endif %}
-    {% if status_code == 200 %}
-        {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'cybersource_checkout', 3: 'ad_post_first_step',4:'ad_post_second_step' ,5:'ad_post_third_step' ,6:'ad_post_fourth_step'} %}
-            {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {} } )) }}
-        {% endif %}
-    {% endif %}
 </div>
+{% if status_code == 200 %}
+ {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'cybersource_checkout', 3: 'fa_adult_homepage'} %}
+        {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {} } )) }}
+    {% endif %} 
+{% endif %} 

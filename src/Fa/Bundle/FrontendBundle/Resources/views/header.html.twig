@@ -94,10 +94,10 @@
         </div>
 	</div>
     {# FFR-4031 starts Here #}
-   {% set isSetCovidSession =0 %}
-   {% set showCovidBanner = 1 %}
-   {% set assignedCategoryId = 0 %}
-   {% if app.request.cookies.has('is_over_18') %}
+    {% set isSetCovidSession =0 %}
+    {% set showCovidBanner = 1 %}
+    {% set assignedCategoryId = 0 %}
+    {% if app.request.cookies.has('is_over_18') %}
         {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null  %}
         	{% set assignedCategoryId = searchParams.item__category_id %}
     	{% elseif currentRoute == 'ad_detail_page' and app.request.get('category_string') %}
@@ -124,11 +124,11 @@
             {% endif %}
        {% endif %}	
     {% endif %}
-   {% if container.get('session').has('CovidSession') %}
+    {% if container.get('session').has('CovidSession') %}
    		{% set isSetCovidSession = container.get('session').get('CovidSession') %}
-   {% endif %}
-   {% if isSetCovidSession==0 and showCovidBanner==1 and currentRoute not in {0: 'fa_frontend_homepage', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote' } %}
-   <div class="covid-19-block top-border d-none d-md-block">
+    {% endif %}
+    {% if isSetCovidSession==0 and showCovidBanner==1 and currentRoute not in {0: 'fa_frontend_homepage', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote' } %}
+    <div class="covid-19-block top-border d-none d-md-block">
         <div class="container">
             <div class="row text-center">
                 <div class="col-sm-24 col-md-17 col-lg-18 align-text"><div class="head">Covid-19. <span class="ask-for-offer-help">Ask for & Offer Help in our <a href="https://www.friday-ad.co.uk/uk/community/coronavirus-support/" class="ga-covid-19-support-link-all-pages">Coronavirus Support section</a></span></div></div>
@@ -136,12 +136,12 @@
             </div>
         </div>
     </div>
-   {% endif %}
-   {# FFR-4031 Ends Here #}   
-   {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+    {% endif %}
+    {# FFR-4031 Ends Here #}
+    {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
     {% set sticky = '' %}
-   {% if status_code == 200 and currentRoute is defined and currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'listing_page', 3: 'landing_page_category_location', 4: 'landing_page_category'}  and not app.request.attributes.get('static_page') %}
-    {% set sticky = 'id="sticky_nav_top"' %}
+    {% if status_code == 200 and currentRoute is defined and currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'listing_page', 3: 'landing_page_category_location', 4: 'landing_page_category'}  and not app.request.attributes.get('static_page') %}
+        {% set sticky = 'id="sticky_nav_top"' %}
     {% endif %}
     <div {{ sticky }}>
         <nav class="navbar navbar-expand-sm navbar-dark top-bar-section" id="top_bar_nav">
