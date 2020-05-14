@@ -326,5 +326,12 @@ window.setTimeout(function() {
         $(this).remove();
     });
 }, 2000);
+$( "#db-dropdown-menu-link" )
+    .mouseenter(function() {
+        $("#db-dropdown-menu").addClass( "show" );
+    })
+    .mouseleave(function() {
+        $("#db-dropdown-menu").removeClass( "show" );
+    });
 </script>
 {# <script src="//maps.googleapis.com/maps/api/js?v=3.exp&key={{container.getParameter('fa.googlemap.api.key')}}&sensor=true&libraries=adsense"></script> #}

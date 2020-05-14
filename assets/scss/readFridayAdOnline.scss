@@ -3,6 +3,7 @@
     }
     .read-online-block .thumbnail{
         margin-right: 30px;
+        box-shadow: 0 0 19px 0 rgba(74,74,74,0.5);
     }
     .read-online-block ul{
         margin-left: 0px;
@@ -10,10 +11,10 @@
         list-style-type: none;
     }
     .read-online-block ul li a {
-        font-size: 16px;
-
-        letter-spacing: 0.5px;
+        font-size: 18px;
+        letter-spacing: 0;
         line-height: 24px;
+        font-family: "Poppins-SemiBold";
     }
 
     .read-online-block .media-head{

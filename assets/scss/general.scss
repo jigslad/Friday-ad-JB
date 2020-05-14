@@ -325,12 +325,13 @@ ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {
         list-style: none;
         padding-left: 0;
         column-count: 4;
-        font-size: 14px;
+        font-size: 13px;
         color: $common-text-color;
         display: block;
         li {
-          margin: 0;
+          margin: 4px 0px;
           a {
+            font-size: 13px;
             color: $common-text-color;
             &:focus, &:hover {
                 color: $secondary-color;

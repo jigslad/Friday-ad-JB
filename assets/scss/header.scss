@@ -20,7 +20,13 @@
         line-height: 32px;
     }
 }
-
+.place-item-btn a.desk-paa-btn {
+  width: 140px;
+  border-radius: 0px;
+}
+.place-item-btn a.mob-paa-btn {
+  border-radius: 0px;
+}
 .sticky{
   position: fixed;
   width: 100%;

@@ -42,12 +42,11 @@ footer {
   	 	text-align: center;
   	}
 	.footer-head {
-	    font-size: 14px;
+		font-size: 12px;
 		font-family: "Poppins-SemiBold";
-
 	    a {
-	      	font-size: 14px;
-
+			font-size: 12px;
+			line-height: 18px;
 	    }
 	}
 	a {
@@ -72,7 +71,10 @@ footer {
 	      	box-shadow: none;
 	      	border: 0;
 	    }
-	    .list-parent-link ul {
+		.list-parent-link {
+			margin-top: 5px;
+		}
+	    .list-parent-link{} ul {
 	        display: block;
 	        display: -webkit-flex;
 	        display: -moz-flex;

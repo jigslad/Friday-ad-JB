@@ -115,10 +115,9 @@
     width: 112px;
     height: 112px;
     text-indent: -9999px;
-    margin: 0 0 0 21px;
-    &:first-child {
-      margin-left: 2px;
-    }
+    margin: 8px 8px;
+    background-size: cover;
+    background-position: center;
   }
 }
 
@@ -188,15 +187,14 @@
   }
   .member-info {
     padding: 8px 15px;
-    font-size: 13px;
-    line-height: 20px;
+    font-size: 14px;
+    line-height: 22px;
     display: flex;
-    .large-17 {
-      padding-top: 9px;
-      padding-bottom: 9px;
-    }
     a {
       display: block;
+    }
+    .posting-year {
+      color: #ACB0B7;
     }
   }
   .member-icon img {
@@ -207,16 +205,16 @@
   }
   .fa-price {
     min-height: 70px;
-    padding: 0px;
+    padding: 10px 0px;
     h4 {
-      font-size: 19px;
-      line-height: 29px;
+      font-size: 16px;
+      line-height: 21px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
       span {
-        font-size: 24px;
-        line-height: 34px;
+        font-size: 18px;
+        line-height: 24px;
         display: block;
       }
     }
@@ -239,15 +237,22 @@
 .right-block {
   width: 25%;
 }
-@media only screen and (max-width: 959px) {
-    .homepage-hero .forsale-phone {
-        display: none !important;
+@media only screen and (min-width: 1152px) {
+  .discover-categories a {
+    &:first-child {
+      margin-left: 2px;
     }
+  }
 }
+
+@media only screen and (max-width: 959px) {
+  .homepage-hero .forsale-phone {
+    display: none !important;
+  }
+}
+
 @media (min-width: 320px) and (max-width: 759px) {
-    .discover-categories a:first-child {
-      margin-left: 21px;
-    }
+
     .homepage-hero {
         position: relative;
         height: 460px !important;
@@ -262,17 +267,20 @@
         text-align: center;
     }
 }
-@media (min-width:960px) and (max-width: 1150px) {
-    .discover-categories li {
-      width: 94px !important;
-      height: 94px !important;
-      background-size: 94px 94px;
-      margin: 0 0 0 20px;
-      &:hover, &:active {
-        width: 94px !important;
-        height: 94px !important;
-        background-size: 94px 94px;
-        margin: 0 0 0 20px;
+
+@media (min-width:960px) and (max-width: 1151px) {
+    .discover-categories a {
+      width: 98px !important;
+      height: 98px !important;
+      background-size: cover;
+      ackground-position: center;
+      margin: 8px 8px;
+      &:hover, &:focus, &:active {
+        width: 98px !important;
+        height: 98px !important;
+        background-size: cover;
+        ackground-position: center;
+        margin: 8px 8px;
       }
     }
     .homepage-hero .forsale-phone {
@@ -315,19 +323,10 @@
         width: auto;
         height: 140px;
     }
-    .discover-categories {
-      width: 79%;
-      text-align: center;
-      margin: 0 auto;
-      li {
-        &:first-child {
-          margin-left: 21px;
-        }
-        margin-bottom: 21px;
-        &:hover, &:active {
-          margin-bottom: 21px;
-        }
-      }
+    .discover-categories a, .discover-categories a:hover, .discover-categories a:focus, .discover-categories a:active {
+      margin: 8px 8px !important;
+      background-size: cover;
+      background-position: center;
     }
 }
 @media (min-width:641px) and (max-width: 759px) {
@@ -338,20 +337,12 @@
     .home-search {
         z-index: 999;
     }
-    .discover-categories li {
-      width: 61px;
-      height: 61px;
-      background-size: 61px 61px;
-      margin: 0 0 11px 11px;
-      &:hover, &:active {
-        width: 61px;
-        height: 61px;
-        background-size: 61px 61px;
-        margin: 0 0 11px 11px;
-      }
-      &:first-child {
-        margin-left: 11px;
-      }
+    .discover-categories a, .discover-categories a:hover, .discover-categories a:focus, .discover-categories a:active {
+      width: 60px;
+      height: 60px;
+      margin: 7px 7px;
+      background-size: cover;
+      background-position: center;
     }
 }
 @media (min-width:320px) and (max-width: 640px) {
@@ -379,21 +370,13 @@
             background-color: rgba(0, 0, 0, 0);
         background-color: rgba(49,49,51,0.7);
     }
-    
-    .discover-categories li {
-      width: 61px;
-      height: 61px;
-      background-size: 61px 61px;
-      margin: 0 0 11px 11px;
-      &:hover, &:active {
-        width: 61px;
-        height: 61px;
-        background-size: 61px 61px;
-        margin: 0 0 11px 11px;
-      }
-      &:first-child {
-        margin-left: 11px;
-      }
+
+    .discover-categories a, .discover-categories a:hover, .discover-categories a:focus, .discover-categories a:active {
+      width: 60px;
+      height: 60px;
+      margin: 7px 7px;
+      background-size: cover;
+      background-position: center;
     }
 
     a.homepage-hero .tagline img {
@@ -440,21 +423,6 @@
       float: none;
       margin: 0 auto;
       text-align: center;
-      li {
-        width: 61px;
-        height: 61px;
-        background-size: 61px 61px;
-        margin: 0 0 15px 15px;
-        &:hover, &:active {
-          width: 61px;
-          height: 61px;
-          background-size: 61px 61px;
-          margin: 0 0 15px 15px;
-        }
-        &:first-child {
-          margin-left: 15px;
-        }
-      }
     }
 }
 @media (min-width:320px) and (max-width: 399px) {
