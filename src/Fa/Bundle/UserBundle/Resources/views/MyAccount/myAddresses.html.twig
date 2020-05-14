@@ -11,7 +11,7 @@
         </div>
     </a>
     <div id="panel6b" class="collapse collapse-body-content">
-        <div>{{ 'Manage your saved addresses'|trans({}, 'frontend-user-address-book') }}</div>
+        <div class="hide-for-small-only">{{ 'Manage your saved addresses'|trans({}, 'frontend-user-address-book') }}</div>
         <div id="address_book_main">
             {{ include('FaUserBundle:MyAccount:listAddress.html.twig') }}
         </div>
