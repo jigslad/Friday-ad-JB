@@ -245,6 +245,9 @@
     }
 }
 @media (min-width: 320px) and (max-width: 759px) {
+    .discover-categories a:first-child {
+      margin-left: 21px;
+    }
     .homepage-hero {
         position: relative;
         height: 460px !important;
