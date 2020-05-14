@@ -1,5 +1,5 @@
 {% for flashMessage in app.session.flashbag.get('success') %}
-<div data-alert class="alert-box success radius position-relative">
+<div data-alert class="alert-box alert success radius position-relative">
 	<span class="alert-icon">&nbsp;</span>
     {{ flashMessage|raw }}
     <a data-dismiss="alert" class="close">&times;</a>
@@ -7,7 +7,7 @@
 {% endfor %}
 
 {% for flashMessage in app.session.flashbag.get('info') %}
-<div data-alert class="alert-box info radius position-relative">
+<div data-alert class="alert-box alert info radius position-relative">
 	<span class="alert-icon">&nbsp;</span>
     {{ flashMessage|raw }}
     <a data-dismiss="alert" class="close">&times;</a>
@@ -15,7 +15,7 @@
 {% endfor %}
 
 {% for flashMessage in app.session.flashbag.get('notice') %}
-<div data-alert class="alert-box warning radius position-relative">
+<div data-alert class="alert-box alert warning radius position-relative">
 	<span class="alert-icon">&nbsp;</span>
     {{ flashMessage|raw }}
     <a data-dismiss="alert" class="close">&times;</a>
