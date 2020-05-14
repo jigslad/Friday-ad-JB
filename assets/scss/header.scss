@@ -212,6 +212,9 @@
 .nav-icon.open span:nth-child(2), .nav-icon span:nth-child(2), .navbar-toggler:hover, .navbar-toggler:focus {
   outline: none !important;
 }
+.top-bar-section .main_category:hover, .top-bar-section .main_category:focus, .top-bar-section .main_category:active {
+  color: #82C249 !important;
+}
 @media screen and (min-width: 760px) {
     .mobile-menu-block {
         display: none !important;
@@ -294,13 +297,15 @@
     .mobile-menu-items li, .login-menu li {
         width: 100%;
         line-height: 40px;
-        padding: 0 13px !important;
+        padding: 0px !important;
     }
     .mobile-menu-items li a, .login-menu li a {
-
         margin-bottom: 0;
         text-transform: uppercase;
     }
+  .login-menu li a {
+    padding: 0px 15px;
+  }
     .navbar-brand {
       text-align: center;
       margin: 0px 40px;
