@@ -1143,7 +1143,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                //return $cachedValue;
+                return $cachedValue;
             }
         }
 
