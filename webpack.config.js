@@ -34,6 +34,7 @@ Encore
     .addStyleEntry('css/newsletter', './assets/scss/newsletter.scss')
     .addStyleEntry('css/adult-homepage', './assets/scss/adult-homepage.scss')
     .addStyleEntry('css/adult-images', './assets/scss/adult-images.scss')
+    .addStyleEntry('css/covid-19', './assets/scss/covid-19.scss')
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 
