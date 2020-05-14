@@ -1,16 +1,14 @@
 {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'fa_top_search'}}) }}
     {{ form_errors(form) }}
     <div class="home-slider-content adul-hp-slider">
-        <div class="row">
-            <div class="columns">
-                <div class="relative">
-                    <div class="row top-msg">
-                        <div class="columns">
-                           {{ include('FaCoreBundle::message.html.twig') }}
-                        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-24 mob-block">
+                    <div class="top-msg">
+                        {{ include('FaCoreBundle::message.html.twig') }}
                     </div>
                     <div class="tagline"><h1 class="adul-tagline-text">What are you looking for?</h1></div>
-                    <div id="home-search" class="large-14 columns">
+                    <div id="home-search" class="col-sm-18 col-md-18 col-lg-14 ">
                         <div class="adult-search">
 			                <div class="search-input-box">
                             <table>
@@ -26,7 +24,7 @@
                             </div>
                             <div class="advanced-search-option"><a onclick="showHideAdvanceSearch()" class="adult-color homepage-advance-srch">Advanced</a></div>
                         </div>
-                        <div id="header_search_editable_location_reveal_modal" class="reveal-modal tiny" data-reveal>
+                        <div id="header_search_editable_location_reveal_modal"  class="modal custom-modal tiny">
                             {{ include('FaCoreBundle:Default:invalidLocationModal.html.twig', {'modalId': 'header_search_editable_location_reveal_modal'}) }}
                         </div>
                         <div class="adult-loc-search location">

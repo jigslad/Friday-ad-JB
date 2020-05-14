@@ -148,7 +148,7 @@
    {% endif %}
    {# FFR-4031 Ends Here #}   
    {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
-   {% if status_code == 200 and currentRoute is defined and currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'listing_page', 3: 'landing_page_category_location', 4: 'landing_page_category'}  and not app.request.attributes.get('static_page') %}
+   {% if status_code == 200 and currentRoute is defined and currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'listing_page', 3: 'landing_page_category_location', 4: 'landing_page_category', }  and not app.request.attributes.get('static_page') %}
     <div id="sticky_nav_top">
     {% endif %}
    	<nav class="navbar navbar-expand-sm navbar-dark top-bar-section" id="top_bar_nav">

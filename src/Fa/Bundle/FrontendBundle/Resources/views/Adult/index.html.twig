@@ -38,6 +38,7 @@
     {% endif %}
 {% endblock %}
 {% block stylesheet %}
+	<link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('/build/css/homeContent.css') }}">
     <link rel="stylesheet" href="{{ asset('/build/css/adult-homepage.css') }}">
     <link rel="stylesheet" href="{{ asset('/build/css/adult-images.css') }}"> 
@@ -318,14 +319,14 @@
                 });
             }
 
-            $(document).foundation({
+            /*$(document).foundation({
                 accordion: {
                     multi_expand: true,
                     callback : function (accordion) {
                         accordionCallback(accordion);
                     }
                 }
-            });
+            });*/
 
             $('#adul-hp-adv-srch').click(function(){
             	var adulSrchCat = $('#fa_adult_home_page_search_item__category_id option:selected').html();
