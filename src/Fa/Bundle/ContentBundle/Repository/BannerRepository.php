@@ -116,7 +116,7 @@ class BannerRepository extends EntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                //return $cachedValue;
+                return $cachedValue;
             }
         }
 
