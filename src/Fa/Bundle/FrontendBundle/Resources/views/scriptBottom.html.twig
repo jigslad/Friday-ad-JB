@@ -97,7 +97,9 @@
     
     $(document).ready(
         function () {
-            $('.select-control').select2();
+            $('.select-control').select2({
+                minimumResultsForSearch: -1
+            });
         }
     );
         
