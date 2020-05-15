@@ -67,7 +67,8 @@
             {% set adCounts = fetch_repository('FaAdBundle:Ad').getLandingPageAdCountsBasedOnSearchParams(searchParams, fetch_container_instance()) %}
         {% endif %}
         {% set landingPageImages = fetch_repository('FaContentBundle:LandingPageInfo').getLandingPageImagesBySecton(landingPage.id, fetch_container_instance()) %}
-        <div class="landing-header {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}adult-parallax{% endif %}">
+        {% set bannerimageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getOtherImageUrl', [container, 'landingpage', landingPage.getFileName()]) %}
+        <div class="landing-header" style="background-image:url('{{ bannerimageUrl }}');">
             <div class="landing-header-content">
                 <div class="cat-icon"><img src="{{ asset_url('fafrontend/images/' ~ category ~ '-hero-icon.svg') }}" alt="" /></div>
                 {% if seoFields.h1_tag is defined %}
@@ -86,9 +87,8 @@
                         <span class="landing-desc">{{ landingPage.description }}</span>
                     </div>
                 {% endif %}
-            </div>
-            {% set bannerimageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getOtherImageUrl', [container, 'landingpage', landingPage.getFileName()]) %}
-            <div class="parallax-window" data-speed="0.6" data-parallax="scroll" data-image-src="{{ bannerimageUrl }}"></div>
+            </div>            
+           {# <div class="parallax-window" data-speed="0.6" data-parallax="scroll" data-image-src="{{ bannerimageUrl }}"></div> #}
             <div class="overlay"></div>
         </div>
 
