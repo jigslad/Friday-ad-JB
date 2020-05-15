@@ -1,5 +1,4 @@
 .homepage-hero {
-  background-image: url("https://leap-in.com/wp-content/uploads/2018/06/mountain.jpg");
   position: relative;
   background-repeat: no-repeat;
   background-size: cover !important;
@@ -17,6 +16,10 @@
       max-width: 100%;
     }
   }
+  .tagline-head {
+    font-size:18px;
+    letter-spacing: 2px;
+   }
   .tagline-text {
     font-size: 16px;
     line-height: 23px;
@@ -68,7 +71,7 @@
     width: 21px;
     height: 25px;
     vertical-align: middle;
-    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2221%22%20height%3D%2225%22%20viewBox%3D%22-469%20268%2021%2025%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23A8DC28%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Esearch-pin%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-458.5%20268c-5.5%200-10%204.3-10%209.6%200.1%207.2%2010%2015.4%2010%2015.4%20-0.1%200%209.8-7.7%2010-15.4C-448.5%20272.3-453%20268-458.5%20268zM-458.5%20281.3c-1.8%200-3.3-1.5-3.3-3.3s1.5-3.3%203.3-3.3%203.3%201.5%203.3%203.3S-456.7%20281.3-458.5%20281.3z%22/%3E%3C/svg%3E') no-repeat;
+    background: url("data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' x='0' y='0' width='21' height='25' viewBox='-469 268 21 25' xml:space='preserve'%3E%3Cstyle type='text/css'%3E .st0%7Bfill:%2391d851;%7D%0A%3C/style%3E%3Ctitle%3Esearch-pin%3C/title%3E%3Cdesc%3ECreated with Sketch.%3C/desc%3E%3Cpath class='st0' d='M-458.5 268c-5.5 0-10 4.3-10 9.6 0.1 7.2 10 15.4 10 15.4 -0.1 0 9.8-7.7 10-15.4C-448.5 272.3-453 268-458.5 268zM-458.5 281.3c-1.8 0-3.3-1.5-3.3-3.3s1.5-3.3 3.3-3.3 3.3 1.5 3.3 3.3S-456.7 281.3-458.5 281.3z'/%3E%3C/svg%3E") no-repeat !important;
   }
   #header_search_editable_location_span {
     margin-left: 2px;
@@ -255,7 +258,9 @@
 
     .homepage-hero {
         position: relative;
-        height: 460px !important;
+        height: auto !important;
+        min-height: auto;
+        padding-bottom: 46px;
     }
     .homepage-title, .homepage-title-small {
         margin: 0 0px 20px;
@@ -266,6 +271,7 @@
         line-height: 22px;
         text-align: center;
     }
+    #home-search .search-btn { height:40px; width:40px; }
 }
 
 @media (min-width:960px) and (max-width: 1151px) {
@@ -383,13 +389,9 @@
       max-width: 263px;
     }
 
-    .homepage-hero {
-      min-height: auto;
-      padding-bottom: 40px;
-    }
-
     .home-category-list {
-      width: 115px;
+       min-width: 52px !important;
+       width: 52px !important;
     }
     .select-styled {
         text-overflow: clip !important;
@@ -398,16 +400,19 @@
     }
 
     .homepage-hero .caption {
-      margin-top: 85px;
+      margin-top: 94px;
     }
 
+    .homepage-hero .tagline {
+	margin: 0 0 12px;
+    }
     .home-search {
-      margin-top: 25px;
+      margin-top: 12px;
       .search-btn {       
         width: 40px;
         height: 40px;
         text-indent: -9999px;
-        border-radius: 0 2px 2px 0;
+        border-radius: 0 4px 4px 0;
         color: #FFFFFF;
         display: block;
         vertical-align: top;

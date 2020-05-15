@@ -21,7 +21,7 @@ input,button, .button, .btn, .primary-btn-1, .primary-btn-2, .primary-btn-3, .se
 .reply-msg-heading .report, .reply-msg-heading .mark-sold, .paypal-box, .credit-cards-box, input.checkbox + label::after,
 .reply-msg-heading .report:hover, .reply-msg-heading .report:focus, .image-tooltip, .enquire-tooltip, .adult-pop-up-modal,
 .adult-modal.custom-modal .modal-content, .error-page .home-search, .popular-items .popular-graphic img, .button.special, .alert-box.radius,
-.discover-categories a.active, .discover-categories a.active
+.discover-categories a.active, .discover-categories a.active, .item-box
 { border-radius:$border-radius; } 
 
 .primary-btn-1, .top-bar-section li:not(.has-form).place-item-btn a {
@@ -2131,8 +2131,8 @@ footer p { color:$grey-color; }
         background: $light-grey-color;
     }
     .home-search .search-btn {
-        background: $secondary-color url('/bundles/fafrontend/images/search-icon.svg') no-repeat center (center / 16px) 16px;
-        border: 1px solid $secondary-h-color;
+        background: url('/bundles/fafrontend/images/search-icon.svg') no-repeat center center / 16px 16px, linear-gradient(135deg, $secondary-btn-l-color 0%, $secondary-btn-r-color 100%) !important;
+        border: 0px solid $secondary-h-color;
     }
     .mobile-menu-items li {
         background: $common-text-color;
@@ -2200,6 +2200,10 @@ footer p { color:$grey-color; }
         }   
         .paa-block .posting-bg { background: $site-dark-bg-color; }
         .paa-block .pkg-active { box-shadow: inset 0 0 0 0px $secondary-color; padding: 0 0px 0px; }
+
+	#home-search .search-btn {
+	    background: url('/bundles/fafrontend/images/search-icon.svg') no-repeat center center / 16px 16px, linear-gradient(135deg, $secondary-btn-l-color 0%, $secondary-btn-r-color 100%) !important;	   
+	}
 }
 
 

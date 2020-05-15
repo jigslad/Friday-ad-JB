@@ -313,10 +313,12 @@
     padding: 0px 15px;
   }
     .navbar-brand {
-      text-align: center;
-      margin: 0px 40px;
-      margin-right: 40px !important;
-      width: 100%;
+	text-align: center;
+	margin: 0px 40px;
+	margin-right: 40px !important;
+	width: 100%;
+	height: 60px;
+	padding: 13px 0px 8px !important;
     }
     .navbar-toggler {
       position: absolute;
@@ -873,3 +875,6 @@ All this is done for any sub-level being entered.
   vertical-align: middle;
   background-position: -2px !important;
 }
+
+
+
