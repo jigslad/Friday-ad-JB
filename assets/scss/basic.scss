@@ -1417,7 +1417,8 @@ input[type=number] {
 .find-all .select2-container .select2-selection {
   border-radius: 4px 0px 0px 4px !important;
 }
-.find-all .select2-container .select2-selection:hover, .select2-container.find-all .select2-selection:focus,
+.find-all .select2-container .select2-selection:hover,
+.find-all .select2-container .select2-selection:focus,
 .find-all .select2-container .select2-selection:active {
   border: 1px solid #CBD5D9 !important;
   outline: 0px !important;

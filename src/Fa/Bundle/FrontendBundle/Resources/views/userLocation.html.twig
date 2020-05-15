@@ -143,10 +143,13 @@
         });
 
         $('#top_search_location_cancel').click(function(e) {
-            $('#top_search_location').hide();
+            // $('#top_search_location').hide();
             $('#in_text_span').show();
             if (!$.trim($('#fa_top_search_item__location_autocomplete').val())) {
                 $('#header_search_editable_location_span').html('United Kingdom');
+            }
+            else {
+                $("#fa_top_search_item__location_autocomplete").text($('#header_search_editable_location_span').text());
             }
             $('#header_search_editable_location_a').show();
             $('#header_search_editable_location_span').show();

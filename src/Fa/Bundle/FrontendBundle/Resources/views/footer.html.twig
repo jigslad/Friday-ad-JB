@@ -4,10 +4,10 @@
 			<div class="col-xs-24 col-sm-18 col-md-18 d-block d-md-none mb10">
 				<a class="primary-btn-1 btn btn-block btn-h-lg" title="Place an ad" href="{{ path('ad_post_first_step') }}">Place an ad</a>
 			</div>
-			<div class="col-xs-24 col-sm-18 col-md-18 left-block">
+			<div class="col-xs-24 col-sm-18 col-md-18">
 				{{ render(controller('FaEntityBundle:Category:renderFooterCategories', {'location': (currentRoute == 'listing_page' ? app.request.get('location') : null), 'searchParams': searchParams})) }}				
 			</div>
-			<div class="col-xs-24 col-sm-6 col-md-6 right-block">
+			<div class="col-xs-24 col-sm-6 col-md-6">
 				<div>
 					{% if app.request.attributes.get('_route') != 'my_account_newsletter'  and app.request.attributes.get('_route') != 'newsletter_feedback' and app.request.attributes.get('_route') != 'newsletter_feedback_success' %}
                     	<div class="clearfix"></div>
