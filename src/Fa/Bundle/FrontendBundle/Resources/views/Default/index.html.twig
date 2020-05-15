@@ -409,14 +409,16 @@
         })
         .done(function(response) {
             if (response.image) {
-                headerParallax = $('#header_image_div').parallax({imageSrc: response.image, naturalWidth: response.width, naturalHeight: response.height});
+                //headerParallax = $('#header_image_div').parallax({imageSrc: response.image, naturalWidth: response.width, naturalHeight: response.height});
+                $('.homepage-hero').css('background-image',"{{ response.image }}");
                 if (response.phone_image && response.phone_image_url)
                     $(".forsale-phone").html('<a href="'+response.phone_image_url+'"><img src="'+response.phone_image+'"></a>');
                 else if (response.phone_image)
                     $(".forsale-phone").html('<img src="'+response.phone_image+'">');
             } else {
-                $('#header_image_div').parallax({imageSrc: "{{ asset_url('/fafrontend/images/home-slider.png') }}" });
+                $('.homepage-hero').css('background-image',"{{ asset_url('/fafrontend/images/home-slider.png') }}");
             }
+            
         });
     }
     //]]>
