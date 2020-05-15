@@ -3,6 +3,23 @@
 
 {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
 {{ include('FaUserBundle:HalfAccount:halfAccountJs.html.twig') }}
+<script>
+    $(window).on('load', function(){
+        setTimeout(
+            function () {
+                // for hiding empty banners SR Above results
+                if ($('#banner_placeholder_2_5').is(':visible') && $('#banner_placeholder_2_5').children('div').length) {
+                    $('#banner_placeholder_2_5').children('div').each(function( index ) {
+                        if ($(this).css('width') == '1px') {
+                            $(this).remove();
+                        }
+                    });
+                }
+            },
+            3000
+        );
+    });
+</script>
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     $(window).on('load', function() {
@@ -83,22 +100,6 @@
             $("#sticky_nav_top").removeClass('fixed');
             $("#sticky_nav_top").removeClass('top-bar-shadow');
         }
-    });
-
-    $(window).load(function(){
-        setTimeout(
-            function () {
-                // for hiding empty banners SR Above results
-                if ($('#banner_placeholder_2_5').is(':visible') && $('#banner_placeholder_2_5').children('div').length) {
-                    $('#banner_placeholder_2_5').children('div').each(function( index ) {
-                        if ($(this).css('width') == '1px') {
-                            $(this).remove();
-                        }
-                    });
-                }
-            },
-            3000
-        );
     });
 
     $('#list_location_box .accordion-navigation .content').each(function(){
