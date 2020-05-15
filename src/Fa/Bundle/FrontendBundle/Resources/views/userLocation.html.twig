@@ -4,6 +4,7 @@
     $(document).ready(function() {
         setLocation();
         changeLocation();
+        var oldlocation = $("#fa_top_search_item__location_autocomplete").val();
     });
 
     function setLocation() {
@@ -149,7 +150,7 @@
                 $('#header_search_editable_location_span').html('United Kingdom');
             }
             else {
-                $("#fa_top_search_item__location_autocomplete").text($('#header_search_editable_location_span').text());
+                setLocation()
             }
             $('#header_search_editable_location_a').show();
             $('#header_search_editable_location_span').show();
