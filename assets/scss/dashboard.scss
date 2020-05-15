@@ -1507,17 +1507,34 @@ textarea[rows] {
     z-index: 1;
 }
 .cover-img-box .cover-img-edit:hover label {
-    line-height: 50px;
+    line-height: 36px !important;
     display: block;
 }
 .photo-icon label {
     font-size: 14px;
-    color: #FFFFFF;
-
+    color: #FFFFFF !important;
     line-height: 30px;
     text-align: left;
     display: none;
 }
+.cover-img-edit .f-dropdown{
+    min-width: 10em !important;
+    border-radius: 4px;
+    width: auto;
+}
+.cover-img-edit .dropdown-item:hover, .cover-img-edit .dropdown-item:focus {
+    color: #16181b;
+    text-decoration: none;
+    background-color: #f8f9fa;
+}
+.cover-img-edit .needsclick {
+    color: #212527 !important;
+}
+
+
+
+
+
 .shops-header-content {
     width: 100%;
     position: absolute;
@@ -1534,6 +1551,9 @@ textarea[rows] {
     width: 148px;
     height: 113px;
     line-height: 103px;
+
+
+
     text-align: center;
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
     margin-top: -29px;
@@ -2614,6 +2634,9 @@ textarea[rows] {
 }
 .label-inline a {
     color: #212527;
+}
+.label-inline a:hover{
+    color: #82C249 !important;
 }
 .modal-dialog.tiny{
     top: 15%

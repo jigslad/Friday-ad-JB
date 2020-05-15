@@ -304,7 +304,58 @@ ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {
       }
     }
     .panel-default {
-      margin-bottom: 10px;
+      margin-bottom: 10px;.media-grid-section {
+    display: grid;
+    grid-gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+    grid-auto-rows: 105px;
+    grid-auto-flow: row dense;
+    padding: 0px;
+}
+.item {
+    position: relative;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+    -webkit-box-pack: end;
+    justify-content: flex-end;
+    box-sizing: border-box;
+    background: #EEF2F5;
+    color: #fff;
+    grid-column-start: auto;
+    grid-row-start: auto;
+    color: #fff;
+    /*background: url("images/car_thumb.jpg");*/
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+}
+.item--full {
+    grid-column-end: auto;
+}
+@media screen and (min-width: 320px) {
+    .item--full {
+        grid-column: 4/1;
+        grid-row-end: span 3;
+    }
+}
+.item__details {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+}
+.item__details img {
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 100%;
+    height: 100%;
+    -ms-interpolation-mode: bicubic;
+    width: max-content;
+}
+
     }
     .panel-title {
       background: $form-bg-color;
@@ -330,7 +381,58 @@ ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {
         display: block;
         li {
           margin: 4px 0px;
-          a {
+          a {.media-grid-section {
+    display: grid;
+    grid-gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+    grid-auto-rows: 105px;
+    grid-auto-flow: row dense;
+    padding: 0px;
+}
+.item {
+    position: relative;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+    -webkit-box-pack: end;
+    justify-content: flex-end;
+    box-sizing: border-box;
+    background: #EEF2F5;
+    color: #fff;
+    grid-column-start: auto;
+    grid-row-start: auto;
+    color: #fff;
+    /*background: url("images/car_thumb.jpg");*/
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+}
+.item--full {
+    grid-column-end: auto;
+}
+@media screen and (min-width: 320px) {
+    .item--full {
+        grid-column: 4/1;
+        grid-row-end: span 3;
+    }
+}
+.item__details {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+}
+.item__details img {
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 100%;
+    height: 100%;
+    -ms-interpolation-mode: bicubic;
+    width: max-content;
+}
+
             font-size: 13px;
             color: $common-text-color;
             &:focus, &:hover {
@@ -342,7 +444,58 @@ ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {
     .collapse.in {
         display: block;
     }
+}.media-grid-section {
+    display: grid;
+    grid-gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+    grid-auto-rows: 105px;
+    grid-auto-flow: row dense;
+    padding: 0px;
 }
+.item {
+    position: relative;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+    -webkit-box-pack: end;
+    justify-content: flex-end;
+    box-sizing: border-box;
+    background: #EEF2F5;
+    color: #fff;
+    grid-column-start: auto;
+    grid-row-start: auto;
+    color: #fff;
+    /*background: url("images/car_thumb.jpg");*/
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+}
+.item--full {
+    grid-column-end: auto;
+}
+@media screen and (min-width: 320px) {
+    .item--full {
+        grid-column: 4/1;
+        grid-row-end: span 3;
+    }
+}
+.item__details {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+}
+.item__details img {
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 100%;
+    height: 100%;
+    -ms-interpolation-mode: bicubic;
+    width: max-content;
+}
+
 
 /* Slider Block */
 .fa-slider {
@@ -2056,4 +2209,55 @@ footer p { color:$grey-color; }
 }
 .logged-out-btn-radius {
   border-radius: 4px !important;
+}
+.media-grid-section {
+  display: grid;
+  grid-gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+  grid-auto-rows: 105px;
+  grid-auto-flow: row dense;
+  padding: 0px;
+}
+.item {
+  position: relative;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  flex-direction: column;
+  -webkit-box-pack: end;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  background: #EEF2F5;
+  color: #fff;
+  grid-column-start: auto;
+  grid-row-start: auto;
+  color: #fff;
+  /*background: url("images/car_thumb.jpg");*/
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+}
+.item--full {
+  grid-column-end: auto;
+}
+@media screen and (min-width: 320px) {
+  .item--full {
+    grid-column: 4/1;
+    grid-row-end: span 3;
+  }
+}
+.item__details {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  width: 100%;
+}
+.item__details img {
+  display: inline-block;
+  vertical-align: middle;
+  max-width: 100%;
+  height: 100%;
+  -ms-interpolation-mode: bicubic;
+  width: max-content;
 }

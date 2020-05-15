@@ -1,17 +1,17 @@
 {% if userSiteImages|length %}
     <div class="shop-gallery">
         <h5>{{'Photo Gallery'|trans({}, 'frontend-profile-page')}}</h5>
-        <ul class="large-block-grid-2">
+        <div class="media-grid-section mt10 mb20">
             {% for userSiteImage in userSiteImages %}
                 {% set userSiteSmallImgUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSharedImageUrl', [fetch_container_instance(), userSiteImage.getPath(), userDetail["site_id"]~'_'~userSiteImage.getHash()~'_300X225.jpg']) %}
                 {% set userSiteBigImgUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSharedImageUrl', [fetch_container_instance(), userSiteImage.getPath(), userDetail["site_id"]~'_'~userSiteImage.getHash()~'_800X600.jpg']) %}
-                <li>
-                    <a class="fancybox" rel="gallery1" href="{{ userSiteBigImgUrl }}">
+                <div class="item">
+                    <a class="item__details" rel="gallery1" href="{{ userSiteBigImgUrl }}">
                         <img src="{{ userSiteSmallImgUrl }}" alt="" />
                     </a>
-                </li>
+                </div>
             {% endfor %}
-        </ul>
+        </div>
         {% if allowProfileEdit %}
             <div class="profile-edit clearfix">
                 <div class="right relative">
