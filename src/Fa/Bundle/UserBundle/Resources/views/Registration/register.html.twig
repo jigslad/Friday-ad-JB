@@ -123,8 +123,8 @@
                         </div>
                         <div class="profile-logo-ins private-profile reg-profile-btn {% if isCompany == 1 %}bz-profile-btn{% endif %}">
                             <div id="profile_change_btn_with_opt" {% if logoUploaded == 0 %}style="display:none;"{% endif %}>
-                                <a href="javascript:void(0);" data-dropdown="profile_image_upload" aria-controls="profile_image_upload" aria-expanded="false" class="secondary-btn-1 btn dropdown thin-btn">{{'Upload image'|trans({}, 'frontend-my-profile')}}</a><br />
-                                <ul id="profile_image_upload" data-dropdown-content class="f-dropdown" aria-hidden="true">
+                                <a href="javascript:void(0);" data-toggle="dropdown" data-dropdown="profile_image_upload" aria-controls="profile_image_upload" aria-expanded="false" class="secondary-btn-1 btn dropdown thin-btn">{{'Upload image'|trans({}, 'frontend-my-profile')}}</a><br />
+                                <ul id="profile_image_upload" data-dropdown-content class="f-dropdown dropdown-menu" aria-hidden="true">
                                     <li><a href="javascript:void(0)" class="pickProfileFile needsclick" id="pickProfileFile">{{'Upload profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
                                     <li><a href="javascript:getProfileBigImage('{{ path(getProfileBigImageRoute, {'userId': userId, 'isCompany': isCompany}) }}')">{{'Edit profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
                                     <li><a href="javascript:removeImage()">{{'Remove'|trans({}, 'frontend-my-profile')}}</a></li>
