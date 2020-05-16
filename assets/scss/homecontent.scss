@@ -17,8 +17,8 @@
     }
   }
   .tagline-head {
-    font-size:18px;
-    letter-spacing: 2px;
+    font-size:24px;
+    letter-spacing: 3px;
    }
   .tagline-text {
     font-size: 16px;
@@ -414,6 +414,10 @@
     .homepage-hero .tagline {
 	margin: 0 0 12px;
     }
+    .homepage-hero .tagline-head {
+       font-size:18px;
+       letter-spacing: 2px;
+     }
     .home-search {
       margin-top: 12px;
       .search-btn {       

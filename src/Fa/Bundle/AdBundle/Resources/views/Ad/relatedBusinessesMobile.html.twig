@@ -15,10 +15,10 @@
                     <div class="small-img">
                         <div class="pvt-seller-img bz-seller-img">
                         {% if userLogo %}
-                            <img class="lazyOwl" data-src="{{ userLogo }}" alt="{{ userNameAltText }}" />
+                            <img class="lazyOwl" src="{{ userLogo }}" alt="{{ userNameAltText }}" />
                         {% else %}
                             <div class="profile-placeholder">
-                                <img class="lazyOwl" data-src="{{ asset_url('fafrontend/images/user-no-logo.svg') }}" alt="{{ userNameAltText }}" />
+                                <img class="lazyOwl" src="{{ asset_url('fafrontend/images/user-no-logo.svg') }}" alt="{{ userNameAltText }}" />
                             </div>
                         {% endif %}
                         </div>
