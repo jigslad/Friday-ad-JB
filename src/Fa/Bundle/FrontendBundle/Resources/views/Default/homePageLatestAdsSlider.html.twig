@@ -27,9 +27,9 @@
 
             <div class="list-img {% if not imagePath or not imagePathExists %}similar-placeholder{% endif %}">
                 {% if imagePath and imagePathExists %}
-                    <img class="lazyOwl" src="#empty" data-src="{{ imagePath }}" alt="{{ imageAltString }}" />
+                    <img class="lazyOwl" src="{{ imagePath }}" alt="{{ imageAltString }}" />
                 {% else %}
-                    <img class="lazyOwl" src="#empty" data-src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
+                    <img class="lazyOwl" src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
                 {% endif %}
             </div>
             <h3>

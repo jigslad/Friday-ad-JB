@@ -193,9 +193,9 @@
                                     {% set userName = userRepository.getUserProfileName(adUserId, container)~' - Friday-Ad' %}
                                     <div class="list-img">
                                         {% if userLogo %}
-                                            <img class="lazyOwl" src="{{ userLogo }}" alt="{{ userName }}" />
+                                            <img class="lazyOwl m-auto" src="{{ userLogo }}" alt="{{ userName }}" />
                                         {% else %}
-                                            <img class="lazyOwl white-placeholder" src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ userName }}" />
+                                            <img class="lazyOwl m-auto white-placeholder" src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ userName }}" />
                                         {% endif %}
                                     </div>
                                     <h3>

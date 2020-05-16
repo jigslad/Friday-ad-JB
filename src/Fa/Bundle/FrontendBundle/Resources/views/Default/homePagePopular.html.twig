@@ -1,11 +1,11 @@
 {% if homePopularImagesArray|length %}
     <div id="homepage-populars" class="row popular-items">
         {% for homePopularImage in homePopularImagesArray %}
-            <div class="col-md-6 col-lg-6">
+            <div class="col-12 col-md-6 col-lg-6">
                 <div class="item-box" style="background-image: url('{{ homePopularImage['bg_image'] }}');background-size: cover;background-position: center;">
                     <a href="{{ homePopularImage['url'] }}" class="tricky-link">{{ homePopularImage['bg_image'] }}</a>
                     <div class="overlay"></div>
-                    <div class="popular-graphic"><img src="{{ homePopularImage['overlay_image'] }}" alt="" /></div>
+                    <div class="popular-graphic"><img class="img-fluid" src="{{ homePopularImage['overlay_image'] }}" alt="" /></div>
                     {# <div class="parallax-window" data-speed="0.6" data-parallax="scroll" data-z-index="1" data-natural-width="{{ homePopularImage['width'] }}" data-natural-height="{{ homePopularImage['height'] }}" data-image-src="{{ homePopularImage['bg_image'] }}"></div> #}
                 </div>
             </div>

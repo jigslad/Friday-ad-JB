@@ -16,10 +16,6 @@
       max-width: 100%;
     }
   }
-  .tagline-head {
-    font-size:24px;
-    letter-spacing: 3px;
-   }
   .tagline-text {
     font-size: 16px;
     line-height: 23px;
@@ -272,6 +268,9 @@
         text-align: center;
     }
     #home-search .search-btn { height:40px; width:40px; }
+    .homepage-hero .tagline img {
+	max-width: 263px;
+    }
 }
 
 @media (min-width:960px) and (max-width: 1151px) {
@@ -444,7 +443,8 @@
 }
 @media (min-width:320px) and (max-width: 399px) {
 	#popular_shops_slider .item, #popular_shops_slider .list-img, #featured-item-slider .item, #featured-item-slider .list-img {
-		width: 100% !important;
+	      width: 100% !important;
+              max-width: -webkit-fill-available !important;
 	}
 }
 
