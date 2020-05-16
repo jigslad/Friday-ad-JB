@@ -94,7 +94,7 @@
         </ul>
     {% endif %}
 </div>
-<div id="desktop-header-menus" class="d-inline-flex">
+<div id="desktop-header-menus" class="d-flex">
     {% if headerCategories|length %}
     {# {% cache 'header|menu|'~location_id|replace({' ':''})~'front/header_menu' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0 ) (staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isBot', [container]) ? 600 : 86400) %} #}
     <ul class="navbar-nav ml-auto desktop-block">
