@@ -334,6 +334,14 @@
       background-size: cover;
       background-position: center;
     }
+   .discover-categories {
+        margin: 0 auto !important;
+        max-width: 515px !important;
+    }
+    .home-category-list, .main-search {
+        width: 52px;
+    }
+    
 }
 @media (min-width:641px) and (max-width: 759px) {
     #featured-item-slider .list-img {

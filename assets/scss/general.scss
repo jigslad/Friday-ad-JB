@@ -335,6 +335,9 @@ ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {
 .item--full {
     grid-column-end: auto;
 }
+.dl-menuwrapper li a span {
+    color: $dark-grey;
+}
 @media screen and (min-width: 320px) {
     .item--full {
         grid-column: 4/1;
