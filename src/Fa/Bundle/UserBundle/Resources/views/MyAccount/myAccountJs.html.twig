@@ -7,7 +7,6 @@
     });
     $(document).ready(function(){
         bindCustomRadioEvent();
-        unsubscribeFromAll();
         showHideBusinessSellerFields();        
         enableDisableContactThroughPhone();
         bindFormErrorEvents();
@@ -17,8 +16,11 @@
         scrollToElement('#successMsgDiv', '1000', -150);
         bindEqualizerEvent('newsletter_equalizer');
         showHidePrivatePhoneNumberField();
+        if ($('#user_newsletter_dotmailer_newsletter_unsubscribe').is(':checked')) {
+            $("#user_newsletter_dotmailer_newsletter_unsubscribe").prop('checked', true);
+            $("input[name='user_newsletter[dotmailer_newsletter_type_id][]']").prop('checked', false);
+        }
     });
-        
     $('#my_account .accordion-navigation .content').each(function(){
         if ($(this).hasClass('active')) {
             $(this).siblings('a').find('span:eq(1)').addClass('dark-arrow-up');
@@ -152,26 +154,24 @@
         });
     }
     
-    function unsubscribeFromAll() {
+    $("#user_newsletter_dotmailer_newsletter_unsubscribe").change(function() {
         if ($('#user_newsletter_dotmailer_newsletter_unsubscribe').is(':checked')) {
-            $("input[name='user_newsletter[dotmailer_newsletter_type_id][]']").attr('checked', false);
-            $('#newsletter_categories span.checked').removeClass('checked');
+            $("#user_newsletter_dotmailer_newsletter_unsubscribe").prop('checked', true);
+            $("input[name='user_newsletter[dotmailer_newsletter_type_id][]']").prop('checked', false);
         }
+        else{
+            $("#user_newsletter_dotmailer_newsletter_unsubscribe").prop('checked', false);
+        }
+    });
 
-        $("#user_newsletter_dotmailer_newsletter_unsubscribe").click(function() {
+    $("input[name='user_newsletter[dotmailer_newsletter_type_id][]']").change( function () {
+        if ($(this).is(':checked')) {
+            $(this).attr('checked', true);
             if ($('#user_newsletter_dotmailer_newsletter_unsubscribe').is(':checked')) {
-                $("input[name='user_newsletter[dotmailer_newsletter_type_id][]']").attr('checked', false);
-                $('#newsletter_categories span.checked').removeClass('checked');
+                $("#user_newsletter_dotmailer_newsletter_unsubscribe").prop('checked', false);
             }
-        });
-
-        $("input[name='user_newsletter[dotmailer_newsletter_type_id][]']").click( function () {
-            if ($(this).is(':checked')) {
-                $("#user_newsletter_dotmailer_newsletter_unsubscribe").attr('checked', false);
-                $('#user_newsletter_dotmailer_newsletter_unsubscribe').parent().removeClass('checked');
-            }
-        });
-    }
+        }
+    });
     
     function addNewAddressBook()
     {
