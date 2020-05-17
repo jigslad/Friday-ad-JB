@@ -299,29 +299,20 @@
         {{ include('FaAdBundle:AdList:topSearchJs.html.twig', {'currentRoute':currentRoute}) }}
 
         {% block scriptbottom %}{% endblock %}
-
-        {% if status_code == 200 %}
-            {% set showFooterFlag = true %}
-            {% set showMblFooterFlag = false %}
-            {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() and currentRoute not in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote'} %}
-                {% set showMblFooterFlag = true %}
-                {% set showFooterFlag = false %}
-            {% endif %}
-            {% if showFooterFlag %}
-            	{% if searchParams is not defined %}
-            		{% set searchParams = [] %}
-            	{% endif %}
-                {{ include('FaFrontendBundle::footer.html.twig', {'searchParams':searchParams}) }}
-            {% else %}
-                {% if showMblFooterFlag %}
-                    {% if searchParams is not defined %}
-                        {% set searchParams = [] %}
-                    {% endif %}
-                    {{ include('FaFrontendBundle::mobile-footer.html.twig', {'searchParams':searchParams}) }}
-                {% endif %}
-            {% endif %}
+		{% if (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration',4: 'show_draft_ad',5: 'ad_package_purchase',6: 'show_cart',7: 'cybersource_checkout'}) %}
+                {{ include('FaFrontendBundle::paaFooter.html.twig') }}
         {% else %}
-            {{ include('FaFrontendBundle::userLocation.html.twig') }}
+            {% if status_code == 200 %}
+                {% set showFooterFlag = true %}
+                {% if showFooterFlag %}
+                	{% if searchParams is not defined %}
+                		{% set searchParams = [] %}
+                	{% endif %}
+                    {{ include('FaFrontendBundle::footer.html.twig', {'searchParams':searchParams}) }}
+                {% endif %}
+            {% else %}
+                {{ include('FaFrontendBundle::userLocation.html.twig') }}
+            {% endif %}
         {% endif %}
 
         {% if (showAdultPopup == 1) %}
