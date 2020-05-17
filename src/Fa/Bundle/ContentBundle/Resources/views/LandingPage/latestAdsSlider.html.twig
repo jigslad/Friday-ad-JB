@@ -18,7 +18,7 @@
         <div class="item item-{{ sliderCount }}" data-equalizer-watch="">
             <div class="card custom-card">
                 <div>
-                    <a href="{{ adUrl }}" class="card-badge heart-badge">
+                    <a href="{{ adUrl }}" class="tricky-link">
                         {% if attribute(latestAd, constant(latestAdSolrMapping ~ 'TITLE')) is defined %}
                             {{trim_text(attribute(latestAd, constant(latestAdSolrMapping ~ 'TITLE')), 65)|raw}}
                         {% endif %}
@@ -38,7 +38,7 @@
                             {{trim_text(attribute(latestAd, constant(latestAdSolrMapping ~ 'TITLE')), 65)|raw}}
                         {% endif %}
                     </h3>
-                    <div class="card-body pt0">
+                    <div class="card-body p0">
                         <div class="two-grid-col">
                             <div class="list-dimensions left">
                                 {% if adListFields|length %}
@@ -64,7 +64,7 @@
                             <p class="card-text text-right"><small class="text-muted">{{ adPropertyRepository.getRentPostFixText(attribute(latestAd, constant(latestAdSolrMapping ~ 'RENT_PER_ID')), container)}}</small></p>
                         {% endif %}
                     </div>
-                    <div class="card-body pt0">
+                    <div class="card-body p0">
                         {% if attribute(latestAd, 'away_from_location') is defined and attribute(latestAd, 'away_from_location') %}
                             <div class="list-miles">
                                 {{ (attribute(latestAd, 'away_from_location') / 1.60934)|round }} {{ 'miles away'|trans({}, 'frontend-search-result')}}

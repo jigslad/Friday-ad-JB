@@ -231,7 +231,7 @@
 
 .custom-card { padding: 20px; }
 .custom-card .list-img { padding: 0px; width: 210px;height: 158px; margin: 0 auto; }
-
+.custom-card .list-dimensions {height: 110px;}
 .list-dimensions .reg-year {
     padding-left: 26px;
     width: auto;
@@ -276,11 +276,9 @@
     display: inline-block;
     background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3Asketch%3D%22http%3A//www.bohemiancoding.com/sketch/ns%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20version%3D%221.1%22%20id%3D%22Layer_1%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%225px%22%20height%3D%225px%22%20viewBox%3D%220%200%205%205%22%20xml%3Aspace%3D%22preserve%22%20enable-background%3D%22new%200%200%205%205%22%3E%0D%0A%20%20%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%20%20%20%20%0D%0A%09.st0%7Bfill%3A%23212527%3B%7D%0D%0A%0D%0A%20%20%3C/style%3E%0D%0A%20%20%3Ctitle%3E%0D%0A%20%20%20%20dot%0D%0A%20%20%3C/title%3E%0D%0A%20%20%3Cdesc%3E%0D%0A%20%20%20%20Created%20with%20Sketch.%0D%0A%20%20%3C/desc%3E%0D%0A%20%20%3Cg%20id%3D%22PAA%22%20sketch%3Atype%3D%22MSPage%22%3E%0D%0A%20%20%20%20%3Cg%20id%3D%22Desktop-HD-For-sale-2%22%20transform%3D%22translate%28-677.000000%2C%20-1589.000000%29%22%20sketch%3Atype%3D%22MSArtboardGroup%22%3E%0D%0A%20%20%20%20%20%20%3Cg%20id%3D%22Phase-1%22%20transform%3D%22translate%28-2.000000%2C%20-127.000000%29%22%20sketch%3Atype%3D%22MSLayerGroup%22%3E%0D%0A%20%20%20%20%20%20%20%20%3Cg%20id%3D%22_x32_-Describe-your-item%22%20transform%3D%22translate%28459.000000%2C%20414.000000%29%22%20sketch%3Atype%3D%22MSShapeGroup%22%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22similar-ads%22%20transform%3D%22translate%280.000000%2C%201163.000000%29%22%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22similar-ad-1%22%20transform%3D%22translate%280.000000%2C%2032.000000%29%22%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Used------Good-Condi-_x2B_-Oval-197-_x2B_-Oval-198%22%20transform%3D%22translate%28183.000000%2C%20102.000000%29%22%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cellipse%20id%3D%22dot%22%20class%3D%22st0%22%20cx%3D%2239.5%22%20cy%3D%227.5%22%20rx%3D%222.5%22%20ry%3D%222.5%22/%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%3C/g%3E%0D%0A%20%20%3C/g%3E%0D%0A%3C/svg%3E%0D%0A') no-repeat 0 6px
 }
-
-.list-dimensions span:first-child {
-    margin-left: 0
+.list-dimensions span {
+    margin: 0 0 5px 0;
 }
-
 .list-distance {
     font-size: 12px;
     margin: 5px 0 0;
