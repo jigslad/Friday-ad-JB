@@ -38,7 +38,7 @@ footer {
   	 	margin-top: 5px;
   	}
   	.fad-logo {
-  	 	height: 108px;
+  	 	height: 85px;
   	 	text-align: center;
   	}
 	.footer-head {
@@ -115,6 +115,12 @@ footer {
 	.left-block, .right-block {
 	    margin-bottom: 20px;
 	}
+        .copyright-text {
+	  font-size: 12px;
+	  letter-spacing: 0;
+	  line-height: 18px;
+	  text-align: center;
+	}
 }
 .footer-newsletter-info-box { margin-top: 20px; }
 @media (min-width: 320px) and (max-width: 640px) {
@@ -136,7 +142,6 @@ footer {
 	  opacity: 1;
 	  transition: box-shadow .2s, opacity .4s;
 	  border-bottom: 1px solid #000;
-	  box-shadow: inset 0 -1px 0 #4A4A4A;
 	}
 	.mobile-footer-name {
 	  color: #FFFFFF;
@@ -228,14 +233,7 @@ footer {
 	}
 	.copyright-block {
 		padding: 20px 20px;
-	}
-	.copyright-text {
-	  color: #ACB0B7;
-	  font-size: 12px;
-	  letter-spacing: 0;
-	  line-height: 18px;
-	  text-align: center;
-	}
+	}	
 	.m-fad-logo {
 		padding: 0px;
 		text-align: center;

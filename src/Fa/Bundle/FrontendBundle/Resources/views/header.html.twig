@@ -86,7 +86,8 @@
                 {% else %}
                     <ul class="clearfix">
                         <li><a href="{{ path('login') }}" id="login-header-id">{{'Log In'|trans({}, 'frontend-header-usermenu')}}</a>|</li>
-                        <li><a href="{{ path('fa_user_register') }}" id="register-header-id">{{'Register'|trans({}, 'frontend-header-usermenu')}}</a></li>
+                        <li><a href="{{ path('fa_user_register') }}" id="register-header-id">{{'Register'|trans({}, 'frontend-header-usermenu')}}</a>|</li>
+                        <li><a href="/contact-us">{{'Contact Us'|trans({}, 'frontend-header-usermenu')}}</a></li>
                     </ul>
                 {% endif %}
                 </div>
@@ -260,12 +261,13 @@
                                         <ul class="d-block d-md-none login-menu login-reg-flex">
                                             <li><a href="{{ path('login') }}" id="mob-login-header-id">{{'Log In'|trans({}, 'frontend-top-menu')}}</a></li>
                                             <li><a href="{{ path('fa_user_register') }}" id="mob-register-header-id">{{'Register'|trans({}, 'frontend-top-menu')}}</a></li>
+                                            <li><a href="/contact-us">{{'Contact Us'|trans({}, 'frontend-header-usermenu')}}</a></li>
                                         </ul>
                                     </div>
                                 {% endif %}
 
                             <ul class="place-item d-block d-md-none f-width">
-                                <li class="place-item-btn text-center"><a class="primary-btn-1 btn btn-block mob-paa-btn" href="{{ path('ad_post_first_step') }}" title="{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}">{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}</a></li>
+                                <li class="place-item-btn text-center"><a class="primary-btn-1 btn btn-block mob-paa-btn" href="{{ path('ad_post_first_step') }}" title="{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}">{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}</a></li>
                             </ul>
                         </div>
                </div>

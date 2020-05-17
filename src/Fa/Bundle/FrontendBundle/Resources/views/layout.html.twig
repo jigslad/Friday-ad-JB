@@ -37,7 +37,9 @@
     {% if ((app.request.uri == container.getParameter('base_url')~'/bristol/') and app.request.get('ti_url')) %}
         {% set showTiPopup = true %}
     {% endif %}
-
+    {% if not app.request.cookies.has('is_over_18') and currentRoute == 'fa_adult_homepage' %}
+    	{% set showAdultPopup = 1 %}
+    {% endif %}
     {% if not app.request.cookies.has('is_over_18') and searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
         {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(searchParams.item__category_id, false, fetch_container_instance()) %}
         {% set catCnt = 0 %}

@@ -1328,6 +1328,44 @@ input[type=number] {
     font-size: 12px;
     font-family: "Poppins-SemiBold";
 }
+.logged-in-input-radius {
+  border-radius: 4px 0px 0px 4px !important;
+}
+.logged-in-btn-radius {
+  border-radius: 0px 4px 4px 0px !important;
+}
+.logged-out-btn-radius {
+  border-radius: 4px !important;
+}
+.media-grid-section {
+  display: grid;
+  grid-gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+  grid-auto-rows: 105px;
+  grid-auto-flow: row dense;
+  padding: 0px;
+}
+.item {
+  position: relative;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  flex-direction: column;
+  -webkit-box-pack: end;
+  justify-content: flex-end;
+  box-sizing: border-box; 
+  color: #fff;
+  grid-column-start: auto;
+  grid-row-start: auto;
+  color: #fff;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+}
+.item--full {
+  grid-column-end: auto;
+}
 
 @media (max-width: 760px) {
     .custom_hc_widget_trigger {
