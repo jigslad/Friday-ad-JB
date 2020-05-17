@@ -82,9 +82,9 @@
     z-index: 5;
   }
   .search-btn {
-    border-radius: 2px;
     width: 133px;
     display: block;
+    border-radius: 0 4px 4px 0;   
   }
   #top_search_location .ui-autocomplete-input {
     margin: 0 0 5px;
@@ -92,7 +92,7 @@
     font-size: 14px;
     line-height: 18px;
 
-    border-radius: 2px;
+    border-radius: 4px;
   }
 }
 
@@ -236,13 +236,6 @@
 .right-block {
   width: 25%;
 }
-@media only screen and (min-width: 1152px) {
-  .discover-categories a {
-    &:first-child {
-      margin-left: 2px;
-    }
-  }
-}
 
 @media only screen and (max-width: 959px) {
   .homepage-hero .forsale-phone {
@@ -337,9 +330,6 @@
         margin: 0 auto !important;
         max-width: 515px !important;
     }
-    .home-category-list, .main-search {
-        width: 52px;
-    }
     
 }
 @media (min-width:641px) and (max-width: 759px) {
@@ -383,13 +373,20 @@
             background-color: rgba(0, 0, 0, 0);
         background-color: rgba(49,49,51,0.7);
     }
+    .discover-categories {
+      width: 320px;
+      float: none;
+      margin: 0 auto;
+      text-align: center;
+    }
 
     .discover-categories a, .discover-categories a:hover, .discover-categories a:focus, .discover-categories a:active {
       width: 60px;
       height: 60px;
-      margin: 7px 7px;
+      margin: 6px 6px;
       background-size: cover;
       background-position: center;
+
     }
 
     a.homepage-hero .tagline img {
@@ -434,12 +431,7 @@
       padding: 0px;
     }
 
-    .discover-categories {
-      width: 320px;
-      float: none;
-      margin: 0 auto;
-      text-align: center;
-    }
+    
 }
 @media (min-width:320px) and (max-width: 399px) {
 	#popular_shops_slider .item, #popular_shops_slider .list-img, #featured-item-slider .item, #featured-item-slider .list-img {

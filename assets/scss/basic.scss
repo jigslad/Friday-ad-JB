@@ -1366,6 +1366,13 @@ input[type=number] {
 .item--full {
   grid-column-end: auto;
 }
+.popular-graphic-img {
+    position: relative;
+    -webkit-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    top: 50%;
+}
 
 @media (max-width: 760px) {
     .custom_hc_widget_trigger {
@@ -1391,9 +1398,6 @@ input[type=number] {
 @media only screen and (min-width: 960px) and (max-width: 1151px) {
    .button.special {
         width: 320px !important;
-    }
-    .home-category-list, .main-search {
-        width: 52px;
     }
 }
 @media (min-width:760px) and (max-width: 1024px) {
@@ -1481,6 +1485,11 @@ input[type=number] {
   .custom-modal .modal-md {
       max-width: 75% !important;
   }
+}
+@media (max-width: 959px) and (min-width: 641px) {
+	.t-navbar-block .link-head a {
+	    font-family: "Poppins-SemiBold";
+	}
 }
 @media only screen and (min-width: 320px) and (max-width: 640px) {
     .mob-forsale, .mob-motors, .mob-jobs, .mob-services, .mob-property, .mob-animals, .mob-community, .mob-adult {
