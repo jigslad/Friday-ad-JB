@@ -539,7 +539,9 @@ All this is done for any sub-level being entered.
 .dl-menu .dl-submenu .dl-submenu a {
     padding-left: 60px !important;
 }
-
+#desktop-header-menus ul.desktop-block li:last-child .main_category::after {
+	background: none !important;
+}
 /* Header after login */
 .top-links .notification-link a span, .top-links .msg-link a span, .top-links .cart-link a span {
 
