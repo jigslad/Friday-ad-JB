@@ -67,7 +67,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col landing-header-content">
-                            <div class="cat-icon"><img src="{{ asset_url('fafrontend/images/' ~ category ~ '-hero-icon.svg') }}" alt="" /></div>
+                            <div class="cat-icon"></div>
                             {% if seoFields.h1_tag is defined %}
                                 {% set h1LocationString = '' %}
                                 {% if seoLocationName|lower != 'uk' and categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
