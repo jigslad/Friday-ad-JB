@@ -231,6 +231,8 @@
 
 .custom-card { padding: 20px; }
 .custom-card .list-img { padding: 0px; width: 210px;height: 158px; margin: 0 auto; }
+.latest-ad-list-dim { margin-bottom:10px; padding:0px; height:112px; }
+.landing-page-bg { background-size: cover !important; background-position: center !important; }
 .list-dimensions .reg-year {
     padding-left: 26px;
     width: auto;
@@ -325,6 +327,7 @@
     .landing-header h1 {
         font-size: 50px;
     }
+    .list-location-box .link-list { column-count: 2 }
 }
 @media only screen and (orientation: landscape) {
     .landing-header {
