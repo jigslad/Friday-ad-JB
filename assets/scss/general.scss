@@ -854,8 +854,10 @@ ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {
 .landing-divider, .border-botttom { border-bottom: solid 1px $form-border-color; }
 .find-property .capsule-links a { background: $dark-grey; }
 .capsule-links a:hover, .capsule-links a.active { background: $secondary-color; }
-.custom-card .card-body { border-top: 1px solid $grey-color; }
 .custom-card .similar-placeholder { background-color: $light-grey-color; }
+
+.list-hr-ago, .list-dimensions { color: $dark-grey; }
+
 
 .dl-menuwrapper button {
     color: $white;
@@ -2147,6 +2149,7 @@ footer p { color:$grey-color; }
 
 @media (min-width: 320px) and (max-width: 640px) {
    footer .mobile-footer-tab { box-shadow: inset 0 -1px 0 $text-color; }
+
 }
 @media screen and (min-width: 320px) {
   .item--full {

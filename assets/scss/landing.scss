@@ -229,6 +229,83 @@
 .job-wanted.active { background: url('/Frontend/images/Jobs/Wanted-ON.png') no-repeat !important; }
 .job-temporary.active { background: url('/Frontend/images/Jobs/Temporary-ON.png') no-repeat !important; }
 
+.custom-card { padding: 20px; }
+.custom-card .list-img { padding: 0px; width: 210px;height: 158px; margin: 0 auto; }
+
+.list-dimensions .reg-year {
+    padding-left: 26px;
+    width: auto;
+    margin-right: 8px;
+    min-height: 19px;
+    line-height: 19px;
+    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2219%22%20height%3D%2219%22%20viewBox%3D%22-1408%20462.9%2019%2019%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23ACB0B7%3B%7D%0D%0A%3C/style%3E%3Ctitle%3EReg%20year%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-261.000000%2C%20-1680.000000%29%22%3E%3Cg%20transform%3D%22translate%2819.000000%2C%2021.000000%29%22%3E%3Cg%20transform%3D%22translate%285.000000%2C%201580.000000%29%22%3E%3Cg%20transform%3D%22translate%28237.000000%2C%2079.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-1390.5%20466.1h-2.9v-1.5c0-0.7-0.5-1.2-1.2-1.2%20-0.6%200-1.2%200.5-1.2%201.2v1.5h-5.3v-1.5c0-0.7-0.5-1.2-1.2-1.2%20-0.6%200-1.2%200.5-1.2%201.2v1.5h-2.9c-0.5%200-0.9%200.4-0.9%200.9v13.2c0%200.5%200.4%200.9%200.9%200.9h15.8c0.5%200%200.9-0.4%200.9-0.9V467C-1389.6%20466.5-1390%20466.1-1390.5%20466.1L-1390.5%20466.1zM-1401.8%20470.2h2.8v2.4h-2.8V470.2zM-1397.8%20470.2h2.8v2.4h-2.8V470.2zM-1405.4%20470.2h2.5v2.4h-2.5V470.2zM-1405.4%20473.8h2.5v1.8h-2.5V473.8zM-1401.8%20473.8h2.8v1.8h-2.8V473.8zM-1401.8%20476.8h2.8v2.4h-2.8V476.8zM-1397.8%20476.8h2.8v2.4h-2.8V476.8zM-1397.8%20473.8h2.8v1.8h-2.8V473.8zM-1393.9%20473.8h2.5v1.8h-2.5V473.8zM-1393.9%20470.2h2.5v2.4h-2.5V470.2zM-1405.4%20476.8h2.5v2.4h-2.5V476.8zM-1393.9%20476.8h2.5v2.4h-2.5V476.8z%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat
+}
+
+.list-dimensions .mileage {
+    padding-left: 26px;
+    margin-right: 8px;
+    min-height: 19px;
+    line-height: 19px;
+    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2219%22%20height%3D%2219%22%20viewBox%3D%22-390%20226%2019%2019%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23ACB0B7%3B%7D%0D%0A%3C/style%3E%3Ctitle%3EMileage%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-326.000000%2C%20-1680.000000%29%22%3E%3Cg%20transform%3D%22translate%2819.000000%2C%2021.000000%29%22%3E%3Cg%20transform%3D%22translate%285.000000%2C%201580.000000%29%22%3E%3Cg%20transform%3D%22translate%28302.000000%2C%2079.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-380.5%20228.4c-3.7%200-6.8%203-6.8%206.8%200%200.2%200.2%200.4%200.4%200.4%200.2%200%200.4-0.2%200.4-0.4%200-0.3%200-0.6%200.1-0.9l1%200.2c0%200%200%200%200%200%200.1%200%200.2-0.1%200.2-0.2%200-0.1-0.1-0.3-0.2-0.3l-1-0.2c0.1-0.5%200.3-1%200.6-1.5l0.9%200.5c0%200%200.1%200%200.1%200%200.1%200%200.2%200%200.2-0.1%200.1-0.1%200-0.3-0.1-0.3l-0.9-0.5c0.3-0.5%200.6-0.9%201-1.2l0.7%200.8c0%200.1%200.1%200.1%200.2%200.1%200.1%200%200.1%200%200.2-0.1%200.1-0.1%200.1-0.2%200-0.3l-0.7-0.8c0.4-0.3%200.9-0.6%201.4-0.8l0.4%201c0%200.1%200.1%200.2%200.2%200.2%200%200%200.1%200%200.1%200%200.1%200%200.2-0.2%200.1-0.3l-0.4-1c0.5-0.2%201-0.3%201.6-0.3v1c0%200.1%200.1%200.2%200.2%200.2s0.2-0.1%200.2-0.2v-1c0.6%200%201.1%200.1%201.6%200.3l-0.4%201c0%200.1%200%200.3%200.1%200.3%200%200%200.1%200%200.1%200%200.1%200%200.2-0.1%200.2-0.2l0.4-1c0.5%200.2%201%200.5%201.4%200.8l-0.7%200.8c-0.1%200.1-0.1%200.2%200%200.3%200%200%200.1%200.1%200.2%200.1%200.1%200%200.1%200%200.2-0.1l0.7-0.8c0.4%200.4%200.8%200.8%201.1%201.3l-0.9%200.5c-0.1%200.1-0.2%200.2-0.1%200.3%200%200.1%200.1%200.1%200.2%200.1%200%200%200.1%200%200.1%200l0.9-0.5c0.3%200.5%200.4%201%200.6%201.6l-1.1%200.2c-0.1%200-0.2%200.1-0.2%200.3%200%200.1%200.1%200.2%200.2%200.2%200%200%200%200%200%200l1.1-0.2c0%200.3%200.1%200.5%200.1%200.8%200%200.2%200.2%200.4%200.4%200.4%200.2%200%200.4-0.2%200.4-0.4C-373.7%20231.5-376.8%20228.4-380.5%20228.4L-380.5%20228.4zM-380.5%20226.2c-5%200-9%204-9%209%200%205%204%209%209%209s9-4%209-9C-371.5%20230.2-375.5%20226.2-380.5%20226.2L-380.5%20226.2zM-380.5%20239.4c-0.8%200-1.4-0.6-1.4-1.4%200-0.8%200.6-1.4%201.4-1.4s1.4%200.6%201.4%201.4C-379.1%20238.8-379.7%20239.4-380.5%20239.4L-380.5%20239.4zM-378.5%20236.5c0%200-0.1-0.1-0.1-0.1l1.2-3.5%20-2.4%202.7c-0.2%200-0.4-0.1-0.6-0.1%20-0.8%200-1.5%200.4-2%201h-5.5c-0.1-0.4-0.1-0.9-0.1-1.3%200-4.2%203.4-7.6%207.6-7.6%204.2%200%207.6%203.4%207.6%207.6%200%200.5%200%200.9-0.1%201.3H-378.5L-378.5%20236.5z%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat
+}
+
+.list-dimensions .engine {
+    background: url('/bundles/fafrontend/images/engine.svg') no-repeat;
+    padding-left: 26px;
+    margin-right: 8px;
+    min-height: 19px;
+    line-height: 19px
+}
+
+.list-dimensions .fuel-type {
+    background: url('/bundles/fafrontend/images/fuel-type.svg') no-repeat;
+    padding-left: 26px;
+    margin-right: 8px;
+    min-height: 19px;
+    line-height: 19px
+}
+.list-dimensions {
+    margin: 12px 0 11px;
+    font-size: 12px;
+    line-height: 18px;
+}
+
+.list-dimensions span {
+    padding-left: 12px;
+    margin-left: 3px;
+    display: inline-block;
+    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3Asketch%3D%22http%3A//www.bohemiancoding.com/sketch/ns%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20version%3D%221.1%22%20id%3D%22Layer_1%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%225px%22%20height%3D%225px%22%20viewBox%3D%220%200%205%205%22%20xml%3Aspace%3D%22preserve%22%20enable-background%3D%22new%200%200%205%205%22%3E%0D%0A%20%20%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%20%20%20%20%0D%0A%09.st0%7Bfill%3A%23212527%3B%7D%0D%0A%0D%0A%20%20%3C/style%3E%0D%0A%20%20%3Ctitle%3E%0D%0A%20%20%20%20dot%0D%0A%20%20%3C/title%3E%0D%0A%20%20%3Cdesc%3E%0D%0A%20%20%20%20Created%20with%20Sketch.%0D%0A%20%20%3C/desc%3E%0D%0A%20%20%3Cg%20id%3D%22PAA%22%20sketch%3Atype%3D%22MSPage%22%3E%0D%0A%20%20%20%20%3Cg%20id%3D%22Desktop-HD-For-sale-2%22%20transform%3D%22translate%28-677.000000%2C%20-1589.000000%29%22%20sketch%3Atype%3D%22MSArtboardGroup%22%3E%0D%0A%20%20%20%20%20%20%3Cg%20id%3D%22Phase-1%22%20transform%3D%22translate%28-2.000000%2C%20-127.000000%29%22%20sketch%3Atype%3D%22MSLayerGroup%22%3E%0D%0A%20%20%20%20%20%20%20%20%3Cg%20id%3D%22_x32_-Describe-your-item%22%20transform%3D%22translate%28459.000000%2C%20414.000000%29%22%20sketch%3Atype%3D%22MSShapeGroup%22%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22similar-ads%22%20transform%3D%22translate%280.000000%2C%201163.000000%29%22%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22similar-ad-1%22%20transform%3D%22translate%280.000000%2C%2032.000000%29%22%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Used------Good-Condi-_x2B_-Oval-197-_x2B_-Oval-198%22%20transform%3D%22translate%28183.000000%2C%20102.000000%29%22%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cellipse%20id%3D%22dot%22%20class%3D%22st0%22%20cx%3D%2239.5%22%20cy%3D%227.5%22%20rx%3D%222.5%22%20ry%3D%222.5%22/%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%3C/g%3E%0D%0A%20%20%3C/g%3E%0D%0A%3C/svg%3E%0D%0A') no-repeat 0 6px
+}
+
+.list-dimensions span:first-child {
+    margin-left: 0
+}
+
+.list-distance {
+    font-size: 12px;
+    margin: 5px 0 0;
+    width: 547px;
+    position: absolute;
+    bottom: 19px
+}
+
+.list-miles {
+    float: left;
+    padding-left: 17px;
+    min-height: 15px;
+    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2212%22%20height%3D%2215%22%20viewBox%3D%22-473%20273%2012%2015%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23212527%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Elocation%20pin%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-467%20273c-3.3%200-6%202.6-6%205.8%200%204.3%206%209.2%206%209.2s5.9-4.6%206-9.2C-461%20275.6-463.7%20273-467%20273zM-467%20281c-1.1%200-2-0.9-2-2%200-1.1%200.9-2%202-2%201.1%200%202%200.9%202%202C-465%20280.1-465.9%20281-467%20281z%22/%3E%3C/svg%3E') no-repeat
+}
+
+.list-miles b {
+    font-size: 14px
+}
+
+.list-hr-ago {
+    float: right;
+    font-style: italic;
+}
+
+
 @media (min-width: 760px) and (max-width: 959px) {
     .landing-header {
         background-position: 100% !important;

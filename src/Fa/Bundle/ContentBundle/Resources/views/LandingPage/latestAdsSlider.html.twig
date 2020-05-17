@@ -25,7 +25,7 @@
                     </a>
                 </div>
                 {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, latestAd, '300X225', 1) %}
-                <div class="list-img {% if not imagePath %}similar-placeholder{% endif %}" style="padding:20px;">
+                <div class="list-img {% if not imagePath %}similar-placeholder{% endif %}">
                     {% if imagePath %}
                         <img class="card-img-top img-fluid" src="{{ imagePath }}" alt="{{ imageAltString }}" />
                     {% else %}
