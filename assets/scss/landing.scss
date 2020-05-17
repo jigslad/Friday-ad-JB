@@ -231,7 +231,6 @@
 
 .custom-card { padding: 20px; }
 .custom-card .list-img { padding: 0px; width: 210px;height: 158px; margin: 0 auto; }
-.custom-card .list-dimensions {height: 110px;}
 .list-dimensions .reg-year {
     padding-left: 26px;
     width: auto;
@@ -268,6 +267,7 @@
     margin: 12px 0 11px;
     font-size: 12px;
     line-height: 18px;
+    height: 110px !important;
 }
 
 .list-dimensions span {

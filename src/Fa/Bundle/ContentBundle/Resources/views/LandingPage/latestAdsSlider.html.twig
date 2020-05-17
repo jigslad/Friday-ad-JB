@@ -64,7 +64,7 @@
                             <p class="card-text text-right"><small class="text-muted">{{ adPropertyRepository.getRentPostFixText(attribute(latestAd, constant(latestAdSolrMapping ~ 'RENT_PER_ID')), container)}}</small></p>
                         {% endif %}
                     </div>
-                    <div class="card-body p0">
+                    <div class="card-body pad-none mb10">
                         {% if attribute(latestAd, 'away_from_location') is defined and attribute(latestAd, 'away_from_location') %}
                             <div class="list-miles">
                                 {{ (attribute(latestAd, 'away_from_location') / 1.60934)|round }} {{ 'miles away'|trans({}, 'frontend-search-result')}}
@@ -78,7 +78,7 @@
                     </div>
 
                 {% else %}
-                    <div class="card-body pt0">
+                    <div class="card-body pad-none mb10">
                         <div class="two-grid-col">
                             <div class="list-price">
                                 {% if attribute(latestAd, constant(latestAdSolrMapping ~ 'PRICE')) is defined %}
@@ -87,7 +87,7 @@
                             </div>
                         </div>
                         {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') and attribute(latestAd, constant(latestAdSolrMapping ~ 'RENT_PER_ID')) is defined %}
-                        <p class="card-text text-right"><span class="text-muted">{{ adPropertyRepository.getRentPostFixText(attribute(latestAd, constant(latestAdSolrMapping ~ 'RENT_PER_ID')), container)}}</span></p>
+                        <p class="list-hr-ago card-text text-right"><span class="text-muted">{{ adPropertyRepository.getRentPostFixText(attribute(latestAd, constant(latestAdSolrMapping ~ 'RENT_PER_ID')), container)}}</span></p>
                         {% endif %}
                     </div>
                     <h3 class="card-title s-h3">
