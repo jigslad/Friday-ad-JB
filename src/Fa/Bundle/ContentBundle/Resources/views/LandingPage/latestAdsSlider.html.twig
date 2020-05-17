@@ -16,14 +16,12 @@
         {% endif %}
         {% set sliderCount = sliderCount + 1 %}
         <div class="item item-{{ sliderCount }}" data-equalizer-watch="">
-            <div class="card custom-card">
-                <div>
-                    <a href="{{ adUrl }}" class="tricky-link">
-                        {% if attribute(latestAd, constant(latestAdSolrMapping ~ 'TITLE')) is defined %}
-                            {{trim_text(attribute(latestAd, constant(latestAdSolrMapping ~ 'TITLE')), 65)|raw}}
-                        {% endif %}
-                    </a>
-                </div>
+                <a href="{{ adUrl }}" class="tricky-link">
+                    {% if attribute(latestAd, constant(latestAdSolrMapping ~ 'TITLE')) is defined %}
+                        {{trim_text(attribute(latestAd, constant(latestAdSolrMapping ~ 'TITLE')), 65)|raw}}
+                    {% endif %}
+                </a>
+
                 {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, latestAd, '300X225', 1) %}
                 <div class="list-img {% if not imagePath %}similar-placeholder{% endif %}">
                     {% if imagePath %}
@@ -38,32 +36,32 @@
                             {{trim_text(attribute(latestAd, constant(latestAdSolrMapping ~ 'TITLE')), 65)|raw}}
                         {% endif %}
                     </h3>
-                    <div class="card-body latest-ad-list-dim">
-                        <div class="two-grid-col">
-                            <div class="list-dimensions left">
-                                {% if adListFields|length %}
-                                    {% for adFieldName, adListFieldValue in adListFields %}
-                                        {% set adFieldClass = adRepository.getListingClass(adFieldName) %}
-                                        {% if adListFieldValue is iterable %}
-                                            {% for adListFieldVal in adListFieldValue %}
-                                                <span {% if adFieldClass %}class="{{ adFieldClass }}"{% endif %}>{{ adListFieldVal }}</span>
-                                            {% endfor %}
-                                        {% else %}
-                                            <span {% if adFieldClass %}class="{{ adFieldClass }}"{% endif %}>{{ adListFieldValue }}</span>
-                                        {% endif %}
-                                    {% endfor %}
-                                {% endif %}
-                            </div>
-                            <div class="list-price">
-                                {% if attribute(latestAd, constant(latestAdSolrMapping ~ 'PRICE')) is defined %}
-                                    {{ format_currency(attribute(latestAd, constant(latestAdSolrMapping ~ 'PRICE'))) }}
-                                {% endif %}
-                            </div>
+
+                    <div class="two-grid-col">
+                        <div class="list-dimensions left">
+                            {% if adListFields|length %}
+                                {% for adFieldName, adListFieldValue in adListFields %}
+                                    {% set adFieldClass = adRepository.getListingClass(adFieldName) %}
+                                    {% if adListFieldValue is iterable %}
+                                        {% for adListFieldVal in adListFieldValue %}
+                                            <span {% if adFieldClass %}class="{{ adFieldClass }}"{% endif %}>{{ adListFieldVal }}</span>
+                                        {% endfor %}
+                                    {% else %}
+                                        <span {% if adFieldClass %}class="{{ adFieldClass }}"{% endif %}>{{ adListFieldValue }}</span>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
                         </div>
-                        {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') and attribute(latestAd, constant(latestAdSolrMapping ~ 'RENT_PER_ID')) is defined %}
-                            <p class="card-text text-right"><small class="text-muted">{{ adPropertyRepository.getRentPostFixText(attribute(latestAd, constant(latestAdSolrMapping ~ 'RENT_PER_ID')), container)}}</small></p>
-                        {% endif %}
-                    </div>
+                        <div class="list-price">
+                            {% if attribute(latestAd, constant(latestAdSolrMapping ~ 'PRICE')) is defined %}
+                                {{ format_currency(attribute(latestAd, constant(latestAdSolrMapping ~ 'PRICE'))) }}
+                            {% endif %}
+                        </div>
+                     </div>
+                    {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') and attribute(latestAd, constant(latestAdSolrMapping ~ 'RENT_PER_ID')) is defined %}
+                        <p class="card-text text-right"><small class="text-muted">{{ adPropertyRepository.getRentPostFixText(attribute(latestAd, constant(latestAdSolrMapping ~ 'RENT_PER_ID')), container)}}</small></p>
+                    {% endif %}
+
                     <div class="pad-none">
                         {% if attribute(latestAd, 'away_from_location') is defined and attribute(latestAd, 'away_from_location') %}
                             <div class="list-miles">
@@ -97,7 +95,6 @@
                     </h3>
                 {% endif %}
             </div>
-        </div>
     {% endfor %}
 </div>
 {% set sliderCount = 0 %}
