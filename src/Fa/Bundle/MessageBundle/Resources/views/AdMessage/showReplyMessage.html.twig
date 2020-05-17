@@ -44,7 +44,7 @@
                                 </div>
                             {% else %}
                                 <div class="profile-placeholder">
-                                    <img src="/bundles/fafrontend/images/user-icon.svg" alt="" />
+                                    <img class="img-fluid" src="/bundles/fafrontend/images/user-icon.svg" alt="" />
                                 </div>
                             {% endif %}
                         </div>
@@ -87,7 +87,7 @@
                                             <li data-image-ord="{{messageAttachment.getId()}}" data-image-id="{{messageAttachment.getId()}}" id="image_{{messageAttachment.getId()}}" class="">
                                                 {% set messageAttachmentUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getMessageAttachmentUrl', [container, messageAttachment]) %}
                                                     <div class="img-attach-thumb">
-                                                        <img src="{{ messageAttachmentUrl }}" />
+                                                        <img class="img-fluid" src="{{ messageAttachmentUrl }}" />
                                                         <div class="img-attach-links">
                                                             <a href="javascript:downloadAttachments('', '{{messageAttachment.getId()}}');" class="download-img-link">Download Image</a>
                                                             <a href="javascript:renderFancyBox('{{ messageCounter }}', '{{ (counter-1) }}');" class="view-img-link">View Image</a>
@@ -154,7 +154,7 @@
                                 </div>
                             {% else %}
                                 <div class="profile-placeholder">
-                                    <img src="/bundles/fafrontend/images/user-icon.svg" alt="" />
+                                    <img class="img-fluid" src="/bundles/fafrontend/images/user-icon.svg" alt="" />
                                 </div>
                             {% endif %}
                         </div>

@@ -511,7 +511,7 @@
                             <a class="primary-btn-3 button thin-btn" href="{{ path('ad_edit', {'id': adId, 'scrollTo': 'image'})}}">Add photo</a>
                         {% else %}
                             {% if noImage != 1 %}<a href="javascript:void(0);" onclick="showOriginalImage();">{% endif %}
-                                <img src="{{ imagePath }}" alt="no-image" />
+                                <img class="img-fluid" src="{{ imagePath }}" alt="no-image" />
                             {% if noImage != 1 %}</a>{% endif %}
 
                         {% endif %}

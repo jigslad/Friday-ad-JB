@@ -85,15 +85,15 @@
         <div class="list-img {% if not imagePath %}list-placeholder{% endif %}">
             {% if imagePath %}
                 {% if fromSimilarAdverts is defined %}
-                    <img class="img-responsive" alt="{{ imageAltString }}" src="{{ imagePath }}" />
+                    <img class="img-fluid" alt="{{ imageAltString }}" src="{{ imagePath }}" />
                 {% else %}
-                    <img data-original="{{ imagePath }}" alt="{{ imageAltString }}" class="img-responsive lazy" src="{{ asset_url('facore/images/ajax_loader.gif') }}" />
+                    <img data-original="{{ imagePath }}" alt="{{ imageAltString }}" class="img-fluid lazy" src="{{ asset_url('facore/images/ajax_loader.gif') }}" />
                 {% endif %}
             {% else %}
                 {% if fromSimilarAdverts is defined %}
-                    <img class="img-responsive" src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ imageAltString }}" />
+                    <img class="img-fluid" src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ imageAltString }}" />
                 {% else %}
-                    <img class="img-responsive" src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
+                    <img class="img-fluid" src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
                 {% endif %}
             {% endif %}
         </div>

@@ -138,7 +138,7 @@
                         {% endif %}
                         {% if rootCategoryId in {0:constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 1:constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), } %}
                             <div class="detail-thumb-img">
-                                <div class="dtl-thumb{% if noImage == 1 %} img-placeholder{% endif %}"><img src="{{ imagePath }}" alt="no-image" /></div>
+                                <div class="dtl-thumb{% if noImage == 1 %} img-placeholder{% endif %}"><img class="img-fluid" src="{{ imagePath }}" alt="no-image" /></div>
                             </div>
                         {% endif %}
                         <h1 class="detail-head">{{adDetail['title']}}</h1>

@@ -16,7 +16,7 @@
                     {% if userLogo %}
                         {{userLogo|raw}}
                     {% else %}
-                        <img src="{{ asset_url('fafrontend/images/user-icon.svg') }}" alt="" />
+                        <img class="img-fluid" src="{{ asset_url('fafrontend/images/user-icon.svg') }}" alt="" />
                     {% endif %}
                 </div>
             </div>
@@ -65,7 +65,7 @@
                                 {% if userLogo %}
                                     {{userLogo|raw}}
                                 {% else %}
-                                    <img src="{{ asset_url('fafrontend/images/user-icon.svg') }}" alt="" />
+                                    <img class="img-fluid" src="{{ asset_url('fafrontend/images/user-icon.svg') }}" alt="" />
                                 {% endif %}
                             </div>
                         </div>

@@ -136,7 +136,7 @@
                                                     <div class="popular-graphic">
                                                         {% if imageInfo.overlay_file_name is defined %}
                                                             {% set imageOverlayUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.overlay_file_name]) %}
-                                                            <img alt="{{ imageInfo.overlay_file_name }}" src="{{ imageOverlayUrl }}">
+                                                            <img class="img-fluid" alt="{{ imageInfo.overlay_file_name }}" src="{{ imageOverlayUrl }}">
                                                         {% endif %}
                                                     </div>
                                                     <div class="explore-price">{{ adCount|number_format }}</div>
@@ -240,7 +240,7 @@
                                                     <div class="popular-graphic">
                                                         {% if imageInfo.overlay_file_name is defined %}
                                                         	{% set imageOverlayUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.overlay_file_name]) %}
-                                                            <img alt="{{ imageInfo.overlay_file_name }}" src="{{ imageOverlayUrl }}">
+                                                            <img class="img-fluid" alt="{{ imageInfo.overlay_file_name }}" src="{{ imageOverlayUrl }}">
                                                         {% endif %}
                                                     </div>
                                                     <div class="explore-price">{{ adCount|number_format }}</div>
@@ -300,9 +300,9 @@
                                                     {% set userName = shopName~' - Friday-Ad' %}
                                                     <div style="padding:20px;" class="border-botttom">
                                                         {% if userLogo %}
-                                                            <img class="card-img-top" data-src="{{ userLogo }}" alt="{{ userName }}" />
+                                                            <img class="card-img-top img-fluid" src="{{ userLogo }}" alt="{{ userName }}" />
                                                         {% else %}
-                                                            <img class="card-img-top" data-src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ userName }}" />
+                                                            <img class="card-img-top img-fluid" src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ userName }}" />
                                                         {% endif %}
                                                     </div>
                                                     <div class="card-body pt0">
@@ -350,7 +350,7 @@
                                                     <div class="popular-graphic">
                                                         {% if imageInfo.overlay_file_name is defined %}
                                                         	{% set imageOverlayUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.overlay_file_name]) %}
-                                                            <img alt="{{ imageInfo.overlay_file_name }}" src="{{ imageOverlayUrl }}">
+                                                            <img class="img-fluid" alt="{{ imageInfo.overlay_file_name }}" src="{{ imageOverlayUrl }}">
                                                         {% endif %}
                                                     </div>
                                                     <div class="explore-price">{{ adCount|number_format }}</div>
@@ -430,7 +430,7 @@
                                                 <div class="popular-graphic">
                                                     {% if imageInfo.overlay_file_name is defined %}
                                                         {% set imageOverlayUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.overlay_file_name]) %}
-                                                        <img alt="{{ imageInfo.overlay_file_name }}" src="{{ imageOverlayUrl }}">
+                                                        <img class="img-fluid" alt="{{ imageInfo.overlay_file_name }}" src="{{ imageOverlayUrl }}">
                                                     {% endif %}
                                                 </div>
                                                 <div class="explore-price">{{ adCount|number_format }}</div>
@@ -543,9 +543,9 @@
                                                     <div class="card custom-card">
                                                         <div style="padding:20px;" class="border-botttom">
                                                             {% if userLogo %}
-                                                                <img class="card-img-top" src="{{ userLogo }}" alt="{{ userName }}" />
+                                                                <img class="card-img-top img-fluid" src="{{ userLogo }}" alt="{{ userName }}" />
                                                             {% else %}
-                                                                <img class="card-img-top" src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ userName }}" />
+                                                                <img class="card-img-top img-fluid" src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ userName }}" />
                                                             {% endif %}
                                                         </div>
                                                         <div class="card-body pt0">

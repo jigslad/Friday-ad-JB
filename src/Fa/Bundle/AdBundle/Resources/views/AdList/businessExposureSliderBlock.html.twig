@@ -68,9 +68,9 @@
                                         <div class="list-img {% if not imagePath %}similar-placeholder{% endif %}">
                                             <a href="{{ adUrl }}" onClick='javascript:visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");'>
                                         {% if imagePath %}
-                                                <img class="lazyOwl" src="{{ imagePath }}" alt="{{ imageAltString }}"/>
+                                                <img class="lazyOwl img-fluid" src="{{ imagePath }}" alt="{{ imageAltString }}"/>
                                             {% else %}
-                                                <img class="lazyOwl" src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}"/>
+                                                <img class="lazyOwl img-fluid" src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}"/>
                                             {% endif %}
                                             </a>
                                         </div>

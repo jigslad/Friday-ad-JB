@@ -58,9 +58,9 @@
                                         <div class="cart-item-img">
                                             {% if cartDetail['path'] is defined and cartDetail['path'] is not null and cartDetail['hash'] is defined and cartDetail['hash'] is not null %}
                                                     {% set adImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageUrl', [container, cartDetail['ad_id'], cartDetail['path'], cartDetail['hash'], '300X225', cartDetail['aws'],cartDetail['image_name']]) %}
-                                                    <img src="{{ adImageUrl }}" />
+                                                    <img  class="img-fluid" src="{{ adImageUrl }}" />
                                                 {% else %}
-                                                    <img src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="" />
+                                                    <img  class="img-fluid" src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="" />
                                                 {% endif %}
                                         </div>
                                         <div class="media-body cart-item-info">

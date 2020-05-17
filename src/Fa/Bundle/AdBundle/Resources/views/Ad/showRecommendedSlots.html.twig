@@ -21,9 +21,9 @@
                     <div class="col-md-6 pad-none recom-l-col">
                         <div class="media-left align-self-center">
                         	{% if userLogo is null%}
-                                <div class="list-img list-placeholder"><img class="img-responsive" src="{{container.getParameter('fa.static.url')}}/fafrontend/images/user-no-logo.svg" alt="{{ userName }}" /></div>
+                                <div class="list-img list-placeholder"><img class="img-fluid" src="{{container.getParameter('fa.static.url')}}/fafrontend/images/user-no-logo.svg" alt="{{ userName }}" /></div>
                             {% else %}
-                                <div class="list-img"><img class="img-responsive" src="{{ userLogo }}" alt="{{ userName }}" /></div>
+                                <div class="list-img"><img class="img-fluid" src="{{ userLogo }}" alt="{{ userName }}" /></div>
                             {% endif %}                            
                         </div>
                     </div>

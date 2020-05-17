@@ -27,12 +27,12 @@
                                         <div class="popular-graphic">
                                             {% if imageInfo.overlay_file_name is defined %}
                                                 {% set imageOverlayUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.overlay_file_name]) %}
-                                                <img alt="{{ adultSubCategoryName }}" src="{{ imageOverlayUrl }}">
+                                                <img class="img-fluid" alt="{{ adultSubCategoryName }}" src="{{ imageOverlayUrl }}">
                                             {% endif %}
                                         </div>
                                         {% if imageInfo.file_name is defined %}
                                         	{% set imageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.file_name]) %}
-                                            <img alt="{{ adultSubCategoryName }}" src="{{ imageUrl }}">
+                                            <img class="img-fluid" alt="{{ adultSubCategoryName }}" src="{{ imageUrl }}">
                                         {% endif %}
                                     </div>
                                 </div>

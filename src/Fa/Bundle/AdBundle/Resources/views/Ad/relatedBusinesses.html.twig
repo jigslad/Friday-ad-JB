@@ -15,9 +15,9 @@
                     
                     <div class="small-img">
                         {% if userLogo %}
-                            <img class="lazyOwl" src="{{ userLogo }}" alt="{{ userNameAltText }}" />
+                            <img class="lazyOwl img-fluid" src="{{ userLogo }}" alt="{{ userNameAltText }}" />
                         {% else %}
-                            <img class="lazyOwl" src="{{ asset_url('fafrontend/images/user-no-logo.svg') }}" alt="{{ userNameAltText }}" />
+                            <img class="lazyOwl img-fluid" src="{{ asset_url('fafrontend/images/user-no-logo.svg') }}" alt="{{ userNameAltText }}" />
                         {% endif %}                            
                     </div>
                     <div class="small-content">{{ userName }}</div>

@@ -2,7 +2,7 @@
 //<![CDATA[
     function loadMoreReviews(userId, limit, page, excludeIds)
     {
-        $('#show_more_link').html("<div class='row'><img src=\"{{ asset_url('facore/images/ajax_loader.gif') }}\"> {{ 'Loading please wait... '|trans({}, 'frontend-profile-page') }}</div>");
+        $('#show_more_link').html("<div class='row'><img class=\"img-fluid\" src=\"{{ asset_url('facore/images/ajax_loader.gif') }}\"> {{ 'Loading please wait... '|trans({}, 'frontend-profile-page') }}</div>");
         var route = Routing.generate('show_profile_user_reviews', { 'userId': userId, 'limit': limit, 'page': page, 'excludeIds': excludeIds });
         $.ajax({
             type: "POST",

@@ -146,7 +146,7 @@
                         else
                         {
                             uploader.start();
-                            $('{{ fileListId }}').html("<div class='row'><img src=\"{{ asset_url('facore/images/ajax_loader.gif') }}\"> {{ 'Uploading image please wait... '|trans({}, 'frontend-paa-lite-common') }}</div>");
+                            $('{{ fileListId }}').html("<div class='row'><img class=\"img-fluid\" src=\"{{ asset_url('facore/images/ajax_loader.gif') }}\"> {{ 'Uploading image please wait... '|trans({}, 'frontend-paa-lite-common') }}</div>");
                             $('.save_data').attr('disabled', true);
                          }
                     },

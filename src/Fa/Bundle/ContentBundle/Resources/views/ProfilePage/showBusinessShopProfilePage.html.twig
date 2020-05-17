@@ -230,7 +230,7 @@
                         <div class="text-center">{{'Or choose from the options below'|trans({}, 'frontend-my-profile')}}</div>
                         <ul class="cover-img-thumbs clearfix">
                             {% for userSiteBannerOtherImage in userSiteBannerOtherImages%}
-                                <li><a href="javascript:void(0);" onclick="return changeBanner('{{ userSiteBannerOtherImage.getId() }}');"><img src="{{ image_url(userSiteBannerOtherImage.getPath()~'/'~userSiteBannerOtherImage.getFilename()|replace({'.png':''})~'_68x55.jpg') }}" alt="" /></a></li>
+                                <li><a href="javascript:void(0);" onclick="return changeBanner('{{ userSiteBannerOtherImage.getId() }}');"><img class="img-fluid" src="{{ image_url(userSiteBannerOtherImage.getPath()~'/'~userSiteBannerOtherImage.getFilename()|replace({'.png':''})~'_68x55.jpg') }}" alt="" /></a></li>
                             {% endfor %}
                         </ul>
                     </div>

@@ -1,4 +1,4 @@
-<img src="{{ asset_url('facore/images/ajax_loader.gif') }}" style="display:none;" height="0px" width="0px">
+<img class="img-fluid" src="{{ asset_url('facore/images/ajax_loader.gif') }}" style="display:none;" height="0px" width="0px">
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     function blockElement(id, message, width)
@@ -7,7 +7,7 @@
                 width = '50%';
         }
         if (typeof message == 'undefined') {
-            message = '<img src=\"{{ asset_url('facore/images/ajax_loader.gif') }}\">{{'Please wait...'|trans({}, 'frontend')}}';
+            message = '<img class=\"img-fluid\" src=\"{{ asset_url('facore/images/ajax_loader.gif') }}\">{{'Please wait...'|trans({}, 'frontend')}}';
         }
         $(id).block({
             message: '<h1>'+message+'</h1>',
@@ -38,7 +38,7 @@
                 width = '30%';
         }
         if (typeof message == 'undefined') {
-            message = '<img src=\"{{ asset_url('facore/images/ajax_loader.gif') }}\">{{'Please wait...'|trans({}, 'frontend')}}';
+            message = '<img class=\"img-fluid\" src=\"{{ asset_url('facore/images/ajax_loader.gif') }}\">{{'Please wait...'|trans({}, 'frontend')}}';
         }
         $.blockUI({
             message: '<h1>'+message+'</h1>',

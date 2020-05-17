@@ -21,7 +21,7 @@
                 {% if userSite.path %}
                     <div class="mb10"><label>{{ 'Company logo'|trans({}, 'frontend-paa-fourth-step') }}:</label></div>
                     {% set logoUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserCompanyLogoUrl', [container, user.id, userSite.path]) %}
-                    <div class="bz-company-logo"><img alt="{{user.id}}.jpg" src="{{ logoUrl }}" /></div>
+                    <div class="bz-company-logo"><img class="img-fluid" alt="{{user.id}}.jpg" src="{{ logoUrl }}" /></div>
                 {% endif %}
                 
                 

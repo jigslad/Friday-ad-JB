@@ -116,7 +116,7 @@
                             <ul class="title-area">
                                 <li class="name">
                                     <h1>
-                                         <a href="/" class="logo "><img src="{{ asset_url('fafrontend/images/fad-logo.svg') }}" alt="Friday-Ad"></a>
+                                         <a href="/" class="logo "><img class="img-fluid" src="{{ asset_url('fafrontend/images/fad-logo.svg') }}" alt="Friday-Ad"></a>
                                     </h1>
                                 </li>
                             </ul>
@@ -173,7 +173,7 @@
                        
                         <div class="large-24 columns mt10" id="paa-lite-form-save-button-div">
                             {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand'}}) }}
-                            <button type="button" id="fa_paa_lite_common_loading" class="primary-btn-1 button expand loading-in-button" style="display:none;"><img src="{{ asset_url('facore/images/ajax_loader.gif') }}" style="margin-right:15px">{{ 'Saving data... '|trans({}, 'frontend-paa-lite-common') }}</button>
+                            <button type="button" id="fa_paa_lite_common_loading" class="primary-btn-1 button expand loading-in-button" style="display:none;"><img class="img-fluid" src="{{ asset_url('facore/images/ajax_loader.gif') }}" style="margin-right:15px">{{ 'Saving data... '|trans({}, 'frontend-paa-lite-common') }}</button>
                         </div>
                     {{ form_end(form) }}
                 {% else %}
