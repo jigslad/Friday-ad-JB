@@ -2,7 +2,7 @@
     position: relative;
     background-size: cover;
     background-position: 50%;
-    min-height: 400px;
+    min-height: 330px;
     width: 100%;
     margin: 0;
     display: flex;
@@ -227,7 +227,7 @@
 .job-temporary.active { background: url('/Frontend/images/Jobs/Temporary-ON.png') no-repeat !important; }
 
 .custom-card { padding: 20px; }
-.custom-card .list-img { padding: 0px; width: 210px;height: 158px; margin: 0 auto; }
+.custom-card .list-img { padding: 0px; width: 100%; height: 140px;  margin: 0 auto; }
 .latest-ad-list-dim { margin-bottom:10px; padding:0px; height:112px; }
 .landing-page-bg { background-size: cover !important; background-position: center !important; }
 .list-dimensions .reg-year {
@@ -321,7 +321,14 @@
     .landing-header .landing-header-content {
         position: absolute;
     }
-    .list-location-box .link-list { column-count: 2 }
+    .list-location-box .link-list { column-count: 2 !important; }
+    .homepage-title {
+	    font-size: 18px !important;
+	    line-height: 24px !important;
+	    font-family: "Poppins-SemiBold" !important;
+	    font-weight: normal !important;
+	    margin: 0 0px 20px !important;
+    }
 }
 @media only screen and (orientation: landscape) {
     .landing-header {
@@ -395,7 +402,7 @@ cursor: pointer;
 }
 @media (min-width: 641px) and (max-width: 759px) {
     .landing-block .list-location-box .link-list {
-        column-count: 3;
+        column-count: 3 !important;
     }
 }
 @media only screen and (max-width: 559px) and (min-width: 320px) {
@@ -405,7 +412,7 @@ cursor: pointer;
 }
 @media (min-width: 320px) and (max-width: 640px) {
     .landing-block .list-location-box .link-list {
-        column-count: 2;
+        column-count: 2 !important;
     }
 }
 
@@ -522,9 +529,10 @@ cursor: pointer;
   display: inline-block;float: left; width: 112px; height: 112px; text-indent: -9999px; margin: 0 0 20px 20px;
 }
 .landing-circles a, .landing-circles a:hover, .landing-circles a:focus, .landing-circles a:active, .landing-circles a.active,
-.property-landing-circles a, .property-landing-circles a:hover, .property-landing-circles a:focus, .property-landing-circles a:active, .property-landing-circles a.active
+.property-landing-circles a, .property-landing-circles a:hover, .property-landing-circles a:focus, .property-landing-circles a:active, .property-landing-circles a.active, .landing-pet-circles a, .landing-pet-circles a:hover, .landing-pet-circles a:focus, .landing-pet-circles a:active, .landing-pet-circles a.active,
 {
-    background-size: 100% !important;
+    background-size: cover !important;
+    
 }
 .landing-circles li:first-child {
     margin-left: 2px;

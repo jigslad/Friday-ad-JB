@@ -298,7 +298,7 @@
                                                     <a class="tricky-link" href="{{ profilePageUrl }}">{{ shopName }}</a>
                                                     {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), adUserId, true, true]) %}
                                                     {% set userName = shopName~' - Friday-Ad' %}
-                                                    <div style="padding:20px;" class="border-botttom">
+                                                    <div style="padding:20px;">
                                                         {% if userLogo %}
                                                             <img class="card-img-top img-fluid" src="{{ userLogo }}" alt="{{ userName }}" />
                                                         {% else %}
