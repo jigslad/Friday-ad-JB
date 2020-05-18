@@ -1377,6 +1377,8 @@ input[type=number] {
 .ui-autocomplete-input {
     padding-right: 30px !important;
 }
+.owl-stage { display: flex; }
+.owl-item { display: flex;flex: 1 0 auto; }
 
 @media (max-width: 760px) {
     .custom_hc_widget_trigger {
