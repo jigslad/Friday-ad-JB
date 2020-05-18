@@ -301,24 +301,6 @@
     font-style: italic;
 }
 
-
-@media (min-width: 320px) and (max-width: 759px) {
-    .landing-header {
-        height: 260px;
-        min-height: 260px;
-    }
-    .landing-header .landing-header-content {
-        position: absolute;
-    }
-    .list-location-box .link-list { column-count: 2 !important; }
-    .homepage-title {
-	    font-size: 18px !important;
-	    line-height: 24px !important;
-	    font-family: "Poppins-SemiBold" !important;
-	    font-weight: normal !important;
-	    margin: 0 0px 20px !important;
-    }
-}
 .motors .popular-items .item-box {
     height: 206px;
 }
@@ -378,26 +360,7 @@ cursor: pointer;
 .any-category.active, .car-hatchback.active, .car-coupes.active, .car-saloons.active, .car-convertibles.active, .car-estates.active, .car-mpvs.active, .car-4x4.active {
     background-size: contain;
 }
-@media (min-width: 760px) and (max-width: 959px) {
-    .landing-circles li:first-child {
-        margin-left: 0px;
-    }
-}
-@media (min-width: 641px) and (max-width: 759px) {
-    .landing-block .list-location-box .link-list {
-        column-count: 3 !important;
-    }
-}
-@media only screen and (max-width: 559px) and (min-width: 320px) {
-	.landing-desc {
-	    display: none;
-	}
-}
-@media (min-width: 320px) and (max-width: 640px) {
-    .landing-block .list-location-box .link-list {
-        column-count: 2 !important;
-    }
-}
+
 
 // For sale
 .for-sale .popular-items .item-box {
@@ -441,18 +404,6 @@ cursor: pointer;
 .property .landing-circles li, .jobs .landing-circles li {
     margin: 0 20px 20px 0px !important;
 }
-@media (min-width: 760px) and (max-width: 959px) {
-    .property .landing-circles li:first-child {
-        margin-left: 0px;
-    }
-    .distance-budget-md-block {
-        display: inline-flex;
-    }
-    .distance-budget-md-block .buget-block {
-        padding: 0 0 0 20px !important;
-    }
-}
-
 // Animals
 .owl-carousel .item .custom-card {
     border: 0px !important;
@@ -471,22 +422,6 @@ cursor: pointer;
     height: 153px;
     float: left;
     margin: 0 26px 19px 0;
-}
-
-
-@media (min-width: 320px) and (max-width: 385px) {
-    .landing-pet-circles a {
-        width: 130px;
-        height: 131px;
-    }
-    .landing-pet-circles li {
-        width: 130px;
-        height: 131px;
-        margin: 0 15px 19px 0;
-    }
-    .pets_choice {
-        background-size: 130px 131px !important;
-    }
 }
 .custom-card .card-img-top {
     object-fit: none;
@@ -509,7 +444,7 @@ cursor: pointer;
 .property-landing-circles { margin:auto !important; width: fit-content !important; }
 .property-landing-circles a.active { border-radius:4px; }
 .landing-circles li, .property-landing-circles a {
-  display: inline-block;float: left; width: 112px; height: 112px; text-indent: -9999px; margin: 0 0 20px 20px;
+  display: inline-block;float: left; width: 112px; height: 112px; text-indent: -9999px; margin: 10px;
 }
 .landing-circles a, .landing-circles a:hover, .landing-circles a:focus, .landing-circles a:active, .landing-circles a.active,
 .property-landing-circles a, .property-landing-circles a:hover, .property-landing-circles a:focus, .property-landing-circles a:active, .property-landing-circles a.active, .landing-pet-circles a, .landing-pet-circles a:hover, .landing-pet-circles a:focus, .landing-pet-circles a:active, .landing-pet-circles a.active
@@ -517,6 +452,72 @@ cursor: pointer;
     background-size: cover !important;
     background-position: center !important;    
 }
-.landing-circles li:first-child {
-    margin-left: 2px;
+.travel-distance li { position: relative; }
+
+@media (min-width: 760px) and (max-width: 959px) {
+    .property .landing-circles li:first-child {
+        margin-left: 0px;
+    }
+    .distance-budget-md-block {
+        display: inline-flex;
+    }
+    .distance-budget-md-block .buget-block {
+        padding: 0 0 0 20px !important;
+    }
 }
+
+
+/* Form location */
+@media (min-width: 320px) and (max-width: 759px) {
+    .landing-header {
+        height: 260px;
+        min-height: 260px;
+    }
+    .landing-header .landing-header-content {
+        position: absolute;
+    }
+    .list-location-box .link-list { column-count: 2 !important; }
+    .homepage-title {
+	    font-size: 18px !important;
+	    line-height: 24px !important;
+	    font-family: "Poppins-SemiBold" !important;
+	    font-weight: normal !important;
+	    margin: 0 0px 20px !important;
+    }
+   .jobs-link-list { column-count: 1 !important; }
+   .popular-items .item-box {
+	    height: 160px !important;
+	}
+	popular-items .item-box {
+	    height: 160px;
+	}
+}
+
+@media (min-width: 641px) and (max-width: 759px) {
+    .landing-block .list-location-box .link-list {
+        column-count: 3 !important;
+    }
+}
+@media only screen and (max-width: 559px) and (min-width: 320px) {
+	.landing-desc {
+	    display: none;
+	}
+    .car-distance li.miles-col, .car-distance li.location-col, .travel-distance li.miles-col, .travel-distance li.location-col {
+       width: 42%;
+    }
+}
+@media (min-width: 320px) and (max-width: 385px) {
+    .landing-pet-circles a {
+        width: 130px;
+        height: 131px;
+    }
+    .landing-pet-circles li {
+        width: 130px;
+        height: 131px;
+        margin: 0 15px 19px 0;
+    }
+    .pets_choice {
+        background-size: 130px 131px !important;
+    }
+}
+

@@ -1373,6 +1373,10 @@ input[type=number] {
     transform: translateY(-50%);
     top: 50%;
 }
+/** location autocomplete */
+.ui-autocomplete-input {
+    padding-right: 30px !important;
+}
 
 @media (max-width: 760px) {
     .custom_hc_widget_trigger {

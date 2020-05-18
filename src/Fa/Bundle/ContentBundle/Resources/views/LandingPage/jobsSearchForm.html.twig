@@ -47,11 +47,11 @@
 
                     </div>
                     <ul class="budget-box clearfix d-inline-flex">
-                        <li class="white-select">{{ form_widget(form.item__distance) }}</li>
-                        <li class="budget-to-caption">{{ 'from'|trans({}, 'frontend')}}</li>
-                        <li>
+                        <li class="miles-col white-select">{{ form_widget(form.item__distance) }}</li>
+                        <li class="from-col budget-to-caption">{{ 'from'|trans({}, 'frontend')}}</li>
+                        <li class="location-col">
                             {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'white-field'}}) }}
-                            <a href="javascript:void(0);" id="fa_landing_page_jobs_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close" style="right: 7%;top: 46%;">Close</a>
+                            <a href="javascript:void(0);" id="fa_landing_page_jobs_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
                         </li>
                     </ul>
                 </div>
