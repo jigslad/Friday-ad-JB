@@ -18,18 +18,18 @@
         <div class="item item-{{ sliderCount }}" data-equalizer-watch="">
             <div class="card custom-card">
                 <div>
-                    <a href="{{ adUrl }}" class="card-badge heart-badge">
+                    <a href="{{ adUrl }}" class="tricky-link">
                         {% if attribute(latestAd, constant(latestAdSolrMapping ~ 'TITLE')) is defined %}
                             {{trim_text(attribute(latestAd, constant(latestAdSolrMapping ~ 'TITLE')), 65)|raw}}
                         {% endif %}
                     </a>
                 </div>
                 {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, latestAd, '300X225', 1) %}
-                <div class="list-img {% if not imagePath %}similar-placeholder{% endif %}" style="padding:20px;">
+                <div class="list-img {% if not imagePath %}similar-placeholder{% endif %}">
                     {% if imagePath %}
-                        <img class="card-img-top" data-src="{{ imagePath }}" alt="{{ imageAltString }}" />
+                        <img class="card-img-top img-fluid" src="{{ imagePath }}" alt="{{ imageAltString }}" />
                     {% else %}
-                        <img class="card-img-top" data-src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
+                        <img class="card-img-top img-fluid" src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
                     {% endif %}
                 </div>
                 {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}
@@ -38,7 +38,7 @@
                             {{trim_text(attribute(latestAd, constant(latestAdSolrMapping ~ 'TITLE')), 65)|raw}}
                         {% endif %}
                     </h3>
-                    <div class="card-body pt0">
+                    <div class="card-body latest-ad-list-dim">
                         <div class="two-grid-col">
                             <div class="list-dimensions left">
                                 {% if adListFields|length %}
@@ -64,13 +64,13 @@
                             <p class="card-text text-right"><small class="text-muted">{{ adPropertyRepository.getRentPostFixText(attribute(latestAd, constant(latestAdSolrMapping ~ 'RENT_PER_ID')), container)}}</small></p>
                         {% endif %}
                     </div>
-                    <div class="card-body pt0">
+                    <div class="pad-none">
                         {% if attribute(latestAd, 'away_from_location') is defined and attribute(latestAd, 'away_from_location') %}
                             <div class="list-miles">
                                 {{ (attribute(latestAd, 'away_from_location') / 1.60934)|round }} {{ 'miles away'|trans({}, 'frontend-search-result')}}
                             </div>
                         {% endif %}
-                        <p class="card-text text-right">
+                        <p class="list-hr-ago card-text text-right">
                             {% if attribute(latestAd, constant(latestAdSolrMapping ~ 'PUBLISHED_AT')) is defined %}
                                 {{attribute(latestAd, constant(latestAdSolrMapping ~ 'PUBLISHED_AT'))|time_ago_in_words}}
                             {% endif %}
@@ -78,7 +78,7 @@
                     </div>
 
                 {% else %}
-                    <div class="card-body pt0">
+                    <div class="card-body pad-none">
                         <div class="two-grid-col">
                             <div class="list-price">
                                 {% if attribute(latestAd, constant(latestAdSolrMapping ~ 'PRICE')) is defined %}
@@ -87,7 +87,7 @@
                             </div>
                         </div>
                         {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') and attribute(latestAd, constant(latestAdSolrMapping ~ 'RENT_PER_ID')) is defined %}
-                        <p class="card-text text-right"><span class="text-muted">{{ adPropertyRepository.getRentPostFixText(attribute(latestAd, constant(latestAdSolrMapping ~ 'RENT_PER_ID')), container)}}</span></p>
+                        <p class="list-hr-ago card-text text-right"><span class="text-muted">{{ adPropertyRepository.getRentPostFixText(attribute(latestAd, constant(latestAdSolrMapping ~ 'RENT_PER_ID')), container)}}</span></p>
                         {% endif %}
                     </div>
                     <h3 class="card-title s-h3">

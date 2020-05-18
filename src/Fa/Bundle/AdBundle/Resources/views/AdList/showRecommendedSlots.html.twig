@@ -7,9 +7,9 @@
         <div class="media-left align-self-center">
             {% set imagePath = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getOtherImageUrl', [container, 'category_recommended_slots', recommendedSlotResult[slotIndex]['slot_filename']]) %}
             {% if imagePath %}
-                <div class="list-img list-placeholder"><img data-original="{{ imagePath }}" alt="{{ recommendedSlotResult[slotIndex]['title'] }}" class="lazy" src="{{ asset_url('facore/images/ajax_loader.gif') }}" /></div>
+                <div class="list-img list-placeholder"><img data-original="{{ imagePath }}" alt="{{ recommendedSlotResult[slotIndex]['title'] }}" class="lazy img-fluid" src="{{ asset_url('facore/images/ajax_loader.gif') }}" /></div>
             {% else %}
-                <div class="list-img"><img src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ recommendedSlotResult[slotIndex]['title'] }}" /></div>
+                <div class="list-img"><img class="img-fluid" src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ recommendedSlotResult[slotIndex]['title'] }}" /></div>
             {% endif %}
         </div>
     

@@ -73,8 +73,8 @@
     <div class="what-u-discover">
     <div class="container">
         <div class="row">
-            <div class="col-md-24">
-                <div class="discover-categories" style="margin-top: 0px;">
+            <div class="col-md-24 d-flex justify-content-center pad-none">
+                <div class="discover-categories">
                 {% set forSaleId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
                 {% set motorsId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}
                 {% set jobsId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
@@ -193,9 +193,9 @@
                                     {% set userName = userRepository.getUserProfileName(adUserId, container)~' - Friday-Ad' %}
                                     <div class="list-img">
                                         {% if userLogo %}
-                                            <img class="lazyOwl" src="{{ userLogo }}" alt="{{ userName }}" />
+                                            <img class="lazyOwl img-fluid m-auto" src="{{ userLogo }}" alt="{{ userName }}" />
                                         {% else %}
-                                            <img class="lazyOwl white-placeholder" src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ userName }}" />
+                                            <img class="lazyOwl img-fluid m-auto white-placeholder" src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ userName }}" />
                                         {% endif %}
                                     </div>
                                     <h3>
@@ -412,9 +412,9 @@
                 //headerParallax = $('#header_image_div').parallax({imageSrc: response.image, naturalWidth: response.width, naturalHeight: response.height});
                 $('.homepage-hero').css("background-image","url('"+response.image+"')");
                 if (response.phone_image && response.phone_image_url)
-                    $(".forsale-phone").html('<a href="'+response.phone_image_url+'"><img src="'+response.phone_image+'"></a>');
+                    $(".forsale-phone").html('<a href="'+response.phone_image_url+'"><img class="img-fluid" src="'+response.phone_image+'"></a>');
                 else if (response.phone_image)
-                    $(".forsale-phone").html('<img src="'+response.phone_image+'">');
+                    $(".forsale-phone").html('<img class="img-fluid" src="'+response.phone_image+'">');
             } else {
                 $('.homepage-hero').css('background-image',"{{ asset_url('/fafrontend/images/home-slider.png') }}");
             }

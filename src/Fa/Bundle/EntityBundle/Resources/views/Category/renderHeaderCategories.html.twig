@@ -26,12 +26,14 @@
                                         or categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID')
                                         or categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
                                         {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParam) %}
+                                    {% elseif categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+                        	            {% set listurl = path('fa_adult_homepage') %}
                                     {% else %}
                                         {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['full_slug']) %}
                                     {% endif %}
                                     <div class="category-links">
                                         <h6 class="link-head"><a href="{{ listurl }}">{{categoryArray['name']}}</a></h6>
-                                        {% if categoryArray['children'] is defined and categoryArray['children']|length %}
+                                        {% if categoryArray['children'] is defined and categoryArray['children']|length and categoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')  %}
                                             {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}
                                                 {% set staticPageUrls = fetch_repository('FaContentBundle:SeoTool').getLandingPageStaticPageUrlArray('motors', container, location_id) %}
                                                 {% set categoryArray  = append_to_array_by_index(categoryArray, {'10000': {'is_static': true, 'link_url' : (staticPageUrls['Classic cars']), 'link_text' : 'Classic Cars'}}, 'children') %}
@@ -106,12 +108,14 @@
                 or categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID')
                 or categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
                 {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParam) %}
+            {% elseif categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+                {% set listurl = path('fa_adult_homepage') %}
             {% else %}
                 {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['full_slug']) %}
             {% endif %}
                 <li class="nav-item dropdown d-navbar-block">
                     <a class="nav-link dropdown-toggle main_category" data-target="{{ listurl }}" href="{{ listurl }}" role="button" aria-haspopup="true" aria-expanded="false">{{categoryArray['name']}}</a>
-                    {% if categoryArray['children'] is defined and categoryArray['children']|length %}
+                    {% if categoryArray['children'] is defined and categoryArray['children']|length  and categoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
                         {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}
                             {% set staticPageUrls = fetch_repository('FaContentBundle:SeoTool').getLandingPageStaticPageUrlArray('motors', container, location_id) %}
                             {% set categoryArray  = append_to_array_by_index(categoryArray, {'10000': {'is_static': true, 'link_url' : (staticPageUrls['Classic cars']), 'link_text' : 'Classic Cars'}}, 'children') %}
@@ -176,7 +180,7 @@
      {# {% endcache %} #}
     {% endif %}
     <ul class="place-item d-none d-md-block">
-        <li class="place-item-btn text-center"><a class="primary-btn-1 btn desk-paa-btn" href="{{ path('ad_post_first_step') }}" title="{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}">{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}</a></li>
+        <li class="place-item-btn text-center"><a class="primary-btn-1 btn desk-paa-btn" href="{{ path('ad_post_first_step') }}" title="{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}">{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}</a></li>
     </ul>
 </div>
 
@@ -197,7 +201,11 @@
                                 {% set secondLevelLength = categoryArray['children']|length %}
                             {% endif %}
                             <li {% if secondLevelLength %}class="has-dropdown"{% else %}class="last-level"{% endif %}>
-                                {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['full_slug']) %}
+                            	{% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+                                	{% set listurl1 = path('fa_adult_homepage') %}
+                                {% else %}
+                                    {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['full_slug']) %}
+                                {% endif %}
                                 <a href="{{ listurl1 }}" class="remove-arrow-f-child">{% if categoryArray['class'] is defined %}<span class="{{categoryArray['class']}}">&nbsp;</span>{% endif %}{{categoryArray['name']}} <span>({{ categoryArray['count'] is defined?categoryArray['count']|number_format:0}} {{'ads'|trans()}})</span></a>
                                 {% if secondLevelLength %}
                                     <ul class="dl-submenu">

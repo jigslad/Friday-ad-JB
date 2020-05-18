@@ -26,7 +26,7 @@
                 {% else %}
                     {% set adCropBigImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserSiteImageUrl', [container, imageUserSiteId, userSiteImgObj.getPath(), userSiteImgObj.getHash(), '800X600']) %}
                 {% endif %}
-                <img id='user_site_crop_big_image' src="{{ adCropBigImageUrl }}?{{ random(1000) }}">
+                <img class="img-fluid" id='user_site_crop_big_image' src="{{ adCropBigImageUrl }}?{{ random(1000) }}">
             </div>
             <div class="photo-link">
                 <div class="row">

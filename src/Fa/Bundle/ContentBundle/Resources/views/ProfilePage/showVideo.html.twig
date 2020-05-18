@@ -5,7 +5,7 @@
             {% set youtubeVideoId = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getYouTubeVideoId', [userDetail["youtube_video_url"]]) %}
             {% set youtubeVideoImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getYouTubeViewImageUrl', [youtubeVideoId]) %}
             <a id="shopVideo" href="https://www.youtube.com/v/{{ youtubeVideoId }}">
-                <img alt="" src="{{ youtubeVideoImageUrl }}">
+                <img class="img-fluid" alt="" src="{{ youtubeVideoImageUrl }}">
             </a>
         </div>
     </div>

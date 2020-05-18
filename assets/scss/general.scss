@@ -312,29 +312,6 @@ ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {
     grid-auto-flow: row dense;
     padding: 0px;
 }
-.item {
-    position: relative;
-    display: -webkit-box;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    flex-direction: column;
-    -webkit-box-pack: end;
-    justify-content: flex-end;
-    box-sizing: border-box;
-    background: #EEF2F5;
-    color: #fff;
-    grid-column-start: auto;
-    grid-row-start: auto;
-    color: #fff;
-    /*background: url("images/car_thumb.jpg");*/
-    background-size: cover;
-    background-position: center;
-    cursor: pointer;
-}
-.item--full {
-    grid-column-end: auto;
-}
 .dl-menuwrapper li a span {
     color: $dark-grey;
 }
@@ -392,29 +369,6 @@ ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {
     grid-auto-flow: row dense;
     padding: 0px;
 }
-.item {
-    position: relative;
-    display: -webkit-box;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    flex-direction: column;
-    -webkit-box-pack: end;
-    justify-content: flex-end;
-    box-sizing: border-box;
-    background: #EEF2F5;
-    color: #fff;
-    grid-column-start: auto;
-    grid-row-start: auto;
-    color: #fff;
-    /*background: url("images/car_thumb.jpg");*/
-    background-size: cover;
-    background-position: center;
-    cursor: pointer;
-}
-.item--full {
-    grid-column-end: auto;
-}
 @media screen and (min-width: 320px) {
     .item--full {
         grid-column: 4/1;
@@ -454,29 +408,6 @@ ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {
     grid-auto-rows: 105px;
     grid-auto-flow: row dense;
     padding: 0px;
-}
-.item {
-    position: relative;
-    display: -webkit-box;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    flex-direction: column;
-    -webkit-box-pack: end;
-    justify-content: flex-end;
-    box-sizing: border-box;
-    background: #EEF2F5;
-    color: #fff;
-    grid-column-start: auto;
-    grid-row-start: auto;
-    color: #fff;
-    /*background: url("images/car_thumb.jpg");*/
-    background-size: cover;
-    background-position: center;
-    cursor: pointer;
-}
-.item--full {
-    grid-column-end: auto;
 }
 @media screen and (min-width: 320px) {
     .item--full {
@@ -923,8 +854,10 @@ ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {
 .landing-divider, .border-botttom { border-bottom: solid 1px $form-border-color; }
 .find-property .capsule-links a { background: $dark-grey; }
 .capsule-links a:hover, .capsule-links a.active { background: $secondary-color; }
-.custom-card .card-body { border-top: 1px solid $grey-color; }
 .custom-card .similar-placeholder { background-color: $light-grey-color; }
+
+.list-hr-ago, .list-dimensions { color: $dark-grey; }
+
 
 .dl-menuwrapper button {
     color: $white;
@@ -985,7 +918,10 @@ footer {
 	.category-links {
 	    border-bottom: 1px solid $black;
 	    box-shadow: 0 1px 0 $common-text-color;	    
-	}	
+	}
+        .copyright-text {
+	  color: $dark-grey;
+        }	
 }
 .site-search {
     background: $common-bg-color;
@@ -1015,7 +951,7 @@ footer {
 	color: $white;
 	fill: currentColor;
 	float: left;
-	background: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2215.3%22%20height%3D%2215.3%22%20viewBox%3D%22-4226.7%201392.2%2015.3%2015.3%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23FFFFFF%3B%7D%0D%0A%3C/style%3E%3Ctitle%3ESEARCH%20ICON%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch%20Beta.%3C/desc%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-4211.4%201406l-3.6-3.6c0.8-1.1%201.3-2.4%201.3-3.8%200-1.7-0.7-3.4-1.9-4.6%20-2.5-2.5-6.7-2.5-9.2%200%20-1.2%201.2-1.9%202.9-1.9%204.6s0.7%203.4%201.9%204.6c1.3%201.3%202.9%201.9%204.6%201.9%201.3%200%202.7-0.4%203.8-1.3l3.6%203.6L-4211.4%201406zM-4223.5%201401.7c-0.9-0.9-1.3-2-1.3-3.2%200-1.2%200.5-2.3%201.3-3.2%200.9-0.9%202-1.3%203.2-1.3%201.2%200%202.3%200.4%203.2%201.3%200.9%200.8%201.3%202%201.3%203.2%200%201.2-0.5%202.3-1.3%203.2C-4218.8%201403.5-4221.7%201403.5-4223.5%201401.7z%22/%3E%3C/svg%3E") no-repeat center center, linear-gradient(135deg, #A8DC28 0%, #79D378 100%) !important;
+	background: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2215.3%22%20height%3D%2215.3%22%20viewBox%3D%22-4226.7%201392.2%2015.3%2015.3%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23FFFFFF%3B%7D%0D%0A%3C/style%3E%3Ctitle%3ESEARCH%20ICON%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch%20Beta.%3C/desc%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-4211.4%201406l-3.6-3.6c0.8-1.1%201.3-2.4%201.3-3.8%200-1.7-0.7-3.4-1.9-4.6%20-2.5-2.5-6.7-2.5-9.2%200%20-1.2%201.2-1.9%202.9-1.9%204.6s0.7%203.4%201.9%204.6c1.3%201.3%202.9%201.9%204.6%201.9%201.3%200%202.7-0.4%203.8-1.3l3.6%203.6L-4211.4%201406zM-4223.5%201401.7c-0.9-0.9-1.3-2-1.3-3.2%200-1.2%200.5-2.3%201.3-3.2%200.9-0.9%202-1.3%203.2-1.3%201.2%200%202.3%200.4%203.2%201.3%200.9%200.8%201.3%202%201.3%203.2%200%201.2-0.5%202.3-1.3%203.2C-4218.8%201403.5-4221.7%201403.5-4223.5%201401.7z%22/%3E%3C/svg%3E") no-repeat center center, linear-gradient(135deg, $secondary-btn-l-color 0%, $secondary-btn-r-color 100%) !important;
     background-size: auto;
 	background-size: 16px 16px;
 }
@@ -1855,7 +1791,7 @@ footer p { color:$grey-color; }
     }
   }
   .accordion-navigation, dd {
-    border-bottom: solid 1px #CBD5D9 !important;
+    border-bottom: solid 1px $form-border-color !important;
     box-shadow: none !important;
    }
   .accordion-navigation > a, dd > a {
@@ -2122,6 +2058,8 @@ footer p { color:$grey-color; }
     background: $secondary-color;
 }
 .chcw_header a, .chcw_header a:hover, .chcw_header a:focus, .chcw_header a:active { color: $common-text-color !important; }
+.item { background: #EEF2F5; }
+
 @media only screen and (max-width: 640px) {
   .ad-list-block .reset-search{
     border-bottom: 1px solid $form-border-color;
@@ -2209,47 +2147,9 @@ footer p { color:$grey-color; }
 	}
 }
 
+@media (min-width: 320px) and (max-width: 640px) {
+   footer .mobile-footer-tab { box-shadow: inset 0 -1px 0 $text-color; }
 
-
-.logged-in-input-radius {
-  border-radius: 4px 0px 0px 4px !important;
-}
-.logged-in-btn-radius {
-  border-radius: 0px 4px 4px 0px !important;
-}
-.logged-out-btn-radius {
-  border-radius: 4px !important;
-}
-.media-grid-section {
-  display: grid;
-  grid-gap: 15px;
-  grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
-  grid-auto-rows: 105px;
-  grid-auto-flow: row dense;
-  padding: 0px;
-}
-.item {
-  position: relative;
-  display: -webkit-box;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  flex-direction: column;
-  -webkit-box-pack: end;
-  justify-content: flex-end;
-  box-sizing: border-box;
-  background: #EEF2F5;
-  color: #fff;
-  grid-column-start: auto;
-  grid-row-start: auto;
-  color: #fff;
-  /*background: url("images/car_thumb.jpg");*/
-  background-size: cover;
-  background-position: center;
-  cursor: pointer;
-}
-.item--full {
-  grid-column-end: auto;
 }
 @media screen and (min-width: 320px) {
   .item--full {

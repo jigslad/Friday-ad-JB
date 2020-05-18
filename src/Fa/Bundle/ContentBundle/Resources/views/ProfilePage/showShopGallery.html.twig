@@ -7,7 +7,7 @@
                 {% set userSiteBigImgUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSharedImageUrl', [fetch_container_instance(), userSiteImage.getPath(), userDetail["site_id"]~'_'~userSiteImage.getHash()~'_800X600.jpg']) %}
                 <div class="item">
                     <a class="item__details" rel="gallery1" href="{{ userSiteBigImgUrl }}">
-                        <img src="{{ userSiteSmallImgUrl }}" alt="" />
+                        <img class="img-fluid" src="{{ userSiteSmallImgUrl }}" alt="" />
                     </a>
                 </div>
             {% endfor %}

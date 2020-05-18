@@ -47,9 +47,9 @@
                             <div class="latest-shop-img">
                                 {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, ad, '300X225', 1) %}
                                 {% if imagePath %}
-                                    <img src="{{ imagePath }}" alt="{{ imageAltString }}" />
+                                    <img class="img-fluid" src="{{ imagePath }}" alt="{{ imageAltString }}" />
                                 {% else %}
-                                    <img src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ imageAltString }}" />
+                                    <img class="img-fluid" src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ imageAltString }}" />
                                 {% endif %}
                             </div>
                             <div class="latest-shop-price">

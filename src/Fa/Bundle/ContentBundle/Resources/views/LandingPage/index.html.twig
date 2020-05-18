@@ -67,7 +67,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col landing-header-content">
-                            <div class="cat-icon"><img src="{{ asset_url('fafrontend/images/' ~ category ~ '-hero-icon.svg') }}" alt="" /></div>
+                            <div class="cat-icon"></div>
                             {% if seoFields.h1_tag is defined %}
                                 {% set h1LocationString = '' %}
                                 {% if seoLocationName|lower != 'uk' and categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
@@ -100,7 +100,7 @@
             </div>
 
             {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}
-                <div class="homepage-row">
+                <div class="homepage-row pb20">
                     {% use "FaContentBundle:LandingPage:carSearchForm.html.twig" %}
                     {{ block('carSearchForm_html') }}
                 </div>
@@ -125,7 +125,7 @@
                                                 {% endif %}
                                             {% endif %}
                                             {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
-                                            <div class="col-md-8 col-lg-8">
+                                            <div class="col-12 col-md-8 col-lg-8">
                                                 <div class="item-box">
                                                     <a class="tricky-link" href="{{ listurl }}">
                                                         {% if imageInfo.file_name is defined %}
@@ -136,13 +136,13 @@
                                                     <div class="popular-graphic">
                                                         {% if imageInfo.overlay_file_name is defined %}
                                                             {% set imageOverlayUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.overlay_file_name]) %}
-                                                            <img alt="{{ imageInfo.overlay_file_name }}" src="{{ imageOverlayUrl }}">
+                                                            <img class="img-fluid" alt="{{ imageInfo.overlay_file_name }}" src="{{ imageOverlayUrl }}">
                                                         {% endif %}
                                                     </div>
                                                     <div class="explore-price">{{ adCount|number_format }}</div>
                                                     {% if imageInfo.file_name is defined %}
                                                         {% set imageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.file_name]) %}
-                                                        <img alt="{{ imageInfo.file_name }}" src="{{ imageUrl }}">
+                                                        <img class="img-fluid popular-graphic-img" alt="{{ imageInfo.file_name }}" src="{{ imageUrl }}">
                                                     {% endif %}
                                                 </div>
                                             </div>
@@ -191,7 +191,7 @@
                                             <div class="explore-price">{{ adCount|number_format }}</div>
                                             {% if imageInfo.file_name is defined %}
                                             	{% set imageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.file_name]) %}
-                                                <img alt="{{ imageInfo.file_name }}" src="{{ imageUrl }}">
+                                                <img class="img-fluid" alt="{{ imageInfo.file_name }}" src="{{ imageUrl }}">
                                             {% endif %}
                                         </div>
                                     </div>
@@ -229,7 +229,7 @@
                                                 {% endif %}
                                             {% endif %}
                                             {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
-                                            <div class="col-md-8 col-lg-8">
+                                            <div class="col-12 col-md-8 col-lg-8">
                                                 <div class="item-box">
                                                     <a class="tricky-link" href="{{ listurl }}">
                                                         {% if imageInfo.file_name is defined %}
@@ -240,13 +240,13 @@
                                                     <div class="popular-graphic">
                                                         {% if imageInfo.overlay_file_name is defined %}
                                                         	{% set imageOverlayUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.overlay_file_name]) %}
-                                                            <img alt="{{ imageInfo.overlay_file_name }}" src="{{ imageOverlayUrl }}">
+                                                            <img class="img-fluid" alt="{{ imageInfo.overlay_file_name }}" src="{{ imageOverlayUrl }}">
                                                         {% endif %}
                                                     </div>
                                                     <div class="explore-price">{{ adCount|number_format }}</div>
                                                     {% if imageInfo.file_name is defined %}
                                                         {% set imageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.file_name]) %}
-                                                        <img alt="{{ imageInfo.file_name }}" src="{{ imageUrl }}">
+                                                        <img class="img-fluid popular-graphic-img" alt="{{ imageInfo.file_name }}" src="{{ imageUrl }}">
                                                     {% endif %}
                                                 </div>
                                             </div>
@@ -300,9 +300,9 @@
                                                     {% set userName = shopName~' - Friday-Ad' %}
                                                     <div style="padding:20px;" class="border-botttom">
                                                         {% if userLogo %}
-                                                            <img class="card-img-top" data-src="{{ userLogo }}" alt="{{ userName }}" />
+                                                            <img class="card-img-top img-fluid" src="{{ userLogo }}" alt="{{ userName }}" />
                                                         {% else %}
-                                                            <img class="card-img-top" data-src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ userName }}" />
+                                                            <img class="card-img-top img-fluid" src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ userName }}" />
                                                         {% endif %}
                                                     </div>
                                                     <div class="card-body pt0">
@@ -339,7 +339,7 @@
                                                 {% endif %}
                                             {% endif %}
                                             {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
-                                            <div class="col-md-8 col-lg-6">
+                                            <div class="col-12 col-md-8 col-lg-6">
                                                 <div class="item-box">
                                                     <a class="tricky-link" href="{{ listurl }}">
                                                         {% if imageInfo.file_name is defined %}
@@ -350,13 +350,13 @@
                                                     <div class="popular-graphic">
                                                         {% if imageInfo.overlay_file_name is defined %}
                                                         	{% set imageOverlayUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.overlay_file_name]) %}
-                                                            <img alt="{{ imageInfo.overlay_file_name }}" src="{{ imageOverlayUrl }}">
+                                                            <img class="img-fluid" alt="{{ imageInfo.overlay_file_name }}" src="{{ imageOverlayUrl }}">
                                                         {% endif %}
                                                     </div>
                                                     <div class="explore-price">{{ adCount|number_format }}</div>
                                                     {% if imageInfo.file_name is defined %}
                                                         {% set imageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.file_name]) %}
-                                                        <img alt="{{ imageInfo.file_name }}" src="{{ imageUrl }}">
+                                                        <img class="img-fluid popular-graphic-img" alt="{{ imageInfo.file_name }}" src="{{ imageUrl }}">
                                                     {% endif %}
                                                 </div>
                                             </div>
@@ -419,7 +419,7 @@
                                             {% endif %}
                                         {% endif %}
                                         {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
-                                        <div class="col-md-8 col-lg-6">
+                                        <div class="col-12 col-md-8 col-lg-6">
                                             <div class="item-box">
                                                 <a class="tricky-link" href="{{ listurl }}">
                                                     {% if imageInfo.file_name is defined %}
@@ -430,13 +430,13 @@
                                                 <div class="popular-graphic">
                                                     {% if imageInfo.overlay_file_name is defined %}
                                                         {% set imageOverlayUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.overlay_file_name]) %}
-                                                        <img alt="{{ imageInfo.overlay_file_name }}" src="{{ imageOverlayUrl }}">
+                                                        <img class="img-fluid" alt="{{ imageInfo.overlay_file_name }}" src="{{ imageOverlayUrl }}">
                                                     {% endif %}
                                                 </div>
                                                 <div class="explore-price">{{ adCount|number_format }}</div>
                                                 {% if imageInfo.file_name is defined %}
                                                     {% set imageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.file_name]) %}
-                                                    <img alt="{{ imageInfo.file_name }}" src="{{ imageUrl }}">
+                                                    <img class="img-fluid popular-graphic-img" alt="{{ imageInfo.file_name }}" src="{{ imageUrl }}">
                                                 {% endif %}
                                             </div>
                                         </div>
@@ -490,7 +490,7 @@
                                         <div class="explore-price">{{ adCount|number_format }}</div>
                                         {% if imageInfo.file_name is defined %}
                                             {% set imageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.file_name]) %}
-                                            <img alt="{{ imageInfo.file_name }}" src="{{ imageUrl }}">
+                                            <img class="img-fluid" alt="{{ imageInfo.file_name }}" src="{{ imageUrl }}">
                                         {% endif %}
                                     </div>
                                 </div>
@@ -543,9 +543,9 @@
                                                     <div class="card custom-card">
                                                         <div style="padding:20px;" class="border-botttom">
                                                             {% if userLogo %}
-                                                                <img class="card-img-top" src="{{ userLogo }}" alt="{{ userName }}" />
+                                                                <img class="card-img-top img-fluid" src="{{ userLogo }}" alt="{{ userName }}" />
                                                             {% else %}
-                                                                <img class="card-img-top" src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ userName }}" />
+                                                                <img class="card-img-top img-fluid" src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ userName }}" />
                                                             {% endif %}
                                                         </div>
                                                         <div class="card-body pt0">
@@ -681,7 +681,7 @@
                                             <div class="explore-price">{{ adCount|number_format }}</div>
                                             {% if imageInfo.file_name is defined %}
                                                 {% set imageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.file_name]) %}
-                                                <img alt="{{ imageInfo.file_name }}" src="{{ imageUrl }}">
+                                                <img class="img-fluid" alt="{{ imageInfo.file_name }}" src="{{ imageUrl }}">
                                             {% endif %}
                                         </div>
                                     </div>

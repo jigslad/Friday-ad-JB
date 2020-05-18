@@ -21,10 +21,10 @@
             <div class="adimg-thumb" style="position:relative">
             {% if isCompany is defined and isCompany == true and imageObj.path %}
                 {% set imageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserCompanyLogoUrl', [container, userId, imageObj.path]) %}
-                <img alt="{{userId}}.jpg" src="{{ imageUrl }}?{{ random(1000) }}" />
+                <img class="img-fluid" alt="{{userId}}.jpg" src="{{ imageUrl }}?{{ random(1000) }}" />
             {% else %}
                 {% set imageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserImageUrl', [container, userId, imageObj.image]) %}
-                <img alt="{{userId}}.jpg" src="{{ imageUrl }}?{{ random(1000) }}" />
+                <img class="img-fluid" alt="{{userId}}.jpg" src="{{ imageUrl }}?{{ random(1000) }}" />
             {% endif %}
             </div>
             <div>

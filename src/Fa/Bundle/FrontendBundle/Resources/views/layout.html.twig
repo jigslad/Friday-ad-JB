@@ -37,7 +37,9 @@
     {% if ((app.request.uri == container.getParameter('base_url')~'/bristol/') and app.request.get('ti_url')) %}
         {% set showTiPopup = true %}
     {% endif %}
-
+    {% if not app.request.cookies.has('is_over_18') and currentRoute == 'fa_adult_homepage' %}
+    	{% set showAdultPopup = 1 %}
+    {% endif %}
     {% if not app.request.cookies.has('is_over_18') and searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
         {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(searchParams.item__category_id, false, fetch_container_instance()) %}
         {% set catCnt = 0 %}
@@ -299,29 +301,20 @@
         {{ include('FaAdBundle:AdList:topSearchJs.html.twig', {'currentRoute':currentRoute}) }}
 
         {% block scriptbottom %}{% endblock %}
-
-        {% if status_code == 200 %}
-            {% set showFooterFlag = true %}
-            {% set showMblFooterFlag = false %}
-            {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() and currentRoute in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote'} %}
-                {% set showMblFooterFlag = true %}
-                {% set showFooterFlag = false %}
-            {% endif %}
-            {% if showFooterFlag %}
-            	{% if searchParams is not defined %}
-            		{% set searchParams = [] %}
-            	{% endif %}
-                {{ include('FaFrontendBundle::footer.html.twig', {'searchParams':searchParams}) }}
-            {% else %}
-                {% if showMblFooterFlag %}
-                    {% if searchParams is not defined %}
-                        {% set searchParams = [] %}
-                    {% endif %}
-                    {{ include('FaFrontendBundle::mobile-footer.html.twig', {'searchParams':searchParams}) }}
-                {% endif %}
-            {% endif %}
+		{% if (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration',4: 'show_draft_ad',5: 'ad_package_purchase',6: 'show_cart',7: 'cybersource_checkout'}) %}
+                {{ include('FaFrontendBundle::paaFooter.html.twig') }}
         {% else %}
-            {{ include('FaFrontendBundle::userLocation.html.twig') }}
+            {% if status_code == 200 %}
+                {% set showFooterFlag = true %}
+                {% if showFooterFlag %}
+                	{% if searchParams is not defined %}
+                		{% set searchParams = [] %}
+                	{% endif %}
+                    {{ include('FaFrontendBundle::footer.html.twig', {'searchParams':searchParams}) }}
+                {% endif %}
+            {% else %}
+                {{ include('FaFrontendBundle::userLocation.html.twig') }}
+            {% endif %}
         {% endif %}
 
         {% if (showAdultPopup == 1) %}
@@ -394,7 +387,7 @@
             </style>
            <div id="tradeitModal" class="reveal-modal tiny r-product-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
                 <div class="modal-block center">
-                    <div class="center r-logo"><img src="{{ asset_url('fafrontend/images/fad-ti-logo.png') }}" alt=""></div>
+                    <div class="center r-logo"><img class="img-fluid" src="{{ asset_url('fafrontend/images/fad-ti-logo.png') }}" alt=""></div>
                     <p class="para">Trade-It has a new look. Welcome to Friday-Ad.</p>
                     <button class="button btn-tellme"><a href="http://promotions.friday-ad.co.uk/tifad/" target="_blank">Tell me more</a></button>
                     <a href="javascript:void(0)" class="close-reveal-modal r-close" aria-label="Close" style="">&#215;</a>
