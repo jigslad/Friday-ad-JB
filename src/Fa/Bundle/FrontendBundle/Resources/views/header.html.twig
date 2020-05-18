@@ -87,7 +87,7 @@
                     <ul class="clearfix">
                         <li><a href="{{ path('login') }}" id="login-header-id">{{'Log In'|trans({}, 'frontend-header-usermenu')}}</a>|</li>
                         <li><a href="{{ path('fa_user_register') }}" id="register-header-id">{{'Register'|trans({}, 'frontend-header-usermenu')}}</a>|</li>
-                        <li><a href="/contact-us">{{'Contact Us'|trans({}, 'frontend-header-usermenu')}}</a></li>
+                        {# <li><a href="/contact-us">{{'Contact Us'|trans({}, 'frontend-header-usermenu')}}</a></li> #}
                     </ul>
                 {% endif %}
                 </div>
@@ -258,10 +258,10 @@
                                 </div>
                                 {% else %}
                                     <div class="m-navbar-block">
-                                        <ul class="d-block d-md-none login-menu">
+                                        <ul class="d-block d-md-none login-menu login-reg-flex">
                                             <li><a href="{{ path('login') }}" id="mob-login-header-id">{{'Log In'|trans({}, 'frontend-top-menu')}}</a></li>
                                             <li><a href="{{ path('fa_user_register') }}" id="mob-register-header-id">{{'Register'|trans({}, 'frontend-top-menu')}}</a></li>
-                                            <li><a href="/contact-us">{{'Contact Us'|trans({}, 'frontend-header-usermenu')}}</a></li>
+                                            {# <li><a href="/contact-us">{{'Contact Us'|trans({}, 'frontend-header-usermenu')}}</a></li> #}
                                         </ul>
                                     </div>
                                 {% endif %}

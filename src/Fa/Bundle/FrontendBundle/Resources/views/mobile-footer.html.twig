@@ -1,127 +1,20 @@
-<footer id="footer_tag" class="d-none">
+<footer id="footer_tag">
 <div class="container">
-<div class="row d-block d-md-none">
-    <div class="col">
-        <a href="{{ path('ad_post_first_step') }}" title="Place an ad" class="primary-btn-1 button btn-block">Place An Ad</a>
-    </div>
-
-    <div id="mobile-footer-content" class="col">
-        <div class="mobile-footer-tab">
-          <input id="item-1" type="checkbox" class="mobile-footer-input" name="aspect">
-          <label for="item-1" class="mobile-footer-label"></label>
-          <div class="mobile-footer-content">
-            <div class="mobile-footer-info">
-                <span class="mobile-footer-name">Can we help?</span>
-            </div>
-            <div class="mobile-footer-stat">
-                <div>
-                    <span class=""><img src="assets/sidemenu/notifications.svg" alt="" class="bell"></span>
+        <div class="row">
+            <div class="help-links" style="margin: 10px 40px 0;">
+                <h6 class="footer-head">Can we help?</h6>
+                <div style="column-count: 2;  margin-bottom: 5px!important;">
+                    {{ render(controller('FaContentBundle:StaticPage:renderMobileStaticPageLink', {'currentRoute': currentRoute})) }}
                 </div>
             </div>
-          </div>
-          	<div class="mobile-footer-tab-content">
-              	<div class="inside-cont">
-	               	<div class="help-links mt0">
-		               <a href="https://blog.friday-ad.co.uk/" target="_blank">{{ 'Blog'|trans({}, 'frontend-footer') }}</a>
-                        {{ render(controller('FaContentBundle:StaticPage:renderStaticPageLink', {'currentRoute': currentRoute})) }}
-                        <a href="{{ path('show_all_locations') }}">{{ 'Locations'|trans({}, 'frontend-footer') }}</a>
-                        <a href="{{ path('testimonials') }}">{{ 'Testimonials'|trans({}, 'frontend-footer') }}</a>
-                    </div>
-              	</div>
-          	</div>
         </div>
-        <div class="mobile-footer-tab">
-          <input id="item-2" type="checkbox" class="mobile-footer-input" name="aspect">
-          <label for="item-2" class="mobile-footer-label"></label>
-          <div class="mobile-footer-content">
-            <div class="mobile-footer-info">
-                <span class="mobile-footer-name">Categories</span>
-            </div>
-          </div>
-          <div class="mobile-footer-tab-content">
-              <div class="inside-cont">
-                {{ render(controller('FaEntityBundle:Category:renderFooterCategories', {'location': (currentRoute == 'listing_page' ? app.request.get('location') : null), 'searchParams': searchParams})) }}				
-              </div>
-          </div>
-        </div>
-        <div class="mobile-footer-tab">
-          <input id="item-3" type="checkbox" class="mobile-footer-input" name="aspect">
-          <label for="item-3" class="mobile-footer-label"></label>
-          <div class="mobile-footer-content">
-            <div class="mobile-footer-info">
-                <span class="mobile-footer-name">Our community</span>
-            </div>
-          </div>
-          <div class="mobile-footer-tab-content">
-              <div class="inside-cont">
-                <a href="https://blog.friday-ad.co.uk/" target="_blank">list</a>
-              </div>
-          </div>
-        </div>
-        <div class="mobile-footer-tab">
-          <input id="item-4" type="checkbox" class="mobile-footer-input" name="aspect">
-          <label for="item-4" class="mobile-footer-label"></label>
-          <div class="mobile-footer-content">
-            <div class="mobile-footer-info">
-                <span class="mobile-footer-name">Read this week’s Friday Ad online</span>
-            </div>
-          </div>
-          <div class="mobile-footer-tab-content">
-              <div class="inside-cont">
-                    <a href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=c50972b1-d10a-4356-84e2-8d09a3530b93" target="_blank">Brighton</a>
-                    <a href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=398dcec4-2114-410f-8484-943e89602ad0" target="_blank">Crawley</a>
-                    <a href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=7297cfac-ef93-4fba-95af-dd8a02f632fd" target="__blank">Eastbourne</a>
-                    <a href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=8fb5f3d9-7213-417f-9b15-bae6c6daad59" target="_blank">Hastings</a>
-                    <a href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=207e2563-a527-43a0-add9-d15eb349790f" target="_blank">Seaford</a>
-                    <a href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=32dc5305-7502-4d5e-8ea3-938521ae57db" target="__blank">Tunbridge Wells</a>
-                    <a href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=2e098523-cbbf-4254-8f7c-f73b46aaa4c4" target="_blank">Uckfield</a>
-                    <a href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=26c9ade6-0fd7-464c-9944-88bd7b54f8bf" target="_blank">Worthing</a>
-	          </div>
-          </div>
-        </div>
-        <div class="mobile-footer-tab">
-          <input id="item-5" type="checkbox" class="mobile-footer-input" name="aspect">
-          <label for="item-5" class="mobile-footer-label"></label>
-          <div class="mobile-footer-content">
-            <div class="mobile-footer-info">
-                <span class="mobile-footer-name">Subscribe to our newsletter</span>
-            </div>
-          </div>
-          <div class="mobile-footer-tab-content">
-              <div class="inside-cont">
-              	  {{ render(controller('FaUserBundle:Newsletter:footerNewsletter')) }}
-              </div>
-          </div>
-        </div>
-        <div style="padding: 20px 20px; border-bottom: 1px solid #000; box-shadow: inset 0 -1px 0 #4A4A4A;">
-	        <h6 class="footer-head-new">Find us on:</h6>
-            <div class="footer-icons">
-                <a href="{{container.getParameter('fa.footer.facebook.page.link')}}" class="facebook" target="_blank" title="{{ 'Facebook'|trans({}, 'frontend-footer') }}">{{ 'Facebook'|trans({}, 'frontend-footer') }}</a>
-                <a href="{{container.getParameter('fa.footer.twitter.page.link')}}" class="twitter" target="_blank" title="{{ 'Twitter'|trans({}, 'frontend-footer') }}">{{ 'Twitter'|trans({}, 'frontend-footer') }}</a>
-                <a href="{{container.getParameter('fa.footer.instagram.page.link')}}" class="instagram" target="_blank" title="{{ 'Instagram'|trans({}, 'frontend-footer') }}">{{ 'Instagram'|trans({}, 'frontend-footer') }}</a>
-            </div>
-        </div>
-        <div class="p10">
-	        <img src="images/review.png" alt="">
-        </div>
-
-        <div class="m-fad-logo fad-logo">
-	        <span>F-Ad</span>
-	    </div> 
-
-        <div class="copyright-block">
-            <div class="copyright-text">
-            	<span>Friday-Ad Limited</span><br>
-            	(Operated & published by Friday Media Group)
- 					London Road, Sayers Common, 
-				West Sussex, BN6 9HS - Copyright 2020
-            </div>
-        </div>
-        
     </div>
-</div>
-</div>
+
+    <div class="fad-logo">
+        <span>F-Ad</span>
+    </div>
 </footer>
+ {{ include('FaFrontendBundle::userLocation.html.twig') }}
 {% block scriptbottom %}
     <script language="javascript" type="text/javascript">
         //<![CDATA[
