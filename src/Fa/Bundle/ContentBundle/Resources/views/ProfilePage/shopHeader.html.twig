@@ -21,7 +21,7 @@
             <div class="container">
                 <div class="row">
                     <div class="cover-img-edit dropdown show">
-                        <a href="javascript:void(0);" id="shop_banner_anchhor" data-dropdown="banner_image_upload" aria-controls="banner_image_upload" aria-expanded="false" class="photo-icon thin-btn dropdown-toggle "><label>{{'Change image'|trans({}, 'frontend-my-profile')}}</label></a>
+                        <a href="javascript:void(0);" id="shop_banner_anchhor" data-toggle="dropdown" data-dropdown="banner_image_upload" aria-controls="banner_image_upload" aria-expanded="false" class="photo-icon thin-btn dropdown-toggle "><label>{{'Change image'|trans({}, 'frontend-my-profile')}}</label></a>
                         <ul class="dropdown-menu" id="banner_image_upload" data-dropdown-content class="f-dropdown" aria-hidden="true">
                             <li class="dropdown-item"><a class="needsclick" href="javascript:void(0);" data-reveal-id="shopBannerModal">{{'Choose image'|trans({}, 'frontend-my-profile')}}</a></li>
                             {% if currentDevice != 'M'%}
@@ -50,11 +50,25 @@
 
                         {% if allowProfileEdit %}
                             <div class="profile-box" id="profile_change_btn_with_opt" {% if not userSiteObj.getPath() %}style="display:none;"{% endif %}>
-                                <a href="javascript:void(0);" id="profile_change_btn_with_opt_anchor" data-dropdown="profile_image_upload" aria-controls="profile_image_upload" aria-expanded="false" class="photo-icon thin-btn dropdown pickProfileFile needsclick "><label>{{'Change image'|trans({}, 'frontend-my-profile')}}</label></a>
-                                <ul id="profile_image_upload" data-dropdown-content class="f-dropdown" aria-hidden="true">
-                                    <li><a href="javascript:void(0)" class="pickProfileFile needsclick" id="pickProfileFile">{{'Upload profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
-                                    <li><a href="javascript:getProfileBigImage('{{ path(getProfileBigImageRoute, {'userId': app.user.getId(), 'isCompany': 1}) }}')">{{'Edit profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
-                                    <li><a href="javascript:deleteProfileImage('{{ path(deleteRoute, {'userId': app.user.getId(), 'isCompany': 1}) }}')">{{'Remove'|trans({}, 'frontend-my-profile')}}</a></li>
+                                <a class="photo-icon thin-btn dropdown-toggle" id="profile_change_btn_with_opt_anchor" data-toggle="dropdown" aria-expanded="false">
+                                    <label>{{'Change image'|trans({}, 'frontend-my-profile')}}</label>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="profile_change_btn_with_opt_anchor">
+                                    <li class="dropdown-item">
+                                        <a class="pickProfileFile needsclick" id="pickProfileFile">
+                                            {{'Upload profile photo'|trans({}, 'frontend-my-profile')}}
+                                        </a>
+                                    </li>
+                                    <li class="dropdown-item">
+                                        <a onclick="getProfileBigImage('{{ path(getProfileBigImageRoute, {'userId': app.user.getId(), 'isCompany': 1}) }}')">
+                                            {{'Edit profile photo'|trans({}, 'frontend-my-profile')}}
+                                        </a>
+                                    </li>
+                                    <li class="dropdown-item">
+                                        <a onclick="deleteProfileImage('{{ path(deleteRoute, {'userId': app.user.getId(), 'isCompany': 1}) }}')">
+                                            {{'Remove'|trans({}, 'frontend-my-profile')}}
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                             <div class="profile-box" id="profile_change_btn_without_opt" {% if userSiteObj.getPath() %}style="display:none;"{% endif %}>

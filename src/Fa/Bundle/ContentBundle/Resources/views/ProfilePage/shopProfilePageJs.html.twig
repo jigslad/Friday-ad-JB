@@ -1,17 +1,6 @@
-{# {% javascripts filter='uglifyjs2' output='bundles/js/compiled/shopProfilePageJs_v1.js'
-    'bundles/facore/js/googleMap.js'
-    'bundles/facore/js/jquery.fancybox.pack.js'
-    'bundles/facore/js/owl.carousel.min.js'
-    'bundles/facore/js/notify.min.js'
-%} #}
-{% javascripts filter='uglifyjs2' output='bundles/js/compiled/shopProfilePageJs_v1.js'
-    'bundles/facore/js/jquery.fancybox.pack.js'
-    'bundles/facore/js/owl.carousel.min.js'
-    'bundles/facore/js/notify.min.js'
-%}
-<script src="{{ static_asset_url(asset_url) }}?v=1"></script>
-{% endjavascripts %}
-
+<script src="{{ asset('js/jquery.fancybox.pack.js') }}?v=1"></script>
+<script src="{{ asset('js/owl.carousel.min.js') }}?v=1"></script>
+<script src="{{ asset('js/notify.min.js') }}?v=1"></script>
 {{ include('FaContentBundle:ProfilePage:showUserReviewJs.html.twig') }}
 <script language="javascript" type="text/javascript">
     //<![CDATA[
