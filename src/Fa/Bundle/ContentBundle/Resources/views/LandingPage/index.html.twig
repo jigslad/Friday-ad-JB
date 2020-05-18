@@ -775,7 +775,7 @@
                             {% set totalColumns = 4 %}
                             {% set choicesPerColumn = (totalChoices / totalColumns)|round(0, 'ceil') %}
                             {% set choiceCount = 0 %}
-                            <ul class="link-list">
+                            <ul class="link-list motors-cars-list">
                                 {% for catId, adCount in topCarMakes %}
                                     {% set queryParams = searchParams %}
                                     {% set queryParams = queryParams|merge({'item__category_id': (catId)}) %}

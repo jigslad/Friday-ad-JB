@@ -488,7 +488,7 @@ cursor: pointer;
     .landing-header .landing-header-content {
         position: absolute;
     }
-    .list-location-box .link-list { column-count: 2 !important; }
+    
     .homepage-title {
 	    font-size: 18px !important;
 	    line-height: 24px !important;
@@ -496,6 +496,7 @@ cursor: pointer;
 	    font-weight: normal !important;
 	    margin: 0 0px 20px !important;
     }
+   .motors-cars-list { column-count: 2 !important; }
    .jobs-link-list { column-count: 1 !important; }
 
 }
