@@ -378,20 +378,20 @@
 
 
 <div class="modal custom-modal" id="markAdAsInactiveModal">
-    <div class="modal-dialog modal-md">
+    <div class="modal-dialog modal-md model-fix-width">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title save-search-title">{{'Remove ad'|trans({}, 'frontend-manage-my-ad')}}</h5>
+                <h5 class="modal-title no-icon-title">{{'Remove ad'|trans({}, 'frontend-manage-my-ad')}}</h5>
                 <button class="close-modal" class="close" data-dismiss="modal">×</button>
             </div>
             <div class="modal-body">
                 <h5>{{'Are you sure that you want to permanently delete this advert?'|trans({}, 'frontend-manage-my-ad')}}</h5>
                 <div class="mt20 remove-item-btn">
                     <div class="row">
-                        <div class="large-12 columns">
+                        <div class="col-md-12">
                             <button type="button" class="button secondary-btn-2 thin-btn expand" onclick="closeRevealModel('#markAdAsInactiveModal');changeAdStatus('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_INACTIVE_ID')}}');">{{'Delete'|trans({}, 'frontend-manage-my-ad')}}</button>
                         </div>
-                        <div class="large-12 columns">
+                        <div class="col-md-12">
                             <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="closeRemoveAdConfirmationBox('markAdAsInactiveModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
                         </div>
                     </div>
