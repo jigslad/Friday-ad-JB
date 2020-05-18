@@ -293,7 +293,7 @@
                                             {% set adUserId = featuredEmployer['id'] %}
                                             {% set shopName = userRepository.getUserProfileName(adUserId, container) %}
                                             {% set profilePageUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(adUserId) %}
-                                            <div class="item" data-equalizer-watch>
+                                            <div class="item f-width" data-equalizer-watch>
                                                 <div class="card custom-card">
                                                     <a class="tricky-link" href="{{ profilePageUrl }}">{{ shopName }}</a>
                                                     {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), adUserId, true, true]) %}
@@ -536,7 +536,7 @@
                                             {% set adUserId = popularShop['id'] %}
                                             {% set shopName = popularShop['shop_name'] %}
                                             {% set profilePageUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(adUserId) %}
-                                            <div class="item" data-equalizer-watch>
+                                            <div class="item f-width" data-equalizer-watch>
                                                 {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), adUserId, true, true]) %}
                                                 {% set userName = userRepository.getUserProfileName(adUserId, container)~' - Friday-Ad' %}
                                                 <a href="{{ profilePageUrl }}">
