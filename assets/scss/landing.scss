@@ -405,6 +405,11 @@ cursor: pointer;
     margin: 0 20px 20px 0px !important;
 }
 // Animals
+@media (min-width: 641px) {
+     .owl-carousel .item {
+	width: 100% !important;
+     }
+}
 .owl-carousel .item .custom-card {
     border: 0px !important;
 }
@@ -485,12 +490,7 @@ cursor: pointer;
 	    margin: 0 0px 20px !important;
     }
    .jobs-link-list { column-count: 1 !important; }
-   .popular-items .item-box {
-	    height: 160px !important;
-	}
-	popular-items .item-box {
-	    height: 160px;
-	}
+
 }
 
 @media (min-width: 641px) and (max-width: 759px) {

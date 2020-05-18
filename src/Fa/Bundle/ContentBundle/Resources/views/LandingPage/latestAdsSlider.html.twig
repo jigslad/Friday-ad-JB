@@ -15,7 +15,7 @@
             {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], latestAd]) %}
         {% endif %}
         {% set sliderCount = sliderCount + 1 %}
-        <div class="item item-{{ sliderCount }} f-width" data-equalizer-watch="">
+        <div class="item item-{{ sliderCount }} m-auto" data-equalizer-watch="">
             <div class="card custom-card">
                 <div>
                     <a href="{{ adUrl }}" class="tricky-link">
