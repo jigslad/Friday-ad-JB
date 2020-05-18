@@ -409,7 +409,13 @@ cursor: pointer;
      .owl-carousel .item {
 	width: 100% !important;
         height: 100% !important;
+	-webkit-box-pack: start !important;
+        justify-content: flex-start  !important;
+    
      }
+}
+@media (max-width: 641px) {
+     .owl-carousel .item { min-width: 250px; max-width: 250px; }
 }
 .owl-carousel .item .custom-card {
     border: 0px !important;
