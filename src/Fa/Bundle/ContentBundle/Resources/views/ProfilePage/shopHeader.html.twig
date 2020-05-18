@@ -23,9 +23,17 @@
                     <div class="cover-img-edit dropdown show">
                         <a href="javascript:void(0);" id="shop_banner_anchhor" data-toggle="dropdown" data-dropdown="banner_image_upload" aria-controls="banner_image_upload" aria-expanded="false" class="photo-icon thin-btn dropdown-toggle "><label>{{'Change image'|trans({}, 'frontend-my-profile')}}</label></a>
                         <ul class="dropdown-menu" id="banner_image_upload" data-dropdown-content class="f-dropdown" aria-hidden="true">
-                            <li class="dropdown-item"><a class="needsclick" href="javascript:void(0);" data-reveal-id="shopBannerModal">{{'Choose image'|trans({}, 'frontend-my-profile')}}</a></li>
+                            <li class="dropdown-item">
+                                <a class="needsclick" href="javascript:void(0);" data-toggle="modal" data-target="#shopBannerModal">
+                                    {{'Choose image'|trans({}, 'frontend-my-profile')}}
+                                </a>
+                            </li>
                             {% if currentDevice != 'M'%}
-                                <li class="dropdown-item"><a class="needsclick" href="javascript:void(0);" onclick="return getUserSiteBannerOriginalImage('{{ path(bigImageRoute, {'userSiteId': userSiteObj.getId()}) }}', true);" id="edit_banner_btn">{{'Edit'|trans({}, 'frontend-my-profile')}}</a></li>
+                                <li class="dropdown-item">
+                                    <a class="needsclick" href="javascript:void(0);" onclick="return getUserSiteBannerOriginalImage('{{ path(bigImageRoute, {'userSiteId': userSiteObj.getId()}) }}', true);" id="edit_banner_btn">
+                                        {{'Edit'|trans({}, 'frontend-my-profile')}}
+                                    </a>
+                                </li>
                             {% endif %}
                         </ul>
                     </div>
