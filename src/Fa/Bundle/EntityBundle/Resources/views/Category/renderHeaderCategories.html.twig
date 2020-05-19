@@ -283,8 +283,15 @@
                                     	<li class="last-level">
                                     		{% if thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox %}
                                         		<a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" >Live Sex Cams</a>
-                                        	{% else %}
+                                    		{% else %}
                                         		<a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" >Live Sex Cams</a>
+                            	            {% endif %}
+                                		</li>
+                                		<li class="last-level">
+                                    		{% if thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox %}
+                                        	    <a href="https://engine.partylemons.com/?414907182" rel="nofollow" target="_blank" >MILF Hookups</a>
+                                    		{% else %}
+                                        		<a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" >MILF Hookups</a>
                             	            {% endif %}
                                 		</li>
                                      {% endif %}
