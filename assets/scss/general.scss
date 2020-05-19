@@ -968,9 +968,8 @@ footer {
     margin: 0 0 5px;
     background: $white;
     font-size: 14px;
-    line-height: 18px;
-
-    border-radius: $border-radius;
+    line-height: 18px;s
+    border-radius: 0;
 }
 .site-search .ad-category-list .btn-outline-secondary {
 	background: $white;
@@ -1098,7 +1097,7 @@ footer {
 .ui-menu.keyword-choices .ui-menu-item span, .ui-menu.category-choices .ui-menu-item div span { color:$secondary-btn-l-color; }
 .ui-menu.category-choices .ui-menu-item{ box-shadow:0 1px 0 $grey-color; }
 .ui-menu.category-choices .ui-menu-item:hover{ color:$common-text-color }
-.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover { color: $common-text-color ; }
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover { color: $common-text-color !important; }
 .select2-drop, .ui-autocomplete { border: 1px solid $grey-color;background: $light-grey-color; }
 .select2-results li, .ui-autocomplete li { box-shadow: 0 1px 0 $grey-color; }
 .enquire-tooltip { background: $light-grey-color; border: 1px solid $grey-color; color: $dark-grey; }
