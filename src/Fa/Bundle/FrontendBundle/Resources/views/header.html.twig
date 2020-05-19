@@ -10,7 +10,7 @@
     }
     </style>
 {% endif %} 
-<div>
+<div class="homesticky">
     {% if status_code == 200 %}
         {% if currentRoute == 'ad_detail_page' %}
             {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_ABOVE_HEADER') %}
@@ -285,9 +285,10 @@
         </div>
     </div>
    {% endif %}
-    {% if status_code == 200 %}
-        {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'cybersource_checkout', 3: 'ad_post_first_step',4:'ad_post_second_step' ,5:'ad_post_third_step' ,6:'ad_post_fourth_step'} %}
-            {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {} } )) }}
-        {% endif %}
-    {% endif %}
 </div>
+{% if status_code == 200 %}
+    {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'cybersource_checkout', 3: 'ad_post_first_step',4:'ad_post_second_step' ,5:'ad_post_third_step' ,6:'ad_post_fourth_step'} %}
+        {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {} } )) }}
+    {% endif %}
+{% endif %}
+

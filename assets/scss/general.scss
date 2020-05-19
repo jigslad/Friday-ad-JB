@@ -36,11 +36,9 @@ input,button, .button, .btn, .primary-btn-1, .primary-btn-2, .primary-btn-3, .se
 }
 .secondary-btn-1, .xs-btn-1, .primary-btn-2 {
     background: linear-gradient(135deg, $secondary-btn-l-color 0%, $secondary-btn-r-color 100%) !important;
-    border: 1px solid $secondary-btn-brdr-color;
     color: $white;
     &:focus, &:hover {
         background: linear-gradient(135deg, $secondary-btn-lh-color 0%, $secondary-btn-rh-color 100%) !important;
-        border: 1px solid $secondary-btn-brdr-h-color;
         color: $white;
     }
 }
