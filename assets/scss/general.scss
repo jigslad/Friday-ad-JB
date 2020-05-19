@@ -36,11 +36,9 @@ input,button, .button, .btn, .primary-btn-1, .primary-btn-2, .primary-btn-3, .se
 }
 .secondary-btn-1, .xs-btn-1, .primary-btn-2 {
     background: linear-gradient(135deg, $secondary-btn-l-color 0%, $secondary-btn-r-color 100%) !important;
-    border: 1px solid $secondary-btn-brdr-color;
     color: $white;
     &:focus, &:hover {
         background: linear-gradient(135deg, $secondary-btn-lh-color 0%, $secondary-btn-rh-color 100%) !important;
-        border: 1px solid $secondary-btn-brdr-h-color;
         color: $white;
     }
 }
@@ -226,7 +224,7 @@ ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {
 
 /* Breadcrumb Block */
 .breadcrumb-area {
-    background: $form-bg-color;
+    background: #FFFFFF;
     border-bottom: 1px solid $form-border-color;
     .breadcrumb {
       padding: 8px 0;
@@ -235,7 +233,7 @@ ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {
         display: inline-block;
         vertical-align: top;
         font-size: 12px;
-        color: $form-text-color;
+        color: $dark-grey;
         line-height: 18px;
         margin-right: 10px;
         padding-right: 21px;

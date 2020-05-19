@@ -40,7 +40,7 @@
                 </div>
             </div>
             <div class="col-lg-8 col-md-24 distance-budget-md-block">
-                <div class="col-sm-24 col-md-12 col-lg-24 pad-none">
+                <div class="col-sm-24 col-md-12 col-lg-24 pad-none mt20">
                     <label>{{ 'Distance I\'m happy to travel'|trans({}, 'frontend-left-search')}}</label>
                     <div>
                         <ul class="budget-box clearfix d-inline-flex f-width">
@@ -69,7 +69,7 @@
                             <li class="budget-field">
                                 <span>&pound;</span>{{ form_widget(form.item__price_to, {'attr': {'class': 'white-field', 'autocomplete': 'off'}}) }}
                             </li>
-                            <li id="rent_per_container" style="display:none" >
+                            <li id="rent_per_container" style="display:none" class="ml20">
                                 <div class="white-select">
                                     {{ form_widget(form.item_property__rent_per_id) }}
                                 </div>

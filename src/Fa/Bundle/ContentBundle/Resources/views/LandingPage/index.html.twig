@@ -181,7 +181,7 @@
                                         {% endif %}
                                     {% endif %}
                                     {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
-                                    <div class="col-md-10 col-lg-8 col">
+                                    <div class="col-md-10 col-lg-8">
                                         <div class="homepage-more-items">
                                             <a class="tricky-link" href="{{ listurl }}">
                                                 {% if imageInfo.file_name is defined %}
@@ -293,19 +293,19 @@
                                             {% set adUserId = featuredEmployer['id'] %}
                                             {% set shopName = userRepository.getUserProfileName(adUserId, container) %}
                                             {% set profilePageUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(adUserId) %}
-                                            <div class="item" data-equalizer-watch>
+                                            <div class="item m-auto" data-equalizer-watch>
                                                 <div class="card custom-card">
                                                     <a class="tricky-link" href="{{ profilePageUrl }}">{{ shopName }}</a>
                                                     {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), adUserId, true, true]) %}
                                                     {% set userName = shopName~' - Friday-Ad' %}
-                                                    <div style="padding:20px;" class="border-botttom">
+                                                    <div>
                                                         {% if userLogo %}
                                                             <img class="card-img-top img-fluid" src="{{ userLogo }}" alt="{{ userName }}" />
                                                         {% else %}
                                                             <img class="card-img-top img-fluid" src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ userName }}" />
                                                         {% endif %}
                                                     </div>
-                                                    <div class="card-body pt0">
+                                                    <div class="card-body pad-none mt10">
                                                         <div class="card-title s-h3">{{ shopName }}</div>
                                                     </div>
                                                 </div>
@@ -378,7 +378,7 @@
                     <div class="container">
                         <div class="row mt20 mb20">
                             <div class="col-md-24">
-                                <div class="d-flex justify-content-center f-width">
+                                <div class="d-flex justify-content-center">
                                     <ul class="landing-pet-circles center-grid-list">
                                     {% for pet_id, class in petsCircleClass %}
                                         {% set queryParams = searchParams|merge({'item__category_id': pet_id}) %}
@@ -480,7 +480,7 @@
                                     {% endif %}
                                 {% endif %}
                                 {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
-                                <div class="col-md-10 col-lg-8 col">
+                                <div class="col-md-10 col-lg-8">
                                     <div class="homepage-more-items">
                                         <a class="tricky-link" href="{{ listurl }}">
                                             {% if imageInfo.file_name is defined %}
@@ -536,19 +536,19 @@
                                             {% set adUserId = popularShop['id'] %}
                                             {% set shopName = popularShop['shop_name'] %}
                                             {% set profilePageUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(adUserId) %}
-                                            <div class="item" data-equalizer-watch>
+                                            <div class="item m-auto" data-equalizer-watch>
                                                 {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), adUserId, true, true]) %}
                                                 {% set userName = userRepository.getUserProfileName(adUserId, container)~' - Friday-Ad' %}
                                                 <a href="{{ profilePageUrl }}">
                                                     <div class="card custom-card">
-                                                        <div style="padding:20px;" class="border-botttom">
+                                                        <div>
                                                             {% if userLogo %}
                                                                 <img class="card-img-top img-fluid" src="{{ userLogo }}" alt="{{ userName }}" />
                                                             {% else %}
                                                                 <img class="card-img-top img-fluid" src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ userName }}" />
                                                             {% endif %}
                                                         </div>
-                                                        <div class="card-body pt0">
+                                                        <div class="card-body pad-none mt10">
                                                             <div class="card-title s-h3">
                                                                 {{ shopName }}
                                                             </div>
@@ -671,7 +671,7 @@
                                         {% endif %}
                                     {% endif %}
                                     {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
-                                    <div class="col-md-10 col-lg-6 col">
+                                    <div class="col-md-10 col-lg-6">
                                         <div class="homepage-more-items">
                                             <a class="tricky-link" href="{{ listurl }}">
                                                 {% if imageInfo.file_name is defined %}
@@ -775,7 +775,7 @@
                             {% set totalColumns = 4 %}
                             {% set choicesPerColumn = (totalChoices / totalColumns)|round(0, 'ceil') %}
                             {% set choiceCount = 0 %}
-                            <ul class="link-list">
+                            <ul class="link-list motors-cars-list">
                                 {% for catId, adCount in topCarMakes %}
                                     {% set queryParams = searchParams %}
                                     {% set queryParams = queryParams|merge({'item__category_id': (catId)}) %}

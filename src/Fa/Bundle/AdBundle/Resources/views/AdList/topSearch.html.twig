@@ -14,7 +14,9 @@
                             {{ form_widget(attribute(form, 'item__category_id'), {'attr': {'class':'select-control '}}) }}
                         </div>
                     </div>
+                    <div class="search-box">
                     {{ form_widget(form.keywords, {'attr': {'class':'form-control white-field', 'placeholder':'Looking for...'|trans({}, 'frontend-header-search') }}) }}
+	                </div>
 	                <div style="position: relative;"><a href="javascript:void(0);" rel="nofollow" id="fa_top_search_keywords_close" class="ui-autocomplete-close select2-search-choice-close">Close</a></div>
                     <div class="input-group-append">
                     	<a href=""><input type="submit" class="button postfix search-icon" value="Go"></a>
