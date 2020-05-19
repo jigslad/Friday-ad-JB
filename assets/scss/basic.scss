@@ -77,6 +77,7 @@ a:hover.secondary-btn-2.thin-btn, a:focus.secondary-btn-2.thin-btn, .secondary-b
 .bdr-none { border: none !important; }
 .pad-none { padding: 0px !important; }
 .margin-none { margin: 0px !important; }
+.font-14 { font-size:14px !important; }
 
 /* Paddings */
 .p5 { padding: 5px; }
@@ -703,6 +704,9 @@ footer .search-box-col .newsletter-lbl, .white-check .label-span, .grey-check .l
 	top: -3px;
 }
 .clear-both { clear:both !important; }
+[name="__cmpLocator"] {
+  display: none !important;
+}
 .detail-sub-head {
     font-size: 25px;
     line-height: 25px;

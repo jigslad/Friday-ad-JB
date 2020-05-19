@@ -78,18 +78,15 @@
                     </div>
 
                 {% else %}
-                    <div class="card-body pad-none">
-                        <div class="two-grid-col">
-                            <div class="list-price">
-                                {% if attribute(latestAd, constant(latestAdSolrMapping ~ 'PRICE')) is defined %}
-                                    {{ format_currency(attribute(latestAd, constant(latestAdSolrMapping ~ 'PRICE'))) }}
-                                {% endif %}
-                            </div>
-                        </div>
-                        {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') and attribute(latestAd, constant(latestAdSolrMapping ~ 'RENT_PER_ID')) is defined %}
-                        <p class="list-hr-ago card-text text-right"><span class="text-muted">{{ adPropertyRepository.getRentPostFixText(attribute(latestAd, constant(latestAdSolrMapping ~ 'RENT_PER_ID')), container)}}</span></p>
+                    <div class="list-price text-left mt10">
+                        {% if attribute(latestAd, constant(latestAdSolrMapping ~ 'PRICE')) is defined %}
+                            {{ format_currency(attribute(latestAd, constant(latestAdSolrMapping ~ 'PRICE'))) }}
                         {% endif %}
-                    </div>
+                
+                        {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') and attribute(latestAd, constant(latestAdSolrMapping ~ 'RENT_PER_ID')) is defined %}
+                        <span class="text-muted font-14">{{ adPropertyRepository.getRentPostFixText(attribute(latestAd, constant(latestAdSolrMapping ~ 'RENT_PER_ID')), container)}}</span>
+                        {% endif %}
+            		</div>
                     <h3 class="card-title s-h3">
                         {% if attribute(latestAd, constant(latestAdSolrMapping ~ 'TITLE')) is defined %}
                            {{trim_text(attribute(latestAd, constant(latestAdSolrMapping ~ 'TITLE')), 65)|raw}}
