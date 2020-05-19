@@ -78,7 +78,7 @@
                     </div>
 
                 {% else %}
-                    <div class="list-price text-left mt10">
+                    <div class="list-price text-left pt10">
                         {% if attribute(latestAd, constant(latestAdSolrMapping ~ 'PRICE')) is defined %}
                             {{ format_currency(attribute(latestAd, constant(latestAdSolrMapping ~ 'PRICE'))) }}
                         {% endif %}
