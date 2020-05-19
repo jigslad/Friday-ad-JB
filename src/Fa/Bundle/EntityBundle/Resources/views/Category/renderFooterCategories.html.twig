@@ -42,15 +42,17 @@
                         {% set subCategoryArray = categoryArray['children'] %}
                         {% for i in 0..columns-1 %}    
                         	<li class="list-child-link">                            
-                                {% if subCategoryArray[ctr] is defined %}
-                                    {% if subCategoryArray[ctr]['is_static'] is defined and subCategoryArray[ctr]['is_static'] %}
-                                        <a href="{{ subCategoryArray[ctr]['link_url'] }}" {% if getNoFollowLink  %}rel="nofollow"{% endif %} >{{ subCategoryArray[ctr]['link_text'] }}</a>
-                                    {% else %}
-                                        {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, subCategoryArray[ctr]['category_full_slug']) %}
-                                        <a href="{{ listurl }}" {% if getNoFollowLink  %}rel="nofollow"{% endif %} >{{subCategoryArray[ctr]['category_name']}}</a>
+                                {% for k in 0..colCounter[i]-1 %}
+                                    {% if subCategoryArray[ctr] is defined %}
+                                        {% if subCategoryArray[ctr]['is_static'] is defined and subCategoryArray[ctr]['is_static'] %}
+                                            <a href="{{ subCategoryArray[ctr]['link_url'] }}" {% if getNoFollowLink  %}rel="nofollow"{% endif %} >{{ subCategoryArray[ctr]['link_text'] }}</a>
+                                        {% else %}
+                                            {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, subCategoryArray[ctr]['category_full_slug']) %}
+                                            <a href="{{ listurl }}" {% if getNoFollowLink  %}rel="nofollow"{% endif %} >{{subCategoryArray[ctr]['category_name']}}</a>
+                                        {% endif %}
                                     {% endif %}
-                                {% endif %}
-                                {% set ctr = ctr + 1 %}   
+                                    {% set ctr = ctr + 1 %}
+                                {% endfor %}  
                            </li>                                                       
                         {% endfor %}
                     </ul></div>

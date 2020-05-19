@@ -99,6 +99,17 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
     background-color: $white !important;
 }
 
+/* ui-autocomplete */
+.ui-autocomplete {
+    border: 1px solid $grey-color;
+    background: $common-bg-color;
+}
+.ui-menu.keyword-choices .ui-menu-item span, .ui-menu.category-choices .ui-menu-item div span {
+    color: $secondary-btn-l-color;
+}
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
+    color: $site-dark-bg-color;
+}
 //Pagination
 .pagination {
     margin: 20px 0;
@@ -464,7 +475,7 @@ ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {
        .similar-placeholder {
           background-color:$imgplaceholder-bgcolor;
           img {
-	    width: max-content !important;
+	    width: auto !important;
 	    margin:auto !important;
           }
        }
