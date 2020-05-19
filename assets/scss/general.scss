@@ -102,7 +102,7 @@ input[type="text"]:focus, input[type="password"]:focus, input[type="date"]:focus
 /* ui-autocomplete */
 .ui-autocomplete {
     border: 1px solid $grey-color;
-    background: $common-bg-color;
+    background: $common-bg-color !important;
 }
 .ui-menu.keyword-choices .ui-menu-item span, .ui-menu.category-choices .ui-menu-item div span {
     color: $secondary-btn-l-color;
@@ -1098,7 +1098,7 @@ footer {
 .ui-menu.category-choices .ui-menu-item{ box-shadow:0 1px 0 $grey-color; }
 .ui-menu.category-choices .ui-menu-item:hover{ color:$common-text-color }
 .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover { color: $common-text-color !important; }
-.select2-drop, .ui-autocomplete { border: 1px solid $grey-color;background: $light-grey-color; }
+.select2-drop { border: 1px solid $grey-color;background: $light-grey-color; }
 .select2-results li, .ui-autocomplete li { box-shadow: 0 1px 0 $grey-color; }
 .enquire-tooltip { background: $light-grey-color; border: 1px solid $grey-color; color: $dark-grey; }
 .enquire-tooltip::after { border-color: $grey-color transparent transparent transparent; }

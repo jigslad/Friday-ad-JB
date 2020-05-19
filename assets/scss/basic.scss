@@ -284,7 +284,7 @@ div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, p, blockquote, t
 	outline: none;
 	font-size: 1px;
 	position: relative;
-	top: -2px;
+	top: 0px;
 	cursor: pointer;
 }
 .white-check input.checkbox:checked + label::after {
@@ -302,7 +302,7 @@ div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, p, blockquote, t
 	outline: none;
 	font-size: 1px;
 	position: relative;
-	top: -2px;
+	top: 0px;
 	cursor: pointer;
 }
 .grey-check input.checkbox:checked + label::after, .grey-check span.equalizer-inner input.checkbox:checked + label::after {
@@ -361,8 +361,8 @@ input.checkbox {
 	clip: rect(0 0 0 0);
 }
 .grey-radio .checkbox, .white-radio .checkbox { background:transparent !important; border:none !important; }
-.grey-radio, .white-radio, .grey-check, .white-check { font-size:13px !important; margin-bottom:5px !important;margin-right:5px !important; }
-.grey-check, .white-check { display: inline-flex !important; }
+.grey-radio, .white-radio, .grey-check, .white-check { font-size:13px !important; margin-bottom:5px !important;margin-right:0px !important; }
+.grey-check, .white-check { display: inline-flex !important; vertical-align: middle; width: 100%; }
 .grey-check span, .white-check span { display: inline-block !important; }
 .grey-radio span, .white-radio span { display: block !important; }
 
