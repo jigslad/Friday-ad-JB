@@ -1021,6 +1021,7 @@ class CommonManager
                     return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<span style="background-image: url('.$newAwsImagePath.')" title="'.$userName.'"></span>';
                 }
             }
+            
         } elseif (is_file($imagePath)) {
             if ($getUrlOnly) {
                 return $container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null);
