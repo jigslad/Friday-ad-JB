@@ -1111,6 +1111,9 @@ footer {
 .covid-19-block.bottom-border { border-bottom: 4px solid $covid-bg-color }
 
 /* adult-pop-up */
+.adult-modal {
+	background: rgb(74, 74, 74);
+}
 .adult-modal.custom-modal .modal-content { 
     border: 0px solid $grey-color !important;
     box-shadow: 0 0 8px 0 $common-text-color !important;
