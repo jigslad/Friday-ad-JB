@@ -48,7 +48,7 @@
                                 </div>
                                 <div class="db-section">
                                     <div class="db-list active">
-                                        <a href="#panel1b" class="panel-heading collapsed" data-toggle="collapse" data-target="#panel1b">
+                                        <a href="#panel1b" class="panel-heading" data-toggle="collapse" data-target="#panel1b">
                                             <div class="media section-head">
                                                 <div class="media-body">
                                                     <span class="your-details-icon list-icon-text">{{'Basic info'|trans({}, 'frontend-my-profile')}}</span>
@@ -59,7 +59,7 @@
                                                 </div>
                                             </div>
                                         </a>
-                                        <div id="panel1b" class="collapse collapse-body-content active">
+                                        <div id="panel1b" class="collapse collapse-body-content show">
                                             {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
                                                 {{ include('FaUserBundle:MyAccount:myAccountMessage.html.twig', {'msgName': 'profile_success'}) }}
                                                 <div class="bz-profile-fields">
@@ -85,12 +85,24 @@
                                                         </div>
                                                         <div class="profile-logo-ins private-profile">
                                                             <span class="d-none d-md-block">{{"Add a photo of yourself to your profile. It doesn't just look nice - buyers prefer to see who they are buying from when deciding what to buy."|trans({}, 'frontend-my-profile')}}<br /></span>
-                                                            <div id="profile_change_btn_with_opt" class="primary-btn-3 button thin-btn dropdown" {% if not app.user.getImage() %}style="display:none;"{% endif %}>
-                                                                <a href="javascript:void(0);" data-dropdown="profile_image_upload" aria-controls="profile_image_upload" aria-expanded="false" class="primary-btn-3 button thin-btn dropdown">{{'Change image'|trans({}, 'frontend-my-profile')}}</a><br />
-                                                                <ul id="profile_image_upload" data-dropdown-content class="f-dropdown" aria-hidden="true">
-                                                                    <li><a href="javascript:void(0)" class="pickProfileFile needsclick" id="pickProfileFile">{{'Upload profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
-                                                                    <li><a href="javascript:getProfileBigImage('{{ path(getProfileBigImageRoute, {'userId': app.user.getId(), 'isCompany': 0}) }}')">{{'Edit profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
-                                                                    <li><a href="javascript:deleteProfileImage('{{ path(deleteRoute, {'userId': app.user.getId(), 'isCompany': 0}) }}')">{{'Remove'|trans({}, 'frontend-my-profile')}}</a></li>
+                                                            <div class="dropdown" {% if not app.user.getImage() %}style="display:none;"{% endif %}>
+                                                                <a id="profile_change_btn_with_opt" class="primary-btn-3 button thin-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >{{'Change image'|trans({}, 'frontend-my-profile')}}</a><br />
+                                                                <ul id="profile_image_upload" class="dropdown-menu" aria-labelledby="profile_change_btn_with_opt">
+                                                                    <li class="dropdown-item">
+                                                                        <a class="pickProfileFile needsclick" id="pickProfileFile">
+                                                                            {{'Upload profile photo'|trans({}, 'frontend-my-profile')}}
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="dropdown-item">
+                                                                        <a onclick="getProfileBigImage('{{ path(getProfileBigImageRoute, {'userId': app.user.getId(), 'isCompany': 0}) }}')">
+                                                                            {{'Edit profile photo'|trans({}, 'frontend-my-profile')}}
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="dropdown-item">
+                                                                        <a onclick="deleteProfileImage('{{ path(deleteRoute, {'userId': app.user.getId(), 'isCompany': 0}) }}')">
+                                                                            {{'Remove'|trans({}, 'frontend-my-profile')}}
+                                                                        </a>
+                                                                    </li>
                                                                 </ul>
                                                             </div>
                                                             <div id="profile_change_btn_without_opt" {% if app.user.getImage() %}style="display:none;"{% endif %}>

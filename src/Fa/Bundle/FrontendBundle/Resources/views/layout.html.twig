@@ -280,9 +280,11 @@
 	
         {% if status_code == 200 %}
             {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page'} %}
-                <div class="row top-msg">
-                    <div class="columns">
-                        {{ include('FaCoreBundle::message.html.twig') }}
+                <div class="container">
+                    <div class="row top-msg">
+                        <div class="col">
+                            {{ include('FaCoreBundle::message.html.twig') }}
+                        </div>
                     </div>
                 </div>
             {% endif %}

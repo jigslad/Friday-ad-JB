@@ -21,13 +21,12 @@
                 {{ form_label(userAccountProfileForm.user_roles) }}
                 <div class="label-inline">
                     <ul class="search-type ">
-                    {% for userRoles in userAccountProfileForm.user_roles %}
-                            <li class="white-radio" >
-                                {{ form_widget(userRoles,{'attr':{'class':'checkbox radio-circle-box'}}) }}
-                                <label for="{{ userRoles.vars.id }}"></label>
-                                {{ userRoles.vars.label }}
-                            </li>
-                    {% endfor %}
+                        {{ form_widget(userAccountProfileForm.user_roles,{'attr':{'class':'white-radio radio-circle-btn'}}) }}
+{#                    {% for userRoles in userAccountProfileForm.user_roles %}#}
+{#                            <li class="white-radio" >#}
+{#                                {{ form_widget(userRoles,{'attr':{'class':'white-radio radio-circle-btn'}}) }}#}
+{#                            </li>#}
+{#                    {% endfor %}#}
                     </ul>
                 </div>
                 <div class="mt10">

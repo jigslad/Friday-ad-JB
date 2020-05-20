@@ -166,9 +166,12 @@
         {% if message['receiver_user_id'] == app.user.getId() and message['is_oneclickenq_message']  and message['oneclickenq_reply'] == NULL %}
             <div class="reply-chat oneenq_reply_box">
                 <div class="row">
-                    <div class="large-24 columns">
-                        <div class="chat-graybox my-respond-content center">
-                            <b>{{ 'Respond to' }} {% if app.user.getId() == message['sender_user_id'] %} {{'You'|trans({}, 'frontend-inbox')}} {% else %} {{message['sender_first_name']}} {{message['sender_last_name']}} {% endif %}:</b>
+                    <div class="col">
+                        <div class="chat-graybox my-respond-content">
+                            <div class="text-center">
+                                <b>{{ 'Respond to' }} {% if app.user.getId() == message['sender_user_id'] %} {{'You'|trans({}, 'frontend-inbox')}} {% else %} {{message['sender_first_name']}} {{message['sender_last_name']}} {% endif %}:</b>
+                            </div>
+
                             <div class="mt10">
                                 <a href="javascript:void(0)" class="secondary-btn-1 button mb0" onclick="return replyOneClickEnq('{{message['id']}}', '{{ message['ad_id'] }}', 'Yes', 'Conversation_View');">{{'Yes'|trans({})}}</a>
                                 <a href="javascript:void(0)" class="secondary-btn-2 button mb0" onclick="return replyOneClickEnq('{{message['id']}}', '{{ message['ad_id'] }}', 'No', 'Conversation_View');"><span class="d-none d-md-block">{{'No - '|trans({})}}</span>{{'Mark as sold'|trans({})}}</a>

@@ -1,101 +1,112 @@
 {% extends 'FaFrontendBundle::layout.html.twig' %}
 {% set allowProfileEdit = false %}
 
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('build/css/dashboard.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('build/css/adlist.css') }}"/>
+{% endblock %}
+
 {% block body %}
-{% set entityCacheManager = container.get('fa.entity.cache.manager') %}
-{% set userRepository = fetch_repository('FaUserBundle:User') %}
-{% set userRole = userRepository.getUserRole(userDetail['id'], container) %}
-{% set seoToolRepository = fetch_repository('FaContentBundle:SeoTool') %}
-{% set profileUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(userDetail['id']) %}
-
-{{ include('FaContentBundle:ProfilePage:shopHeader.html.twig') }}
-
-<div class="row d-block d-md-none">
-    <div class="columns">
-        <a href="{{ profileUrl }}" class="shop-back-link mt10">{{'Back to shop homepage'|trans({}, 'frontend-profile-page')}}</a>
-    </div>
-</div>
-
-<div class="other-profile shop-search-results">
-    <div class="row">
-        <div class="large-6 columns" id="left_search">
-            <a href="{{ profileUrl }}" class="shop-back-link d-none d-md-block">{{'Back to shop homepage'|trans({}, 'frontend-profile-page')}}</a>
-            <div class="search-filters mt20">
-                <a href="javascript:void(0);" class="search-close" onclick="return showLeftSearch(false);">search-close</a>
-                {{ render(controller('FaAdBundle:AdList:leftSearch', { 'searchParams': searchParams is defined ? searchParams : {} , 'locationFacets': locationFacets, 'facetResult': facetResult, 'isShopPage': 1, 'cookieLocationDetails': cookieLocationDetails is defined ? cookieLocationDetails : {}} )) }}
-            </div>
-            <div class="reset-search clearfix">
-                {% if isShopPage is defined and isShopPage %}
-                    {% set profileAdsUrl = container.get('fa_ad.manager.ad_routing').getProfilePageAdsUrl(searchParams['item__user_id']) %}
-                    <a href="{{ profileAdsUrl }}" title="{{ 'Reset search'|trans({}, 'frontend-left-search') }}">{{ 'Reset search'|trans({}, 'frontend-left-search') }}</a>
-                {% else %}
-                    <a href="javascript:void(0)" id="reset_search" title="{{ 'Reset search'|trans({}, 'frontend-left-search') }}">{{ 'Reset search'|trans({}, 'frontend-left-search') }}</a>
-                {% endif %}
+    {% set entityCacheManager = container.get('fa.entity.cache.manager') %}
+    {% set userRepository = fetch_repository('FaUserBundle:User') %}
+    {% set userRole = userRepository.getUserRole(userDetail['id'], container) %}
+    {% set seoToolRepository = fetch_repository('FaContentBundle:SeoTool') %}
+    {% set profileUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(userDetail['id']) %}
+    <div class="dash-block">
+        {{ include('FaContentBundle:ProfilePage:shopHeader.html.twig') }}
+        <div class="row d-block d-md-none">
+            <div class="col">
+                <a href="{{ profileUrl }}" class="shop-back-link mt10">{{'Back to shop homepage'|trans({}, 'frontend-profile-page')}}</a>
             </div>
         </div>
+        <div class="other-profile shop-search-results">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6" id="left_search">
+                        <a href="{{ profileUrl }}" class="shop-back-link d-none d-md-block">{{'Back to shop homepage'|trans({}, 'frontend-profile-page')}}</a>
+                        <div class="search-filters mt20">
+                            <a href="javascript:void(0);" class="search-close" onclick="return showLeftSearch(false);">search-close</a>
+                            {{ render(controller('FaAdBundle:AdList:leftSearch', { 'searchParams': searchParams is defined ? searchParams : {} , 'locationFacets': locationFacets, 'facetResult': facetResult, 'isShopPage': 1, 'cookieLocationDetails': cookieLocationDetails is defined ? cookieLocationDetails : {}} )) }}
+                        </div>
+                        <div class="reset-search clearfix">
+                            {% if isShopPage is defined and isShopPage %}
+                                {% set profileAdsUrl = container.get('fa_ad.manager.ad_routing').getProfilePageAdsUrl(searchParams['item__user_id']) %}
+                                <a href="{{ profileAdsUrl }}" title="{{ 'Reset search'|trans({}, 'frontend-left-search') }}">{{ 'Reset search'|trans({}, 'frontend-left-search') }}</a>
+                            {% else %}
+                                <a href="javascript:void(0)" id="reset_search" title="{{ 'Reset search'|trans({}, 'frontend-left-search') }}">{{ 'Reset search'|trans({}, 'frontend-left-search') }}</a>
+                            {% endif %}
+                        </div>
+                    </div>
 
-        <div class="large-18 columns">
-            <div class="profile-list-title">
-                <div class="clearfix">
-                    <h2 class="profile-list-title">{{'%resultCount% results found'|trans({'%resultCount%': pagination.getNbResults()}, 'frontend-search-result')}}</h2>
-                    {% if pagination.getNbResults() %}
-                        {% set sortFields = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSortingArray', [fetch_container_instance(), null, searchParams]) %}
-                        <div class="sortby-fields clearfix">
-                                <div class="d-none d-md-block white-select">
-                                    {% if not app.request.get('map')%}
-                                        <label>{{'Sort by'|trans({}, 'frontend-search-result')}}</label>
-                                        <select class="select-control" name="sort_by" id="sort_by">
-                                            {% for sortFieldKey, sortFieldName in sortFields %}
-                                                <option value="{{sortFieldKey}}" {% if app.request.get('sort_field')~'|'~app.request.get('sort_ord') == sortFieldKey %} selected="selected" {% endif %}>{{sortFieldName}}</option>
-                                            {% endfor %}
-                                        </select>
+                    <div class="col-md-18">
+                        <div class="profile-list-title">
+                            <div class="row">
+                                <div class="col-md-12 col-lg-12 col-sm-12 pull-left">
+                                    <h2 class="pull-left profile-list-title">{{'%resultCount% results found'|trans({'%resultCount%': pagination.getNbResults()}, 'frontend-search-result')}}</h2>
+                                </div>
+                                <div class="col-md-12 col-lg-12 col-sm-12 pull-right">
+                                    {% if pagination.getNbResults() %}
+                                        {% set sortFields = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSortingArray', [fetch_container_instance(), null, searchParams]) %}
+                                        <div class="sortby-fields pull-right">
+                                            <div class="d-none d-md-block white-select">
+                                                <div class="s-by-filters">
+                                                {% if not app.request.get('map')%}
+                                                    <label>{{'Sort by'|trans({}, 'frontend-search-result')}}</label>
+                                                    <select class="select-control" name="sort_by" id="sort_by">
+                                                        {% for sortFieldKey, sortFieldName in sortFields %}
+                                                            <option value="{{sortFieldKey}}" {% if app.request.get('sort_field')~'|'~app.request.get('sort_ord') == sortFieldKey %} selected="selected" {% endif %}>{{sortFieldName}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                {% endif %}
+                                            </div>
+                                            <div class="d-block d-md-none sorting-small clearfix">
+                                                <a href="javascript:void(0);" class="secondary-btn-2 button left" onclick="return toggleLeftSearch();">{{'Refine'|trans({}, 'frontend-search-result')}}</a>
+                                                <a href="javascript:void(0);" class="secondary-btn-2 button right" onclick="return showSortBy();">{{'Sort'|trans({}, 'frontend-search-result')}}</a>
+                                                <div class="sortby-links" style="display:none;" id="sort_options_div">
+                                                    {% for sortFieldKey, sortFieldName in sortFields %}
+                                                        <a href="javascript:void(0);" onclick="return sortBy('{{sortFieldKey}}');" {% if app.request.get('sort_field')~'|'~app.request.get('sort_ord') == sortFieldKey %} class="active" {% endif %}>{{sortFieldName}}</a>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                            <div class="left d-none d-md-block tablet-refine-btn">
+                                                <a href="javascript:void(0);" class="secondary-btn-2 button refine-search" onclick="return showLeftSearch(true);">{{'Refine your search'|trans({}, 'frontend-search-result')}}</a>
+                                            </div>
+                                        </div>
                                     {% endif %}
                                 </div>
-                                <div class="d-block d-md-none sorting-small clearfix">
-                                    <a href="javascript:void(0);" class="secondary-btn-2 button left" onclick="return toggleLeftSearch();">{{'Refine'|trans({}, 'frontend-search-result')}}</a>
-                                    <a href="javascript:void(0);" class="secondary-btn-2 button right" onclick="return showSortBy();">{{'Sort'|trans({}, 'frontend-search-result')}}</a>
-                                    <div class="sortby-links" style="display:none;" id="sort_options_div">
-                                        {% for sortFieldKey, sortFieldName in sortFields %}
-                                            <a href="javascript:void(0);" onclick="return sortBy('{{sortFieldKey}}');" {% if app.request.get('sort_field')~'|'~app.request.get('sort_ord') == sortFieldKey %} class="active" {% endif %}>{{sortFieldName}}</a>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                                <div class="left d-none d-md-block tablet-refine-btn">
-                                    <a href="javascript:void(0);" class="secondary-btn-2 button refine-search" onclick="return showLeftSearch(true);">{{'Refine your search'|trans({}, 'frontend-search-result')}}</a>
-                                </div>
+                            </div>
                         </div>
-                    {% endif %}
-                </div>
-            </div>
-            {% if pagination.getNbResults() %}
-                {% set adFavoriteRepository   = fetch_repository('FaAdBundle:AdFavorite') %}
-                {% set adRepository   = fetch_repository('FaAdBundle:Ad') %}
-                {% if app.user %}
-                    {% set userId = app.user.getId() %}
-                {% else %}
-                    {% set userId = app.session.getId() %}
-                {% endif %}
-                {% set adFavoriteAdIds = adFavoriteRepository.getFavoriteAdByUserId(userId, container) %}
+                        {% if pagination.getNbResults() %}
+                            {% set adFavoriteRepository   = fetch_repository('FaAdBundle:AdFavorite') %}
+                            {% set adRepository   = fetch_repository('FaAdBundle:Ad') %}
+                            {% if app.user %}
+                                {% set userId = app.user.getId() %}
+                            {% else %}
+                                {% set userId = app.session.getId() %}
+                            {% endif %}
+                            {% set adFavoriteAdIds = adFavoriteRepository.getFavoriteAdByUserId(userId, container) %}
 
-                {% set adCounter = 0 %}
-                {% set adCount = 0 %}
-                {% for ad in pagination.getCurrentPageResults() %}
-                    {% set adCount = adCount + 1 %}
-                    {{ include('FaAdBundle:AdList:listDetail.html.twig', {'showAdUpsell': 0}) }}
-                {% endfor %}
-            {% else %}
-                <div data-alert class="alert-box success radius mt10">
-                    <span class="alert-icon">&nbsp;</span>
-                    {{'No ads available.'|trans({}, 'frontend-search-result')}}
-                    <a href="javascript:void(0)" class="close">&times;</a>
+                            {% set adCounter = 0 %}
+                            {% set adCount = 0 %}
+                            {% for ad in pagination.getCurrentPageResults() %}
+                                {% set adCount = adCount + 1 %}
+                                {{ include('FaAdBundle:AdList:listDetail.html.twig', {'showAdUpsell': 0}) }}
+                            {% endfor %}
+                        {% else %}
+                            <div data-alert class="alert-box success radius mt10">
+                                <span class="alert-icon">&nbsp;</span>
+                                {{'No ads available.'|trans({}, 'frontend-search-result')}}
+                                <a href="javascript:void(0)" class="close">&times;</a>
+                            </div>
+                        {% endif %}
+                        <div class="pagination-centered">
+                            {{ include('FaFrontendBundle:Default:googlePager.html.twig', {'pagination': pagination, 'addToEndPage': 1, 'seoPager': true}) }}
+                        </div>
+                    </div>
                 </div>
-            {% endif %}
-            <div class="pagination-centered">
-                {{ include('FaFrontendBundle:Default:googlePager.html.twig', {'pagination': pagination, 'addToEndPage': 1, 'seoPager': true}) }}
             </div>
         </div>
     </div>
-</div>
 {% endblock %}
 
 {% block scriptbottom %}
