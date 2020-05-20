@@ -32,7 +32,7 @@
   width: 100%;
   top: 0;
 }
-.homesticky { position: -webkit-sticky;position: sticky;top: 0;z-index: 1005 !important; }
+.homesticky { position: -webkit-sticky;position: sticky;top: 0;z-index: 1005 !important; position: fixed;width: 100%; }
 
 .fixed {
     width: 100%;

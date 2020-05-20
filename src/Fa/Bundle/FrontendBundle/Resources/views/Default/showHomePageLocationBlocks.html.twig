@@ -24,16 +24,33 @@
                     <div id="home-collapse{{ panelCnt }}" class="panel-collapse collapse {% if (currentDevice == 'D' and panelCnt == 0) %}show{% endif %}" role="tabpanel" aria-labelledby="home-heading{{ panelCnt }}">
                         <div class="panel-body list-panel-body">
                             <ul class="link-list">
-                            	{% set facetIdArray = block['facet']|keys %}
-                            	{% set ctr = 0 %}
+                                {% set facetIdArray = block['facet']|keys %}
+                                {% if currentDevice == 'T'%}
+                                    {% set columns = 5 %}
+                                {% else %}
+                                    {% set columns = 6 %}
+                                {% endif %}
+                                {% set ctr = 0 %}
                                 {% set totalItems = facetIdArray|length %}
-                                {% for i in 0..totalItems-1 %}
-                                	{% if facetIdArray[ctr] is defined %}
-                                        {% set facetId = facetIdArray[ctr] %}
-                                        {% set searchResultUrl =  path('location_home_page', {'location': entityCacheManager.getEntitySlugById('FaEntityBundle:Location', facetId)}) %}
-                                        <li><a href="{{ searchResultUrl }}">{{ entityCacheManager.getEntityNameById(block['repository'], facetId) }} {# ({{ block['facet'][facetId] }}) #}</a></li>
+                                {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
+                                {% set extraColumn = (totalItems % columns) %}
+                                {% set colCounter = {} %}
+                                {% for i in 0..columns-1 %}
+                                    {% if loop.index0 < extraColumn %}
+                                        {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
+                                    {% else  %}
+                                        {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
                                     {% endif %}
-                                    {% set ctr = ctr + 1 %}
+                                {% endfor %}
+                                {% for i in 0..columns-1 %}
+                                        {% for k in 0..colCounter[i]-1 %}
+                                            {% if facetIdArray[ctr] is defined %}
+                                                {% set facetId = facetIdArray[ctr] %}
+                                                {% set searchResultUrl =  path('location_home_page', {'location': entityCacheManager.getEntitySlugById('FaEntityBundle:Location', facetId)}) %}
+                                                <li><a href="{{ searchResultUrl }}">{{ entityCacheManager.getEntityNameById(block['repository'], facetId) }} {# ({{ block['facet'][facetId] }}) #}</a></li>
+                                            {% endif %}
+                                            {% set ctr = ctr + 1 %}
+                                        {% endfor %}
                                 {% endfor %}
                             </ul>
                         </div>
