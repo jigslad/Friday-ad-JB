@@ -32,7 +32,7 @@
   width: 100%;
   top: 0;
 }
-.homesticky { position: -webkit-sticky;position: sticky;top: 0;z-index: 1005 !important; position: fixed;width: 100%; }
+.homesticky { position: -webkit-sticky;position: sticky;top: 0;z-index: 1005 !important; }
 
 .fixed {
     width: 100%;
@@ -547,7 +547,6 @@ All this is done for any sub-level being entered.
 }
 /* Header after login */
 .top-links .notification-link a span, .top-links .msg-link a span, .top-links .cart-link a span {
-
         color:#a8dc28;
     }
     a.basket-icon {
@@ -628,12 +627,7 @@ All this is done for any sub-level being entered.
         max-width: 34px;
         max-height: 26px;
     }
-    .top-links .notification-counter {
-        border-top: 1px solid #000;
-        padding: 10px;
-        color: #fff;
-        text-align: left;
-    }
+    
     #notification-menu .button {
 	 text-align: center;
     }
@@ -645,6 +639,50 @@ All this is done for any sub-level being entered.
 	    border-radius: 0px !important;
 	    text-align: left;
 	}
+
+
+.top-links ul li.notification-link .f-dropdown {
+    margin-left: -200px;
+    text-align: left;
+    min-width: 320px;
+    background: #fff;
+    border-radius: 2px;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
+}
+.notification-counter {
+    background: #212527;
+    border-top: 1px solid #000;
+    box-shadow: inset 0 1px 0 #212527;
+    padding: 10px;
+    color: #fff;
+}
+.top-links .db-notifications {
+    max-height: 368px;
+    overflow-y: auto;
+    padding: 0;
+}
+.top-links .db-notifications .inner {
+    min-height: 100%;
+}
+.top-links .db-notifications .alert-box {
+    margin-bottom: 0;
+    font-size: 13px;
+    padding: 15px 45px;
+    line-height: normal;
+    min-height: 50px;
+    border-radius: 0px !important;
+	border: 0px !important;
+	border-bottom: 1px solid #CBD5D9 !important;
+	background-color: #fff;
+	color: #ACB0B7;
+}
+.top-links .db-notifications .alert-box a {
+    color: #82C249;
+    font-size: 13px;
+    line-height: normal;
+    padding: 0;
+    height: auto;
+}
     .top-links a span.unread-msg {
         display: inline-block;
         width: 12px;
@@ -753,6 +791,9 @@ All this is done for any sub-level being entered.
     .mobile-menu-items li a, .login-menu li a {
         font-size: 12px !important;
         font-family: "Poppins-SemiBold";
+    }
+    .find-all span.select2-dropdown.select2-dropdown--below {
+        width:121px !important;
     }
 }
 
