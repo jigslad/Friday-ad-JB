@@ -83,7 +83,7 @@
             <div class="row">
             	<div class="browse-by-category col-md-18 discover-adult-categories mb10">Browse by category</div>
                 {# {% cache 'home|page|'~locationId~'front/home_page_discover' 1800 %} #}
-                <div class="discover-categories col-md-18 discover-adult-categories text-center">
+                <div class="discover-categories col-md-24 col-lg-18 discover-adult-categories text-center m-auto pad-none">
                     {% set linkParams = { 'item__location': locationId, 'item__category_id': escortsId } %}
                     <a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}" class="discover-escorts ga-ahpDiscover">{{'Escorts'|trans({}, 'frontend-homepage')}}</a>
                 	
@@ -157,7 +157,9 @@
     <div class="homepage-row">
         <div class="container">
             <div class="row">
-                <div class="homepage-title">{{'Featured advertisers'|trans({}, 'frontend-homepage')}}</div>
+            	<div class="col">
+                	<div class="homepage-title text-center">{{'Featured advertisers'|trans({}, 'frontend-homepage')}}</div>
+            	</div>
             </div>
             <div class="row">
                 {{ include('FaFrontendBundle:Adult:homePageFeaturedAdvertisers.html.twig') }}
@@ -170,7 +172,9 @@
     <div class="homepage-row">
         <div class="container">
             <div class="row">
-                <div class="homepage-title col">{{'Latest from the blog'|trans({}, 'frontend-homepage')}}</div>
+            	<div class="col">
+                    <div class="homepage-title">{{'Latest from the blog'|trans({}, 'frontend-homepage')}}</div>
+                </div>  
             </div>            
             {{ include('FaFrontendBundle:Adult:homePageLatestBlog.html.twig', {'divId': 'recently-viwed-item-slider', 'ads': '', noImageColor:'grey'}) }}
         </div>
@@ -271,19 +275,22 @@
                 navigation: true,
                 pagination:false,
                 responsiveRefreshRate : 100,
-                navigationText: ['<img src="https://fmtinew.friday-ad.co.uk/bundles/fafrontend/images/small-slider-prev.svg" alt="" />', '<img src="https://fmtinew.friday-ad.co.uk/bundles/fafrontend/images/small-slider-next.svg" alt="" />'],
+                navText: ['<img src="/bundles/fafrontend/images/small-slider-prev.svg" alt="" />', '<img src="{{ asset_url('/bundles/fafrontend/images/small-slider-next.svg') }}" alt="" />'],
                 lazyLoad: true,
                 scrollPerPage: true,
+                nav: true,
+                dots: false,
+                loop: true
             });
 
             var featuredItemSlider = $("#featured-top-item-slider");
             featuredItemSlider.owlCarousel({
             	items : 3,
-                itemsCustom:[[320, 1], [568, 2], [641, 2], [760, 3]],
+                itemsCustom:[[320, 2], [568, 2], [641, 2], [760, 3]],
                 navigation: true,
                 pagination:false,
                 responsiveRefreshRate : 100,
-                navText: ['<img src="https://fmtinew.friday-ad.co.uk/bundles/fafrontend/images/small-slider-prev.svg" alt="" />', '<img src="https://fmtinew.friday-ad.co.uk/bundles/fafrontend/images/small-slider-next.svg" alt="" />'],
+                navText: ['<img src="{{ asset_url('/bundles/fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('/bundles/fafrontend/images/small-slider-next.svg') }}" alt="" />'],
                 lazyLoad: true,
                 scrollPerPage: true,
                 nav: true,
