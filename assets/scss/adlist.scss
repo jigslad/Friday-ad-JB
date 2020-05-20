@@ -517,111 +517,6 @@
 .ad-list-block .sortby-area h2, .ad-list-block .sortby-area h1 {
 	margin-bottom: 10px;
 }
-
-@media (min-width: 960px) and (max-width:1151px) {
-    .ad-list-block {
-        .left-search-block {
-            max-width: 28% !important;
-            flex: 0 0 28% !important;
-        }
-        .right-search-block {
-            max-width: 72% !important;
-            flex: 0 0 72% !important;
-        }
-    }
-}
-@media (min-width: 760px) and (max-width:959px) {
-    .ad-list-block {
-        .sortby-fields {
-            width: 55%;
-        }
-    }
-    .sortby-area h2 {
-        margin-bottom: 10px;
-    }
-    .site-search .search-box {
-        width: 235px;
-    }
-    .listing .list-distance {
-	width: 65% !important;
-    }
-}
-@media (min-width: 320px) and (max-width:759px) {
-    .listing {
-      .media-left {
-        align-self: flex-start !important;
-      }
-      .list-img {
-        width: 100px;
-        height: auto;
-        img {
-          max-width: 100px;
-          max-height: 80px;
-        }
-      }
-      .media-left img {
-        width: 100px;
-      }
-      h3.list-title {
-        margin-top: 0;
-        float: none;
-        width: auto;
-        min-height: 30px;
-        font-size: 14px;
-
-        line-height: 15px;
-      }
-      .list-price {
-        float: left;
-        text-align: left;
-        margin-top: 0;
-        width: auto;
-        font-size: 20px;
-        margin-top: 0px;
-        text-align: left;
-        line-height: 21px;
-      }
-      .list-distance {
-        margin: 10px 0 0 0;
-      }
-      &::after {
-        background: url("/bundles/fafrontend/images/arrow1.svg") no-repeat;
-        content: " ";
-        display: block;
-        position: absolute;
-        right: 20px;
-        top: 50%;
-        margin-top: -14px;
-        width: 8px;
-        height: 14px;
-      }
-    }
-    .ad-list-block {
-        .mobile-refine {
-            display: block !important;
-        }
-        .sortby-fields {
-            width: 100%;
-            margin-top: 10px;
-        }
-        .mobile-create-alert-box {
-            margin-bottom: 20px;
-        }
-        .mobile-refine .m-sort-btn { 
-            background: #FFFFFF;
-            width: 79px;
-        }
-    }
-}
-
-.ad-list-block {
-    .custom-modal .save-search-title {
-        background: url('data:image/svg+xml;charset=US-ASCII,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%0A%3C%21--%20Generator%3A%20Adobe%20Illustrator%2019.2.0%2C%20SVG%20Export%20Plug-In%20.%20SVG%20Version%3A%206.00%20Build%200%29%20%20--%3E%0A%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20x%3D%220px%22%20y%3D%220px%22%0A%09%20width%3D%2233px%22%20height%3D%2218px%22%20viewBox%3D%220%200%2033%2018%22%20style%3D%22enable-background%3Anew%200%200%2033%2018%3B%22%20xml%3Aspace%3D%22preserve%22%3E%0A%3Cstyle%20type%3D%22text/css%22%3E%0A%09.st0%7Bfill%3A%23A8DC28%3B%7D%0A%09.st1%7Bfilter%3Aurl%28%23Adobe_OpacityMaskFilter%29%3B%7D%0A%09.st2%7Bfill%3A%23FFFFFF%3B%7D%0A%09.st3%7Bmask%3Aurl%28%23mask-2%29%3Bfill%3A%23A8DC28%3B%7D%0A%3C/style%3E%0A%3Ctitle%3EBell-white%3C/title%3E%0A%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%0A%3Cg%20id%3D%22Page-1%22%3E%0A%09%3Cg%20id%3D%22Create-alert%22%20transform%3D%22translate%28-355.000000%2C%20-407.000000%29%22%3E%0A%09%09%3Cg%20id%3D%22Filters%22%20transform%3D%22translate%28182.000000%2C%20385.000000%29%22%3E%0A%09%09%09%3Cg%20id%3D%22create-alert-hover%22%20transform%3D%22translate%2811.000000%2C%2011.000000%29%22%3E%0A%09%09%09%09%3Cg%20id%3D%22Group-2%22%20transform%3D%22translate%2835.000000%2C%208.000000%29%22%3E%0A%09%09%09%09%09%3Cg%20id%3D%22Bell-white%22%20transform%3D%22translate%28127.000000%2C%203.000000%29%22%3E%0A%09%09%09%09%09%09%3Cpath%20id%3D%22Fill-1%22%20class%3D%22st0%22%20d%3D%22M24.1%2C13.3c0%2C0-3-4.8-3-8.7c0-2.5-2.2-4.6-4.9-4.6c-2.7%2C0-4.9%2C2.1-4.9%2C4.6c0%2C3.9-3%2C8.7-3%2C8.7%0A%09%09%09%09%09%09%09c-0.2%2C0.3-0.2%2C0.6%2C0%2C0.8c0.2%2C0.3%2C0.4%2C0.4%2C0.7%2C0.4h14.3c0.3%2C0%2C0.6-0.2%2C0.7-0.4C24.2%2C13.9%2C24.2%2C13.6%2C24.1%2C13.3%22/%3E%0A%09%09%09%09%09%09%3Cpath%20id%3D%22Fill-3%22%20class%3D%22st0%22%20d%3D%22M16.2%2C17.8c-1.1%2C0-2.1-0.8-2.2-1.9h4.4C18.2%2C17%2C17.3%2C17.8%2C16.2%2C17.8%22/%3E%0A%09%09%09%09%09%09%3Cpath%20id%3D%22Fill-5%22%20class%3D%22st0%22%20d%3D%22M6.9%2C5.2c0-0.2-0.1-0.3-0.2-0.5c-0.3-0.3-0.7-0.3-1%2C0C4.3%2C6.1%2C3.5%2C7.9%2C3.5%2C9.9%0A%09%09%09%09%09%09%09c0%2C2%2C0.8%2C3.8%2C2.2%2C5.2c0.1%2C0.1%2C0.3%2C0.2%2C0.5%2C0.2c0.2%2C0%2C0.4-0.1%2C0.5-0.2c0.3-0.3%2C0.3-0.7%2C0-1c-1.2-1.1-1.8-2.6-1.8-4.2%0A%09%09%09%09%09%09%09c0-1.6%2C0.6-3.1%2C1.8-4.2C6.8%2C5.5%2C6.9%2C5.4%2C6.9%2C5.2%22/%3E%0A%09%09%09%09%09%09%3Cg%20id%3D%22Group-9%22%20transform%3D%22translate%280.000000%2C%201.702007%29%22%3E%0A%09%09%09%09%09%09%09%3Cg%20id%3D%22Clip-8%22%3E%0A%09%09%09%09%09%09%09%3C/g%3E%0A%09%09%09%09%09%09%09%3Cdefs%3E%0A%09%09%09%09%09%09%09%09%3Cfilter%20id%3D%22Adobe_OpacityMaskFilter%22%20filterUnits%3D%22userSpaceOnUse%22%20x%3D%220%22%20y%3D%220.2%22%20width%3D%224.5%22%20height%3D%2215.9%22%3E%0A%09%09%09%09%09%09%09%09%09%3CfeColorMatrix%20%20type%3D%22matrix%22%20values%3D%221%200%200%200%200%20%200%201%200%200%200%20%200%200%201%200%200%20%200%200%200%201%200%22/%3E%0A%09%09%09%09%09%09%09%09%3C/filter%3E%0A%09%09%09%09%09%09%09%3C/defs%3E%0A%09%09%09%09%09%09%09%3Cmask%20maskUnits%3D%22userSpaceOnUse%22%20x%3D%220%22%20y%3D%220.2%22%20width%3D%224.5%22%20height%3D%2215.9%22%20id%3D%22mask-2%22%3E%0A%09%09%09%09%09%09%09%09%3Cg%20class%3D%22st1%22%3E%0A%09%09%09%09%09%09%09%09%09%3Cpath%20id%3D%22path-1%22%20class%3D%22st2%22%20d%3D%22M0%2C16.1h4.5V0.2H0V16.1L0%2C16.1z%22/%3E%0A%09%09%09%09%09%09%09%09%3C/g%3E%0A%09%09%09%09%09%09%09%3C/mask%3E%0A%09%09%09%09%09%09%09%3Cpath%20id%3D%22Fill-7%22%20class%3D%22st3%22%20d%3D%22M1.4%2C8.1c0-2.6%2C1-5%2C2.9-6.8c0.3-0.3%2C0.3-0.7%2C0-1c-0.3-0.3-0.7-0.3-1%2C0C1.2%2C2.5%2C0%2C5.2%2C0%2C8.1%0A%09%09%09%09%09%09%09%09c0%2C2.9%2C1.2%2C5.7%2C3.3%2C7.7c0.1%2C0.1%2C0.3%2C0.2%2C0.5%2C0.2c0.1%2C0%2C0.3%2C0%2C0.5-0.2c0.1-0.1%2C0.2-0.3%2C0.2-0.5c0-0.2-0.1-0.4-0.2-0.5%0A%09%09%09%09%09%09%09%09C2.4%2C13.1%2C1.4%2C10.7%2C1.4%2C8.1%22/%3E%0A%09%09%09%09%09%09%3C/g%3E%0A%09%09%09%09%09%09%3Cpath%20id%3D%22Fill-10%22%20class%3D%22st0%22%20d%3D%22M26.6%2C4.7c-0.3-0.3-0.7-0.3-1%2C0c-0.3%2C0.3-0.3%2C0.7%2C0%2C1c1.2%2C1.1%2C1.8%2C2.6%2C1.8%2C4.2%0A%09%09%09%09%09%09%09c0%2C1.6-0.6%2C3.1-1.8%2C4.2c-0.3%2C0.3-0.3%2C0.7%2C0%2C1c0.1%2C0.1%2C0.3%2C0.2%2C0.5%2C0.2c0.2%2C0%2C0.4-0.1%2C0.5-0.2c1.4-1.4%2C2.2-3.2%2C2.2-5.2%0A%09%09%09%09%09%09%09C28.8%2C7.9%2C28.1%2C6.1%2C26.6%2C4.7%22/%3E%0A%09%09%09%09%09%09%3Cpath%20id%3D%22Fill-12%22%20class%3D%22st0%22%20d%3D%22M29%2C2.1c-0.3-0.3-0.7-0.3-1%2C0c-0.1%2C0.1-0.2%2C0.3-0.2%2C0.5c0%2C0.2%2C0.1%2C0.4%2C0.2%2C0.5%0A%09%09%09%09%09%09%09c1.9%2C1.8%2C2.9%2C4.2%2C2.9%2C6.8c0%2C2.6-1%2C5-2.9%2C6.8c-0.1%2C0.1-0.2%2C0.3-0.2%2C0.5c0%2C0.2%2C0.1%2C0.3%2C0.2%2C0.5c0.1%2C0.1%2C0.3%2C0.2%2C0.5%2C0.2%0A%09%09%09%09%09%09%09c0.2%2C0%2C0.4-0.1%2C0.5-0.2c2.1-2.1%2C3.3-4.8%2C3.3-7.7C32.3%2C6.9%2C31.2%2C4.2%2C29%2C2.1%22/%3E%0A%09%09%09%09%09%3C/g%3E%0A%09%09%09%09%3C/g%3E%0A%09%09%09%3C/g%3E%0A%09%09%3C/g%3E%0A%09%3C/g%3E%0A%3C/g%3E%0A%3C/svg%3E%0A') no-repeat 21px 10px;
-        background-size: 29px 20px;
-        padding: 9px 25px 10px 60px;
-    }
-}
-
 .search-sliders {
     width: 100%;
     z-index: 10;
@@ -689,38 +584,13 @@
 .alert-block .list-desc {
     height: auto !important;
 }
-@media only screen and (min-width:960px) { 
-    .ad-list-block .site-search .ad-category-list {
-        min-width: 130px;
+.ad-list-block {
+    .custom-modal .save-search-title {
+        background: url('data:image/svg+xml;charset=US-ASCII,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%0A%3C%21--%20Generator%3A%20Adobe%20Illustrator%2019.2.0%2C%20SVG%20Export%20Plug-In%20.%20SVG%20Version%3A%206.00%20Build%200%29%20%20--%3E%0A%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20x%3D%220px%22%20y%3D%220px%22%0A%09%20width%3D%2233px%22%20height%3D%2218px%22%20viewBox%3D%220%200%2033%2018%22%20style%3D%22enable-background%3Anew%200%200%2033%2018%3B%22%20xml%3Aspace%3D%22preserve%22%3E%0A%3Cstyle%20type%3D%22text/css%22%3E%0A%09.st0%7Bfill%3A%23A8DC28%3B%7D%0A%09.st1%7Bfilter%3Aurl%28%23Adobe_OpacityMaskFilter%29%3B%7D%0A%09.st2%7Bfill%3A%23FFFFFF%3B%7D%0A%09.st3%7Bmask%3Aurl%28%23mask-2%29%3Bfill%3A%23A8DC28%3B%7D%0A%3C/style%3E%0A%3Ctitle%3EBell-white%3C/title%3E%0A%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%0A%3Cg%20id%3D%22Page-1%22%3E%0A%09%3Cg%20id%3D%22Create-alert%22%20transform%3D%22translate%28-355.000000%2C%20-407.000000%29%22%3E%0A%09%09%3Cg%20id%3D%22Filters%22%20transform%3D%22translate%28182.000000%2C%20385.000000%29%22%3E%0A%09%09%09%3Cg%20id%3D%22create-alert-hover%22%20transform%3D%22translate%2811.000000%2C%2011.000000%29%22%3E%0A%09%09%09%09%3Cg%20id%3D%22Group-2%22%20transform%3D%22translate%2835.000000%2C%208.000000%29%22%3E%0A%09%09%09%09%09%3Cg%20id%3D%22Bell-white%22%20transform%3D%22translate%28127.000000%2C%203.000000%29%22%3E%0A%09%09%09%09%09%09%3Cpath%20id%3D%22Fill-1%22%20class%3D%22st0%22%20d%3D%22M24.1%2C13.3c0%2C0-3-4.8-3-8.7c0-2.5-2.2-4.6-4.9-4.6c-2.7%2C0-4.9%2C2.1-4.9%2C4.6c0%2C3.9-3%2C8.7-3%2C8.7%0A%09%09%09%09%09%09%09c-0.2%2C0.3-0.2%2C0.6%2C0%2C0.8c0.2%2C0.3%2C0.4%2C0.4%2C0.7%2C0.4h14.3c0.3%2C0%2C0.6-0.2%2C0.7-0.4C24.2%2C13.9%2C24.2%2C13.6%2C24.1%2C13.3%22/%3E%0A%09%09%09%09%09%09%3Cpath%20id%3D%22Fill-3%22%20class%3D%22st0%22%20d%3D%22M16.2%2C17.8c-1.1%2C0-2.1-0.8-2.2-1.9h4.4C18.2%2C17%2C17.3%2C17.8%2C16.2%2C17.8%22/%3E%0A%09%09%09%09%09%09%3Cpath%20id%3D%22Fill-5%22%20class%3D%22st0%22%20d%3D%22M6.9%2C5.2c0-0.2-0.1-0.3-0.2-0.5c-0.3-0.3-0.7-0.3-1%2C0C4.3%2C6.1%2C3.5%2C7.9%2C3.5%2C9.9%0A%09%09%09%09%09%09%09c0%2C2%2C0.8%2C3.8%2C2.2%2C5.2c0.1%2C0.1%2C0.3%2C0.2%2C0.5%2C0.2c0.2%2C0%2C0.4-0.1%2C0.5-0.2c0.3-0.3%2C0.3-0.7%2C0-1c-1.2-1.1-1.8-2.6-1.8-4.2%0A%09%09%09%09%09%09%09c0-1.6%2C0.6-3.1%2C1.8-4.2C6.8%2C5.5%2C6.9%2C5.4%2C6.9%2C5.2%22/%3E%0A%09%09%09%09%09%09%3Cg%20id%3D%22Group-9%22%20transform%3D%22translate%280.000000%2C%201.702007%29%22%3E%0A%09%09%09%09%09%09%09%3Cg%20id%3D%22Clip-8%22%3E%0A%09%09%09%09%09%09%09%3C/g%3E%0A%09%09%09%09%09%09%09%3Cdefs%3E%0A%09%09%09%09%09%09%09%09%3Cfilter%20id%3D%22Adobe_OpacityMaskFilter%22%20filterUnits%3D%22userSpaceOnUse%22%20x%3D%220%22%20y%3D%220.2%22%20width%3D%224.5%22%20height%3D%2215.9%22%3E%0A%09%09%09%09%09%09%09%09%09%3CfeColorMatrix%20%20type%3D%22matrix%22%20values%3D%221%200%200%200%200%20%200%201%200%200%200%20%200%200%201%200%200%20%200%200%200%201%200%22/%3E%0A%09%09%09%09%09%09%09%09%3C/filter%3E%0A%09%09%09%09%09%09%09%3C/defs%3E%0A%09%09%09%09%09%09%09%3Cmask%20maskUnits%3D%22userSpaceOnUse%22%20x%3D%220%22%20y%3D%220.2%22%20width%3D%224.5%22%20height%3D%2215.9%22%20id%3D%22mask-2%22%3E%0A%09%09%09%09%09%09%09%09%3Cg%20class%3D%22st1%22%3E%0A%09%09%09%09%09%09%09%09%09%3Cpath%20id%3D%22path-1%22%20class%3D%22st2%22%20d%3D%22M0%2C16.1h4.5V0.2H0V16.1L0%2C16.1z%22/%3E%0A%09%09%09%09%09%09%09%09%3C/g%3E%0A%09%09%09%09%09%09%09%3C/mask%3E%0A%09%09%09%09%09%09%09%3Cpath%20id%3D%22Fill-7%22%20class%3D%22st3%22%20d%3D%22M1.4%2C8.1c0-2.6%2C1-5%2C2.9-6.8c0.3-0.3%2C0.3-0.7%2C0-1c-0.3-0.3-0.7-0.3-1%2C0C1.2%2C2.5%2C0%2C5.2%2C0%2C8.1%0A%09%09%09%09%09%09%09%09c0%2C2.9%2C1.2%2C5.7%2C3.3%2C7.7c0.1%2C0.1%2C0.3%2C0.2%2C0.5%2C0.2c0.1%2C0%2C0.3%2C0%2C0.5-0.2c0.1-0.1%2C0.2-0.3%2C0.2-0.5c0-0.2-0.1-0.4-0.2-0.5%0A%09%09%09%09%09%09%09%09C2.4%2C13.1%2C1.4%2C10.7%2C1.4%2C8.1%22/%3E%0A%09%09%09%09%09%09%3C/g%3E%0A%09%09%09%09%09%09%3Cpath%20id%3D%22Fill-10%22%20class%3D%22st0%22%20d%3D%22M26.6%2C4.7c-0.3-0.3-0.7-0.3-1%2C0c-0.3%2C0.3-0.3%2C0.7%2C0%2C1c1.2%2C1.1%2C1.8%2C2.6%2C1.8%2C4.2%0A%09%09%09%09%09%09%09c0%2C1.6-0.6%2C3.1-1.8%2C4.2c-0.3%2C0.3-0.3%2C0.7%2C0%2C1c0.1%2C0.1%2C0.3%2C0.2%2C0.5%2C0.2c0.2%2C0%2C0.4-0.1%2C0.5-0.2c1.4-1.4%2C2.2-3.2%2C2.2-5.2%0A%09%09%09%09%09%09%09C28.8%2C7.9%2C28.1%2C6.1%2C26.6%2C4.7%22/%3E%0A%09%09%09%09%09%09%3Cpath%20id%3D%22Fill-12%22%20class%3D%22st0%22%20d%3D%22M29%2C2.1c-0.3-0.3-0.7-0.3-1%2C0c-0.1%2C0.1-0.2%2C0.3-0.2%2C0.5c0%2C0.2%2C0.1%2C0.4%2C0.2%2C0.5%0A%09%09%09%09%09%09%09c1.9%2C1.8%2C2.9%2C4.2%2C2.9%2C6.8c0%2C2.6-1%2C5-2.9%2C6.8c-0.1%2C0.1-0.2%2C0.3-0.2%2C0.5c0%2C0.2%2C0.1%2C0.3%2C0.2%2C0.5c0.1%2C0.1%2C0.3%2C0.2%2C0.5%2C0.2%0A%09%09%09%09%09%09%09c0.2%2C0%2C0.4-0.1%2C0.5-0.2c2.1-2.1%2C3.3-4.8%2C3.3-7.7C32.3%2C6.9%2C31.2%2C4.2%2C29%2C2.1%22/%3E%0A%09%09%09%09%09%3C/g%3E%0A%09%09%09%09%3C/g%3E%0A%09%09%09%3C/g%3E%0A%09%09%3C/g%3E%0A%09%3C/g%3E%0A%3C/g%3E%0A%3C/svg%3E%0A') no-repeat 21px 10px;
+        background-size: 29px 20px;
+        padding: 9px 25px 10px 60px;
     }
 }
-@media (min-width: 760px) and (max-width:959px) {
-  .notify-me .btn {
-      width: auto;
-  }
-}
-@media (min-width: 320px) and (max-width:759px) {
-    .listing.alert-block::after {
-        background: none;
-    }
-    .notify-me .form-control {
-        margin-top: 10px; 
-        margin-bottom: 10px !important;
-    }
-    .notify-me .input-group-append, .notify-me .btn {
-      width: 100%;
-      display: block !important;
-    }
-   .listing h3.list-title {
-	min-height: 35px;
-	margin-bottom: 3px;
-     line-height: 17px;
-    }
-  .listing .list-distance .away-from-location {
-    display: none !important;
-  }
-}
-
 .md-refine .btn {
   min-width: 180px;
 }
@@ -728,48 +598,8 @@
   line-height: 40px;
   padding-left: 10px;
 }
-@media only screen and (min-width: 960px) {
-    .ad-list-block .left-search-block {
-        position: relative !important;
-        margin-left: 0 !important;
-        transition: all 0s ease-in 0s !important;
-    }
-}
-@media only screen and (min-width: 760px) and (max-width: 959px){
-  .left-search-block {
-    position: absolute !important;
-    z-index: 999;
-    margin-top: -21px;
-    margin-left: -100%;
-    width: 40% !important;
-  }
-  .left-search-block.open {
-    position: absolute !important;
-    z-index: 999;
-    margin-top: -21px;
-    margin-left: -20px;
-  }
-  .left-search-block .reset-search {
-      background: #FFFFFF;
-      border-top: 0px;
-  }
-}
-@media only screen and (min-width: 320px) and (max-width: 759px){
-  .left-search-block {
-    position: absolute !important;
-    z-index: 999;
-    margin-top: -21px;
-    margin-left: -100%;
-    width: 100% !important;
-    padding: 0px !important;
-  }
-  .left-search-block.open {
-    position: absolute !important;
-    z-index: 999;
-    margin-top: -21px;
-    margin-left: -20px;
-  }
-}
+
+
 .hide_sort_menu {
   position: relative; 
   right: 0px; 
@@ -821,22 +651,6 @@
   margin-left: -4px;
   background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%229%22%20height%3D%228%22%20viewBox%3D%220%200%209%208%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23B3B3B3%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Earrow3%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-138.000000%2C%20-194.000000%29%22%3E%3Cg%20transform%3D%22translate%2869.000000%2C%20150.000000%29%22%3E%3Cg%20transform%3D%22translate%280.000000%2C%2043.000000%29%22%3E%3Cpolygon%20class%3D%22st0%22%20points%3D%2273.3%201%2069%208.5%2077.7%208.5%20%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat;
 }
-
-@media only screen and (max-width: 640px) {
-  .m-search-left {
-    width: 85% !important;
-  }
-  .m-search-right {
-    width: 15% !important;
-    float: right;
-  }
-  .ad-list-block .reset-search{
-    background:#FFFFFF;
-    margin: 0;
-    padding: 14px 9px 20px;
-  }
-}
-
 .left-search-close {  display: none !important; }
 .crawlable-checkbox li a { position: absolute; width: 100%; left: 0; top: 0; z-index: -1; }
 
@@ -922,21 +736,6 @@
 	margin: 4px 10px 15px;
 }
 .bus-shop-user-item-slider .owl-stage { transform: none !important; }
-
-@media only screen and (min-width: 960px) and (max-width: 1151px) {
-	.bus-shop-user-item-slider .item .busad-item {
-	    margin: 0px 7px;
-	    width: 154px;
-	}
-}
-@media only screen and (min-width: 760px) and (max-width: 1151px) {
-	.bus-shop-user-item-slider .item .busad-item {
-	    margin: 0px 7px;
-	}
-}
-
-
-
 .leaflet-popup-content .tricky-link {
   width: auto;
   height: auto;
@@ -945,3 +744,230 @@
   padding: 20px 20px 16px;
   border: 0;
 }
+
+/* One click Featured Upgrade */
+.featured-upgrade-border {
+    border: 1px dashed #999 !important;
+}
+.one-click-upsell.parent {
+    display: inline-block !important;
+}
+.one-click-upsell.parent {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    width: 45%;
+    height: 100%;
+    overflow: hidden;
+    display: table;
+    padding: 20px;
+    background: rgba(255, 255, 255, 1);
+    background: -moz-linear-gradient(left, rgba(255, 255, 255, 0.1) 0, rgba(255, 255, 255, 1) 40%, rgba(255, 255, 255, 1) 100%);
+    background: -webkit-linear-gradient(left, rgba(255, 255, 255, 0.8) 0, rgba(255, 255, 255, 1) 40%, rgba(255, 255, 255, 1) 100%);
+    background: -o-linear-gradient(left, rgba(255, 255, 255, 0.8) 0, rgba(255, 255, 255, 1) 40%, rgba(255, 255, 255, 1) 100%);
+    background: -ms-linear-gradient(left, rgba(255, 255, 255, 0.8) 0, rgba(255, 255, 255, 1) 40%, rgba(255, 255, 255, 1) 100%);
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.8) 0, rgba(255, 255, 255, 1) 40%, rgba(255, 255, 255, 1) 100%);
+}
+.one-click-upsell.parent .child {
+    vertical-align: middle;
+    display: table-cell;
+}
+.one-click-upsell .desc {
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+
+@media only screen and (min-width: 960px) and (max-width: 1151px) {
+	.bus-shop-user-item-slider .item .busad-item {
+	    margin: 0px 7px;
+	    width: 154px;
+	}
+      .ad-list-block {
+        .left-search-block {
+            max-width: 28% !important;
+            flex: 0 0 28% !important;
+        }
+        .right-search-block {
+            max-width: 72% !important;
+            flex: 0 0 72% !important;
+        }
+      }
+}
+@media only screen and (min-width: 760px) and (max-width: 1151px) {
+	.bus-shop-user-item-slider .item .busad-item {
+	    margin: 0px 7px;
+	}
+}
+
+@media only screen and (min-width:960px) { 
+    .ad-list-block .site-search .ad-category-list {
+        min-width: 130px;
+    }
+    .ad-list-block .left-search-block {
+        position: relative !important;
+        margin-left: 0 !important;
+        transition: all 0s ease-in 0s !important;
+    }
+}
+@media (min-width: 760px) and (max-width:959px) {
+    .ad-list-block {
+        .sortby-fields {
+            width: 55%;
+        }
+    }
+    .sortby-area h2 {
+        margin-bottom: 10px;
+    }
+    .site-search .search-box {
+        width: 235px;
+    }
+    .listing .list-distance {
+	width: 65% !important;
+    }
+    .notify-me .btn {
+      width: auto;
+   }
+   .left-search-block {
+      position: absolute !important;
+      z-index: 999;
+      margin-top: -21px;
+      margin-left: -100%;
+      width: 40% !important;
+   }
+  .left-search-block.open {
+      position: absolute !important;
+      z-index: 999;
+      margin-top: -21px;
+      margin-left: -20px;
+   }
+  .left-search-block .reset-search {
+      background: #FFFFFF;
+      border-top: 0px;
+  }
+}
+@media (min-width: 320px) and (max-width:759px) {
+    .listing {
+      .media-left {
+        align-self: flex-start !important;
+      }
+      .list-img {
+        width: 100px;
+        height: auto;
+        img {
+          max-width: 100px;
+          max-height: 80px;
+        }
+      }
+      .media-left img {
+        width: 100px;
+      }
+      h3.list-title {
+        margin-top: 0;
+        float: none;
+        width: auto;
+        min-height: 30px;
+        font-size: 14px;
+
+        line-height: 15px;
+      }
+      .list-price {
+        float: left;
+        text-align: left;
+        margin-top: 0;
+        width: auto;
+        font-size: 20px;
+        margin-top: 0px;
+        text-align: left;
+        line-height: 21px;
+      }
+      .list-distance {
+        margin: 10px 0 0 0;
+      }
+      &::after {
+        background: url("/bundles/fafrontend/images/arrow1.svg") no-repeat;
+        content: " ";
+        display: block;
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        margin-top: -14px;
+        width: 8px;
+        height: 14px;
+      }
+    }
+    .ad-list-block {
+        .mobile-refine {
+            display: block !important;
+        }
+        .sortby-fields {
+            width: 100%;
+            margin-top: 10px;
+        }
+        .mobile-create-alert-box {
+            margin-bottom: 20px;
+        }
+        .mobile-refine .m-sort-btn { 
+            background: #FFFFFF;
+            width: 79px;
+        }
+    }
+
+    .listing.alert-block::after {
+        background: none;
+    }
+    .notify-me .form-control {
+        margin-top: 10px; 
+        margin-bottom: 10px !important;
+    }
+    .notify-me .input-group-append, .notify-me .btn {
+      width: 100%;
+      display: block !important;
+    }
+   .listing h3.list-title {
+	min-height: 35px;
+	margin-bottom: 3px;
+     line-height: 17px;
+    }
+  .listing .list-distance .away-from-location {
+    display: none !important;
+  }
+   .left-search-block {
+    position: absolute !important;
+    z-index: 999;
+    margin-top: -21px;
+    margin-left: -100%;
+    width: 100% !important;
+    padding: 0px !important;
+  }
+  .left-search-block.open {
+    position: absolute !important;
+    z-index: 999;
+    margin-top: -21px;
+    margin-left: -20px;
+  }
+  .listing .media-body {
+    padding: 0px 15px 0px 0px !important;
+  }
+  .one-click-upsell.parent {
+    padding: 10px 20px;
+    width: 55%;
+  }
+}
+@media only screen and (max-width: 640px) {
+  .m-search-left {
+    width: 85% !important;
+  }
+  .m-search-right {
+    width: 15% !important;
+    float: right;
+  }
+  .ad-list-block .reset-search{
+    background:#FFFFFF;
+    margin: 0;
+    padding: 14px 9px 20px;
+  }
+}
+
+

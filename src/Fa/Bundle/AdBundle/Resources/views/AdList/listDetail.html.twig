@@ -201,11 +201,11 @@
     {% if isLiveBasicAd is defined and isLiveBasicAd == 1 %}
         <div class="one-click-upsell parent text-right">
             <div class="child">
-                <h3 class="list-title hide-mobile">Your ad could appear here</h3>
-                <h5 class="show-mobile">Your ad could appear here</h5>
+                <h3 class="list-title d-none d-md-block">Your ad could appear here</h3>
+                <h5 class="d-block d-md-none">Your ad could appear here</h5>
                 <div class="clearfix"></div>
                 {% set categUpgTxtInfo = categoryRepository.find(rootCategoryId) %}
-                <div class="desc hide-mobile">
+                <div class="desc d-none d-md-block">
                     {% if categUpgTxtInfo.FeaturedUpgradeInfo != 'NULL' %}
                         {{ categUpgTxtInfo.FeaturedUpgradeInfo }}
                     {% endif %}
