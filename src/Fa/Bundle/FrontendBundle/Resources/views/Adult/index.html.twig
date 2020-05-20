@@ -122,29 +122,31 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-24">
-                    <div class="homepage-title col">{{'Latest ads'|trans({}, 'frontend-homepage')}}</div>          
-        	        <div class="col-lg-15">
-                        {{ include('FaFrontendBundle:Adult:homePageLatestAds.html.twig', {'divId': 'featured-top-item-slider', 'ads': ''}) }}
-                    </div>
-                    <div class="col-lg-9 latest-ad-r-block">
-        	        	<div class="mb20 square-block-img ga-ahpBlockAResults">
-        	        		{% if mobileDetectManager.isMobile() %}
-                                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK_MOBILE') %}
+                    <div class="homepage-title col">{{'Latest ads'|trans({}, 'frontend-homepage')}}</div> 
+                    <div class="row">         
+            	        <div class="col-lg-15">
+                            {{ include('FaFrontendBundle:Adult:homePageLatestAds.html.twig', {'divId': 'featured-top-item-slider', 'ads': ''}) }}
+                        </div>
+                        <div class="col-lg-9 latest-ad-r-block">
+            	        	<div class="mb20 square-block-img ga-ahpBlockAResults">
+            	        		{% if mobileDetectManager.isMobile() %}
+                                    {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK_MOBILE') %}
+                                    {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                                {% else %}
+                                    {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK') %}
+                                    {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
+                                {% endif %}
+            	        	</div>
+            	        	<div class="mt0 square-block-img ga-ahpBlockBResults">
+            	        	{% if mobileDetectManager.isMobile() %}
+                                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK_MOBILE_2') %}
                                 {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
                             {% else %}
-                                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK') %}
+                                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK_2') %}
                                 {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
                             {% endif %}
-        	        	</div>
-        	        	<div class="mt0 square-block-img ga-ahpBlockBResults">
-        	        	{% if mobileDetectManager.isMobile() %}
-                            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK_MOBILE_2') %}
-                            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
-                        {% else %}
-                            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK_2') %}
-                            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
-                        {% endif %}
-        	        	</div>
+            	        	</div>
+            	        </div>
         	        </div>
         	     </div>
     	     </div>
@@ -203,13 +205,6 @@
 
 {% block scriptbottom %}
 {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
-    {% javascripts filter='uglifyjs2' output='bundles/js/compiled/home.js'
-        'bundles/facore/js/owl.carousel.min.js'
-        'bundles/fafrontend/js/parallax.min.js'
-    %}
-    <script defer src="{{ static_asset_url(asset_url) }}"></script>
-    {% endjavascripts %}
-    
     {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
     {% if mobileDetectManager.is('IE') %}
         {% javascripts filter='uglifyjs2' output='bundles/js/compiled/parallaxFix.js'
@@ -284,13 +279,16 @@
             var featuredItemSlider = $("#featured-top-item-slider");
             featuredItemSlider.owlCarousel({
             	items : 3,
-                itemsCustom:[[320, 2], [568, 3], [641, 2], [760, 3]],
+                itemsCustom:[[320, 1], [568, 2], [641, 2], [760, 3]],
                 navigation: true,
                 pagination:false,
                 responsiveRefreshRate : 100,
-                navigationText: ['<img src="https://fmtinew.friday-ad.co.uk/bundles/fafrontend/images/small-slider-prev.svg" alt="" />', '<img src="https://fmtinew.friday-ad.co.uk/bundles/fafrontend/images/small-slider-next.svg" alt="" />'],
+                navText: ['<img src="https://fmtinew.friday-ad.co.uk/bundles/fafrontend/images/small-slider-prev.svg" alt="" />', '<img src="https://fmtinew.friday-ad.co.uk/bundles/fafrontend/images/small-slider-next.svg" alt="" />'],
                 lazyLoad: true,
-                scrollPerPage: true
+                scrollPerPage: true,
+                nav: true,
+                loop: true,
+                dots: false
             });
 
             var recentlyViwedItemSlider = $("#recently-viwed-item-slider");

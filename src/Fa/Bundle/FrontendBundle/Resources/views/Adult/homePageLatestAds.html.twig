@@ -42,6 +42,7 @@
     {% endfor %}
 </div>
 <div class="mt20 latest-ads">
+        <div class="row">
     {% for latestAdultAd in latestAdultAds  %}
         {% set rootCategoryId = attribute(latestAdultAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::ROOT_CATEGORY_ID')) %}
         {% set rootCategoryName =  staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [rootCategoryId, true]) %}
@@ -58,7 +59,6 @@
         {% if seoRule['image_alt'] is defined %}
             {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], latestAdultAd]) %}
         {% endif %}
-        <div class="row">
         <div class="col-sm-12 col-md-8 col-lg-8 mb20 list">
             <div class="card">
                 <div class="item" data-equalizer-watch>
@@ -81,7 +81,7 @@
                     </h3>
                 </div>
             </div>
-        </div>
-        </div>
+        </div> 
     {% endfor %}
+           </div>
 </div>

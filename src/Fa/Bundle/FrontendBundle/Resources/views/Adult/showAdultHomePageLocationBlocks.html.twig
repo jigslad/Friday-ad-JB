@@ -9,52 +9,56 @@
     {% endif %}
 
     {% set container = fetch_container_instance() %}
-    {% set customized_url = app.request.get('customized_url')  %}
     {% set entityCacheManager = container.get('fa.entity.cache.manager') %}
-    <div id="list_home_location_box" class="fa-accordion">
-        <dl class="accordion" data-accordion>
-            {% set panelCnt = 0 %}
-            {% for solrFieldName, block in blocks %}
-                {% if block['facet'] is defined and block['facet']|length %}
-                    <dd class="accordion-navigation{% if (currentDevice == 'D' and panelCnt == 0) %} active{% endif %}">
-                        <a href="#panelBlock{{panelCnt}}" class="clearfix"><h5 class="left">{{ block['heading'] }}</h5> <i class="{% if (currentDevice == 'D' and panelCnt == 0) %} fi-minus{% else %}fi-plus{% endif %} right"></i></a>
-                        <div id="panelBlock{{panelCnt}}" class="content clearfix{% if (currentDevice == 'D' and panelCnt == 0) %} active{% endif %}">
+    <div class="wrapper center-block home-list-location-box">
+      <div class="panel-group" id="home-accordion" role="tablist" aria-multiselectable="true">
+        {% set panelCnt = 0 %}
+        {% for solrFieldName, block in blocks %}
+            {% if block['facet'] is defined and block['facet']|length %}
+                  <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="home-heading{{ panelCnt }}">
+                      <h4 class="panel-title">
+                        <a role="button" data-toggle="collapse" data-parent="#home-accordion" href="#home-collapse{{ panelCnt }}" aria-expanded="false" aria-controls="home-collapse{{ panelCnt }}">{{ block['heading'] }} <i class="fa float-right {% if (currentDevice == 'D' and panelCnt == 0) %}fa-minus{% else %}fa-plus{% endif %}"></i></a>
+                      </h4>
+                    </div>
+                    <div id="home-collapse{{ panelCnt }}" class="panel-collapse collapse {% if (currentDevice == 'D' and panelCnt == 0) %}show{% endif %}" role="tabpanel" aria-labelledby="home-heading{{ panelCnt }}">
+                        <div class="panel-body list-panel-body">
                             <ul class="link-list">
-                                <li>
-                                    {% set facetIdArray = block['facet']|keys %}
-                                    {% if currentDevice == 'T'%}
-                                        {% set columns = 5 %}
-                                    {% else %}
-                                        {% set columns = 6 %}
+                                {% set facetIdArray = block['facet']|keys %}
+                                {% if currentDevice == 'T'%}
+                                    {% set columns = 5 %}
+                                {% else %}
+                                    {% set columns = 6 %}
+                                {% endif %}
+                                {% set ctr = 0 %}
+                                {% set totalItems = facetIdArray|length %}
+                                {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
+                                {% set extraColumn = (totalItems % columns) %}
+                                {% set colCounter = {} %}
+                                {% for i in 0..columns-1 %}
+                                    {% if loop.index0 < extraColumn %}
+                                        {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
+                                    {% else  %}
+                                        {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
                                     {% endif %}
-                                    {% set ctr = 0 %}
-                                    {% set totalItems = facetIdArray|length %}
-                                    {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
-                                    {% set extraColumn = (totalItems % columns) %}
-                                    {% set colCounter = {} %}
-                                    {% for i in 0..columns-1 %}
-                                        {% if loop.index0 < extraColumn %}
-                                            {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
-                                        {% else  %}
-                                            {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
-                                        {% endif %}
-                                    {% endfor %}
-                                    {% for i in 0..totalItems-1 %}                                               
+                                {% endfor %}
+                                {% for i in 0..columns-1 %}
+                                        {% for k in 0..colCounter[i]-1 %}
                                             {% if facetIdArray[ctr] is defined %}
                                                 {% set facetId = facetIdArray[ctr] %}
-                                                {% set searchResultUrl = container.get('fa_ad.manager.ad_routing').getCustomListingUrl({ (block['search_field_name']): facetId},'adult-services/escorts') %}
-                                                {# {% set searchResultUrl =  path('location_home_page', {'location': entityCacheManager.getEntitySlugById('FaEntityBundle:Location', facetId)}) %} #}
-                                                <a href="{{ searchResultUrl }}">{{ entityCacheManager.getEntityNameById(block['repository'], facetId) }} {# ({{ block['facet'][facetId] }}) #}</a>
+                                                {% set searchResultUrl =  path('location_home_page', {'location': entityCacheManager.getEntitySlugById('FaEntityBundle:Location', facetId)}) %}
+                                                <li><a href="{{ searchResultUrl }}">{{ entityCacheManager.getEntityNameById(block['repository'], facetId) }} {# ({{ block['facet'][facetId] }}) #}</a></li>
                                             {% endif %}
-                                            {% set ctr = ctr + 1 %}                                               
-                                    {% endfor %}
-                                </li>
-                          </ul>
+                                            {% set ctr = ctr + 1 %}
+                                        {% endfor %}
+                                {% endfor %}
+                            </ul>
                         </div>
-                    </dd>
-                    {% set panelCnt = panelCnt + 1 %}
-                {% endif %}
-            {% endfor %}
-        </dl>
+                    </div>
+                  </div>   
+            {% set panelCnt = panelCnt + 1 %}
+            {% endif %}
+        {% endfor %}               
+    	</div>
     </div>
 {% endif %}
