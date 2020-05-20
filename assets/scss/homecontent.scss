@@ -264,6 +264,10 @@
     .homepage-hero .tagline img {
 	max-width: 263px;
     }
+   span.select2-dropdown.select2-dropdown--below, span.select2-dropdown.select2-dropdown--above {
+        width:121px !important;
+    }
+
 }
 
 @media (min-width:960px) and (max-width: 1151px) {
