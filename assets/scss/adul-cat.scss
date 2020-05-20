@@ -21,7 +21,7 @@
 #home-search .adult-search table {margin-bottom: 0.5rem}
 .search-input-box {width: 80%;}
 .advanced-search-option {width: 20%; height: 40px; padding: 8px; text-align: right;}
-.adult-color { color:#E62EEB;font-weight: normal;font-family: "Poppins-Bold"; }
+.homepage-advance-srch { color:#E62EEB !important;font-family: "Poppins-SemiBold"; }
 #home-search .adult-loc-search.location { margin-top: 17px !important; }
 .select2-drop-multi .select2-results { column-count: 2;background: #ffffff !important; }
 .select2-drop-multi .select2-results li { border-bottom: 0px solid #fff; box-shadow: none; }
@@ -491,7 +491,8 @@
     top: 0;
     width: 100%;
 }
-/* Adult Homepage Search */
+
+/* Adult Homepage Search */ 
 .adult-search {display: inline-flex;width: 100% !important; }
 #home-search .adult-search .looking-for input[type="text"] {border-top-left-radius: 4px !important;border-bottom-left-radius: 4px !important;}
 #home-search .adult-search table {margin-bottom: 0.5rem}
@@ -621,6 +622,75 @@
     background: #FFFFFF url("/Frontend/images/adul/adul-alert-illustration.svg") no-repeat 90% 10px;
 }
 
+.looking-for input[type="text"] {
+    border-radius: 4px 0px 0px 4px!important;
+}
+.looking-for .search-btn {
+    border-radius: 0px 4px 4px 0px !important;
+}
+.select2-drop-multi .select2-results {
+    column-count: 2;
+    background: #FFFFFF !important;
+}
+.select2-drop-multi .select2-results li {
+    border-bottom: 0px solid #fff;
+    box-shadow: none;
+}
+.select2-drop-multi .select2-results li .select2-result-label, .select2-drop-multi .select2-results .select2-result-label {
+    color: #212527;
+    font-size: 12px;
+    letter-spacing: 0;
+    line-height: 18px;
+}
+.select2-drop-multi .select2-results li .select2-match::before {
+    content: "";
+    display: inline-block;
+    position: relative;
+    height: 21px;
+    width: 21px;
+    border-radius: 2px;
+    border: 1px solid #CBD5D9;
+    margin-right: 10px;
+    vertical-align: middle;
+    background-color: #EAEFF0;
+}
+.select2-container-multi .select2-choices, .adul-search-form .select2-container .select2-choice, .adul-search-form .select2-container .select2-choice:hover, .adul-search-form .select2-container .select2-choice:focus, .adul-search-form .select2-container-multi.select2-container-active .select2-choices {
+    padding-right: 25px !important;
+}
+.select2-search-choice {
+    height: 30px !important;
+    margin: 4px 0 0 4px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0 !important;
+    line-height: 21px !important;
+    text-align: right !important;
+    color: #FFFFFF !important;
+    background: linear-gradient(135deg, #A75BD8 0%, #C60A84 100%) !important;
+    border: 0px solid #9C1F9F !important;
+    padding: .1875rem 1.5rem .1875rem 0.5rem !important;
+}
+.select2-container-multi .select2-search-choice-close {
+    background: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding='UTF-8'?%3e%3csvg width='24px' height='24px' viewBox='0 0 24 24' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3c!-- Generator: Sketch 63.1 (92452) - https://sketch.com --%3e%3ctitle%3eIcon / 24 / Functional / Cross%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cg id='Icon-/-24-/-Functional-/-Cross' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3e%3cpolygon id='Shape' fill='%23ffffff' points='19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12'/%3e%3c/g%3e%3c/svg%3e") no-repeat !important;
+    right: 6px !important;
+    top: 2px !important;
+    background-size: 22px 24px !important;
+    text-indent: -9999px !important;
+}
+.select2-container-multi .select2-choices .select2-search-field {
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+}
+.select2-container-multi .select2-choices li {
+    float: left;
+    list-style: none;
+}
+.select2-container-multi .select2-choices .select2-search-field input {
+    padding: .5rem;
+    margin: 0;
+    height: 38px;
+}
 @media only screen and (min-width: 641px) and (max-width: 960px) {
     .parallax-mirror, .parallax-window {
         background: url('/Frontend/images/adul/hero-homepage-s.png') no-repeat !important;
@@ -628,5 +698,38 @@
         background-repeat: no-repeat !important;
         background-size: cover !important; 
     }
+}
+@media (min-width: 320px) and (max-width: 759px) {
+	.discover-categories a, .discover-categories a:hover, .discover-categories a:focus, .discover-categories a:active {
+	    width: 80px;
+	    height: 80px;
+	    margin: 8px 8px;
+	    background-size: cover;
+	    background-position: center;
+	    float: none;
+	}
+	.m-pop-click {
+	    top: 50px;
+	}
+	.m-pop-1 {
+	    min-height: 90px;
+	    overflow: hidden;
+	    height: 90px;
+	}
+	.m-pop-2 {
+	    min-height: 100%;
+	    overflow: auto;
+	    height: auto;
+	}
+}
+@media (min-width: 760px) and (max-width: 959px) {
+	.discover-categories a, .discover-categories a:hover, .discover-categories a:focus, .discover-categories a:active {
+	    width: 80px;
+	    height: 80px;
+	    margin: 8px 8px;
+	    background-size: cover;
+	    background-position: center;
+	    float: none;
+	}
 }
 

@@ -121,31 +121,33 @@
     <div class="homepage-row">
         <div class="container">
             <div class="row">
-                <div class="homepage-title col">{{'Latest ads'|trans({}, 'frontend-homepage')}}</div>
-            </div>
-	        <div class="medium-24 large-15 columns">
-                {{ include('FaFrontendBundle:Adult:homePageLatestAds.html.twig', {'divId': 'featured-top-item-slider', 'ads': ''}) }}
-            </div>
-            <div class="medium-24 large-9 columns latest-ad-r-block">
-	        	<div class="mb20 square-block-img ga-ahpBlockAResults">
-	        		{% if mobileDetectManager.isMobile() %}
-                        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK_MOBILE') %}
-                        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
-                    {% else %}
-                        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK') %}
-                        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
-                    {% endif %}
-	        	</div>
-	        	<div class="mt0 square-block-img ga-ahpBlockBResults">
-	        	{% if mobileDetectManager.isMobile() %}
-                    {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK_MOBILE_2') %}
-                    {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
-                {% else %}
-                    {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK_2') %}
-                    {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
-                {% endif %}
-	        	</div>
-	        </div>
+                <div class="col-md-24">
+                    <div class="homepage-title col">{{'Latest ads'|trans({}, 'frontend-homepage')}}</div>          
+        	        <div class="col-lg-15">
+                        {{ include('FaFrontendBundle:Adult:homePageLatestAds.html.twig', {'divId': 'featured-top-item-slider', 'ads': ''}) }}
+                    </div>
+                    <div class="col-lg-9 latest-ad-r-block">
+        	        	<div class="mb20 square-block-img ga-ahpBlockAResults">
+        	        		{% if mobileDetectManager.isMobile() %}
+                                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK_MOBILE') %}
+                                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                            {% else %}
+                                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK') %}
+                                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
+                            {% endif %}
+        	        	</div>
+        	        	<div class="mt0 square-block-img ga-ahpBlockBResults">
+        	        	{% if mobileDetectManager.isMobile() %}
+                            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK_MOBILE_2') %}
+                            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                        {% else %}
+                            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK_2') %}
+                            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
+                        {% endif %}
+        	        	</div>
+        	        </div>
+        	     </div>
+    	     </div>
         </div>
     </div>
     

@@ -58,6 +58,7 @@
         {% if seoRule['image_alt'] is defined %}
             {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], latestAdultAd]) %}
         {% endif %}
+        <div class="row">
         <div class="col-sm-12 col-md-8 col-lg-8 mb20 list">
             <div class="card">
                 <div class="item" data-equalizer-watch>
@@ -80,6 +81,7 @@
                     </h3>
                 </div>
             </div>
+        </div>
         </div>
     {% endfor %}
 </div>
