@@ -80,7 +80,7 @@ class AdultController extends ThirdPartyLoginController
         );
         
         $externalSiteBlogDetails = array();
-        //$externalSiteBlogDetails  = CommonManager::getWordpressBlogDetails($blogArray);
+        $externalSiteBlogDetails  = CommonManager::getWordpressBlogDetails($blogArray);
         
         $entityCacheManager = $this->container->get('fa.entity.cache.manager');
         $seoLocationName    = $entityCacheManager->getEntityNameById('FaEntityBundle:Location', LocationRepository::COUNTY_ID);
