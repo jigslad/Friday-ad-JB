@@ -24,11 +24,9 @@ input,button, .button, .btn, .primary-btn-1, .primary-btn-2, .primary-btn-3, .se
 .discover-categories a.active, .discover-categories a.active, .item-box
 { border-radius:$border-radius; } 
 
-.top-links .db-notifications .alert-box a, #business_about_us_div a, .user-name a, .tooltip.opened,  
-.see-more a.clear_filter:hover,  .details-top-banner b a:hover, #business_about_us_div a:hover, #show_message_div a:hover,
-.top-links a:hover,.top-links button:hover, .top-links a:focus,.top-links button:focus, .top-links .f-dropdown li a:hover,
-.top-links .notification-link a span,.top-links .msg-link a span, .left-off-canvas-menu .db-left-menu a:hover, .left-off-canvas-menu .db-left-menu a:focus, .left-off-canvas-menu .db-left-menu a:active, .pkg-pricing h4, .basket-icon span, a.cookie-policy,
-.top-bar-section ul li:hover:not(.has-form) > a, .top-bar-section ul li:focus:not(.has-form) > a, 
+.top-links .db-notifications .alert-box a, #business_about_us_div a, .tooltip.opened, #header_search_editable_location_a.ahp-chg-under-loc, 
+.top-links a:hover,.top-links button:hover, .top-links a:focus,.top-links button:focus, .top-links .f-dropdown li a:hover, 
+.top-links .notification-link a span,.top-links .msg-link a span, a.cookie-policy, .top-bar-section ul li:hover:not(.has-form) > a, .top-bar-section ul li:focus:not(.has-form) > a, .user-name a, .left-off-canvas-menu .db-left-menu a:hover, .left-off-canvas-menu .db-left-menu a:focus, .left-off-canvas-menu .db-left-menu a:active, .pkg-pricing h4, .basket-icon span
 {
     color: $atag-light-color !important;
 }
@@ -898,7 +896,7 @@ ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {
     background: $site-dark-bg-color;
 }
 .demo-2 .dl-menuwrapper button {
-    background: #4D5052;
+    background: $common-text-color;
 }
 .demo-2 .dl-menuwrapper button:hover,
 .demo-2 .dl-menuwrapper button.dl-active {
@@ -1565,7 +1563,6 @@ table.responsive-card-table tr:nth-of-type(2n) {
 .latest-shop-price h4 span { color: $secondary-color; }
 .latest-place-ad { background: $form-text-color; border: 1px solid $form-text-color; }
 .latest-place-ad:hover { border-color: $form-border-color; }
-.latest-place-ad:hover .place-ad-text { color: $secondary-color; }
 .shop-back-link {
     color: $form-text-color;
     border: 1px solid $form-border-color;
@@ -2078,35 +2075,172 @@ footer p { color:$grey-color; }
     background: $secondary-color;
 }
 .chcw_header a, .chcw_header a:hover, .chcw_header a:focus, .chcw_header a:active { color: $common-text-color !important; }
-.item { background: #EEF2F5; }
+.item { background: $form-border-color; }
 
-@media only screen and (max-width: 640px) {
-  .ad-list-block .reset-search{
-    border-bottom: 1px solid $form-border-color;
-    border-left: 1px solid $form-border-color;
-    border-right: 1px solid $form-border-color;
-  }
+.placeholderTxt::placeholder, .placeholderTxt::-webkit-input-placeholder, .placeholderTxt:-ms-input-placeholder { color: red !important; }
+.fa-slider.bus-shop-user-item-slider .owl-item .item:hover h3, a.xs-btn-2.button, .db-section .manage-item-btns .xs-black-btn,
+.homepage-hero:first-child, .select2-drop-multi .select2-results li .select2-result-label, .select2-results .select2-result-label,
+.top-bar-section a.backtofad, .blog-item .list-title, .content.active .link-list a, .blog-item .list-author-pub-date, .btn-transparent,
+.reset-search a, .latest-place-ad:hover .place-ad-text, .edit-advert, .add-photo:hover .add-photo-text
+{
+    color: $common-text-color !important;
 }
-@media only screen and (min-width: 320px) and (max-width: 640px) { 
-    .motor-info .info-box:nth-child(2n+1) {
-        background: $light-grey-color;
+.details-price a:hover, .detail-tabpart-2 a:hover, a.read-more:hover, a.read-less:hover, .see-more a.clear_filter:hover,  .details-top-banner b a:hover, #business_about_us_div a:hover, #show_message_div a:hover
+{ 
+    color:$accent1-dark-color !important; 
+}
+
+.top-bar-section ul li.active>a, .icon-bar>*:hover, .progress .meter, .sub-nav dt.active a,.sub-nav dd.active a,.sub-nav li.active a,
+.range-slider.radius .range-slider-handle, .range-slider.round .range-slider-handle, .range-slider.disabled .range-slider-handle,.range-slider[disabled] .range-slider-handle, .range-slider-handle, .switch input:checked+label, #zoom_div .ui-slider-handle.ui-state-default,#zoom_div .ui-slider-handle.ui-state-hover, .radio-capsule .capsule-bg:hover,.radio-capsule .capsule-bg.active, .website-btn-1, .website-btn-1:focus, .website-btn-1:active, .website-btn-1:visited, .fa-range-slider .noUi-connect, .adv-srch-form-btn:hover, .adv-srch-form-btn:focus, .capsule-links a:hover,.capsule-links a.active, .pkg-green-head 
+{
+    background:$accent1-dark-color !important;
+}
+
+.label, .report:hover, .reply-msg-heading .report:hover,.reply-msg-heading .mark-sold:hover, .respond-review .report:hover {
+    background-color:$accent1-dark-color !important;
+}
+
+input[type="text"]:focus,input[type="password"]:focus,input[type="date"]:focus,input[type="datetime"]:focus,input[type="datetime-local"]:focus,input[type="month"]:focus,input[type="week"]:focus,input[type="email"]:focus,input[type="number"]:focus,input[type="search"]:focus,input[type="tel"]:focus,input[type="time"]:focus,input[type="url"]:focus,input[type="color"]:focus,textarea:focus,.attachment-textbox:focus, .select2-container-multi.select2-container-active .select2-choices, .site-search #top_search_location input[type="text"]:focus, 
+.listing:hover, #similar-item-slider .owl-item .item:hover, .paa-features li.active, .fa-slider .owl-item .item:hover, .latest-shop-box:hover,
+.drag-drop-box:hover,.drag-drop-box-hover, .img-attach-links a.download-img-link:hover, .img-attach-links a.view-img-link:hover
+{
+    border-color:$accent1-dark-color !important;
+}
+select:hover,select:focus, .ui-selectmenu-button:hover,.ui-selectmenu-button.active,
+.select2-container .select2-choice:hover,.select2-container .select2-choice:focus,
+.paa-gray-box, .credit-cards-box:hover, .map-wrapper .infoBox:hover, .featured-profile-list:hover, .img-upload-ins, .alert-tooltip, .blog-item:hover, .blog-item:focus, .ga-ahpPopularSearch, a.ga-ahpPopularSearch:hover, a.ga-ahpPopularSearch:focus
+{
+    border:1px solid $accent1-dark-color !important;
+}
+
+.datepicker td.active.day,.datepicker th.active.day{
+    background:$accent1-dark-color !important;
+    border-color:$accent1-dark-color !important;
+}
+.secondary-btn-2, .secondary-btn-3, .secondary-btn-4, .primary-btn-3, .primary-btn-4{
+    border:1px solid $accent1-dark-color !important;
+    color:$accent1-dark-color !important;
+    background:transparent !important;
+}
+
+.select2-chkbox li .select2-match:before { border: 1px solid $grey-color; }
+.select-with-checkbox .select2-result-selectable .select2-match:after { background-color: green; }
+
+.top-bar-section ul.db-menu-mobile li {
+    background: $common-text-color !important;
+} 
+
+.my-msg-box:hover,.unread-msg:hover{
+    box-shadow:inset 0 0 0 2px $accent1-dark-color !important;
+}
+
+.highlight, .active-pkg, .leaflet-popup:hover .leaflet-popup-tip {
+    border:2px solid $accent1-dark-color !important;
+}
+.saved-item-btn,.saved-item-btn:hover,.saved-item-btn:focus,.save-item-btn:hover,.save-item-btn:focus{
+    border-color:$accent1-dark-color !important;
+    color:$accent1-dark-color !important;
+}
+.cover-img-thumbs li:hover{
+    outline:4px solid $accent1-dark-color !important;
+}
+.paa-pkg-bg:hover .primary-btn-3{
+    background:$accent1-dark-color !important;
+    border:1px solid $accent1-dark-color !important;
+}
+.paa-pkg-bg:hover .primary-btn-2{
+    background:$accent1-dark-color !important;
+    border:1px solid $accent1-dark-color !important;
+}
+.img-upload-layer{
+    border:2px dashed $accent1-dark-color !important;
+}
+
+#adult-categories.popular-items .active .item-box{
+    border:3px solid $accent1-dark-color
+}
+.finance-btn{
+    border:solid 1px $accent1-dark-color !important;
+    color:$accent1-dark-color !important;
+}
+.finance-btn:before{
+    border:solid 1px $accent1-dark-color !important;
+}
+.finance-btn:hover,.finance-btn:hover:before{
+    background:$accent1-dark-color !important;
+    border-color:$accent1-dark-color !important;
+}
+.finance-btn:hover:focus{
+    background:$accent1-dark-color !important;
+}
+
+.leaflet-popup-content-wrapper:hover {
+    outline: 2px solid $accent1-dark-color;
+}
+.list-display-url:hover, .list-img a:hover, .search-pref a:hover, #savedSearchAgentModal .modal-content a:hover{
+    color: $accent1-dark-color !important;
+}
+
+.alert-tooltip:after { border-right-color: $accent1-dark-color !important; }
+
+.site-search .search-icon:hover{
+    background-color:$accent1-dark-color !important;
+    border-color:$accent1-dark-color !important;
+}
+.msg-smiley{
+    background:$form-border-color;
+}
+.blog-item { border: 1px solid $grey-color; }
+.blog-item .list-img { border-bottom: 1px solid $grey-color; }
+.latest-ads .card .item { border: 1px solid $grey-color !important;background: #fff !important; }
+.browse-by-category {
+    color: $dark-grey;
+} 
+
+.select2-drop-multi .select2-results li .select2-match:before {
+    border: 1px solid $grey-color;background-color: $form-border-color
+}
+.adv-srch-form-btn { 
+    background:$atag-light-color;
+}
+.step-nav .step-on .step-1, .step-nav .step-on .step-2, .step-nav .step-on .step-3, .step-nav .step-on .step-2 {
+   border: 3px solid $atag-light-color;color: $atag-light-color;
+}
+
+.select2-container.find-all .select2-choice, .select2-container.find-all .select2-choice:hover,
+.select2-container.find-all .select2-choice:focus, .select2-container.find-all .select2-choice:active,
+.select2-container.find-all, .select2-container.find-all:hover, .select2-container.find-all:focus, .select2-container.find-all:active,
+.find-all .select2-choice, .find-all .select2-choice:hover, .find-all .select2-choice:focus, .find-all .select2-choice:active,
+.find-all, .find-all:hover, .find-all:focus, .find-all:active
+{
+    color: $dark-grey !important;
+    border-color: $grey-color !important;
+}
+.item__details {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  width: 100%;
+}
+.item__details img {
+  display: inline-block;
+  vertical-align: middle;
+  max-width: 100%;
+  height: 100%;
+  -ms-interpolation-mode: bicubic;
+  width: max-content;
+}
+@media only screen and (min-width:40.063em){
+    .top-bar-section li.active:not(.has-form) a:not(.button), .no-js .top-bar-section ul li:active>a{
+        background:$accent1-dark-color !important;
     }
-    .home-search .search-btn {
-        background: url('/bundles/fafrontend/images/search-icon.svg') no-repeat center center / 16px 16px, linear-gradient(135deg, $secondary-btn-l-color 0%, $secondary-btn-r-color 100%) !important;
-        border: 0px solid $secondary-h-color;
-    }
-    .mobile-menu-items li {
-        background: $common-text-color;
-        border-bottom: 1px solid $black;
-        box-shadow: none;
-    }
-    .login-menu li {
-        background: #4D5052;
-        border-bottom: 1px solid #000;
-        box-shadow: none;
-    }
-    .mobile-menu-items li a, .login-menu li a {
-        color: $white;
+    .breadcrumbs>* a{
+	    color:$accent1-dark-color !important;
+	}
+}
+@media only screen and (min-width:960px) and (max-width:1151px){
+    #top_category_menu.real-tablet a.main_category:hover,#top_category_menu .sub-cat-menu a:hover{
+        color:$accent1-dark-color !important;
     }
 }
 @media screen and (min-width: 992px) {
@@ -2122,11 +2256,29 @@ footer p { color:$grey-color; }
     }
 }
 @media only screen and (min-width: 760px) and (max-width: 959px){
-	.left-search-block .reset-search { border: 1px solid $form-border-color; }
+    .left-search-block .reset-search { border: 1px solid $form-border-color; }
+    #top_category_menu a.main_category:hover,#top_category_menu .sub-cat-menu a:hover{
+        color:$accent1-dark-color !important;
+    }
+    .map-wrapper .infoBox:hover{
+        border:1px solid $accent1-dark-color !important;
+    }
 }
 @media only screen and (min-width:560px) and (max-width:759px){
     .top-bar-section li:not(.has-form) a:not(.button) span.notification-digit{
         color:$atag-light-color !important;
+    }
+    .pkg-active{
+        box-shadow:inset 0 0 0 5px $accent1-dark-color !important;
+    }
+    .map-wrapper .infoBox:hover{
+        border:1px solid $accent1-dark-color !important;
+    }
+    .my-review-title{
+        color:$accent1-dark-color !important;
+    }
+    .finance-btn, .finance-btn:before {
+        background:$accent1-dark-color !important;
     }
 }
 @media (min-width: 641px) and (max-width: 959px) {   
@@ -2170,20 +2322,76 @@ footer p { color:$grey-color; }
 	#home-search .search-btn {
 	    background: url('/bundles/fafrontend/images/search-icon.svg') no-repeat center center / 16px 16px, linear-gradient(135deg, $secondary-btn-l-color 0%, $secondary-btn-r-color 100%) !important;	   
 	}
-    .step-nav .step-on .step-1, .step-nav .step-on .step-2, .step-nav .step-on .step-3, .step-nav .step-on .step-2 {
+       .step-nav .step-on .step-1, .step-nav .step-on .step-2, .step-nav .step-on .step-3, .step-nav .step-on .step-2 {
 	    border: 3px solid $atag-light-color !important;
 	    color: $atag-light-color !important;
 	}
+        .sorting-small .secondary-btn-2 {
+		border-color: $accent1-dark-color !important;
+	}
+	.sorting-small .secondary-btn-2:hover, .sorting-small .secondary-btn-2:focus, .sorting-small .secondary-btn-2:active {
+		color: $accent1-dark-color !important;
+	}
+}
+@media only screen and (max-width: 640px) {
+  .ad-list-block .reset-search{
+    border-bottom: 1px solid $form-border-color;
+    border-left: 1px solid $form-border-color;
+    border-right: 1px solid $form-border-color;
+  }
+}
+@media only screen and (min-width: 320px) and (max-width: 640px) { 
+    .motor-info .info-box:nth-child(2n+1) {
+        background: $light-grey-color;
+    }
+    .home-search .search-btn {
+        background: url('/bundles/fafrontend/images/search-icon.svg') no-repeat center center / 16px 16px, linear-gradient(135deg, $secondary-btn-l-color 0%, $secondary-btn-r-color 100%) !important;
+        border: 0px solid $secondary-h-color;
+    }
+    .mobile-menu-items li {
+        background: $common-text-color;
+        border-bottom: 1px solid $black;
+        box-shadow: none;
+    }
+    .login-menu li {
+        background: $common-text-color;
+        border-bottom: 1px solid #000;
+        box-shadow: none;
+    }
+    .mobile-menu-items li a, .login-menu li a {
+        color: $white;
+    }
+    footer .mobile-footer-tab { box-shadow: inset 0 -1px 0 $text-color; }
+    #featured_advertisers_slider .list-img, #featured-top-item-slider .list-img { border-bottom: 1px solid $grey-color; }
+    .top-bar-section .login-menu li:not(.has-form) a:not(.button) {
+        background: $common-text-color !important;
+        border-right: 1px solid $common-text-color !important;
+    }
+    .top-bar-section .accordion dd > a, .top-bar-section .accordion dd > a:hover, .top-bar-section .accordion dd.active > a {
+        background: $common-text-color !important;
+    }
 }
 
-@media (min-width: 320px) and (max-width: 640px) {
-   footer .mobile-footer-tab { box-shadow: inset 0 -1px 0 $text-color; }
-
-}
 @media only screen and (min-width:320px) and (max-width:559px){
     .top-bar-section li:not(.has-form) a:not(.button) span.notification-digit{
-        color:#E62EEB !important;
+        color:$atag-light-color !important;
     }
+    .pkg-active{
+        box-shadow:inset 0 0 0 5px $accent1-dark-color !important;
+    }
+    .map-wrapper .infoBox:hover{
+        border:1px solid $accent1-dark-color !important;
+    }
+
+    .my-review-title, #top_category_menu a.main_category:hover,#top_category_menu .sub-cat-menu a:hover,
+    #top_category_menu.real-tablet a.main_category:hover,#top_category_menu .sub-cat-menu a:hover   
+    {
+        color:$accent1-dark-color !important;
+    }
+    
+    .finance-btn, .finance-btn:before{
+        background:$accent1-dark-color !important;
+    }   
 }
 @media screen and (min-width: 320px) {
   .item--full {
@@ -2191,17 +2399,4 @@ footer p { color:$grey-color; }
     grid-row-end: span 3;
   }
 }
-.item__details {
-  position: relative;
-  z-index: 1;
-  height: 100%;
-  width: 100%;
-}
-.item__details img {
-  display: inline-block;
-  vertical-align: middle;
-  max-width: 100%;
-  height: 100%;
-  -ms-interpolation-mode: bicubic;
-  width: max-content;
-}
+

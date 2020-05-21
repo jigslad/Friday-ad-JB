@@ -1795,7 +1795,7 @@ footer p { color:$grey-color; }
   }
   .alert-tooltip {
     border: 1px solid $secondary-color;
-    color: $form-text-color;
+    color: $dark-grey;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
     &::after {
       border-color: rgba(164, 216, 22, 0);
@@ -1869,7 +1869,7 @@ footer p { color:$grey-color; }
     color: $secondary-color;
   }
   .list-dimensions {
-    color: $form-text-color;    
+    color: $dark-grey;    
   }
   .list-desc {
     color: $common-text-color;
@@ -2072,6 +2072,10 @@ footer p { color:$grey-color; }
 .chcw_header a, .chcw_header a:hover, .chcw_header a:focus, .chcw_header a:active { color: $common-text-color !important; }
 .item { background: #EEF2F5; }
 
+.detail-tabpart-1 .tab-content {
+	border: 1px solid $grey-color;
+}
+
 @media only screen and (max-width: 640px) {
   .ad-list-block .reset-search{
     border-bottom: 1px solid $form-border-color;
@@ -2114,7 +2118,10 @@ footer p { color:$grey-color; }
     }
 }
 @media only screen and (min-width: 760px) and (max-width: 959px){
-	.left-search-block .reset-search { border: 1px solid $form-border-color; }
+   .left-search-block .reset-search { border: 1px solid $form-border-color; }
+   .get_online_decision span {
+    	color: $common-text-color !important;
+    }
 }
 @media (min-width: 641px) and (max-width: 959px) {   
     .t-navbar-block {

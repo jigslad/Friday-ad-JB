@@ -6,7 +6,7 @@
         <div class="container">
             <div class="row">
             	<div class="col-md-24">
-                <h3 class="details-similar-item-title">
+                <div class="details-similar-item-title">
                     {% if isSoldExpiredAdFlag %}
                         {{'This advert has expired.'|trans({}, 'frontend-show-ad')}}<br />
                         {% if similarAds['totalAds'] is defined and similarAds['totalAds'] > 0 %}
@@ -15,7 +15,7 @@
                     {% else %}
                         {{'Similar ads'|trans({}, 'frontend-show-ad')}}
                     {% endif %}
-                </h3>
+                </div>
                 {% if similarAds['totalAds'] is defined and similarAds['totalAds'] > 0 %}
                     <div class="owl-carousel owl-theme fa-slider {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}motor-similar-item{% endif %}{% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID')} %}service-similar-slider{% endif %}" id="similar-item-slider" data-equalizer>
                         {% for similarAd in similarAds['ads']%}
@@ -44,7 +44,7 @@
                                         <img class="lazyOwl img-fluid" src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
                                     {% endif %}
                                 </div>
-                                <h3>
+                                <h3>                                
                                     {% if attribute(similarAd, constant(similarAdSolrMapping ~ 'TITLE')) is defined %}
                                        {{trim_text(attribute(similarAd, constant(similarAdSolrMapping ~ 'TITLE')), 65)|raw}}
                                     {% endif %}

@@ -222,7 +222,7 @@
 
 {% block body %}
 {% if displayRecommendedSlot is defined and displayRecommendedSlot==1 %}
-    {{ include('FaAdBundle:AdList:recommended_slot_css.html.twig') }}
+    <link rel="stylesheet" href="{{ asset('/build/css/adlist-recommended.css') }}">
 {% endif %}
 
 {% set entityCacheManager = container.get('fa.entity.cache.manager') %}

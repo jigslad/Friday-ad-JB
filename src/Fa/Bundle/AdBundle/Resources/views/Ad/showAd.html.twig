@@ -216,8 +216,8 @@
         {{ block('profileImageUploadStylesheets') }}
         {{ set_variables('profileImageUploadStylesheets', {'loaded':'true'}) }}
         {{ block('imageUploadStylesheets') }}
-    {% endif %}
-    <link href="/bundles/faad/css/zutoLoanCalc.css" rel="stylesheet">
+    {% endif %}  
+    <link  rel="stylesheet" href="{{ asset('/build/css/zutoLoanCalc.css') }}">  
 {% endblock %}
 
 {% block meta_robots %}
@@ -297,7 +297,7 @@
 {% endblock %}
 {% block stylesheet %}
 	<link rel="stylesheet" href="{{ asset('/build/css/addetail.css') }}">
-    <link rel="stylesheet" href="{{ asset('/build/css/addetail-recommended.css') }}">
+    <link rel="stylesheet" href="{{ asset('/build/css/addetail-recommended.css') }}">    
 {% endblock %}
 {% if promotePackages is defined and promotePackages|length %}
     {% set packageIdArray = {} %}

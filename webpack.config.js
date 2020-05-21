@@ -27,6 +27,7 @@ Encore
     .addStyleEntry('css/paa', './assets/scss/paa.scss')
     .addStyleEntry('css/login-register', './assets/scss/login-register.scss')
     .addStyleEntry('css/adlist', './assets/scss/adlist.scss')
+    .addStyleEntry('css/adlist-recommended','./assets/scss/adlist-recommended.scss')
     .addStyleEntry('css/addetail', './assets/scss/addetail.scss')
     .addStyleEntry('css/landing', './assets/scss/landing.scss')
     .addStyleEntry('css/dashboard', './assets/scss/dashboard.scss')
@@ -34,6 +35,7 @@ Encore
     .addStyleEntry('css/newsletter', './assets/scss/newsletter.scss')
     .addStyleEntry('css/adul-cat', './assets/scss/adul-cat.scss')
     .addStyleEntry('css/covid-19', './assets/scss/covid-19.scss')
+    .addStyleEntry('css/zutoLoanCalc', './assets/scss/zutoLoanCalc.scss')    
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 
