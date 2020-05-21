@@ -29,7 +29,7 @@
   }  
   .report-tab {
     position: absolute;
-    margin-top: 6px;
+    margin-top: 0px;
     right: 15px;
   }
   .report {
@@ -1502,4 +1502,29 @@ table.responsive-card-table {
   text-indent: 100%;
   overflow: hidden;
   white-space: nowrap;
+}
+@media (min-width: 320px) and (max-width: 759px) {
+  .motor-info .info-row:nth-child(2n), .motor-info .info-row:nth-child(2n+1) {
+    background: #fff;
+  }
+  .motor-info .info-box:nth-child(2n+1) {
+    background: #EAEFF0;
+  }
+  .motor-info .info-box label {
+    display: block;
+    float: left;
+    border-right: 1px solid #fff;
+    margin-bottom: 0;
+    padding: 12px 0 11px 12px;
+    width: 50%;
+  }
+  .motor-info .info-dtl {
+    display: block;
+    float: left;
+    width: 50%;
+    padding: 10px 0 7px 12px;
+  }
+  .motor-info .color-row {
+    padding: 0;
+  }
 }
