@@ -50,14 +50,17 @@
                                         <div class="sortby-fields pull-right">
                                             <div class="d-none d-md-block white-select">
                                                 <div class="s-by-filters">
-                                                {% if not app.request.get('map')%}
-                                                    <label>{{'Sort by'|trans({}, 'frontend-search-result')}}</label>
-                                                    <select class="select-control" name="sort_by" id="sort_by">
-                                                        {% for sortFieldKey, sortFieldName in sortFields %}
-                                                            <option value="{{sortFieldKey}}" {% if app.request.get('sort_field')~'|'~app.request.get('sort_ord') == sortFieldKey %} selected="selected" {% endif %}>{{sortFieldName}}</option>
-                                                        {% endfor %}
-                                                    </select>
-                                                {% endif %}
+                                                    {% if not app.request.get('map')%}
+                                                        <label>{{'Sort by'|trans({}, 'frontend-search-result')}}</label>
+                                                        <div class="ad-category-list white-select">
+                                                            <select class="select-control" name="sort_by" id="sort_by">
+                                                                {% for sortFieldKey, sortFieldName in sortFields %}
+                                                                    <option value="{{sortFieldKey}}" {% if app.request.get('sort_field')~'|'~app.request.get('sort_ord') == sortFieldKey %} selected="selected" {% endif %}>{{sortFieldName}}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
                                             </div>
                                             <div class="d-block d-md-none sorting-small clearfix">
                                                 <a href="javascript:void(0);" class="secondary-btn-2 button left" onclick="return toggleLeftSearch();">{{'Refine'|trans({}, 'frontend-search-result')}}</a>

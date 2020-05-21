@@ -33,34 +33,6 @@ $(function() {
         }, 500);
     });
 });
-
-// $(".dropdown-menu").on('click', 'a', function(){
-//      $(".btn:first-child").text($(this).text());
-//      $(".btn:first-child").val($(this).text());
-// });  
-
-$('#header_search_editable_location_a').click(function(e) {
-    $('#header_search_editable_location_a').hide();
-    $('#header_search_editable_location_span').hide();
-    $('#top_search_location').show();
-    $('#in_text_span').hide();
-    if ($.trim($('#fa_top_search_item__location_autocomplete').val())) {
-        $('#fa_top_search_item__location_close').show();
-        $('#fa_top_search_item__location_autocomplete').select();
-    }
-});
-
-$('#top_search_location_cancel').click(function(e) {
-    $('#top_search_location').hide();
-    $('#in_text_span').show();
-    if (!$.trim($('#fa_top_search_item__location_autocomplete').val())) {
-        $('#header_search_editable_location_span').html('United Kingdom');
-    }
-    $('#header_search_editable_location_a').show();
-    $('#header_search_editable_location_span').show();
-    return false;
-});
-
 $(document).ready(function(){
 
   $('.own-item .dropdown-menu .dropdown-item').click(function() {

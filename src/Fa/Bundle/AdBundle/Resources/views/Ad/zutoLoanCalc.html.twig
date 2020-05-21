@@ -2,7 +2,7 @@
 {%  set ZutoCar = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getStaticImageUrl', [container, 'faad/images', 'car.png'])%}
 <div id="zutoLoanCalcDiv">
     <div class="row get_online_decision">
-        <div class="apply-new-block columns">
+        <div class="apply-new-block col">
             <div class="apply-new-left apply-new-logo d-none d-md-block">
                 <img src="{{  ZutoLogo }}" />
             </div>
@@ -20,14 +20,14 @@
                 <h2 class="detail-foot d-none d-md-block">GET AN ONLINE DECISION TODAY! </h2>
             </div>
         </div>
-        <div class="form-new-block columns">
+        <div class="form-new-block col-md-7">
             <div class="desktop-form-block mobile-form-block">
                 <div class="form-block-1">
                     <div>
                         <span>Borrow</span>
                     </div>
-                    <div class="expand-cont">
-                        <select name="loan_amount" id="loan_amount">
+                    <div class="expand-cont ">
+                        <select name="loan_amount" id="loan_amount" class="f-width">
                             <option value="2000">&#163; 2000</option>
                             <option value="3000">&#163; 3000</option>
                             <option value="4000">&#163; 4000</option>
@@ -85,7 +85,7 @@
                         <span>Over</span>
                     </div>
                     <div class="expand-cont">
-                        <select name="loan_period" id="loan_period">
+                        <select name="loan_period" id="loan_period" class="f-width">
                             <option value="24" selected>24 months</option>
                             <option value="36">36 months</option>
                             <option value="48">48 months</option>
@@ -95,10 +95,10 @@
                 </div>
             </div>
             <div class="mobile-logo-button">
-                <div class="form-bottom-logo d-block d-md-none">
-                    <img src="{{ ZutoLogo }}" class="logo_img"/>
+                <div class="form-bottom-logo d-block d-md-none mr10">
+                    <img src="{{ ZutoLogo }}" class="logo_img img-fluid"/>
                 </div>
-                <button class="button expand" id="zuto_loan_calc">GET QUOTE NOW</button>
+                <button class="secondary-btn-1 btn btn-block" id="zuto_loan_calc">GET QUOTE NOW</button>
             </div>
         </div>
     </div>

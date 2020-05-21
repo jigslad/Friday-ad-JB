@@ -476,7 +476,7 @@ ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {
           background-color:$imgplaceholder-bgcolor;
           img {
 	    width: auto !important;
-	    margin:auto !important;
+	    margin: 0 auto !important;
           }
        }
     }
