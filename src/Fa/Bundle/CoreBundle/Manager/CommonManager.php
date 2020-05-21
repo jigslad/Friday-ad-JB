@@ -969,7 +969,7 @@ class CommonManager
             }
         }
     }
-    
+
     public static function getUserLogo1($container, $path, $userId, $imageWidth = "88", $imageHeight = '88', $appendTime = false, $isCompany = false, $userStatus = null, $userName = null)
     {
         if (!$userStatus) {
@@ -1019,7 +1019,7 @@ class CommonManager
             } else {
                 return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<span style="background-image: url('.$newImagePath.')" title="'.$userName.'"></span>';
             }
-        } elseif (is_file($imagePath)) {
+        /*} elseif (is_file($imagePath)) {
             if (($imageWidth==null && $imageHeight== null) || ($imageWidth =='' && $imageHeight=='') || ($imageWidth ==0 || $imageHeight==0)) {
                 if ($isCompany) {
                     return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img src="'.$container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).'" alt="'.$userName.'" />';
@@ -1043,7 +1043,7 @@ class CommonManager
                 } else {
                     return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<span style="background-image: url('.$newImagePath.')" title="'.$userName.'"></span>';
                 }
-            }
+            }*/
         } else {
             $noImageName = 'user-icon.svg';
             if ($isCompany) {
