@@ -150,7 +150,7 @@
     	{% if isShopPage is defined and isShopPage %}
     	    $('form[name="fa_left_search"]').submit()
     	{% else %}
-    	   /* if (searchLocation && searchLocation != 2) {*/
+    	    if (searchLocation && searchLocation != 2) {
     	    	var catId = $('#fa_left_search_item__category_id').val();
     	    	var distanceId = $('#fa_left_search_item__distance').val();
     	    	var defaultDist = $('#fa_left_search_default_distance').val();
@@ -191,10 +191,10 @@
                          }
                      }
                  });
-            /*} else {
+            } else {
                 document.cookie="location=;expires=Wed; 01 Jan 1970; path=/";
                 $('form[name="fa_left_search"]').submit()
-            }*/
+            }
     	{% endif %}
     }
 

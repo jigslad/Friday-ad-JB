@@ -1478,7 +1478,7 @@ column-count: unset;
      padding: 0px 0px 10px;
   }
 }
-@media only screen and (min-width: 320px) and (max-width: 759px) { 
+@media only screen and (min-width: 320px) and (max-width: 759px) {
 	.bg-img404, .bg-img410, .bg-img500 {
 	    background-size: 170px 200px;
 	    height: 200px;
@@ -1580,6 +1580,9 @@ column-count: unset;
 	    display: none;
 	}
 
+  .place-free-ad-btn, .place-free-ad-btn:hover, .place-free-ad-btn:focus, a:hover.button.place-free-ad-btn, a:focus.button.place-free-ad-btn {
+    display: inline-block;
+  }
 }
 @media (min-width: 641px) and (max-width: 759px) {
   .custom-modal .modal-md {

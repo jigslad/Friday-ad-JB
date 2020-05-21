@@ -474,9 +474,10 @@ ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {
     .owl-item {
        .similar-placeholder {
           background-color:$imgplaceholder-bgcolor;
+          width: auto !important;
           img {
 	    width: auto !important;
-	    margin:auto !important;
+	    margin: 0 auto !important;
           }
        }
     }
@@ -626,7 +627,7 @@ ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {
     color: $form-text-color;
     border: 1px solid $form-border-color !important;
     border-radius: 0px !important;
-
+    font-family: "Poppins-SemiBold";
     padding: .5rem 0;
     text-align: center;
     font-size: 14px;
