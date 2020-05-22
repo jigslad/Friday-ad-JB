@@ -634,9 +634,8 @@ All this is done for any sub-level being entered.
     }
 	#notification-menu .alert-box {
 	    font-size: 13px;
-
-	    line-height: 5px;
-	    padding: 10px 10px 19px !important;
+	    line-height: 18px !important;
+  	    padding: 10px 50px 10px !important;
 	    border-radius: 0px !important;
 	    text-align: left;
 	}
@@ -645,7 +644,7 @@ All this is done for any sub-level being entered.
 .top-links ul li.notification-link .f-dropdown {
     margin-left: -200px;
     text-align: left;
-    min-width: 320px;
+    min-width: 320px !important;
     background: #fff;
     border-radius: 2px;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);

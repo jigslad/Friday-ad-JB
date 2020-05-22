@@ -53,7 +53,7 @@
                         {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
                             {{ form_errors(form) }}
                             <div class="col-md-24 d-flex justify-content-center mt20">
-                                <div class="category-search" id="category_autocomplete_div">
+                                <div class="category-search small-wrapper position-relative" id="category_autocomplete_div">
                                     <div class="disable-autocomplete"></div>
                                     <div class="relative text-center">
                                         <span id="field_arrow">
@@ -85,7 +85,7 @@
                                                 {% if attribute(form, 'has_reg_no') is defined %}
                                                     <h3 class="text-center">{{ attribute(form, 'has_reg_no').vars.label }}</h3>
                                                     <div class="text-center reg-yes-no">
-                                                        {{ form_widget(attribute(form, 'has_reg_no'), {'attr': {'class': 'grey-radio radio-circle-btn'}}) }}
+                                                        {{ form_widget(attribute(form, 'has_reg_no'), {'attr': {'class': 'grey-radio radio-circle-btn d-inline-flex'}}) }}
                                                         {{ form_errors(attribute(form, 'has_reg_no')) }}
                                                     </div>
                                                 {% endif %}
@@ -96,7 +96,7 @@
                                                         {{ form_widget(attribute(form, 'reg_no')) }}
                                                         {{ form_errors(attribute(form, 'reg_no')) }}
                                                         <span class="error" id="reg_no_error_msg"></span>
-                                                        <button class="secondary-btn-1 expand mt10" id="lookup_vehicle" type="button">{{ 'Lookup Vehicle'|trans({}, 'frontend-paa-second-step')}}</button>
+                                                        <button class="secondary-btn-1 btn btn-block mt20 mb20" id="lookup_vehicle" type="button">{{ 'Lookup Vehicle'|trans({}, 'frontend-paa-second-step')}}</button>
                                                     </div>
                                                 {% endif %}
                                             </div>
@@ -135,7 +135,7 @@
                                 {% set totalLevel = fetch_repository('FaEntityBundle:Category').getMaxLevel(fetch_container_instance()) %}
                                 {{ set_variables('paa_category_select', {'totalLevel' : totalLevel }) }}
                                 {% if totalLevel %}
-                                    <div id="category_choices_div" class="width-100per">
+                                    <div id="category_choices_div" class="width-100per small-wrapper">
                                         {% for i in 1..totalLevel %}
                                             <div id="category_choice_div_{{ i }}" class="col-md-24 col-lg-24 cat-mid-full" style="display:none">
                                                 {% set field = 'category_' ~ i %}
@@ -145,8 +145,8 @@
                                     </div>
                                 {% endif %}
                             </div>
-                            <div class="col-md-24 d-flex justify-content-center">
-                              {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 btn btn-block disabled col-md-24 col-lg-16 next-btn'}}) }}
+                            <div class="col-md-24 d-flex justify-content-center small-wrapper pad-none">
+                              {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 btn btn-block disabled next-btn'}}) }}
                             </div>
                             {#<div class="col-md-24 d-flex justify-content-center">
                                 <h2 class="s-h2 text-center col-md-24 col-lg-18" id="or_msg">{{ 'OR'|trans({}, 'frontend-paa-first-step') }}</h2>

@@ -1,26 +1,28 @@
 {% set container = fetch_container_instance() %}
 <footer id="footer_tag">
 	<div class="container">
-	<div class="row">
-    	<div class="mt0">
-    		<h6 class="footer-head">Can we help?</h6>
-    		<div class="large-19 mt20 paa-footer-links">
-    		    <a href="https://blog.friday-ad.co.uk/" target="_blank">{{ 'Blog'|trans({}, 'frontend-footer') }}</a>
-    		    {{ render(controller('FaContentBundle:StaticPage:renderStaticPageLink', {'currentRoute': currentRoute})) }}
-    		    <a href="{{ path('show_all_locations') }}">{{ 'Locations'|trans({}, 'frontend-footer') }}</a>
-                        <a href="{{ path('testimonials') }}">{{ 'Testimonials'|trans({}, 'frontend-footer') }}</a>
-    		    <a href="https://www.yumpu.com/user/EDITORFAD" target="__blank">{{ 'Read this week\'s Friday-Ad'|trans({}, 'frontend-footer') }}</a>
-    		</div>
-    	</div>
-    	<div class="fad-logo">
-            <span>F-Ad</span>
-        </div>
-        <div class="copyright-block">
-            <div class="copyright-text">
-            	Friday Media Group Ltd, London Road, Sayers Common, West Sussex, BN6 9HS - Copyright 2020
-            </div>
-        </div>
-	</div>
+		<div class="row">
+	    	<div class="col-24">
+	    		<h6 class="footer-head">Can we help?</h6>
+	    		<div class="col-18 mt20 paa-footer-links pad-none">
+        		    <a href="https://blog.friday-ad.co.uk/" target="_blank">{{ 'Blog'|trans({}, 'frontend-footer') }}</a>
+        		    {{ render(controller('FaContentBundle:StaticPage:renderStaticPageLink', {'currentRoute': currentRoute})) }}
+        		    <a href="{{ path('show_all_locations') }}">{{ 'Locations'|trans({}, 'frontend-footer') }}</a>
+                    <a href="{{ path('testimonials') }}">{{ 'Testimonials'|trans({}, 'frontend-footer') }}</a>
+        		    <a href="https://www.yumpu.com/user/EDITORFAD" target="__blank">{{ 'Read this week\'s Friday-Ad'|trans({}, 'frontend-footer') }}</a>
+	    		</div>
+	    	</div>
+	    	<div class="col-24"><div class="fad-logo">
+	            <span>F-Ad</span>
+	        </div></div>
+	        {# <div class="col-24">
+	        	<div class="copyright-block">
+		            <div class="copyright-text">
+		            	Friday Media Group Ltd, London Road, Sayers Common, West Sussex, BN6 9HS - Copyright 2020
+		            </div>
+		        </div>
+	  		</div>#}
+		</div>
 	</div>
 </footer>
 {{ include('FaFrontendBundle::userLocation.html.twig') }}

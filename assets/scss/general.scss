@@ -877,7 +877,7 @@ ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {
 .homepage-more-items { border: 1px solid $form-border-color; }
 .landing-divider, .border-botttom { border-bottom: solid 1px $form-border-color; }
 .find-property .capsule-links a { background: $dark-grey; }
-.capsule-links a:hover, .capsule-links a.active { background: $secondary-color; }
+.capsule-links a:hover, .capsule-links a.active { background: $accent1-dark-color; }
 .custom-card .similar-placeholder { background-color: $light-grey-color; }
 
 .list-hr-ago, .list-dimensions { color: $dark-grey; }
@@ -1465,10 +1465,10 @@ table.responsive-card-table tr:nth-of-type(2n) {
 }
 .hlight-box { background: $form-bg-color; }
 .profile-placeholder { background: $dark-grey; }
-.paa-back-arrow { 
-	color: $form-text-color; 
+.paa-back-arrow, .paa-back-arrow-pkg { 
+	color: $accent1-dark-color; 
 	&:focus, &:hover {
-	   color: $primary-color;
+	   color: $accent1-dark-color;
 	}
 }
 .change-category {
@@ -1478,7 +1478,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
         color: $form-text-color;
     }
 }
-.paa-bdr-box { border-bottom: 1px solid $form-text-color; }
+
 .paa-features {
     li {
         &:hover {
@@ -1766,12 +1766,12 @@ footer p { color:$grey-color; }
       }
 }
 .paa-title-char {
-    color: $form-text-color;
+    color: $dark-grey;
 }
 .paa-help-text {
     color: $form-text-color;
     p {
-      color: $form-text-color;
+      color: $dark-grey;
     }
     h4 {
       color: $form-text-color;
@@ -1995,6 +1995,17 @@ footer p { color:$grey-color; }
   .drag-ins-vr {
     color: $form-text-color;
   }
+}
+#reg_no_field input[type="text"] {
+    border-width: 3px;
+    background: #EAEFF0 url('/Frontend/images/icons/plate-icon.svg') no-repeat;
+    height: 46px;
+    padding-left: 40px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: #212527;
+    text-transform: uppercase;
 }
 //Choose Package
 .paa-block {

@@ -171,7 +171,7 @@ div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, p, blockquote, t
 }
 /* Custom Modal */
 .custom-modal .modal-body {
-    padding: 1.5rem;
+    padding: 15px;
 }
 .custom-modal .modal-body p {
     padding: 5px 0;
@@ -268,7 +268,7 @@ div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, p, blockquote, t
 .featured-ribbon, .urgent-ribbon { text-indent: -999px !important; }
 
 .radio-capsule .capsule-bg { 
-   display: inline-block;margin: 0 11px 0 -4px;height: 35px;line-height: 32px;padding: 0 16px;vertical-align: middle;border-radius: 20px;cursor: pointer;position: relative;
+   display: inline-block;margin: 0px 4px 10px 4px;height: 35px;line-height: 32px;padding: 0 16px;vertical-align: middle;border-radius: 20px;cursor: pointer;position: relative;
 }
 .radio-capsule .capsule-bg input[type="radio"] {
     display: block;width: 100%;height: 100%;margin: 0;position: absolute;left: 0;top: 0;z-index: 1;opacity: 0;cursor: pointer;
@@ -940,7 +940,8 @@ footer .search-box-col .newsletter-lbl, .white-check .label-span, .grey-check .l
 //Alert
 .alert-box {
     font-size: 13px;
-    line-height: 16px;
+    font-family: "Poppins-SemiBold";
+    line-height: 18px;
     padding: 15px 50px !important;
     border-radius: 4px !important;
     margin-bottom: 1.25rem;
@@ -1283,7 +1284,7 @@ input[type=number] {
   position: absolute;
   top: 10px;
   left: 15px;
-  padding: 21px 48px !important;
+  padding: 15px 15px !important;
 }
 .outside-tricky {
   position: relative;
@@ -1402,13 +1403,16 @@ input[type=number] {
     font-family: "Poppins-SemiBold" !important;
 }
 b, strong {
-    font-weight: normal;
+    font-weight: normal;font-family: "Poppins-Bold";
 }
 .owl-stage { display: flex; }
 .owl-item { display: flex;flex: 1 0 auto; }
 .details-similar-item-title { font-family: "Poppins-Medium"; }
 .find-property .capsule-links a { font-family: "Poppins-Bold"; }
 .dash-block .custom-tabs .nav-link { font-family: "Poppins-SemiBold"; }
+.top-links .notification-link a span, .top-links .msg-link a span, .top-links .cart-link a span, .top-links .basket-icon span {
+	font-family: 'Poppins-Bold';
+}
 
 @media (min-width: 760px) and (max-width: 1151px) {
 	.home-list-location-box .link-list, .list-location-box .link-list, .details-list-location-box .link-list {
