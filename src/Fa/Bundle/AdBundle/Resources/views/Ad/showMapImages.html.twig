@@ -32,7 +32,7 @@
                 {% endif %}
                 <a class="nav-item nav-link {% if not adImages|length and not (allowAdEdit is defined and allowAdEdit) and  not youtubeVideoUrl|length %} active {% endif %}" id="map_tab_anchor" data-toggle="tab" href="#map_panel" role="tab" aria-controls="nav-profile" aria-selected="false"><span class="map-tab">Map-tab</span>{{'Map'|trans({}, 'frontend-show-ad')}}</a>
             {% endif %}
-            <a class="text-right report-tab d-none d-md-block"><span class="xs-black-btn btn" onclick="return reportAd('{{ adId }}');" id="add-report-id">{{'Report'|trans({}, 'frontend-show-ad')}}</span></a>
+            <a class="text-right report-tab d-none d-md-block"><span class="xs-black-btn btn" onclick="return reportAd('{{ adId }}');" id="add-report-id">{{'Report this ad'|trans({}, 'frontend-show-ad')}}</span></a>
 		</div>
 	</nav>
 	<div class="tab-content" id="nav-tabContent">
@@ -79,7 +79,7 @@
             {% endif %}
         </span>
 
-        <span class="text-right xs-black-btn btn d-block d-md-none" onclick="return reportAd('{{ adId }}');" id="add-report-id">{{'Report'|trans({}, 'frontend-show-ad')}}</span>
+        <span class="text-right xs-black-btn btn d-block d-md-none" onclick="return reportAd('{{ adId }}');" id="add-report-id">{{'Report this ad'|trans({}, 'frontend-show-ad')}}</span>
 	</div>
 	<div class="right-col">
 		<div class="dtl-social-icons">

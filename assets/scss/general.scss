@@ -1637,10 +1637,6 @@ table.responsive-card-table tr:nth-of-type(2n) {
         color: $secondary-color;
     }
 }
-#home-search .search-btn, .home-search .search-btn, .search-icon {
-     background: url('/Frontend/images/icons/search-icon.svg') no-repeat center center / 16px 16px, linear-gradient(135deg, $secondary-btn-l-color 0%, $secondary-btn-r-color 100%) !important;	   
-}
-
 .new-order-btn { background-color: $alert-new-order !important; }
 .dropdown .new-order-btn.new-order, .dropdown .new-order-btn.new-order:hover, .dropdown .new-order-btn.new-order:focus {
     background-color: $alert-new-order !important;
