@@ -40,7 +40,7 @@
      }
 
     {# function checkLocation(position) {
-     
+
         var latitude  = position.coords.latitude;
         var longitude = position.coords.longitude;
         var address      = position.coords.latitude+', '+position.coords.longitude;
@@ -66,7 +66,7 @@
                                     $('#header_search_editable_location_span').html($('#fa_top_search_item__location_autocomplete').val());
                                 }
                              }
-                             
+
                              return false;
                          }
                      });
@@ -144,7 +144,7 @@
         });
 
         $('#top_search_location_cancel').click(function(e) {
-            // $('#top_search_location').hide();
+            $('#top_search_location').hide();
             $('#in_text_span').show();
             if (!$.trim($('#fa_top_search_item__location_autocomplete').val())) {
                 $('#header_search_editable_location_span').html('United Kingdom');
