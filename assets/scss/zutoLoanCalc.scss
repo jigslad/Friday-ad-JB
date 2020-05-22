@@ -149,12 +149,8 @@
 }
 /* Changes needed in WB only */
 @media only screen and (min-width: 760px) and (max-width: 959px) {
-    .get_online_decision .desktop-form-block {
-        width: 70% !important;
-    }
-
     .get_online_decision .form-block-1, .get_online_decision .form-block-2 {
-        width: 44%;
+        width: 49%;
     }
 
     .get_online_decision .button {

@@ -15,7 +15,7 @@
         {% if seoRule['image_alt'] is defined %}
             {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], featureAd]) %}
         {% endif %}
-        <div class="item" data-equalizer-watch>
+        <div class="item f-width" data-equalizer-watch>
             {% if categoryBadgeArray[rootCategoryId] is defined %}
                 <span class="fa-slider-badge {{categoryBadgeArray[rootCategoryId]}}">Category</span>
             {% endif %}

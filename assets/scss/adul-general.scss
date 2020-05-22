@@ -232,7 +232,7 @@ ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {
       z-index: 1;
       border: 0px;
       cursor: pointer;
-      background: url("https://fmtinew.friday-ad.co.uk/bundles/fafrontend/images/cross-new.svg") no-repeat center center;
+      background: url("/Frontend/images/icons/cross.svg") no-repeat center center;
     }
     .m-form-space {
       margin-top: 20px;
@@ -958,6 +958,9 @@ footer {
     width: 49%;
     height: auto !important;
 }
+#home-search .search-btn, .home-search .search-btn, .search-icon {
+    background: url('/Frontend/images/icons/search-icon.svg') no-repeat center center / 16px 16px, linear-gradient(135deg, $secondary-btn-l-color 0%, $secondary-btn-r-color 100%) !important;	   
+}
 .site-search .search-icon {
     width: 45px;
 	height: 40px;
@@ -1262,7 +1265,7 @@ footer {
     }
   }
   .create-alert {
-    background: $common-bg-color url("/bundles/fafrontend/images/alert-illustration.svg?v=1") no-repeat center 33px;
+    background: $common-bg-color url("/Frontend/images/icons/alert-illustration.svg") no-repeat center 33px;
     border: 1px solid $form-border-color;
   }
 }
@@ -1627,9 +1630,6 @@ table.responsive-card-table tr:nth-of-type(2n) {
    .list-price {
         color: $secondary-color;
     }
-}
-.search-icon {
-    background: $secondary-color url('/bundles/fafrontend/images/search-icon.svg') no-repeat center center / 16px 16px;
 }
 .new-order-btn { background-color: $alert-new-order !important; }
 .dropdown .new-order-btn.new-order, .dropdown .new-order-btn.new-order:hover, .dropdown .new-order-btn.new-order:focus {
@@ -2047,7 +2047,7 @@ footer p { color:$grey-color; }
     }
   }
   .paypal-box {
-    background: $paypal-bg-color url('/bundles/fafrontend/images/paypal-payment.png') no-repeat center center;
+    background: $paypal-bg-color url('/Frontend/images/payment/paypal-payment.png') no-repeat center center;
     border: solid 1px $paypal-border-color;
     &:focus, &:hover {
       background-color: $paypal-h-bg-color;
@@ -2318,10 +2318,7 @@ select:hover,select:focus, .ui-selectmenu-button:hover,.ui-selectmenu-button.act
         }   
         .paa-block .posting-bg { background: $site-dark-bg-color; }
         .paa-block .pkg-active { box-shadow: inset 0 0 0 0px $secondary-color; padding: 0 0px 0px; }
-
-	#home-search .search-btn {
-	    background: url('/bundles/fafrontend/images/search-icon.svg') no-repeat center center / 16px 16px, linear-gradient(135deg, $secondary-btn-l-color 0%, $secondary-btn-r-color 100%) !important;	   
-	}
+	
        .step-nav .step-on .step-1, .step-nav .step-on .step-2, .step-nav .step-on .step-3, .step-nav .step-on .step-2 {
 	    border: 3px solid $atag-light-color !important;
 	    color: $atag-light-color !important;
@@ -2345,7 +2342,6 @@ select:hover,select:focus, .ui-selectmenu-button:hover,.ui-selectmenu-button.act
         background: $light-grey-color;
     }
     .home-search .search-btn {
-        background: url('/bundles/fafrontend/images/search-icon.svg') no-repeat center center / 16px 16px, linear-gradient(135deg, $secondary-btn-l-color 0%, $secondary-btn-r-color 100%) !important;
         border: 0px solid $secondary-h-color;
     }
     .mobile-menu-items li {
