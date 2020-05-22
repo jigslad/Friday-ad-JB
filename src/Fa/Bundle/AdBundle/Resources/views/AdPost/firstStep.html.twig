@@ -52,8 +52,23 @@
                         </div>
                         {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
                             {{ form_errors(form) }}
+                            <div class="col-md-24 d-flex justify-content-center mt20">
+                                <div class="category-search" id="category_autocomplete_div">
+                                    <div class="disable-autocomplete"></div>
+                                    <div class="relative text-center">
+                                        <span id="field_arrow">
+                                            <i class="fi-arrow-right large element-animation"></i>
+                                            <i class="fi-arrow-down large element-animation"></i>
+                                        </span>
+                                        <span class="textbox-wrapper">
+                                            {{ form_row(form.category_id_autocomplete) }}
+                                            <a href="javascript:void(0);" id="fa_paa_category_select_category_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-md-24 d-flex justify-content-center">
-                                <h2 class="s-h2 col-md-24 col-lg-18 text-center" id="choose_cat_msg">{{ 'choose from all categories'|trans({}, 'frontend-paa-first-step') }}</h2>
+                                <h2 class="s-h2 col-md-24 col-lg-18 text-center" id="choose_cat_msg">{{ 'or choose from all categories'|trans({}, 'frontend-paa-first-step') }}</h2>
                                 <h3 class="s-h3 col-md-24 col-lg-18 text-center" id="redirect_msg" style="display:none">{{ 'please wait…'|trans({}, 'frontend-paa-first-step') }}</h3>
                             </div>
                             <div class="choose-all-categories">
@@ -63,14 +78,14 @@
                                     <a href="javascript:void(0)" class="{{ catClass }} main_category" id="maincategory_{{ categoryId }}" onclick="changeMainCategory('{{ categoryId }}', '', '1');">{{ categoryName }}</a>
                                  {% endfor %}
                             </div>
-                            <div class="col-md-24 d-flex justify-content-center" id="main_div">
+                            <div class="col-md-24 col-lg-24 f-width justify-content-center" id="main_div">
                                 <div id="motor_reg_fields">
                                     {% if showRegNoFieldsFlag %}
                                         <div id="reg_no_fields" class="paa-bdr-box">
                                                 {% if attribute(form, 'has_reg_no') is defined %}
                                                     <h3 class="text-center">{{ attribute(form, 'has_reg_no').vars.label }}</h3>
-                                                    <div class="text-center label-inline reg-yes-no">
-                                                        {{ form_widget(attribute(form, 'has_reg_no')) }}
+                                                    <div class="text-center reg-yes-no">
+                                                        {{ form_widget(attribute(form, 'has_reg_no'), {'attr': {'class': 'grey-radio radio-circle-btn'}}) }}
                                                         {{ form_errors(attribute(form, 'has_reg_no')) }}
                                                     </div>
                                                 {% endif %}
@@ -122,7 +137,7 @@
                                 {% if totalLevel %}
                                     <div id="category_choices_div" class="width-100per">
                                         {% for i in 1..totalLevel %}
-                                            <div id="category_choice_div_{{ i }}" class="col-md-24 col-lg-16 cat-mid-full" style="display:none">
+                                            <div id="category_choice_div_{{ i }}" class="col-md-24 col-lg-24 cat-mid-full" style="display:none">
                                                 {% set field = 'category_' ~ i %}
                                                 {{ form_widget(attribute(form, field)) }}
                                             </div>
@@ -133,27 +148,13 @@
                             <div class="col-md-24 d-flex justify-content-center">
                               {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 btn btn-block disabled col-md-24 col-lg-16 next-btn'}}) }}
                             </div>
-                            <div class="col-md-24 d-flex justify-content-center">
+                            {#<div class="col-md-24 d-flex justify-content-center">
                                 <h2 class="s-h2 text-center col-md-24 col-lg-18" id="or_msg">{{ 'OR'|trans({}, 'frontend-paa-first-step') }}</h2>
                             </div>
                             <div class="col-md-24 d-flex justify-content-center mb20s">
                                 <h2 class="s-h2 text-center col-md-24 col-lg-18 subtitle">{{ 'Tell us what it is and we\'ll help you find the category'|trans({}, 'frontend-paa-first-step') }}</h2>
-                            </div>
-                            <div class="col-md-24 d-flex justify-content-center mt20">
-                                <div class="category-search" id="category_autocomplete_div">
-                                    <div class="disable-autocomplete"></div>
-                                    <div class="relative text-center">
-                                        <span id="field_arrow">
-                                            <i class="fi-arrow-right large element-animation"></i>
-                                            <i class="fi-arrow-down large element-animation"></i>
-                                        </span>
-                                        <span class="textbox-wrapper">
-                                            {{ form_row(form.category_id_autocomplete) }}
-                                            <a href="javascript:void(0);" id="fa_paa_category_select_category_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
+                            </div>#}
+                            
                         {{ form_end(form) }}
                     </div>
                     {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {}) }}

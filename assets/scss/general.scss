@@ -1637,10 +1637,6 @@ table.responsive-card-table tr:nth-of-type(2n) {
         color: $secondary-color;
     }
 }
-#home-search .search-btn, .home-search .search-btn, .search-icon {
-     background: url('/Frontend/images/icons/search-icon.svg') no-repeat center center / 16px 16px, linear-gradient(135deg, $secondary-btn-l-color 0%, $secondary-btn-r-color 100%) !important;	   
-}
-
 .new-order-btn { background-color: $alert-new-order !important; }
 .dropdown .new-order-btn.new-order, .dropdown .new-order-btn.new-order:hover, .dropdown .new-order-btn.new-order:focus {
     background-color: $alert-new-order !important;
@@ -2057,10 +2053,11 @@ footer p { color:$grey-color; }
     }
   }
   .paypal-box {
-    background: $paypal-bg-color url('/Frontend/images/payment/paypal-payment.png') no-repeat center center;
-    border: solid 1px $paypal-border-color;
+    background: transparent url('/Frontend/images/payment/paypal-payment.png') no-repeat center center;
+    border: solid 1px $form-border-color !important;
     &:focus, &:hover {
-      background-color: $paypal-h-bg-color;
+      background-color: transparent;
+      border: 1px solid $accent1-dark-color !important;
     }
   }
 }
@@ -2090,6 +2087,26 @@ footer p { color:$grey-color; }
 .detail-tabpart-1 .tab-content {
 	border: 1px solid $grey-color;
 }
+.alert-box.alert-danger {
+  background: #ffebeb;
+  border: 1px solid #f74d4d;
+  color: #f74d4d;
+}
+.alert-box.success {
+    background: #eef8d4;
+    border: 1px solid #82C249;
+    color: #82C249;
+}
+
+.alert-box.success .alert-icon{background:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2227%22%20height%3D%2227%22%20viewBox%3D%22-1404%20458.9%2027%2027%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23FFFFFF%3Bstroke%3A%2382C249%3B%7D%0D%0A%09.st1%7Bfill%3Anone%3Bstroke%3A%2382C249%3Bstroke-width%3A3%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Esuccess%20icon%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-54.000000%2C%20-199.000000%29%22%3E%3Cg%20transform%3D%22translate%2836.000000%2C%20182.000000%29%22%3E%3Cg%20transform%3D%22translate%2819.000000%2C%2018.000000%29%22%3E%3Ccircle%20class%3D%22st0%22%20cx%3D%22-1391.5%22%20cy%3D%22471.4%22%20r%3D%2212.5%22/%3E%3Cpath%20class%3D%22st1%22%20d%3D%22M-1396%20471.9l3.8%204%206.2-8%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat}
+.gplus-btn, .gplus-btn:hover, .gplus-btn:hover, .gplus-btn:active {background:url('/Frontend/images/social/google_signin.png') no-repeat;margin-left:22px; background-color: #3265D1 !important;}
+
+.step-nav .step-on .step-1, .step-nav .step-on .step-2, .step-nav .step-on .step-3, .step-nav .step-on .step-2 {
+    background: transparent !important;
+    border: 3px solid #82C249;
+    color: #82C249;
+}
+
 
 @media only screen and (max-width: 640px) {
   .ad-list-block .reset-search{

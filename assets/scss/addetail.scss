@@ -1413,7 +1413,13 @@ table.responsive-card-table {
 .detail-tabpart-2 .accordion .content h5:first-child {
     margin-top: 15px;
 }
-
+.detail-tabpart-2 .accordion .content {
+    background: #fff;
+    padding: 18px 25px
+}
+.detail-tabpart-2 .accordion .content h5 {
+    margin-top: 20px;
+}
 .details-top-banner .double-buttons a:first-child {
     width: 42% !important;
 }
@@ -1426,9 +1432,61 @@ table.responsive-card-table {
 .details-top-banner .item-price {
 	font-family: "Poppins-Bold" !important;
 }
+#related_businesses_slider .item .small-img img {
+	width: auto !important;
+	margin: 0 auto !important;
+}
+
 @media (min-width: 760px) and (max-width: 959px) {
 	.double-buttons .btn-txt {
 	    display: none;
+	}
+     .motor-info-icon {
+	    display: none
+	}
+	.motor-info .info-box {
+	    border: 0;
+	    float: none;
+	    width: 100%;
+	    padding: 0;
+	    text-align: left
+	}
+	.motor-info .info-row:nth-child(even),
+	.motor-info .info-row:nth-child(odd) {
+	    background: #fff
+	}
+	.motor-info .info-box:nth-child(even) {
+	    background: #EAEFF0
+	}
+	.motor-info .info-box:nth-child(odd) {
+	    background: #EAEFF0
+	}
+	.motor-info .info-box:after {
+	    clear: both;
+	    content: " ";
+	    display: table
+	}
+	.motor-info .info-box label {
+	    display: block;
+	    float: left;
+	    border-right: 1px solid #fff;
+	    margin-bottom: 0;
+	    padding: 12px 0 11px 12px;
+	    width: 50%
+	}
+	.motor-info .info-dtl {
+	    display: block;
+	    float: left;
+	    width: 50%;
+	    padding: 10px 0 7px 12px
+	}
+	.motor-info .color-row {
+	    padding: 0
+	}
+	.safety-block {
+	    float: none;
+	    width: 100%;
+	    margin: 55px 0 20px 0
 	}
 }
 @media (min-width: 760px) {
