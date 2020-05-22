@@ -583,7 +583,7 @@ input.checkbox {
     top: 15px;
 }
 .newsletter-icon {
-    background: url('/Frontend/images/newsletter-white.svg') no-repeat; background-size: 100%; background-position: center center;
+    background: url('/Frontend/images/icons/newsletter-white.svg') no-repeat; background-size: 100%; background-position: center center;
     font-size: 35px; padding: 24px; margin-right: 10px
 }
 
@@ -627,7 +627,7 @@ z-index:999;
 .ui-menu .ui-menu-icon{left:auto;right:0}
 
 .ui-menu .ui-menu-item:last-child{border-bottom:0}
-.ui-selectmenu-button span.ui-icon{background:url('/Frontend/images/select-arrow.png') no-repeat center center;background-size:11px 8px;margin-top:-7px}
+.ui-selectmenu-button span.ui-icon{background:url('/Frontend/images/icons/select-arrow.png') no-repeat center center;background-size:11px 8px;margin-top:-7px}
 .white-select .ui-selectmenu-button,.ui-selectmenu-menu .ui-menu.white-dropdown{background:#fff}
 .ui-menu.white-dropdown .ui-menu-item{box-shadow:none}
 .ui-menu.white-dropdown .ui-state-focus{box-shadow:none}
@@ -822,28 +822,28 @@ footer .search-box-col .newsletter-lbl, .white-check .label-span, .grey-check .l
 }
 /* menu Icons */
 .mob-forsale {
-	background: url('/Frontend/images/icons/main/for-sale.png') no-repeat !important;
+	background: url('/Frontend/images/icons/main-cat/for-sale.png') no-repeat !important;
 }
 .mob-motors {
-	background: url('/Frontend/images/icons/main/motors.png') no-repeat !important;
+	background: url('/Frontend/images/icons/main-cat/motors.png') no-repeat !important;
 }
 .mob-jobs {
-	background: url('/Frontend/images/icons/main/jobs.png') no-repeat !important;
+	background: url('/Frontend/images/icons/main-cat/jobs.png') no-repeat !important;
 }
 .mob-services {
-	background: url('/Frontend/images/icons/main/services.png') no-repeat !important;
+	background: url('/Frontend/images/icons/main-cat/services.png') no-repeat !important;
 }
 .mob-property {
-	background: url('/Frontend/images/icons/main/property.png') no-repeat !important;
+	background: url('/Frontend/images/icons/main-cat/property.png') no-repeat !important;
 }
 .mob-animals {
-	background: url('/Frontend/images/icons/main/animals.png') no-repeat !important;
+	background: url('/Frontend/images/icons/main-cat/animals.png') no-repeat !important;
 }
 .mob-community {
-	background: url('/Frontend/images/icons/main/community.png') no-repeat !important;
+	background: url('/Frontend/images/icons/main-cat/community.png') no-repeat !important;
 }
 .mob-adult {
-	background: url('/Frontend/images/icons/main/adult-green.png') no-repeat !important;
+	background: url('/Frontend/images/icons/main-cat/adult-green.png') no-repeat !important;
 }
 
 .dtl-social-icons a {
@@ -951,7 +951,7 @@ footer .search-box-col .newsletter-lbl, .white-check .label-span, .grey-check .l
     right: 15px;
     top: 20px;
     margin: 0;
-    background: url("/Frontend/images/cross-new.svg") no-repeat center center;
+    background: url("/Frontend/images/icons/cross.svg") no-repeat center center;
 }
 .alert-box.success .alert-icon, .alert-box.white .alert-icon {
     background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2227%22%20height%3D%2227%22%20viewBox%3D%22-1404%20458.9%2027%2027%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23FFFFFF%3Bstroke%3A%23A8DC28%3B%7D%0D%0A%09.st1%7Bfill%3Anone%3Bstroke%3A%23A8DC28%3Bstroke-width%3A3%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Esuccess%20icon%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-54.000000%2C%20-199.000000%29%22%3E%3Cg%20transform%3D%22translate%2836.000000%2C%20182.000000%29%22%3E%3Cg%20transform%3D%22translate%2819.000000%2C%2018.000000%29%22%3E%3Ccircle%20class%3D%22st0%22%20cx%3D%22-1391.5%22%20cy%3D%22471.4%22%20r%3D%2212.5%22/%3E%3Cpath%20class%3D%22st1%22%20d%3D%22M-1396%20471.9l3.8%204%206.2-8%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat;
@@ -1040,10 +1040,10 @@ span.error, small.error {
     float: right;
     a {
       &.expand-search, &.expand-search:hover, &.expand-search:focus, &.expand-search.expanded {
-	  background: url('/Frontend/images/setplus-green.png') no-repeat left center !important;	
+	  background: url('/Frontend/images/icons/setplus-green.png') no-repeat left center !important;	
       }
       &.collapse-search, &.collapse-search:hover, &.collapse-search:focus, &.collapse-search.expanded {
-	  background: url('/Frontend/images/setminus.png') no-repeat left center !important;	
+	  background: url('/Frontend/images/icons/setminus.png') no-repeat left center !important;	
       }
       height: 38px;
       line-height: 38px;
