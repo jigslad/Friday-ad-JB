@@ -259,6 +259,7 @@
     background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%226%22%20height%3D%2212%22%20viewBox%3D%22-1414%20465.9%206%2012%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3Anone%3Bstroke%3A%23A8A8A8%3Bstroke-width%3A2%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Eselected%2011%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-23.000000%2C%20-521.000000%29%22%3E%3Cg%20transform%3D%22translate%28-12.000000%2C%20438.000000%29%22%3E%3Cg%20transform%3D%22translate%2826.000000%2C%2046.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-1400%20503.9l-4%205%204%205%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') 0 4px no-repeat;
   }
 }
+small.username_cls.error { margin-bottom:0px !important; margin-top: 5px !important; padding-bottom:0px !important; }
 
 @media (min-width: 760px) and (max-width: 959px) {
   .step-text {
@@ -277,6 +278,9 @@
     li.step-on {
       background: transparent;
       width: 25%;
+    }
+    .cart-item-price h4 {
+        padding-top: 10px !important;
     }
     .step-nav {
       li {
@@ -864,6 +868,8 @@
       padding: 10px !important;
     }
     .cart-list li {
+       border-bottom: solid 1px #fff;
+       padding: 19px 0;
       .cart-m-block {
         width: 50%;
       }
@@ -874,16 +880,32 @@
     .cart-item-type h3 {
       margin-top: 0px;
     }
-    .cart-item-price h4 {
+    .cart-item-info h4 {
+      font-size: 16px;
+      line-height: 21px;
+      padding: 60px 0 0 0;
       text-align: center;
-      padding-top: 0px !important;
+    }
+    .cart-item-price h4 {
+      font-size: 16px;
+      line-height: 21px;
+      padding: 60px 0 0 0;
+      text-align: center;
     }
     .cart-cost-text {
       margin-top: 10px;
     }
   }
 }
-
+.paa-block .cart-total .cart-item-price h4 {
+    padding: 36px 0 0 0;
+}
+.promo-code .code-field input {
+    border-radius: 4px 0px 0px 4px !important;
+}
+.promo-code .code-field .btn {
+    border-radius: 0px 4px 4px 0px !important;
+}
 //Payment
 .paa-block {
   .payment {

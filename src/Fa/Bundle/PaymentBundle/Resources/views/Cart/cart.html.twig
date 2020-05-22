@@ -53,7 +53,7 @@
                             {% endif %}
                         <li>
                             <div class="row">
-                                <div class="col-md-12 cart-l-block">
+                                <div class="col-md-11 col-lg-12 cart-l-block">
                                     <div class="media cart-item">
                                         <div class="cart-item-img">
                                             {% if cartDetail['path'] is defined and cartDetail['path'] is not null and cartDetail['hash'] is defined and cartDetail['hash'] is not null %}
@@ -72,7 +72,7 @@
                                     </div>
                                 </div>
                                 {% if packageId and cartDetail['ad_id'] is not null %}
-                                <div class="col-md-6 cart-m-block">
+                                <div class="col-md-8 col-lg-6 cart-m-block">
                                     <div class="cart-item-type text-center">                                
                                             {% set packageObj = packageRepository.find(packageId)%}
                                             <h3 class="s-h3">{{packageObj.getTitle()}}</h3>										
@@ -108,7 +108,7 @@
                                     </div>
                                {% endif %}
                                
-                            <div class="col-md-6 cart-r-block d-none d-md-block">
+                            <div class="col-md-5 col-lg-6 cart-r-block d-none d-md-block">
                                 <div class="cart-item-price text-center">
                                     <h4>
                                         {% set totalVat = totalVat + cartDetail['vat_amount'] %}
