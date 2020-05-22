@@ -78,14 +78,14 @@
                                     <a href="javascript:void(0)" class="{{ catClass }} main_category" id="maincategory_{{ categoryId }}" onclick="changeMainCategory('{{ categoryId }}', '', '1');">{{ categoryName }}</a>
                                  {% endfor %}
                             </div>
-                            <div class="col-md-24 d-flex justify-content-center" id="main_div">
+                            <div class="col-md-24 col-lg-24 f-width justify-content-center" id="main_div">
                                 <div id="motor_reg_fields">
                                     {% if showRegNoFieldsFlag %}
                                         <div id="reg_no_fields" class="paa-bdr-box">
                                                 {% if attribute(form, 'has_reg_no') is defined %}
                                                     <h3 class="text-center">{{ attribute(form, 'has_reg_no').vars.label }}</h3>
-                                                    <div class="text-center label-inline reg-yes-no">
-                                                        {{ form_widget(attribute(form, 'has_reg_no')) }}
+                                                    <div class="text-center reg-yes-no">
+                                                        {{ form_widget(attribute(form, 'has_reg_no'), {'attr': {'class': 'grey-radio radio-circle-btn'}}) }}
                                                         {{ form_errors(attribute(form, 'has_reg_no')) }}
                                                     </div>
                                                 {% endif %}
