@@ -333,18 +333,18 @@
     padding: 0;
     text-indent: -9999px;
     margin-bottom: 26px;
-    background: url('/bundles/fafrontend/images/fb-btn.svg') no-repeat;
+    background: url('/Frontend/images/social/fb-btn.svg') no-repeat;
     transition: none;
     border: 0px;
   }
   .fb-btn:hover {
-    background: url('/bundles/fafrontend/images/fb-btn-hover.svg') no-repeat;
+    background: url('/Frontend/images/social/fb-btn-hover.svg') no-repeat;
   }
   .gplus-btn {
-    background: url('/bundles/fafrontend/images/google_signin.png') no-repeat;
+    background: url('/Frontend/images/social/google_signin.png') no-repeat;
     margin-left: 18px;
     &:hover {
-      background: url('/bundles/fafrontend/images/google_signin.png') no-repeat;
+      background: url('/Frontend/images/social/google_signin.png') no-repeat;
       margin-left: 20px;
     }
   }
@@ -434,7 +434,7 @@
   }
   .drag-ins-hr {
 
-    background: url('/bundles/fafrontend/images/upload-image.png') no-repeat;
+    background: url('/Frontend/images/icons/upload-image.png') no-repeat;
     padding: 0 0 0 26px;
     margin-bottom: 10px;
     min-height: 15px;
@@ -444,7 +444,7 @@
   }
   .drag-ins-vr {
 
-    background: url('/bundles/fafrontend/images/upload-image.png') no-repeat;
+    background: url('/Frontend/images/icons/upload-image.png') no-repeat;
     padding: 43px 0 0 0;
     margin: 10px 0;
     background-position: center top;
@@ -510,7 +510,7 @@
     max-height: 98px;
     max-width: 130px;
     cursor: move;
-    cursor: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/move-cursor.png) 4 12,auto;
+    cursor: url('/Frontend/images/icons/move-cursor.png') 4 12,auto;
 }
 .adimg-thumb .edit-img {
     padding: 5px 27px 7px !important;
@@ -684,7 +684,7 @@
   .available-payment-options {
     width: 100%;
     height: 47px;
-    background: url('https://www.friday-ad.co.uk/bundles/fafrontend/images/payment-options-new.png') no-repeat center center;
+    background: url('/Frontend/images/payment/payment-options.png') no-repeat center center;
   }
 
   .weekly-pkg {
@@ -706,7 +706,7 @@
 @media (min-width: 320px) and (max-width: 759px) {
   .paa-block {
     .available-payment-options {
-      background: url('/bundles/fafrontend/images/payment-options-mobile-new.png') no-repeat center center;
+      background: url('/Frontend/images/payment/payment-options-mobile.png') no-repeat center center;
       height: 100px;
     }
     .paa-pkg-main {
@@ -810,7 +810,7 @@
     padding-bottom: 55px;
   }
   .credit-cards-box {
-    background: url('/bundles/fafrontend/images/credit-cards.svg') no-repeat center center;
+    background: url('/Frontend/images/payment/credit-cards.svg') no-repeat center center;
     height: 144px;
     border-radius: 2px;
     cursor: pointer;
@@ -841,7 +841,7 @@
       display: inline-block !important;
     }
     .credit-cards-box {
-      background: url('/bundles/fafrontend/images/credit-cards-mobile.svg') no-repeat center center;
+      background: url('/Frontend/images/payment/credit-cards-mobile.svg') no-repeat center center;
       width: 100%;
       height: 60px;
       float: none;
@@ -1096,18 +1096,18 @@
     width: 242px;
     height: 141px;
 }
-.motors-subtitle{background:url('/bundles/fafrontend/images/motors-subtitle.png') 0 0 / 245px 153px no-repeat}
-.for_sale-subtitle{background:url('/bundles/fafrontend/images/forsale-subtitle.png') 0 0 / 245px 153px no-repeat}
-.jobs-subtitle{background:url('/bundles/fafrontend/images/jobs-subtitle.png') 0 0 / 245px 153px no-repeat}
-.services-subtitle{background:url('/bundles/fafrontend/images/services-subtitle.png') 0 0 / 245px 153px no-repeat}
-.adult-subtitle{background:url('/bundles/fafrontend/images/adult-subtitle.png') 0 0 / 245px 153px no-repeat}
-.property-subtitle{background:url('/bundles/fafrontend/images/property-subtitle.png') 0 0 / 245px 153px no-repeat}
-.classes_and_tuition-subtitle{background:url('/bundles/fafrontend/images/classes-subtitle.png') 0 0 / 245px 153px no-repeat}
-.clubs_societies_and_teams-subtitle{background:url('/bundles/fafrontend/images/clubs-subtitle.png') 0 0 / 245px 153px no-repeat}
-.friendship_and_dating-subtitle{background:url('/bundles/fafrontend/images/dating-subtitle.png') 0 0 / 245px 153px no-repeat}
-.in_your_area-subtitle{background:url('/bundles/fafrontend/images/area-subtitle.png') 0 0 / 245px 153px no-repeat}
-.animals-subtitle{background:url('/bundles/fafrontend/images/animals-subtitle.png') 0 0 / 245px 153px no-repeat}
-.whats_on-subtitle{background:url('/bundles/fafrontend/images/whatson-subtitle.png') 0 0 / 245px 153px no-repeat}
+.motors-subtitle{background:url('/Frontend/images/subtitle/motors-subtitle.png') 0 0 / 245px 153px no-repeat}
+.for_sale-subtitle{background:url('/Frontend/images/subtitle/forsale-subtitle.png') 0 0 / 245px 153px no-repeat}
+.jobs-subtitle{background:url('/Frontend/images/subtitle/jobs-subtitle.png') 0 0 / 245px 153px no-repeat}
+.services-subtitle{background:url('/Frontend/images/subtitle/services-subtitle.png') 0 0 / 245px 153px no-repeat}
+.adult-subtitle{background:url('/Frontend/images/subtitle/adult-subtitle.png') 0 0 / 245px 153px no-repeat}
+.property-subtitle{background:url('/Frontend/images/subtitle/property-subtitle.png') 0 0 / 245px 153px no-repeat}
+.classes_and_tuition-subtitle{background:url('/Frontend/images/subtitle/classes-subtitle.png') 0 0 / 245px 153px no-repeat}
+.clubs_societies_and_teams-subtitle{background:url('/Frontend/images/subtitle/clubs-subtitle.png') 0 0 / 245px 153px no-repeat}
+.friendship_and_dating-subtitle{background:url('/Frontend/images/subtitle/dating-subtitle.png') 0 0 / 245px 153px no-repeat}
+.in_your_area-subtitle{background:url('/Frontend/images/subtitle/area-subtitle.png') 0 0 / 245px 153px no-repeat}
+.animals-subtitle{background:url('/Frontend/images/subtitle/animals-subtitle.png') 0 0 / 245px 153px no-repeat}
+.whats_on-subtitle{background:url('/Frontend/images/subtitle/whatson-subtitle.png') 0 0 / 245px 153px no-repeat}
 
 .paa-subtitle-img {
     width: 245px;

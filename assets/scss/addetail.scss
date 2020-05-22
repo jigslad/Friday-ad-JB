@@ -148,7 +148,7 @@
     padding: 17px 20px;
 }
 .nimber-logo {
-    background: url("/bundles/fafrontend/images/nimber-logo.png") no-repeat 0 0 / 132px 28px;
+    background: url("/Frontend/images/icons/nimber-logo.png") no-repeat 0 0 / 132px 28px;
     display: block;
     width: 132px;
     height: 28px;
@@ -729,13 +729,13 @@
                 opacity: 0;
                 transition: left ease .25s;
                 transform: rotate(0deg);
-                background: url("/bundles/fafrontend/images/photo-prev.svg") center center;
+                background: url("/Frontend/images/icons/photo-prev.svg") center center;
                 background-repeat: no-repeat;
                 &:hover {
                     visibility: visible;
                     opacity: 1;
                     left: 20px;
-                    background: url("/bundles/fafrontend/images/photo-prev.svg") center center;
+                    background: url("/Frontend/images/icons/photo-prev.svg") center center;
                     transform: rotate(0deg);
                     background-repeat: no-repeat;
                 }
@@ -756,14 +756,14 @@
                 visibility: hidden;
                 opacity: 0;
                 transition: right ease .25s;
-                background: url("/bundles/fafrontend/images/photo-next.svg") center center;
+                background: url("/Frontend/images/icons/photo-next.svg") center center;
                 transform: rotate(0deg);
                 background-repeat: no-repeat;
                 &:hover {
                     visibility: visible;
                     opacity: 1;
                     right: 20px;
-                    background: url("/bundles/fafrontend/images/photo-next.svg") center center;
+                    background: url("/Frontend/images/icons/photo-next.svg") center center;
                     transform: rotate(0deg);
                     background-repeat: no-repeat;
                 }
@@ -821,7 +821,7 @@
                 transition: all ease .25s;
                 width: 40px;
                 height: 100%;
-                background: no-repeat rgba(239, 239, 239, 0.5) url("http://static.friday-ad.co.uk/bundles/fafrontend/images/small-slider-prev.svg") center center;
+                background: no-repeat rgba(239, 239, 239, 0.5) url("/Frontend/images/icons/small-slider-prev.svg") center center;
                 left: -40px;
                 &:hover {
                     visibility: visible;
@@ -835,7 +835,7 @@
                 visibility: hidden;
             }
             .right-t {
-                background: no-repeat rgba(239, 239, 239, 0.5) url("http://static.friday-ad.co.uk/bundles/fafrontend/images/small-slider-next.svg") center center;
+                background: no-repeat rgba(239, 239, 239, 0.5) url("/Frontend/images/icons/small-slider-next.svg") center center;
                 cursor: pointer;
                 position: absolute;
                 z-index: 1;
@@ -915,13 +915,13 @@
         opacity: 0;
         transition: left ease .25s;
         transform: rotate(0deg);
-        background: url("/bundles/fafrontend/images/photo-prev.svg") center center;
+        background: url("/Frontend/images/icons/photo-prev.svg") center center;
         background-repeat: no-repeat;
         &:hover {
             visibility: visible;
             opacity: 1;
             left: 20px;
-            background: url("/bundles/fafrontend/images/photo-prev.svg") center center;
+            background: url("/Frontend/images/icons/photo-prev.svg") center center;
             transform: rotate(0deg);
             background-repeat: no-repeat;
         }
@@ -942,14 +942,14 @@
         visibility: hidden;
         opacity: 0;
         transition: right ease .25s;
-        background: url("/bundles/fafrontend/images/photo-next.svg") center center;
+        background: url("/Frontend/images/icons/photo-next.svg") center center;
         transform: rotate(0deg);
         background-repeat: no-repeat;
         &:hover {
             visibility: visible;
             opacity: 1;
             right: 20px;
-            background: url("/bundles/fafrontend/images/photo-next.svg") center center;
+            background: url("/Frontend/images/icons/photo-next.svg") center center;
             transform: rotate(0deg);
             background-repeat: no-repeat;
         }
@@ -1108,31 +1108,31 @@
 }
 
 .info-year {
-    background: url('/Frontend/images/icons/info-year.svg') 50% 50% no-repeat
+    background: url('/Frontend/images/icons/ad-det/info-year.svg') 50% 50% no-repeat
 }
 
 .info-mileage {
-    background: url('/Frontend/images/icons/info-mileage.svg') 50% 50% no-repeat
+    background: url('/Frontend/images/icons/ad-det/info-mileage.svg') 50% 50% no-repeat
 }
 
 .info-fuel {
-    background: url('/Frontend/images/icons/info-fuel.svg') 50% 50% no-repeat
+    background: url('/Frontend/images/icons/ad-det/info-fuel.svg') 50% 50% no-repeat
 }
 
 .info-engine {
-    background: url('/Frontend/images/icons/info-engine.svg') 50% 50% no-repeat
+    background: url('/Frontend/images/icons/ad-det/info-engine.svg') 50% 50% no-repeat
 }
 
 .info-item-type {
-    background: url('/Frontend/images/icons/info-item-type.svg') 50% 50% no-repeat
+    background: url('/Frontend/images/icons/ad-det/info-item-type.svg') 50% 50% no-repeat
 }
 
 .info-bedroom {
-    background: url('/Frontend/images/icons/info-bedroom.svg') 50% 50% no-repeat
+    background: url('/Frontend/images/icons/ad-det/info-bedroom.svg') 50% 50% no-repeat
 }
 
 .info-bathroom {
-    background: url('/Frontend/images/icons/info-bathroom.svg') 50% 50% no-repeat
+    background: url('/Frontend/images/icons/ad-det/info-bathroom.svg') 50% 50% no-repeat
 }
 
 .motor-info .color-row {
@@ -1187,7 +1187,7 @@
 }
 
 .safety-stars {
-    background: url('/bundles/fafrontend/images/rating-stars.png') repeat-x;
+    background: url('/Frontend/images/icons/rating-stars.png') repeat-x;
     background-size: 90px 16px;
     width: 91px;
     height: 16px;
@@ -1232,11 +1232,11 @@
 }
 
 .ncap-icon {
-    background: url('/bundles/fafrontend/images/ncap-icon.svg') no-repeat
+    background: url('/Frontend/images/icons/ncap-icon.svg') no-repeat
 }
 
 .iso-icon {
-    background: url('/bundles/fafrontend/images/iso-icon.svg') no-repeat
+    background: url('/Frontend/images/icons/iso-icon.svg') no-repeat
 }
 
 .iso-title {
@@ -1246,14 +1246,14 @@
     width: 30px;
     height: 22px;
     float: left;
-    background: url('/Frontend/images/icons/adult/adul-incalls.svg') no-repeat
+    background: url('/Frontend/images/adul/icons/adul-incalls.svg') no-repeat
 }
 
 .adult-outcall-icon {
     width: 30px;
     height: 22px;
     float: left;
-    background: url('/Frontend/images/icons/adult/adul-outcalls.svg') no-repeat
+    background: url('/Frontend/images/adul/icons/adul-outcalls.svg') no-repeat
 }
 
 #element_my_service_id {
@@ -1265,7 +1265,7 @@
     height: 25px;
     display: inline-block;
     vertical-align: middle;
-    background: url('/Frontend/images/icons/adult/adul-incall.svg') no-repeat
+    background: url('/Frontend/images/adul/icons/adul-incall.svg') no-repeat
 }
 
 .safety-fe-outcall {
@@ -1273,7 +1273,7 @@
     height: 25px;
     display: inline-block;
     vertical-align: middle;
-    background: url('/Frontend/images/icons/adult/adul-outcall.svg') no-repeat
+    background: url('/Frontend/images/adul/icons/adul-outcall.svg') no-repeat
 }
 
 .adult_services_box tbody tr td {
@@ -1367,48 +1367,48 @@ table.responsive-card-table {
 }
 
 .adult-male {
-    background: url('/Frontend/images/icons/adult/adul-male.svg') no-repeat
+    background: url('/Frontend/images/adul/icons/adul-male.svg') no-repeat
 }
 
 .adult-female {
-    background: url('/Frontend/images/icons/adult/adul-female.svg') no-repeat
+    background: url('/Frontend/images/adul/icons/adul-female.svg') no-repeat
 }
 
 .adult-transexual {
-    background: url('/Frontend/images/icons/adult/adul-trans.svg') no-repeat
+    background: url('/Frontend/images/adul/icons/adul-trans.svg') no-repeat
 }
 
 .adult-agency {
-    background: url('/Frontend/images/icons/adult/adul-agency.svg') no-repeat
+    background: url('/Frontend/images/adul/icons/adul-agency.svg') no-repeat
 }
 
 .service-for-male,
 .service-for-men {
-    background: url('/Frontend/images/icons/adult/adul-men.svg') no-repeat
+    background: url('/Frontend/images/adul/icons/adul-men.svg') no-repeat
 }
 
 .service-for-women {
-    background: url('/Frontend/images/icons/adult/adul-women.svg') no-repeat
+    background: url('/Frontend/images/adul/icons/adul-women.svg') no-repeat
 }
 
 .service-for-couples {
-    background: url('/Frontend/images/icons/adult/couples.svg') no-repeat
+    background: url('/Frontend/images/adul/icons/couples.svg') no-repeat
 }
 
 .travel-arrangement-in-call {
-    background: url('/Frontend/images/icons/adult/adul-travel-incall.svg') no-repeat
+    background: url('/Frontend/images/adul/icons/adul-travel-incall.svg') no-repeat
 }
 
 .travel-arrangement-out-call {
-    background: url('/Frontend/images/icons/adult/adul-travel-outcall.svg') no-repeat
+    background: url('/Frontend/images/adul/icons/adul-travel-outcall.svg') no-repeat
 }
 
 .travel-arrangement-either {
-    background: url('/Frontend/images/icons/adult/adul-in-out-call.svg') no-repeat
+    background: url('/Frontend/images/adul/icons/adul-in-out-call.svg') no-repeat
 }
 
 .adult-independent {
-    background: url('/Frontend/images/icons/adult/adul-independent.svg') no-repeat
+    background: url('/Frontend/images/adul/icons/adul-independent.svg') no-repeat
 }
 .detail-tabpart-2 .accordion .content h5:first-child {
     margin-top: 15px;
@@ -1489,7 +1489,7 @@ table.responsive-card-table {
   opacity: 1;
 }
 .dealer-badge {
-  background: url(/bundles/fafrontend/images/dealer-badge.svg) no-repeat 0 5px;
+  background: url('/Frontend/images/trusted-badges/dealer-badge.svg') no-repeat 0 5px;
 }
 .website-icon {
   background: url(data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2222px%22%20height%3D%2223px%22%20viewBox%3D%220%200%2022%2023%22%20version%3D%221.1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%3E%0A%20%20%20%20%3C%21--%20Generator%3A%20Sketch%2043%20%2838999%29%20-%20http%3A//www.bohemiancoding.com/sketch%20--%3E%0A%20%20%20%20%3Ctitle%3Ewebsite-icon%3C/title%3E%0A%20%20%20%20%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%0A%20%20%20%20%3Cdefs%3E%3C/defs%3E%0A%20%20%20%20%3Cg%20id%3D%22Page-1%22%20stroke%3D%22none%22%20stroke-width%3D%221%22%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%0A%20%20%20%20%20%20%20%20%3Cg%20id%3D%223.-Visit-website-mobile%22%20transform%3D%22translate%28-94.000000%2C%20-739.000000%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Green-button-small-2-Copy-2%22%20transform%3D%22translate%2810.000000%2C%20730.000000%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22website-icon%22%20transform%3D%22translate%2884.000000%2C%209.000000%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Shape%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M17.4142857%2C17.7666667%20L21.3466667%2C16.9828571%20L11.4952381%2C10.8447619%20L11.2628571%2C11.0066667%20L13.4561905%2C22.4019048%20L15.5971429%2C19.0142857%20L17.6733333%2C22.0390476%20C18.067619%2C22.6085714%2018.7914286%2C22.792381%2019.2933333%2C22.4485714%20C19.792381%2C22.1038095%2019.8819048%2C21.3609524%2019.4904762%2C20.7904762%20L17.4142857%2C17.7666667%20L17.4142857%2C17.7666667%20Z%22%20fill%3D%22%23FFFFFF%22%3E%3C/path%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M13.5933333%2C17.9792857%20C13.6143333%2C17.9682857%2013.6363333%2C17.9582857%2013.6573333%2C17.9482857%20C13.6493333%2C17.9362857%2013.6413333%2C17.9262857%2013.6343333%2C17.9142857%20C13.6223333%2C17.9332857%2013.6063333%2C17.9592857%2013.5933333%2C17.9792857%20L13.5933333%2C17.9792857%20Z%22%20fill%3D%22%23212527%22%3E%3C/path%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M9.69047619%2C17.6761905%20C8.11047619%2C17.6761905%206.63809524%2C17.2228571%205.38190476%2C16.4504762%20C6.51238095%2C16.4619048%204.54095238%2C14.7304762%205.89904762%2C14.4647619%20C7.32380952%2C14.1847619%207.92380952%2C12.5552381%207.46761905%2C12.58%20C7.01238095%2C12.6038095%206.14571429%2C12.3447619%205.53619048%2C11.5790476%20C4.92571429%2C10.807619%204.39142857%2C10.9838095%203.76190476%2C11.1047619%20C3.21142857%2C11.2133333%202.53333333%2C12.8057143%202.3647619%2C13.2238095%20C1.93619048%2C12.4028571%201.64571429%2C11.5009524%201.51428571%2C10.547619%20C2.21333333%2C10.1819048%203.35428571%2C9.56666667%203.76666667%2C9.22666667%20C4.37428571%2C8.72285714%203.56380952%2C8.51904762%203.46380952%2C8.2152381%20C3.3647619%2C7.91142857%203.46380952%2C7.20380952%203.46380952%2C6.50095238%20C3.46380952%2C5.79142857%204.87904762%2C5.79142857%205.38095238%2C5.08571429%20C5.74190476%2C4.58190476%205.08095238%2C3.47047619%204.66857143%2C2.86857143%20C6.06190476%2C1.79619048%207.80095238%2C1.15142857%209.69047619%2C1.15142857%20C10.1914286%2C1.15142857%2010.68%2C1.20380952%2011.1571429%2C1.28952381%20C11.2971429%2C2.16%2011.5885714%2C3.35714286%2012.1514286%2C3.66952381%20C13.0628571%2C4.17428571%2014.1657143%2C5.28571429%2014.5733333%2C5.48571429%20C14.9790476%2C5.68761905%2015.4809524%2C7.40761905%2015.3819048%2C8.11428571%20C15.3104762%2C8.61333333%2014.6914286%2C9.16285714%2014.4380952%2C9.69142857%20L18.647619%2C12.3142857%20C18.9447619%2C11.4%2019.1085714%2C10.427619%2019.1085714%2C9.4152381%20C19.1085714%2C4.22285714%2014.8819048%2C0%209.69142857%2C0%20C4.49809524%2C0%200.274285714%2C4.22285714%200.274285714%2C9.4152381%20C0.274285714%2C14.6085714%204.49809524%2C18.8333333%209.69142857%2C18.8333333%20C9.88857143%2C18.8333333%2010.0809524%2C18.8152381%2010.2752381%2C18.8038095%20L10.0552381%2C17.6571429%20C9.93333333%2C17.6628571%209.81333333%2C17.6761905%209.69047619%2C17.6761905%20L9.69047619%2C17.6761905%20Z%20M17.8514286%2C10.6342857%20C17.6733333%2C9.92761905%2017.3285714%2C9.24571429%2016.5952381%2C8.71904762%20C16.0933333%2C8.3647619%2015.6838095%2C6.80095238%2015.9885714%2C6.29428571%20C16.1704762%2C5.99238095%2016.6438095%2C5.72666667%2016.992381%2C5.56095238%20C17.6028571%2C6.71238095%2017.9514286%2C8.02285714%2017.9514286%2C9.4152381%20C17.9514286%2C9.83047619%2017.9104762%2C10.2352381%2017.8514286%2C10.6342857%20L17.8514286%2C10.6342857%20Z%22%20fill%3D%22%23FFFFFF%22%3E%3C/path%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%3C/g%3E%0A%3C/svg%3E) no-repeat;

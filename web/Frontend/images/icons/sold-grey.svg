@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="41px" height="19px" viewBox="0 0 41 19" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>Ribbon / Sold@2x</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Ribbon-/-Sold" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="shops-sold-icon-grey">
+            <path d="M38.4087591,9.23611111 C38.4087591,9.96491285 37.8279722,10.5555556 37.1128936,10.5555556 C36.3973249,10.5555556 35.8175182,9.96491285 35.8175182,9.23611111 C35.8175182,8.50782297 36.3973249,7.91666667 37.1128936,7.91666667 C37.8284623,7.91666667 38.4087591,8.50782297 38.4087591,9.23611111 L38.4087591,9.23611111 Z M34.4277482,0.75688222 C34.0167057,0.266652272 33.40445,-3.55271368e-15 32.7582364,-3.55271368e-15 L9.82954223,-3.55271368e-15 L7.219853,-3.55271368e-15 L0,-3.55271368e-15 L0,19 L7.219853,19 L9.82903539,19 L32.7582364,19 C33.5529524,19 34.2478221,18.5789971 34.6243999,17.9503131 L40.5274977,10.6701932 C41.1656019,9.88356904 41.1564789,8.76568067 40.5057038,7.98931232 L34.4277482,0.75688222 Z" id="Shape-Copy" fill="#ACB0B7"></path>
+            <g id="SOLD" transform="translate(3.000000, 1.000000)" fill="#EFEFEF" font-family="Poppins-SemiBold, Poppins" font-size="12" font-weight="500">
+                <text>
+                    <tspan x="0" y="13">SOLD</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>
