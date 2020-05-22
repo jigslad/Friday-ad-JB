@@ -65,7 +65,6 @@
 
 
 {% block scripttop %}
-    <link href="{{ asset_url('css/jquery.fancybox.css') }}" rel="stylesheet">
     {% if allowProfileEdit %}
         {{ block('userSiteBannerUploadStylesheets') }}
         {{ block('profileImageUploadStylesheets') }}
@@ -75,6 +74,7 @@
 
 {% block stylesheet %}
     <link rel="stylesheet" href="{{ asset('build/css/dashboard.css') }}"/>
+    <link href="{{ asset_url('css/jquery.fancybox.css') }}?v=2.1.7" rel="stylesheet">
 {% endblock %}
 
 {% block body %}

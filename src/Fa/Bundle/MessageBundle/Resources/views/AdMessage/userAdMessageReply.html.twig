@@ -8,6 +8,7 @@
 
 {% block stylesheet %}
     <link rel="stylesheet" href="{{ asset('build/css/dashboard.css') }}" />
+    <link href="{{ asset_url('css/jquery.fancybox.css') }}?v=2.1.7" rel="stylesheet">
 {% endblock %}
 
 {% block scripttop %}
@@ -16,13 +17,7 @@
 
 
 {% block message_attachments_slider_css %}
-    {% stylesheets filter='uglifycss' output='bundles/css/compiled/imageSlider.css'
-            'bundles/facore/css/owl.carousel.css'
-            'bundles/facore/css/owl.theme.css'
-            'bundles/facore/css/jquery.fancybox.css'
-              %}
-            <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}?v=3"/>
-    {% endstylesheets %}
+
 {% endblock %}
 
 {% block body -%}
