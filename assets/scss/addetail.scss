@@ -1413,6 +1413,24 @@ table.responsive-card-table {
 .detail-tabpart-2 .accordion .content h5:first-child {
     margin-top: 15px;
 }
+
+.details-top-banner .double-buttons a:first-child {
+    width: 42% !important;
+}
+.details-top-banner .double-buttons a:last-child {
+    width: 55% !important;
+}
+.details-top-banner .double-buttons .enquire-btn .btn-txt {
+    width: auto !important;
+}
+.details-top-banner .item-price {
+	font-family: "Poppins-Bold" !important;
+}
+@media (min-width: 760px) and (max-width: 959px) {
+	.double-buttons .btn-txt {
+	    display: none;
+	}
+}
 @media (min-width: 760px) {
     .details-wrapper .two-grid-col {
         width: 100%;

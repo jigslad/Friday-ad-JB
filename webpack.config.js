@@ -35,7 +35,8 @@ Encore
     .addStyleEntry('css/newsletter', './assets/scss/newsletter.scss')
     .addStyleEntry('css/adul-cat', './assets/scss/adul-cat.scss')
     .addStyleEntry('css/covid-19', './assets/scss/covid-19.scss')
-    .addStyleEntry('css/zutoLoanCalc', './assets/scss/zutoLoanCalc.scss')    
+    .addStyleEntry('css/zutoLoanCalc', './assets/scss/zutoLoanCalc.scss')  
+    .addStyleEntry('css/upgrade-modal', './assets/scss/upgrade-modal.scss')  
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 

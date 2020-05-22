@@ -52,6 +52,20 @@ input,button, .button, .btn, .primary-btn-1, .primary-btn-2, .primary-btn-3, .se
         color: $white;
     }
 }
+.xs-black-btn, , .xs-black-large-btn {
+    background: transparent !important;
+    border: 1px solid #212527 !important;
+    color: #212527 !important;
+    font-size: 14px !important;
+    line-height: 16px !important;
+    padding: 5px 20px 7px 20px !important;
+}
+.xs-black-btn:focus, .xs-black-btn:hover, .xs-black-large-btn:focus, .xs-black-large-btn:hover {
+    background: #212527 !important;
+    border: 1px solid #212527 !important;
+    color: #FFFFFF !important;
+}
+
 .xs-btn-1, .xs-btn-2, .xs-thin-btn {
     color: $white;
 }

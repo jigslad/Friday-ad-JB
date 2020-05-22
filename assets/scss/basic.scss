@@ -52,11 +52,13 @@ label {
   font-size: 14px;
 }
 
-.primary-btn-1, a:hover.primary-btn-1, a:focus.primary-btn-1, .primary-btn-1:focus, .primary-btn-1:hover, .top-bar-section li.place-item-btn a {
+.primary-btn-1, a:hover.primary-btn-1, a:focus.primary-btn-1, .primary-btn-1:focus, .primary-btn-1:hover, .top-bar-section li.place-item-btn a,
+.primary-btn-2, a:hover.primary-btn-2, a:focus.primary-btn-2, .primary-btn-2:focus, .primary-btn-2:hover 
+{
 	text-align:center; height:60px !important; padding:15px 0px !important;font-size:18px !important; line-height:27px !important;
 }
-.secondary-btn-1, .secondary-btn-2, .primary-btn-2, a:hover.primary-btn-2, a:focus.primary-btn-2, .primary-btn-2:focus, .primary-btn-2:hover
-a:hover.secondary-btn-1, a:hover.secondary-btn-2, a:focus.secondary-btn-1, a:focus.secondary-btn-2, .secondary-btn-1:focus, .secondary-btn-1:hover, .secondary-btn-2:focus, .secondary-btn-2:hover,
+.secondary-btn-1, .secondary-btn-2, a:hover.secondary-btn-1, a:hover.secondary-btn-2, a:focus.secondary-btn-1, a:focus.secondary-btn-2, 
+.secondary-btn-1:focus, .secondary-btn-1:hover, .secondary-btn-2:focus, .secondary-btn-2:hover,
 .primary-btn-1.thin-btn, a:hover.primary-btn-1.thin-btn, a:focus.primary-btn-1.thin-btn, .primary-btn-1.thin-btn:focus, .primary-btn-1.thin-btn:hover,
 .primary-btn-2.thin-btn, a:hover.primary-btn-2.thin-btn, a:focus.primary-btn-2.thin-btn, .primary-btn-2.thin-btn:focus, .primary-btn-2.thin-btn:hover,
 .primary-btn-3.thin-btn, a:hover.primary-btn-3.thin-btn, a:focus.primary-btn-3.thin-btn, .primary-btn-3.thin-btn:focus, .primary-btn-3.thin-btn:hover {
@@ -164,7 +166,9 @@ div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, p, blockquote, t
  .homepage-hero .tagline-head {
     font-family: "Poppins-SemiBold";
    }
-
+.breadcrumb .back-link {
+    font-family: "Poppins-SemiBold";
+}
 /* Custom Modal */
 .custom-modal .modal-body {
     padding: 1.5rem;
