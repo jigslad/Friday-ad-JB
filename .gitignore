@@ -32,3 +32,4 @@
 /.idea
 /web/build
 /node_modules/
+yarn-error.log
