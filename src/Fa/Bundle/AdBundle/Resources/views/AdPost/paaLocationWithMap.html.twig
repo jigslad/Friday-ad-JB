@@ -9,7 +9,7 @@
 {% endif %}
 {% set locationRepository = fetch_repository('FaEntityBundle:Location') %}
 {% use "FaCoreBundle:GoogleMap:renderLocationUsingCircle.html.twig" %}
-<div class="col-md-24 justify-content-center">
+<div class="col-md-24 justify-content-center pad-none">
     <div class="paa-gray-box btm-pa-0 justify-content-center" id="location_div">
         <h3 class="text-center">
             {{ attribute(form, field).vars.label }}
@@ -44,7 +44,7 @@
         <div id="dispEditNurseryLocation" style="display:none;padding-bottom:10px;">{{ 'It looks like you\'re based in %actuallocation%'|trans({'%actuallocation%': '<b>' ~ curLocText ~ '</b>'}, 'frontend-paa-fourth-step')|raw }}</div>
         <div id="location_field_div" class="map-location-field" style="display:{{ showHideLocationField }}">
             <div class="row">
-                <div class="small-wrapper">
+                <div class="small-wrapper position-relative">
                     <div class="relative">
                         {{ form_widget(attribute(form, field), {'attr': {'placeholder': ((attribute(form, field).vars.attr.placeholder is defined and attribute(form, field).vars.attr.placeholder is not null) ? attribute(form, field).vars.attr.placeholder : 'Type postal code or town') }}) }}
                         <a href="javascript:void(0);" id="{{ formName }}_location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
