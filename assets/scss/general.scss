@@ -1024,7 +1024,7 @@ footer {
   color: $dark-grey;
 }
 .fa-range-slider .noUi-connect {
-  background: $slider-noui-color;
+  background: $accent1-dark-color;
 }
 .fa-range-slider .noUi-target {
   background: $chat-btn-color;
@@ -1894,7 +1894,7 @@ footer p { color:$grey-color; }
     margin-bottom: 20px;
 }
 .search-sliders .slider-text-top {
-    color: $form-text-color;
+    color: $dark-grey;
 }
 .search-sliders .noUi-origin {
     background: $form-border-color;
@@ -1903,7 +1903,7 @@ footer p { color:$grey-color; }
     background-color: $slider-noui-handle-color;
 }
 .search-sliders .noUi-connect {
-    background-color: $slider-noui-color;
+    background-color: $accent1-dark-color;
 }
 .noUi-connect {
     background: $slider-noui-color;
@@ -2115,6 +2115,10 @@ footer p { color:$grey-color; }
     background: #EAEFF0;
 }
 .modal-body{ font-size: 13px; color: #ACB0B7;line-height: 19px; }
+.ad-list-block .accordion-navigation > a, .ad-list-block dd > a {
+    color: $common-text-color;
+    font-family: "Poppins-SemiBold";
+}
 
 @media only screen and (max-width: 640px) {
   .ad-list-block .reset-search{

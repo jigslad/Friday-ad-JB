@@ -367,7 +367,7 @@ input.checkbox {
 
 
 /* Select2 dropdown */
-.select2-container { width: 100% !important; }
+.select2-container { width: 100% !important;  overflow-x: hidden; }
 .white-select .select2-container--default .select2-selection--single {
 	background: #FFFFFF !important;
 }
@@ -1412,6 +1412,9 @@ b, strong {
 }
 .paa-back-arrow, .paa-back-arrow-pkg {
     font-family: "Poppins-SemiBold";
+}
+.breadcrumb-area .breadcrumb span:last-child {
+	font-family: "Poppins-SemiBold";
 }
 @media (min-width: 760px) and (max-width: 1151px) {
 	.home-list-location-box .link-list, .list-location-box .link-list, .details-list-location-box .link-list {
