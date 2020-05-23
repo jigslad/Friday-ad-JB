@@ -314,9 +314,7 @@ footer .fad-logo {
       background: transparent;
       width: 25%;
     }
-    .cart-item-price h4 {
-        padding-top: 10px !important;
-    }
+    
     .step-nav {
       li {
         margin-bottom: 14px;
@@ -878,7 +876,10 @@ footer .fad-logo {
     }
 
 }
-
+.paa-block .paa-pkg-bg button {
+    z-index: 2 !important;
+    position: relative;
+}
 //Cart Block
 .paa-block {
   .cart-list-main h1 {
@@ -930,15 +931,18 @@ footer .fad-logo {
   }
   .cart-item-info h4 {
     font-size: 16px !important;;
-    line-height: 21px !important;;
-    padding: 40px 0 0 !important;;
+    line-height: 21px !important;
+    padding: 12px 0 !important;
   }
-  .cart-item-price h4 {
-     padding: 12px 0 !important;
+  .cart-item-price h4 { 
      font-size: 16px !important;
      line-height: 21px !important;    
      text-align: center;
   }
+  .cart-r-block .cart-item-price h4 {	
+     padding: 40px 0 !important;	
+  }
+  
   .code-field {
     display: flex;
     .btn {
@@ -977,6 +981,7 @@ footer .fad-logo {
     display: flex;
   }
 }
+
 
 @media (min-width: 320px) and (max-width: 759px) {
   .paa-block {
@@ -1022,18 +1027,17 @@ footer .fad-logo {
     .cart-item-info h4 {
       font-size: 16px;
       line-height: 21px;
-      padding: 60px 0 0 0;
       text-align: center;
     }
     .cart-item-price h4 {
       font-size: 16px;
       line-height: 21px;
-      padding: 60px 0 0 0;
       text-align: center;
     }
     .cart-cost-text {
-      margin-top: 10px;
+      margin-top: 30px;
     }
+    .cart-item-info h3 { word-break: break-word; }
   }
 }
 .paa-block .cart-total .cart-item-price h4 {
@@ -1044,6 +1048,25 @@ footer .fad-logo {
 }
 .promo-code .code-field .btn {
     border-radius: 0px 4px 4px 0px !important;
+}
+.visa {
+    background: url('/Frontend/images/payment/visa.png') no-repeat 0 0 / 67px 42px;
+    display: inline-block;
+    width: 67px;
+    height: 42px;
+    vertical-align: middle;
+    margin-right: 15px;
+}
+.expiry-date .l-select {
+	width: 100px;
+	margin-right: 10px;
+}
+.expiry-date .r-select {
+	width: 100px;
+	margin-right: 0px;
+}
+span#fa_payment_cyber_source_checkout_card_expity_month-button, span#fa_payment_cyber_source_checkout_card_expity_year-button {
+  display:none;
 }
 //Payment
 .paa-block {
