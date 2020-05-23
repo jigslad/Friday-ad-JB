@@ -15,7 +15,7 @@
             {{ attribute(form, field).vars.label }}
         </h3>
         <div class="small-wrapper text-center">
-            <p class="mb0">
+            <p class="mb0 position-relative">
                 <span id="paa_location_autocomplete_tips">{{ 'Enter your postcode or town.'|trans({}, 'frontend-paa-fourth-step')}}</span>
                 {% if form.location_autocomplete.vars.attr['field-help'] is defined and form.location_autocomplete.vars.attr['field-help'] is not null %}&nbsp;
                 <div class="image-tooltip-wrapper text-left">
@@ -44,8 +44,8 @@
         <div id="dispEditNurseryLocation" style="display:none;padding-bottom:10px;">{{ 'It looks like you\'re based in %actuallocation%'|trans({'%actuallocation%': '<b>' ~ curLocText ~ '</b>'}, 'frontend-paa-fourth-step')|raw }}</div>
         <div id="location_field_div" class="map-location-field" style="display:{{ showHideLocationField }}">
             <div class="row">
-                <div class="small-wrapper position-relative">
-                    <div class="relative">
+                <div class="small-wrapper">
+                    <div class="position-relative">
                         {{ form_widget(attribute(form, field), {'attr': {'placeholder': ((attribute(form, field).vars.attr.placeholder is defined and attribute(form, field).vars.attr.placeholder is not null) ? attribute(form, field).vars.attr.placeholder : 'Type postal code or town') }}) }}
                         <a href="javascript:void(0);" id="{{ formName }}_location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
                         {{ form_errors(attribute(form, field), {'attr' : {'class' : '' }}) }}
