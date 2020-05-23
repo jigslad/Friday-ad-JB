@@ -1240,6 +1240,12 @@ footer .fad-logo {
 .top-bar-section, #top_search, .f-ad-sign, #fa_user_newsletter, #paa_steps_title, .fad-sign-bdr {
     display: none !important;
 }
+@media only screen and (min-width: 1152px) {
+.dpaa-section .btn {
+    margin: auto;
+    width: 209px;
+}
+}
 @media only screen and (min-width: 960px) and (max-width: 1151px) {
     .tab-pad {
         padding: 0px 8px !important;
