@@ -247,7 +247,7 @@ li.step-on {
     background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2213%22%20height%3D%2233%22%20viewBox%3D%22-1411%20455.9%2013%2033%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3Anone%3Bstroke%3A%23FFFFFF%3Bstroke-width%3A3%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Eselected%20arrow%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-398.000000%2C%20-693.000000%29%22%3E%3Cg%20transform%3D%22translate%28-2.000000%2C%20-127.000000%29%22%3E%3Cg%20transform%3D%22translate%280.000000%2C%20387.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-1009%20890.9l9%2014.5%20-9%2014.5%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat 100% 10px;
 }
 
-small.username_cls.error { margin-bottom:0px !important; margin-top: 5px !important; padding-bottom:0px !important; }
+small.username_cls.error { margin-bottom:0px !important; margin-top: 5px !important; padding-bottom:15px !important; }
 #reg_no_details_fields .select2 { margin-bottom: 15px !important;} 
 .change-category .separator, .breadcrumb span.separator:last-child {
     background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%226%22%20height%3D%2210%22%20viewBox%3D%220%200%206%2010%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3Anone%3Bstroke%3A%23ACB0B7%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Ebreadcrumbs%20arrow%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-253.000000%2C%20-531.000000%29%22%3E%3Cg%20transform%3D%22translate%28-42.000000%2C%20406.000000%29%22%3E%3Cg%20transform%3D%22translate%280.000000%2C%20119.000000%29%22%3E%3Cg%20transform%3D%22translate%28296.000000%2C%206.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M0%200l4%205%20-4%205%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat 100% 7px !important;
@@ -373,7 +373,6 @@ footer .fad-logo {
     }
   }
   .paa-forgot-pwd {
-    margin-bottom: 20px;
     a {
       position: absolute;
       right: 0;
@@ -1189,7 +1188,7 @@ footer .fad-logo {
     display: inline-block;
 }
 .cat-mid-full { width:100% !important; margin:auto auto 20px !important; padding: 0px !important; }
-.paa-block .paa-features li.grey-check label { display:inline-flex !important; }
+.paa-block .paa-features li.grey-check label { display:inline-flex !important;font-family: "Poppins-SemiBold"; }
 .paa-usr-type .grey-radio span { display:inline-block !important;margin-right:20px; }
 .paa-block .subtitle { font-size: 20px;line-height: 26px;color: #4a4a4a; }
 .paa-bdr-box-btm-hd { border-bottom:0px !important; }

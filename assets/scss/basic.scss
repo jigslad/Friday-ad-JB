@@ -360,7 +360,7 @@ input.checkbox {
 	clip: rect(0 0 0 0);
 }
 .grey-radio .checkbox, .white-radio .checkbox { background:transparent !important; border:none !important; }
-.grey-radio, .white-radio, .grey-check, .white-check { font-size:13px !important; margin-bottom:5px !important;margin-right:0px !important; }
+.grey-radio, .white-radio, .grey-check, .white-check { font-size:13px !important; margin-bottom:5px !important;margin-right:0px !important;font-family:"Poppins-SemiBold"; }
 .grey-check, .white-check { display: inline-flex !important; vertical-align: middle; width: 100%; }
 .grey-check span, .white-check span { display: inline-block !important; }
 .grey-radio span, .white-radio span { display: block !important; }
@@ -971,10 +971,11 @@ span.error, small.error {
   color: #f74d4d;
   line-height: 15px;
   display: block;
-  padding: .375rem .5625rem .5625rem;
+  padding-bottom:15px;
+  /*padding: .375rem .5625rem .5625rem;
   padding-left: 0.5625rem;
   margin-top: -1px;
-  margin-bottom: 1rem;
+  margin-bottom: 1rem;*/
 }
 .site-search .show > .btn-outline-secondary.dropdown-toggle:focus {
     box-shadow: none;
@@ -1409,7 +1410,9 @@ b, strong {
 .top-links .notification-link a span, .top-links .msg-link a span, .top-links .cart-link a span, .top-links .basket-icon span {
 	font-family: 'Poppins-Bold';
 }
-
+.paa-back-arrow, .paa-back-arrow-pkg {
+    font-family: "Poppins-SemiBold";
+}
 @media (min-width: 760px) and (max-width: 1151px) {
 	.home-list-location-box .link-list, .list-location-box .link-list, .details-list-location-box .link-list {
             column-count: unset;
