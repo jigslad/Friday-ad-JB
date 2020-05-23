@@ -2641,20 +2641,10 @@ textarea[rows] {
 .label-inline a:hover{
     color: #82C249 !important;
 }
-.modal-dialog.tiny{
-    top: 15%
-}
 @media (min-width:560px) {
-    .modal-dialog.tiny{
-        width: 30%;
-        top: 10%
-    }
     .visa{
         margin-right: 105px;
     }
-}
-.custom-modal .modal-header {
-    background: #EAEFF0;
 }
 .db-left-menu li a:hover{
     color: #82C249;
