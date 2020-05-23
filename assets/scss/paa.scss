@@ -302,6 +302,9 @@ footer .fad-logo {
     .paa-features li {
       width: 100%;
     }
+    .paypal-box {
+	height: 60px !important;
+    }
     .step-nav {
       display: flex;
       margin: 0 auto !important;
@@ -858,6 +861,7 @@ footer .fad-logo {
     }
     li {
       border-bottom: solid 1px #FFFFFF;
+      box-shadow: none !important;
       padding: 19px 0;
       &:last-child {
         border-bottom: 0px;
@@ -895,14 +899,15 @@ footer .fad-logo {
     }
   }
   .cart-item-info h4 {
-    font-size: 32px;
-    padding: 12px 0;
+    font-size: 16px !important;;
+    line-height: 21px !important;;
+    padding: 40px 0 0 !important;;
   }
   .cart-item-price h4 {
-    font-size: 36px;
-    line-height: 46px;
-    padding: 14px 0 0;
-    text-align: center;
+     padding: 12px 0 !important;
+     font-size: 16px !important;
+     line-height: 21px !important;    
+     text-align: center;
   }
   .code-field {
     display: flex;
@@ -1002,7 +1007,7 @@ footer .fad-logo {
   }
 }
 .paa-block .cart-total .cart-item-price h4 {
-    padding: 36px 0 0 0;
+    padding: 36px 0 0 0 !important;
 }
 .promo-code .code-field input {
     border-radius: 4px 0px 0px 4px !important;
