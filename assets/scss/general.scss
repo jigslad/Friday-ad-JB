@@ -2011,7 +2011,7 @@ footer p { color:$grey-color; }
     background: rgba(0, 0, 0, 0.155);
   }
   .pkg-title {
-    background-color: $form-text-color;
+    background-color: $dark-grey;
   }
   .pkg-subtitle {
     background: $site-dark-bg-color;
@@ -2028,13 +2028,18 @@ footer p { color:$grey-color; }
     background: $form-text-color;
     border-color: $form-text-color;
   }
+  .pkg-green-head { background: $accent1-dark-color; }
   .pkg-blue-head {
     background: $primary-color;
   }
   .pkg-ins {
-    box-shadow: 0 1px 0 $form-text-color;
-    color: $site-dark-bg-color;
+    box-shadow: 0 1px 0 $chat-btn-color;
+    color: $common-text-color;
   }
+  .primary-btn-grey {
+      background: $dark-grey;
+      border-color: $dark-grey;
+   }
 }
 .paa-block {
   .cart-list {
@@ -2202,7 +2207,7 @@ footer p { color:$grey-color; }
             border-color: 1px solid $secondary-btn-brdr-color;
         }   
         .paa-block .posting-bg { background: $site-dark-bg-color; }
-        .paa-block .pkg-active { box-shadow: inset 0 0 0 0px $secondary-color; padding: 0 0px 0px; }
+        .paa-block .pkg-active { box-shadow: inset 0 0 0 0px $accent1-dark-color !important; padding: 0 5px 5px !important; }
 }
 
 @media (min-width: 320px) and (max-width: 640px) {

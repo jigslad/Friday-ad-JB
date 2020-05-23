@@ -739,14 +739,16 @@ footer .fad-logo {
     margin: -1px;
   }
   .pkg-subtitle {
-    height: 60px;
+    height: 85px;
     line-height: normal;
-    min-height: 60px;
+    min-height: 60px !important;
     position: relative;
     text-align: center;
     color: #FFFFFF;
     font-size: 16px;
     margin: -1px;
+    padding: 20px 10px 10px;
+    border-bottom: 1px solid #000;
   }
   .pkg-pricing {
     padding: 0 20px 4px 20px;
@@ -763,7 +765,6 @@ footer .fad-logo {
     text-transform: uppercase;
   }
   .choose_btn {
-    height: 60px !important;
     margin-bottom: 20px;
   }
   .paa-pkg-bg button {
@@ -773,8 +774,8 @@ footer .fad-logo {
     border-bottom: 1px solid #FFFFFF;
     padding: 13px 15px;
     text-align: center;
-
     line-height: 16px;
+    font-family: "Poppins-SemiBold";
   }
   .pkg-points {
     padding: 10px 23px;
@@ -813,7 +814,17 @@ footer .fad-logo {
   }
   
 }
-
+@media (min-width: 760px) {
+	#package_equalizer .equalizer-inner, #package_equalizer .pkg-columns {
+	    display: grid !important;
+	    align-items: stretch !important;
+	}
+}
+@media (max-width: 759px) {
+	#package_equalizer .equalizer-inner, #package_equalizer .pkg-columns {
+	    height: auto !important;
+	}
+}
 @media (min-width: 320px) and (max-width: 759px) {
   .paa-block {
     .available-payment-options {
@@ -825,20 +836,21 @@ footer .fad-logo {
       padding-right: 0px !important;
     }
     .paa-pkg-bg {
-      margin-bottom: 0px;
+      margin-bottom: 0px !important;
+      height: auto !important;
     }
     .pkg-pricing-wrap {
-      min-height: auto;
+      min-height: 10px;
     }
     .pkg-pricing h4 {
-      padding: 15px 0 15px;
+      padding: 0 0 5px;
     }
     .pkg-active {
       padding: 0 0px 0px;
     }
     .pkg-includes {
       padding: 25px 0 6px;
-
+      font-weight: normal;
     }
     .pkg-selection {
       height: auto !important;
@@ -846,7 +858,25 @@ footer .fad-logo {
     .pkg-points {
         display: none;
     }
-  }
+  } 
+  .pkg-subtitle {
+    height: auto !important;
+    line-height: normal;
+    border: 0;
+    box-shadow: none;
+    padding-top: 10px;
+   }
+   .pkg-pricing-wrap.pkg-pricing-equalizer {
+       min-height: 10px;
+   }
+   .pkg-ins {
+       border-bottom: 0;
+       box-shadow: none;
+    }
+    .paa-block .pkg-pricing.non-print-pkg h4 {
+       padding: 20px 0 20px !important;
+    }
+
 }
 
 //Cart Block

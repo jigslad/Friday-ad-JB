@@ -135,7 +135,7 @@
                                     {% set packagePrice = 'Free'|trans({}, 'frontend-ad-package')%}
                                 {% endif %}	
                                 	
-							<div class="col-md-6 col-sm-24 col-xs-24 mb20 pl10 pr10 tab-pad">
+							<div class="pkg-columns col-md-6 col-sm-24 col-xs-24 mb20 pl10 pr10 tab-pad">
 						        <div class="paa-pkg-bg">						        
                                         {% set pkgBoxColorClass = 'pkg-green-head' %}
                                         {% set pkgButtonColorClass = '' %}
@@ -150,7 +150,7 @@
 						          	<div class="pkg-title {{ pkgBoxColorClass}}">{{package.getPackage().getLabel()}}</div>
 						          	<div id="active_package_{{package.getPackage().getId()}}">
                                         <div class="pkg-subtitle">
-                                        	<div class="hide">
+                                        	<div class="d-none">
                                                 <span class="custom-radio {% if selectedPackageId == package.getPackage().getId() %} checked {% endif %}">
                                                     <input type="radio" name="package_id" value="{{package.getPackage().getId()}}" {% if selectedPackageId == package.getPackage().getId() %} checked="checked" {% endif %} onclick="return highlightSelectedPackage('{{package.getPackage().getId()}}');" />
                                                 </span>
@@ -254,12 +254,11 @@
                                                         {% endfor %}
                                                     </div>
                                                  </div>
-                                            {% endif %}
-                                            </div>
+                                            {% endif %}                                            
                                             
                                             <div class="choose-btn-block">                                               
                                             	{% set userCreditId = fetch_repository('FaPromotionBundle:Package').isPackageValidForCredit(package.getPackage(), userActiveCredits, activeShopPackageDetail) %}
-                                                <button type="button" class="{% if pkgButtonColorClass is defined and pkgButtonColorClass != '' %}{{pkgButtonColorClass}}{% else %}primary-btn-1{% endif %} {% if not userCreditId or (userCreditId and package.getPackage().getPrice() <= 0) %} free-button-spacing{% endif %} btn btn-block choose_btn btn-h-lg" onclick="selectPackage({{package.getPackage().getId()}}, '{{ package.getPackage().getPrice() }}');return false;" onmouseover="$('#package_selection_{{package.getPackage().getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getPackage().getId()}}').attr('style', '');">
+                                                <button type="button" class="{% if pkgButtonColorClass is defined and pkgButtonColorClass != '' %}{{pkgButtonColorClass}}{% else %}primary-btn-1{% endif %} {% if not userCreditId or (userCreditId and package.getPackage().getPrice() <= 0) %} free-button-spacing{% endif %} btn btn-block choose_btn thin-btn" onclick="selectPackage({{package.getPackage().getId()}}, '{{ package.getPackage().getPrice() }}');return false;" onmouseover="$('#package_selection_{{package.getPackage().getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getPackage().getId()}}').attr('style', '');">
                                                 {% if package.getPackage().getPrice() > 0 and userCreditId %}
                                                     {{'Pay for advert'|trans({}, 'frontend-ad-package')}}
                                                 {% else %}
@@ -274,13 +273,14 @@
                                                 </button>
                                                  {% if package.getPackage().getPrice() > 0 and userCreditId %}
                                                     {% set creditName = fetch_repository('FaUserBundle:UserCredit').getCreditPackageName(package.getPackage().getPackageSrNo()) %}
-                                                    <button type="button" class="primary-btn-1 btn btn-block credit_btn btn-h-lg" onclick="return confirmCreditBox({{package.getPackage().getId()}}, {{package.getPackage().getPackageSrNo()}}, {{ (packageSrNoCredits[package.getPackage().getPackageSrNo()] is defined ? packageSrNoCredits[package.getPackage().getPackageSrNo()] : 0) }}, {{userCreditId}}, '{{ creditName }}', '{{ package.getPackage().getPrice() }}')" onmouseover="$('#package_selection_{{package.getPackage().getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getPackage().getId()}}').attr('style', '');">
+                                                    <button type="button" class="primary-btn-1 btn btn-block credit_btn thin-btn" onclick="return confirmCreditBox({{package.getPackage().getId()}}, {{package.getPackage().getPackageSrNo()}}, {{ (packageSrNoCredits[package.getPackage().getPackageSrNo()] is defined ? packageSrNoCredits[package.getPackage().getPackageSrNo()] : 0) }}, {{userCreditId}}, '{{ creditName }}', '{{ package.getPackage().getPrice() }}')" onmouseover="$('#package_selection_{{package.getPackage().getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getPackage().getId()}}').attr('style', '');">
                                                         <span>{{'Use credit'|trans({}, 'frontend-ad-package')}}</span>
                                                     </button>
                                                 {% endif %}
                                             </div>
+                                            </div>
                                         </div>
-                                        {# <span class="pkg-selection" id="package_selection_{{package.getPackage().getId()}}" /></span> #}
+                                        <span class="pkg-selection" ></span>{# <span id="package_selection_{{package.getPackage().getId()}}" /></span> #}
                                         <div class="pkg-ins">
                                             {{package.getPackage().getSubTitle()}}
                                             <div class="pkg-includes d-block d-md-none">
