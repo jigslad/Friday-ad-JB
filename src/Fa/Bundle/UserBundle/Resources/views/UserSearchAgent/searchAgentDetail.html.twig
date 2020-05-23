@@ -27,14 +27,14 @@
         <div class="col-md-9 col-lg-7 r-block">
             {% if guid is not defined %}
                 <div class="group-m-btn">
-                    <span class="ad-edit">
-                        <a class="xs-btn-2 btn small-btn edit-btn" href="javascript:void(0)" onclick="renameSavedSearchConfirmation('{{searchAgent.id}}');">
+                    <span class="ad-edit mr10">
+                        <a class="secondary-btn-2 btn thin-btn edit-btn" href="javascript:void(0)" onclick="renameSavedSearchConfirmation('{{searchAgent.id}}');">
                             <span class="edit-icon"></span>
                             {{'Rename'|trans({}, 'frontend-my-saved-searches')}}
                         </a>
                     </span>
                     <span class="ad-remove float-right">
-                        <a class="xs-btn-2 btn last-btn small-btn delete-btn" href="javascript:void(0);" onclick="removeSavedSearchConfirmation('{{searchAgent.id}}');">
+                        <a class="secondary-btn-2 btn thin-btn last-btn delete-btn" href="javascript:void(0);" onclick="removeSavedSearchConfirmation('{{searchAgent.id}}');">
                             <span class="delete-icon"></span>
                             {{'Remove'|trans({}, 'frontend-my-saved-searches')}}
                         </a>
@@ -42,7 +42,7 @@
                 </div>
             {% endif %}
             <div class="group-m-btn">
-                <a href="{{ searchResultUrl }}" class="secondary-btn-1 xs-thin-btn btn btn-block small-btn">{{'Search now'|trans({}, 'frontend-my-saved-searches')}}</a>
+                <a href="{{ searchResultUrl }}" class="secondary-btn-1 thin-btn btn btn-block">{{'Search now'|trans({}, 'frontend-my-saved-searches')}}</a>
             </div>
             <div class="label-inline">
                 <ul>
