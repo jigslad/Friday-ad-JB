@@ -14,8 +14,8 @@
         <h3 class="text-center">
             {{ attribute(form, field).vars.label }}
         </h3>
-        <div class="small-wrapper text-center">
-            <p class="mb0 position-relative">
+        <div class="text-center">
+            <p class="mb0">
                 <span id="paa_location_autocomplete_tips">{{ 'Enter your postcode or town.'|trans({}, 'frontend-paa-fourth-step')}}</span>
                 {% if form.location_autocomplete.vars.attr['field-help'] is defined and form.location_autocomplete.vars.attr['field-help'] is not null %}&nbsp;
                 <div class="image-tooltip-wrapper text-left">
@@ -64,7 +64,7 @@
             <div class="row">
                 <div class="small-wrapper">
                     <p class="paa-area-title">Type your postcode to find your area:</p>
-                    <div class="relative">
+                    <div class="position-relative">
                         {{ form_widget(attribute(form, 'area_autocomplete'), {'attr': {'placeholder': ((attribute(form, 'area_autocomplete').vars.attr.placeholder is defined and attribute(form, 'area_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'area_autocomplete').vars.attr.placeholder : ' ') }}) }}
                         <a href="javascript:void(0);" id="{{ formName }}_area_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
                     </div>

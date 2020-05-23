@@ -275,6 +275,22 @@ footer .fad-logo {
     cursor: pointer;
 }
 
+.ui-autocomplete.white-choices,
+.select2-drop.white-choices {
+    background: #fff
+}
+
+.ui-autocomplete.white-choices li,
+.select2-drop.white-choices .select2-results li {
+    border-bottom: 0
+}
+
+.ui-autocomplete.white-choices li.ui-state-focus,
+.select2-drop.white-choices .select2-results .select2-highlighted {
+    background: #EAEFF0
+}
+
+
 @media (min-width: 760px) and (max-width: 959px) {
   .step-text {
     width: 80px !important;
