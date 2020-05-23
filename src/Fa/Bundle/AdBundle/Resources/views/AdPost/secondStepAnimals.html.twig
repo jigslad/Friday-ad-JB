@@ -22,31 +22,32 @@
                         <div class="col-md-24 d-flex justify-content-center">
                             <h1 class="s-h1 paa-title col-md-24 col-lg-18 text-center">{{ 'Describe your item and choose your price'|trans({}, 'frontend-paa-second-step') }} </h1>
                         </div>
-
-                        <div class="change-category mt30">
-                            <div class="text-left cat-name-wrap" style="display: inline-flex;">
-                                <span>{{ 'Category'|trans({}, 'frontend-paa-second-step') }}:</span>
-                                {% set categoryId = attribute(first_step_data, 'category_id') %}
-                                {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|last('<span class="seperator"></span>')|raw }}
+						<div class="big-wrapper">
+                            <div class="change-category mt30">
+                                <div class="text-left cat-name-wrap" style="display: inline-flex;">
+                                    <span>{{ 'Category'|trans({}, 'frontend-paa-second-step') }}:</span>
+                                    {% set categoryId = attribute(first_step_data, 'category_id') %}
+                                    {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|last('<span class="seperator"></span>')|raw }}
+                                </div>
+                                <div class="text-right edit-category">
+                                    <a href="{{ path('ad_post_first_step', {'is_edit' : 1}) }}" title="{{ 'Change category'|trans({}, 'frontend-paa-second-step') }}">{{ 'Change'|trans({}, 'frontend-paa-second-step') }}</a>
+                                </div>
                             </div>
-                            <div class="text-right edit-category">
-                                <a href="{{ path('ad_post_first_step', {'is_edit' : 1}) }}" title="{{ 'Change category'|trans({}, 'frontend-paa-second-step') }}">{{ 'Change'|trans({}, 'frontend-paa-second-step') }}</a>
-                            </div>
-                        </div>
-                        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-                            {{ form_errors(form) }}
-                            {% if categoryId is not null %}
-                                {% set orderedFields = form.second_step_ordered_fields.vars.value|split(',') %}
-                                {% if orderedFields|length  > 0 %}
-                                    {% for field in orderedFields %}
-                                        {{ include('FaAdBundle:AdPost:secondStepAnimalsFields.html.twig', {'form': form, 'field': field}) }}
-                                    {% endfor %}
+                            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                                {{ form_errors(form) }}
+                                {% if categoryId is not null %}
+                                    {% set orderedFields = form.second_step_ordered_fields.vars.value|split(',') %}
+                                    {% if orderedFields|length  > 0 %}
+                                        {% for field in orderedFields %}
+                                            {{ include('FaAdBundle:AdPost:secondStepAnimalsFields.html.twig', {'form': form, 'field': field}) }}
+                                        {% endfor %}
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
-                            <div class="col-md-24 d-flex justify-content-center">
-                                {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 btn btn-block col-md-24 col-lg-16 next-btn'}}) }}
-                            </div>
-                        {{ form_end(form) }}
+                                <div class="col-md-24 d-flex justify-content-center">
+                                    {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 btn btn-block col-md-24 col-lg-16 next-btn'}}) }}
+                                </div>
+                            {{ form_end(form) }}
+                       </div>
                     </div>
                     {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {'paaBlockSlug': 'paa-animals-second-step'}) }}
             </div>
