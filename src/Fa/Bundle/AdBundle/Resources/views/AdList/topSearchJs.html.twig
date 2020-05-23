@@ -146,44 +146,44 @@
         }
     }
 
-    function setAndMoveSliderCaption(slider, handle, captionCotainer, setToField)
-    {
-        var sliderVal = document.getElementById(slider).noUiSlider.get();
-        if (captionCotainer === 'distance') {
-            if (Math.ceil(sliderVal) !== 100000) {
-                $('#'+captionCotainer).html('Up to ' + Math.ceil(sliderVal) + ' mile(s)');
-                $('#distance_slider .noUi-handle-lower').removeClass('noUi-handle-at-upper');
-            } else {
-                $('#'+captionCotainer).html('National');
-                $('#distance_slider .noUi-handle-lower').addClass('noUi-handle-at-upper');
-            }
-            // set value to hidden
-            if (setToField) {
-                $('#fa_top_search_item__'+captionCotainer).val($('#'+slider).val());
-            }
-        }
-        else {
-            var handleVal = '';
-            if (handle === 'lower') {
-                handleVal = Math.ceil(sliderVal[0]);
-                $('#'+captionCotainer).html('&pound;' + handleVal)
-                // set value to hidden
-                if (setToField) {
-                    $('#fa_top_search_item__'+captionCotainer).val(handleVal);
-                }
-            } else if (handle === 'upper') {
-                handleVal = Math.ceil(sliderVal[1]);
-                if (handleVal === 500000) {
-                    $('#'+captionCotainer).html('No maximum');
+    function setAndMoveSliderCaption(slider, handle, captionCotainer, setToField) {
+        if($('#'+slider).length) {
+            var sliderVal = document.getElementById(slider).noUiSlider.get();
+            if (captionCotainer === 'distance') {
+                if (Math.ceil(sliderVal) !== 100000) {
+                    $('#' + captionCotainer).html('Up to ' + Math.ceil(sliderVal) + ' mile(s)');
+                    $('#distance_slider .noUi-handle-lower').removeClass('noUi-handle-at-upper');
                 } else {
-                    $('#'+captionCotainer).html('&pound;' + handleVal)
+                    $('#' + captionCotainer).html('National');
+                    $('#distance_slider .noUi-handle-lower').addClass('noUi-handle-at-upper');
                 }
                 // set value to hidden
                 if (setToField) {
+                    $('#fa_top_search_item__' + captionCotainer).val($('#' + slider).val());
+                }
+            } else {
+                var handleVal = '';
+                if (handle === 'lower') {
+                    handleVal = Math.ceil(sliderVal[0]);
+                    $('#' + captionCotainer).html('&pound;' + handleVal)
+                    // set value to hidden
+                    if (setToField) {
+                        $('#fa_top_search_item__' + captionCotainer).val(handleVal);
+                    }
+                } else if (handle === 'upper') {
+                    handleVal = Math.ceil(sliderVal[1]);
                     if (handleVal === 500000) {
-                        $('#fa_top_search_item__'+captionCotainer).val('');
+                        $('#' + captionCotainer).html('No maximum');
                     } else {
-                        $('#fa_top_search_item__'+captionCotainer).val(handleVal);
+                        $('#' + captionCotainer).html('&pound;' + handleVal)
+                    }
+                    // set value to hidden
+                    if (setToField) {
+                        if (handleVal === 500000) {
+                            $('#fa_top_search_item__' + captionCotainer).val('');
+                        } else {
+                            $('#fa_top_search_item__' + captionCotainer).val(handleVal);
+                        }
                     }
                 }
             }
