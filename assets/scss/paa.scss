@@ -1237,6 +1237,9 @@ footer .fad-logo {
 .step-off {
     opacity: .5 !important;
 }
+.top-bar-section, #top_search, .f-ad-sign, #fa_user_newsletter, #paa_steps_title, .fad-sign-bdr {
+    display: none !important;
+}
 @media only screen and (min-width: 960px) and (max-width: 1151px) {
     .tab-pad {
         padding: 0px 8px !important;

@@ -68,12 +68,7 @@ label {
 a:hover.secondary-btn-2.thin-btn, a:focus.secondary-btn-2.thin-btn, .secondary-btn-2.thin-btn:focus, .secondary-btn-2.thin-btn:hover {
     font-family: "Poppins-SemiBold" !important; text-align:center; height:30px !important; padding:5px 10px !important; font-size:14px !important; line-height:16px !important; 
 }
-.secondary-btn-1, .xs-btn-1, .primary-btn-2 {
-	border: 0px;
-     &:focus, &:hover {
-        border: 0px;
-    }
-}
+
 .h-width { width: 50%; }
 .f-width{ width: 100%; }
 .bdr-none { border: none !important; }
