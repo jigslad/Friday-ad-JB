@@ -1035,12 +1035,13 @@ span.error, small.error {
     text-align: right;
     float: right;
     a {
-      &.expand-search, &.expand-search:hover, &.expand-search:focus, &.expand-search.expanded {
+      &.collapse-search, &.collapse-search:hover, &.collapse-search:focus, &.expand-search, &.expand-search:hover, &.expand-search:focus {
 	  background: url('/Frontend/images/icons/setplus-green.png') no-repeat left center !important;	
       }
-      &.collapse-search, &.collapse-search:hover, &.collapse-search:focus, &.collapse-search.expanded {
-	  background: url('/Frontend/images/icons/setminus.png') no-repeat left center !important;	
+      &.collapse-search.expanded, &.expand-search.expanded{
+        background: url('/Frontend/images/icons/setminus.png') no-repeat left center !important;
       }
+
       height: 38px;
       line-height: 38px;
       display: inline-block;
@@ -1631,4 +1632,6 @@ column-count: unset;
 	width: 31px !important;
     }
 }
-
+.model-fix-width{
+  width: 340px !important;
+}

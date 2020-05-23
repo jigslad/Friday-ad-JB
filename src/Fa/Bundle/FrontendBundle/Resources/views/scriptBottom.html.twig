@@ -18,7 +18,13 @@
 <script type="text/javascript" src="{{ asset('bundles/fafrontend/js/vendor/fastclick.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/custom.js') }}"></script>
 
+<script async='async' src="{{ asset('js/jquery.fancybox.pack.js') }}?v=2.1.7"></script>
 {% set container = fetch_container_instance() %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".fancybox").fancybox();
+    });
+</script>
 <script>
     let isAdBlocker;
     isAdBlocker = false;
