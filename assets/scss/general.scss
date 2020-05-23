@@ -2117,7 +2117,11 @@ footer p { color:$grey-color; }
     border: 3px solid #82C249;
     color: #82C249;
 }
-
+.modal-title {
+    background: #EAEFF0;
+    border-bottom: 1px solid #CBD5D9;
+}
+.modal-body{ font-size: 13px; color: #ACB0B7;line-height: 19px; }
 
 @media only screen and (max-width: 640px) {
   .ad-list-block .reset-search{
