@@ -98,9 +98,13 @@
 {%- endblock radio_widget %}
 
 {% block checkbox_widget -%}
-    {#<span class="custom-checkbox {% if checked %}checked{% endif %}">#}
+    {% if attr['class'] is defined and 'custom-check' in attr['class'] %}
+        <span class="custom-checkbox {% if checked %}checked{% endif %}">
+           <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+        </span>
+    {% else %}
         <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
-    {#</span>#}
+    {% endif %}
 {%- endblock checkbox_widget %}
 
 {% block form_label -%}	

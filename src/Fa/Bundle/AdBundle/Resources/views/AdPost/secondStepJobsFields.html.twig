@@ -36,8 +36,8 @@
                         {% if child.vars.value in selectedValues %}
                             {% set activeClass = 'active' %}
                         {% endif %}
-                        <li class="grey-check {{ activeClass }}">
-                            {{ form_widget(child, {'attr': {'class': 'checkbox'}}) }}
+                        <li class="{{ activeClass }}">
+                            {{ form_widget(child, {'attr': {'class': 'custom-check'}}) }}
                             <label for="{{ child.vars.id }}"></label>{{ child.vars.label }}
                         </li>
                     

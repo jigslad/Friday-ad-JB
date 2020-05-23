@@ -1777,12 +1777,6 @@ footer p { color:$grey-color; }
       color: $form-text-color;
     }
 }
-.paa-back-arrow {
-    color: $form-text-color;
-    &:focus, &:hover {
-      color: $primary-color;
-    }
-}
 /* AdList */
 .bus-abt-us-div a, .bus-abt-us-div a:hover, .bus-abt-us-div a:focus {
 	color: $common-text-color !important;
