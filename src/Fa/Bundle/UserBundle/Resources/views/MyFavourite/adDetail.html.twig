@@ -17,11 +17,11 @@
 {% endif %}
 <div class="favourites-card card custom-card p20">
             <a href="javascript:void(0);" onclick="return removeFromFavorite('{{adId}}');" class="card-badge heart-badge">&nbsp;</a>
-            {% if attribute(adDetail, constant(adDetailSolrMapping ~ 'STATUS_ID')) == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
+           {# {% if attribute(adDetail, constant(adDetailSolrMapping ~ 'STATUS_ID')) == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
                 <span class="sold-ribbon">{{ 'Ad Sold'|trans({}, 'frontend-my-favourites') }}</span>
             {% elseif attribute(adDetail, constant(adDetailSolrMapping ~ 'STATUS_ID')) == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') %}
                 <span class="expired-ribbon">{{ 'Ad Expired'|trans({}, 'frontend-my-favourites') }}</span>
-            {% endif %}
+            {% endif %}  #}
             <a class="tricky-link" href="{{adUrl}}">
                 {% if attribute(adDetail, constant(adDetailSolrMapping ~ 'TITLE')) is defined %}
                     {{trim_text(attribute(adDetail, constant(adDetailSolrMapping ~ 'TITLE')), 65)|raw}}

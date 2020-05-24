@@ -2487,8 +2487,10 @@ textarea[rows] {
 .myacc-address-box .xs-btn-2:first-of-type {
     margin: 0 0 0 0;
 }
+.favourites-card .list-dimensions {
+	height: 43px!important;
+}
 .favourites-card {
-	display: grid !important;
 	align-items: stretch !important;
 }
 .favourites-card .similar-placeholder {

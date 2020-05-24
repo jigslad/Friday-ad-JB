@@ -25,7 +25,7 @@
                             {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
                             <div class="col-md-19 d-right-col" id="db-right-part">
                                 <h1 class="s-h1 db-title mt30 mb20">{{'Orders'|trans({}, 'frontend-my-orders')}}</h1>
-                                <h2 class="s-h2 mb10" id="sub_title_div">{{ 'From here you can keep track of orders placed by your customers, the details of those orders, customer addresses and update the status of those orders.'|trans({}, 'frontend-my-orders') }}</h2>
+                                <h2 class="s-h2 mb10 db-sub-title" id="sub_title_div">{{ 'From here you can keep track of orders placed by your customers, the details of those orders, customer addresses and update the status of those orders.'|trans({}, 'frontend-my-orders') }}</h2>
 
                                 <div id="leave_review_modal" class="modal custom-modal"></div>
                                 {% if pagination.getNbResults() %}
@@ -45,16 +45,17 @@
                                             	<div class="col-md-12 col-lg-12 l-block">
                                             	    {% set userRepository = fetch_repository('FaUserBundle:User') %}
                                                     {% set profileName = userRepository.getFullNameFromArray(paymentDetail) %}
-                                                    <span class="mr-3"><b>{{ 'Buyer name'|trans({}, 'frontend-my-orders') }}</b></span>
+                                                    <div><span class="mr-3"><b>{{ 'Buyer name'|trans({}, 'frontend-my-orders') }}</b></span>
                                                     {% if paymentDetail['user_status_id'] == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::USER_STATUS_ACTIVE_ID') %}
                                                         <span><a target="_blank" href="{{profileUrl}}">{{ profileName }}</a></span>
                                                     {% else %}
                                                         <span>{{ profileName }} <i>({{userStatusText}})</i></span>
                                                     {% endif %}
+                                                    </div>
 
-                                                    <span class="mr-3"><b>{{ 'Order no.'|trans({}, 'frontend-my-orders') }}</b></span><span>{{paymentDetail['cart_code']}}</span>
-                                                    <span class="mr-3"><b>{{ 'Order placed'|trans({}, 'frontend-my-orders') }}</b></span><span>{{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [paymentDetail['created_at'], container]) }}</span>
-                                                    <span class="mr-3"><b>{{ 'Item'|trans({}, 'frontend-my-orders') }}</b></span><span><a target="_blank" href="{{ container.get('router').generate('ad_detail_page_by_id', {'id': paymentDetail['ad_id']}, true) }}">{{paymentDetail['title']}}</a></span>
+                                                    <div><span class="mr-3"><b>{{ 'Order no.'|trans({}, 'frontend-my-orders') }}</b></span><span>{{paymentDetail['cart_code']}}</span></div>
+                                                    <div><span class="mr-3"><b>{{ 'Order placed'|trans({}, 'frontend-my-orders') }}</b></span><span>{{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [paymentDetail['created_at'], container]) }}</span></div>
+                                                    <div><span class="mr-3"><b>{{ 'Item'|trans({}, 'frontend-my-orders') }}</b></span><span><a target="_blank" href="{{ container.get('router').generate('ad_detail_page_by_id', {'id': paymentDetail['ad_id']}, true) }}">{{paymentDetail['title']}}</a></span></div>
                                             	</div>
                                                 <div class="col-md-12 float-right pad-none">
                                                 	<div class="clearfix d-inline-flex f-width mb10">
