@@ -108,13 +108,13 @@
                         {% endif %}
                 });
         }
+        function showCoords(c) {
+            $('#profile_crop_x').val(c.x);
+            $('#profile_crop_y').val(c.y);
+            $('#profile_crop_w').val(c.w);
+            $('#profile_crop_h').val(c.h);
+        }
     });
-function showCoords(c) {
-    $('#profile_crop_x').val(c.x);
-    $('#profile_crop_y').val(c.y);
-    $('#profile_crop_w').val(c.w);
-    $('#profile_crop_h').val(c.h);
-}
     function cropProfileImage()
     {
         var imgParams = '';
