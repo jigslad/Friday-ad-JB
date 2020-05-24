@@ -74,7 +74,7 @@
             {% endif %}
         </span>
     {% elseif attr['class'] is defined and 'radio-circle-btn' in attr['class'] %}
-       <span class="radio-span">
+       <span class="radio-span mr10">
     	<input class="checkbox" type="radio" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} /> 
        {% if form.vars.label is defined and form.vars.label is not null %}
            {% if label is empty -%}
@@ -98,9 +98,13 @@
 {%- endblock radio_widget %}
 
 {% block checkbox_widget -%}
-    {#<span class="custom-checkbox {% if checked %}checked{% endif %}">#}
+    {% if attr['class'] is defined and 'custom-check' in attr['class'] %}
+        <span class="custom-checkbox {% if checked %}checked{% endif %}">
+           <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+        </span>
+    {% else %}
         <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
-    {#</span>#}
+    {% endif %}
 {%- endblock checkbox_widget %}
 
 {% block form_label -%}	

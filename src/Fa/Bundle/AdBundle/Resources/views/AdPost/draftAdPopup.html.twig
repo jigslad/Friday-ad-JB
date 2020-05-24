@@ -1,5 +1,5 @@
 <div id="draftAdModal" class="modal custom-modal tiny remove-item-modal">
-	<div class="modal-dialog model-fix-width">
+	<div class="modal-dialog modal-sm">
 		    <div class="modal-content">
 		      	<div class="modal-header">
 		        	<h5 class="modal-title no-icon-title">{{'Start where you left off?'|trans({}, 'frontend-paa-first-step')}}</h5>
@@ -17,11 +17,11 @@
                     </div>
                     <div class="mt20 remove-item-btn">
                         <div class="row">
-                            <div class="col-md-10">
-                                <button type="button" class="button secondary-btn-2 thin-btn expand" onclick="closeRevealModel('#draftAdModal');">{{'No Thanks'|trans({}, 'frontend-paa-first-step')}}</button>
+                            <div class="col-12 col-md-12">
+                                <button type="button" class="btn secondary-btn-2 thin-btn btn-block" onclick="closeRevealModel('#draftAdModal');">{{'No Thanks'|trans({}, 'frontend-paa-first-step')}}</button>
                             </div>
-                            <div class="col-md-14">
-                                <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="setStepSessionData('{{ objDraftAd.getId() }}');">{{'Load saved draft'|trans({}, 'frontend-paa-first-step')}}</button>
+                            <div class="col-12 col-md-12">
+                              <button type="button" class="btn secondary-btn-1 thin-btn btn-block" onclick="setStepSessionData('{{ objDraftAd.getId() }}');">{{'Load draft'|trans({}, 'frontend-paa-first-step')}}</button>
                             </div>
                         </div>
                     </div>

@@ -916,7 +916,43 @@
 	width: auto !important;
 	margin: 0 auto !important;
 }
+.db-notifications .alert-box {
+    background-color: #fff;
+    border: 1px solid #CBD5D9;
+    padding: 12px 54px;
+    color: #ACB0B7;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 10px
+}
 
+.db-notifications .alert-box .close {
+    right: 18px;
+    top: 12px;
+    height: 18px !important;
+    background: url('/Frontend/images/icons/cross.svg') no-repeat center center
+}
+
+.db-notifications .alert-box .alert-icon {
+    top: 8px;
+    left: 19px
+}
+.db-notifications .alert-box {
+    border-radius: 0px !important;
+    border: 0px !important;
+    border-bottom: 1px solid #CBD5D9 !important;
+}
+.db-sub-title { min-height:100px; }
+/* Manage my ads */
+.manage-my-ad-img {
+background: #EAEFF0;
+    width: 183px;
+    height: 135px;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
 @media only screen and (min-width: 320px) and (max-width: 640px) {
     .photos-box .inline-list > li {
         margin-left: 18px !important;

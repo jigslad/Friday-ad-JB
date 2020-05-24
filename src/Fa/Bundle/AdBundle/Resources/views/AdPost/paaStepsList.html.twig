@@ -95,10 +95,12 @@
     {% if step == 1 and app.user and app.user.getRole() and (app.user.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or app.user.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
         <div class="paaLeftContainer">
             <div class="dpaa-section text-center d-none d-md-block" id="paaLeftPrintItem">
-                <span class="self-service-img">&nbsp;</span>
-                <span class="magazines-img">&nbsp;</span>
-                <b>{{ 'Create and upload</b><br />your own branded advert<br /><b>for print'|trans({}, 'frontend-paa')|raw }}</b>
-                <a href="https://www.fmgadvertising.com/display-item/post/choose-style" target="_blank" class="button primary-btn-2 expand">{{ 'Give it a go!'|trans({}, 'frontend-paa') }}</a>
+                <div> 
+                    <span class="self-service-img">&nbsp;</span>
+                    <span class="magazines-img">&nbsp;</span>
+                    <b>{{ 'Create and upload</b><br />your own branded advert<br /><b>for print'|trans({}, 'frontend-paa')|raw }}</b>
+                </div>
+                <div class="mt20"><a href="https://www.fmgadvertising.com/display-item/post/choose-style" target="_blank" class="btn primary-btn-2 btn-block">{{ 'Give it a go!'|trans({}, 'frontend-paa') }}</a></div>
             </div>
         </div>
     {% endif %}
