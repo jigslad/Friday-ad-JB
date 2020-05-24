@@ -113,14 +113,14 @@
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
                         <div class="collapse collapse-body-content {{ showHideElement }}" id="element_toggle_{{ field }}">
                             <div class="row">
-                              <div class="large-12 columns subtitle-ins">
+                              <div class="col-md-12 subtitle-ins">
                                 {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
                                     <p>{{ attribute(attribute(form, field).vars.attr, 'field-help') }}</p>
                                 {% else %}
                                     <p>{{ 'Add some personality to your ad with a short quote statement that tells readers what makes your advert special'|trans({}, 'frontend-ad-edit')}}</p>
                                 {% endif %}
                               </div>
-                              <div class="large-12 columns">
+                              <div class="col-md-12">
                                   {{ include('FaAdBundle:AdPost:adSubtitleImage.html.twig', {'categoryId':ad.category.id}) }}
                               </div>
                             </div>

@@ -5,11 +5,11 @@
         <img class="img-fluid" id="user_site_banner_crop_big_image" src="{{ userSiteBannerUrl }}?{{ random(1000) }}" />
         <div class="edit-pro-banner">
             <div class="clearfix">
-                <div class="large-12 columns">
+                <div class="col-md-12">
                     <h2>{{'Reposition your cover photo'|trans({}, 'frontend-my-profile')}}</h2>
                     <p>{{'Some areas might be cropped on mobile screens'|trans({}, 'frontend-my-profile')}}</p>
                 </div>
-                <div class="edit-pro-btns large-12 columns">
+                <div class="edit-pro-btns col-md-12">
                     <a class="xs-btn-2 button" href="javascript:void(0);" onclick="return getUserSiteBanner(true);">{{'Cancel'|trans({}, 'frontend-my-profile')}}</a>
                     <a class="xs-btn-1 button" href="javascript:void(0);" onclick="return cropUserSiteBanner('{{ path(cropImageRoute, {'userSiteId': userSiteObj.getId()}) }}')" style="display:none;" id="crop_image_banner">{{'Apply'|trans({}, 'frontend-my-profile')}}</a>
                     <input type="hidden" id="banner_x" name="banner_x" class="cropImg" />

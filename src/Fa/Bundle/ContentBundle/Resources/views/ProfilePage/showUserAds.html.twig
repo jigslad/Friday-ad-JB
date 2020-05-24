@@ -8,7 +8,7 @@
 {% set profileUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(userDetail['id']) %}
 <div class="other-profile">
     <div class="row profile-list-main">
-        <div class="large-6 columns">
+        <div class="col-md-6">
             <a href="{{ profileUrl }}" class="shop-back-link">{{'Back to profile'|trans({}, 'frontend-profile-page')}}</a>
             <div class="user-pro-pic {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}rounded{% endif %}">
                 <span>
@@ -38,7 +38,7 @@
             {% endif %}
             </h2>
         </div>
-        <div class="large-18 columns">
+        <div class="col-md-18">
             <h2 class="profile-list-title">{{'%records% results found'|trans({'%records%': pagination.getNbResults()}, 'frontend-profile-page')}}</h2>
             {% if pagination.getNbResults() %}
                 {% set adFavoriteRepository   = fetch_repository('FaAdBundle:AdFavorite') %}

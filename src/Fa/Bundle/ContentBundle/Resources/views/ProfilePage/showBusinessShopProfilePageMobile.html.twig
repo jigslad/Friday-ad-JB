@@ -92,7 +92,7 @@
             {{ render(controller('FaUserBundle:UserImage:showProfileImageUploader', {'userId': app.user.getId(), 'isCompany': true})) }}
             {{ set_variables('profileImageUploadJavascriptBottom', {'loaded':'false'}) }}
         {% endif %}
-        <div class="columns" id="show_message_div">
+        <div class="col-md-24" id="show_message_div">
             {{ include('FaContentBundle:ProfilePage:shopDetail.html.twig') }}
             
             {% if userDetail['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')} %}

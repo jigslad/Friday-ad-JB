@@ -609,11 +609,13 @@
                 {% endif %}
                 {% set prevSectionBgClass = bgColour %}
                 <div class="homepage-row {{ bgColour }}">
-                    <div class="row">
-                        <div class="columns">
+                    <div class="container">
+                        <div class="row">
+                        	<div class="col-md-24">
                             {% cache 'landing|page|location|block|'~categoryId~currentDevice 3600 %}
                                 {{ render(controller('FaContentBundle:LandingPage:showLandingPageLocationBlocks', {'searchParams': searchParams})) }}
                             {% endcache %}
+                            </div>
                         </div>
                     </div>
                 </div>

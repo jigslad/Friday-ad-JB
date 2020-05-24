@@ -82,7 +82,7 @@
             {% else %}
                 {% set packagePrice = 'Free'|trans({}, 'frontend-ad-package')%}
             {% endif %}
-            <div class="columns center">
+            <div class="col4 center">
                 <div class="paa-pkg-bg">
                     <span class="pkg-selection" id="package_selection_{{package.getPackage().getId()}}">Select Package</span>
                     {% set pkgBoxColorClass = 'pkg-green-head' %}
@@ -221,9 +221,9 @@
    	    </div>
    	    <div class="mt20 mb20 remove-item-btn">
        		<div class="row">
-               	<div class="columns">
+               	<div class="col-24">
                     <div id="pay_now_btn">
-                        {{ form_widget(form.save, {'attr': {'class':'button secondary-btn-1 thin-btn expand'}, 'label': 'Pay'}) }}
+                        {{ form_widget(form.save, {'attr': {'class':'btn btn-block secondary-btn-1 thin-btn'}, 'label': 'Pay'}) }}
                     </div>
                 </div>
             </div>

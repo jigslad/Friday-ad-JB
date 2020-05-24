@@ -428,7 +428,7 @@
                             {% endif %}
 
                             {% if (isOneclickenqbutton == true) %}
-                                <a href="javascript:void(0)" class="primary-btn-2 button enquire-btn" onclick="return sendOneClickEnquiry();" >
+                                <a href="javascript:void(0)" class="primary-btn-2 btn btn-block enquire-btn" onclick="return sendOneClickEnquiry();" >
                                     <span class="btn-txt">{{'Still available?'|trans({}, 'frontend-show-ad')}}</span>
                                     <span class="enquire-icon">{{'Still available?'|trans({}, 'frontend-show-ad')}}</span>
                                 </a>
@@ -576,8 +576,8 @@
                                 {% endif %}
                             </div>
                             <div class="col-md-8">
-                                {# <a id="upgrade_now_link" class="primary-btn-1 button thin-btn expand mb0" href="javascript:void(0);">{{'Upgrade now'|trans({}, 'frontend-manage-my-ad')}}</a> #}
-                                 <a id="upgrade_now_link" class="primary-btn-1 button thin-btn expand mb0" href="javascript:void(0);" onclick="return upgradeToNextPlanBtn('{{ adId }}', '{{ rootCategoryId }}');">{{'Upgrade now'|trans({}, 'frontend-manage-my-ad')}}</a>
+                                {# <a id="upgrade_now_link" class="primary-btn-1  thin-btn  mb0" href="javascript:void(0);">{{'Upgrade now'|trans({}, 'frontend-manage-my-ad')}}</a> #}
+                                 <a id="upgrade_now_link" class="primary-btn-1 btn btn-block thin-btn  mb0" href="javascript:void(0);" onclick="return upgradeToNextPlanBtn('{{ adId }}', '{{ rootCategoryId }}');">{{'Upgrade now'|trans({}, 'frontend-manage-my-ad')}}</a>
                             </div>
                         </div>
                     </div>

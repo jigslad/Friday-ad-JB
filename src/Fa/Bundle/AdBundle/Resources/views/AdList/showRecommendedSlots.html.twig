@@ -35,7 +35,7 @@
                     {{ recommendedSlotResult[slotIndex]['sub_title']|length > 150 ? trim_text(recommendedSlotResult[slotIndex]['sub_title'], 150)|raw ~ '...': recommendedSlotResult[slotIndex]['sub_title'] }}
                 </div>
                 {% if recommendedSlotResult[slotIndex]['cta_text'] !='' %}
-                <div class="outer-btn"><div class="button secondary-btn-1 expand right-block" style="cursor: pointer;">{{ recommendedSlotResult[slotIndex]['cta_text'] }}</div></div>
+                <div class="outer-btn"><div class="btn btn-block secondary-btn-1 right-block" style="cursor: pointer;">{{ recommendedSlotResult[slotIndex]['cta_text'] }}</div></div>
            		{% endif %}                    
             </div>
         </div>

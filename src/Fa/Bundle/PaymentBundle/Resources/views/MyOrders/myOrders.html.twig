@@ -165,9 +165,11 @@
                                         {{ include('FaFrontendBundle:Default:googlePager.html.twig', {'pagination': pagination, 'addToEndPage': 0, 'seoPager': false}) }}
                                     </div>
                                 {% else %}
-                                    <div class="row">
-                                        <div class="columns">
-                                            {{ 'No records found.'|trans({}, 'frontend-my-orders') }}
+                                	<div class="container">
+                                        <div class="row">
+                                            <div class="col-md-24">
+                                                {{ 'No records found.'|trans({}, 'frontend-my-orders') }}
+                                            </div>
                                         </div>
                                     </div>
                                 {% endif %}

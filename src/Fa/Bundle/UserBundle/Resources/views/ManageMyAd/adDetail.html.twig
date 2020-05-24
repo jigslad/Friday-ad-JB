@@ -198,9 +198,9 @@
 
         <div class="d-col-4">
             <div class="float-right h-width ">
-                <a class="secondary-btn-2 btn thin-btn h-width" href="{{ path('ad_edit', {'id': adId})}}">{{'Edit'|trans({}, 'frontend-manage-my-ad')}}</a>
+                <a class="secondary-btn-2 btn thin-btn f-width mb20" href="{{ path('ad_edit', {'id': adId})}}">{{'Edit'|trans({}, 'frontend-manage-my-ad')}}</a>
                 {% if ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_IN_MODERATION_ID') %}
-                <a class="secondary-btn-2 btn thin-btn h-width" href="javascript:void(0);" onclick="removeAdConfirmation('{{adId}}', '{{ad.status_id}}');">{{'Remove'|trans({}, 'frontend-manage-my-ad')}}</a>
+                <a class="secondary-btn-2 btn thin-btn f-width" href="javascript:void(0);" onclick="removeAdConfirmation('{{adId}}', '{{ad.status_id}}');">{{'Remove'|trans({}, 'frontend-manage-my-ad')}}</a>
                 {% endif %}
                 
                 <div class="group-m-btn clearfix">

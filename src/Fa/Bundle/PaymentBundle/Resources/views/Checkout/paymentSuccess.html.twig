@@ -16,7 +16,7 @@
 {% block body %}
     <div class="payment">
         <div class="row">
-            <div class="columns">
+            <div class="col-md-24">
                 <h1 class="text-center">
                     {% if cart.getAmount() %}
                         {{'Payment Success'|trans({}, 'frontend-payment-success')}}
@@ -29,7 +29,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="columns text-center">
+            <div class="col-md-24 text-center">
                 <h4>{{'Thank you for your visit!'|trans({}, 'frontend-payment-success')}}</h4>
                 {{'Your transaction ID is'|trans({}, 'frontend-payment-success')}}: <b>{{cart.getCartCode}}</b> <br /><br />
             </div>

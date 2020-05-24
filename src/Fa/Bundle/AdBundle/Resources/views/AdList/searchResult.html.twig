@@ -478,7 +478,7 @@
                         {% if getXMiles > 0 %}
                         <div class="listing">
                             Or you can view matching adverts within {{getXMiles}} miles of {{ app.request.get('location') | replace({'-':' '}) | title }}
-                            <div class="text-center mt20"><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(searchParams|merge({'item__distance': getXMiles })) }}" class="secondary-btn-1 button mb0"  style="color:#fff">View matching adverts</a></div>
+                            <div class="text-center mt20"><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(searchParams|merge({'item__distance': getXMiles })) }}" class="secondary-btn-1 btn mb0"  style="color:#fff">View matching adverts</a></div>
                         </div>
                         {% endif %}
                     {% endif %}
