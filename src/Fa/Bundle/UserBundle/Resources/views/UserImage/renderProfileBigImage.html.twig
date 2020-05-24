@@ -1,6 +1,6 @@
 <div class="modal-dialog"><div class="modal-content">
 		<div class="modal-header">
-			<h5 class="modal-title save-search-title">
+			<h5 class="modal-title no-icon-title">
                 {% if fromProfilePage is defined and fromProfilePage %}
                     {{'Edit image'|trans({}, 'frontend-my-profile')}}
                 {% else %}
@@ -46,11 +46,11 @@
         var orgwidth, orgheight;
         $("<img/>") // Make in memory copy of image to avoid css issues
             .attr("src", $(img).attr("src"))
-            .load(function() {
+            .on('load',function() {
                 $('#cancelCropProfileImage, #cropProfileImage').show();
                 orgwidth = this.width;   // Note: $(this).width() will not
                 orgheight = this.height; // work for in memory images.
-                $('#profile_crop_real_w').val(orgwidth);
+                $('#profile_crop_real_w'    ).val(orgwidth);
                 $('#profile_crop_real_h').val(orgheight);
              });
 
@@ -105,6 +105,10 @@
             var height = orgheight * (value / 100);
             $('#profile_image_crop').width(width);
             $('#profile_image_crop').height(height);
+            $('#img_crop').width(width);
+            $('#img_crop1').width(width);
+            $('#img_crop1').height(height);
+            $('#img_crop').height(height);
             $('#profile_crop_real_w').val(width);
             $('#profile_crop_real_h').val(height);
 

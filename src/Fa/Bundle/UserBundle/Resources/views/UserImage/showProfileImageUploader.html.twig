@@ -1,7 +1,7 @@
 {% block profileImageUploadStylesheets %}
     {% set profileImageUploadStylesheetsVariables = get_variables('profileImageUploadStylesheets') %}
     {% if profileImageUploadStylesheetsVariables.loaded is not defined %}
-        <link href="{{ asset_url('fafrontend/css/jquery.Jcrop.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/jquery.Jcrop.css') }}" rel="stylesheet">
     {% endif %}
 {% endblock %}
 
@@ -27,7 +27,7 @@
         {% set fromProfilePage = (fromProfilePageVariables.fromProfilePage is defined ? fromProfilePageVariables.fromProfilePage : false) %}
         {% set maxFileSize = (isCompany ? container.getParameter("fa.company.allow_size_in_mb")~' mb' : container.getParameter("fa.user.allow_size_in_mb")~' mb') %}
         <script type="text/javascript" src="{{ asset('/bundles/facore/js/plupload.full.min.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('/bundles/fafrontend/js/jquery.Jcrop.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/jquery.Jcrop.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('/bundles/facore/js/jquery.ui.touch-punch.min.js') }}"></script>
         
         <script language="javascript" type="text/javascript">

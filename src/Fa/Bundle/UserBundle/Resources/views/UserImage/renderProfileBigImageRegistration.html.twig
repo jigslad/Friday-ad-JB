@@ -1,6 +1,6 @@
-<div class="modal-dialog"><div class="modal-content">
+<div class="modal-dialog tiny"><div class="modal-content">
 		<div class="modal-header">
-			<h5 class="modal-title save-search-title">
+			<h5 class="modal-title no-icon-title">
 				{% if isCompany %}
                     {{'Crop logo image'|trans({}, 'frontend-my-profile')}}
                 {% else %}
@@ -12,7 +12,9 @@
         <div class="modal-body">
             <div class="text-center">{{'Resize your image and drag to reposition'|trans({}, 'frontend-my-profile')}}</div>
             <div class="crop-prof-img-main">
-                <div class="crop-prof-img"><img class="img-fluid" src="{{ imageUrl }}" id="profile_image_crop" /></div>
+                <div class="crop-prof-img">
+                    <img class="img-fluid" src="{{ imageUrl }}" id="profile_image_crop" />
+                </div>
         
                 <div class="clearfix">
                     <span class="zoom-minus text-left">-</span>
@@ -38,50 +40,18 @@
 //<![CDATA[
     {% set mobileDetectManager = fetch_container_instance().get('fa.mobile.detect.manager') %}
     $(document).ready(function() {
+        initJcrop();
         var img = $('#profile_image_crop'); // Get my img elem
         var orgwidth, orgheight;
-        $("<img/>") // Make in memory copy of image to avoid css issues
-            .attr("src", $(img).attr("src"))
-            .load(function() {
-                $('#cancelCropProfileImage, #cropProfileImage').show();
-                orgwidth = this.width;   // Note: $(this).width() will not
-                orgheight = this.height; // work for in memory images.
-                $('#profile_crop_real_w').val(orgwidth);
-                $('#profile_crop_real_h').val(orgheight);
-             });
+        // Make in memory copy of image to avoid css issues
+        $("<img/>").attr("src", img.attr("src")).on('load', function(){
+            $('#cancelCropProfileImage, #cropProfileImage').show();
+            orgwidth = this.width;   // Note: $(this).width() will not
+            orgheight = this.height; // work for in memory images.
+            $('#profile_crop_real_w').val(orgwidth);
+            $('#profile_crop_real_h').val(orgheight);
 
-        var api;
-
-        function initJcrop() {
-            $('#profile_image_crop').Jcrop({
-              // start off with jcrop-light class
-              bgColor: 'white',
-              addClass: 'jcrop-light',
-              allowSelect: false,
-              allowResize: false,
-              {% if isCompany %}
-                  minSize: [160, 120],
-                  maxSize: [160, 120],
-              {% else %}
-                  minSize: [116, 116],
-                  maxSize: [116, 116],
-              {% endif %}
-              roundSelect:{% if isCompany %}false{% else %}true{% endif %},
-              onChange:   showCoords,
-              onSelect:   showCoords,
-            },function(){
-              api = this;
-              api.setSelect([65,50,65+250,45+185]);
-              api.setOptions({ bgFade: true });
-              {% if isCompany %}
-                  api.ui.selection.addClass('jcrop-selection bz-logo-selection');
-              {% else %}
-                  api.ui.selection.addClass('jcrop-selection pvt-logo-selection');
-              {% endif %}
-            });
-        }
-
-        initJcrop();
+        });
         $("#zoom_div").slider({
             value: 100,
             max: 100,
@@ -95,12 +65,13 @@
         });
 
         function resizeImage(orgwidth, orgheight) {
-            api.destroy();
             var value = $('#zoom_div').slider('option', 'value');
             var width = orgwidth * (value / 100);
             var height = orgheight * (value / 100);
-            $('#profile_image_crop').width(width);
-            $('#profile_image_crop').height(height);
+            $('#img_crop').width(width);
+            $('#img_crop1').width(width);
+            $('#img_crop1').height(height);
+            $('#img_crop').height(height);
             $('#profile_crop_real_w').val(width);
             $('#profile_crop_real_h').val(height);
 
@@ -108,15 +79,42 @@
         }
         // Simple event handler, called from onChange and onSelect
         // event handlers, as per the Jcrop invocation above
-        function showCoords(c)
-        {
+        function initJcrop() {
+            $('#profile_image_crop').Jcrop({
+                    // start off with jcrop-light class
+                    bgColor: 'white',
+                    addClass: 'jcrop-light',
+                    allowSelect: false,
+                    allowResize: false,
+                        {% if isCompany %}
+                    minSize: [160, 120],
+                    maxSize: [160, 120],
+                        {% else %}
+                    minSize: [116, 116],
+                    maxSize: [116, 116],
+                        {% endif %}
+                    roundSelect:{% if isCompany %}false{% else %}true{% endif %},
+                    onChange:   showCoords,
+                    onSelect:   showCoords,
+                }
+                ,function(){
+                    api = this;
+                    api.setSelect([65,50,65+250,45+185]);
+                    api.setOptions({ bgFade: true });
+                        {% if isCompany %}
+                    api.ui.selection.addClass('jcrop-selection bz-logo-selection');
+                        {% else %}
+                    api.ui.selection.addClass('jcrop-selection pvt-logo-selection');
+                        {% endif %}
+                });
+        }
+        function showCoords(c) {
             $('#profile_crop_x').val(c.x);
             $('#profile_crop_y').val(c.y);
             $('#profile_crop_w').val(c.w);
             $('#profile_crop_h').val(c.h);
         }
     });
-
     function cropProfileImage()
     {
         var imgParams = '';
