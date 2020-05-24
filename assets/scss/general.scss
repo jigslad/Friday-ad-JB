@@ -1554,7 +1554,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
     }
 }
 .download-link { color: $form-label-color; }
-.newsletter-pref { box-shadow: 0 -1px 0 $form-text-color; }
+.newsletter-pref { box-shadow: 0 -1px 0 $chat-btn-color; }
 .own-item { border: 1px solid $form-border-color; }
 .profile-img-overlay, .cover-img-overlay { background: $site-dark-bg-color; }
 .profile-placeholder { background: $form-text-color; }
@@ -1652,9 +1652,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
 .order-select .custom-drop-menu a.active, .order-select .custom-drop-menu a:hover, .order-select .custom-drop-menu a:focus {
     background-color: $common-bg-color;
 }
-.newsletter-pref {
-    box-shadow: 0 -1px 0 $form-text-color;
-}
+
 .db-list a .section-head:hover, .db-list a .section-head:focus, .db-list a .section-head:active {
     background-color: $form-border-color;
     //color: $site-dark-bg-color;

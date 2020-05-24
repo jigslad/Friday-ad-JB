@@ -44,7 +44,7 @@
                             {% set objMessage = fetch_repository('FaMessageBundle:Message').getLastConversionOfTwoUsersForAd(paymentDetail['ad_id'], paymentDetail['buyer_id'], paymentDetail['seller_id']) %}
                             <div class="purchase-item own-item">
                                 <div class="row" id="order_{{ paymentDetail['payment_id'] }}">
-                                    <div class="col-lg-18">
+                                    <div class="col-lg-18 mb10">
                                         <b>{{'Order no.'|trans({}, 'frontend-my-purchases')}}</b> {{paymentDetail['cart_code']}}<br />
                                         <b>{{'Item'|trans({}, 'frontend-my-purchases')}}</b> <a target="_blank" href="{{ container.get('router').generate('ad_detail_page_by_id', {'id': paymentDetail['ad_id']}, true) }}">{{paymentDetail['title']}}</a><br />
 
@@ -53,8 +53,8 @@
                                         <button class="secondary-btn-1 btn thin-btn btn-block order-details-btn purchase-details-btn" id="order_detail_button_{{orderId}}" onclick="toggleOrderDetail('{{orderId}}')">{{ 'Show details'|trans({}, 'frontend-my-orders') }}</button>
                                     </div>
                                 </div>
-                                <div class="row" id="order_detail_div_{{orderId}}" style="display: none;">
-                                    <div class="col-lg-18 mt20">
+                                <div class="row mt20" id="order_detail_div_{{orderId}}" style="display: none;">
+                                    <div class="col-lg-18">
                                         <div class="purchase-disc">
                                             <b>{{'Order placed'|trans({}, 'frontend-my-purchases')}}</b> {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [paymentDetail['created_at'], container]) }}<br />
                                             <b>{{'Total price'|trans({}, 'frontend-my-purchases')}}</b> {{ format_currency(paymentDetail['amount']) }}<br />
