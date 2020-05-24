@@ -1159,6 +1159,9 @@ span#fa_payment_cyber_source_checkout_card_expity_month-button, span#fa_payment_
   0%,20%,40%,60%,80%,100%{-ms-transform:translate(0,0)}10%,30%,50%,70%,90%{-ms-transform:translate(10px,0)}
 }
 
+.loc-block { width:100%; display:block;position:relative; }
+.loc-autocomp { display:block;position:absolute; }
+
 @media only screen and (min-width: 960px) and (max-width: 1151px) {
   #field_arrow {
       left: 40px !important;
