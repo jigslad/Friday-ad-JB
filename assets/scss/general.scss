@@ -2187,19 +2187,23 @@ footer p { color:$grey-color; }
     }
 }
 @media only screen and (min-width: 320px) and (max-width: 759px) {
-	.recommended-div.listing .recommended-addetail-div .recom-l-col {
-	    background: $dark-grey;
-	}
-	.recommended-div.listing .recommended-addetail-div .list-img {
-	    background-color: $dark-grey;
-	}
-	.posting-bg { background: $common-bg-color; }
-        .ad-list-block .mobile-refine .m-sort-btn { 
-            border-color: 1px solid $secondary-btn-brdr-color;
-        }   
-        .paa-block .posting-bg { background: $site-dark-bg-color; }
-        .paa-block .pkg-active { box-shadow: inset 0 0 0 0px $accent1-dark-color !important; padding: 0 5px 5px !important; }
-}
+    .recommended-div.listing .recommended-addetail-div .recom-l-col {
+      background: $dark-grey;
+    }
+    .recommended-div.listing .recommended-addetail-div .list-img {
+      background-color: $dark-grey;
+    }
+    .posting-bg { background: $common-bg-color; }
+    .ad-list-block .mobile-refine .m-sort-btn { 
+        border-color: 1px solid $secondary-btn-brdr-color;
+    }   
+    .paa-block .posting-bg { background: $site-dark-bg-color; }
+    .paa-block .pkg-active { box-shadow: inset 0 0 0 0px $accent1-dark-color !important; padding: 0 5px 5px !important; }
+    #home-search .search-btn, .home-search .search-btn {
+      background: url('/Frontend/images/icons/search-icon.svg') no-repeat center center / 16px 16px, linear-gradient(135deg, $secondary-btn-l-color 0%, $secondary-btn-r-color 100%) !important;
+      border: 0px solid $secondary-h-color;	   
+    }
+  }
 
 @media (min-width: 320px) and (max-width: 640px) {
    footer .mobile-footer-tab { box-shadow: inset 0 -1px 0 $text-color; }
