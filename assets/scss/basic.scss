@@ -36,7 +36,7 @@ h5 { font-weight: normal !important;font-size: 14px;line-height: 21px;font-famil
 h6 { font-weight: normal !important;font-size: 14px;line-height: 20px; }
 
 button, .button, .btn { font-family: 'Poppins-SemiBold' !important; }
-button:focus, a:focus { outline: 0px dotted; }
+button:focus, a:focus, .btn:focus, .btn.focus { outline: 0px dotted; }
 .btn:focus, .btn.focus { box-shadow: none; }
 
 .btn-h-lg { height: 60px !important;font-size: 18px !important;line-height: 36px !important; }
@@ -171,7 +171,7 @@ div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, p, blockquote, t
 .custom-modal .modal-body p {
     padding: 5px 0;
 }
-.custom-modal .modal-body .button {
+.custom-modal .modal-body .btn {
     margin-top: 10px;
 }
 .modal-backdrop {
@@ -718,7 +718,9 @@ footer .search-box-col .newsletter-lbl, .white-check .label-span, .grey-check .l
 .covid-19-block .head {color: #FFFFFF; font-size: 20px; letter-spacing: 0.83px;line-height: 23px; font-weight: bold;padding-right: 25px; }
 .ask-for-offer-help { color: #FFFFFF;font-weight: normal !important;font-size: 18px;letter-spacing: 0; line-height: 21px;text-align: center;  }
 .ask-for-offer-help a, .ask-for-offer-help a:hover, .ask-for-offer-help a:focus { text-decoration: underline !important; }
-.place-free-ad-btn, .place-free-ad-btn:hover, .place-free-ad-btn:focus, a:hover.button.place-free-ad-btn, a:focus.button.place-free-ad-btn { height: 30px; width: 162px; font-size: 14px; letter-spacing: 0;line-height: 16px;text-align: center; margin-bottom: 0px; vertical-align: middle; display: table-cell; }
+.place-free-ad-btn, .place-free-ad-btn:hover, .place-free-ad-btn:focus, a:hover.button.place-free-ad-btn, a:focus.button.place-free-ad-btn,
+, a:hover.btn.place-free-ad-btn, a:focus.btn.place-free-ad-btn
+{ height: 30px; width: 162px; font-size: 14px; letter-spacing: 0;line-height: 16px;text-align: center; margin-bottom: 0px; vertical-align: middle; display: table-cell; }
 
 .cross-btn {
     color: #ffffff;cursor: pointer;position: absolute;right: 0;width: 20px;height: 30px;top: 0;right: 15px;text-indent: -9999px;z-index: 1;
@@ -1155,7 +1157,7 @@ input[type=number] {
     float: right;
 }
 //FB an Goggle button
-.button.signup-fb-btn {
+.button.signup-fb-btn, .btn.signup-fb-btn {
 	background-color: #3B5998;
 	color: #ffffff;
 }
@@ -1163,12 +1165,12 @@ input[type=number] {
 	background-color: #2b4a7a !important;
 	background: #2b4a7a !important;
 }
-.button.signup-google-btn {
+.button.signup-google-btn, .btn.signup-google-btn {
 	background-color: #FFFFFF;
 	box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 1px 1px 0 rgba(0,0,0,0.24) !important;
 	color: #ACB0B7;
 }
-.button.special {
+.button.special, .btn.special {
 	display: block;
 	width: 100%;
 	text-align: center;
@@ -1474,10 +1476,10 @@ column-count: unset;
     }
 }
 @media (max-width: 640px) {
-  .button.special { padding: 17px 6px 22px 6px !important;  }
+  .button.special, .btn.special  { padding: 17px 6px 22px 6px !important;  }
 }
 @media only screen and (min-width: 960px) and (max-width: 1151px) {
-   .button.special {
+   .button.special, .btn.special  {
         width: 320px !important;
     }
 }
@@ -1609,7 +1611,9 @@ column-count: unset;
 	    display: none;
 	}
 
-  .place-free-ad-btn, .place-free-ad-btn:hover, .place-free-ad-btn:focus, a:hover.button.place-free-ad-btn, a:focus.button.place-free-ad-btn {
+  .place-free-ad-btn, .place-free-ad-btn:hover, .place-free-ad-btn:focus, a:hover.button.place-free-ad-btn, a:focus.button.place-free-ad-btn,
+  a:hover.btn.place-free-ad-btn, a:focus.btn.place-free-ad-btn
+  {
     display: inline-block;
   }
 }

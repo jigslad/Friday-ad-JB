@@ -169,7 +169,7 @@
   .alert-btn-wrapper {
     margin: 10px;
     position: relative;
-    .button {
+    .button, .btn {
       padding-bottom: 10px;
     }
     &:hover .alert-tooltip {
@@ -218,7 +218,7 @@
       margin-top: -12px;
     }
   }
-  .alert-btn-wrapper .button {
+  .alert-btn-wrapper .button, .alert-btn-wrapper .btn {
     padding-bottom: 10px;
   }
   .accordion {

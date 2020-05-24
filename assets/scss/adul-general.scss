@@ -17,7 +17,7 @@ h6 { color: $common-bg-color; }
 .white-bg { background: $white; }
 .gray-bg { background: $grey-color; }
 label { color: $dark-grey; }
-input,button, .button, .btn, .primary-btn-1, .primary-btn-2, .primary-btn-3, .secondary-btn-1, .secondary-btn-2,
+input,button, .button, .btn, .primary-btn-1, .primary-btn-2, .primary-btn-3, .secondary-btn-1, .secondary-btn-2, .btn.special,
 .reply-msg-heading .report, .reply-msg-heading .mark-sold, .paypal-box, .credit-cards-box, input.checkbox + label::after,
 .reply-msg-heading .report:hover, .reply-msg-heading .report:focus, .image-tooltip, .enquire-tooltip, .adult-pop-up-modal,
 .adult-modal.custom-modal .modal-content, .error-page .home-search, .popular-items .popular-graphic img, .button.special, .alert-box.radius,
@@ -1116,7 +1116,9 @@ footer {
 /* Covid 19 */
 .covid-19-block { background: $common-text-color; }
 .ask-for-offer-help a, .ask-for-offer-help a:hover, .ask-for-offer-help a:focus { color: $covid-bg-color !important; }
-.place-free-ad-btn, .place-free-ad-btn:hover, .place-free-ad-btn:focus, a:hover.button.place-free-ad-btn, a:focus.button.place-free-ad-btn {  background-color: $covid-bg-color;color: $covid-btn-txt-color !important; }
+.place-free-ad-btn, .place-free-ad-btn:hover, .place-free-ad-btn:focus, a:hover.button.place-free-ad-btn, a:focus.button.place-free-ad-btn,
+a:hover.btn.place-free-ad-btn, a:focus.btn.place-free-ad-btn
+{  background-color: $covid-bg-color;color: $covid-btn-txt-color !important; }
 .covid-19-block.top-border { border-top: 4px solid $covid-bg-color }
 .covid-19-block.bottom-border { border-bottom: 4px solid $covid-bg-color }
 
@@ -2078,7 +2080,7 @@ footer p { color:$grey-color; }
 .item { background: $form-border-color; }
 
 .placeholderTxt::placeholder, .placeholderTxt::-webkit-input-placeholder, .placeholderTxt:-ms-input-placeholder { color: red !important; }
-.fa-slider.bus-shop-user-item-slider .owl-item .item:hover h3, a.xs-btn-2.button, .db-section .manage-item-btns .xs-black-btn,
+.fa-slider.bus-shop-user-item-slider .owl-item .item:hover h3, a.xs-btn-2.button, a.xs-btn-2.btn, .db-section .manage-item-btns .xs-black-btn,
 .homepage-hero:first-child, .select2-drop-multi .select2-results li .select2-result-label, .select2-results .select2-result-label,
 .top-bar-section a.backtofad, .blog-item .list-title, .content.active .link-list a, .blog-item .list-author-pub-date, .btn-transparent,
 .reset-search a, .latest-place-ad:hover .place-ad-text, .edit-advert, .add-photo:hover .add-photo-text
@@ -2231,7 +2233,7 @@ select:hover,select:focus, .ui-selectmenu-button:hover,.ui-selectmenu-button.act
   width: max-content;
 }
 @media only screen and (min-width:40.063em){
-    .top-bar-section li.active:not(.has-form) a:not(.button), .no-js .top-bar-section ul li:active>a{
+    .top-bar-section li.active:not(.has-form) a:not(.button), .top-bar-section li.active:not(.has-form) a:not(.btn), .no-js .top-bar-section ul li:active>a{
         background:$accent1-dark-color !important;
     }
     .breadcrumbs>* a{
@@ -2265,7 +2267,8 @@ select:hover,select:focus, .ui-selectmenu-button:hover,.ui-selectmenu-button.act
     }
 }
 @media only screen and (min-width:560px) and (max-width:759px){
-    .top-bar-section li:not(.has-form) a:not(.button) span.notification-digit{
+    .top-bar-section li:not(.has-form) a:not(.button) span.notification-digit,
+    .top-bar-section li:not(.has-form) a:not(.btn) span.notification-digit {
         color:$atag-light-color !important;
     }
     .pkg-active{
@@ -2359,7 +2362,7 @@ select:hover,select:focus, .ui-selectmenu-button:hover,.ui-selectmenu-button.act
     }
     footer .mobile-footer-tab { box-shadow: inset 0 -1px 0 $text-color; }
     #featured_advertisers_slider .list-img, #featured-top-item-slider .list-img { border-bottom: 1px solid $grey-color; }
-    .top-bar-section .login-menu li:not(.has-form) a:not(.button) {
+    .top-bar-section .login-menu li:not(.has-form) a:not(.button), .top-bar-section .login-menu li:not(.has-form) a:not(.btn) {
         background: $common-text-color !important;
         border-right: 1px solid $common-text-color !important;
     }
@@ -2369,7 +2372,9 @@ select:hover,select:focus, .ui-selectmenu-button:hover,.ui-selectmenu-button.act
 }
 
 @media only screen and (min-width:320px) and (max-width:559px){
-    .top-bar-section li:not(.has-form) a:not(.button) span.notification-digit{
+    .top-bar-section li:not(.has-form) a:not(.button) span.notification-digit,
+    .top-bar-section li:not(.has-form) a:not(.btn) span.notification-digit
+    {
         color:$atag-light-color !important;
     }
     .pkg-active{
