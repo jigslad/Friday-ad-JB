@@ -153,10 +153,10 @@
                 <div id="listingDiv">
                     <div class="map-result-main">
                         {% if resultCount > container.getParameter('fa.search.map.records.per.page') %}
-                            <div data-alert class="alert-box success radius">
+                            <div data-alert class="alert alert-box success radius">
                                 <span class="alert-icon">&nbsp;</span>
                                 {{'Showing 1000 results near by you on map.'|trans({}, 'frontend-search-result')}}
-                                <a href="javascript:void(0)" class="close">&times;</a>
+                                <a data-dismiss="alert" class="close">&times;</a>
                             </div>
                         {% endif %}
                         {% if isShopPage is not defined %}

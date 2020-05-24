@@ -49,14 +49,14 @@
             <div data-alert class="alert-box success radius">
                 <span class="alert-icon">&nbsp;</span>
                 {{'You have successfully logged in.'|trans({}, 'frontend')}}
-                <a href="javascript:void(0)" class="close">&times;</a>
+                <a data-dismiss="alert" class="close">&times;</a>
             </div>
             {{ fetch_repository('FaUserBundle:User').removeUserCookies() }}
         {% endif %}
         <div data-alert class="alert-box alert radius" style="display:none;" id="deadlock_error_main">
             <span class="alert-icon">&nbsp;</span>
             <span id="deadlock_error"></span>
-            <a href="javascript:void(0)" class="close">&times;</a>
+            <a data-dismiss="alert" class="close">&times;</a>
         </div>
         {% if ad.getBusinessPhone() %}
             <div class="contact-box contact-box-2">

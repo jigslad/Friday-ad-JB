@@ -10,10 +10,10 @@
 	<div class="modal-body">
     {{ form_start(form, {'attr': {'novalidate': '', 'id': 'testimonial_id'}}) }}
         {% if app.user and app.request.cookies.has('add_testimonial_flag') and app.request.cookies.has('add_testimonial_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') and app.request.cookies.get('add_testimonial_flag') %}
-            <div data-alert class="alert-box success radius">
+            <div data-alert class="alert alert-box success radius">
                 <span class="alert-icon">&nbsp;</span>
                 {{'You have successfully logged in.'|trans({}, 'frontend')}}
-                <a href="javascript:void(0)" class="close">&times;</a>
+                <a data-dismiss="alert" class="close">&times;</a>
             </div>
             {{ fetch_repository('FaUserBundle:User').removeUserCookies() }}
         {% endif %}

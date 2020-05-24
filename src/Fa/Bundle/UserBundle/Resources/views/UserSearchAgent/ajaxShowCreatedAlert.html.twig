@@ -12,9 +12,9 @@
 	<div class="modal-body">
     {% if app.user and app.request.cookies.has('save_search_agent_flag') and app.request.cookies.get('save_search_agent_flag') and app.request.cookies.get('save_search_agent_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') %}
         <div data-alert class="alert-box success radius">
-            <span class="alert-icon">&nbsp;</span>
+            <span class="alert alert-icon">&nbsp;</span>
             {{'You have successfully logged in.'|trans({}, 'frontend')}}
-            <a href="javascript:void(0)" class="close">&times;</a>
+            <a data-dismiss="alert" class="close">&times;</a>
         </div>
         {{ fetch_repository('FaUserBundle:User').removeUserCookies() }}
     {% endif %}
