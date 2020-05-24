@@ -153,54 +153,6 @@
                         </div>
                     </div>
                 {% endif %}
-
-                {# More Motors Block#}
-                {% set motor_more_in_motor_id = constant('Fa\\Bundle\\ContentBundle\\Repository\\LandingPageInfoRepository::MOTOR_MORE_IN_MOTOR_ID')%}
-                {% if attribute(landingPageImages, motor_more_in_motor_id) is defined %}
-                    {% if prevSectionBgClass == '' %}
-                        {% set bgColour = 'white-bg' %}
-                    {% else %}
-                        {% set bgColour = '' %}
-                    {% endif %}
-                    {% set prevSectionBgClass = bgColour %}
-                    <div class="homepage-row">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col">
-                                    <div class="homepage-title">{{ 'More in motors'|trans({}, 'frontend-landing-page') }}</div>
-                                </div>
-                            </div>
-                            <div class="row justify-content-center">
-                                {% for imageInfo in attribute(landingPageImages, motor_more_in_motor_id) %}
-                                    {% set queryParams = searchParams %}
-                                    {% set adCount = 0 %}
-                                    {% if imageInfo.category_id is defined %}
-                                        {% set queryParams = queryParams|merge({'item__category_id': (imageInfo.category_id)}) %}
-                                        {% if adCounts.a_parent_category_lvl_2_id_i is defined and attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) is defined %}
-                                            {% set adCount = attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) %}
-                                        {% endif %}
-                                    {% endif %}
-                                    {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
-                                    <div class="col-md-10 col-lg-8">
-                                        <div class="homepage-more-items">
-                                            <a class="tricky-link" href="{{ listurl }}">
-                                                {% if imageInfo.file_name is defined %}
-                                                    {{ imageInfo.file_name }}
-                                                {% endif %}
-                                            </a>
-                                            <div class="explore-price">{{ adCount|number_format }}</div>
-                                            {% if imageInfo.file_name is defined %}
-                                            	{% set imageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.file_name]) %}
-                                                <img class="img-fluid" alt="{{ imageInfo.file_name }}" src="{{ imageUrl }}">
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-
-                    </div>
-                {% endif %}
             {% endif %}
 
             {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') %}
@@ -599,6 +551,55 @@
                         </div>
                     </div>
                 </div>
+            {% endif %}
+            {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}
+                {# More Motors Block#}
+                {% set motor_more_in_motor_id = constant('Fa\\Bundle\\ContentBundle\\Repository\\LandingPageInfoRepository::MOTOR_MORE_IN_MOTOR_ID')%}
+                {% if attribute(landingPageImages, motor_more_in_motor_id) is defined %}
+                    {% if prevSectionBgClass == '' %}
+                        {% set bgColour = 'white-bg' %}
+                    {% else %}
+                        {% set bgColour = '' %}
+                    {% endif %}
+                    {% set prevSectionBgClass = bgColour %}
+                    <div class="homepage-row">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="homepage-title">{{ 'More in motors'|trans({}, 'frontend-landing-page') }}</div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center">
+                                {% for imageInfo in attribute(landingPageImages, motor_more_in_motor_id) %}
+                                    {% set queryParams = searchParams %}
+                                    {% set adCount = 0 %}
+                                    {% if imageInfo.category_id is defined %}
+                                        {% set queryParams = queryParams|merge({'item__category_id': (imageInfo.category_id)}) %}
+                                        {% if adCounts.a_parent_category_lvl_2_id_i is defined and attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) is defined %}
+                                            {% set adCount = attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) %}
+                                        {% endif %}
+                                    {% endif %}
+                                    {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
+                                    <div class="col-md-10 col-lg-8">
+                                        <div class="homepage-more-items">
+                                            <a class="tricky-link" href="{{ listurl }}">
+                                                {% if imageInfo.file_name is defined %}
+                                                    {{ imageInfo.file_name }}
+                                                {% endif %}
+                                            </a>
+                                            <div class="explore-price">{{ adCount|number_format }}</div>
+                                            {% if imageInfo.file_name is defined %}
+                                                {% set imageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.file_name]) %}
+                                                <img class="img-fluid" alt="{{ imageInfo.file_name }}" src="{{ imageUrl }}">
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                    </div>
+                {% endif %}
             {% endif %}
 
             {% if categoryId is defined and (categoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')}) %}
