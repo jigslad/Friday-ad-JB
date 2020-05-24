@@ -42,7 +42,7 @@
                             {% endif %}
 
                             {% set objMessage = fetch_repository('FaMessageBundle:Message').getLastConversionOfTwoUsersForAd(paymentDetail['ad_id'], paymentDetail['buyer_id'], paymentDetail['seller_id']) %}
-                            <div class="purchase-item">
+                            <div class="purchase-item own-item  mb20">
                                 <div class="row" id="order_{{ paymentDetail['payment_id'] }}">
                                     <div class="col-lg-18">
                                         <b>{{'Order no.'|trans({}, 'frontend-my-purchases')}}</b> {{paymentDetail['cart_code']}}<br />
@@ -104,9 +104,9 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
-                                        <button class="secondary-btn-2 btn btn-block order-receipt-btn" onclick="viewReceipt('{{orderId}}');"><span class="view-icon">{{'View receipt'|trans({}, 'frontend-my-purchases')}}</span></button>
-                                        <button class="secondary-btn-2 btn btn-block mb10" onclick="printReceipt('{{orderId}}');"><span class="print-receipt-icon">{{'Print receipt'|trans({}, 'frontend-my-purchases')}}</span></button>
-                                        <div class="purchase-link-list">
+                                        <button class="secondary-btn-2 btn btn-block order-receipt-btn thin-btn" onclick="viewReceipt('{{orderId}}');"><span class="view-icon">{{'View receipt'|trans({}, 'frontend-my-purchases')}}</span></button>
+                                        <button class="secondary-btn-2 btn btn-block mb10 thin-btn" onclick="printReceipt('{{orderId}}');"><span class="print-receipt-icon">{{'Print receipt'|trans({}, 'frontend-my-purchases')}}</span></button>
+                                        <div class="purchase-link-list text-right">
                                             {% if paymentDetail['user_status_id'] == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::USER_STATUS_ACTIVE_ID') %}
                                                 {{ include('FaUserBundle:Review:leaveReviewLink.html.twig', {'reviewDetails' : paymentDetail, 'to_whom' : 'advertiser'}) }}<br />
                                                 {% if objMessage.getId() is defined and  objMessage.getId() == 1 %}

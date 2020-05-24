@@ -30,10 +30,10 @@
                 </div>
                 <div class="col-md-8 col-lg-7 r-block pad-none md-r-tab">
                     <div class="group-m-btn">
-                        <button class="xs-btn-2 btn btn-block small-btn order-receipt-btn" onclick="viewInvoiceReceipt('{{ userInvoice['cart_code'] }}');"><span class="view-icon">{{ 'View receipt'|trans({}, 'frontend-user-invoices') }}</span></button>
+                        <button class="secondary-btn-2 btn btn-block thin-btn order-receipt-btn" onclick="viewInvoiceReceipt('{{ userInvoice['cart_code'] }}');"><span class="view-icon">{{ 'View receipt'|trans({}, 'frontend-user-invoices') }}</span></button>
                     </div>
                     <div class="group-m-btn">
-                        <button class="xs-btn-2 btn btn-block small-btn" onclick="printInvoiceReceipt('{{ userInvoice['cart_code'] }}');"><span class="print-receipt-icon">{{ 'Print receipt'|trans({}, 'frontend-user-invoices') }}</span></button>
+                        <button class="secondary-btn-2 btn btn-block thin-btn" onclick="printInvoiceReceipt('{{ userInvoice['cart_code'] }}');"><span class="print-receipt-icon">{{ 'Print receipt'|trans({}, 'frontend-user-invoices') }}</span></button>
                     </div>
                 </div>
             </div>

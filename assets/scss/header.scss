@@ -729,6 +729,15 @@ All this is done for any sub-level being entered.
   vertical-align: middle;
   background-position: -2px !important;
 }
+.back-arrow-icon {
+    margin-right: 2px !important;
+    display: inline-block;
+    transform: rotate(180deg);
+    width: 10px;
+    height: 31px;
+    background: url('/Frontend/images/icons/breadcrumbs-back.png') 0 4px no-repeat !important;
+}
+
 @media only screen and (max-width: 759px) {
     .mob-container {
         height: 60px !important ;
