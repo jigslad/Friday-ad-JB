@@ -73,17 +73,13 @@
                                                                                         {{ creditTitle|join(' + ') }}
                                                                                     </h5>
                                                                                     <label class="card-text">{{'%credits% credits remaining'|trans({'%credits%': userCreditDetail['credit'] }, 'frontend-my-credits')}}</label>
-                                                                                    <p class="card-text mt5">
-                                                                                        <small class="text-muted">
-                                                                                            <em>
-                                                                                                {% if userCreditDetail['expires_at'] is not null %}
-                                                                                                    {{'Expiry date:'|trans({}, 'frontend-my-credits')}} {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [userCreditDetail['expires_at'], container, null, null, 'd MMMM YYYY']) }}
-                                                                                                {% else %}
-                                                                                                    {{'Expiry date:'|trans({}, 'frontend-my-credits')}} {{'Infinite'|trans({}, 'frontend-my-credits')}}
-                                                                                                {% endif %}
-                                                                                            </em>
-                                                                                        </small>
-                                                                                    </p>
+                                                                                    <p class="card-text mt5"><small class="text-muted"><em>Expiry date: 16 November 2019</em></small></p>
+                                                                                            {% if userCreditDetail['expires_at'] is not null %}
+                                                                                                {{'Expiry date:'|trans({}, 'frontend-my-credits')}} {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [userCreditDetail['expires_at'], container, null, null, 'd MMMM YYYY']) }}
+                                                                                            {% else %}
+                                                                                                {{'Expiry date:'|trans({}, 'frontend-my-credits')}} {{'Infinite'|trans({}, 'frontend-my-credits')}}
+                                                                                            {% endif %}
+                                                                                      </em></small></p>
                                                                                 </div>
                                                                             </div>
                                                                         </div>

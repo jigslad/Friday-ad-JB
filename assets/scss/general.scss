@@ -2114,6 +2114,7 @@ footer p { color:$grey-color; }
     color: $common-text-color;
     font-family: "Poppins-SemiBold";
 }
+.form-control:focus { border-color: $accent1-dark-color !important; }
 
 @media only screen and (max-width: 640px) {
   .ad-list-block .reset-search{
