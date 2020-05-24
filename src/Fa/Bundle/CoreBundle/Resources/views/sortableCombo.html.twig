@@ -11,7 +11,7 @@
         <option value="asc" {% if queryParams.sort_ord is defined and queryParams.sort_ord == 'asc' %}selected{% endif %}>Asc</option>
         <option value="desc" {% if queryParams.sort_ord is defined and queryParams.sort_ord == 'desc' %}selected{% endif %}>Desc</option>
        </select>
-    <input type="button" name="btn_sort" class="tiny button" value="Sort" onClick="doSorting()">
+    <input type="button" name="btn_sort" class="tiny btn" value="Sort" onClick="doSorting()">
 </form>
 
 {% block scriptbottom -%}

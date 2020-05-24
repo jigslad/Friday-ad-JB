@@ -57,7 +57,7 @@
                         {% if userDetail['website_link'] is defined  and userDetail['website_link']|length %}
                             {% set websiteLabel = 'Visit website'|trans({}, 'frontend-profile-page') %}
                             {% set profileWebSite = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'addHttpToUrl', [userDetail['website_link']]) %}
-                            <a rel="nofollow" onclick="openUserWebsite('{{(userDetail['id'] ? userDetail['id'] : '-')}}', '{{ profileWebSite }}', '{{ userName }}')" href="javascript:void(0);" class="website-btn-1 button expand mt20 mb0"><span class="website-icon"></span>{{ websiteLabel }}</a>
+                            <a rel="nofollow" onclick="openUserWebsite('{{(userDetail['id'] ? userDetail['id'] : '-')}}', '{{ profileWebSite }}', '{{ userName }}')" href="javascript:void(0);" class="website-btn-1 btn btn-block mt20 mb0"><span class="website-icon"></span>{{ websiteLabel }}</a>
                         {% endif %}
                         <a href="{{ profileAdsUrl }}" class="secondary-btn-1 btn btn-block text-center mt20">{{'View latest ads'|trans({}, 'frontend-profile-page')}}</a>
                     </div>

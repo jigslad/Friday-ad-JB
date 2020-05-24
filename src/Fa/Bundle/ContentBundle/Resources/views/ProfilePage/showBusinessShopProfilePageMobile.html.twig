@@ -153,21 +153,21 @@
                 {% if userDetail['website_link'] is defined  and userDetail['website_link']|length %}
                     {% set websiteLabel = 'Visit website'|trans({}, 'frontend-profile-page') %}  
                     {% set profileWebSite = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'addHttpToUrl', [userDetail['website_link']]) %}    
-                    <a rel="nofollow" onclick="openUserWebsite('{{(userDetail['id'] ? userDetail['id'] : '-')}}', '{{ profileWebSite }}', '{{ userName }}')" href="javascript:void(0);" class="website-btn-1 button expand"><span class="website-icon"></span>{{ websiteLabel }}</a>
+                    <a rel="nofollow" onclick="openUserWebsite('{{(userDetail['id'] ? userDetail['id'] : '-')}}', '{{ profileWebSite }}', '{{ userName }}')" href="javascript:void(0);" class="website-btn-1 btn btn-block"><span class="website-icon"></span>{{ websiteLabel }}</a>
                 {% endif %} 
 
 
                 <div class="shop-latest-slider">
                     {{ render(controller('FaContentBundle:ProfilePage:showShopUserLatestAds', {'userId': userDetail['id'], 'slider': 1 })) }}
                     
-                    <a href="{{ profileAdsUrl }}" class="button secondary-btn-1 expand mb10">{{ 'View all our ads'|trans({}, 'frontend-profile-page') }}</a>
+                    <a href="{{ profileAdsUrl }}" class="btn btn-block secondary-btn-1 mb10">{{ 'View all our ads'|trans({}, 'frontend-profile-page') }}</a>
                 </div>
             {% endif %}
             
             {% if userDetail['business_category_id'] not in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')} %}
                 {{ render(controller('FaContentBundle:ProfilePage:showShopUserLatestAds', {'userId': userDetail['id'] })) }}
 
-                <a href="{{ profileAdsUrl }}" class="button secondary-btn-1 expand mb10">{{ 'View all our ads'|trans({}, 'frontend-profile-page') }}</a>
+                <a href="{{ profileAdsUrl }}" class="btn btn-block secondary-btn-1 mb10">{{ 'View all our ads'|trans({}, 'frontend-profile-page') }}</a>
                 
                 <div class="shop-cont-info" id="business_address_detail_div">
                     {{ include('FaContentBundle:ProfilePage:showBusinessAddressDetail.html.twig') }}
@@ -250,7 +250,7 @@
                 {{ render(controller('FaUserBundle:UserSiteBanner:showUserSiteBannerUploader', {'userSiteId': userSiteObj.getId()})) }}
                 {{ set_variables('userSiteBannerUploadJavascriptBottom', {'loaded':'false'}) }}
                 <div class="relative">
-                    <a href="javascript:void(0);" class="button secondary-btn-1 expand mt15 needsclick" id="pickUserSiteBannerFile">{{'Upload your photo'|trans({}, 'frontend-my-profile')}}</a>
+                    <a href="javascript:void(0);" class="btn btn-block secondary-btn-1 mt15 needsclick" id="pickUserSiteBannerFile">{{'Upload your photo'|trans({}, 'frontend-my-profile')}}</a>
                 </div>
                 <div class="text-center">{{'Or choose from the options below'|trans({}, 'frontend-my-profile')}}</div>
                 <ul class="cover-img-thumbs clearfix">

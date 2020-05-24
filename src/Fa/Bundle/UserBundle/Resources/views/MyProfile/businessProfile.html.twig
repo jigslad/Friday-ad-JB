@@ -70,7 +70,7 @@
                             <div class="row">
                                 {% if showUpgradeBtn %}
                                     <div class="col-md-12 d-right-col">
-                                        <a href="{{ path('user_package_choose_profile', {'from': 'profile'}) }}" class="primary-btn-1 button thin-btn upgrade-profile-btn">{{'Upgrade your profile now!'|trans({}, 'frontend-my-profile')}}</a>
+                                        <a href="{{ path('user_package_choose_profile', {'from': 'profile'}) }}" class="primary-btn-1 btn thin-btn upgrade-profile-btn">{{'Upgrade your profile now!'|trans({}, 'frontend-my-profile')}}</a>
                                     </div>
                                 {% endif %}
                             </div>
@@ -123,7 +123,7 @@
                                                         <div class="profile-logo-ins end corporate-profile">
                                                             {{"Add a logo to your profile. It doesn't just look nice - buyers prefer to see who they are buying from when deciding what to buy."|trans({}, 'frontend-my-profile')}}<br />
                                                             <div id="profile_change_btn_with_opt" {% if not userSiteObj.getPath() %}style="display:none;"{% endif %}>
-                                                                <a href="javascript:void(0);" data-dropdown="profile_image_upload" aria-controls="profile_image_upload" aria-expanded="false" class="primary-btn-3 button thin-btn dropdown">{{'Change image'|trans({}, 'frontend-my-profile')}}</a><br />
+                                                                <a href="javascript:void(0);" data-dropdown="profile_image_upload" aria-controls="profile_image_upload" aria-expanded="false" class="primary-btn-3 btn thin-btn dropdown">{{'Change image'|trans({}, 'frontend-my-profile')}}</a><br />
                                                                 <ul id="profile_image_upload" data-dropdown-content class="f-dropdown" aria-hidden="true">
                                                                     <li><a href="javascript:void(0)" class="pickProfileFile needsclick" id="pickProfileFile">{{'Upload logo'|trans({}, 'frontend-my-profile')}}</a></li>
                                                                     <li><a href="javascript:getProfileBigImage('{{ path(getProfileBigImageRoute, {'userId': app.user.getId(), 'isCompany': 1}) }}')">{{'Edit logo'|trans({}, 'frontend-my-profile')}}</a></li>
@@ -131,7 +131,7 @@
                                                                 </ul>
                                                             </div>
                                                             <div id="profile_change_btn_without_opt" {% if userSiteObj.getPath() %}style="display:none;"{% endif %}>
-                                                                <a href="javascript:void(0);" id="pickProfileFile1" class="primary-btn-3 button thin-btn dropdown pickProfileFile needsclick">{{'Change image'|trans({}, 'frontend-my-profile')}}</a><br />
+                                                                <a href="javascript:void(0);" id="pickProfileFile1" class="primary-btn-3 btn thin-btn dropdown pickProfileFile needsclick">{{'Change image'|trans({}, 'frontend-my-profile')}}</a><br />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -203,7 +203,7 @@
                                                     {% endif %}
 
                                                     <div class="mt30 field-300">
-                                                        {{ form_widget(form.save_profile_changes, {'attr': {'class':'secondary-btn-1 button expand mb0'}}) }}
+                                                        {{ form_widget(form.save_profile_changes, {'attr': {'class':'secondary-btn-1 btn btn-block mb0'}}) }}
                                                     </div>
                                                 </div>
                                             {{ form_end(form) }}
@@ -236,7 +236,7 @@
                                         <div class="design-your-profile">
                                             {% if (showUpgradeBtn and (not activeShopPackage or (activeShopPackage and activeShopPackage.getPackage() and activeShopPackage.getPackage().getPackageText() == constant('Fa\\Bundle\\PromotionBundle\\Repository\\PackageRepository::SHP_PACKAGE_BASIC_TEXT')))) %}
                                                 <p>{{'Not available for users with basic business profile.'|trans({}, 'frontend-my-profile')}}</p>
-                                                <a href="{{ path('user_package_choose_profile', {'from': 'profile'}) }}" class="primary-btn-1 button thin-btn upgrade-profile-btn">{{'Upgrade your profile now!'|trans({}, 'frontend-my-profile')}}</a>
+                                                <a href="{{ path('user_package_choose_profile', {'from': 'profile'}) }}" class="primary-btn-1 btn thin-btn upgrade-profile-btn">{{'Upgrade your profile now!'|trans({}, 'frontend-my-profile')}}</a>
                                             {% else %}
                                                 {{ form_start(shopForm, {'attr': {'novalidate': 'novalidate'}}) }}
                                                     {% set userSiteBannerRepository = fetch_repository('FaUserBundle:UserSiteBanner') %}
@@ -254,7 +254,7 @@
                                                                         {{ render(controller('FaUserBundle:UserSiteBanner:showUserSiteBannerUploader', {'userSiteId': userSiteObj.getId()})) }}
                                                                         {{ set_variables('userSiteBannerUploadJavascriptBottom', {'loaded':'false'}) }}
                                                                         <div class="relative" style="display: inline-flex !important;">
-                                                                            <a href="javascript:void(0);" class="button secondary-btn-1 expand mt15 needsclick" id="pickUserSiteBannerFile">{{'Upload your photo'|trans({}, 'frontend-my-profile')}}</a>
+                                                                            <a href="javascript:void(0);" class="btn btn-block secondary-btn-1 mt15 needsclick" id="pickUserSiteBannerFile">{{'Upload your photo'|trans({}, 'frontend-my-profile')}}</a>
                                                                         </div>
                                                                         <div class="text-center">{{'Or choose from the options below'|trans({}, 'frontend-my-profile')}}</div>
                                                                         <ul class="cover-img-thumbs clearfix">
@@ -364,7 +364,7 @@
                                                     </div>
 
                                                     <div class="design-field field-300">
-                                                        {{ form_widget(shopForm.save_shop_profile_changes, {'attr': {'class':'secondary-btn-1 button expand mb0'}}) }}
+                                                        {{ form_widget(shopForm.save_shop_profile_changes, {'attr': {'class':'secondary-btn-1 btn btn-block mb0'}}) }}
                                                     </div>
                                                 {{ form_end(shopForm) }}
                                             {% endif %}

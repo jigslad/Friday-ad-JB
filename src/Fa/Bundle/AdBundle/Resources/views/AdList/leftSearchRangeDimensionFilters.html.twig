@@ -30,7 +30,7 @@
             {% if attribute(form, filter~'_to') is defined %}
                 {{ form_widget(attribute(form, filter~'_to')) }}
             {% endif %}
-            <button class="secondary-btn-2 expand" type="submit"> {{ 'Search'|trans({}, 'frontend-left-search') }} </button>
+            <button class="secondary-btn-2 btn-block" type="submit"> {{ 'Search'|trans({}, 'frontend-left-search') }} </button>
         </div>
     </dd>
 {% endif %}

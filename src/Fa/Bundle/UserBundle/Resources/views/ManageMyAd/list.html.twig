@@ -306,7 +306,7 @@
                                                             <div class="manage-list-desc">You will have <span class="leftoutAdCount">0</span> boosts left</div>
                                                         </div>
                                                         <div class="col-sm-24 col-md-6 col-md-6">
-                                                            <button type="button" id="boost-sel-ads-btn" class="button primary-btn-2  expand" onclick="closeRevealModel('#markAdAsBoostedModal');boostSelectedAds();">{{'Boost Ads'|trans({}, 'frontend-manage-my-ad')}}</button>
+                                                            <button type="button" id="boost-sel-ads-btn" class="btn btn-block primary-btn-2" onclick="closeRevealModel('#markAdAsBoostedModal');boostSelectedAds();">{{'Boost Ads'|trans({}, 'frontend-manage-my-ad')}}</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -336,13 +336,13 @@
                 <div class="mt20 remove-item-btn">
                     <div class="row">
                         <div class="col-md-6">
-                            <button type="button" class="button secondary-btn-2 thin-btn expand" data-dismiss="modal" onclick="changeAdStatus('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID')}}');">{{'Yes'|trans({}, 'frontend-manage-my-ad')}}</button>
+                            <button type="button" class="btn btn-block secondary-btn-2 thin-btn" data-dismiss="modal" onclick="changeAdStatus('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID')}}');">{{'Yes'|trans({}, 'frontend-manage-my-ad')}}</button>
                         </div>
                         <div class="col-md-6">
-                            <button type="button" class="button secondary-btn-2 thin-btn expand" data-dismiss="modal" onclick="changeAdStatus('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID')}}');">{{'No'|trans({}, 'frontend-manage-my-ad')}}</button>
+                            <button type="button" class="btn btn-block secondary-btn-2 thin-btn" data-dismiss="modal" onclick="changeAdStatus('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID')}}');">{{'No'|trans({}, 'frontend-manage-my-ad')}}</button>
                         </div>
                         <div class="col-md-12">
-                            <button type="button" class="button secondary-btn-1 thin-btn expand" data-dismiss="modal" onclick="closeRemoveAdConfirmationBox('markAdAsSoldOrExpireModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
+                            <button type="button" class="btn btn-block secondary-btn-1 thin-btn" data-dismiss="modal" onclick="closeRemoveAdConfirmationBox('markAdAsSoldOrExpireModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
                         </div>
                     </div>
                 </div>
@@ -364,10 +364,10 @@
                 <div class="mt20 remove-item-btn">
                     <div class="row">
                         <div class="col-md-12">
-                            <button type="button" class="button secondary-btn-2 thin-btn expand" onclick="closeRevealModel('#markAdAsUnBoostModal');unBoostSelectedAds();">{{'Yes'|trans({}, 'frontend-manage-my-ad')}}</button>
+                            <button type="button" class="btn btn-block secondary-btn-2 thin-btn" onclick="closeRevealModel('#markAdAsUnBoostModal');unBoostSelectedAds();">{{'Yes'|trans({}, 'frontend-manage-my-ad')}}</button>
                         </div>
                         <div class="col-md-12">
-                            <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="closeRemoveAdConfirmationBox('markAdAsUnBoostModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
+                            <button type="button" class="btn btn-block secondary-btn-1 thin-btn" onclick="closeRemoveAdConfirmationBox('markAdAsUnBoostModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
                         </div>
                     </div>
                 </div>
@@ -389,10 +389,10 @@
                 <div class="mt20 remove-item-btn">
                     <div class="row">
                         <div class="col-md-12">
-                            <button type="button" class="button secondary-btn-2 thin-btn expand" onclick="closeRevealModel('#markAdAsInactiveModal');changeAdStatus('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_INACTIVE_ID')}}');">{{'Delete'|trans({}, 'frontend-manage-my-ad')}}</button>
+                            <button type="button" class="btn btn-block secondary-btn-2 thin-btn" onclick="closeRevealModel('#markAdAsInactiveModal');changeAdStatus('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_INACTIVE_ID')}}');">{{'Delete'|trans({}, 'frontend-manage-my-ad')}}</button>
                         </div>
                         <div class="col-md-12">
-                            <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="closeRemoveAdConfirmationBox('markAdAsInactiveModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
+                            <button type="button" class="btn btn-block secondary-btn-1 thin-btn" onclick="closeRemoveAdConfirmationBox('markAdAsInactiveModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
                         </div>
                     </div>
                 </div>

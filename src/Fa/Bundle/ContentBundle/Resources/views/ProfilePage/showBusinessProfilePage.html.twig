@@ -82,14 +82,14 @@
             </div>
             {{ include('FaContentBundle:ProfilePage:showBusinessAddressDetail.html.twig') }}
             {% if (userDetail['contact_through_email'] is defined and userDetail['contact_through_email'] == 1) or (userDetail['contact_through_phone'] is defined and userDetail['contact_through_phone'] == 1) %}
-                <button class="primary-btn-1 expand button uppercase mb10" name="profilepage_contactuser" id="profilepage_contactuser" type="button">{{'Contact us'|trans({}, 'frontend-profile-page')}}</button>
+                <button class="primary-btn-1 btn btn-block uppercase mb10" name="profilepage_contactuser" id="profilepage_contactuser" type="button">{{'Contact us'|trans({}, 'frontend-profile-page')}}</button>
             {% endif %}
              {% if userDetail['website_link'] is defined and userDetail['website_link']|length %}
                 {% set websiteLabel = 'Visit website'|trans({}, 'frontend-profile-page') %}  
                 {% set profileWebSite = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'addHttpToUrl', [userDetail['website_link']]) %}    
-                <a rel="nofollow" onclick="openUserWebsite('{{(userDetail['id'] ? userDetail['id'] : '-')}}', '{{ profileWebSite }}', '{{ userName }}')" href="javascript:void(0);" class="website-btn-1 button expand"><span class="website-icon"></span>{{ websiteLabel }}</a>
+                <a rel="nofollow" onclick="openUserWebsite('{{(userDetail['id'] ? userDetail['id'] : '-')}}', '{{ profileWebSite }}', '{{ userName }}')" href="javascript:void(0);" class="website-btn-1 btn btn-block"><span class="website-icon"></span>{{ websiteLabel }}</a>
             {% endif %}
-            <a href="{{ profileAdsUrl }}" class="secondary-btn-1 button expand">{{'View latest ads'|trans({}, 'frontend-profile-page')}}</a>
+            <a href="{{ profileAdsUrl }}" class="secondary-btn-1 btn btn-block">{{'View latest ads'|trans({}, 'frontend-profile-page')}}</a>
         </div>
         <div class="l">
             <h1 class="other-pro-title">{{"Hi, We are %profile_name%"|trans({'%profile_name%': (userDetail['user_name'] ? userDetail['user_name'] : '-')}, 'frontend-profile-page')}}{% if userDetail['town_name']|length %} {{'of'|trans({}, 'frontend-profile-page')}} {{ userDetail['town_name'] }} {% endif %}</h1>

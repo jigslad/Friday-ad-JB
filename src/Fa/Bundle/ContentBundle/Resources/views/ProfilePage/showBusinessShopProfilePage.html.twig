@@ -224,7 +224,7 @@
                         {{ render(controller('FaUserBundle:UserSiteBanner:showUserSiteBannerUploader', {'userSiteId': userSiteObj.getId()})) }}
                         {{ set_variables('userSiteBannerUploadJavascriptBottom', {'loaded':'false'}) }}
                         <div class="relative">
-                            <a href="javascript:void(0);" class="button secondary-btn-1 expand mt15 needsclick" id="pickUserSiteBannerFile">{{'Upload your photo'|trans({}, 'frontend-my-profile')}}</a>
+                            <a href="javascript:void(0);" class="btn btn-block secondary-btn-1 mt15 needsclick" id="pickUserSiteBannerFile">{{'Upload your photo'|trans({}, 'frontend-my-profile')}}</a>
                         </div>
                         <div class="text-center">{{'Or choose from the options below'|trans({}, 'frontend-my-profile')}}</div>
                         <ul class="cover-img-thumbs clearfix">

@@ -43,7 +43,7 @@
                         {# {{ form_errors(form) }} #}
                             {{ include('FaAdBundle:AdPost:fourthStepAdultFields.html.twig') }}
                             <div class="small-wrapper">
-                                {{ form_widget(form.preview, {'attr': {'class':'secondary-btn-2 expand'}}) }}
+                                {{ form_widget(form.preview, {'attr': {'class':'secondary-btn-2 btn-block'}}) }}
                                 {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 btn btn-block next-btn mt20'}}) }}
                             </div>
                         {{ form_end(form) }}

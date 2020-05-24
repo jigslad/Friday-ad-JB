@@ -24,8 +24,8 @@
                                    {{ form_widget(form.item__location_autocomplete) }}
                                    <a href="javascript:void(0);" rel="nofollow" id="fa_top_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
                                     <div class="clearfix">
-                                        <button class="button xs-btn-1 expand left" type="button" id="top_search_location_homepage_ok">Ok</button>
-                                        <button class="button xs-btn-1 expand right" type="button" id="top_search_location_cancel">Cancel</button>
+                                        <button class="secondary-btn-1 thin-btn btn btn-block left" type="button" id="top_search_location_homepage_ok">Ok</button>
+                                        <button class="secondary-btn-1 thin-btn btn btn-block right" type="button" id="top_search_location_cancel">Cancel</button>
                                     </div>
                                 </div>
                             </div>
@@ -35,7 +35,7 @@
                 <tr>
                     <td class="all-cat-select">{{ form_widget(attribute(form, 'item__category_id'), {'attr': {'class':'find-all custom_select' }}) }}</td>
                     <td class="looking-for">{{ form_widget(form.keywords, {'attr': {'class': 'white-field mb0', 'placeholder':'Looking for...'|trans({}, 'frontend-homepage') }}) }}</td>
-                    <td class="search-btn"><button class="button secondary-btn-1 mb0 expand" type="submit">{{'Search'|trans({}, 'frontend-homepage')}}</button></td>
+                    <td class="search-btn"><button class="btn btn-block secondary-btn-1 mb0" type="submit">{{'Search'|trans({}, 'frontend-homepage')}}</button></td>
                 </tr>
             </table>
             <div id="header_search_editable_location_reveal_modal" class="reveal-modal tiny" data-reveal>
@@ -49,8 +49,8 @@
                     {{ form_widget(form.item__location_autocomplete) }}
                     <a href="javascript:void(0);" id="fa_top_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
                     <div class="clearfix">
-                        <button class="button xs-btn-1 expand left" type="button" id="top_search_location_ok">{{ 'Ok'|trans({}, 'frontend-homepage') }}</button>
-                        <button class="button xs-btn-1 expand right" type="cancel" id="top_search_location_cancel">{{ 'Cancel'|trans({}, 'frontend-homepage') }}</button>
+                        <button class="secondary-btn-1 thin-btn btn btn-block left" type="button" id="top_search_location_ok">{{ 'Ok'|trans({}, 'frontend-homepage') }}</button>
+                        <button class="secondary-btn-1 thin-btn btn btn-block right" type="cancel" id="top_search_location_cancel">{{ 'Cancel'|trans({}, 'frontend-homepage') }}</button>
                     </div>
                 </div>
             </div>

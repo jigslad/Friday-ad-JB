@@ -508,7 +508,7 @@
                     <div class="dtl-thumb{% if noImage == 1 %} img-placeholder{% endif %}">
                         {% if noImage == 1 and allowAdEdit is defined and allowAdEdit %}
                             <span>No photo?</span>
-                            <a class="primary-btn-3 button thin-btn" href="{{ path('ad_edit', {'id': adId, 'scrollTo': 'image'})}}">Add photo</a>
+                            <a class="primary-btn-3 btn thin-btn" href="{{ path('ad_edit', {'id': adId, 'scrollTo': 'image'})}}">Add photo</a>
                         {% else %}
                             {% if noImage != 1 %}<a href="javascript:void(0);" onclick="showOriginalImage();">{% endif %}
                                 <img class="img-fluid" src="{{ imagePath }}" alt="no-image" />
