@@ -59,7 +59,7 @@
                             {% endif %}
                             <div class="mb40">
                                 <h1 class="s-h1 db-title mt30 mb20">{{'Business profile'|trans({}, 'frontend-my-profile')}}</h1>
-                                <h2 class="s-h2 d-none d-md-block">
+                                <h2 class="s-h2 db-sub-title d-none d-md-block">
                                     {{'You currently have <b>%package_name%.</b>'|trans({'%package_name%': (activeShopPackage and activeShopPackage.getPackage() ? activeShopPackage.getPackage().getTitle() : 'no package')}, 'frontend-my-profile')|raw}}
                                     {% if showUpgradeBtn %}
                                         <br />

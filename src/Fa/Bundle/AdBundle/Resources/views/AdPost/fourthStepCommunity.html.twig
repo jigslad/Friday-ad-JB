@@ -30,6 +30,7 @@
                         <h2 class="s-h2 col-md-24 col-lg-18 text-center subtitle paa-title">{{ 'Add some photos and a few more details if you want to.'|trans({}, 'frontend-paa-fourth-step') }}</h2>
                     </div>
 
+					<div class="big-wrapper">
                     {% if ad and ad.id %}
                         {% set categoryId = ad.category.id %}
                         {% set orderedFields = form.fourth_step_ordered_fields.vars.value|split(',') %}
@@ -49,6 +50,7 @@
                             </div>
                         {{ form_end(form) }}
                     {% endif %}
+                    </div>
                 </div>
                 {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {'paaBlockSlug': 'paa-community-fourth-step'}) }}
             </div>

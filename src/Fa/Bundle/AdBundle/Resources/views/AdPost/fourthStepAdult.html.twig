@@ -31,6 +31,7 @@
                     </div>
 
                     {% set hideRightSideTxt = '' %}
+                    <div class="big-wrapper">
                     {% if ad and ad.id %}
                         {% set categoryId = ad.category.id %}
                         {% set hideRightSideTxt = (ad.category.name == 'Adult Contacts' or  ad.category.name == 'Adult Industry Jobs'?'hide':'') %}
@@ -48,6 +49,7 @@
                             </div>
                         {{ form_end(form) }}
                     {% endif %}
+                    </div>
                 </div>
                     {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {'paaBlockSlug': 'paa-adult-fourth-step', 'hideRightSideTxt': hideRightSideTxt}) }}
 
