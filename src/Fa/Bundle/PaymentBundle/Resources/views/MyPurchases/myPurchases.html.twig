@@ -42,7 +42,7 @@
                             {% endif %}
 
                             {% set objMessage = fetch_repository('FaMessageBundle:Message').getLastConversionOfTwoUsersForAd(paymentDetail['ad_id'], paymentDetail['buyer_id'], paymentDetail['seller_id']) %}
-                            <div class="purchase-item own-item  mb20">
+                            <div class="purchase-item own-item">
                                 <div class="row" id="order_{{ paymentDetail['payment_id'] }}">
                                     <div class="col-lg-18">
                                         <b>{{'Order no.'|trans({}, 'frontend-my-purchases')}}</b> {{paymentDetail['cart_code']}}<br />
@@ -54,7 +54,7 @@
                                     </div>
                                 </div>
                                 <div class="row" id="order_detail_div_{{orderId}}" style="display: none;">
-                                    <div class="col-lg-18">
+                                    <div class="col-lg-18 mt20">
                                         <div class="purchase-disc">
                                             <b>{{'Order placed'|trans({}, 'frontend-my-purchases')}}</b> {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [paymentDetail['created_at'], container]) }}<br />
                                             <b>{{'Total price'|trans({}, 'frontend-my-purchases')}}</b> {{ format_currency(paymentDetail['amount']) }}<br />

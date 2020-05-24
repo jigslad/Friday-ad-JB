@@ -210,6 +210,7 @@
     .d-board-main{
         min-height: 100% !important;
     }
+    .mob-purc-t-space { margin-top: 20px; }
     .dash-block .off-canvas-wrap.move-right, .dash-block .off-canvas-wrap.move-left {
         min-height: 100%;
         -webkit-overflow-scrolling: touch;
@@ -955,6 +956,9 @@
 }
 .newsletter-col { border-bottom: solid 1px #D8D8D8; box-shadow: 0 1px 0 #fff;padding: 0 10px 10px 0;margin-bottom: 18px; }
 .newsletter-pref .search-type li { margin-bottom: 10px !important; }
+.collapse-body-content {
+    padding: 24px 0 20px;
+}
 
 @media only screen and (min-width: 320px) and (max-width: 640px) {
     .photos-box .inline-list > li {
@@ -2482,6 +2486,10 @@ textarea[rows] {
 }
 .myacc-address-box .xs-btn-2:first-of-type {
     margin: 0 0 0 0;
+}
+.favourites-card {
+	display: grid !important;
+	align-items: stretch !important;
 }
 .favourites-card .similar-placeholder {
 	max-height: 100%;
