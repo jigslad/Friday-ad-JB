@@ -1535,6 +1535,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
 .reply-msg-heading .report:hover, .reply-msg-heading .report:focus {
     background-color: $secondary-color !important; border-color: $secondary-color !important;
 }
+.reply-msg-heading h3 { color: $common-text-color !important; }
 .back-link { color: $secondary-color !important; }
 .green-text, .reply-msg-heading h3 a.green-text {
     color: $secondary-color;
@@ -2115,7 +2116,12 @@ footer p { color:$grey-color; }
     font-family: "Poppins-SemiBold";
 }
 .form-control:focus { border-color: $accent1-dark-color !important; }
-
+.my-msg-heading span {     color: #ACB0B7; }
+.my-msg-box {
+    background: #F8F8F8;
+    border: 1px solid #CBD5D9;
+}
+.db-ins { color: #ACB0B7 !important; }
 @media only screen and (max-width: 640px) {
   .ad-list-block .reset-search{
     border-bottom: 1px solid $form-border-color;

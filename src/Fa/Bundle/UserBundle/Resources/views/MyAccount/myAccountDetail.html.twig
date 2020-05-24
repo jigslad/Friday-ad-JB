@@ -76,10 +76,11 @@
                 {% if userDetailForm.new_password is defined %}
                     {{ form_row(userDetailForm.new_password, {'attr': {'class': 'white-field'}}) }}
                     <div class="label-inline">
-                        <ul class="custom-control custom-checkbox search-type">
-                            <li>
+                        <ul class="search-type">
+                            <li class="white-check">
                                 {% if userDetailForm.show_password is defined %}
-                                    {{ form_row(userDetailForm.show_password,{'attr':{'class': 'custom-control-input'},'label_attr': {'class': 'custom-control-label'} }) }}
+                                    {{ form_widget(userDetailForm.show_password,{'attr':{'class': 'checkbox'}}) }}
+                                    <label for="{{ userDetailForm.show_password.vars.id }}"></label>{{ userDetailForm.show_password.vars.label }}
                                 {% endif %}
                             </li>
                         </ul>
