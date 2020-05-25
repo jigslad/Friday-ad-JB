@@ -6,7 +6,7 @@
 .upgrade-modal .input-block { width: 30%; margin-right: 10px; }
 .featured-upgrade-border { border: 1px dashed #999 !important; }
 #contactSellerModal .receive-alert li label, #profilePageContactUserModal .receive-alert li label { line-height:20px !important;padding-top:2px !important}
-.modal-paypal-box{background:#FFC439 url('/Frontend/images/payment/paypal-payment.png') no-repeat center center;height:37px;margin-bottom: 3px;border:solid 1px #DC911D;border-radius:2px;cursor:pointer}
+.modal-paypal-box{background:transparent url('/Frontend/images/payment/paypal-payment.png') no-repeat center center;height:60px;margin-bottom: 20px;border:solid 1px #82C249;border-radius:4px;cursor:pointer}
 .upgrade-payments #AmazonPayButton { height: 46px;cursor: pointer;text-align:center;}
 .upgrade-payments #AmazonPayButton img { width: 100%; }
 .mt0 { margin-top:0px !important}
@@ -84,6 +84,78 @@
     text-align: center;
     vertical-align: top;
 }
+.pkg-subtitle {
+    background: #212527;
+    border-bottom: 1px solid #000;
+    box-shadow: 0 1px 0 #212527;
+    position: relative;
+    height: 59px;
+    line-height: 18px;
+    text-align: center;
+    color: #fff;
+    font-size: 18px;
+    margin: -1px;
+}
+//horizontal radio
+.horizontal-radio {
+    display: block;
+    position: relative;
+    padding-left: 0px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    text-align: center;
+    width: calc(100% - 0em);
+    height: 100%;
+}
+/* Hide the browser's default radio button */
+.horizontal-radio input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+/* Create a custom radio button */
+.horizontal-radio .checkmark {
+    position: absolute;
+    top: 0;
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+    left: calc(50% - 17%);
+    left: -webkit-calc(50% - 17%);
+}
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.horizontal-radio .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+/* Show the indicator (dot/circle) when checked */
+.horizontal-radio input:checked ~ .checkmark:after {
+    display: block;
+}
+/* Style the indicator (dot/circle) */
+.horizontal-radio .checkmark:after {
+    top: 7px;
+    left: 7px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+.horizontal-radio .label-text {
+    height: 100%;
+    position: relative;
+    margin-top: 30px;
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+    line-height: 16px;
+    display: inline-block;
+}
 @media only screen and (min-width: 1152px) {
 	.pkg-subtitle {
 	    height: auto;
@@ -91,16 +163,4 @@
 	    min-height: 60px;
 	    padding: 20px 10px 10px;
 	}
-}
-.pkg-subtitle {
-    background: #212527;
-    border-bottom: 1px solid #000;
-    box-shadow: 0 1px 0 #212527;
-    position: relative;
-    height: 59px;
-    line-height: 59px;
-    text-align: center;
-    color: #fff;
-    font-size: 18px;
-    margin: -1px;
 }

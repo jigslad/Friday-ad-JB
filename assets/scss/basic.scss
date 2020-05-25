@@ -1469,7 +1469,14 @@ b, strong {
     overflow: hidden;
     white-space: nowrap
 }
-
+.visa {
+    background: url('/Frontend/images/payment/visa.png') no-repeat 0 0 / 67px 42px;
+    display: inline-block;
+    width: 67px;
+    height: 42px;
+    vertical-align: middle;
+    margin-right: 15px;
+}
 @media (min-width: 760px) and (max-width: 1151px) {
 	.home-list-location-box .link-list, .list-location-box .link-list, .details-list-location-box .link-list {
             column-count: unset;
