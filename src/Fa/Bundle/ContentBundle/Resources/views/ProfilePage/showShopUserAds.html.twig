@@ -41,10 +41,10 @@
                     <div class="col-md-18">
                         <div class="profile-list-title">
                             <div class="sortby-area row">
-                                <div class="col-md-12 col-lg-12 col-sm-12 pull-left">
+                                <div class="col-md-12 col-lg-12 col-sm-12 pull-left pad-none">
                                     <h2 class="pull-left profile-list-title">{{'%resultCount% results found'|trans({'%resultCount%': pagination.getNbResults()}, 'frontend-search-result')}}</h2>
                                 </div>
-                                <div class="col-md-12 col-lg-12 col-sm-12 pull-right">
+                                <div class="col-md-12 col-lg-12 col-sm-12 pull-right  pad-none">
                                     {% if pagination.getNbResults() %}
                                         {% set sortFields = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSortingArray', [fetch_container_instance(), null, searchParams]) %}
                                         <div class="sortby-fields pull-right">
@@ -52,7 +52,7 @@
                                                 <div class="s-by-filters">
                                                     {% if not app.request.get('map')%}
                                                         <label>{{'Sort by'|trans({}, 'frontend-search-result')}}</label>
-                                                        <div class="ad-category-list white-select">
+                                                        <div class="ad-category-list white-select mr0">
                                                             <select class="select-control" name="sort_by" id="sort_by">
                                                                 {% for sortFieldKey, sortFieldName in sortFields %}
                                                                     <option value="{{sortFieldKey}}" {% if app.request.get('sort_field')~'|'~app.request.get('sort_ord') == sortFieldKey %} selected="selected" {% endif %}>{{sortFieldName}}</option>
@@ -102,7 +102,7 @@
                                 <a data-dismiss="alert" class="close">&times;</a>
                             </div>
                         {% endif %}
-                        <div class="pagination-centered">
+                        <div class="pagination-centered justify-content-center d-flex">
                             {{ include('FaFrontendBundle:Default:googlePager.html.twig', {'pagination': pagination, 'addToEndPage': 1, 'seoPager': true}) }}
                         </div>
                     </div>

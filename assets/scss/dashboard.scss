@@ -2173,7 +2173,22 @@ textarea[rows] {
     height: 40px;
     text-indent: -9999px;
 }
-
+.other-profile.shop-search-results .medi.listing{
+	margin-bottom: 20px !important;
+}
+.other-profile.shop-search-results .profile-list-title .s-by-filters label {
+	width: 80px !important;
+}
+.other-profile.shop-search-results .distance-search .select2-search-choice-close {
+	text-indent: -9999px !important;
+}
+.other-profile.shop-search-results .keyword-search input {
+	    border-radius: 4px 0px 0px 4px !important;
+ }
+.other-profile.shop-search-results .keyword-search .btn {
+ 	 border-radius: 0px 4px 4px 0px  !important;
+ }
+ 
 @media only screen and (min-width: 1152px) {
 	.shop-search-results .tablet-refine-btn {
 	    display: none !important;
