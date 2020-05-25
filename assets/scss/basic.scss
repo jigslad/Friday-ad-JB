@@ -1434,6 +1434,19 @@ b, strong {
 .custom-modal .modal-title {
     padding: 10px 10px 10px 15px !important;
 }
+.cover-img-thumbs li {
+	height: 55px;
+}
+.change-banner-btn {
+	color: #FFFFFF !important;
+}
+.delete-msg-caption:hover {
+	visibility: visible !important;
+	opacity: 1 !important;
+}
+.custom-modal .modal-body .btn {
+    margin-top: 0 !important;
+}
 
 @media (min-width: 760px) and (max-width: 1151px) {
 	.home-list-location-box .link-list, .list-location-box .link-list, .details-list-location-box .link-list {
@@ -1579,7 +1592,7 @@ column-count: unset;
 	    padding: 0 10px 40px;
 	    margin-bottom: 100px;
 	}
-	adult-modal-content h3 {
+	.adult-modal-content h3 {
 		display: grid;
 	}
 	.adult-modal h2 {
@@ -1617,6 +1630,12 @@ column-count: unset;
   {
     display: inline-block;
   }
+  .bz-profile-fields .field-530, .bz-profile-fields input.field-530, .design-your-profile .field-530, .design-your-profile input.field-530 {
+	    width: auto !important;
+	}
+	.field-530 input {
+		padding-right: 45px !important;
+	}
 }
 @media (min-width: 641px) and (max-width: 759px) {
   .custom-modal .modal-md {

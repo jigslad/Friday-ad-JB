@@ -88,7 +88,7 @@
                                         </div>
                                     </a>
                                     <div id="panel1b" class="collapse collapse-body-content {% if not form.vars.valid or app.session.flashbag.has('profile_success') %}active{% endif %}">
-                                        <div class="small-wrapper">
+                                        <div class="">
                                             {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
                                                 {{ include('FaUserBundle:MyAccount:myAccountMessage.html.twig', {'msgName': 'profile_success'}) }}
                                                 <div class="bz-profile-fields">
@@ -166,7 +166,7 @@
 
                                                     <div class="mt30">
                                                         {{ form_label(form.company_address) }}
-                                                        <div class="field-530 company-address">
+                                                        <div class="field-530 company-address position-relative">
                                                             <span></span>
                                                             {{ form_widget(form.company_address, {'attr': {'class': 'white-field', 'placeholder': 'eg. King House 101 Sunshine Road, Burgess Hill, West Sussesx, NH22 8LN'|trans({}, 'frontend-my-profile')}}) }}
                                                             {{ form_errors(form.company_address) }}
@@ -175,12 +175,12 @@
 
                                                     <div class="mt30 profile-telephone">
                                                         <label>{{'Telephone(s)'|trans({}, 'frontend-my-profile')}}</label>
-                                                        <div class="field-300 telephone-icon">
+                                                        <div class="field-300 telephone-icon position-relative">
                                                             <span></span>
                                                             {{ form_widget(form.phone1, {'attr': {'class': 'white-field', 'placeholder': 'Telephone 1'|trans({}, 'frontend-my-profile')}}) }}
                                                             {{ form_errors(form.phone1) }}
                                                         </div>
-                                                        <div class="field-300 telephone-icon">
+                                                        <div class="field-300 telephone-icon position-relative">
                                                             <span></span>
                                                             {{ form_widget(form.phone2, {'attr': {'class': 'white-field', 'placeholder': 'Telephone 2'|trans({}, 'frontend-my-profile')}}) }}
                                                             {{ form_errors(form.phone2) }}
@@ -189,7 +189,7 @@
 
                                                     <div class="mt30">
                                                         {{ form_label(form.website_link) }}
-                                                        <div class="field-530 company-website">
+                                                        <div class="field-530 company-website position-relative">
                                                             <span></span>
                                                             {{ form_widget(form.website_link, {'attr': {'class': 'white-field', 'placeholder': 'eg. https://www.yourwebsitename.co.uk'|trans({}, 'frontend-my-profile')}}) }}
                                                             {{ form_errors(form.website_link) }}

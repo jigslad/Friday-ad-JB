@@ -1092,6 +1092,10 @@ footer {
 }
 .profile-logo-ins .f-dropdown li a {
     border-bottom: 1px solid $grey-color;
+    color: #212527 !important;
+}
+.profile-logo-ins .f-dropdown li:hover, .profile-logo-ins .f-dropdown li:focus {
+    background: #EAEFF0;
 }
 .primary-btn-1.disabled, .btn-disabled {
     background: $light-grey-color !important;
@@ -2122,6 +2126,10 @@ footer p { color:$grey-color; }
     border: 1px solid #CBD5D9;
 }
 .db-ins { color: #ACB0B7 !important; }
+.custom-card:hover, .custom-card:focus {
+	border-color: #82C249 !important;
+}
+
 @media only screen and (max-width: 640px) {
   .ad-list-block .reset-search{
     border-bottom: 1px solid $form-border-color;
