@@ -39,7 +39,7 @@
             {% if userLogo %}
                 {{userLogo|raw}}
             {% else %}
-                <img class="pvt-no-img rounded-circle img-fluid" src="{{ asset_url('fafrontend/images/user-icon.svg') }}" alt="" />
+                <img class="pvt-no-img img-fluid" src="{{ asset_url('fafrontend/images/user-icon.svg') }}" alt="" />
             {% endif %}
 
         </div>
@@ -47,11 +47,12 @@
             <div class="my-msg-heading">
                 <h3  class="s-h3 mb5">{{userDisplayName}}</h3>
                 <div class="list-created-hours">
-                    <span class="{% if (arrayMessage['has_attachments'] > 0) %}attach-icon{% endif %}">{{arrayMessage['created_at']|time_ago_in_words}}</span>
+                    
                     <div class="delete-msg-icon d-none d-md-block">
                         <div class="delete-msg-caption">Delete</div>
                         <a href="javascript:void(0);" class="delete-msg" onclick="removeMessageConfirmation('{{arrayMessage['id']}}', '{{app.user.getId()}}', '{{arrayMessage['message_ad_id']}}');">Delete</a>
                     </div>
+                    <span class="{% if (arrayMessage['has_attachments'] > 0) %}attach-icon{% endif %}">{{arrayMessage['created_at']|time_ago_in_words}}</span>
                 </div>
             </div>
             <h5 class="my-msg-title mb5">

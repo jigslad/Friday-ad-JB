@@ -13,7 +13,15 @@
 .ui-front.ui-selectmenu-open {
     z-index: 10000 !important;
 }
+.paa-pkg-bg {
+    background: #EAEFF0;
+    border: 1px solid #CBD5D9;
+    border-radius: 0 0 2px 2px;
+    margin-bottom: 13px;
+    position: relative;
+}
 .pkg-selection {
+    background: rgba(0, 0, 0, 0.155);
     display: block;
     width: 100%;
     height: 100%;
@@ -25,39 +33,74 @@
     white-space: nowrap;
     opacity: 0;
     z-index: 1;
-    &:hover {
-      opacity: 1;
-    }
-  }
-  .pkg-title {
+}
+.pkg-title {
     height: 40px;
     line-height: 40px;
     text-align: center;
     text-transform: uppercase;
-    color: #FFFFFF;
+    color: #fff;
     margin: -1px;
-  }
-  .pkg-subtitle {
-    height: 60px;
-    line-height: normal;
-    min-height: 60px;
-    position: relative;
-    text-align: center;
-    color: #FFFFFF;
-    font-size: 16px;
-    margin: -1px;
-  }
-  .pkg-pricing {
+}
+
+.pkg-green-head {
+    background: #82C249;
+}
+.pkg-pricing {
+    background: #212527;
     padding: 0 20px 4px 20px;
     margin: -1px;
-  }
-  .pkg-pricing-wrap {
+}
+.pkg-pricing-wrap {
     min-height: 150px;
-  }
-.paa-pkg-bg {
-    background: #EAEFF0;
-    border: 1px solid #CBD5D9;
-    border-radius: 0 0 2px 2px;
-    margin-bottom: 13px;
+}
+.pkg-pricing h4 {
+    color: #82C249 !important;
+    font-size: 36px !important;
+    line-height: 46px !important;
+}
+.pkg-pricing-wrap h4 {
+    color: #82C249 !important;
+}
+.print-pkg h4 {
+    padding: 3px 0 10px;
+}
+.pkg-pricing h4 {
+    text-align: center;
+    text-transform: uppercase;
+}
+.weekly-pkg {
+    margin-bottom: 12px;
+    text-align: center;
     position: relative;
+    z-index: 2;
+}
+.weekly-pkg .pkg-box {
+    width: 32%;
+    margin: 0;
+}
+.weekly-pkg .pkg-box {
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+}
+@media only screen and (min-width: 1152px) {
+	.pkg-subtitle {
+	    height: auto;
+	    line-height: normal;
+	    min-height: 60px;
+	    padding: 20px 10px 10px;
+	}
+}
+.pkg-subtitle {
+    background: #212527;
+    border-bottom: 1px solid #000;
+    box-shadow: 0 1px 0 #212527;
+    position: relative;
+    height: 59px;
+    line-height: 59px;
+    text-align: center;
+    color: #fff;
+    font-size: 18px;
+    margin: -1px;
 }

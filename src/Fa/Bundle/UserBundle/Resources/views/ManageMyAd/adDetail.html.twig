@@ -197,36 +197,40 @@
         </div>
 
         <div class="d-col-4">
-            <div class="float-right h-width ">
-                <a class="secondary-btn-2 btn thin-btn f-width mb20" href="{{ path('ad_edit', {'id': adId})}}">{{'Edit'|trans({}, 'frontend-manage-my-ad')}}</a>
-                {% if ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_IN_MODERATION_ID') %}
-                <a class="secondary-btn-2 btn thin-btn f-width" href="javascript:void(0);" onclick="removeAdConfirmation('{{adId}}', '{{ad.status_id}}');">{{'Remove'|trans({}, 'frontend-manage-my-ad')}}</a>
-                {% endif %}
+            <div class="float-right f-width  ">
+            	<div class="col-md-24 pad-none clear-both">
+                	<a class="secondary-btn-2 btn thin-btn h-width mb10 float-right" href="{{ path('ad_edit', {'id': adId})}}">{{'Edit'|trans({}, 'frontend-manage-my-ad')}}</a>
+                </div>
+                    {% if ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_IN_MODERATION_ID') %}
+                <div class="col-md-24 pad-none clear-both">
+                	<a class="secondary-btn-2 btn thin-btn h-width mb10 float-right" href="javascript:void(0);" onclick="removeAdConfirmation('{{adId}}', '{{ad.status_id}}');">{{'Remove'|trans({}, 'frontend-manage-my-ad')}}</a>
+                </div>
+                    {% endif %}
                 
-                <div class="group-m-btn clearfix">
+                <div class="col-md-24 pad-none clear-both">
                     {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') or ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
-                        <a class="primary-btn-1 thin-btn btn active float-right upgrade-btn" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'repost'}) }}">{{'Repost Ad'|trans({}, 'frontend-manage-my-ad')}}</a>
+                        <a class="secondary-btn-1 btn-block thin-btn btn active float-right upgrade-btn mb10 h-width" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'repost'}) }}">{{'Repost Ad'|trans({}, 'frontend-manage-my-ad')}}</a>
                     {% endif %}
                     {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') and ((adPackageArray[adId] is defined and adPackageArray[adId]['price'] == 0) or adPackageArray[adId] is not defined) %}
                         {% if ((userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) and upgradePackagesCount > 1) or (userRoleId != constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
-                            <a class="primary-btn-1 thin-btn btn active float-right upgrade-btn float-right upgrade-btn" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'promote'}) }}">{{'Upgrade'|trans({}, 'frontend-manage-my-ad')}}</a>
+                            <a class="secondary-btn-1 btn-block thin-btn btn active float-right upgrade-btn mb10 h-width" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'promote'}) }}">{{'Upgrade'|trans({}, 'frontend-manage-my-ad')}}</a>
                         {% endif %}
                     {% endif %}
 
                     {% if ((isBoostEnabled is defined and isBoostEnabled==1) and (boostAdRemaining is defined and boostAdRemaining > 0) and (currentRoute == 'manage_my_ads_active'  or  currentRoute == 'manage_my_ads_boosted')and (userBusinessCategory is defined and userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive) %}
-                        <a id="boost_ad_id_{{ad['id']}}" class="secondary-btn-2 thin-btn btn boost_your_ad not_boosted_ad package_boosted_ad"><span>Boost</span></a>
+                        <a id="boost_ad_id_{{ad['id']}}" class="secondary-btn-2 btn-block thin-btn btn active mb10 h-width float-right boost_your_ad not_boosted_ad package_boosted_ad"><span>Boost</span></a>
                     {% elseif ((isBoostEnabled is defined and isBoostEnabled==1) and (boostAdRemaining is defined and boostAdRemaining > 0) and  currentRoute=='ajax_manage_my_ads_get_status' and (userBusinessCategory is defined and userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive) %}
-                        <a id="boost_ad_id_{{ad['id']}}" class="secondary-btn-2 thin-btn btn boost_your_ad not_boosted_ad package_boosted_ad ajaxboost_your_ad"><span>Boost</span></a>
+                        <a id="boost_ad_id_{{ad['id']}}" class="secondary-btn-2 btn-block thin-btn btn active  mb10 h-width float-right boost_your_ad not_boosted_ad package_boosted_ad ajaxboost_your_ad"><span>Boost</span></a>
                     {% endif %}
                 </div>
 
                 {% if isBoostEnabled is defined and isBoostEnabled==1 and ad.boosted_at is defined and ad.is_boosted==1 %}
-                    <div class="list-boosted-hours list-boosted-hours-desk-tab d-none d-md-block">
+                    <div class="clear-both list-boosted-hours list-boosted-hours-desk-tab d-none d-md-block mb10">
                     {{ 'Boosted'|trans({}, 'frontend-manage-my-ad') }} {{ (ad.boosted_at|time_ago_in_words) }}
                 </div>
                 {% endif %}
                 {% if ad['status_id'] == adStatusLive %}
-                    <div class="clearfix dtl-social-icons-desk-tab dtl-social-icons manage-list-social-icons">
+                    <div class="clear-both  dtl-social-icons-desk-tab dtl-social-icons manage-list-social-icons">
                         <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/facebook/offer?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0','Facebook');" href="javascript:void(0);" title="{{'Facebook'|trans({}, 'frontend-show-ad')}}" class="dtl-fb" id="dtl-fb-id"></a>
                         <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/twitter/offer?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0', 'Twitter');" href="javascript:void(0);" title="{{'Twitter'|trans({}, 'frontend-show-ad')}}" class="dtl-twi" id="dtl-twi-id"></a>
                         <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/google_plusone_share/offer?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0', 'GooglePlus');" href="javascript:void(0);" title="{{'Google Plus'|trans({}, 'frontend-show-ad')}}" class="dtl-gpl" id="dtl-gpl-id"></a>
