@@ -329,7 +329,10 @@
     line-height: 40px;
     speak: none;
     -webkit-font-smoothing: antialiased;
-    content: "\f054";
+    background: url('/Frontend/images/icons/next-arrow.png') no-repeat 95% 50%;
+    width: 24px;
+    height: 40px;
+    content: "";
 }
 
 .dl-menuwrapper .dl-menu {
@@ -865,7 +868,19 @@ All this is done for any sub-level being entered.
         background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns%3D"http%3A//www.w3.org/2000/svg" version%3D"1.1" x%3D"0" y%3D"0" width%3D"23" height%3D"23" viewBox%3D"-388 224 23 23" xml%3Aspace%3D"preserve"%3E%3Cstyle type%3D"text/css"%3E%0D%0A%09.st0%7Bfill%3A%23313133%3B%7D%0D%0A%3C/style%3E%3Ctitle%3EMenu icon%3C/title%3E%3Cdesc%3ECreated with Sketch.%3C/desc%3E%3Cg transform%3D"translate(-10.000000%2C -19.000000)"%3E%3Cg transform%3D"translate(-561.000000%2C -36.000000)"%3E%3Cg transform%3D"translate(571.000000%2C 55.000000)"%3E%3Crect x%3D"-388" y%3D"224" class%3D"st0" width%3D"23" height%3D"4.6"/%3E%3Crect x%3D"-388" y%3D"233.2" class%3D"st0" width%3D"23" height%3D"4.6"/%3E%3Crect x%3D"-388" y%3D"242.4" class%3D"st0" width%3D"23" height%3D"4.6"/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
     }
     .mobile-navbar {
-        dispaly: block;
+        display: block;
+    }
+    .dl-menu .dl-menuwrapper .dl-trigger, .dl-menu li .dl-back a {
+        background: #4D5052 !important;
+        height: 40px !important;
+        color: #fff !important;
+        border-radius: 0px !important;
+    }
+    .dl-menu .dlmain-cat {
+        padding-left: 50px !important;
+    }
+    .dl-menu .has-dropdown .remove-arrow-f-child span:last-child {
+        color: #ACB0B7 !important;
     }
 
 }

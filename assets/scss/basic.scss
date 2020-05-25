@@ -1490,13 +1490,14 @@ b, strong {
 }
 @media (min-width: 1152px) {
 	.home-list-location-box .link-list, .list-location-box .link-list, .details-list-location-box .link-list {
-column-count: unset;
-		display: grid;
-	    grid-gap: 5px;
-	    grid-template-columns: repeat(auto-fit, minmax(23%, 1fr));
-	    grid-auto-rows: 25px;
-	    grid-auto-flow: row dense;
-	    padding: 0;
+    column-count: unset;
+    display: grid;
+    grid-gap: 0;
+    grid-template-columns: repeat(auto-fit, minmax(30%, 1fr));
+    grid-auto-rows: auto;
+    grid-auto-flow: row dense;
+    padding: 0;
+    grid-column-gap: 15px;
 	}
 } 
 
