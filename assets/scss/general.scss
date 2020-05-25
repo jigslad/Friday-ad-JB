@@ -2171,6 +2171,14 @@ footer p { color:$grey-color; }
 .dl-submenu .active-subcat span:last-child{
 	color: #82C249 !important
 }
+.green-back-link:hover, .green-back-link:focus, .green-back-link:active {
+	font-family: "Poppins-Bold" !important;
+	color: #82C249 !important;
+}
+.top-links .notification-link a span, .top-links .msg-link a span, .top-links .basket-icon span {
+	color: #82C249 !important;
+}
+
 @media only screen and (max-width: 640px) {
   .ad-list-block .reset-search{
     border-bottom: 1px solid $form-border-color;
@@ -2197,6 +2205,9 @@ footer p { color:$grey-color; }
     }
     .mobile-menu-items li a, .login-menu li a {
         color: $white;
+    }
+    .login-menu li .notification-digit {
+      color: #82C249 !important;
     }
 }
 @media screen and (min-width: 992px) {

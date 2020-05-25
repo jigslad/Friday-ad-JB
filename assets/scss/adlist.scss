@@ -200,7 +200,6 @@
     &::after {
       right: 100%;
       top: 50%;
-      border: solid transparent;
       content: " ";
       height: 0;
       width: 0;
@@ -208,6 +207,8 @@
       pointer-events: none;
       border-width: 7px;
       margin-top: -12px;
+      border-color: rgba(164, 216, 22, 0) !important;
+	    border-right-color: #A4D816 !important;
     }
   }
   .alert-btn-wrapper .button, .alert-btn-wrapper .btn {

@@ -532,7 +532,7 @@ All this is done for any sub-level being entered.
     line-height: 40px;
     speak: none;
     -webkit-font-smoothing: antialiased;
-    content: "\f054";
+    content: "" !important;
 }
 .dl-menu .remove-arrow-f-child::after {
     content: "" !important;
@@ -870,7 +870,7 @@ All this is done for any sub-level being entered.
     .mobile-navbar {
         display: block;
     }
-    .dl-menu .dl-menuwrapper .dl-trigger, .dl-menu li .dl-back a {
+    .dl-menuwrapper .dl-trigger, .dl-menu li .dl-back a {
         background: #4D5052 !important;
         height: 40px !important;
         color: #fff !important;
