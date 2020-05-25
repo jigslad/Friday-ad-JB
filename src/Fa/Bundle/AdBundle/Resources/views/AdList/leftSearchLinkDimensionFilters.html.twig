@@ -53,7 +53,7 @@
             </ul>
             <div class="see-more text-right clearfix">
                 {% if showSeeMore %}
-                    <a href="javascript:void(0)" {% if getNoFollowLink  %}rel="nofollow"{% endif %} onClick="loadDimensionAllChoicesModal('{{ dimensionId }}', '{{ dimensionName }}', '{{filter}}', '{{ dimensionSearchType }}', '{{array_serialize(searchParams)|escape('js')}}')"><b>{{ 'See more'|trans({}, 'frontend-left-search') }}</b></a>
+                    <a href="javascript:void(0)" {% if getNoFollowLink  %}rel="nofollow"{% endif %} onClick="loadDimensionAllChoicesModal('{{ dimensionId }}', '{{ dimensionName }}', '{{filter}}', '{{ dimensionSearchType }}', '{{array_serialize(searchParams)|escape('js')}}')">{{ 'See more'|trans({}, 'frontend-left-search') }}</a>
                 {% endif %}
                 {% if filter == 'item_motors__make_id' %}
                     {% set queryParams  = dimensionParams|merge({(filter): '', 'item_motors__model_id': ''}) %}

@@ -87,7 +87,7 @@
             </ul>
             <div class="see-more text-right clearfix">
                 {% if showSeeMore %}
-                    <a href="javascript:void(0)" rel="nofollow" onClick="loadDimensionAllChoicesModal('{{ dimensionId }}', '{{ dimensionName }}', '{{filter}}', '{{ dimensionSearchType }}', '{{array_serialize(searchParams)|escape('js')}}')"><b>{{ 'See more'|trans({}, 'frontend-left-search') }}</b></a>
+                    <a href="javascript:void(0)" rel="nofollow" onClick="loadDimensionAllChoicesModal('{{ dimensionId }}', '{{ dimensionName }}', '{{filter}}', '{{ dimensionSearchType }}', '{{array_serialize(searchParams)|escape('js')}}')">{{ 'See more'|trans({}, 'frontend-left-search') }}</a>
                 {% endif %}
                 <a href="javascript:void(0)" rel="nofollow" class="right clear_filter" id="{{ filter }}_clear">{{ 'Clear'|trans({}, 'frontend-left-search') }}</a>
             </div>

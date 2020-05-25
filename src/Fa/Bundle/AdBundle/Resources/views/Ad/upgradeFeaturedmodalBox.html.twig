@@ -199,9 +199,9 @@
             <ul id="payment_method_id" class="payment-card-option-block ml0">
                 {% for choice in form.payment_method.vars.choices %}
                 	<li>
-                    	<div class="d-flex mt10 mb10 upgrade-modal-choice">
-                            <span class="grey-radio {% if form.payment_method.vars.data == choice.value %}checked{% endif %} "><input onclick="return showHideCardDetail();" class="checkbox" type="radio" value="{{ choice.value }}" {% if form.payment_method.vars.data == choice.value %}checked="checked"{% endif %} name="{{ form.payment_method.vars.full_name }}" id="{{ form.payment_method.vars.id }}_{{ choice.value }}" />
-                            <label for="{{ form.payment_method.vars.id }}_{{ choice.value }}"></label>{{ choice.label|raw }}</span>
+                    	<div class="d-flex mt10 mb10">
+                            <span class="grey-radio d-inline-flex upgrade-modal-choice {% if form.payment_method.vars.data == choice.value %}checked{% endif %} "><input onclick="return showHideCardDetail();" class="checkbox" type="radio" value="{{ choice.value }}" {% if form.payment_method.vars.data == choice.value %}checked="checked"{% endif %} name="{{ form.payment_method.vars.full_name }}" id="{{ form.payment_method.vars.id }}_{{ choice.value }}" />
+                            <label class="pt15" for="{{ form.payment_method.vars.id }}_{{ choice.value }}"></label>{{ choice.label|raw }}</span>
                         </div>
                 	</li>
                 {% endfor %}
@@ -213,9 +213,10 @@
 	</div>
 	<div id="card_detail_save" class="small-wrapper">
             <div class="payment-row">
-                <div class="label-inline white-checkbox">
-                    {{ form_widget(form.is_save_credit_card) }}
-                    {{ form_label(form.is_save_credit_card) }}
+                <div class="label-inline grey-check">
+                    {{ form_widget(form.is_save_credit_card, {'attr': {'class': 'checkbox'}}) }}
+                    <label for="{{ form_label(form.is_save_credit_card.vars.id) }}"></label>
+                    {{ form_label(form.is_save_credit_card.vars.label) }}
                     {{ form_errors(form.is_save_credit_card) }}
                 </div>
             </div>

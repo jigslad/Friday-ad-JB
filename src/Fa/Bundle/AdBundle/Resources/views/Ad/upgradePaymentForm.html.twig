@@ -16,7 +16,7 @@
                 <div class="payment-row">
                     {{ form_label(form.zip) }}
                     <div class="postcode clearfix d-flex">
-                        <div class="col-15 pr0">{{ form_widget(form.zip) }}</div>
+                        <div class="col-15 pad-none">{{ form_widget(form.zip) }}</div>
                         <div class="col-9 pr0"><button type="button" class="btn secondary-btn-1 right btn-block" onclick="return getUserAddress();">{{'Find address'|trans({},'frontend-cyber-source')}}</button></div>
                     </div>
                     <small id="zip_error_div" class="error" style="display:none"></small>
