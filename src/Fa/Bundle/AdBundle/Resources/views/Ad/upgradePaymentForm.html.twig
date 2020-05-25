@@ -15,9 +15,9 @@
                 
                 <div class="payment-row">
                     {{ form_label(form.zip) }}
-                    <div class="postcode clearfix">
-                        {{ form_widget(form.zip) }}
-                        <button type="button" class="btn secondary-btn-1 right" onclick="return getUserAddress();">{{'Find address'|trans({},'frontend-cyber-source')}}</button>
+                    <div class="postcode clearfix d-flex">
+                        <div class="col-15 pad-none">{{ form_widget(form.zip) }}</div>
+                        <div class="col-9 pr0"><button type="button" class="btn secondary-btn-1 right btn-block" onclick="return getUserAddress();">{{'Find address'|trans({},'frontend-cyber-source')}}</button></div>
                     </div>
                     <small id="zip_error_div" class="error" style="display:none"></small>
                     <span id="form_zip_error">{{ form_errors(form.zip) }}</span>
@@ -45,8 +45,8 @@
             
             
             <div class="small-wrapper">
-                <h3 class="text-center mb0">Card details</h3>
-                <div class="payment-cards mt20">&nbsp;</div>
+                <h3 class="text-center mb20 mb20">Card details</h3>
+                <div class="payment-cards m-auto">&nbsp;</div>
 
                 <div class="payment-row">
                     {{ form_label(form.card_holder_name) }}
@@ -62,9 +62,11 @@
                 
                 <div class="payment-row white-select">
                     {{ form_label(form.card_expity_month) }}
-                    <div class="expiry-date" style="padding-top: 10px;">
-                        {{ form_widget(form.card_expity_month, {'attr': {'class': 'select-control'}}) }}
-                        {{ form_widget(form.card_expity_year, {'attr': {'class': 'select-control'}}) }}
+                    <div class="expiry-date d-flex mb20" >
+                        <div class="col-6 pl0">{{ form_widget(form.card_expity_month, {'attr': {'class': 'select-control'}}) }}</div>
+                        <div class="col-6 pl0">
+                         {{ form_widget(form.card_expity_year, {'attr': {'class': 'select-control'}}) }}
+                         </div>
                     </div>
                     {{ form_errors(form.card_expity_month) }}
                     {{ form_errors(form.card_expity_year) }}

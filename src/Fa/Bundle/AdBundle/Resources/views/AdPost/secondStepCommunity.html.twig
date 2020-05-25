@@ -64,7 +64,7 @@
 {% block scriptbottom %}
     {{ include('FaAdBundle:AdPost:secondStepJs.html.twig', {'categoryName' : 'community'}) }}
 
-    {{ include('FaContentBundle:Default:tinyMceJs.html.twig', {'plugins' : 'autoresize', 'autoresizeOptions': 'autoresize_bottom_margin: 0, autoresize_min_height: 100, autoresize_max_height: 500,', 'toolbar1' : 'bold italic underline, bullist numlist', 'toolbar2' : 'false', 'menubar' : 'false', 'statusbar': 'true', 'charCounter' : 'true' }) }}
+    {{ include('FaContentBundle:Default:tinyMceJs.html.twig', {'plugins' : 'autoresize', 'autoresizeOptions': 'autoresize_bottom_margin: 0, autoresize_min_height: 100, autoresize_max_height: 500,', 'toolbar1' : 'bold italic underline, bullist numlist', 'toolbar2' : 'false', 'menubar' : 'false', 'statusbar': 'false', 'charCounter' : 'true' }) }}
 
     {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_second_step_community_event_start_time', 'placeHolder': ((attribute(form, 'event_start_time').vars.attr.placeholder is defined and attribute(form, 'event_start_time').vars.attr.placeholder is not null) ? attribute(form, 'event_start_time').vars.attr.placeholder : 'Add a time'|trans({}, 'frontend-paa-second-step')), 'route' : 'ad_post_ajax_event_time_search'}) }}
 

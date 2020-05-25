@@ -26,7 +26,7 @@
         {% if isShopPage is defined and isShopPage %}
             <dd class="accordion-navigation keep-shown">
                 <a href="#" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Keyword search'|trans({}, 'frontend-left-search')}}</h5></a>
-                <div class="content active keyword-search">
+                <div class="content active keyword-search d-inline-flex">
                     {{ form_widget(attribute(form, 'keywords'), {'attr': {'class': 'white-field mb0'}}) }}
                     <button type="submit" class="btn secondary-btn-1 mb0">Keyword search</button>
                 </div>

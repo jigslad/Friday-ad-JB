@@ -39,58 +39,12 @@
                     </div>
 
                     <div class="col-md-18">
-                        <div class="sortby-area">
-                            <div class="clearfix">
-                                <h2>115953 results found </h2>
-                                <div class="clearfix d-none d-md-block d-lg-none"></div>
-                                <div class="float-left d-none d-md-block d-lg-none md-refine">
-                                    <button type="button" class="btn secondary-btn-2 show_sort_menu">Refine</button>
-                                </div>
-
-                                <div class="sortby-fields">
-                                    <div class="clearfix">
-                                        <div class="mob-filter-block">
-                                            <div class="mobile-refine d-block d-md-none">
-                                                <div class="float-left">
-                                                    <button type="button" class="btn secondary-btn-2 m-sort-btn mr5 show_sort_menu">Refine</button>
-
-                                                </div>
-                                                <div class="float-right">
-                                                    <button class="btn secondary-btn-2 m-sort-btn sortDropdown" type="button" id="sortDropdown">Sort</button>
-                                                    <div class="sortDropdownContent" style="display: none;">
-                                                        <ul class="list-group">
-                                                            <li class="list-group-item active"><a href="javascript://">Most recent</a></li>
-                                                            <li class="list-group-item"><a href="javascript://">Price: lowest first</a></li>
-                                                            <li class="list-group-item"><a href="javascript://">Price: lowest first</a></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="d-none d-md-block">
-                                            <div class="s-by-filters">
-                                                <label>Sort by</label>
-                                                <span>
-					                        		<div class="ad-category-list">
-					                        			<select>
-								                            <option value="Most recent">Most recent</option>
-								                            <option value="Price: lowest first">Price: lowest first</option>
-								                            <option value="Price: highest first">Price: highest first</option>
-								                        </select>
-						                    		</div>
-					                    		</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="profile-list-title">
                             <div class="sortby-area row">
-                                <div class="col-md-12 col-lg-12 col-sm-12 pull-left">
+                                <div class="col-md-12 col-lg-12 col-sm-12 pull-left pad-none">
                                     <h2 class="pull-left profile-list-title">{{'%resultCount% results found'|trans({'%resultCount%': pagination.getNbResults()}, 'frontend-search-result')}}</h2>
                                 </div>
-                                <div class="col-md-12 col-lg-12 col-sm-12 pull-right">
+                                <div class="col-md-12 col-lg-12 col-sm-12 pull-right  pad-none">
                                     {% if pagination.getNbResults() %}
                                         {% set sortFields = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSortingArray', [fetch_container_instance(), null, searchParams]) %}
                                         <div class="sortby-fields pull-right">
@@ -98,7 +52,7 @@
                                                 <div class="s-by-filters">
                                                     {% if not app.request.get('map')%}
                                                         <label>{{'Sort by'|trans({}, 'frontend-search-result')}}</label>
-                                                        <div class="ad-category-list white-select">
+                                                        <div class="ad-category-list white-select mr0">
                                                             <select class="select-control" name="sort_by" id="sort_by">
                                                                 {% for sortFieldKey, sortFieldName in sortFields %}
                                                                     <option value="{{sortFieldKey}}" {% if app.request.get('sort_field')~'|'~app.request.get('sort_ord') == sortFieldKey %} selected="selected" {% endif %}>{{sortFieldName}}</option>
@@ -148,7 +102,7 @@
                                 <a data-dismiss="alert" class="close">&times;</a>
                             </div>
                         {% endif %}
-                        <div class="pagination-centered">
+                        <div class="pagination-centered justify-content-center d-flex">
                             {{ include('FaFrontendBundle:Default:googlePager.html.twig', {'pagination': pagination, 'addToEndPage': 1, 'seoPager': true}) }}
                         </div>
                     </div>

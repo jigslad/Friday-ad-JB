@@ -100,7 +100,7 @@
 {% endif %}
 
 {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
-{{ include('FaContentBundle:Default:tinyMceJs.html.twig', {'plugins' : 'autoresize', 'autoresizeOptions': 'autoresize_bottom_margin: 0, autoresize_min_height: 100, autoresize_max_height: 500,', 'toolbar1' : 'bold italic underline, bullist numlist', 'toolbar2' : 'false', 'menubar' : 'false', 'statusbar': 'true', 'charCounter' : 'true' }) }}
+{{ include('FaContentBundle:Default:tinyMceJs.html.twig', {'plugins' : 'autoresize', 'autoresizeOptions': 'autoresize_bottom_margin: 0, autoresize_min_height: 100, autoresize_max_height: 500,', 'toolbar1' : 'bold italic underline, bullist numlist', 'toolbar2' : 'false', 'menubar' : 'false', 'statusbar': 'false', 'charCounter' : 'true' }) }}
 {{ set_variables('imageUploadJavascriptBottom', {'loaded':'true'}) }}
 {{ block('imageUploadJavascriptBottom') }}
 {{ block('googlemap_location_js') }}

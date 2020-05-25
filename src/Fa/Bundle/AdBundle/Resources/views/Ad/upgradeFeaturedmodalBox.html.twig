@@ -82,7 +82,7 @@
             {% else %}
                 {% set packagePrice = 'Free'|trans({}, 'frontend-ad-package')%}
             {% endif %}
-            <div class="col4 center">
+            <div class="col-24 center">
                 <div class="paa-pkg-bg">
                     <span class="pkg-selection" id="package_selection_{{package.getPackage().getId()}}">Select Package</span>
                     {% set pkgBoxColorClass = 'pkg-green-head' %}
@@ -98,7 +98,7 @@
                     <div class="pkg-title {{ pkgBoxColorClass}}">{{package.getPackage().getLabel()}}</div>                        
                     <div id="active_package_{{package.getPackage().getId()}}">
                         <div class="pkg-subtitle">
-                            <div class="hide">
+                            <div class="d-none">
                                 <span class="custom-radio {% if selectedPackageId == package.getPackage().getId() %} checked {% endif %}">
                                     <input type="radio" name="package_id" checked="checked" value="{{package.getPackage().getId()}}" {% if selectedPackageId == package.getPackage().getId() %} checked="checked" {% endif %} onclick="return highlightSelectedPackage('{{package.getPackage().getId()}}');" />
                                 </span>
@@ -112,6 +112,7 @@
                                 </H4>
                                 {% if printPackageDuration[package.getPackage().getId()] is defined %}
                                     <div class="weekly-pkg">
+                                    <div class="d-flex tab-d-flex">
                                         {% for printDuration in printPackageDuration[package.getPackage().getId()] %}
                                             {% set printDurationPrice = 0 %}
                                             {% set printFirstDurationPrice = 0 %}
@@ -125,21 +126,21 @@
                                             {% set printDurationId = printDuration['id'] %}
                                             
                                             
-                                            <span class="pkg-box">
-                                                <span class="custom-radio {% if loop.index == 1 %}checked{% endif %}">
-                                                    <input type="hidden" name="package_print_price_{{printDuration['id']}}" id="package_print_price_{{printDuration['id']}}" value="{{format_currency(printDurationPrice)}}" />
-                                                    <input type="radio" {% if loop.index == 1 %} checked="checked" {% endif %} name="package_print_id_{{package.getPackage().getId()}}" id="package_print_id_{{printDuration['id']}}" class="package_print_record" value="{{printDuration['id']}}" onclick="return updatePackagePrice({{package.getPackage().getId()}}, {{printDuration['id']}})" />
-                                                </span>
-                                                <label for="package_print_id_{{printDuration['id']}}">
+                                            <span class="pkg-box horizontal-radio">
+                                                <input type="hidden" name="package_print_price_{{printDuration['id']}}" id="package_print_price_{{printDuration['id']}}" value="{{format_currency(printDurationPrice)}}" />
+                                                <input type="radio" {% if loop.index == 1 %} checked="checked" {% endif %} name="package_print_id_{{package.getPackage().getId()}}" id="package_print_id_{{printDuration['id']}}" class="checkbox package_print_record" value="{{printDuration['id']}}" onclick="return updatePackagePrice({{package.getPackage().getId()}}, {{printDuration['id']}})" />
+                                                <span class="checkmark"></span>
+                                                <label class="label-text" for="package_print_id_{{printDuration['id']}}">
                                                     {% set fullDuration = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getFullDurationFromShortForm', [printDuration['duration']]) %}
                                                     {{fullDuration}} {{'in print'|trans({}, 'frontend-ad-package')}} {% if loop.index != 1 %}(+{{format_currency(printDurationPrice - printFirstDurationPrice)}}){% endif %}
                                                 </label>
                                             </span>
                                         {% endfor %}
+                                      </div>
                                     </div>
                                     <input type="hidden" name="package_print_edition_limit_{{ package.getPackage().getId() }}" id="package_print_edition_limit_{{ package.getPackage().getId() }}" value="{{ (printEditionLimits[package.getPackage().getId()] is defined ? printEditionLimits[package.getPackage().getId()] : 0) }}" />
                                     {% if printEditionLimits[package.getPackage().getId()] is defined %}
-                                        <div class="edition-link">
+                                        <div class="edition-link text-center">
                                             <a href="javascript:void(0);" id="print_edition_show_anchor_{{ package.getPackage().getId() }}" onclick="hideShowPrintEditions({{ package.getPackage().getId() }})">
                                                 {% if printEditionLimits[package.getPackage().getId()] == 1 %}
                                                     {{'Change your edition'|trans({}, 'frontend-ad-package')}}
@@ -181,7 +182,7 @@
         {% endfor %}
     </div>
     
-    <div class="col-md-24 col-lg-24" >
+    <div class="col-md-24 col-lg-24 pad-none" >
           {% set ccUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_CYBERSOURCE')}) %}
           {% set appleUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_APPLEPAY')}) %}
           {% set catPath = '' %}
@@ -198,9 +199,9 @@
             <ul id="payment_method_id" class="payment-card-option-block ml0">
                 {% for choice in form.payment_method.vars.choices %}
                 	<li>
-                    	<div class="label-inline white-radio mt10 mb10">
-                            <span class="custom-radio {% if form.payment_method.vars.data == choice.value %}checked{% endif %} "><input onclick="return showHideCardDetail();" type="radio" value="{{ choice.value }}" {% if form.payment_method.vars.data == choice.value %}checked="checked"{% endif %} name="{{ form.payment_method.vars.full_name }}" id="{{ form.payment_method.vars.id }}_{{ choice.value }}" /></span>
-                            <label for="{{ form.payment_method.vars.id }}_{{ choice.value }}">{{ choice.label|raw }}</label>
+                    	<div class="d-flex mt10 mb10">
+                            <span class="grey-radio d-inline-flex upgrade-modal-choice {% if form.payment_method.vars.data == choice.value %}checked{% endif %} "><input onclick="return showHideCardDetail();" class="checkbox" type="radio" value="{{ choice.value }}" {% if form.payment_method.vars.data == choice.value %}checked="checked"{% endif %} name="{{ form.payment_method.vars.full_name }}" id="{{ form.payment_method.vars.id }}_{{ choice.value }}" />
+                            <label class="pt15" for="{{ form.payment_method.vars.id }}_{{ choice.value }}"></label>{{ choice.label|raw }}</span>
                         </div>
                 	</li>
                 {% endfor %}
@@ -212,9 +213,10 @@
 	</div>
 	<div id="card_detail_save" class="small-wrapper">
             <div class="payment-row">
-                <div class="label-inline white-checkbox">
-                    {{ form_widget(form.is_save_credit_card) }}
-                    {{ form_label(form.is_save_credit_card) }}
+                <div class="label-inline grey-check">
+                    {{ form_widget(form.is_save_credit_card, {'attr': {'class': 'checkbox'}}) }}
+                    <label for="{{ form_label(form.is_save_credit_card.vars.id) }}"></label>
+                    {{ form_label(form.is_save_credit_card.vars.label) }}
                     {{ form_errors(form.is_save_credit_card) }}
                 </div>
             </div>
