@@ -11,6 +11,28 @@ a, a:hover, a:focus, .a-tag, .a-tag:hover, .a-tag:focus  {
     color: $common-text-color !important; 
 }
 
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+.uneditable-input:focus {   
+  border-color: rgba(130, 194,	73, 0.8);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(130, 194,	73, 0.6);
+  outline: 0 none;
+}
+
+
 h1, h2, h3, h4, h5, .s-h1, .s-h3, .s-h2 { color: $htag-color; }
 h6 { color: $common-bg-color; }
 
@@ -2160,6 +2182,9 @@ footer p { color:$grey-color; }
 
 .crawlable-checkbox li:hover, .crawlable-checkbox li:focus, .crawlable-checkbox li:active {
 	color: #82C249 !important;
+}
+#fa_message_message_ad_text_message {
+	background: #FFFFFF !important;
 }
 
 @media only screen and (max-width: 640px) {
