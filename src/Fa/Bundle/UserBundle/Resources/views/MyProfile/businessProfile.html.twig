@@ -123,8 +123,8 @@
                                                         <div class="profile-logo-ins end corporate-profile">
                                                             {{"Add a logo to your profile. It doesn't just look nice - buyers prefer to see who they are buying from when deciding what to buy."|trans({}, 'frontend-my-profile')}}<br />
                                                             <div id="profile_change_btn_with_opt" {% if not userSiteObj.getPath() %}style="display:none;"{% endif %}>
-                                                                <a href="javascript:void(0);" data-dropdown="profile_image_upload" aria-controls="profile_image_upload" aria-expanded="false" class="primary-btn-3 button thin-btn dropdown">{{'Change image'|trans({}, 'frontend-my-profile')}}</a><br />
-                                                                <ul id="profile_image_upload" data-dropdown-content class="f-dropdown" aria-hidden="true">
+                                                                <a href="javascript:void(0);" data-toggle="dropdown" data-dropdown="profile_image_upload" aria-controls="profile_image_upload" aria-expanded="false" class="primary-btn-3 button thin-btn dropdown">{{'Change image'|trans({}, 'frontend-my-profile')}}</a><br />
+                                                                <ul id="profile_image_upload" class="f-dropdown dropdown-menu" aria-hidden="true">
                                                                     <li><a href="javascript:void(0)" class="pickProfileFile needsclick" id="pickProfileFile">{{'Upload logo'|trans({}, 'frontend-my-profile')}}</a></li>
                                                                     <li><a href="javascript:getProfileBigImage('{{ path(getProfileBigImageRoute, {'userId': app.user.getId(), 'isCompany': 1}) }}')">{{'Edit logo'|trans({}, 'frontend-my-profile')}}</a></li>
                                                                     <li><a href="javascript:deleteProfileImage('{{ path(deleteRoute, {'userId': app.user.getId(), 'isCompany': 1}) }}')">{{'Remove'|trans({}, 'frontend-my-profile')}}</a></li>

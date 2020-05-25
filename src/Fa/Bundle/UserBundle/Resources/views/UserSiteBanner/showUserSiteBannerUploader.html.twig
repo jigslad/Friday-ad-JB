@@ -182,7 +182,7 @@
                         $('.edit-pro-banner').remove();
                         $(".shops-header-content").append('<div class="edit-pro-banner">'+cropContent+'</div>');
                     {% endif %}
-                    $("#user_site_banner_crop_big_image" ).load(function() {
+                    $("#user_site_banner_crop_big_image" ).on('load',function() {
                         $('#crop_image_banner').show();
                         var picture = $('#user_site_banner_crop_big_image');
                         picture.guillotine({
@@ -270,7 +270,9 @@
 
         function closeBannerMenu()
         {
-            $('#banner_image_upload').foundation('dropdown', 'close', $('#banner_image_upload'));
+            // $('#banner_image_upload').foundation('dropdown', 'close', $('#banner_image_upload'));
+            $('#banner_image_upload').dropdown('toggle');
+
         }
         //]]>
         </script>
