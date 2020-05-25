@@ -49,7 +49,7 @@
 {% set profileAdsUrl = container.get('fa_ad.manager.ad_routing').getProfilePageAdsUrl(userDetail['id']) %}
 <div class="other-profile">
     <div class="row">
-        <div class="large-6 columns" id="show_message_div">
+        <div class="col-md-6" id="show_message_div">
             <div class="user-pro-pic">
                 <span>
                     {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), userDetail['company_logo'], userDetail['id'], null, null, true, true, userDetail['status_id'], userDetail['user_name']]) %}
@@ -69,12 +69,12 @@
             <div class="sold-n-reviews mt10">
                 <div class="row">
                     {% if userDetail['sold_ad_count'] > 0 %}
-                        <div class="large-12 columns text-center">
+                        <div class="col-md-12 text-center">
                             <span class="sold-icon">{{'Sold'|trans({}, 'frontend-profile-page')}}</span><br />
                             {{'Items sold'|trans({}, 'frontend-profile-page')}}: <b>{{userDetail['sold_ad_count']}}</b>
                         </div>
                     {% endif %}
-                    <div class="{% if userDetail['sold_ad_count'] > 0 %}large-12{%else%}large-24{% endif %} columns text-center">
+                    <div class="{% if userDetail['sold_ad_count'] > 0 %}col-md-12{%else%}col-md-24{% endif %} text-center">
                         <span class="review-sold-icon">Reviews</span><br />
                         {{'Reviews'|trans({}, 'frontend-profile-page')}}: <b>{{ userDetail['total_review'] }}</b>
                     </div>
@@ -82,16 +82,16 @@
             </div>
             {{ include('FaContentBundle:ProfilePage:showBusinessAddressDetail.html.twig') }}
             {% if (userDetail['contact_through_email'] is defined and userDetail['contact_through_email'] == 1) or (userDetail['contact_through_phone'] is defined and userDetail['contact_through_phone'] == 1) %}
-                <button class="primary-btn-1 expand button uppercase mb10" name="profilepage_contactuser" id="profilepage_contactuser" type="button">{{'Contact us'|trans({}, 'frontend-profile-page')}}</button>
+                <button class="primary-btn-1 btn btn-block uppercase mb10" name="profilepage_contactuser" id="profilepage_contactuser" type="button">{{'Contact us'|trans({}, 'frontend-profile-page')}}</button>
             {% endif %}
              {% if userDetail['website_link'] is defined and userDetail['website_link']|length %}
                 {% set websiteLabel = 'Visit website'|trans({}, 'frontend-profile-page') %}  
                 {% set profileWebSite = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'addHttpToUrl', [userDetail['website_link']]) %}    
-                <a rel="nofollow" onclick="openUserWebsite('{{(userDetail['id'] ? userDetail['id'] : '-')}}', '{{ profileWebSite }}', '{{ userName }}')" href="javascript:void(0);" class="website-btn-1 button expand"><span class="website-icon"></span>{{ websiteLabel }}</a>
+                <a rel="nofollow" onclick="openUserWebsite('{{(userDetail['id'] ? userDetail['id'] : '-')}}', '{{ profileWebSite }}', '{{ userName }}')" href="javascript:void(0);" class="secondary-btn-1 btn btn-block"><span class="website-icon"></span>{{ websiteLabel }}</a>
             {% endif %}
-            <a href="{{ profileAdsUrl }}" class="secondary-btn-1 button expand">{{'View latest ads'|trans({}, 'frontend-profile-page')}}</a>
+            <a href="{{ profileAdsUrl }}" class="secondary-btn-1 btn btn-block">{{'View latest ads'|trans({}, 'frontend-profile-page')}}</a>
         </div>
-        <div class="large-18 columns">
+        <div class="l">
             <h1 class="other-pro-title">{{"Hi, We are %profile_name%"|trans({'%profile_name%': (userDetail['user_name'] ? userDetail['user_name'] : '-')}, 'frontend-profile-page')}}{% if userDetail['town_name']|length %} {{'of'|trans({}, 'frontend-profile-page')}} {{ userDetail['town_name'] }} {% endif %}</h1>
             <div class="other-pro-location">
                 {% if userDetail['town_name']|length %}

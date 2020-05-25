@@ -1,9 +1,11 @@
 {% if totalAds is defined and totalAds >= 5 %}
+    <div class="container">
     <div class="row relative">
-        <div class="columns" id="list_similar_adverts">
+        <div class="col-md-24" id="list_similar_adverts">
         	<h5>{{ 'Similar items'|trans({}, 'frontend-paa-second-step') }}</h5>
             {{ include('FaAdBundle:AdPost:listSimilarAdverts.html.twig', {'ads' : ads}) }}
         </div>
+    </div>
     </div>
     <input type="hidden" name="total_similar_ad_found" id="total_similar_ad_found" value="{{ totalAds }}" />
     <input type="hidden" name="similar_ad_page" id="similar_ad_page" />

@@ -44,10 +44,10 @@
 
         {% if (container.has('security.authorization_checker') and container.get('security.authorization_checker').isGranted("IS_AUTHENTICATED_REMEMBERED")) %}
                 {# After login only btn#}
-                {{ form_widget(form.save, {'attr': {'class': 'secondary-btn-1 button mb0 logged-out-btn-radius', 'onclick': "return saveSearchAgent('', 'ListingBottom');"}}) }}
+                {{ form_widget(form.save, {'attr': {'class': 'secondary-btn-1 btn  mb0 logged-out-btn-radius', 'onclick': "return saveSearchAgent('', 'ListingBottom');"}}) }}
         {% else %}
             {% if currentDevice == 'M' %}
-                {{ form_widget(form.save, {'attr': {'class': 'secondary-btn-1 button mb0', 'onclick': "return createHalfAccount('', 'ListingBottom');"}}) }}
+                {{ form_widget(form.save, {'attr': {'class': 'secondary-btn-1 btn  mb0', 'onclick': "return createHalfAccount('', 'ListingBottom');"}}) }}
             {% else %}
                 {% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
                 {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}

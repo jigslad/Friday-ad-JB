@@ -19,7 +19,7 @@
         <div class="frame edit-photo">
             <h5>{{ 'Edit your photo'|trans({}, 'frontend-paa-fourth-step') }}</h5>
             <div class="edit-item frame">
-                <a href="javascript:deleteUserSiteImage('{{path(deleteRoute, {'userSiteId': imageUserSiteId, 'imageId': userSiteImgObj.getId(), 'imageHash': userSiteImgObj.getHash()})}}')" class="xs-btn-2 button remove-btn" id="remove_img"><span class="delete-icon"></span>{{ 'Remove'|trans({}, 'frontend-paa-fourth-step')}}</a>
+                <a href="javascript:deleteUserSiteImage('{{path(deleteRoute, {'userSiteId': imageUserSiteId, 'imageId': userSiteImgObj.getId(), 'imageHash': userSiteImgObj.getHash()})}}')" class="secondary-btn-2 thin-btn btn remove-btn" id="remove_img"><span class="delete-icon"></span>{{ 'Remove'|trans({}, 'frontend-paa-fourth-step')}}</a>
                 {% if app.request.get('show_org') %}
                     <input type="hidden" id="show_org" name="show_org" value="true" class="cropImg" />
                     {% set adCropBigImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserSiteImageUrl', [container, imageUserSiteId, userSiteImgObj.getPath(), userSiteImgObj.getHash(), '']) %}
@@ -31,21 +31,21 @@
             <div class="photo-link">
                 <div class="row">
                     {% if userSiteImgObj.getOrd() > 1 %}
-                        <div class="large-24 columns small-only-text-center">
-                            <a href="javascript:makeUserSiteMainPhoto('{{ userSiteImgObj.getId() }}', '{{ userSiteImgObj.getOrd() }}')" class="xs-btn-2 button" id="make_main_photo">{{'Make main photo'|trans({}, 'frontend-paa-fourth-step')}}</a>
+                        <div class="col-md-24 small-only-text-center">
+                            <a href="javascript:makeUserSiteMainPhoto('{{ userSiteImgObj.getId() }}', '{{ userSiteImgObj.getOrd() }}')" class="secondary-btn-2 thin-btn btn" id="make_main_photo">{{'Make main photo'|trans({}, 'frontend-paa-fourth-step')}}</a>
                         </div>
                     {% endif %}
                 </div>
                 <div class="row">
-                    <div class="large-24 columns photo-control">
-                        <a href="javascript:void(0);" class="xs-btn-2 button" id="rotate"><span class="rotate-icon"></span>{{'Rotate'|trans({}, 'frontend-paa-fourth-step')}}</a> &nbsp;
-                        <a href="javascript:void(0);" class="xs-btn-2 button" id="zoom_in"><i class="fi-zoom-in size-18"></i></span>{{'Zoom in'|trans({}, 'frontend-paa-fourth-step')}}</a> &nbsp;
-                        <a href="javascript:void(0);" class="xs-btn-2 button" id="zoom_out"><i class="fi-zoom-out size-18"></i>{{'Zoom out'|trans({}, 'frontend-paa-fourth-step')}}</a> &nbsp;
-                        <a href="javascript:void(0);" class="xs-btn-2 button" id="fit"><i class="fi-annotate size-18"></i>{{'Fit Image'|trans({}, 'frontend-paa-fourth-step')}}</a>
+                    <div class="col-md-24 photo-control">
+                        <a href="javascript:void(0);" class="secondary-btn-2 thin-btn btn" id="rotate"><span class="rotate-icon"></span>{{'Rotate'|trans({}, 'frontend-paa-fourth-step')}}</a> &nbsp;
+                        <a href="javascript:void(0);" class="secondary-btn-2 thin-btn btn" id="zoom_in"><i class="fi-zoom-in size-18"></i></span>{{'Zoom in'|trans({}, 'frontend-paa-fourth-step')}}</a> &nbsp;
+                        <a href="javascript:void(0);" class="secondary-btn-2 thin-btn btn" id="zoom_out"><i class="fi-zoom-out size-18"></i>{{'Zoom out'|trans({}, 'frontend-paa-fourth-step')}}</a> &nbsp;
+                        <a href="javascript:void(0);" class="secondary-btn-2 thin-btn btn" id="fit"><i class="fi-annotate size-18"></i>{{'Fit Image'|trans({}, 'frontend-paa-fourth-step')}}</a>
                     </div>
                 </div>
                 <div class="row photo-save-btn">
-                    <div class="large-24 columns">
+                    <div class="col-md-24">
                         <span id="reset_image_success_msg"></span>
                         <input type="hidden" id="x" name="x" class="cropImg" />
                         <input type="hidden" id="y" name="y" class="cropImg" />
@@ -53,8 +53,8 @@
                         <input type="hidden" id="h" name="h" class="cropImg" />
                         <input type="hidden" id="angle" name="angle" class="cropImg" />
                         <input type="hidden" id="scale" name="scale" class="cropImg" />
-                        <a href="javascript:cropUserSiteImage('{{path(cropImageRoute, {'userSiteId': imageUserSiteId, 'imageId': userSiteImgObj.getId(), 'imageHash': userSiteImgObj.getHash()})}}')" class="secondary-btn-1 expand button" id="crop_image" style="display:none;">{{'Save changes'|trans({}, 'frontend-paa-fourth-step')}}</a>
-                        <a href="javascript:void(0);" class="secondary-btn-2 expand button" id="crop_close">{{'Cancel'|trans({}, 'frontend-paa-fourth-step')}}</a>
+                        <a href="javascript:cropUserSiteImage('{{path(cropImageRoute, {'userSiteId': imageUserSiteId, 'imageId': userSiteImgObj.getId(), 'imageHash': userSiteImgObj.getHash()})}}')" class="secondary-btn-1 btn btn-block" id="crop_image" style="display:none;">{{'Save changes'|trans({}, 'frontend-paa-fourth-step')}}</a>
+                        <a href="javascript:void(0);" class="secondary-btn-2 btn btn-block" id="crop_close">{{'Cancel'|trans({}, 'frontend-paa-fourth-step')}}</a>
                     </div>
                 </div>
             </div>

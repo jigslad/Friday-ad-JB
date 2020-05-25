@@ -36,7 +36,7 @@ h5 { font-weight: normal !important;font-size: 14px;line-height: 21px;font-famil
 h6 { font-weight: normal !important;font-size: 14px;line-height: 20px; }
 
 button, .button, .btn { font-family: 'Poppins-SemiBold' !important; }
-button:focus, a:focus { outline: 0px dotted; }
+button:focus, a:focus, .btn:focus, .btn.focus { outline: 0px dotted; }
 .btn:focus, .btn.focus { box-shadow: none; }
 
 .btn-h-lg { height: 60px !important;font-size: 18px !important;line-height: 36px !important; }
@@ -129,6 +129,7 @@ a:hover.secondary-btn-2.thin-btn, a:focus.secondary-btn-2.thin-btn, .secondary-b
 .mr10 { margin-right: 10px; }
 .mr15 { margin-right: 15px; }
 .mr20 { margin-right: 20px; }
+.h-width-btn { width:49%; }
 
 ul, ol, dl {
     font-size: 1rem;
@@ -171,7 +172,7 @@ div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, p, blockquote, t
 .custom-modal .modal-body p {
     padding: 5px 0;
 }
-.custom-modal .modal-body .button {
+.custom-modal .modal-body .btn {
     margin-top: 10px;
 }
 .modal-backdrop {
@@ -718,7 +719,9 @@ footer .search-box-col .newsletter-lbl, .white-check .label-span, .grey-check .l
 .covid-19-block .head {color: #FFFFFF; font-size: 20px; letter-spacing: 0.83px;line-height: 23px; font-weight: bold;padding-right: 25px; }
 .ask-for-offer-help { color: #FFFFFF;font-weight: normal !important;font-size: 18px;letter-spacing: 0; line-height: 21px;text-align: center;  }
 .ask-for-offer-help a, .ask-for-offer-help a:hover, .ask-for-offer-help a:focus { text-decoration: underline !important; }
-.place-free-ad-btn, .place-free-ad-btn:hover, .place-free-ad-btn:focus, a:hover.button.place-free-ad-btn, a:focus.button.place-free-ad-btn { height: 30px; width: 162px; font-size: 14px; letter-spacing: 0;line-height: 16px;text-align: center; margin-bottom: 0px; vertical-align: middle; display: table-cell; }
+.place-free-ad-btn, .place-free-ad-btn:hover, .place-free-ad-btn:focus, a:hover.button.place-free-ad-btn, a:focus.button.place-free-ad-btn,
+, a:hover.btn.place-free-ad-btn, a:focus.btn.place-free-ad-btn
+{ height: 30px; width: 162px; font-size: 14px; letter-spacing: 0;line-height: 16px;text-align: center; margin-bottom: 0px; vertical-align: middle; display: table-cell; }
 
 .cross-btn {
     color: #ffffff;cursor: pointer;position: absolute;right: 0;width: 20px;height: 30px;top: 0;right: 15px;text-indent: -9999px;z-index: 1;
@@ -952,7 +955,7 @@ footer .search-box-col .newsletter-lbl, .white-check .label-span, .grey-check .l
     top: 20px;
     margin: 0;
     /*background:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2226%22%20height%3D%2226%22%20viewBox%3D%220%200%2026%2026%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23FFFFFF%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Ecross%202%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M18.4%2013l6.4-6.4c0.8-0.8%200.8-2%200-2.8l-2.7-2.7c-0.8-0.8-2-0.8-2.8%200l-6.4%206.4L7.2%201.8C6%200.7%204.3%200.5%203.3%201.5L1.4%203.4c-1%201-0.9%202.8%200.3%203.9L7.4%2013%201%2019.4c-0.8%200.8-0.8%202%200%202.8l2.7%202.7c0.8%200.8%202%200.8%202.8%200l6.4-6.4%205.7%205.7c1.2%201.2%202.9%201.3%203.9%200.3l1.8-1.8c1-1%200.9-2.8-0.3-3.9L18.4%2013z%22/%3E%3C/svg%3E') no-repeat center center;*/
-   background:url('/Frontend/images/icons/close.svg') no-repeat center center;
+   background:url('/Frontend/images/icons/cross.svg') no-repeat center center;
 }
 .alert-box.success .alert-icon, .alert-box.white .alert-icon {
     background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2227%22%20height%3D%2227%22%20viewBox%3D%22-1404%20458.9%2027%2027%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23FFFFFF%3Bstroke%3A%23A8DC28%3B%7D%0D%0A%09.st1%7Bfill%3Anone%3Bstroke%3A%23A8DC28%3Bstroke-width%3A3%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Esuccess%20icon%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-54.000000%2C%20-199.000000%29%22%3E%3Cg%20transform%3D%22translate%2836.000000%2C%20182.000000%29%22%3E%3Cg%20transform%3D%22translate%2819.000000%2C%2018.000000%29%22%3E%3Ccircle%20class%3D%22st0%22%20cx%3D%22-1391.5%22%20cy%3D%22471.4%22%20r%3D%2212.5%22/%3E%3Cpath%20class%3D%22st1%22%20d%3D%22M-1396%20471.9l3.8%204%206.2-8%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat;
@@ -1112,7 +1115,7 @@ input[type=number] {
 // custom card
 .custom-card .two-grid-col { display: inline-flex; width: 100%; }
 .custom-card .list-dimensions {
-    margin: 0;width: 50%;line-height: normal;height: 47px;overflow: hidden;font-size: 12px;
+    margin: 0;width: 50%;line-height: normal;height: 43px;overflow: hidden;font-size: 12px;
 }
 .custom-card .list-price {
     margin: 0;width: 50%;font-size: 20px;line-height: 22px;float: right;text-align: right;word-wrap: break-word;
@@ -1155,7 +1158,7 @@ input[type=number] {
     float: right;
 }
 //FB an Goggle button
-.button.signup-fb-btn {
+.button.signup-fb-btn, .btn.signup-fb-btn {
 	background-color: #3B5998;
 	color: #ffffff;
 }
@@ -1163,12 +1166,12 @@ input[type=number] {
 	background-color: #2b4a7a !important;
 	background: #2b4a7a !important;
 }
-.button.signup-google-btn {
+.button.signup-google-btn, .btn.signup-google-btn {
 	background-color: #FFFFFF;
 	box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 1px 1px 0 rgba(0,0,0,0.24) !important;
 	color: #ACB0B7;
 }
-.button.special {
+.button.special, .btn.special {
 	display: block;
 	width: 100%;
 	text-align: center;
@@ -1424,6 +1427,49 @@ b, strong {
 .alert-box.promotional .alert-icon {
     background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2226%22%20height%3D%2227%22%20viewBox%3D%22-1404%20458.9%2026%2027%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23FFFFFF%3Bstroke%3A%23CF55F0%3B%7D%0D%0A%09.st1%7Bfill%3A%23CF55F0%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Epromo-icon%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-325.000000%2C%20-407.000000%29%22%3E%3Cg%20transform%3D%22translate%28315.500000%2C%2034.000000%29%22%3E%3Cg%20transform%3D%22translate%280.000000%2C%204.000000%29%22%3E%3Cg%20transform%3D%22translate%2810.000000%2C%20365.000000%29%22%3E%3Cg%20transform%3D%22translate%280.000000%2C%205.000000%29%22%3E%3Ccircle%20class%3D%22st0%22%20cx%3D%22-1391.5%22%20cy%3D%22471.4%22%20r%3D%2212.5%22/%3E%3Cpolygon%20class%3D%22st1%22%20points%3D%22-1391.5%20474.7%20-1395.3%20476.7%20-1394.6%20472.4%20-1397.7%20469.4%20-1393.4%20468.8%20-1391.5%20464.9%20-1389.6%20468.8%20-1385.3%20469.4%20-1388.4%20472.4%20-1387.7%20476.7%20%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat
 }
+.card-img-top {
+	height: 158px;
+}
+.paa_similar_adverts .listing { padding:20px !important; }
+.custom-modal .modal-title {
+    padding: 10px 10px 10px 15px !important;
+}
+.cover-img-thumbs li {
+	height: 55px;
+}
+.change-banner-btn {
+	color: #FFFFFF !important;
+}
+.delete-msg-caption:hover {
+	visibility: visible !important;
+	opacity: 1 !important;
+}
+.custom-modal .modal-body .btn {
+    margin-top: 0 !important;
+}
+.alert-box.info .alert-icon {
+    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2227%22%20height%3D%2227%22%20viewBox%3D%22-1404%20458.9%2027%2027%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23FFFFFF%3Bstroke%3A%234ACCF3%3B%7D%0D%0A%09.st1%7Bfill%3A%2343CAF2%3B%7D%0D%0A%09.st2%7Bfont-family%3A%27BreeSerif-Regular%27%3B%7D%0D%0A%09.st3%7Bfont-size%3A18px%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Einfo%20icon%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-54.000000%2C%20-795.000000%29%22%3E%3Cg%20transform%3D%22translate%2836.000000%2C%20779.000000%29%22%3E%3Cg%20transform%3D%22translate%2819.000000%2C%2017.000000%29%22%3E%3Ccircle%20class%3D%22st0%22%20cx%3D%22-1391.5%22%20cy%3D%22471.4%22%20r%3D%2212.5%22/%3E%3Ctext%20transform%3D%22matrix%281%200%200%201%20-1394.3495%20477.94%29%22%20class%3D%22st1%20st2%20st3%22%3Ei%3C/text%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat
+}
+.profile-ins {
+	margin-top: 5px;
+	font-size: 12px !important;
+}
+.seller-badge {
+    background: url('/Frontend/images/trusted-badges/seller-badge.svg') no-repeat 0 5px;
+}
+.website-icon {
+    background: url(data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2222px%22%20height%3D%2223px%22%20viewBox%3D%220%200%2022%2023%22%20version%3D%221.1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%3E%0A%20%20%20%20%3C%21--%20Generator%3A%20Sketch%2043%20%2838999%29%20-%20http%3A//www.bohemiancoding.com/sketch%20--%3E%0A%20%20%20%20%3Ctitle%3Ewebsite-icon%3C/title%3E%0A%20%20%20%20%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%0A%20%20%20%20%3Cdefs%3E%3C/defs%3E%0A%20%20%20%20%3Cg%20id%3D%22Page-1%22%20stroke%3D%22none%22%20stroke-width%3D%221%22%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%0A%20%20%20%20%20%20%20%20%3Cg%20id%3D%223.-Visit-website-mobile%22%20transform%3D%22translate%28-94.000000%2C%20-739.000000%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Green-button-small-2-Copy-2%22%20transform%3D%22translate%2810.000000%2C%20730.000000%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22website-icon%22%20transform%3D%22translate%2884.000000%2C%209.000000%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Shape%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M17.4142857%2C17.7666667%20L21.3466667%2C16.9828571%20L11.4952381%2C10.8447619%20L11.2628571%2C11.0066667%20L13.4561905%2C22.4019048%20L15.5971429%2C19.0142857%20L17.6733333%2C22.0390476%20C18.067619%2C22.6085714%2018.7914286%2C22.792381%2019.2933333%2C22.4485714%20C19.792381%2C22.1038095%2019.8819048%2C21.3609524%2019.4904762%2C20.7904762%20L17.4142857%2C17.7666667%20L17.4142857%2C17.7666667%20Z%22%20fill%3D%22%23FFFFFF%22%3E%3C/path%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M13.5933333%2C17.9792857%20C13.6143333%2C17.9682857%2013.6363333%2C17.9582857%2013.6573333%2C17.9482857%20C13.6493333%2C17.9362857%2013.6413333%2C17.9262857%2013.6343333%2C17.9142857%20C13.6223333%2C17.9332857%2013.6063333%2C17.9592857%2013.5933333%2C17.9792857%20L13.5933333%2C17.9792857%20Z%22%20fill%3D%22%23212527%22%3E%3C/path%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M9.69047619%2C17.6761905%20C8.11047619%2C17.6761905%206.63809524%2C17.2228571%205.38190476%2C16.4504762%20C6.51238095%2C16.4619048%204.54095238%2C14.7304762%205.89904762%2C14.4647619%20C7.32380952%2C14.1847619%207.92380952%2C12.5552381%207.46761905%2C12.58%20C7.01238095%2C12.6038095%206.14571429%2C12.3447619%205.53619048%2C11.5790476%20C4.92571429%2C10.807619%204.39142857%2C10.9838095%203.76190476%2C11.1047619%20C3.21142857%2C11.2133333%202.53333333%2C12.8057143%202.3647619%2C13.2238095%20C1.93619048%2C12.4028571%201.64571429%2C11.5009524%201.51428571%2C10.547619%20C2.21333333%2C10.1819048%203.35428571%2C9.56666667%203.76666667%2C9.22666667%20C4.37428571%2C8.72285714%203.56380952%2C8.51904762%203.46380952%2C8.2152381%20C3.3647619%2C7.91142857%203.46380952%2C7.20380952%203.46380952%2C6.50095238%20C3.46380952%2C5.79142857%204.87904762%2C5.79142857%205.38095238%2C5.08571429%20C5.74190476%2C4.58190476%205.08095238%2C3.47047619%204.66857143%2C2.86857143%20C6.06190476%2C1.79619048%207.80095238%2C1.15142857%209.69047619%2C1.15142857%20C10.1914286%2C1.15142857%2010.68%2C1.20380952%2011.1571429%2C1.28952381%20C11.2971429%2C2.16%2011.5885714%2C3.35714286%2012.1514286%2C3.66952381%20C13.0628571%2C4.17428571%2014.1657143%2C5.28571429%2014.5733333%2C5.48571429%20C14.9790476%2C5.68761905%2015.4809524%2C7.40761905%2015.3819048%2C8.11428571%20C15.3104762%2C8.61333333%2014.6914286%2C9.16285714%2014.4380952%2C9.69142857%20L18.647619%2C12.3142857%20C18.9447619%2C11.4%2019.1085714%2C10.427619%2019.1085714%2C9.4152381%20C19.1085714%2C4.22285714%2014.8819048%2C0%209.69142857%2C0%20C4.49809524%2C0%200.274285714%2C4.22285714%200.274285714%2C9.4152381%20C0.274285714%2C14.6085714%204.49809524%2C18.8333333%209.69142857%2C18.8333333%20C9.88857143%2C18.8333333%2010.0809524%2C18.8152381%2010.2752381%2C18.8038095%20L10.0552381%2C17.6571429%20C9.93333333%2C17.6628571%209.81333333%2C17.6761905%209.69047619%2C17.6761905%20L9.69047619%2C17.6761905%20Z%20M17.8514286%2C10.6342857%20C17.6733333%2C9.92761905%2017.3285714%2C9.24571429%2016.5952381%2C8.71904762%20C16.0933333%2C8.3647619%2015.6838095%2C6.80095238%2015.9885714%2C6.29428571%20C16.1704762%2C5.99238095%2016.6438095%2C5.72666667%2016.992381%2C5.56095238%20C17.6028571%2C6.71238095%2017.9514286%2C8.02285714%2017.9514286%2C9.4152381%20C17.9514286%2C9.83047619%2017.9104762%2C10.2352381%2017.8514286%2C10.6342857%20L17.8514286%2C10.6342857%20Z%22%20fill%3D%22%23FFFFFF%22%3E%3C/path%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%3C/g%3E%0A%3C/svg%3E) no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 2px 0 0;
+    width: 21px;
+    height: 20px;
+    background-size: 21px 20px;
+    text-indent: 100%;
+    overflow: hidden;
+    white-space: nowrap
+}
+
 @media (min-width: 760px) and (max-width: 1151px) {
 	.home-list-location-box .link-list, .list-location-box .link-list, .details-list-location-box .link-list {
             column-count: unset;
@@ -1466,10 +1512,10 @@ column-count: unset;
     }
 }
 @media (max-width: 640px) {
-  .button.special { padding: 17px 6px 22px 6px !important;  }
+  .button.special, .btn.special  { padding: 17px 6px 22px 6px !important;  }
 }
 @media only screen and (min-width: 960px) and (max-width: 1151px) {
-   .button.special {
+   .button.special, .btn.special  {
         width: 320px !important;
     }
 }
@@ -1568,7 +1614,7 @@ column-count: unset;
 	    padding: 0 10px 40px;
 	    margin-bottom: 100px;
 	}
-	adult-modal-content h3 {
+	.adult-modal-content h3 {
 		display: grid;
 	}
 	.adult-modal h2 {
@@ -1601,9 +1647,17 @@ column-count: unset;
 	    display: none;
 	}
 
-  .place-free-ad-btn, .place-free-ad-btn:hover, .place-free-ad-btn:focus, a:hover.button.place-free-ad-btn, a:focus.button.place-free-ad-btn {
+  .place-free-ad-btn, .place-free-ad-btn:hover, .place-free-ad-btn:focus, a:hover.button.place-free-ad-btn, a:focus.button.place-free-ad-btn,
+  a:hover.btn.place-free-ad-btn, a:focus.btn.place-free-ad-btn
+  {
     display: inline-block;
   }
+  .bz-profile-fields .field-530, .bz-profile-fields input.field-530, .design-your-profile .field-530, .design-your-profile input.field-530 {
+	    width: auto !important;
+	}
+	.field-530 input {
+		padding-right: 45px !important;
+	}
 }
 @media (min-width: 641px) and (max-width: 759px) {
   .custom-modal .modal-md {

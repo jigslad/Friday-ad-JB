@@ -18,7 +18,7 @@
                     {% set userSiteImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserSiteImageUrl', [container, userSiteId, userSiteImage.getPath(), userSiteImage.getHash(), '300X225']) %}
                     <img class="img-fluid" alt="{{userSiteId}}_{{userSiteImage.getHash()}}_300X225.jpg" src="{{ userSiteImageUrl }}{% if cache is defined and cache == true %}?{{ random(1000) }}{% endif %}" title="{{ 'Drag photo to change order'|trans({}, 'frontend-paa') }}" />
                     {% if userSiteImage.getHash() %}
-                        <a class="secondary-btn-1 btn edit-img thin-btn" href="javascript:getUserSiteOriginalImage('{{path(bigImageRoute, {'userSiteId': userSiteId, 'imageId': userSiteImage.getId(), 'imageHash': userSiteImage.getHash()})}}')">{{'Edit'|trans({}, 'frontend-paa')}}</a>
+                        <a class="secondary-btn-1 btn edit-img thin-btn h-width" href="javascript:getUserSiteOriginalImage('{{path(bigImageRoute, {'userSiteId': userSiteId, 'imageId': userSiteImage.getId(), 'imageHash': userSiteImage.getHash()})}}')">{{'Edit'|trans({}, 'frontend-paa')}}</a>
                     {% endif %}
                 </div>
             </li>

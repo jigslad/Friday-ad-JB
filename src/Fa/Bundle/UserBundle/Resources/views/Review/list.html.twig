@@ -4,45 +4,46 @@
 {% set profileName = fetch_repository('FaUserBundle:User').getProfileNameFromArray(userProfileNameDetail) %}
 
 <div class="own-item">
-    <div class="media review-media">
-        <a href="{{ path('user_review_show', {'id':review.id})}}" class="tricky-link d-block d-md-none">{{ profileName }}</a>
-        <div class="col-md-3 col-lg-3 l-block pad-none">
-            {% if (review.reviewer_role_id == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or review.reviewer_role_id == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
-                {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), review.reviewer_company_image, review.reviewer_id, null, null, true, true, review.reviewer_status_id, profileName]) %}
-            {% endif %}
-            {% if review.reviewer_role_id == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER_ID') %}
-                {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), review.reviewer_image, review.reviewer_id, null, null, true, false, review.reviewer_status_id, profileName]) %}
-            {% endif %}
-            <div class="my-msg-usericon mr-3 {% if review.reviewer_role_id == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER_ID') %}rounded{% endif %}">
+	<div class="media review-media">
+	   <a href="{{ path('user_review_show', {'id':review.id})}}" class="tricky-link d-block d-md-none">{{ profileName }}</a>
+	    {% if (review.reviewer_role_id == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or review.reviewer_role_id == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
+            {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), review.reviewer_company_image, review.reviewer_id, null, null, true, true, review.reviewer_status_id, profileName]) %}
+        {% endif %}
+        {% if review.reviewer_role_id == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER_ID') %}
+            {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), review.reviewer_image, review.reviewer_id, null, null, true, false, review.reviewer_status_id, profileName]) %}
+        {% endif %}
+            
+		<div class="col-md-3 col-lg-3 l-block pad-none">
+			<div class="my-msg-usericon mr-3 {% if review.reviewer_role_id == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER_ID') %}rounded{% endif %}"">
                 {% if userLogo %}
                     {{userLogo|raw}}
                 {% else %}
                     <img class="pvt-no-img rounded-circle img-fluid" src="{{ asset_url('fafrontend/images/user-icon.svg') }}" alt="" />
                 {% endif %}
-            </div>
-        </div>
-        <div class="col-md-21 col-lg-21 r-block pad-none">
-            <div class="media-body mobile-arrow">
-                <div class="my-msg-heading">
-                    <h3 class="s-h3 mb5">{{ profileName }}</h3>
+            </div>				
+		</div>
+		<div class="col-md-21 col-lg-21 r-block pad-none">
+			<div class="media-body mobile-arrow">
+				<div class="my-msg-heading">
+				   <h3 class="s-h3 mb5">{{ profileName }}</h3>
                     <div class="list-created-hours">
                         <span>{{review['created_at']|time_ago_in_words}}</span>
-                    </div>
-                </div>
-                <div class="clearfix">
-                    <div class="my-review-title">
-                        {% if review.user_review_ad_id > 0 %}
+                    </div>				   
+			    </div>
+			    <div class="clearfix">
+			    	<div class="my-review-title">
+			    	    {% if review.user_review_ad_id > 0 %}
                             <a class="outside-tricky" href="{{ container.get('router').generate('ad_detail_page_by_id', {'id': review.user_review_ad_id}, true) }}">{{ review.ad_title }}</a>
                         {% else %}
-                            {{ review.subject }}
+                            {{ review.subject|raw }}
                         {% endif %}
                     </div>
-                    <div class="user-rating">
-                        {{ include('FaCoreBundle::showStarRating.html.twig', {'rating': review.rating}) }}
-                    </div>
-                </div>
-                <div class="user-review-content respond-description clearfix d-flex">
-                    <div class="col text-left pad-none">{{ review.message }}</div>
+			    	<div class="user-rating">
+			    	    {{ include('FaCoreBundle::showStarRating.html.twig', {'rating': review.rating}) }}					    
+					</div>
+			    </div>
+			    <div class="user-review-content respond-description clearfix d-flex">
+			         <div class="col text-left pad-none">{{ review.message }}</div>
                     <div class="col text-right pad-none d-none d-md-block">
                         {% set reviewDetails = {'ad_id':review.user_review_ad_id, 'title':(review.ad_title ? review.ad_title : review.subject), 'user_id':review.reviewer_id, 'first_name':review.reviewer_first_name, 'last_name':review.reviewer_last_name, 'business_name':review.reviewer_business_name, 'user_status_id':review.reviewer_status_id } %}
                         {% set review_link_text = 'Review this buyer'|trans({}, 'frontend-review') %}
@@ -52,21 +53,22 @@
                             {% set review_link_text = 'Review this advertiser'|trans({}, 'frontend-review') %}
                         {% endif %}
                         {{ include('FaUserBundle:Review:leaveReviewLink.html.twig', {'reviewDetails' : reviewDetails, 'to_whom' : to_whom, 'review_link_text' : review_link_text}) }}
-                    </div>
+                    </div>                    
                 </div>
-                <div class="clearfix respond-review d-none d-md-block">
-                    <div class="large-18 columns">
+			    <div class="clearfix respond-review d-none d-md-block">
+                    <div class="col text-left pad-none">
                         {% if respond|length == 0 %}
                             <div class="mt5 outside-tricky">
                                 <a href="javascript:void(0)" class="response_link" id="response_link_{{ review.id }}" title="{{ 'Respond to this review'|trans({}, 'frontend-review') }}" onClick="loadResponseForm('{{ review.id }}', '{{ review.user_id }}')">{{ 'Respond to this review'|trans({}, 'frontend-review') }}</a>
                             </div>
                         {% endif %}
-                    </div>
-                    <div class="large-6 columns outside-tricky">&nbsp;</div>
+                     </div>
+                    <div class="col text-left pad-none outside-tricky">&nbsp;</div>
                 </div>
-                {% if respond|length and respond.status == 1 %}
+                
+              {% if respond|length and respond.status == 1 %}
                 <div class="clearfix reply-review d-none d-md-block">
-                    <div class="large-3 columns">
+                    <div class="col-lg-3">
                         {% set userLogo = null %}
                         {% set userProfileNameDetail = {'first_name': respond.responder_first_name, 'last_name': respond.responder_last_name, 'business_name': respond.responder_business_name} %}
                         {% set profileName = fetch_repository('FaUserBundle:User').getProfileNameFromArray(userProfileNameDetail) %}
@@ -84,7 +86,7 @@
                             {% endif %}
                         </div>
                     </div>
-                    <div class="large-21 columns">
+                    <div class="col-lg-21">
                         <div class="clearfix my-msg-heading">
                             <h3>{{ '%responder_name% responded to this review'|trans({'%responder_name%' : profileName}, 'frontend-review')}}</h3>
                         </div>
@@ -92,8 +94,9 @@
                     </div>
                 </div>
             {% endif %}
-            </div>
-        </div>
-    </div>
-    <div class="write-reply mb0 respond_box" style="display:none" id="respond_box_{{ review.id }}"></div>
+            
+			</div>
+		</div>
+	</div>
+	<div class="write-reply mb0 respond_box" style="display:none" id="respond_box_{{ review.id }}"></div>
 </div>

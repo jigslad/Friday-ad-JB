@@ -31,6 +31,7 @@
                     <h2 class="s-h2 paa-title col-md-24 col-lg-18 text-center">{{ 'Add some photos and a few more details if you want to.'|trans({}, 'frontend-paa-fourth-step') }}</h2>
                 </div>
 
+				<div class="big-wrapper">
                 {% if ad and ad.id %}
                     {% set adMotorsDetails = fetch_repository('FaAdBundle:AdMotors').findByAdId(ad.id) %}
                     {% set adMotors = adMotorsDetails[0] %}
@@ -58,8 +59,8 @@
                             </div>
                         </div>
                     {{ form_end(form) }}
-
                 {% endif %}
+                </div>
             </div>
             {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {'paaBlockSlug': 'paa-motors-fourth-step'}) }}
         </div>

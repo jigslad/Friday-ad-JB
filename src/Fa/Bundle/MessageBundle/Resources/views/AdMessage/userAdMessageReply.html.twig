@@ -116,7 +116,7 @@
                                     {% if reviewDetails|length %}
                                         <span id="msg_leave_review_link">
 {#                                                class="xs-btn-1 btn small-btn leave-msg-btn"#}
-                                            {{ include('FaUserBundle:Review:leaveReviewLink.html.twig', {'reviewDetails' : reviewDetails, 'to_whom' : 'buyer', 'class' : 'button xs-btn-1 mt5 mb0 mymsg-review-btn', 'from_where': 'message'}) }}
+                                            {{ include('FaUserBundle:Review:leaveReviewLink.html.twig', {'reviewDetails' : reviewDetails, 'to_whom' : 'buyer', 'class' : 'btn secondary-btn-1 thin-btn mt5 mb0 mr10 mymsg-review-btn d-none d-md-block', 'from_where': 'message'}) }}
                                         </span>
                                     {% endif %}
                                     {% if isAdActive == true %}
@@ -126,11 +126,11 @@
                                             {% set messageSpammerObj = messageSpammerRepository.findOneBy({'ad_id': fullConversation[0]['message_ad_id'], 'reporter':app.user.getId(), 'spammer': fullConversation[0]['sender_user_id']}) %}
                                         {% endif %}
                                         {% if not messageSpammerObj %}
-                                            <span class="xs-btn-2 report" id="report_user_btn" onclick="reportUser();">{{ 'Report'|trans({}, 'frontend-inbox') }}</span>
+                                            <span class="secondary-btn-2 btn thin-btn d-none" id="report_user_btn" onclick="reportUser();">{{ 'Report'|trans({}, 'frontend-inbox') }}</span>
                                         {% endif %}
                                     {% endif %}
                                     {% if not isNewMessageFlag and adOwnerId == objLoggedInUser.getId() and isAdActive == true %}
-                                        <span class="xs-btn-2 btn small-btn marksold-btn" onclick="$('#markAsSoldModal').modal('show');">{{ 'Mark as sold'|trans({}, 'frontend-inbox') }}</span>
+                                        <span class="xs-btn-2 btn small-btn marksold-btn  d-none" onclick="$('#markAsSoldModal').modal('show');">{{ 'Mark as sold'|trans({}, 'frontend-inbox') }}</span>
                                     {% endif %}
                                 </div>
                             </div>
@@ -189,10 +189,10 @@
                         <div class="gray-text mt10">This will remove this ad from the listings.</div>
                         <div class="row">
                             <div class="col-lg-12 col-md-12">
-                                <button type="button" class="button secondary-btn-2 thin-btn expand mb0" onclick="closeRevealModel('#markAsSoldModal');markAsSold('{{adId}}');">{{'Continue'|trans({}, 'frontend-inbox')}}</button>
+                                <button type="button" class="btn btn-block secondary-btn-2 thin-btn mb0" onclick="closeRevealModel('#markAsSoldModal');markAsSold('{{adId}}');">{{'Continue'|trans({}, 'frontend-inbox')}}</button>
                             </div>
                             <div class="col-lg-12 col-md-12">
-                                <button type="button" class="button secondary-btn-1 thin-btn expand mb0" onclick="javascript:closeRevealModel('#markAsSoldModal');">{{'Cancel'|trans({}, 'frontend-inbox')}}</button>&nbsp;
+                                <button type="button" class="btn btn-block secondary-btn-1 thin-btn mb0" onclick="javascript:closeRevealModel('#markAsSoldModal');">{{'Cancel'|trans({}, 'frontend-inbox')}}</button>&nbsp;
                             </div>
                         </div>
                     </div>

@@ -31,6 +31,7 @@
                     </div>
 
                     {% set hideRightSideTxt = '' %}
+                    <div class="big-wrapper">
                     {% if ad and ad.id %}
                         {% set categoryId = ad.category.id %}
                         {% set hideRightSideTxt = (ad.category.name == 'Adult Contacts' or  ad.category.name == 'Adult Industry Jobs'?'hide':'') %}
@@ -43,11 +44,12 @@
                         {# {{ form_errors(form) }} #}
                             {{ include('FaAdBundle:AdPost:fourthStepAdultFields.html.twig') }}
                             <div class="small-wrapper">
-                                {{ form_widget(form.preview, {'attr': {'class':'secondary-btn-2 expand'}}) }}
+                                {{ form_widget(form.preview, {'attr': {'class':'secondary-btn-2 btn-block'}}) }}
                                 {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 btn btn-block next-btn mt20'}}) }}
                             </div>
                         {{ form_end(form) }}
                     {% endif %}
+                    </div>
                 </div>
                     {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {'paaBlockSlug': 'paa-adult-fourth-step', 'hideRightSideTxt': hideRightSideTxt}) }}
 
@@ -68,7 +70,7 @@
                                     <div class="invalid-loc-btns">
                                         <div class="row">
                                             <div class="col-lg-24 col-md-24 text-center">
-                                                <button type="button" class="button secondary-btn-1"  onclick='changeCategoryForAdult();'>{{'Change Category'|trans({}, 'frontend-invalid-location')}}</button>
+                                                <button type="button" class="btn secondary-btn-1"  onclick='changeCategoryForAdult();'>{{'Change Category'|trans({}, 'frontend-invalid-location')}}</button>
                                             </div>
                                         </div>
                                     </div>

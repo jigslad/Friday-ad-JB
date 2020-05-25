@@ -47,7 +47,7 @@
                     </div>
                     {% if respond|length %}
                         <div class="clearfix respond-review d-none d-md-block">
-                            <div class="large-3 columns">
+                            <div class="col-md-3>
                                 {% set userLogo = null %}
                                 {% set userProfileNameDetail = {'first_name': respond.responder_first_name, 'last_name': respond.responder_last_name, 'business_name': respond.responder_business_name} %}
                                 {% set profileName = fetch_repository('FaUserBundle:User').getProfileNameFromArray(userProfileNameDetail) %}
@@ -65,7 +65,7 @@
                                     {% endif %}
                                 </div>
                             </div>
-                            <div class="large-21 columns">
+                            <div class="col-md-21">
                                 <div class="clearfix my-msg-heading">
                                  <h3>{{ '%responder_name% responded to this review'|trans({'%responder_name%' : profileName}, 'frontend-review')}}</h3>
                                 </div>

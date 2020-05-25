@@ -17,7 +17,7 @@ h6 { color: $common-bg-color; }
 .white-bg { background: $white; }
 .gray-bg { background: $grey-color; }
 label { color: $dark-grey; }
-input,button, .button, .btn, .primary-btn-1, .primary-btn-2, .primary-btn-3, .secondary-btn-1, .secondary-btn-2,
+input,button, .button, .btn, .primary-btn-1, .primary-btn-2, .primary-btn-3, .secondary-btn-1, .secondary-btn-2, .btn.special,
 .reply-msg-heading .report, .reply-msg-heading .mark-sold, .paypal-box, .credit-cards-box, input.checkbox + label::after,
 .reply-msg-heading .report:hover, .reply-msg-heading .report:focus, .image-tooltip, .enquire-tooltip, .adult-pop-up-modal,
 .adult-modal.custom-modal .modal-content, .error-page .home-search, .popular-items .popular-graphic img, .button.special, .alert-box.radius,
@@ -822,7 +822,7 @@ ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {
 }
 .custom-card .list-price { color: $secondary-color; }
 .alert-box.success {
-    background: $primary-bg-color;
+    background: $primary-bg-color !important;
     border: 1px solid $accent1-color;
     color: $accent1-dark-color;
 }
@@ -1092,6 +1092,10 @@ footer {
 }
 .profile-logo-ins .f-dropdown li a {
     border-bottom: 1px solid $grey-color;
+    color: #212527 !important;
+}
+.profile-logo-ins .f-dropdown li:hover, .profile-logo-ins .f-dropdown li:focus {
+    background: #EAEFF0;
 }
 .primary-btn-1.disabled, .btn-disabled {
     background: $light-grey-color !important;
@@ -1121,7 +1125,9 @@ footer {
 /* Covid 19 */
 .covid-19-block { background: $common-text-color; }
 .ask-for-offer-help a, .ask-for-offer-help a:hover, .ask-for-offer-help a:focus { color: $covid-bg-color !important; }
-.place-free-ad-btn, .place-free-ad-btn:hover, .place-free-ad-btn:focus, a:hover.button.place-free-ad-btn, a:focus.button.place-free-ad-btn {  background-color: $covid-bg-color;color: $covid-btn-txt-color !important; }
+.place-free-ad-btn, .place-free-ad-btn:hover, .place-free-ad-btn:focus, a:hover.button.place-free-ad-btn, a:focus.button.place-free-ad-btn,
+a:hover.btn.place-free-ad-btn, a:focus.btn.place-free-ad-btn
+{  background-color: $covid-bg-color;color: $covid-btn-txt-color !important; }
 .covid-19-block.top-border { border-top: 4px solid $covid-bg-color }
 .covid-19-block.bottom-border { border-bottom: 4px solid $covid-bg-color }
 
@@ -1533,6 +1539,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
 .reply-msg-heading .report:hover, .reply-msg-heading .report:focus {
     background-color: $secondary-color !important; border-color: $secondary-color !important;
 }
+.reply-msg-heading h3 { color: $common-text-color !important; }
 .back-link { color: $secondary-color !important; }
 .green-text, .reply-msg-heading h3 a.green-text {
     color: $secondary-color;
@@ -1554,7 +1561,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
     }
 }
 .download-link { color: $form-label-color; }
-.newsletter-pref { box-shadow: 0 -1px 0 $form-text-color; }
+.newsletter-pref { box-shadow: 0 -1px 0 $chat-btn-color; }
 .own-item { border: 1px solid $form-border-color; }
 .profile-img-overlay, .cover-img-overlay { background: $site-dark-bg-color; }
 .profile-placeholder { background: $form-text-color; }
@@ -1652,9 +1659,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
 .order-select .custom-drop-menu a.active, .order-select .custom-drop-menu a:hover, .order-select .custom-drop-menu a:focus {
     background-color: $common-bg-color;
 }
-.newsletter-pref {
-    box-shadow: 0 -1px 0 $form-text-color;
-}
+
 .db-list a .section-head:hover, .db-list a .section-head:focus, .db-list a .section-head:active {
     background-color: $form-border-color;
     //color: $site-dark-bg-color;
@@ -2114,6 +2119,35 @@ footer p { color:$grey-color; }
     color: $common-text-color;
     font-family: "Poppins-SemiBold";
 }
+.form-control:focus { border-color: $accent1-dark-color !important; }
+.my-msg-heading span {     color: #ACB0B7; }
+.my-msg-box {
+    background: #F8F8F8;
+    border: 1px solid #CBD5D9;
+}
+.db-ins { color: #ACB0B7 !important; }
+.custom-card:hover, .custom-card:focus {
+	border-color: #82C249 !important;
+}
+.alert-box.info {
+    border: 1px solid #31c5f2 !important;
+    color: #31c5f2 !important;
+    background: #c5eff8 !important;
+}
+.design-your-profile .edit-pro-banner p, .design-your-profile .edit-pro-banner h2 {
+	color: #FFFFFF !important;
+}
+.profile-ins {
+  color: #ACB0B7 !important;
+}
+.shops-header-content .shop-view, .shop-review {
+	color: #FFFFFF!important;
+}
+.shop-cont-info .seller-cont-info {
+	border-top: 1px solid #D8D8D8;
+    border-bottom: 1px solid #fff;
+    box-shadow: inset 0 1px 0 0 #fff, inset 0 -1px 0 0 #D8D8D8;
+}
 
 @media only screen and (max-width: 640px) {
   .ad-list-block .reset-search{
@@ -2186,19 +2220,23 @@ footer p { color:$grey-color; }
     }
 }
 @media only screen and (min-width: 320px) and (max-width: 759px) {
-	.recommended-div.listing .recommended-addetail-div .recom-l-col {
-	    background: $dark-grey;
-	}
-	.recommended-div.listing .recommended-addetail-div .list-img {
-	    background-color: $dark-grey;
-	}
-	.posting-bg { background: $common-bg-color; }
-        .ad-list-block .mobile-refine .m-sort-btn { 
-            border-color: 1px solid $secondary-btn-brdr-color;
-        }   
-        .paa-block .posting-bg { background: $site-dark-bg-color; }
-        .paa-block .pkg-active { box-shadow: inset 0 0 0 0px $accent1-dark-color !important; padding: 0 5px 5px !important; }
-}
+    .recommended-div.listing .recommended-addetail-div .recom-l-col {
+      background: $dark-grey;
+    }
+    .recommended-div.listing .recommended-addetail-div .list-img {
+      background-color: $dark-grey;
+    }
+    .posting-bg { background: $common-bg-color; }
+    .ad-list-block .mobile-refine .m-sort-btn { 
+        border-color: 1px solid $secondary-btn-brdr-color;
+    }   
+    .paa-block .posting-bg { background: $site-dark-bg-color; }
+    .paa-block .pkg-active { box-shadow: inset 0 0 0 0px $accent1-dark-color !important; padding: 0 5px 5px !important; }
+    #home-search .search-btn, .home-search .search-btn {
+      background: url('/Frontend/images/icons/search-icon.svg') no-repeat center center / 16px 16px, linear-gradient(135deg, $secondary-btn-l-color 0%, $secondary-btn-r-color 100%) !important;
+      border: 0px solid $secondary-h-color;	   
+    }
+  }
 
 @media (min-width: 320px) and (max-width: 640px) {
    footer .mobile-footer-tab { box-shadow: inset 0 -1px 0 $text-color; }

@@ -12,15 +12,16 @@
 {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'adult_form'}}) }}
 {{ form_errors(form) }}
     <div class="adult-landing">
+        <div class="container">
         <div class="row">
-            <div class="columns">
+            <div class="col-md-24">
                 <div class="homepage-title">{{ 'Find a service'|trans({}, 'frontend-landing-page') }}</div>
                 <label>{{ 'Select category'|trans({}, 'frontend-landing-page') }}</label>
                 <div id="adult-categories" class="row popular-items ">
                     {% for adultSubCategoryId, adultSubCategoryName in adultSubCategories %}
                         {% if attribute(landingPageImages, adultSubCategoryId) is defined %}
                             {% for imageInfo in attribute(landingPageImages, adultSubCategoryId) %}
-                                <div class="large-4 columns adult_choice" id="adult_choice_{{ adultSubCategoryId }}">
+                                <div class="col-md-4 adult_choice" id="adult_choice_{{ adultSubCategoryId }}">
                                     <div class="item-box">
                                         <a class="tricky-link" href="javascript:void(0);">{{ adultSubCategoryName }}</a>
                                         <div class="overlay"></div>
@@ -43,7 +44,7 @@
                 
                 <div class="adult-fields">
                     <div class="row" id="adult_fields_div" style="display:none;">
-                        <div class="large-8 columns">
+                        <div class="col-md-8">
                             <div class="car-distance">
                                 <label>{{ 'Distance'|trans({}, 'frontend-landing-page') }}</label>
                                 <ul class="clearfix">
@@ -58,7 +59,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="large-8 columns">
+                        <div class="col-md-8">
                             {% if form.item_adult__travel_arrangements_id is defined %}
                                 {{ form_label(form.item_adult__travel_arrangements_id) }}
                                 <div class="white-select">
@@ -66,7 +67,7 @@
                                 </div>
                             {% endif %}
                         </div>
-                        <div class="large-8 columns">
+                        <div class="col-md-8">
                             {% if form.item_adult__independent_or_agency_id is defined %}
                                 {{ form_label(form.item_adult__independent_or_agency_id) }}
                                 <div class="white-select">
@@ -81,6 +82,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
 {{ form_end(form) }}
 {% endblock %}

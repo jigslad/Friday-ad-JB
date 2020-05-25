@@ -169,7 +169,7 @@
   .alert-btn-wrapper {
     margin: 10px;
     position: relative;
-    .button {
+    .button, .btn {
       padding-bottom: 10px;
     }
     &:hover .alert-tooltip {
@@ -218,7 +218,7 @@
       margin-top: -12px;
     }
   }
-  .alert-btn-wrapper .button {
+  .alert-btn-wrapper .button, .alert-btn-wrapper .btn {
     padding-bottom: 10px;
   }
   .accordion {
@@ -795,7 +795,16 @@
 	padding-left: 12px;
 	font-family: "Poppins-SemiBold";
 }
-
+.map-wrapper {
+    background: #fff;
+    border: 1px solid #CBD5D9;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+.map-wrapper h3 {
+    margin: 6px 0 20px 0;
+}
 
 @media only screen and (min-width: 960px) and (max-width: 1151px) {
 	.bus-shop-user-item-slider .item .busad-item {

@@ -49,7 +49,7 @@
                             {{ form_label(form.zip) }}
                             <div class="postcode clearfix">
                                 {{ form_widget(form.zip) }}
-                                <button type="button" class="button secondary-btn-1 right" onclick="return getUserAddress();">{{'Find address'|trans({},'frontend-cyber-source')}}</button>
+                                <button type="button" class="btn secondary-btn-1 right" onclick="return getUserAddress();">{{'Find address'|trans({},'frontend-cyber-source')}}</button>
                             </div>
                             <small id="zip_error_div" class="error" style="display:none"></small>
                             <span id="form_zip_error">{{ form_errors(form.zip) }}</span>
@@ -90,14 +90,14 @@
                     </div>
                     <div class="order-info">
                         <div class="row">
-                            <div class="large-18 columns">
+                            <div class="col-md-18">
                                 <h3>
                                     {% if attribute(adDetail, constant(solrMapping ~ 'TITLE')) is defined %}
                                        {{trim_text(attribute(adDetail, constant(solrMapping ~ 'TITLE')), 70)|raw}}
                                     {% endif %}
                                 </h3>
                             </div>
-                            <div class="large-6 columns text-right">
+                            <div class="col-md-6 text-right">
                                 <h3>
                                     {% if attribute(adDetail, constant(solrMapping ~ 'PRICE')) is defined %}
                                         {{ format_currency(attribute(adDetail, constant(solrMapping ~ 'PRICE'))) }}
@@ -106,18 +106,18 @@
                             </div>
                         </div>
                         <div class="row postage">
-                            <div class="large-18 columns">
+                            <div class="col-md-18">
                                 Postage cost
                             </div>
-                            <div class="large-6 columns text-right" id="buy_now_postage_price_div">
+                            <div class="col-md-6 text-right" id="buy_now_postage_price_div">
                                 {{ format_currency(adObj.getPostagePrice()) }}
                             </div>
                         </div>
                         <div class="row postage-total">
-                            <div class="large-18 columns">
+                            <div class="col-md-18">
                                 <h3>{{'TOTAL'|trans({}, 'frontend-buy-now')}}</h3>
                             </div>
-                            <div class="large-6 columns text-right">
+                            <div class="col-md-6 text-right">
                                 <h3 id="buy_now_total_price_div">
                                     {{ format_currency(adPrice+adPostagePrice) }}
                                 </h3>
@@ -131,7 +131,7 @@
         <div class="pb30">
             <h2 class="text-center pb30 black-text">Continue to PayPal to complete your purchase</h2>
             <div class="small-wrapper">
-                {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand'}}) }}
+                {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 btn-block'}}) }}
             </div>
         </div>
     {{ form_end(form) }}

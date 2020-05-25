@@ -64,7 +64,7 @@
                     <div class="head">Covid-19. <span class="ask-for-offer-help">Ask for & Offer Help in our <a href="https://www.friday-ad.co.uk/uk/community/coronavirus-support/" class="ga-covid-19-support-link-homepage">Coronavirus Support section</a></span></div>
                 </div>
                 <div class="col-sm-24 col-md-7 col-lg-6 covid-mb-btn">
-                    <a class="button place-free-ad-btn thin-btn ga-covid-19-paa-link-homepage" href="https://www.friday-ad.co.uk/paa/first_step?categoryName=Coronavirus%20Support">Place Help Ad</a>
+                    <a class="btn place-free-ad-btn thin-btn ga-covid-19-paa-link-homepage" href="https://www.friday-ad.co.uk/paa/first_step?categoryName=Coronavirus%20Support">Place Help Ad</a>
                 </div>
             </div>
         </div>
@@ -146,7 +146,7 @@
                 {{ include('FaFrontendBundle:Default:homePageLatestAdsSlider.html.twig', {'divId': 'latest-item-slider'}) }}
                 {% if searchResultUrl is not null%}
                     <div class="small-wrapper">
-                        <a href="{{ searchResultUrl }}" class="secondary-btn-1 expand button mb0" rel="nofollow">{{'View all'|trans({}, 'frontend-homepage')}}</a>
+                        <a href="{{ searchResultUrl }}" class="secondary-btn-1 btn btn-block mb0" rel="nofollow">{{'View all'|trans({}, 'frontend-homepage')}}</a>
                     </div>
                 {% endif %}
                 </div>
@@ -260,7 +260,7 @@
                     <div class="homepage-title">{{'Find out what your friends are selling'|trans({}, 'frontend-homepage')}}</div>
                     <div class="clearfix"></div>
                     <div class="text-center mb20 col-md-11 col-lg-7 m-auto pad-none">
-                        <a href="javascript:fbLoginPopup('{{ facebookLoginUrl }}');" class="button special signup-fb-btn">
+                        <a href="javascript:fbLoginPopup('{{ facebookLoginUrl }}');" class="btn special signup-fb-btn">
                             <span class="fb-icon"></span> 
                             <span class="btn-text">{{ 'Sign In with Facebook'|trans({}, 'frontend-homepage')}}</span>
                         </a>

@@ -22,13 +22,13 @@
                 <div>
                     <label for="fa_user_user_account_detail_email" class="required">Social connections</label>
                 	<div class="text-center mb20">
-                        <a href="{% if not app.user.getFacebookId() %}javascript:fbLoginPopup('{{ facebookLoginUrl }}');{% else %} # {% endif %}" class="button special signup-fb-btn">
+                        <a href="{% if not app.user.getFacebookId() %}javascript:fbLoginPopup('{{ facebookLoginUrl }}');{% else %} # {% endif %}" class="btn special signup-fb-btn">
                             <span class="fb-icon"></span> 
                             <span class="btn-text">{{ 'Connect with Facebook'|trans({}, 'frontend-user-account-detail') }}{% if app.user.getFacebookId() %}<span class="tickmark-icon right">&nbsp;</span>{% endif %}</span>
                         </a>
                     </div>
                     <div class="text-center mb20">
-                        <a href="{% if not app.user.getGoogleId() %}javascript:googleLoginPopup('{{ googleLoginUrl }}');{% else %} # {% endif %}" class="button special signup-google-btn">
+                        <a href="{% if not app.user.getGoogleId() %}javascript:googleLoginPopup('{{ googleLoginUrl }}');{% else %} # {% endif %}" class="btn special signup-google-btn">
                             <span class="google-icon"></span> 
                             <span class="btn-text">{{ 'Connected with Google'|trans({}, 'frontend-user-account-detail') }}{% if app.user.getGoogleId() %}<span class="tickmark-icon right">&nbsp;</span>{% endif %}</span>
                         </a>
@@ -76,10 +76,11 @@
                 {% if userDetailForm.new_password is defined %}
                     {{ form_row(userDetailForm.new_password, {'attr': {'class': 'white-field'}}) }}
                     <div class="label-inline">
-                        <ul class="custom-control custom-checkbox search-type">
-                            <li>
+                        <ul class="search-type">
+                            <li class="white-check">
                                 {% if userDetailForm.show_password is defined %}
-                                    {{ form_row(userDetailForm.show_password,{'attr':{'class': 'custom-control-input'},'label_attr': {'class': 'custom-control-label'} }) }}
+                                    {{ form_widget(userDetailForm.show_password,{'attr':{'class': 'checkbox'}}) }}
+                                    <label for="{{ userDetailForm.show_password.vars.id }}"></label>{{ userDetailForm.show_password.vars.label }}
                                 {% endif %}
                             </li>
                         </ul>

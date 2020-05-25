@@ -78,7 +78,7 @@
                     {% if countyInfo|length %}
                         <div class="choose-location counties">
                             <div class="row">
-                                <div class="columns">
+                                <div class="col-md-24">
                                 {% set locationHomePageUrl = container.get('fa_ad.manager.ad_routing').getLocationHomePageUrl(countyInfo['slug']) %}
                                 {% set locationLink = '<a href="'~path('show_all_locations')~'">'~'Locations'|trans({}, 'frontend-location')~'</a>' %}
                                 {{ 'Select your local area below or view all ads from %county_link% or go to %locations_link%'|trans({'%county_link%': '<a href="'~locationHomePageUrl~'">'~countyInfo['county']~'</a>', '%locations_link%': locationLink}, 'frontend-location')|raw }}

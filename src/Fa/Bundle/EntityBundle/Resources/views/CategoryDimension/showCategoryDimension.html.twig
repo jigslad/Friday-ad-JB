@@ -8,8 +8,9 @@
 {% endblock %}
 
 {% block body %}
+<div class="container">
 <div class="row">
-    <div class="columns">
+    <div class="col-md-24">
         <br />
         <div id="list_location_box" class="fa-accordion">
             <dl class="accordion" data-accordion>
@@ -36,7 +37,7 @@
                                  {% endif %}
                              {% endfor %}
                              {% for i in 0..columns-1 %}
-                                 <div class="large-8 columns">
+                                 <div class="col-md-8">
                                      {% for k in 0..colCounter[i]-1 %}
                                          {% if dimensions[ctr] is defined %}
                                             {% if isCategoryMake %}
@@ -61,5 +62,6 @@
             </dl>
         </div>
     </div>
+</div>
 </div>
 {% endblock %}

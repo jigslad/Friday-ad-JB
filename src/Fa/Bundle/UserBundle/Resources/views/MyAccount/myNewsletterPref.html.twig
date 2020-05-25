@@ -40,7 +40,7 @@
                 <div class="newsletter-pref">
                     {% for mainCatId in newsletterMainCategoryArray %}
                         {% set child = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(mainCatId - 1)] %}
-                        <div class="col-md-12 col-lg-8 pad-none d-inline-flex">
+                        <div class="col-md-12 col-lg-8 d-inline-flex newsletter-col">
                             <div class="label-inline">
                                 <ul class="search-type">
                                     <li class="white-check">

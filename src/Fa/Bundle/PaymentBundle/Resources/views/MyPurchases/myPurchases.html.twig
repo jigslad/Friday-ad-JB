@@ -42,9 +42,9 @@
                             {% endif %}
 
                             {% set objMessage = fetch_repository('FaMessageBundle:Message').getLastConversionOfTwoUsersForAd(paymentDetail['ad_id'], paymentDetail['buyer_id'], paymentDetail['seller_id']) %}
-                            <div class="purchase-item">
+                            <div class="purchase-item own-item">
                                 <div class="row" id="order_{{ paymentDetail['payment_id'] }}">
-                                    <div class="col-lg-18">
+                                    <div class="col-lg-18 mb10">
                                         <b>{{'Order no.'|trans({}, 'frontend-my-purchases')}}</b> {{paymentDetail['cart_code']}}<br />
                                         <b>{{'Item'|trans({}, 'frontend-my-purchases')}}</b> <a target="_blank" href="{{ container.get('router').generate('ad_detail_page_by_id', {'id': paymentDetail['ad_id']}, true) }}">{{paymentDetail['title']}}</a><br />
 
@@ -53,7 +53,7 @@
                                         <button class="secondary-btn-1 btn thin-btn btn-block order-details-btn purchase-details-btn" id="order_detail_button_{{orderId}}" onclick="toggleOrderDetail('{{orderId}}')">{{ 'Show details'|trans({}, 'frontend-my-orders') }}</button>
                                     </div>
                                 </div>
-                                <div class="row" id="order_detail_div_{{orderId}}" style="display: none;">
+                                <div class="row mt20" id="order_detail_div_{{orderId}}" style="display: none;">
                                     <div class="col-lg-18">
                                         <div class="purchase-disc">
                                             <b>{{'Order placed'|trans({}, 'frontend-my-purchases')}}</b> {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [paymentDetail['created_at'], container]) }}<br />
@@ -104,9 +104,9 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
-                                        <button class="secondary-btn-2 btn btn-block order-receipt-btn" onclick="viewReceipt('{{orderId}}');"><span class="view-icon">{{'View receipt'|trans({}, 'frontend-my-purchases')}}</span></button>
-                                        <button class="secondary-btn-2 btn btn-block mb10" onclick="printReceipt('{{orderId}}');"><span class="print-receipt-icon">{{'Print receipt'|trans({}, 'frontend-my-purchases')}}</span></button>
-                                        <div class="purchase-link-list">
+                                        <button class="secondary-btn-2 btn btn-block order-receipt-btn thin-btn" onclick="viewReceipt('{{orderId}}');"><span class="view-icon">{{'View receipt'|trans({}, 'frontend-my-purchases')}}</span></button>
+                                        <button class="secondary-btn-2 btn btn-block mb10 thin-btn" onclick="printReceipt('{{orderId}}');"><span class="print-receipt-icon">{{'Print receipt'|trans({}, 'frontend-my-purchases')}}</span></button>
+                                        <div class="purchase-link-list text-right">
                                             {% if paymentDetail['user_status_id'] == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::USER_STATUS_ACTIVE_ID') %}
                                                 {{ include('FaUserBundle:Review:leaveReviewLink.html.twig', {'reviewDetails' : paymentDetail, 'to_whom' : 'advertiser'}) }}<br />
                                                 {% if objMessage.getId() is defined and  objMessage.getId() == 1 %}

@@ -113,10 +113,10 @@
                        <div class="sortby-fields">
                         	<div class="clearfix">
                             	<div class="float-left d-block d-md-none sorting-small">
-                                    <a href="javascript:void(0);" rel="nofollow" class="secondary-btn-2 button" onclick="return toggleLeftSearch();">{{'Refine'|trans({}, 'frontend-search-result')}}</a>
+                                    <a href="javascript:void(0);" rel="nofollow" class="secondary-btn-2 btn" onclick="return toggleLeftSearch();">{{'Refine'|trans({}, 'frontend-search-result')}}</a>
                                 </div>
                                 <div class="float-left d-none d-md-block tablet-refine-btn">
-                                    <a href="javascript:void(0);" rel="nofollow" class="secondary-btn-2 button refine-search" onclick="return showLeftSearch(true);">{{'Refine your search'|trans({}, 'frontend-search-result')}}</a>
+                                    <a href="javascript:void(0);" rel="nofollow" class="secondary-btn-2 btn refine-search" onclick="return showLeftSearch(true);">{{'Refine your search'|trans({}, 'frontend-search-result')}}</a>
                                 </div>                        		
                         	</div>
                        </div>
@@ -129,12 +129,14 @@
 </div>
 
 {% if areaToolTipFlag is defined and areaToolTipFlag %}
-<div class="row top-msg">
-    <div class="columns">
-        <div data-alert="" class="alert alert-box info radius area-tooltip-alert">
+<div class="container top-msg">
+    <div class="row">
+    	<div class="col-md-24">
+        <div data-alert="" class=""alert alert-box info radius area-tooltip-alert">
         <span class="alert-icon">&nbsp;</span>
         <b>London Areas: </b> See ads that are closer to you by setting your location to a specific area of London (e.g. Camden Town or Westminster) or using your postcode.
         <a href="javascript:void(0)" class="close">×</a>
+        </div>
         </div>
     </div>
 </div>

@@ -28,7 +28,7 @@
             {% endif %}
             </div>
             <div>
-                <a href="javascript:deleteProfileImage('{{ path(deleteRoute, {'userId': userId, 'isCompany': isBusinessUser}) }}')" class="xs-btn-2 button remove-logo-btn" id="remove_img"><span class="delete-icon"></span>{{ 'Remove'|trans({}, 'frontend-paa-fourth-step')}}</a>
+                <a href="javascript:deleteProfileImage('{{ path(deleteRoute, {'userId': userId, 'isCompany': isBusinessUser}) }}')" class="secondary-btn-2 btn thin-btn remove-logo-btn" id="remove_img"><span class="delete-icon"></span>{{ 'Remove'|trans({}, 'frontend-paa-fourth-step')}}</a>
             </div>
         </li>
     {% else %}

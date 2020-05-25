@@ -436,7 +436,7 @@
 
                                 <div class="small-wrapper">
                                     {% if adDetail['user'] is defined %}
-                                        <a href="javascript:void(0);" class="primary-btn-1 button expand not-hover {% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 2: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')} and (adDetail['price'] is not defined or adDetail['price'] is null) %}mt10{% endif %}">
+                                        <a href="javascript:void(0);" class="primary-btn-1 btn btn-block not-hover {% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 2: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')} and (adDetail['price'] is not defined or adDetail['price'] is null) %}mt10{% endif %}">
                                         {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
                                             {{'Apply'|trans({}, 'frontend-preview-ad')}}
                                         {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
@@ -447,7 +447,7 @@
                                         <span class="contact-icon">contact</span></a>
                                     {% endif %}
                                     {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') and adDetail['payment_method_id'] is defined and adDetail['payment_method_id']  in {0: constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_ID'), 1: constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_OR_CASH_ID')} %}
-                                        <a href="javascript:void(0);" class="primary-btn-1 button expand not-hover">{{'Buy now with'|trans({}, 'frontend-preview-ad')}}<span class="paypal-icon">contact</span></a>
+                                        <a href="javascript:void(0);" class="primary-btn-1 btn btn-block not-hover">{{'Buy now with'|trans({}, 'frontend-preview-ad')}}<span class="paypal-icon">contact</span></a>
                                     {% endif %}
                                 </div>
 
@@ -458,7 +458,7 @@
                                 <div class="interested-item d-none d-md-block">
                                     {% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID'), 2: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ANIMALS_ID'), 3: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID')} %}
                                         <h3>{{'Got one like this?'|trans({}, 'frontend-preview-ad')}}</h3>
-                                        <a href="javascript:void(0);" class="secondary-btn-2 button expand not-hover">{{'Sell it here!'|trans({}, 'frontend-preview-ad')}}</a>
+                                        <a href="javascript:void(0);" class="secondary-btn-2 btn btn-block not-hover">{{'Sell it here!'|trans({}, 'frontend-preview-ad')}}</a>
                                     {% endif %}
                                 </div>
                             </div>
@@ -467,7 +467,7 @@
                                 <div class="property-alert">
                                     <div class="create-alert">
                                         <h5 class="text-center">{{'Want us to send you an email when we receive more ads like this?'|trans({}, 'frontend-preview-ad')}}</h5>
-                                        <a href="javascript:void(0);" class="secondary-btn-1 button expand alert-btn not-hover">{{'Create Alert'|trans({}, 'frontend-preview-ad')}}</a>
+                                        <a href="javascript:void(0);" class="secondary-btn-1 btn btn-block alert-btn not-hover">{{'Create Alert'|trans({}, 'frontend-preview-ad')}}</a>
                                     </div>
                                 </div>
                             {% endif %}
@@ -476,11 +476,11 @@
                 </div>
                 <div class="draft-buttons" id="ad_preview_bottom">
                 <div class="row">
-                    <div class="large-12 columns">
-                        <a href="{{path('ad_post_fourth_step', {'is_edit': 1})}}" class="primary-btn-1 button expand border-btn">{{'Edit details'|trans({}, 'frontend-preview-ad')}}</a>
+                    <div class="col-lg-12">
+                        <a href="{{path('ad_post_fourth_step', {'is_edit': 1})}}" class="primary-btn-1 btn btn-block border-btn">{{'Edit details'|trans({}, 'frontend-preview-ad')}}</a>
                     </div>
-                    <div class="large-12 columns">
-                        <a href="{{path('ad_package_purchase', {'adId': app.request.get('adId')})}}" class="primary-btn-1 button expand"><span class="d-block d-md-none">{{'Save & publish'|trans({}, 'frontend-preview-ad')}}</span><span class="d-none d-md-block">{{'Save and publish'|trans({}, 'frontend-preview-ad')}}</span></a>
+                    <div class="col-lg-12">
+                        <a href="{{path('ad_package_purchase', {'adId': app.request.get('adId')})}}" class="primary-btn-1 btn btn-block"><span class="d-block d-md-none">{{'Save & publish'|trans({}, 'frontend-preview-ad')}}</span><span class="d-none d-md-block">{{'Save and publish'|trans({}, 'frontend-preview-ad')}}</span></a>
                     </div>
                 </div>
             </div>

@@ -28,7 +28,7 @@
                 <a href="#" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Keyword search'|trans({}, 'frontend-left-search')}}</h5></a>
                 <div class="content active keyword-search">
                     {{ form_widget(attribute(form, 'keywords'), {'attr': {'class': 'white-field mb0'}}) }}
-                    <button type="submit" class="button secondary-btn-1 mb0">Keyword search</button>
+                    <button type="submit" class="btn secondary-btn-1 mb0">Keyword search</button>
                 </div>
             </dd>
         {% endif %}
@@ -183,10 +183,10 @@
         <div class="mt20 remove-search-btn">
             <div class="row">
                 <div class="col-lg-12 col-md-12">
-                    <button type="button" class="button secondary-btn-2 thin-btn expand mb0" onclick="closeRevealModel('#removeSavedSearch');removeSavedSearch();">{{'Ok'|trans({}, 'frontend-my-saved-searches')}}</button>
+                    <button type="button" class="btn btn-block secondary-btn-2 thin-btn mb0" onclick="closeRevealModel('#removeSavedSearch');removeSavedSearch();">{{'Ok'|trans({}, 'frontend-my-saved-searches')}}</button>
                 </div>
                 <div class="col-lg-12 col-md-12">
-                    <button type="button" class="button secondary-btn-1 thin-btn expand mb0" onclick="cancleRemoveSearchAgentPopup();">{{'Cancel'|trans({}, 'frontend-my-saved-searches')}}</button>
+                    <button type="button" class="btn btn-block secondary-btn-1 thin-btn mb0" onclick="cancleRemoveSearchAgentPopup();">{{'Cancel'|trans({}, 'frontend-my-saved-searches')}}</button>
                 </div>
             </div>
         </div>

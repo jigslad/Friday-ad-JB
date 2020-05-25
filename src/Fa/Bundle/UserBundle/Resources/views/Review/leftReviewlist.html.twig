@@ -1,10 +1,10 @@
-<div class="my-msg-box">
+<div class="my-msg-box own-item">
     {% set userLogo = null %}
     {% set userProfileNameDetail = {'first_name': review.user_first_name, 'last_name': review.user_last_name, 'business_name': review.user_business_name} %}
     {% set profileName = fetch_repository('FaUserBundle:User').getProfileNameFromArray(userProfileNameDetail) %}
     <a href="javascript:void(0)" class="tricky-link d-block d-md-none">{{ profileName }}</a>
     <div class="clearfix">
-        <div class="large-3 columns">
+        <div class="col-lg-3 col-md-3">
             
             {% if (review.user_role_id == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or review.user_role_id == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
                 {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), review.user_company_image, review.user_id, null, null, true, true, review.user_status_id, profileName]) %}
@@ -20,7 +20,7 @@
                 {% endif %}
             </div>
         </div>
-        <div class="large-21 columns my-msg-content">
+        <div class="col-lg-21 col-md-21 my-msg-content">
             <div class="clearfix my-msg-heading">
                 <h3>{{ 'You have left review for %user_name%'|trans({'%user_name%' : profileName}, 'frontend-review') }}</h3>
                 <span>{{review['created_at']|time_ago_in_words}}</span>
@@ -40,14 +40,14 @@
             </div>
 
             <div class="user-review-content respond-description clearfix">
-                <div class="large-18 columns">{{ review.message }}</div>
-                <div class="large-6 columns"></div>
+                <div class="col-lg-18 col-md-18">{{ review.message }}</div>
+                <div class="col-lg-6 col-md-6"></div>
             </div>
 
             {% set respond = fetch_repository('FaUserBundle:UserReview').getUserReviewResponse(review.id, review.user_id) %}
             {% if respond|length and respond.status == 1 %}
                 <div class="clearfix">
-                    <div class="large-3 columns">
+                    <div class="col-lg-3 col-md-3">
                         {% set userLogo = null %}
                         {% set userProfileNameDetail = {'first_name': respond.responder_first_name, 'last_name': respond.responder_last_name, 'business_name': respond.responder_business_name} %}
                         {% set profileName = fetch_repository('FaUserBundle:User').getProfileNameFromArray(userProfileNameDetail) %}
@@ -65,7 +65,7 @@
                             {% endif %}
                         </div>
                     </div>
-                    <div class="large-21 columns">
+                    <div class="col-lg-21 col-md-21">
                         <div class="clearfix my-msg-heading">
                             <h3>{{ '%responder_name% responded to this review'|trans({'%responder_name%' : profileName}, 'frontend-review')}}</h3>
                         </div>

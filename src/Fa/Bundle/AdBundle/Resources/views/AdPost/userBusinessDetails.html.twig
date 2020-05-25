@@ -16,7 +16,7 @@
         <div class="fad-sign-bdr">&nbsp;</div>
         <div class="row paa-main">
             {{ include('FaAdBundle:AdPost:paaStepsList.html.twig', {'step' : 3, 'isBusinessDetails' : true }) }}
-            <div id="middle-column" class="large-12 columns">
+            <div id="middle-column" class="col-md-12">
                 <h1 class="text-center pb30">{{ 'Add your business details'|trans({}, 'frontend-paa-third-step') }}</h1>
                 <h2 class="text-center">{{ 'Tell us a bit more about your business, if you want to.'|trans({}, 'frontend-paa-third-step') }}</h2>
                 <div class="big-wrapper">
@@ -90,7 +90,7 @@
                             </div>
                         </div>
                         <div class="small-wrapper">
-                            {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand'}}) }}
+                            {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 btn-block'}}) }}
                         </div>
                     {{ form_end(form) }}
                 </div>

@@ -10,7 +10,7 @@
     </div>
     <div class="review-dtl-content">
         <div class="clearfix">
-            <div class="large-3 columns">
+            <div class="col-md-3">
                 {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), review.reviewer_image, review.reviewer_id, null, null]) %}
                 <div class="my-msg-usericon">
                     {% if userLogo %}
@@ -20,7 +20,7 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="large-21 columns my-msg-content">
+            <div class="col-md-21 my-msg-content">
                 <div class="clearfix my-msg-heading">
                     <h3>{{ reviewer_name }}</h3>
                     <span>{{review['created_at']|time_ago_in_words}}</span>
@@ -47,19 +47,19 @@
                     {{ review.message }}
                 </div>
                 <div class="user-review-content clearfix respond-review">
-                    <div class="large-18 columns">
+                    <div class="col-md-18">
                         {% if respond|length == 0 %}
                             <div class="mt5 outside-tricky">
                                 <a href="javascript:void(0)" class="response_link" id="response_link_{{ review.id }}" title="{{ 'Respond to this review'|trans({}, 'frontend-review') }}" onClick="loadResponseForm('{{ review.id }}', '{{ review.user_id }}')">{{ 'Respond to this review'|trans({}, 'frontend-review') }}</a>
                             </div>
                         {% endif %}
                     </div>
-                    <div class="large-6 columns outside-tricky">&nbsp;</div>
+                    <div class="col-md-6 outside-tricky">&nbsp;</div>
                 </div>
 
                 {% if respond|length and respond.status == 1 %}
                     <div class="clearfix reply-review">
-                        <div class="large-3 columns">
+                        <div class="col-md-3">
                             {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), respond.responder_image, respond.responder_id]) %}
                             <div class="my-msg-usericon respond-icon">
                                 {% if userLogo %}
@@ -69,7 +69,7 @@
                                 {% endif %}
                             </div>
                         </div>
-                        <div class="large-21 columns">
+                        <div class="col-md-21">
                             <div class="clearfix my-msg-heading">
                              {% if respond.responder_business_name %}
                                  {% set responder_name = respond.responder_business_name %}

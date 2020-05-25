@@ -426,7 +426,7 @@ class DashboardController extends CoreController
 
         $keywords       = null;
         $page           = ($request->get('page') ? $request->get('page') : 1);
-        $recordsPerPage = 50;
+        $recordsPerPage = 3; 
 
         if (is_array($adIdsArray) && count($adIdsArray) > 0) {
             //set ad criteria to search

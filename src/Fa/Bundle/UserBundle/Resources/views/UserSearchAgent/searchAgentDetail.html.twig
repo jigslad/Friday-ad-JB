@@ -27,14 +27,14 @@
         <div class="col-md-9 col-lg-7 r-block">
             {% if guid is not defined %}
                 <div class="group-m-btn">
-                    <span class="ad-edit mr10">
-                        <a class="secondary-btn-2 btn thin-btn edit-btn" href="javascript:void(0)" onclick="renameSavedSearchConfirmation('{{searchAgent.id}}');">
+                    <span class="ad-edit">
+                        <a class="secondary-btn-2 btn thin-btn edit-btn h-width" href="javascript:void(0)" onclick="renameSavedSearchConfirmation('{{searchAgent.id}}');">
                             <span class="edit-icon"></span>
                             {{'Rename'|trans({}, 'frontend-my-saved-searches')}}
                         </a>
                     </span>
                     <span class="ad-remove float-right">
-                        <a class="secondary-btn-2 btn thin-btn last-btn delete-btn" href="javascript:void(0);" onclick="removeSavedSearchConfirmation('{{searchAgent.id}}');">
+                        <a class="secondary-btn-2 btn thin-btn last-btn delete-btn f-width" href="javascript:void(0);" onclick="removeSavedSearchConfirmation('{{searchAgent.id}}');">
                             <span class="delete-icon"></span>
                             {{'Remove'|trans({}, 'frontend-my-saved-searches')}}
                         </a>

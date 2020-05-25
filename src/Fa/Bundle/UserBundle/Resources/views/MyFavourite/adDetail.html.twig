@@ -15,13 +15,13 @@
 {% if seoRule['image_alt'] is defined %}
     {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], adDetail]) %}
 {% endif %}
-<div class="card custom-card">
+<div class="favourites-card card custom-card p20">
             <a href="javascript:void(0);" onclick="return removeFromFavorite('{{adId}}');" class="card-badge heart-badge">&nbsp;</a>
-            {% if attribute(adDetail, constant(adDetailSolrMapping ~ 'STATUS_ID')) == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
+           {# {% if attribute(adDetail, constant(adDetailSolrMapping ~ 'STATUS_ID')) == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
                 <span class="sold-ribbon">{{ 'Ad Sold'|trans({}, 'frontend-my-favourites') }}</span>
             {% elseif attribute(adDetail, constant(adDetailSolrMapping ~ 'STATUS_ID')) == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') %}
                 <span class="expired-ribbon">{{ 'Ad Expired'|trans({}, 'frontend-my-favourites') }}</span>
-            {% endif %}
+            {% endif %}  #}
             <a class="tricky-link" href="{{adUrl}}">
                 {% if attribute(adDetail, constant(adDetailSolrMapping ~ 'TITLE')) is defined %}
                     {{trim_text(attribute(adDetail, constant(adDetailSolrMapping ~ 'TITLE')), 65)|raw}}
@@ -38,7 +38,7 @@
                     <img class="img-fluid" src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
                 {% endif %}
             </div>
-            <div class="card-body pt0">
+            <div class="">
                 <h3 class="card-title s-h3">
                     {% if attribute(adDetail, constant(adDetailSolrMapping ~ 'TITLE')) is defined %}
                         {{trim_text(attribute(adDetail, constant(adDetailSolrMapping ~ 'TITLE')), 65)|raw}}

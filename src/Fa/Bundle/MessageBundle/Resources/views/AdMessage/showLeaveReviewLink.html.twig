@@ -9,5 +9,5 @@
 {% endif %}
 
 {% if reviewDetails|length %}
-    {{ include('FaUserBundle:Review:leaveReviewLink.html.twig', {'reviewDetails' : reviewDetails, 'to_whom' : 'buyer', 'class' : 'button xs-btn-1 mt5 mb0 mymsg-review-btn', 'from_where': 'message'}) }}
+    {{ include('FaUserBundle:Review:leaveReviewLink.html.twig', {'reviewDetails' : reviewDetails, 'to_whom' : 'buyer', 'class' : 'btn secondary-btn-1 thin-btn mt5 mb0 mymsg-review-btn', 'from_where': 'message'}) }}
 {% endif %}

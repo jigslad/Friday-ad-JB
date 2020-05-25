@@ -79,7 +79,7 @@
     <div class="featured-ribbon">featured</div>
     <div class="urgent-ribbon">urgent</div>
     {#<div class="boost-ribbon"></div>#}
-
+    
     <div class="media-left align-self-center">
         {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, ad, '300X225', 1) %}
         <div class="list-img {% if not imagePath %}list-placeholder{% endif %}">
@@ -211,7 +211,7 @@
                     {% endif %}
                 </div>
                 <div class="upgrade-btn">
-                	<button class="button secondary-btn-1 upgradeToFeaturedBtn" data-reveal-id="upgrade-modal" onclick="return upgradeToFeaturedBtn('{{ ad.id }}', '{{ rootCategoryId }}');" >
+                	<button class="btn secondary-btn-1 upgradeToFeaturedBtn" data-reveal-id="upgrade-modal" onclick="return upgradeToFeaturedBtn('{{ ad.id }}', '{{ rootCategoryId }}');" >
                 		{{ (categUpgTxtInfo.FeaturedUpgradeBtnTxt is null)?'Upgrade':categUpgTxtInfo.FeaturedUpgradeBtnTxt  }}
                 	</button>
                 </div>

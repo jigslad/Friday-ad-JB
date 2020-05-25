@@ -15,10 +15,6 @@
 {% use "FaAdBundle:AdPost:fourthStepCommonPushNotification.html.twig" %}
 
 {% block body %}
-<style>
-.select2-container.custom_select { width:100% !important; }
-.custom_select_options.select2-drop.select2-with-searchbox { min-width:300px !important; }
-</style>
     <div class="posting-bg">
         <div class="container">
             <div class="row">
@@ -33,7 +29,8 @@
                     <div class="col-md-24 d-flex justify-content-center sub-text mb30">
                         <h2 class="s-h2 col-md-24 col-lg-18 text-center subtitle paa-title">{{ 'Add some photos and a few more details if you want to.'|trans({}, 'frontend-paa-fourth-step') }}</h2>
                     </div>
-
+                    
+                    <div class="big-wrapper">
                     {% if ad and ad.id %}
                         {% set categoryId = ad.category.id %}
                         {% set orderedFields = form.fourth_step_ordered_fields.vars.value|split(',') %}
@@ -53,6 +50,7 @@
                             </div>
                         {{ form_end(form) }}
                     {% endif %}
+                    </div>
                 </div>
                 {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {'paaBlockSlug': 'paa-animals-fourth-step'}) }}
             </div>

@@ -64,7 +64,7 @@
                                                 </div>
                                             {% else %}
                                                 {% if currentPackage.getPackage.getPrice() > package.getPrice() %}
-                                                    <button type="button" class="{% if packageValues['btn_class'] is defined %}{{packageValues['btn_class']}}{% else %}primary-btn-3{% endif %} expand disabled"  onmouseover="$('#package_selection_{{package.getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getId()}}').attr('style', '');">
+                                                    <button type="button" class="{% if packageValues['btn_class'] is defined %}{{packageValues['btn_class']}}{% else %}primary-btn-3{% endif %} btn-block disabled"  onmouseover="$('#package_selection_{{package.getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getId()}}').attr('style', '');">
                                                         {% if package.getNewAdCta() %}
                                                             {{package.getNewAdCta()}}
                                                         {% else %}
@@ -72,7 +72,7 @@
                                                         {% endif %}
                                                     </button>
                                                 {% else %}
-                                                    <button type="button" class="{% if packageValues['btn_class'] is defined %}{{packageValues['btn_class']}}{% else %}primary-btn-3{% endif %} expand" onclick="return selectPackage({{package.getId()}}, {{is_trail}});"  onmouseover="$('#package_selection_{{package.getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getId()}}').attr('style', '');">
+                                                    <button type="button" class="{% if packageValues['btn_class'] is defined %}{{packageValues['btn_class']}}{% else %}primary-btn-3{% endif %} btn-block" onclick="return selectPackage({{package.getId()}}, {{is_trail}});"  onmouseover="$('#package_selection_{{package.getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getId()}}').attr('style', '');">
                                                         {% if package.getRenewalAdCta() %}
                                                             {{package.getRenewalAdCta()}}
                                                         {% else %}
@@ -82,7 +82,7 @@
                                                 {% endif %}
                                             {% endif %}
                                            {% else %}
-                                             <button type="button" class="{% if packageValues['btn_class'] is defined %}{{packageValues['btn_class']}}{% else %}primary-btn-3{% endif %} expand" onclick="return selectPackage({{package.getId()}}, {{is_trail}});" onmouseover="$('#package_selection_{{package.getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getId()}}').attr('style', '');">
+                                             <button type="button" class="{% if packageValues['btn_class'] is defined %}{{packageValues['btn_class']}}{% else %}primary-btn-3{% endif %} btn-block" onclick="return selectPackage({{package.getId()}}, {{is_trail}});" onmouseover="$('#package_selection_{{package.getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getId()}}').attr('style', '');">
                                                 {% if package.getNewAdCta() %}
                                                     {{package.getNewAdCta()}}
                                                 {% else %}
@@ -105,7 +105,7 @@
                         {{'No ad packages found.'|trans({}, 'frontend-ad-package')}}
                     {% endif %}
                     <div class="d-block d-md-none">
-                        <button id="purchase_btn" class="primary-btn-1 button expand disabled">{{'Place my ad'|trans({}, 'frontend-ad-package')}}</button>
+                        <button id="purchase_btn" class="primary-btn-1 btn btn-block disabled">{{'Place my ad'|trans({}, 'frontend-ad-package')}}</button>
                     </div>
 
                     {{ form_start(form, {'attr': {'novalidate': '', 'id': 'fa_user_package_admin_id'} }) }}
@@ -114,7 +114,7 @@
                                 {{ form_row(form.package) }}
                             </div>
                             <ul class="button-group text-center">
-                                <li>{{ form_widget(form.save, {'label': 'Save'|trans, 'attr': {'class':'tiny button mb0'}}) }}</li>
+                                <li>{{ form_widget(form.save, {'label': 'Save'|trans, 'attr': {'class':'tiny btn mb0'}}) }}</li>
                             </ul>
                         </div>
                     {{ form_end(form) }}
