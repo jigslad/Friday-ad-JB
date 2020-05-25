@@ -77,7 +77,7 @@
                 $('#shopBannerModal').modal('hide');
             }
             if (response.error.length) {
-                $(decorateMessage(response.error, 'alert')).insertBefore('#user_site_banner_div');
+                $(decorateMessage(response.error, 'error')).insertBefore('#user_site_banner_div');
                 $('#shopBannerModal').modal('hide');
             } else {
                 $(decorateMessage("{{'Banner changed successfully.'|trans({}, 'frontend-my-profile')}}", 'success')).insertBefore('#user_site_banner_div');

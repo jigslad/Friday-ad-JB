@@ -263,7 +263,7 @@
                         close_on_esc : false
                     });
                 } else if (response.error.length) {
-                    $('.manage-item-tabs').prepend(decorateMessage(response.error, 'alert'));
+                    $('.manage-item-tabs').prepend(decorateMessage(response.error, 'error'));
                     scrollToElement('.manage-item-tabs', '1000', -150);
                 }
             });

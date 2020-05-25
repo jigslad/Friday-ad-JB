@@ -168,7 +168,7 @@
         .done(function(response) {
             hideAlertMessage();
             if (response.error && response.error.length) {
-                $(decorateMessage(response.error, 'alert')).prependTo('#saved_search_'+id);
+                $(decorateMessage(response.error, 'error')).prependTo('#saved_search_'+id);
             } else if (response.success && response.success.length) {
                 $(decorateMessage(response.success, 'success')).prependTo('#saved_search_'+id);
             }
@@ -190,7 +190,7 @@
             .done(function(response) {
                 hideAlertMessage();
                 if (response.error.length) {
-                    $(decorateMessage(response.error, 'alert')).insertBefore('#saved_search_'+id);
+                    $(decorateMessage(response.error, 'error')).insertBefore('#saved_search_'+id);
                 } else {
                     location.reload();
                 }
@@ -236,7 +236,7 @@
                 .done(function(response) {
                     hideAlertMessage();
                     if (response.error.length) {
-                        $(decorateMessage(response.error, 'alert')).prependTo('#saved_search_'+savedSearchIdToRename);
+                        $(decorateMessage(response.error, 'error')).prependTo('#saved_search_'+savedSearchIdToRename);
                     } else {
                     	$('#saved_search_title_'+savedSearchIdToRename+'_mobile').html(searchAgentTitle);
                     	$('#saved_search_title_'+savedSearchIdToRename+'_desktop').html(searchAgentTitle);

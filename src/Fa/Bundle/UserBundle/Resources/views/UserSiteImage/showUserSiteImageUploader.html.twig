@@ -176,7 +176,7 @@
             })
             .done(function(response) {
                 if (response.error.length) {
-                    $('#userSiteFilelist').html(decorateMessage(response.error, 'alert'));
+                    $('#userSiteFilelist').html(decorateMessage(response.error, 'error'));
                 }
                 if (response.successMsg.length) {
                     $('#userSiteFilelist').html(decorateMessage(response.successMsg, 'success'));
@@ -202,7 +202,7 @@
             })
             .done(function(response) {
                 if (response.error.length) {
-                    $('#userSiteFilelist').html(decorateMessage(response.error, 'alert'));
+                    $('#userSiteFilelist').html(decorateMessage(response.error, 'error'));
                 }
                 if (response.image.length) {
                     $('#user_site_crop_big_image_div').html(response.image);
@@ -274,7 +274,7 @@
             })
             .done(function(response) {
                 if (response.error.length) {
-                    $('#userSiteFilelist').html(decorateMessage(response.error, 'alert'));
+                    $('#userSiteFilelist').html(decorateMessage(response.error, 'error'));
                     initUserSiteImageUpload(false);
                 }
                 if (response.successMsg.length) {
@@ -314,7 +314,7 @@
                         success: function(response) {
                             unblockElement('#user_site_uploaded_images_div');
                             if (response.error.length) {
-                                $('#userSiteFilelist').html(decorateMessage(response.error, 'alert'));
+                                $('#userSiteFilelist').html(decorateMessage(response.error, 'error'));
                                 getUserSiteImages();
                             }
                             if (response.successMsg.length) {
@@ -342,7 +342,7 @@
                     success: function(response) {
                         unblockElement('#user_site_uploaded_images_div');
                         if (response.error.length) {
-                            $('#userSiteFilelist').html(decorateMessage(response.error, 'alert'));
+                            $('#userSiteFilelist').html(decorateMessage(response.error, 'error'));
                             getUserSiteImages();
                         }
                         if (response.successMsg.length) {

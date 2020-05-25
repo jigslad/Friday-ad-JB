@@ -96,7 +96,7 @@
                     $('#profileEditModal').html(response.htmlContent);
                     $('#profileEditModal').modal('show');
                 } else if (response.error.length) {
-                    $('#profile_main_div').prepend(decorateMessage(response.error, 'alert'));
+                    $('#profile_main_div').prepend(decorateMessage(response.error, 'error'));
                     scrollToElement('#profile_main_div', '1000', -150);
                 } else if (response.redirectToUrl.length) {
                     window.location.href = response.redirectToUrl;
@@ -121,7 +121,7 @@
                     $('#profileEditModal').html(response.htmlContent);
                     $('#profileEditModal').modal('show');
                 } else if (response.error.length) {
-                    $('#profile_main_div').prepend(decorateMessage(response.error, 'alert'));
+                    $('#profile_main_div').prepend(decorateMessage(response.error, 'error'));
                     scrollToElement('#profile_main_div', '1000', -150);
                 } else if (response.redirectToUrl.length) {
                     window.location.href = response.redirectToUrl;
@@ -146,7 +146,7 @@
                     $('#profileEditModal').html(response.htmlContent);
                     $('#profileEditModal').modal('show');
                 } else if (response.error.length) {
-                    $('#profile_main_div').prepend(decorateMessage(response.error, 'alert'));
+                    $('#profile_main_div').prepend(decorateMessage(response.error, 'error'));
                     scrollToElement('#profile_main_div', '1000', -150);
                 } else if (response.redirectToUrl.length) {
                     window.location.href = response.redirectToUrl;
@@ -171,7 +171,7 @@
                     $('#profileEditModal').html(response.htmlContent);
                     $('#profileEditModal').modal('show');
                 } else if (response.error.length) {
-                    $('#profile_main_div').prepend(decorateMessage(response.error, 'alert'));
+                    $('#profile_main_div').prepend(decorateMessage(response.error, 'error'));
                     scrollToElement('#profile_main_div', '1000', -150);
                 } else if (response.redirectToUrl.length) {
                     window.location.href = response.redirectToUrl;
@@ -196,7 +196,7 @@
                     $('#profileEditModal').html(response.htmlContent);
                     $('#profileEditModal').modal('show');
                 } else if (response.error.length) {
-                    $('#profile_main_div').prepend(decorateMessage(response.error, 'alert'));
+                    $('#profile_main_div').prepend(decorateMessage(response.error, 'error'));
                     scrollToElement('#profile_main_div', '1000', -150);
                 } else if (response.redirectToUrl.length) {
                     window.location.href = response.redirectToUrl;
@@ -221,7 +221,7 @@
                     $('#profileEditModal').html(response.htmlContent);
                     $('#profileEditModal').modal('show');
                 } else if (response.error.length) {
-                    $('#profile_main_div').prepend(decorateMessage(response.error, 'alert'));
+                    $('#profile_main_div').prepend(decorateMessage(response.error, 'error'));
                     scrollToElement('#profile_main_div', '1000', -150);
                 } else if (response.redirectToUrl.length) {
                     window.location.href = response.redirectToUrl;
@@ -246,7 +246,7 @@
                     $('#profileEditLocationModal').html(response.htmlContent);
                     $('#profileEditLocationModal').modal('show');
                 } else if (response.error.length) {
-                    $('#profile_main_div').prepend(decorateMessage(response.error, 'alert'));
+                    $('#profile_main_div').prepend(decorateMessage(response.error, 'error'));
                     scrollToElement('#profile_main_div', '1000', -150);
                 } else if (response.redirectToUrl.length) {
                     window.location.href = response.redirectToUrl;
@@ -272,7 +272,7 @@
                     $('#shopBannerModal').modal('hide');
                 }
                 if (response.error.length) {
-                    $(decorateMessage(response.error, 'alert')).insertBefore('#show_message_div');
+                    $(decorateMessage(response.error, 'error')).insertBefore('#show_message_div');
                     $('#shopBannerModal').modal('hide');
                 } else {
                     $(decorateMessage("{{'Banner changed successfully.'|trans({}, 'frontend-my-profile')}}", 'success')).insertBefore('#show_message_div');

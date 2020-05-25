@@ -73,7 +73,7 @@
                 if (response.error == 'no_cookie') {
                     clearNimberCookies(true);
                 } else {
-                    $(decorateMessage(response.error, 'alert')).insertBefore('#adDetailMainTabs');
+                    $(decorateMessage(response.error, 'error')).insertBefore('#adDetailMainTabs');
                     scrollToElement('#adDetailMainTabs', '1000', -150);
                 }
             } else {

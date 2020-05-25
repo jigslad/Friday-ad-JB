@@ -145,7 +145,7 @@
                 $('#paypal_email, #paypal_first_name, #paypal_last_name').removeClass('error');
             }
             if (response.error.length) {
-                $(decorateMessage(response.error, 'alert')).prependTo('#panel3b');
+                $(decorateMessage(response.error, 'error')).prependTo('#panel3b');
                 $('#paypal_email_verify_status').addClass('error-icon');
                 $('#paypal_email, #paypal_first_name, #paypal_last_name').addClass('error');
             }
@@ -195,7 +195,7 @@
                 $('#addressBookModal').html(response.htmlContent);
 
             } else if (response.error.length) {
-                $(decorateMessage(response.error, 'alert')).prependTo('#panel6b');
+                $(decorateMessage(response.error, 'error')).prependTo('#panel6b');
                 scrollToElement('#panel6b', '1000', -150);
             }
         });
@@ -223,7 +223,7 @@
                 $('#addressBookModal').html(response.htmlContent);
                 $('#addressBookModal').modal("show");
             } else if (response.error.length) {
-                $(decorateMessage(response.error, 'alert')).prependTo('#panel6b');
+                $(decorateMessage(response.error, 'error')).prependTo('#panel6b');
                 scrollToElement('#panel6b', '1000', -150);
             }
         });
@@ -342,7 +342,7 @@
         .done(function(response) {
             hideAlertMessage();
             if (response.error.length) {
-                $(decorateMessage(response.error, 'alert')).prependTo('#panel6b');
+                $(decorateMessage(response.error, 'error')).prependTo('#panel6b');
                 scrollToElement('#panel6b', '1000', -150);
             } else {
                 if (response.listHtmlContent.length) {
@@ -400,7 +400,7 @@
         .done(function(response) {
             hideAlertMessage();
             if (response.error.length) {
-                $(decorateMessage(response.error, 'alert')).prependTo('#panel6b');
+                $(decorateMessage(response.error, 'error')).prependTo('#panel6b');
                 scrollToElement('#panel6b', '1000', -150);
             } else {
                 if (response.listHtmlContent.length) {
@@ -427,7 +427,7 @@
         .done(function(response) {
             hideAlertMessage();
             if (response.error.length) {
-                $(decorateMessage(response.error, 'alert')).prependTo('#panel8b');
+                $(decorateMessage(response.error, 'error')).prependTo('#panel8b');
                 scrollToElement('#panel8b', '1000', -150);
             } else {
                 if (response.listHtmlContent.length) {

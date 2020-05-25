@@ -330,7 +330,7 @@
              })
         .done(function(response) {
                 if (response.error.length) {
-                $('#reply_msg_div').html(decorateMessage(response.error, 'alert'));
+                $('#reply_msg_div').html(decorateMessage(response.error, 'error'));
                 $('#reply_msg_div').show();
             }
             if (response.successMsg.length) {
@@ -367,7 +367,7 @@
              })
         .done(function(response) {
                 if (response.error.length) {
-                $('#reply_msg_div').html(decorateMessage(response.error, 'alert'));
+                $('#reply_msg_div').html(decorateMessage(response.error, 'error'));
                 $('#reply_msg_div').show();
             } else {
                 $('#messages_div').html(response.messagesHtml)
@@ -393,7 +393,7 @@
              })
             .done(function(response) {
                     if (response.error.length) {
-                    $('#mark_as_sold_msg_div').html(decorateMessage(response.error, 'alert'));
+                    $('#mark_as_sold_msg_div').html(decorateMessage(response.error, 'error'));
                     $('#mark_as_sold_msg_div').show();
                 }
                 if (response.successMsg.length) {
@@ -423,7 +423,7 @@
                 $('#reportUserModal').html(response.htmlContent);
                 $('#reportUserModal').modal('show');
             } else if (response.error.length) {
-                $(decorateMessage(response.error, 'alert')).insertBefore('#message_box');
+                $(decorateMessage(response.error, 'error')).insertBefore('#message_box');
                 scrollToElement('#message_box', '1000', -150);
             }
         });

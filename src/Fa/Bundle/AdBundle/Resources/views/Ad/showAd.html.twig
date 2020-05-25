@@ -1062,7 +1062,7 @@
                 return false;
             }
             if (response.error.length) {
-                $(decorateMessage(response.error, 'alert')).insertBefore('#adDetailMainTabs');
+                $(decorateMessage(response.error, 'error')).insertBefore('#adDetailMainTabs');
             } else {
                 $(decorateMessage('{{'Ad reported successfully.'|trans({}, 'frontend-show-ad')}}', 'success')).insertBefore('#adDetailMainTabs');
             }
@@ -1086,7 +1086,7 @@
                 $('#fav_'+id).html(response.anchorHtml);
             }
             if (response.error.length) {
-                $(decorateMessage(response.error, 'alert')).insertAfter('#detail_'+id);
+                $(decorateMessage(response.error, 'error')).insertAfter('#detail_'+id);
             }
             if (response.redirectToUrl.length) {
                 window.location.href = response.redirectToUrl;
@@ -1108,7 +1108,7 @@
                 $('#fav_'+id).html(response.anchorHtml);
             }
             if (response.error.length) {
-                $(decorateMessage(response.error, 'alert')).insertBefore('#listing_'+id);
+                $(decorateMessage(response.error, 'error')).insertBefore('#listing_'+id);
             }
         });
     }
@@ -1128,7 +1128,7 @@
                 return false;
             }
             if (response.error.length) {
-                $(decorateMessage(response.error, 'alert')).insertAfter('#post_similar_item');
+                $(decorateMessage(response.error, 'error')).insertAfter('#post_similar_item');
             }
         });
     }
@@ -1155,7 +1155,7 @@
                 $('#contactSellerModal').html(response.htmlContent);
                 $('#contactSellerModal').modal('show');
             } else if (response.error.length) {
-                $(decorateMessage(response.error, 'alert')).insertBefore('#adDetailMainTabs');
+                $(decorateMessage(response.error, 'error')).insertBefore('#adDetailMainTabs');
                 scrollToElement('#adDetailMainTabs', '1000', -150);
             } else if (response.redirectToUrl.length) {
                 window.location.href = response.redirectToUrl;
@@ -1184,7 +1184,7 @@
                     clearNimberCookies(true);
                     $('#nimberCreateTaskModal').modal('hide');
                 } else {
-                    $(decorateMessage(response.error, 'alert')).insertBefore('#adDetailMainTabs');
+                    $(decorateMessage(response.error, 'error')).insertBefore('#adDetailMainTabs');
                     scrollToElement('#adDetailMainTabs', '1000', -150);
                 }
             }
@@ -1260,7 +1260,7 @@
                 $('#createAlertModal').modal('show');
             }
             if (response.error.length) {
-                $(decorateMessage(response.error, 'alert')).insertBefore('#adDetailMainTabs');
+                $(decorateMessage(response.error, 'error')).insertBefore('#adDetailMainTabs');
                 scrollToElement('#adDetailMainTabs', '1000', -150);
             }
             if (response.redirectToUrl.length) {
@@ -1287,7 +1287,7 @@
             .done(function(response) {
                 hideAlertMessage();
                 if (response.error.length) {
-                    $(decorateMessage(response.error, 'alert')).insertBefore('#adDetailMainTabs');
+                    $(decorateMessage(response.error, 'error')).insertBefore('#adDetailMainTabs');
                     scrollToElement('#adDetailMainTabs', '1000', -150);
                 }
                 if (response.redirectToUrl.length) {

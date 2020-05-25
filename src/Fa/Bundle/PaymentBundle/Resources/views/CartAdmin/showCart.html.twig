@@ -106,7 +106,7 @@
       })
       .done(function(response) {
           if (response.error.length) {
-              $(decorateMessage(response.error, 'alert')).insertAfter('#cart_main_div');
+              $(decorateMessage(response.error, 'error')).insertAfter('#cart_main_div');
           } else if (response.htmlContent.length) {
               $('#cart_main_div').html(response.htmlContent);
               if (response.code.length) {

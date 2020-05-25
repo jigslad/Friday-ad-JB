@@ -221,7 +221,7 @@
                 $(decorateMessage(response.successMsg, 'success')).insertBefore('#order_'+orderId);
             }
             if (response.error.length) {
-                $(decorateMessage(response.error, 'alert')).insertBefore('#order_'+orderId);
+                $(decorateMessage(response.error, 'error')).insertBefore('#order_'+orderId);
             }
         });
     }
@@ -268,7 +268,7 @@
                 $('#messageUserModal').html(response.htmlContent);
                 $('#messageUserModal').modal('show');
             } else if (response.error.length) {
-                $(decorateMessage(response.error, 'alert')).insertBefore('#order_'+orderId);
+                $(decorateMessage(response.error, 'error')).insertBefore('#order_'+orderId);
             } else if (response.redirectToUrl.length) {
                 window.location.href = response.redirectToUrl;
             }

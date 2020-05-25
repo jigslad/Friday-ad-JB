@@ -64,7 +64,7 @@
             if (response.htmlContent.length) {
                 $('#addressBookModal').html(response.htmlContent);
             } else if (response.error.length) {
-                $(decorateMessage(response.error, 'alert')).prependTo('#panel6b');
+                $(decorateMessage(response.error, 'error')).prependTo('#panel6b');
                 scrollToElement('#panel6b', '1000', -150);
             } else {
                 if (response.listHtmlContent.length) {
