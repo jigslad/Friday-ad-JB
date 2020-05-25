@@ -80,7 +80,6 @@
     <div class="urgent-ribbon">urgent</div>
     {#<div class="boost-ribbon"></div>#}
     
-    <div class="clearfix">  
     <div class="media-left align-self-center">
         {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, ad, '300X225', 1) %}
         <div class="list-img {% if not imagePath %}list-placeholder{% endif %}">
@@ -223,5 +222,4 @@
     {% if (attribute(ad, constant(solrMapping ~ 'IS_AFFILIATE_AD')) is defined and not attribute(ad, constant(solrMapping ~ 'IS_AFFILIATE_AD')) and attribute(ad, constant(solrMapping ~ 'IS_TRADE_AD')) is defined and attribute(ad, constant(solrMapping ~ 'IS_TRADE_AD')) == 1 and rootCategoryId is defined and rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID')) %}
         <div class="fad-shop-icon d-block d-md-none fa-shop-icon-small">AD SHOP</div>
     {% endif %}
-</div>
 </div>
