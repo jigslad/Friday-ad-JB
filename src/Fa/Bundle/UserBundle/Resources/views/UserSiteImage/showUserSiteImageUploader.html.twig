@@ -207,7 +207,7 @@
                 if (response.image.length) {
                     $('#user_site_crop_big_image_div').html(response.image);
                     $('#user_site_uploaded_images_div').hide();
-                    $( "#user_site_crop_big_image" ).load(function() {
+                    $( "#user_site_crop_big_image" ).on('load', function() {
                         $('#crop_image').show();
                         var picture = $('#user_site_crop_big_image');
                         picture.guillotine({
