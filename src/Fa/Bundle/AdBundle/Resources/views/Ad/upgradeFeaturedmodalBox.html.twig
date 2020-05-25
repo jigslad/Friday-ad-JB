@@ -199,9 +199,9 @@
             <ul id="payment_method_id" class="payment-card-option-block ml0">
                 {% for choice in form.payment_method.vars.choices %}
                 	<li>
-                    	<div class="label-inline white-radio mt10 mb10">
-                            <span class="grey-radio {% if form.payment_method.vars.data == choice.value %}checked{% endif %} "><input onclick="return showHideCardDetail();" class="checkbox" type="radio" value="{{ choice.value }}" {% if form.payment_method.vars.data == choice.value %}checked="checked"{% endif %} name="{{ form.payment_method.vars.full_name }}" id="{{ form.payment_method.vars.id }}_{{ choice.value }}" /></span>
-                            <label for="{{ form.payment_method.vars.id }}_{{ choice.value }}"></label>{{ choice.label|raw }}
+                    	<div class="d-flex mt10 mb10 upgrade-modal-choice">
+                            <span class="grey-radio {% if form.payment_method.vars.data == choice.value %}checked{% endif %} "><input onclick="return showHideCardDetail();" class="checkbox" type="radio" value="{{ choice.value }}" {% if form.payment_method.vars.data == choice.value %}checked="checked"{% endif %} name="{{ form.payment_method.vars.full_name }}" id="{{ form.payment_method.vars.id }}_{{ choice.value }}" />
+                            <label for="{{ form.payment_method.vars.id }}_{{ choice.value }}"></label>{{ choice.label|raw }}</span>
                         </div>
                 	</li>
                 {% endfor %}
