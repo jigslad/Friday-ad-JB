@@ -114,7 +114,7 @@ function clearForm(form) {
 }
 
 function decorateMessage(message, type) {
-    return '<div data-alert class="alert-box '+ type +' radius outside-tricky"><span class="alert-icon">&nbsp;</span>'+ message +'<a href="javascript:hideAlertMessage()" class="close"></a></div>';
+    return '<div class="col-md-24"><div data-alert class="alert alert-box '+ type +' radius outside-tricky"><span class="alert-icon">&nbsp;</span>'+ message +'<a data-dismiss="alert" class="close">&times;</a></a></div></div>';
 }
 
 function hideAlertMessage() {

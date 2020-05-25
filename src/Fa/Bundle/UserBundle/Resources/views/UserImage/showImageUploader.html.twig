@@ -163,7 +163,7 @@
             })
             .done(function(response) {
                 if (response.error.length) {
-                    $('#filelist').html(decorateMessage(response.error, 'alert'));
+                    $('#filelist').html(decorateMessage(response.error, 'error'));
                 }
                 if (response.successMsg.length) {
                     $('#filelist').html(decorateMessage(response.successMsg, 'success'));

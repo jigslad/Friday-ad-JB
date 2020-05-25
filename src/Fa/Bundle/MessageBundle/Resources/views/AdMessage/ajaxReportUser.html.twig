@@ -48,7 +48,7 @@
                 $('#reportUserModal').html(response.htmlContent);
             } else if (response.error.length) {
                 $('#reportUserModal').modal('hide');
-                $(decorateMessage(response.error, 'alert')).insertBefore('#message_box');
+                $(decorateMessage(response.error, 'error')).insertBefore('#message_box');
                 scrollToElement('#message_box', '1000', -150);
             } else {
                 $('#reportUserModal').modal('hide');

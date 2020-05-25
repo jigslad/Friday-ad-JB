@@ -151,7 +151,7 @@
                 $('#fav_'+id).html(response.anchorHtml);
             }
             if (response.error.length) {
-                $(decorateMessage(response.error, 'alert')).insertBefore('#listing_'+id);
+                $(decorateMessage(response.error, 'error')).insertBefore('#listing_'+id);
             }
             if (response.redirectToUrl.length) {
                 window.location.href = response.redirectToUrl;
@@ -173,7 +173,7 @@
                 $('#fav_'+id).html(response.anchorHtml);
             }
             if (response.error.length) {
-                $(decorateMessage(response.error, 'alert')).insertBefore('#listing_'+id);
+                $(decorateMessage(response.error, 'error')).insertBefore('#listing_'+id);
             }
         });
     }
@@ -201,7 +201,7 @@
                 scrollToElement("#savedSearchAgentModal");
             }
             if (response.error.length) {
-                $(decorateMessage(response.error, 'alert')).insertAfter('#like_results_div');
+                $(decorateMessage(response.error, 'error')).insertAfter('#like_results_div');
             }
             if (response.redirectToUrl.length) {
                 window.location.href = response.redirectToUrl;
@@ -329,7 +329,7 @@
             .done(function(response) {
                 hideAlertMessage();
                 if (response.error.length) {
-                    $(decorateMessage(response.error, 'alert')).insertBefore('#left_search');
+                    $(decorateMessage(response.error, 'error')).insertBefore('#left_search');
                 } else {
                 	$(decorateMessage('Search alert removed successfully', 'success')).insertBefore('#left_search');
                 	if ($(".alertButton").hasClass("secondary-btn-2")) {

@@ -106,7 +106,7 @@
                 $('#addTestimonialModal').html(response.htmlContent);
                 $('#addTestimonialModal').modal('show');
             } else if (response.error.length) {
-                $('#testimonials_list_id').prepend(decorateMessage(response.error, 'alert'));
+                $('#testimonials_list_id').prepend(decorateMessage(response.error, 'error'));
                 scrollToElement('#testimonials_list_id', '1000', -150);
             } else if (response.redirectToUrl.length) {
                 window.location.href = response.redirectToUrl;

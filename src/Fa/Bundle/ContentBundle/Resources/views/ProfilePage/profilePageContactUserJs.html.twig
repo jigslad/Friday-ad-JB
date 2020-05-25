@@ -28,7 +28,7 @@ function profilePageContactUser(status = 1)
             	ga('send', 'event', 'CTA', 'Contact Seller button Profile', 'Profile {{ profileUserId }}');
             }
         } else if (response.error.length) {
-            $(decorateMessage(response.error, 'alert')).insertBefore('{{msg_div_id}}');
+            $(decorateMessage(response.error, 'error')).insertBefore('{{msg_div_id}}');
             scrollToElement('{{msg_div_id}}', '1000', -150);
         }
     });

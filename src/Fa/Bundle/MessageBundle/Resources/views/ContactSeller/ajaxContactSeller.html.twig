@@ -218,7 +218,7 @@
                 }
             } else if (response.error.length) {
                 $('#contactSellerModal').modal('hide');
-                $(decorateMessage(response.error, 'alert')).insertBefore('#adDetailMainTabs');
+                $(decorateMessage(response.error, 'error')).insertBefore('#adDetailMainTabs');
                 scrollToElement('#adDetailMainTabs', '1000', -150);
             } else {
                 $('#contactSellerModal').modal('hide');

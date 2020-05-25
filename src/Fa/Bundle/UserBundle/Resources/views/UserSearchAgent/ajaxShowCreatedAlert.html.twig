@@ -48,7 +48,7 @@
         .done(function(response) {
             hideAlertMessage();
             if (response.error.length) {
-                $(decorateMessage(response.error, 'alert')).insertBefore('#saved_search_header');
+                $(decorateMessage(response.error, 'error')).insertBefore('#saved_search_header');
             } else {
                 $('#createAlertModal').modal('hide');
             }

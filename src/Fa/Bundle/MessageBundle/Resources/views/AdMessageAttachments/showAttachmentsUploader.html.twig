@@ -190,7 +190,7 @@
             })
             .done(function(response) {
                 if (response.error.length) {
-                    $('{{ fileListId }}').html(decorateMessage(response.error, 'alert'));
+                    $('{{ fileListId }}').html(decorateMessage(response.error, 'error'));
                 }
                 if (response.successMsg.length) {
                     $('#uploaded_attachments_div').html(response.attachments);

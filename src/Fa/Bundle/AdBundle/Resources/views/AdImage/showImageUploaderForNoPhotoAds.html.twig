@@ -112,7 +112,7 @@
         })
         .done(function(response) {
             if (response.error.length) {
-                $('#filelist').html(decorateMessage(response.error, 'alert'));
+                $('#filelist').html(decorateMessage(response.error, 'error'));
                 scrollToElement('#filelist', '1000', -150);
             }
 

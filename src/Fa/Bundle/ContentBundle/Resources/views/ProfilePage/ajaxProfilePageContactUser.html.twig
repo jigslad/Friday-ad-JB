@@ -103,7 +103,7 @@
                 $('#profilePageContactUserModal').html(response.htmlContent);
             } else if (response.error.length) {
                 $('#profilePageContactUserModal').modal('hide');
-                $(decorateMessage(response.error, 'alert')).insertBefore('{{msg_div_id}}');
+                $(decorateMessage(response.error, 'error')).insertBefore('{{msg_div_id}}');
                 scrollToElement('{{msg_div_id}}', '1000', -150);
             } else {
                 updateUserSiteViewCounterField('{{ contactUserObj.getId() }}', 'profile_page_email_sent_count', '');

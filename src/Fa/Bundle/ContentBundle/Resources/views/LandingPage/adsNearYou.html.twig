@@ -203,7 +203,7 @@
                     $('#fav_'+id).html(response.anchorHtml);
                 }
                 if (response.error.length) {
-                    $(decorateMessage(response.error, 'alert')).insertBefore('#listing_'+id);
+                    $(decorateMessage(response.error, 'error')).insertBefore('#listing_'+id);
                 }
                 if (response.redirectToUrl.length) {
                     window.location.href = response.redirectToUrl;
@@ -225,7 +225,7 @@
                     $('#fav_'+id).html(response.anchorHtml);
                 }
                 if (response.error.length) {
-                    $(decorateMessage(response.error, 'alert')).insertBefore('#listing_'+id);
+                    $(decorateMessage(response.error, 'error')).insertBefore('#listing_'+id);
                 }
             });
         }

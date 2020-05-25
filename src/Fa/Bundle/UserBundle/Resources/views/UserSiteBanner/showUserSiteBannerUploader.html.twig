@@ -172,7 +172,7 @@
                     hideAlertMessage();
                 }
                 if (response.error.length) {
-                    $('#userSiteBannerMsg').html(decorateMessage(response.error, 'alert'));
+                    $('#userSiteBannerMsg').html(decorateMessage(response.error, 'error'));
                 }
                 if (response.image.length) {
                     $('#user_site_banner_div').html(response.image);
@@ -258,7 +258,7 @@
             .done(function(response) {
                 hideAlertMessage();
                 if (response.error.length) {
-                    $(decorateMessage(response.error, 'alert')).insertBefore(msgId);
+                    $(decorateMessage(response.error, 'error')).insertBefore(msgId);
                 }
                 if (response.successMsg.length) {
                     $(decorateMessage(response.successMsg, 'success')).insertBefore(msgId);

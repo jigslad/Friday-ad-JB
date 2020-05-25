@@ -238,7 +238,7 @@
             })
             .done(function(response) {
                 if (response.error.length) {
-                    $('{{ fileListId }}').html(decorateMessage(response.error, 'alert'));
+                    $('{{ fileListId }}').html(decorateMessage(response.error, 'error'));
                 }
                 if (response.successMsg.length) {
                     $('{{ fileListId }}').html(decorateMessage(response.successMsg, 'success'));
@@ -269,7 +269,7 @@
             })
             .done(function(response) {
                 if (response.error.length) {
-                    $('{{ fileListId }}').html(decorateMessage(response.error, 'alert'));
+                    $('{{ fileListId }}').html(decorateMessage(response.error, 'error'));
                 }
                 if (response.image.length) {
                     $('#crop_big_image_div').html(response.image);
@@ -347,7 +347,7 @@
             })
             .done(function(response) {
                 if (response.error.length) {
-                    $('{{ fileListId }}').html(decorateMessage(response.error, 'alert'));
+                    $('{{ fileListId }}').html(decorateMessage(response.error, 'error'));
                     initImageUpload(false);
                 }
                 if (response.successMsg.length) {
@@ -386,7 +386,7 @@
                         success: function(response) {
                             unblockElement('#upload_image_div');
                             if (response.error.length) {
-                                $('{{ fileListId }}').html(decorateMessage(response.error, 'alert'));
+                                $('{{ fileListId }}').html(decorateMessage(response.error, 'error'));
                                 getImages();
                             }
                             if (response.successMsg.length) {
@@ -414,7 +414,7 @@
                     success: function(response) {
                         unblockElement('#upload_image_div');
                         if (response.error.length) {
-                            $('{{ fileListId }}').html(decorateMessage(response.error, 'alert'));
+                            $('{{ fileListId }}').html(decorateMessage(response.error, 'error'));
                             getImages();
                         }
                         if (response.successMsg.length) {

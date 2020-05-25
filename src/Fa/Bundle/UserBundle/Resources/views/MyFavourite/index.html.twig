@@ -38,7 +38,7 @@
             	location.reload();
             }
             if (response.error.length) {
-                $(decorateMessage(response.error, 'alert')).insertBefore('#listing_'+id);
+                $(decorateMessage(response.error, 'error')).insertBefore('#listing_'+id);
             }
         });
     }

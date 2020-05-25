@@ -142,7 +142,7 @@
         })
         .done(function(response) {
             if (response.error.length) {
-                $('#filelist').html(decorateMessage(response.error, 'alert'));
+                $('#filelist').html(decorateMessage(response.error, 'error'));
            } else if (response.image.length) {
                $('#profile_image_div, #left_profile_image_div, #top_profile_image_div').html(response.image);
                $('#filelist').html(decorateMessage('{{ 'Profile image cropped successfully.' }}', 'success'));
