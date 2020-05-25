@@ -335,7 +335,7 @@
         					{% set FeaturedAdCount = FeaturedAdCount + 1 %}
         					
                             {% if ((realAdCnt > resultCount) and (setExtendedHeading==0)) %}
-                                <li><div data-alert="" class="alert-box info radius">
+                                <li><div data-alert="" class="alert alert-box info radius">
                                    <span class="alert-icon">&nbsp;</span>
                                    We found  {{extendedResultCount}} {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id) }} ads within  {{extendedRadius}} miles of {{ app.request.get('location') | replace({'-':' '}) | title }}
                                 </div></li>
@@ -447,7 +447,7 @@
         
                     
                     {% else %}
-                        <li><div data-alert class="alert-box info radius mt10">
+                        <li><div data-alert class="alert alert-box info radius mt10">
                             <span class="alert-icon">&nbsp;</span>
                             Sorry, we haven't found adverts matching your criteria in {{ app.request.get('location')| replace({'-':' '}) | title }}: <span style="font-weight:normal">Try modifying your keyword or filters selected.</span>
                         </div></li>

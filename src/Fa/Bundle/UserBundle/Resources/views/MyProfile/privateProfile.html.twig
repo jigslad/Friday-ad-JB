@@ -36,10 +36,10 @@
                             {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
                             <div id="db-right-part" class="col-md-19 d-right-col">
                                 {% if not form.vars.valid %}
-                                    <div data-alert class="alert-box alert radius mt10">
+                                    <div data-alert class="alert alert-box alert radius mt10">
                                         <span class="alert-icon">&nbsp;</span>
                                         {{ 'Please correct errors and resubmit form.'|trans({}, 'frontend-my-account') }}
-                                        <a href="javascript:void(0)" class="close">&times;</a>
+                                        <a data-dismiss="alert" class="close">&times;</a>
                                     </div>
                                 {% endif %}
                                 <div class="mb40">

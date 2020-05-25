@@ -1,7 +1,7 @@
 {% set userPackageRepository = fetch_repository('FaUserBundle:UserPackage') %}
 {% set paymentTokenizationRepository = fetch_repository('FaPaymentBundle:PaymentTokenization') %}
 <div class="db-list">
-    <a class="panel-heading collapsed" data-toggle="collapse" data-target="#panel4b">
+    <a class="panel-heading {% if userAccountProfileForm.vars.valid or app.session.flashbag.has('user_account_profile_success') %}collapsed{% endif %} " data-toggle="collapse" data-target="#panel4b">
         <div class="media section-head">
             <div class="media-body">
                 <span class="profile-icon list-icon-text">{{ 'Your profile'|trans({}, 'frontend-user-account-profile') }}</span>
@@ -12,7 +12,7 @@
             </div>
         </div>
     </a>
-    <div id="panel4b" class="collapse collapse-body-content">
+    <div id="panel4b" class="collapse collapse-body-content {% if not userAccountProfileForm.vars.valid or app.session.flashbag.has('user_account_profile_success') %}show{% endif %} ">
         <div class="col-md-14 col-lg-9 pad-none">
 
             {{ form_start(userAccountProfileForm, {'attr': {'novalidate': 'novalidate'}}) }}
@@ -22,19 +22,18 @@
                 <div class="label-inline">
                     <ul class="search-type ">
                         {{ form_widget(userAccountProfileForm.user_roles,{'attr':{'class':'white-radio radio-circle-btn'}}) }}
-{#                    {% for userRoles in userAccountProfileForm.user_roles %}#}
-{#                            <li class="white-radio" >#}
-{#                                {{ form_widget(userRoles,{'attr':{'class':'white-radio radio-circle-btn'}}) }}#}
-{#                            </li>#}
-{#                    {% endfor %}#}
+                        {{ form_errors(userAccountProfileForm.user_roles) }}
                     </ul>
                 </div>
+            <div class="business_seller_fields">
                 <div class="mt10">
                     {{ form_label(userAccountProfileForm.business_category_id) }}
                 </div>
                 <div class="white-select">
                     {{ form_widget(userAccountProfileForm.business_category_id,{'attr':{'class':'select-control'}}) }}
+                    {{ form_errors(userAccountProfileForm.business_category_id) }}
                 </div>
+            </div>
                 {% if shopPackageDetail is not null and shopPackageDetail.getPayment() and  paymentTokens|length %}
                     {% set paymentValue = array_unserialize(shopPackageDetail.getPayment().getValue()) %}
                     {% set paymentSource = null %}
@@ -44,7 +43,7 @@
                             {% set paymentSource = token.getId() %}
                         {% endif %}
                     {% endif %}
-                    <ul class="choose-payment-method" id="payment_source_id">
+                    <ul class="choose-payment-method myacc-profile-dtl" id="payment_source_id">
                         {% for choice in userAccountProfileForm.payment_source.vars.choices %}
                             <li class="label-inline">
                                 <span class="custom-radio {% if paymentSource == choice.value %}checked{% endif %} "><input type="radio" value="{{ choice.value }}" {% if paymentSource == choice.value %}checked{% endif %} name="{{ userAccountProfileForm.payment_source.vars.full_name }}" id="{{ userAccountProfileForm.payment_source.vars.id }}_{{ choice.value }}" /></span>

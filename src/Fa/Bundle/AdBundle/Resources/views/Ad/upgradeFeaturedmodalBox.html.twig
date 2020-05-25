@@ -35,10 +35,10 @@
     <button class="close-modal" style="display:{% if popup_title is defined %}none{% else %}block{% endif %}" class="close" data-dismiss="modal">×</button>
 </div>
 <div class="modal-body">
-    <div data-alert class="alert-box alert radius" style="display:none;" id="deadlock_error_main">
+    <div data-alert class="alert-box alert error radius" style="display:none;" id="deadlock_error_main">
         <span class="alert-icon">&nbsp;</span>
         <span id="deadlock_error"></span>
-        <a href="javascript:void(0)" class="close">&times;</a>
+        <a data-dismiss="alert" class="close">&times;</a>
     </div>   
 {% if packages|length %}     
     {{ form_start(form, {'attr': {'novalidate': '', 'id': 'cyber_source_form'}}) }}  

@@ -15,10 +15,10 @@
 		</div>
         <div class="modal-body">
             {% if app.user and app.request.cookies.has('contact_seller_flag') and app.request.cookies.has('contact_seller_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') and app.request.cookies.get('contact_seller_flag') %}
-                <div data-alert class="alert-box success radius">
+                <div data-alert class="alert-box alert success radius">
                     <span class="alert-icon">&nbsp;</span>
                     {{'You have successfully logged in.'|trans({}, 'frontend')}}
-                    <a href="javascript:void(0)" class="close">&times;</a>
+                    <a data-dismiss="alert" class="close">&times;</a>
                 </div>
                 {{ fetch_repository('FaUserBundle:User').removeUserCookies() }}
             {% endif %}
