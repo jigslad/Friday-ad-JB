@@ -1890,6 +1890,10 @@ textarea[rows] {
 .sortby-area .ad-category-list {
     margin: 0 !important;
 }
+.company-address.position-relative input, company-website position-relative input {
+    padding-right: 45px;
+}
+
 @media only screen and (min-width: 760px) and (max-width: 959px) {
     .shop-search-results .left-search-block {
         margin-top: 7rem;

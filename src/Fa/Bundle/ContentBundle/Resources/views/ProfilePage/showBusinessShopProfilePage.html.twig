@@ -205,14 +205,14 @@
                 </div>
             </div>
         </div>
-        <div id="profilePageContactUserModal" class="modal custom-modal-modal small"></div>
+        <div id="profilePageContactUserModal" class="modal custom-modal small"></div>
         {% if allowProfileEdit %}
-            <div id="cropProfileImageModal" class="modal custom-modal-modal small"></div>
-            <div id="profileEditModal" class="modal custom-modal-modal medium"></div>
-            <div id="profileEditLocationModal" class="modal custom-modal-modal tiny"></div>
+            <div id="cropProfileImageModal" class="modal custom-modal small"></div>
+            <div id="profileEditModal" class="modal custom-modal medium"></div>
+            <div id="profileEditLocationModal" class="modal custom-modal tiny"></div>
             {% set userSiteBannerRepository = fetch_repository('FaUserBundle:UserSiteBanner') %}
             {% set userSiteBannerOtherImages = userSiteBannerRepository.getUserSiteBannerOtherImages() %}
-            <div id="shopBannerModal" class="modal custom-modal-modal small">
+            <div id="shopBannerModal" class="modal custom-modal small">
                 <div class="modal-dialog"><div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title save-search-title">{{'Change cover image'|trans({}, 'frontend-my-profile')}}</h5>

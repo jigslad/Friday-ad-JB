@@ -7,7 +7,7 @@
 
 {% block userSiteImageUploadHtml %}
 {{ set_variables('UserSiteImageUpload', {'userSiteId':userSiteId}) }}
-<div>
+<div class="col-md-24 pad-none">
     <div id="userSiteFilelist"></div>
     <input type="hidden" name="userSiteMaxFileRemain" id="userSiteMaxFileRemain" value="{{imageLimitRemaining}}" />
 </div>

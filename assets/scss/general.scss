@@ -822,7 +822,7 @@ ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {
 }
 .custom-card .list-price { color: $secondary-color; }
 .alert-box.success {
-    background: $primary-bg-color;
+    background: $primary-bg-color !important;
     border: 1px solid $accent1-color;
     color: $accent1-dark-color;
 }
@@ -2128,6 +2128,25 @@ footer p { color:$grey-color; }
 .db-ins { color: #ACB0B7 !important; }
 .custom-card:hover, .custom-card:focus {
 	border-color: #82C249 !important;
+}
+.alert-box.info {
+    border: 1px solid #31c5f2 !important;
+    color: #31c5f2 !important;
+    background: #c5eff8 !important;
+}
+.design-your-profile .edit-pro-banner p, .design-your-profile .edit-pro-banner h2 {
+	color: #FFFFFF !important;
+}
+.profile-ins {
+  color: #ACB0B7 !important;
+}
+.shops-header-content .shop-view, .shop-review {
+	color: #FFFFFF!important;
+}
+.shop-cont-info .seller-cont-info {
+	border-top: 1px solid #D8D8D8;
+    border-bottom: 1px solid #fff;
+    box-shadow: inset 0 1px 0 0 #fff, inset 0 -1px 0 0 #D8D8D8;
 }
 
 @media only screen and (max-width: 640px) {
