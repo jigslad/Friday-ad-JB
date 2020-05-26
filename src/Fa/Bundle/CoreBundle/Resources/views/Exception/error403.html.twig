@@ -1,11 +1,15 @@
 {% extends 'FaAdminBundle::layout.html.twig' %}
 
 {% block content %}
-    <div class="text-center">
-        <div class="bg-img403"></div>
-        <h1>Application Error</h1>
-        <p class="red-text">Oops! {{ status_text }}</p>
-        <p><a href="{{path("fa_user_admin_welcome")}}">Go to home</a></p>
+	<div class="container">	
+        <div class="row text-center error-page">
+        	<div class="col m-auto">
+                <div class="bg-img403"></div>
+                <h1>Application Error</h1>
+                <p class="red-text">Oops! {{ status_text }}</p>
+                <p><a href="{{path("fa_user_admin_welcome")}}">Go to home</a></p>
+            </div>
+          </div>
     </div>
 {% endblock %}
 
