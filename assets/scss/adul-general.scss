@@ -958,9 +958,6 @@ footer {
     width: 49%;
     height: auto !important;
 }
-#home-search .search-btn, .home-search .search-btn, .search-icon {
-    background: url('/Frontend/images/icons/search-icon.svg') no-repeat center center / 16px 16px, linear-gradient(135deg, $secondary-btn-l-color 0%, $secondary-btn-r-color 100%) !important;	   
-}
 .site-search .search-icon {
     width: 45px;
 	height: 40px;
@@ -2331,7 +2328,10 @@ select:hover,select:focus, .ui-selectmenu-button:hover,.ui-selectmenu-button.act
 	}
 	.sorting-small .secondary-btn-2:hover, .sorting-small .secondary-btn-2:focus, .sorting-small .secondary-btn-2:active {
 		color: $accent1-dark-color !important;
-	}
+  }
+  #home-search .search-btn, .home-search .search-btn, .search-icon {
+    background: url('/Frontend/images/icons/search-icon.svg') no-repeat center center / 16px 16px, linear-gradient(135deg, $secondary-btn-l-color 0%, $secondary-btn-r-color 100%) !important;	   
+  }
 }
 @media only screen and (max-width: 640px) {
   .ad-list-block .reset-search{

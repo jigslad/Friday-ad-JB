@@ -1006,5 +1006,17 @@
     padding: 14px 9px 20px;
   }
 }
+.recommended-div.listing {
+	margin-bottom: 20px!important;
+}
+@media (min-width: 760px) and (max-width: 759px) {
+	.recommended-div.listing .list-title {
+		font-size: 14px !important;
+		font-weight: normal !important;
+	}
+}
 
+.listing .list-dimensions {
+	color: #ACB0B7 !important;
+}
 

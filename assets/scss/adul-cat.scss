@@ -646,7 +646,6 @@ a.basket-icon {
     overflow: hidden !important;
     background: #FFFFFF !important;
     content: "" !important;
-	background: #EAEFF0 !important;
 }
 #select2-fa_adult_home_page_search_item_adult__services_id-results .select2-results__option[aria-selected="true"] {
 	background-color: #fff !important;
@@ -712,12 +711,6 @@ a.basket-icon {
 	margin-bottom: 0px !important
 }
 
-.adul-search-form #top_search_location_homepage_ok {
-	margin: 10px 5px 0px 0px !important;
-}
-.adul-search-form #top_search_location_cancel {
-	margin: 10px 0px 0px 5px !important;
-}
 @media (min-width: 760px) and (max-width: 959px) {
 	.discover-categories a, .discover-categories a:hover, .discover-categories a:focus, .discover-categories a:active {
 	    width: 80px;
@@ -801,5 +794,72 @@ a.basket-icon {
 	    background-size: cover !important;
 	}
 }
+
+@media (min-width: 960px) {
+	.m-pop-click {
+		display: none !important;
+	}
+}
+@media (min-width: 320px) and (max-width: 759px) {
+	.m-pop-click {
+		right: 0px !important;
+	}
+	.adul-hp span.select2-dropdown.select2-dropdown--below, .adul-hp span.select2-dropdown.select2-dropdown--above {
+	    width: 100vh;
+	}
+}
+@media (min-width: 760px) and (max-width: 959px) {
+	#tablet-header-menus a.backtofad {
+		font-size: 13px !important;
+	}
+	#tablet-header-menus .navbar-nav {
+    	margin-right: 6px !important;
+    }
+    #tablet-header-menus .t-navbar-block .nav-link {
+	    line-height: 21px !important;
+	}
+}
+
+#top_search_location #top_search_location_homepage_ok {
+	margin: 10px 5px 0px 0px !important;
+}
+#top_search_location #top_search_location_cancel {
+	margin: 10px 0px 0px 5px !important;
+}
+#select2-fa_adult_home_page_search_item_adult__services_id-results {
+	background: #ffffff !important;
+}
+.list-author-pub-date {
+	color: #9C1F9F !important;
+}
+footer .category-links .list-parent-link {
+	color: #E62EEB !important;
+}
+@media (min-width: 960px) {
+	.m-pop-click {
+		display: none !important;
+	}
+}
+@media (min-width: 320px) and (max-width: 759px) {
+	.m-pop-click {
+		right: 0px !important;
+	}
+	.adul-hp span.select2-dropdown.select2-dropdown--below, .adul-hp span.select2-dropdown.select2-dropdown--above {
+	    width: 100vh;
+	}
+}
+@media (min-width: 760px) and (max-width: 959px) {
+	#tablet-header-menus a.backtofad {
+		font-size: 13px !important;
+	}
+	#tablet-header-menus .navbar-nav {
+    	margin-right: 6px !important;
+    }
+    #tablet-header-menus .t-navbar-block .nav-link {
+	    line-height: 21px !important;
+	}
+}
+
+
 
 
