@@ -2181,7 +2181,9 @@ footer p { color:$grey-color; }
 .custom-card:hover h3 {
 	color: #82C249 !important;
 }
-
+.text-muted {
+    color: #ACB0B7 !important;
+}
 @media only screen and (max-width: 640px) {
   .ad-list-block .reset-search{
     border-bottom: 1px solid $form-border-color;

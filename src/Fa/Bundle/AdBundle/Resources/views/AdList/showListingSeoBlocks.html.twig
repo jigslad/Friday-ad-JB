@@ -23,8 +23,6 @@
                     <div id="adlist-collapse{{panelCnt}}" class="panel-collapse collapse {% if (currentDevice == 'D' and panelCnt == 0) %}show{% endif %}" role="tabpanel" aria-labelledby="adlist-heading{{panelCnt}}">
                         <div class="panel-body list-panel-body">
                              <ul class="link-list">
-                                   <li> 
-                                    <div class="row">
                                         {% if block['is_top_links'] is defined and block['is_top_links'] == 1 %}
                                             {% set facetIdArray = block['facet'] %}
                                             {% set columns = 3 %}
@@ -41,14 +39,14 @@
                                                 {% endif %}
                                             {% endfor %}
                                             {% for i in 0..columns-1 %}
-                                                <div class="col-md-8">
+                                                <li">
                                                     {% for k in 0..colCounter[i]-1 %}
                                                         {% if facetIdArray[ctr] is defined %}
                                                             <a href="{{ facetIdArray[ctr]['url'] }}" {% if getNoFollowLink1  %}rel="nofollow"{% endif %} >{{ facetIdArray[ctr]['title'] }}</a>
                                                         {% endif %}
                                                         {% set ctr = ctr + 1 %}
                                                     {% endfor %}
-                                                </div>
+                                                </li>
                                             {% endfor %}
                                         {% else %}
                                             {% set facetIdArray = block['facet']|keys %}
@@ -78,7 +76,7 @@
                                                 {% endif %}
                                             {% endif %}
                                             {% for i in 0..columns-1 %}
-                                                <div class="col-md-8">
+                                                <li>
                                                     {% for k in 0..colCounter[i]-1 %}
                                                         {% if facetIdArray[ctr] is defined %}
                                                             {% set facetId = facetIdArray[ctr] %}
@@ -116,11 +114,9 @@
                                                         {% endif %}
                                                         {% set ctr = ctr + 1 %}
                                                     {% endfor %}
-                                                </div>
+                                                </li>
                                             {% endfor %}
                                         {% endif %}
-                                     </div>
-                                </li>
                                 {% if block['show_all_link'] is defined and block['show_all_link'] and totalItems == block['facet_limit'] %}
                                     <li class="right"><a href="{{ path('category_dimension_list', {'categoryString': categoryRepository.getSlugById(categoryId, container), 'dimensionName': block['dimension_name']}) }}" {% if getNoFollowLink1  %}rel="nofollow"{% endif %} >{{ 'View all'|trans({}, 'frontend-search-list-block') }}</a></li>
                                 {% endif %}
