@@ -804,7 +804,15 @@
     text-indent: -9999px;
     margin-top: -3px;
 }
-
+.ad-list-block .alert-tooltip::after {
+	border-color: rgba(164, 216, 22, 0) !important;
+	border-right-color: #A4D816 !important;
+	border: solid transparent;
+	border-width: 7px !important
+}
+.ad-list-block .custom-modal .save-search-title {
+	background: none !important;
+}
 @media only screen and (min-width: 960px) and (max-width: 1151px) {
 	.bus-shop-user-item-slider .item .busad-item {
 	    margin: 0px 7px;

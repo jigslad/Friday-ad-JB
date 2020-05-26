@@ -23,98 +23,104 @@
                     <div id="adlist-collapse{{panelCnt}}" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="adlist-heading{{panelCnt}}">
                         <div class="panel-body list-panel-body">
                              <ul class="link-list">
-                                                                     
-                                    {% if block['is_top_links'] is defined and block['is_top_links'] == 1 %}
-                                        {% set facetIdArray = block['facet'] %}
-                                        {% set columns = 3 %}
-                                        {% set ctr = 0 %}
-                                        {% set totalItems = facetIdArray|length %}
-                                        {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
-                                        {% set extraColumn = (totalItems % columns) %}
-                                        {% set colCounter = {} %}
-                                        {% for i in 0..columns-1 %}
-                                            {% if loop.index0 < extraColumn %}
-                                                {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
-                                            {% else  %}
-                                                {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
-                                            {% endif %}
-                                        {% endfor %}
-                                        {% for i in 0..columns-1 %}
-                                            {% for k in 0..colCounter[i]-1 %}
-                                                {% if facetIdArray[ctr] is defined %}
-                                                    <li><a href="{{ facetIdArray[ctr]['url'] }}" {% if getNoFollowLink1  %}rel="nofollow"{% endif %} >{{ facetIdArray[ctr]['title'] }}</a></li>
+                                   <li> 
+                                    <div class="row">
+                                        {% if block['is_top_links'] is defined and block['is_top_links'] == 1 %}
+                                            {% set facetIdArray = block['facet'] %}
+                                            {% set columns = 3 %}
+                                            {% set ctr = 0 %}
+                                            {% set totalItems = facetIdArray|length %}
+                                            {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
+                                            {% set extraColumn = (totalItems % columns) %}
+                                            {% set colCounter = {} %}
+                                            {% for i in 0..columns-1 %}
+                                                {% if loop.index0 < extraColumn %}
+                                                    {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
+                                                {% else  %}
+                                                    {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
                                                 {% endif %}
-                                                {% set ctr = ctr + 1 %}
                                             {% endfor %}
-                                        {% endfor %}
-                                    {% else %}
-                                        {% set facetIdArray = block['facet']|keys %}
-                                        {% set columns = 3 %}
-                                        {% set ctr = 0 %}
-                                        {% set totalItems = facetIdArray|length %}
-                                        {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
-                                        {% set extraColumn = (totalItems % columns) %}
-                                        {% set colCounter = {} %}
-                                        {% for i in 0..columns-1 %}
-                                            {% if loop.index0 < extraColumn %}
-                                                {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
-                                            {% else  %}
-                                                {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
+                                            {% for i in 0..columns-1 %}
+                                                <div class="col-md-8">
+                                                    {% for k in 0..colCounter[i]-1 %}
+                                                        {% if facetIdArray[ctr] is defined %}
+                                                            <a href="{{ facetIdArray[ctr]['url'] }}" {% if getNoFollowLink1  %}rel="nofollow"{% endif %} >{{ facetIdArray[ctr]['title'] }}</a>
+                                                        {% endif %}
+                                                        {% set ctr = ctr + 1 %}
+                                                    {% endfor %}
+                                                </div>
+                                            {% endfor %}
+                                        {% else %}
+                                            {% set facetIdArray = block['facet']|keys %}
+                                            {% set columns = 3 %}
+                                            {% set ctr = 0 %}
+                                            {% set totalItems = facetIdArray|length %}
+                                            {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
+                                            {% set extraColumn = (totalItems % columns) %}
+                                            {% set colCounter = {} %}
+                                            {% for i in 0..columns-1 %}
+                                                {% if loop.index0 < extraColumn %}
+                                                    {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
+                                                {% else  %}
+                                                    {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% set parentFullSlug = null %}
+                                            {% set secondLevelParentFullSlug = null %}
+                                            {% if seoSearchParams.item__category_id is defined and seoSearchParams.item__category_id is not null %}
+                                                {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(seoSearchParams.item__category_id, false, fetch_container_instance()) %}
+                                                {% set categoryPathKeys = categoryPath|keys %}
+                                                {% if categoryPathKeys[0] is defined %}
+                                                    {% set parentFullSlug = fetch_repository('FaEntityBundle:Category').getFullSlugById(categoryPathKeys[0], fetch_container_instance()) %}
+                                                {% endif %}
+                                                {% if categoryPathKeys[1] is defined %}
+                                                    {% set secondLevelParentFullSlug = fetch_repository('FaEntityBundle:Category').getFullSlugById(categoryPathKeys[1], fetch_container_instance()) %}
+                                                {% endif %}
                                             {% endif %}
-                                        {% endfor %}
-                                        {% set parentFullSlug = null %}
-                                        {% set secondLevelParentFullSlug = null %}
-                                        {% if seoSearchParams.item__category_id is defined and seoSearchParams.item__category_id is not null %}
-                                            {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(seoSearchParams.item__category_id, false, fetch_container_instance()) %}
-                                            {% set categoryPathKeys = categoryPath|keys %}
-                                            {% if categoryPathKeys[0] is defined %}
-                                                {% set parentFullSlug = fetch_repository('FaEntityBundle:Category').getFullSlugById(categoryPathKeys[0], fetch_container_instance()) %}
-                                            {% endif %}
-                                            {% if categoryPathKeys[1] is defined %}
-                                                {% set secondLevelParentFullSlug = fetch_repository('FaEntityBundle:Category').getFullSlugById(categoryPathKeys[1], fetch_container_instance()) %}
-                                            {% endif %}
-                                        {% endif %}
-                                        {% for i in 0..columns-1 %}
-                                                {% for k in 0..colCounter[i]-1 %}
-                                                    {% if facetIdArray[ctr] is defined %}
-                                                        {% set facetId = facetIdArray[ctr] %}
-                                                        {% if customized_url|length and block['search_field_name'] == 'item__location' and customized_url['target_url'] != '' %}
-                                                            {% set searchResultUrl = container.get('fa_ad.manager.ad_routing').getCustomListingUrl(seoSearchParams|merge({ (block['search_field_name']): facetId}), customized_url['target_url']) %}
-                                                        {% else %}
-                                                            {% if block['first_entry_as_uk'] is defined and block['first_entry_as_uk'] == 1 %}
-                                                                {% if (ctr == 0) %}
-                                                                    {% if facetId == 0 %}
-                                                                        {% set searchResultUrl = block['facet'][0]['url'] %}
+                                            {% for i in 0..columns-1 %}
+                                                <div class="col-md-8">
+                                                    {% for k in 0..colCounter[i]-1 %}
+                                                        {% if facetIdArray[ctr] is defined %}
+                                                            {% set facetId = facetIdArray[ctr] %}
+                                                            {% if customized_url|length and block['search_field_name'] == 'item__location' and customized_url['target_url'] != '' %}
+                                                                {% set searchResultUrl = container.get('fa_ad.manager.ad_routing').getCustomListingUrl(seoSearchParams|merge({ (block['search_field_name']): facetId}), customized_url['target_url']) %}
+                                                            {% else %}
+                                                                {% if block['first_entry_as_uk'] is defined and block['first_entry_as_uk'] == 1 %}
+                                                                    {% if (ctr == 0) %}
+                                                                        {% if facetId == 0 %}
+                                                                            {% set searchResultUrl = block['facet'][0]['url'] %}
+                                                                        {% else %}
+                                                                            {% set tmpSeoSearchParams = seoSearchParams %}
+                                                                            {% if block['removeOtherParams'] is defined and block['removeOtherParams'] == 1 %}
+                                                                                {% set searchResultUrl = container.get('fa_ad.manager.ad_routing').getListingUrl({}|merge({ (block['search_field_name']): facetId, 'item__location': constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID')}), null, false, null, false, parentFullSlug, secondLevelParentFullSlug) %}
+                                                                            {% else %}
+                                                                                {% set searchResultUrl = container.get('fa_ad.manager.ad_routing').getListingUrl(tmpSeoSearchParams|merge({ (block['search_field_name']): facetId, 'item__location': constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID')}), null, false, null, false, parentFullSlug, secondLevelParentFullSlug) %}
+                                                                            {% endif %}
+                                                                        {% endif %}
                                                                     {% else %}
-                                                                        {% set tmpSeoSearchParams = seoSearchParams %}
                                                                         {% if block['removeOtherParams'] is defined and block['removeOtherParams'] == 1 %}
                                                                             {% set searchResultUrl = container.get('fa_ad.manager.ad_routing').getListingUrl({}|merge({ (block['search_field_name']): facetId, 'item__location': constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID')}), null, false, null, false, parentFullSlug, secondLevelParentFullSlug) %}
                                                                         {% else %}
-                                                                            {% set searchResultUrl = container.get('fa_ad.manager.ad_routing').getListingUrl(tmpSeoSearchParams|merge({ (block['search_field_name']): facetId, 'item__location': constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID')}), null, false, null, false, parentFullSlug, secondLevelParentFullSlug) %}
+                                                                            {% set searchResultUrl = container.get('fa_ad.manager.ad_routing').getListingUrl(seoSearchParams|merge({ (block['search_field_name']): facetId, 'item__location': constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID')}), null, false, null, false, parentFullSlug, secondLevelParentFullSlug) %}
                                                                         {% endif %}
                                                                     {% endif %}
                                                                 {% else %}
-                                                                    {% if block['removeOtherParams'] is defined and block['removeOtherParams'] == 1 %}
-                                                                        {% set searchResultUrl = container.get('fa_ad.manager.ad_routing').getListingUrl({}|merge({ (block['search_field_name']): facetId, 'item__location': constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID')}), null, false, null, false, parentFullSlug, secondLevelParentFullSlug) %}
-                                                                    {% else %}
-                                                                        {% set searchResultUrl = container.get('fa_ad.manager.ad_routing').getListingUrl(seoSearchParams|merge({ (block['search_field_name']): facetId, 'item__location': constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID')}), null, false, null, false, parentFullSlug, secondLevelParentFullSlug) %}
-                                                                    {% endif %}
+                                                                    {% set searchResultUrl = container.get('fa_ad.manager.ad_routing').getListingUrl(seoSearchParams|merge({ (block['search_field_name']): facetId}), null, false, null, false, parentFullSlug, secondLevelParentFullSlug) %}
                                                                 {% endif %}
+                                                            {% endif %}
+                                                            {% if facetId == 0 %}
+                                                                <a href="{{ searchResultUrl }}" {% if getNoFollowLink1  %}rel="nofollow"{% endif %}>{{block['facet'][0]['title']}}</a>
                                                             {% else %}
-                                                                {% set searchResultUrl = container.get('fa_ad.manager.ad_routing').getListingUrl(seoSearchParams|merge({ (block['search_field_name']): facetId}), null, false, null, false, parentFullSlug, secondLevelParentFullSlug) %}
+                                                                <a href="{{ searchResultUrl }}" {% if getNoFollowLink1  %}rel="nofollow"{% endif %}>{{ entityCacheManager.getEntityNameById(block['repository'], facetId) }} {# ({{ block['facet'][facetId] }}) #}</a>
                                                             {% endif %}
                                                         {% endif %}
-                                                        {% if facetId == 0 %}
-                                                            <li><a href="{{ searchResultUrl }}" {% if getNoFollowLink1  %}rel="nofollow"{% endif %}>{{block['facet'][0]['title']}}</a></li>
-                                                        {% else %}
-                                                            <li><a href="{{ searchResultUrl }}" {% if getNoFollowLink1  %}rel="nofollow"{% endif %}>{{ entityCacheManager.getEntityNameById(block['repository'], facetId) }} {# ({{ block['facet'][facetId] }}) #}</a></li>
-                                                        {% endif %}
-                                                    {% endif %}
-                                                    {% set ctr = ctr + 1 %}
-                                                {% endfor %}
-                                        {% endfor %}
-                                    {% endif %}
-                                
+                                                        {% set ctr = ctr + 1 %}
+                                                    {% endfor %}
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                     </div>
+                                </li>
                                 {% if block['show_all_link'] is defined and block['show_all_link'] and totalItems == block['facet_limit'] %}
                                     <li class="right"><a href="{{ path('category_dimension_list', {'categoryString': categoryRepository.getSlugById(categoryId, container), 'dimensionName': block['dimension_name']}) }}" {% if getNoFollowLink1  %}rel="nofollow"{% endif %} >{{ 'View all'|trans({}, 'frontend-search-list-block') }}</a></li>
                                 {% endif %}

@@ -1356,7 +1356,7 @@ b, strong {
 	margin: 0 auto !important;
 	margin-top: 10px !important;
 }
-.paa-block .change-category span:first-child {
+.paa-block .change-category span.cat-caption {
     width: 95px !important;
 }
 .edition-fields .select2 {
@@ -1368,7 +1368,30 @@ b, strong {
 .green-back-link {
 	font-family: "Poppins-Bold" !important;
 }
-
+.leaflet-container {
+	width: 100% !important;
+}
+.leaflet-popup-content {
+	width: max-content !important;;
+}
+.map-wrapper .featured-ribbon, .map-wrapper .urgent-ribbon {
+    display: none !important;;
+}
+.map-wrapper .list-col-1 {
+    width: 184px !important;;
+    float: left !important;;
+    margin-right: 15px !important;;
+}
+.map-wrapper .list-col-2 {
+    width: 215px !important;;
+    padding-right: 10px !important;;
+    float: right !important;;
+    word-wrap: break-word !important;;
+}
+#mapfit .leaflet-popup {
+    bottom: -8px !important;
+    left: -262px !important;
+}
 @media (min-width: 760px) and (max-width: 1151px) {
 	.home-list-location-box .link-list, .list-location-box .link-list, .details-list-location-box .link-list {
       column-count: unset;
@@ -1666,4 +1689,43 @@ b, strong {
   width: 19px;
   height: 19px;
   cursor: pointer;
+}
+
+@media (min-width: 320px) and (max-width: 759px) {
+  #mapfit .leaflet-popup {
+      bottom: -8px !important;
+      left: -120px !important;
+  }
+  #mapfit .leaflet-popup, #mapfit .leaflet-popup-content, #mapfit .leaflet-popup-content-wrapper {
+      width: 254px !important;
+      height: 236px !important;
+  }
+  #mapfit .leaflet-popup-content {
+      margin: 13px 0px !important;
+  }
+  .map-wrapper .listing::after {
+      right: -4px !important;
+  }
+  #mapfit .leaflet-popup .list-col-1 {
+      width: 100px !important;
+  }
+  #mapfit .listing .list-img {
+      width: 100px;
+      height: 75px;
+  }
+  #mapfit .listing .list-img img {
+      max-width: 98px;
+      max-height: 74px;
+  }
+  #mapfit .leaflet-popup .list-col-2 {
+      width: 115px !important;
+      padding: 0 0 0 10px !important;
+  }
+  #mapfit .leaflet-popup .list-col-2 .list-price {
+      margin-top: -16px !important;
+  }
+  #mapfit .leaflet-popup .list-col-2 h3 {
+      min-height: 54px;
+      overflow: hidden;
+  }
 }

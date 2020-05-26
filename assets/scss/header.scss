@@ -731,7 +731,9 @@ All this is done for any sub-level being entered.
     width: 10px;
     height: 31px;
 }
-
+.dl-subview .dl-submenu .last-level a:last-child {
+	padding-left: 50px !important;
+}
 @media only screen and (max-width: 759px) {
     .mob-container {
         height: 60px !important ;

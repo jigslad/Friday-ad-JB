@@ -327,6 +327,7 @@
   }
   .cont-seller-btn {
     padding: 15px 0 17px !important;
+    border-radius: 4px !important;
     border: 0px solid transparent !important;
     height: 60px !important;
     border-radius: 2px !important;
@@ -1333,13 +1334,18 @@ table.responsive-card-table {
     margin-top: 20px;
 }
 .details-top-banner .double-buttons a:first-child {
-    width: 42% !important;
+    width: 43% !important;
+    margin-right: 15px;
 }
 .details-top-banner .double-buttons a:last-child {
-    width: 55% !important;
+    width: 57% !important;
 }
 .details-top-banner .double-buttons .enquire-btn .btn-txt {
     width: auto !important;
+}
+.details-top-banner .double-buttons {
+    display: inline-flex;
+    width: 100%;
 }
 .details-top-banner .item-price {
 	font-family: "Poppins-Bold" !important;
