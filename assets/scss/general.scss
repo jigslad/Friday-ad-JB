@@ -2184,6 +2184,19 @@ footer p { color:$grey-color; }
 .text-muted {
     color: #ACB0B7 !important;
 }
+.latest-shop-box:hover {
+	color: #82C249 !important;
+}
+.latest-place-ad {
+    background: #ACB0B7 !important;
+    border: 1px solid #ACB0B7 !important;
+}
+.other-pro-location {
+	color: #ACB0B7 !important;
+}
+.profile-img-overlay, .cover-img-overlay {
+	opacity: 0 !important;
+}
 @media only screen and (max-width: 640px) {
   .ad-list-block .reset-search{
     border-bottom: 1px solid $form-border-color;
