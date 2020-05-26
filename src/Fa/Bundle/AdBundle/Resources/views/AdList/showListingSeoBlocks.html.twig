@@ -30,7 +30,7 @@
                         <a {% if getNoFollowLink1  %}rel="nofollow"{% endif %} role="button" data-toggle="collapse" data-parent="#adlist-collapse" href="#adlist-collapse{{panelCnt}}" aria-expanded="true" aria-controls="adlist-collapse{{panelCnt}}">{{ block['heading'] }} <i class="fa float-right {% if (panelCnt == 0) %} fa-minus{% else %}fa-plus{% endif %}"></i></a>
                       </h4>
                     </div>
-                    <div id="adlist-collapse{{panelCnt}}" class="panel-collapse collapse {% if (currentDevice == 'D' and panelCnt == 0) %}show{% endif %}" role="tabpanel" aria-labelledby="adlist-heading{{panelCnt}}">
+                    <div id="adlist-collapse{{panelCnt}}" class="panel-collapse collapse {% if panelCnt == 0 %}show{% endif %}" role="tabpanel" aria-labelledby="adlist-heading{{panelCnt}}">
                         <div class="panel-body list-panel-body">
                              <ul class="link-list">
                                         {% if block['is_top_links'] is defined and block['is_top_links'] == 1 %}

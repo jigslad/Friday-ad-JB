@@ -1354,7 +1354,14 @@ table.responsive-card-table {
 	width: auto !important;
 	margin: 0 auto !important;
 }
-
+.mapfit-control { display:block; }
+@media only screen and (max-width: 959px) and (min-width: 320px)
+{
+    .map-wrapper .listing {
+        border-top: 0px !important;
+        margin: 0 !important;
+    }
+}
 @media (min-width: 760px) and (max-width: 959px) {
 	.double-buttons .btn-txt {
 	    display: none;
