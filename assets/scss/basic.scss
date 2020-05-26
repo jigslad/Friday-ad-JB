@@ -1741,6 +1741,9 @@ b, strong {
     min-height: 110px;
     text-align: center
 }
+.see-more.f-width {
+	display: flex !important;
+}
 @media (min-width: 320px) and (max-width: 759px) {
   #mapfit .leaflet-popup {
       bottom: -8px !important;
