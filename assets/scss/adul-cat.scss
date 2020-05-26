@@ -773,5 +773,19 @@ a.basket-icon {
     
 
 }
+@media (min-width: 320px) and (max-width: 640px) {
+	.parallax-window {
+	    background-position: center 100% !important;
+	    background-repeat: no-repeat !important;
+	    background-size: auto !important;
+	}
+}
+@media (min-width: 641px) and (max-width: 959px) {
+	.parallax-window {
+	    background-position: center !important;
+	    background-repeat: no-repeat !important;
+	    background-size: cover !important;
+	}
+}
 
 
