@@ -6,13 +6,13 @@
             <div class="col-md-24">
                 <div class="browse-by-category mt20">Choose by category</div>
                 <div class="row">
-                    <div class="col-md-11 col-lg-12 mobile-p-0">
+                    <div class="col-24 col-md-11 col-lg-12 mobile-p-0 ">
                         {{ form_widget(attribute(form, 'item__category_id'),{'attr':{ 'class': 'form-control select-control without-sel-box'  }}) }}
                     </div>
-                    <div class="col-sm-9 col-md-7 col-lg-7 mobile-p-0">
-                        {{ form_widget(form.item__distance,{'attr':{'class':'form-control select-control without-sel-box'}}) }}
+                    <div class="col-11 col-md-7 col-lg-7 mobile-p-0">
+                        {{ form_widget(form.item__distance,{'attr':{'class':'select-control without-sel-box'}}) }}
                     </div>
-                    <div class="col-sm-15 col-md-6 col-lg-5 mobile-p-0 d-inline-flex">
+                    <div class="col-13 col-md-6 col-lg-5 mobile-p-0 pl0 d-inline-flex">
                         <label class="from-sec">{{ 'from'|trans({}, 'frontend')}}</label>
                         <div class="location-col">
                         {{ form_widget(form.item__location_autocomplete,{'attr':{'class':'white-field'}}) }}
@@ -22,10 +22,10 @@
                 </div>
                 <div id="more_options" style="display: none">
                 	<div class="row">
-                        <div class="col-md-10 col-lg-11 mobile-p-0 multi-sel-box">
-                            {{ form_widget(attribute(form, 'item_adult__services_id'),{'attr':{ 'class': 'select-control'  }}) }}
+                        <div class="col-24 col-md-10 col-lg-11 mobile-p-0 multi-sel-box">
+                            {{ form_widget(attribute(form, 'item_adult__services_id'),{'attr':{ 'class': 'multi-selbox select-control'  }}) }}
                         </div>
-                        <div class="col-md-7 col-lg-6 mobile-p-0 mt10">
+                        <div class="col-24 col-md-7 col-lg-6 mobile-p-0 mt10">
                         		<div class="form-control adult-radio-form white-check">
                                     <input type="checkbox" id="fa_adult_home_page_search_item_adult__independent_or_agency_id_0" class="independent-or-agency-cls checkbox" name="fa_adult_home_page_search[item_adult__independent_or_agency_id][]" required="required" value="7317">                                
                                     <label for="fa_adult_home_page_search_item_adult__independent_or_agency_id_0" class="required radio-label"></label>Independent
@@ -33,7 +33,7 @@
                                     <label for="fa_adult_home_page_search_item_adult__independent_or_agency_id_1" class="required radio-label"></label>Agency
                                 </div>
                         </div>
-                        <div class="col-md-7 col-lg-7 mobile-p-0 d-inline-flex">
+                        <div class="col-24 col-md-7 col-lg-7 mobile-p-0 d-inline-flex">
                             {{ form_widget(attribute(form, 'item_adult__ethnicity_id'),{'attr':{ 'class': 'form-control select-control without-sel-box'  }}) }}
                         </div>
                     </div>
