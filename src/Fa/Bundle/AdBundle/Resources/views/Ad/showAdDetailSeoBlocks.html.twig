@@ -3,6 +3,15 @@
     {% set container = fetch_container_instance() %}
     {% set entityCacheManager = container.get('fa.entity.cache.manager') %}
     {% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+    
+    {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+    {% set currentDevice = 'D' %}
+    {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+        {% set currentDevice = 'M' %}
+    {% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
+        {% set currentDevice = 'T' %}
+    {% endif %}
+    
     <div class="container">
         <div class="row">
             <div class="col-md-24">

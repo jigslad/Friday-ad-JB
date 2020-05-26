@@ -5,6 +5,16 @@
 	{% else %}
 	 	{%  set searchParamsResult = searchParams.search %}
     {% endif %}
+    
+    {% set container = fetch_container_instance() %}
+    {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+    {% set currentDevice = 'D' %}
+    {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+        {% set currentDevice = 'M' %}
+    {% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
+        {% set currentDevice = 'T' %}
+    {% endif %}
+    
     {% set getNoFollowLink1 = fetch_repository('FaEntityBundle:Category').getCategoryNoFollowLink(searchQueryString,true) %}
     {% set container = fetch_container_instance() %}
     {% set entityCacheManager = container.get('fa.entity.cache.manager') %}
