@@ -726,6 +726,20 @@ a.basket-icon {
 	    background-size: cover;
 	    background-position: center;
 	    float: none;
+    }
+    #tablet-header-menus {
+		width: 310px !important;
+		display: inline-flex !important;
+	}
+	#tablet-header-menus .top-bar-section a.backtofad {
+		font-size: 13px !important;
+	}
+	#tablet-header-menus .t-navbar-block .nav-link {
+		font-size: 13px !important;
+		line-height: 18px !important;
+	}
+	#desktop-header-menus .backtofad {
+		display: none !important;
 	}
 }
 @media (min-width: 320px) and (max-width: 640px) {
