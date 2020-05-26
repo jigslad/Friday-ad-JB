@@ -31,6 +31,10 @@
 </script>
 <script language="javascript" type="text/javascript">
 //<![CDATA[
+    var cueentElemrnt = 'null';
+    $('body').mousemove(function(evt){
+        cueentElemrnt = evt.target;
+    });
     $.ajax({
       url: '{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}',
       async: false,
@@ -169,7 +173,6 @@
         $("#notification-area").empty();
         notification_box = true;
     });
-
     
     function displayNotifications()
     {
@@ -180,10 +183,13 @@
         })
         .done(function(response) {
             if (response) {
-              $("#notification-area").html(response);
-              var counter = parseInt($("#notification_head_counter").html());
-              $("#notification_head_count").html(counter);
-             notification_box = false;
+                var otificationids = ('notification-href','notification-l','notification_head_count','notification-area');
+                if($.inArray(cueentElemrnt.id, otificationids))   {
+                    $("#notification-area").html(response);
+                    var counter = parseInt($("#notification_head_counter").html());
+                    $("#notification_head_count").html(counter);
+                    notification_box = false;
+                }
             }
         });
     }

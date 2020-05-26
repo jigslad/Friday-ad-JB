@@ -210,7 +210,7 @@
         });
     }
 
-    $('#savedSearchAgentModal').bind('closed', function() {
+    $('#savedSearchAgentModal').on('hidden.bs.modal', function() {
     	$( ".alertButton" ).each(function( index ) {
     		  $(this).html("New alert created<span class='alert-check-icon'>&nbsp;</span>");
     		  $(this).removeClass("secondary-btn-1");

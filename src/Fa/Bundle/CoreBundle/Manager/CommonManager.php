@@ -903,7 +903,7 @@ class CommonManager
                     if ($isCompany) {
                         return '<img class="img-fluid" src="'.$container->getParameter('fa.static.shared.url').'/uploads/tmp/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).'" alt="'.$userName.'"  />';
                     } else {
-                        return '<span style="background-image: url('.$container->getParameter('fa.static.shared.url').'/uploads/tmp/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).')" title="'.$userName.'" />';
+                        return '<img src="'.$container->getParameter('fa.static.shared.url').'/uploads/tmp/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).'" title="'.$userName.'" />';
                     }
                 } else {
                     $noImageName = 'user-icon.svg';
@@ -930,14 +930,14 @@ class CommonManager
             if ($isCompany) {
                 return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img class="img-fluid" src="'.$newImagePath.'" width="'.$imageWidth.'" height="'.$imageHeight.'" alt="'.$userName.'" />';
             } else {
-                return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<span style="background-image: url('.$newImagePath.')" title="'.$userName.'"></span>';
+                return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img src="'.$newImagePath.'" title="'.$userName.'" />';
             }
         } elseif (is_file($imagePath)) {
             if (($imageWidth==null && $imageHeight== null) || ($imageWidth =='' && $imageHeight=='') || ($imageWidth ==0 || $imageHeight==0)) {
                 if ($isCompany) {
                     return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img class="img-fluid" src="'.$container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).'" alt="'.$userName.'" />';
                 } else {
-                    return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<span style="background-image: url('.$container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).')" title="'.$userName.'" />';
+                    return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img src="'.$container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).'" title="'.$userName.'" />';
                 }
             } else {                
                 if (!file_exists($container->get('kernel')->getRootDir().'/../web/'.$path.'/'.$userId.'_'.$imageWidth.'X'.$imageHeight.'.jpg')) {
@@ -954,7 +954,7 @@ class CommonManager
                 if ($isCompany) {
                     return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img class="img-fluid" src="'.$newImagePath.'" width="'.$imageWidth.'" height="'.$imageHeight.'" alt="'.$userName.'" />';
                 } else {
-                    return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<span style="background-image: url('.$newImagePath.')" title="'.$userName.'"></span>';
+                    return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img src="'.$newImagePath.'" title="'.$userName.'" />';
                 }
             }
         } else {

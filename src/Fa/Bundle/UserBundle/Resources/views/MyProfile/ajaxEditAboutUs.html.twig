@@ -26,7 +26,9 @@
         </div>
         <div class="container mt15">
             <div class="row">
-                {{ form_widget(form.about_us) }}
+                <div class="col-md-24">
+                    {{ form_widget(form.about_us) }}
+                </div>
                 <div class="clearfix">
                     <div class="left col-24 pad-none">
                         {{ form_errors(form.about_us) }}

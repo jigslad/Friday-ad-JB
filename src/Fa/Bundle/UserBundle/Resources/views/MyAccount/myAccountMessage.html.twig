@@ -1,6 +1,6 @@
 {% if app.session.flashbag.has(msgName) %}
     {% for flashMessage in app.session.flashbag.get(msgName) %}
-        <div data-alert class="alert-box success radius" id="successMsgDiv">
+        <div data-alert class="alert alert-box success radius" id="successMsgDiv">
             <span class="alert-icon">&nbsp;</span>
             {{ flashMessage }}
             <a data-dismiss="alert" class="close">&times;</a>
