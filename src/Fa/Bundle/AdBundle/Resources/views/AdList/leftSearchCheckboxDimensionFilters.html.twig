@@ -85,7 +85,7 @@
                     {% endif %}
                 {% endfor %}
             </ul>
-            <div style="column-count: 2;" class="see-more text-right clearfix f-width">
+            <div class="see-more text-right clearfix f-width">
               <div class="f-width text-left">
                 {% if showSeeMore %}
                     <a href="javascript:void(0)" rel="nofollow" onClick="loadDimensionAllChoicesModal('{{ dimensionId }}', '{{ dimensionName }}', '{{filter}}', '{{ dimensionSearchType }}', '{{array_serialize(searchParams)|escape('js')}}')">{{ 'See more'|trans({}, 'frontend-left-search') }}</a>

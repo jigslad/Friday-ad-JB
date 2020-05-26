@@ -18,7 +18,7 @@
     	                        <a role="button" data-toggle="collapse" data-parent="#detail_seo_box" href="#addetailBlock{{panelCnt}}" aria-expanded="true" aria-controls="addetailBlock{{panelCnt}}">Top Counties <i class="fa float-right fa-plus"></i></a>
     	                      </h4>
     	                    </div>
-    	                    <div id="addetailBlock{{panelCnt}}" class="panel-collapse collapse show" role="tabpanel" aria-labelledby="ad-detail-headingOne">
+    	                    <div id="addetailBlock{{panelCnt}}" class="panel-collapse collapse {% if (currentDevice == 'D' and panelCnt == 0) %}show{% endif %}" role="tabpanel" aria-labelledby="ad-detail-headingOne">
     	                        <div class="panel-body list-panel-body">
     	                            <ul class="link-list">
     	                                

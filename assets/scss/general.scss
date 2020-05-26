@@ -2178,6 +2178,9 @@ footer p { color:$grey-color; }
 .top-links .notification-link a span, .top-links .msg-link a span, .top-links .basket-icon span {
 	color: #82C249 !important;
 }
+.custom-card:hover h3 {
+	color: #82C249 !important;
+}
 
 @media only screen and (max-width: 640px) {
   .ad-list-block .reset-search{

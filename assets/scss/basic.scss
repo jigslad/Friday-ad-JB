@@ -648,7 +648,7 @@ footer .search-box-col .newsletter-lbl, .white-check .label-span, .grey-check .l
 .ask-for-offer-help { color: #FFFFFF;font-weight: normal !important;font-size: 18px;letter-spacing: 0; line-height: 21px;text-align: center;  }
 .ask-for-offer-help a, .ask-for-offer-help a:hover, .ask-for-offer-help a:focus { text-decoration: underline !important; }
 .place-free-ad-btn, .place-free-ad-btn:hover, .place-free-ad-btn:focus, a:hover.button.place-free-ad-btn, a:focus.button.place-free-ad-btn,
-, a:hover.btn.place-free-ad-btn, a:focus.btn.place-free-ad-btn
+ a:hover.btn.place-free-ad-btn, a:focus.btn.place-free-ad-btn
 { height: 30px; width: 162px; font-size: 14px; letter-spacing: 0;line-height: 16px;text-align: center; margin-bottom: 0px; vertical-align: middle; display: table-cell; }
 
 .cross-btn {
@@ -1690,7 +1690,57 @@ b, strong {
   height: 19px;
   cursor: pointer;
 }
-
+.map-wrapper .listing {
+    padding: 20px 20px 16px;
+    border: 1px solid #CBD5D9 !important;
+    border-radius: 4px !important;
+}
+.ame-express {
+    display: inline-block;
+    width: 67px;
+    height: 42px;
+    vertical-align: middle;
+    margin-right: 15px
+}
+.dinners-club {
+    display: inline-block;
+    width: 67px;
+    height: 42px;
+    vertical-align: middle;
+    margin-right: 15px
+}
+.discover {
+    display: inline-block;
+    width: 67px;
+    height: 42px;
+    vertical-align: middle;
+    margin-right: 15px
+}
+.maestro {
+    display: inline-block;
+    width: 67px;
+    height: 42px;
+    vertical-align: middle;
+    margin-right: 15px
+}
+.mastercard {
+    display: inline-block;
+    width: 67px;
+    height: 42px;
+    vertical-align: middle;
+    margin-right: 15px
+}
+.visa-electron {
+    display: inline-block;
+    width: 67px;
+    height: 42px;
+    vertical-align: middle;
+    margin-right: 15px
+}
+.top-banner {
+    min-height: 110px;
+    text-align: center
+}
 @media (min-width: 320px) and (max-width: 759px) {
   #mapfit .leaflet-popup {
       bottom: -8px !important;
