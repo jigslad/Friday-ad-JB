@@ -63,168 +63,6 @@
     background-size: 152px 153px !important;
 }
 
-/* Animals Images */
-.pets-dogs { background: url('/Frontend/images/animals/Ic-btn-Dogs.png') no-repeat !important; }
-.pets-cats { background: url('/Frontend/images/animals/Ic-btn-Cats.png') no-repeat !important; }
-.pets-birds { background: url('/Frontend/images/animals/Ic-btn-Birds.png') no-repeat !important; }
-.pets-rabbits { background: url('/Frontend/images/animals/Ic-btn-Rabbits.png') no-repeat !important; }
-.pets-guinea-pigs { background: url('/Frontend/images/animals/Ic-btn-Guinea-Pigs.png') no-repeat !important; }
-.pets-reptiles { background: url('/Frontend/images/animals/Ic-btn-Reptiles.png') no-repeat !important; }
-.pets-fish { background: url('/Frontend/images/animals/Ic-btn-Fish.png') no-repeat !important; }
-.pets-insects { background: url('/Frontend/images/animals/Ic-btn-Insects.png') no-repeat !important; }
-.pets-exotic-pets { background: url('/Frontend/images/animals/Ic-btn-Exotic.png') no-repeat !important; }
-.pets-other-pets { background: url('/Frontend/images/animals/Ic-btn-Other.png') no-repeat !important; }
-.pets-pet-accessories { background: url('/Frontend/images/animals/Ic-btn-Pet-accessories.png') no-repeat !important; }
-.pets-pet-supplies { background: url('/Frontend/images/animals/Ic-btn-Pet-supplies.png') no-repeat !important; }
-
-.pets-dogs:active, .pets-dogs:hover { background: url('/Frontend/images/animals/Ic-btn-Dogs-Hover.png') no-repeat !important; }
-.pets-cats:active, .pets-cats:hover { background: url('/Frontend/images/animals/Ic-btn-Cats-Hover.png') no-repeat !important; }
-.pets-birds:active, .pets-birds:hover { background: url('/Frontend/images/animals/Ic-btn-Birds-Hover.png') no-repeat !important; }
-.pets-rabbits:active, .pets-rabbits:hover { background: url('/Frontend/images/animals/Ic-btn-Rabbits-Hover.png') no-repeat !important; }
-.pets-guinea-pigs:active, .pets-guinea-pigs:hover { background: url('/Frontend/images/animals/Ic-btn-Guinea-Pigs-Hover.png') no-repeat !important; }
-.pets-reptiles:active, .pets-reptiles:hover { background: url('/Frontend/images/animals/Ic-btn-Reptiles-Hover.png') no-repeat !important; }
-.pets-fish:active, .pets-fish:hover { background: url('/Frontend/images/animals/Ic-btn-Fish-Hover.png') no-repeat !important; }
-.pets-insects:active, .pets-insects:hover { background: url('/Frontend/images/animals/Ic-btn-Insects-Hover.png') no-repeat !important; }
-.pets-exotic-pets:active, .pets-exotic-pets:hover { background: url('/Frontend/images/animals/Ic-btn-Exotic-Hover.png') no-repeat !important; }
-.pets-other-pets:active, .pets-other-pets:hover { background: url('/Frontend/images/animals/Ic-btn-Other-Hover.png') no-repeat !important; }
-.pets-pet-accessories:active, .pets-pet-accessories:hover { background: url('/Frontend/images/animals/Ic-btn-Pet-accessories-Hover.png') no-repeat !important; }
-.pets-pet-supplies:active, .pets-pet-supplies:hover { background: url('/Frontend/images/animals/Ic-btn-Pet-supplies-Hover.png') no-repeat !important; }
-
-/* Motors Images */
-.any-category {
-  background: url('/Frontend/images/Ic-btn-Any.png') no-repeat;
-  &:hover {
-    background: url('/Frontend/images/Ic-btn-Any-Hover.png') no-repeat;
-  }
-  &.active {
-    background: url('/Frontend/images/Ic-btn-Any-ON.png') no-repeat;
-  }
-}
-.car-hatchback {
-  background: url('/Frontend/images/motors/Ic-btn-Hatchback.png') no-repeat;
-  &:hover {
-    background: url('/Frontend/images/motors/Ic-btn-Hatchback-Hover.png') no-repeat;
-  }
-  &.active {
-    background: url('/Frontend/images/motors/Ic-btn-Hatchback-ON.png') no-repeat;
-  }
-}
-.car-coupes {
-  background: url('/Frontend/images/motors/Ic-btn-Coupes.png') no-repeat;
-  &:hover {
-    background: url('/Frontend/images/motors/Ic-btn-Coupes-Hover.png') no-repeat;
-  }
-  &.active {
-    background: url('/Frontend/images/motors/Ic-btn-Coupes-ON.png') no-repeat;
-  }
-}
-.car-saloons {
-  background: url('/Frontend/images/motors/Ic-btn-Saloons.png') no-repeat;
-  &:hover {
-    background: url('/Frontend/images/motors/Ic-btn-Saloons-Hover.png') no-repeat;
-  }
-  &.active {
-    background: url('/Frontend/images/motors/Ic-btn-Saloons-ON.png') no-repeat;
-  }
-}
-.car-convertibles {
-  background: url('/Frontend/images/motors/Ic-btn-Convertibles.png') no-repeat;
-  &:hover {
-    background: url('/Frontend/images/motors/Ic-btn-Convertibles-Hover.png') no-repeat;
-  }
-  &.active {
-    background: url('/Frontend/images/motors/Ic-btn-Convertibles-ON.png') no-repeat;
-  }
-}
-.car-estates {
-  background: url('/Frontend/images/motors/Ic-btn-Estates.png') no-repeat;
-  &:hover {
-    background: url('/Frontend/images/motors/Ic-btn-Estates-Hover.png') no-repeat;
-  }
-  &.active {
-    background: url('/Frontend/images/motors/Ic-btn-Estates-ON.png') no-repeat;
-  }
-}
-.car-mpvs {
-  background: url('/Frontend/images/motors/Ic-btn-MPVs.png') no-repeat;
-  &:hover {
-    background: url('/Frontend/images/motors/Ic-btn-MPVs-Hover.png') no-repeat;
-  }
-  &.active {
-    background: url('/Frontend/images/motors/Ic-btn-MPVs-ON.png') no-repeat;
-  }
-}
-.car-4x4 {
-  background: url('/Frontend/images/motors/Ic-btn-4x4.png') no-repeat;
-  &:hover {
-    background: url('/Frontend/images/motors/Ic-btn-4x4-Hover.png') no-repeat;
-  }
-  &.active {
-    background: url('/Frontend/images/motors/Ic-btn-4x4-ON.png') no-repeat;
-  }
-}
-
-/* Property Images */
-.pt-commercial { background: url('/Frontend/images/Properties/Commercial.png') no-repeat !important; }
-.pt-flats { background: url('/Frontend/images/Properties/Flats.png') no-repeat !important; }
-.pt-garages { background: url('/Frontend/images/Properties/Garages.png') no-repeat !important; }
-.pt-houses { background: url('/Frontend/images/Properties/Houses.png') no-repeat !important; }
-.pt-land { background: url('/Frontend/images/Properties/Land.png') no-repeat !important; }
-.pt-mobile-homes { background: url('/Frontend/images/Properties/Mobile-Homes.png') no-repeat !important; }
-.pt-overseas { background: url('/Frontend/images/Properties/Overseas.png') no-repeat !important; }
-.pt-parking { background: url('/Frontend/images/Properties/Parking.png') no-repeat !important; }
-.pt-rooms { background: url('/Frontend/images/Properties/Rooms.png') no-repeat !important; }
-
-.pt-commercial:hover { background: url('/Frontend/images/Properties/Commercial-Hover.png') no-repeat !important; }
-.pt-flats:hover { background: url('/Frontend/images/Properties/Flats-Hover.png') no-repeat !important; }
-.pt-garages:hover { background: url('/Frontend/images/Properties/Garages-Hover.png') no-repeat !important; }
-.pt-houses:hover { background: url('/Frontend/images/Properties/Houses-Hover.png') no-repeat !important; }
-.pt-land:hover { background: url('/Frontend/images/Properties/Land-Hover.png') no-repeat !important; }
-.pt-mobile-homes:hover { background: url('/Frontend/images/Properties/Mobile-Homes-Hover.png') no-repeat !important; }
-.pt-overseas:hover { background: url('/Frontend/images/Properties/Overseas-Hover.png') no-repeat !important; }
-.pt-parking:hover { background: url('/Frontend/images/Properties/Parking-Hover.png') no-repeat !important; }
-.pt-rooms:hover { background: url('/Frontend/images/Properties/Rooms-Hover.png') no-repeat !important; }
-
-.pt-commercial.active { background: url('/Frontend/images/Properties/Commercial-ON.png') no-repeat !important; }
-.pt-flats.active { background: url('/Frontend/images/Properties/Flats-ON.png') no-repeat !important; }
-.pt-garages.active { background: url('/Frontend/images/Properties/Garages-ON.png') no-repeat !important; }
-.pt-houses.active { background: url('/Frontend/images/Properties/Houses-ON.png') no-repeat !important; }
-.pt-land.active { background: url('/Frontend/images/Properties/Land-ON.png') no-repeat !important; }
-.pt-mobile-homes.active { background: url('/Frontend/images/Properties/Mobile-Homes-ON.png') no-repeat !important; }
-.pt-overseas.active { background: url('/Frontend/images/Properties/Overseas-ON.png') no-repeat !important; }
-.pt-parking.active { background: url('/Frontend/images/Properties/Parking-ON.png') no-repeat !important; }
-.pt-rooms.active { background: url('/Frontend/images/Properties/Rooms-ON.png') no-repeat !important; }
-
-/* Job Images */
-.job-full-time { background: url('/Frontend/images/Jobs/Full-Time.png') no-repeat !important; }
-.job-part-time { background: url('/Frontend/images/Jobs/Part-Time.png') no-repeat !important; }
-.job-contract { background: url('/Frontend/images/Jobs/Contract.png') no-repeat !important; }
-.job-weekend { background: url('/Frontend/images/Jobs/Weekends.png') no-repeat !important; }
-.job-evenings { background: url('/Frontend/images/Jobs/Evenings.png') no-repeat !important; }
-.job-home-working { background: url('/Frontend/images/Jobs/Home-Working.png') no-repeat !important; }
-.job-freelance { background: url('/Frontend/images/Jobs/Freelance.png') no-repeat !important; }
-.job-wanted { background: url('/Frontend/images/Jobs/Wanted.png') no-repeat !important; }
-.job-temporary { background: url('/Frontend/images/Jobs/Temporary.png') no-repeat !important; }
-
-.job-full-time:hover { background: url('/Frontend/images/Jobs/Full-Time-Hover.png') no-repeat !important; }
-.job-part-time:hover { background: url('/Frontend/images/Jobs/Part-Time-Hover.png') no-repeat !important; }
-.job-contract:hover { background: url('/Frontend/images/Jobs/Contract-Hover.png') no-repeat !important; }
-.job-weekend:hover { background: url('/Frontend/images/Jobs/Weekends-Hover.png') no-repeat !important; }
-.job-evenings:hover { background: url('/Frontend/images/Jobs/Evenings-Hover.png') no-repeat !important; }
-.job-home-working:hover { background: url('/Frontend/images/Jobs/Home-Working-Hover.png') no-repeat !important; }
-.job-freelance:hover { background: url('/Frontend/images/Jobs/Freelance-Hover.png') no-repeat !important; }
-.job-wanted:hover { background: url('/Frontend/images/Jobs/Wanted-Hover.png') no-repeat !important; }
-.job-temporary:hover { background: url('/Frontend/images/Jobs/Temporary-Hover.png') no-repeat !important; }
-
-.job-full-time.active { background: url('/Frontend/images/Jobs/Full-Time-ON.png') no-repeat !important; }
-.job-part-time.active { background: url('/Frontend/images/Jobs/Part-Time-ON.png') no-repeat !important; }
-.job-contract.active { background: url('/Frontend/images/Jobs/Contract-ON.png') no-repeat !important; }
-.job-weekend.active { background: url('/Frontend/images/Jobs/Weekends-ON.png') no-repeat !important; }
-.job-evenings.active { background: url('/Frontend/images/Jobs/Evenings-ON.png') no-repeat !important; }
-.job-home-working.active { background: url('/Frontend/images/Jobs/Home-Working-ON.png') no-repeat !important; }
-.job-freelance.active { background: url('/Frontend/images/Jobs/Freelance-ON.png') no-repeat !important; }
-.job-wanted.active { background: url('/Frontend/images/Jobs/Wanted-ON.png') no-repeat !important; }
-.job-temporary.active { background: url('/Frontend/images/Jobs/Temporary-ON.png') no-repeat !important; }
 
 .custom-card { padding: 20px; }
 .custom-card .list-img { padding: 0px; width: 100%; height: 158px;  margin: 0 auto; }
@@ -247,7 +85,6 @@
 }
 
 .list-dimensions .engine {
-    background: url('/Frontend/images/icons/engine.svg') no-repeat;
     padding-left: 26px;
     margin-right: 8px;
     min-height: 19px;
@@ -255,7 +92,6 @@
 }
 
 .list-dimensions .fuel-type {
-    background: url('/Frontend/images/icons/fuel-type.svg') no-repeat;
     padding-left: 26px;
     margin-right: 8px;
     min-height: 19px;

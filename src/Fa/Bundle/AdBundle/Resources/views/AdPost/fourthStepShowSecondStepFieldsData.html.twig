@@ -33,12 +33,12 @@
     </div>
 </div>
 <div class="change-category">
-    <div class="text-left cat-name-wrap">
-        <span>{{ 'Description'|trans({}, 'frontend-paa-fourth-step') }}:</span>
+    <div class="text-left cat-name-wrap d-flex">
+        <span>{{ 'Description'|trans({}, 'frontend-paa-fourth-step') }}:</span>    
+        <div id="paa_desc">{{ ad.description|raw }}</div>
     </div>
-    {#<div id="paa_desc">{{ ad.description|raw }}</div>
-    <a href="javascript:void(0);" class="read-more" style="display:none;">{{ 'Read more'|trans({}, 'frontend') }}</a>
-    <a href="javascript:void(0);" class="read-less" style="display:none;">{{ 'Read less'|trans({}, 'frontend') }}</a>#}
+        <a href="javascript:void(0);" class="read-more" style="display:none;">{{ 'Read more'|trans({}, 'frontend') }}</a>
+    	<a href="javascript:void(0);" class="read-less" style="display:none;">{{ 'Read less'|trans({}, 'frontend') }}</a>
     <div class="text-right edit-category">
         <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" class="a-tag" title="{{ 'Change description'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
     </div>

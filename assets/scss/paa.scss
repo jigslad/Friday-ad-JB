@@ -414,18 +414,12 @@ footer .fad-logo {
     padding: 0;
     text-indent: -9999px;
     margin-bottom: 26px;
-    background: url('/Frontend/images/social/fb-btn.svg') no-repeat;
     transition: none;
     border: 0px;
   }
-  .fb-btn:hover {
-    background: url('/Frontend/images/social/fb-btn-hover.svg') no-repeat;
-  }
   .gplus-btn {
-    background: url('/Frontend/images/social/google_signin.png') no-repeat;
     margin-left: 18px;
     &:hover {
-      background: url('/Frontend/images/social/google_signin.png') no-repeat;
       margin-left: 20px;
     }
   }
@@ -443,13 +437,11 @@ footer .fad-logo {
     color: #EAEFF0;
 }
 .self-service-img {
-    background: url('/Frontend/images/self-service-title.svg') no-repeat;
     display: inline-block;
     width: 201px;
     height: 164px;
 }
 .magazines-img {
-    background: url('/Frontend/images/magazines.png') no-repeat;
     display: inline-block;
     width: 222px;
     height: 179px;
@@ -541,8 +533,6 @@ footer .fad-logo {
     background: #FFFFFF;
   }
   .drag-ins-hr {
-
-    background: url('/Frontend/images/icons/upload-image.png') no-repeat;
     padding: 0 0 0 26px;
     margin-bottom: 10px;
     min-height: 15px;
@@ -551,8 +541,6 @@ footer .fad-logo {
     background-size: 20px 15px;
   }
   .drag-ins-vr {
-
-    background: url('/Frontend/images/icons/upload-image.png') no-repeat;
     padding: 43px 0 0 0;
     margin: 10px 0;
     background-position: center top;
@@ -618,7 +606,6 @@ footer .fad-logo {
     max-height: 98px;
     max-width: 130px;
     cursor: move;
-    cursor: url('/Frontend/images/icons/move-cursor.png') 4 12,auto;
 }
 .adimg-thumb .edit-img {
     padding: 5px 27px 7px !important;
@@ -794,7 +781,6 @@ footer .fad-logo {
   .available-payment-options {
     width: 100%;
     height: 47px;
-    background: url('/Frontend/images/payment/payment-options.png') no-repeat center center;
   }
 
   .weekly-pkg {
@@ -826,7 +812,6 @@ footer .fad-logo {
 @media (min-width: 320px) and (max-width: 759px) {
   .paa-block {
     .available-payment-options {
-      background: url('/Frontend/images/payment/payment-options-mobile.png') no-repeat center center;
       height: 100px;
     }
     .paa-pkg-main {
@@ -957,7 +942,6 @@ footer .fad-logo {
     padding-bottom: 55px;
   }
   .credit-cards-box {
-    background: url('/Frontend/images/payment/credit-cards.svg') no-repeat center center;
     height: 144px;
     border-radius: 2px;
     cursor: pointer;
@@ -989,7 +973,6 @@ footer .fad-logo {
       display: inline-block !important;
     }
     .credit-cards-box {
-      background: url('/Frontend/images/payment/credit-cards-mobile.svg') no-repeat center center;
       width: 100%;
       height: 60px;
       float: none;
@@ -1275,19 +1258,6 @@ span#fa_payment_cyber_source_checkout_card_expity_month-button, span#fa_payment_
     width: 242px;
     height: 141px;
 }
-.motors-subtitle{background:url('/Frontend/images/subtitle/motors-subtitle.png') 0 0 / 245px 153px no-repeat}
-.for_sale-subtitle{background:url('/Frontend/images/subtitle/forsale-subtitle.png') 0 0 / 245px 153px no-repeat}
-.jobs-subtitle{background:url('/Frontend/images/subtitle/jobs-subtitle.png') 0 0 / 245px 153px no-repeat}
-.services-subtitle{background:url('/Frontend/images/subtitle/services-subtitle.png') 0 0 / 245px 153px no-repeat}
-.adult-subtitle{background:url('/Frontend/images/subtitle/adult-subtitle.png') 0 0 / 245px 153px no-repeat}
-.property-subtitle{background:url('/Frontend/images/subtitle/property-subtitle.png') 0 0 / 245px 153px no-repeat}
-.classes_and_tuition-subtitle{background:url('/Frontend/images/subtitle/classes-subtitle.png') 0 0 / 245px 153px no-repeat}
-.clubs_societies_and_teams-subtitle{background:url('/Frontend/images/subtitle/clubs-subtitle.png') 0 0 / 245px 153px no-repeat}
-.friendship_and_dating-subtitle{background:url('/Frontend/images/subtitle/dating-subtitle.png') 0 0 / 245px 153px no-repeat}
-.in_your_area-subtitle{background:url('/Frontend/images/subtitle/area-subtitle.png') 0 0 / 245px 153px no-repeat}
-.animals-subtitle{background:url('/Frontend/images/subtitle/animals-subtitle.png') 0 0 / 245px 153px no-repeat}
-.whats_on-subtitle{background:url('/Frontend/images/subtitle/whatson-subtitle.png') 0 0 / 245px 153px no-repeat}
-
 .paa-subtitle-img {
     width: 245px;
     height: 153px;
@@ -1376,7 +1346,18 @@ span#fa_payment_cyber_source_checkout_card_expity_month-button, span#fa_payment_
     text-align: left;
     float: none;
 }
+.paa-desc, .paa-desc p, .paa-desc li {
+    font-size: 14px;
+    color: #212527;
+    font-weight: normal;
+    line-height: 22px;
+    margin-bottom: 0;
+}
 
+.paa-desc {
+    float: left;
+    width: 77%;
+}
 @media only screen and (min-width: 1152px) {
   .dpaa-section .btn {
       margin: auto;

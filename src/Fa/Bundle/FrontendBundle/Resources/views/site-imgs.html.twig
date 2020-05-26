@@ -1,0 +1,443 @@
+{% set container = fetch_container_instance() %}
+{% set imgAwsUrl = container.getParameter('fa.static.aws.url') %}
+<style>
+.payment-cards {
+    background: url('{{ imgAwsUrl }}/Frontend/images/payment/credit-cards.svg') no-repeat center 2px;
+}
+.sec-code-icon {
+    background: url('{{ imgAwsUrl }}/Frontend/images/payment/sec-code-icon.svg') no-repeat;
+}
+.alert-box .close {
+    background:url('{{ imgAwsUrl }}/Frontend/images/icons/cross.svg') no-repeat center center;
+}
+.seller-badge {
+    background: url('{{ imgAwsUrl }}/Frontend/images/trusted-badges/seller-badge.svg') no-repeat 0 5px;
+}
+/* Category Images */
+.discover-forsale, .cat-forsale { background: url('{{ imgAwsUrl }}/Frontend/images/categories/Ic-btn-For-Sale.png') no-repeat !important; }
+.discover-motors, .cat-motors { background: url('{{ imgAwsUrl }}/Frontend/images/categories/Ic-btn-Motors.png') no-repeat !important; }
+.discover-jobs, .cat-jobs { background: url('{{ imgAwsUrl }}/Frontend/images/categories/Ic-btn-Jobs.png') no-repeat !important; }
+.discover-services, .cat-services { background: url('{{ imgAwsUrl }}/Frontend/images/categories/Ic-btn-Services.png') no-repeat !important; }
+.discover-property, .cat-property { background: url('{{ imgAwsUrl }}/Frontend/images/categories/Ic-btn-Property.png') no-repeat !important; }
+.discover-animals, .cat-animals { background: url('{{ imgAwsUrl }}/Frontend/images/categories/Ic-btn-Animals.png') no-repeat !important; }
+.discover-community, .cat-community { background: url('{{ imgAwsUrl }}/Frontend/images/categories/Ic-btn-Community.png') no-repeat !important; }
+.discover-adult, .cat-adult { background: url('{{ imgAwsUrl }}/Frontend/images/categories/Ic-btn-Adult.png') no-repeat !important; }
+
+.discover-forsale:hover, .cat-forsale:hover { background: url('{{ imgAwsUrl }}/Frontend/images/categories/Ic-btn-For-Sale-Hover.png') no-repeat !important; }
+.discover-motors:hover, .cat-motors:hover { background: url('{{ imgAwsUrl }}/Frontend/images/categories/Ic-btn-Motors-Hover.png') no-repeat !important; }
+.discover-jobs:hover, .cat-jobs:hover { background: url('{{ imgAwsUrl }}/Frontend/images/categories/Ic-btn-Jobs-Hover.png') no-repeat !important; }
+.discover-services:hover, .cat-services:hover { background: url('{{ imgAwsUrl }}/Frontend/images/categories/Ic-btn-Services-Hover.png') no-repeat !important; }
+.discover-property:hover, .cat-property:hover { background: url('{{ imgAwsUrl }}/Frontend/images/categories/Ic-btn-Property-Hover.png') no-repeat !important; }
+.discover-animals:hover, .cat-animals:hover { background: url('{{ imgAwsUrl }}/Frontend/images/categories/Ic-btn-Animals-Hover.png') no-repeat !important; }
+.discover-community:hover, .cat-community:hover { background: url('{{ imgAwsUrl }}/Frontend/images/categories/Ic-btn-Community-Hover.png') no-repeat !important; }
+.discover-adult:hover, .cat-adult:hover { background: url('{{ imgAwsUrl }}/Frontend/images/categories/Ic-btn-Adult-Hover.png') no-repeat !important; }
+
+.discover-forsale.active, .cat-forsale.active { background: url('{{ imgAwsUrl }}/Frontend/images/categories/Ic-btn-For-Sale-ON.png') no-repeat !important; border-radius: 5px !important; }
+.discover-motors.active, .cat-motors.active { background: url('{{ imgAwsUrl }}/Frontend/images/categories/Ic-btn-Motors-ON.png') no-repeat !important; border-radius: 5px !important; }
+.discover-jobs.active, .cat-jobs.active { background: url('{{ imgAwsUrl }}/Frontend/images/categories/Ic-btn-Jobs-ON.png') no-repeat !important; border-radius: 5px !important; }
+.discover-services.active, .cat-services.active { background: url('{{ imgAwsUrl }}/Frontend/images/categories/Ic-btn-Services-ON.png') no-repeat !important; border-radius: 5px !important; }
+.discover-property.active, .cat-property.active { background: url('{{ imgAwsUrl }}/Frontend/images/categories/Ic-btn-Property-ON.png') no-repeat !important; border-radius: 5px !important; }
+.discover-animals.active, .cat-animals.active { background: url('{{ imgAwsUrl }}/Frontend/images/categories/Ic-btn-Animals-ON.png') no-repeat !important; border-radius: 5px !important; }
+.discover-community.active, .cat-community.active { background: url('{{ imgAwsUrl }}/Frontend/images/categories/Ic-btn-Community-ON.png') no-repeat !important; border-radius: 5px !important; }
+.discover-adult.active, .cat-adult.active { background: url('{{ imgAwsUrl }}/Frontend/images/categories/Ic-btn-Adult-ON.png') no-repeat !important; border-radius: 5px !important; }
+
+/* Badges */
+.forsale-badge {
+	background: url('{{ imgAwsUrl }}/Frontend/images/badges/for-sale.png') no-repeat !important;
+}
+.motors-badge {
+	background: url('{{ imgAwsUrl }}/Frontend/images/badges/motors.png') no-repeat !important;
+}
+.job-badge {
+	background: url('{{ imgAwsUrl }}/Frontend/images/badges/jobs.png') no-repeat !important;
+}
+.services-badge {
+	background: url('{{ imgAwsUrl }}/Frontend/images/badges/services.png') no-repeat !important;
+}
+.property-badge {
+	background: url('{{ imgAwsUrl }}/Frontend/images/badges/properties.png') no-repeat !important;
+}
+.animals-badge {
+	background: url('{{ imgAwsUrl }}/Frontend/images/badges/animals.png') no-repeat !important;
+}
+.community-badge {
+	background: url('{{ imgAwsUrl }}/Frontend/images/badges/community.png') no-repeat !important;
+}
+/* menu Icons */
+.mob-forsale {
+	background: url('{{ imgAwsUrl }}/Frontend/images/icons/main-cat/for-sale.png') no-repeat !important;
+}
+.mob-motors {
+	background: url('{{ imgAwsUrl }}/Frontend/images/icons/main-cat/motors.png') no-repeat !important;
+}
+.mob-jobs {
+	background: url('{{ imgAwsUrl }}/Frontend/images/icons/main-cat/jobs.png') no-repeat !important;
+}
+.mob-services {
+	background: url('{{ imgAwsUrl }}/Frontend/images/icons/main-cat/services.png') no-repeat !important;
+}
+.mob-property {
+	background: url('{{ imgAwsUrl }}/Frontend/images/icons/main-cat/property.png') no-repeat !important;
+}
+.mob-animals {
+	background: url('{{ imgAwsUrl }}/Frontend/images/icons/main-cat/animals.png') no-repeat !important;
+}
+.mob-community {
+	background: url('{{ imgAwsUrl }}/Frontend/images/icons/main-cat/community.png') no-repeat !important;
+}
+.mob-adult {
+	background: url('{{ imgAwsUrl }}/Frontend/images/icons/main-cat/adult-green.png') no-repeat !important;
+}
+
+.nimber-logo {
+   background: url("{{ imgAwsUrl }}/Frontend/images/icons/nimber-logo.png") no-repeat 0 0 / 132px 28px;
+}
+.info-year {
+    background: url('{{ imgAwsUrl }}/Frontend/images/icons/ad-det/info-year.svg') 50% 50% no-repeat;
+}
+.info-mileage {
+    background: url('{{ imgAwsUrl }}/Frontend/images/icons/ad-det/info-mileage.svg') 50% 50% no-repeat;
+}
+.info-fuel {
+    background: url('{{ imgAwsUrl }}/Frontend/images/icons/ad-det/info-fuel.svg') 50% 50% no-repeat;
+}
+.info-engine {
+    background: url('{{ imgAwsUrl }}/Frontend/images/icons/ad-det/info-engine.svg') 50% 50% no-repeat;
+}
+
+.info-item-type {
+    background: url('{{ imgAwsUrl }}/Frontend/images/icons/ad-det/info-item-type.svg') 50% 50% no-repeat;
+}
+.info-bedroom {
+    background: url('{{ imgAwsUrl }}/Frontend/images/icons/ad-det/info-bedroom.svg') 50% 50% no-repeat;
+}
+
+.info-bathroom {
+    background: url('{{ imgAwsUrl }}/Frontend/images/icons/ad-det/info-bathroom.svg') 50% 50% no-repeat;
+}
+.safety-stars {
+    background: url('{{ imgAwsUrl }}/Frontend/images/icons/rating-stars.png') repeat-x;
+}
+.ncap-icon {
+    background: url('{{ imgAwsUrl }}/Frontend/images/icons/ncap-icon.svg') no-repeat;
+}
+.iso-icon {
+    background: url('{{ imgAwsUrl }}/Frontend/images/icons/iso-icon.svg') no-repeat;
+}
+.adult-incall-icon {
+    background: url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-incalls.svg') no-repeat;
+}
+.adult-outcall-icon {
+    background: url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-outcalls.svg') no-repeat;
+}
+.safety-fe-incall {
+    background: url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-incall.svg') no-repeat;
+}
+.safety-fe-outcall {
+    background: url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-outcall.svg') no-repeat;
+}
+.adult-male {
+    background: url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-male.svg') no-repeat;
+}
+.adult-female {
+    background: url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-female.svg') no-repeat;
+}
+.adult-transexual {
+    background: url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-trans.svg') no-repeat;
+}
+.adult-agency {
+    background: url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-agency.svg') no-repeat;
+}
+.service-for-male, .service-for-men {
+    background: url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-men.svg') no-repeat;
+}
+.service-for-women {
+    background: url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-women.svg') no-repeat;
+}
+.service-for-couples {
+    background: url('{{ imgAwsUrl }}/Frontend/images/adul/icons/couples.svg') no-repeat;
+}
+.travel-arrangement-in-call {
+    background: url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-travel-incall.svg') no-repeat;
+}
+.travel-arrangement-out-call {
+    background: url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-travel-outcall.svg') no-repeat;
+}
+.travel-arrangement-either {
+    background: url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-in-out-call.svg') no-repeat;
+}
+.adult-independent {
+    background: url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-independent.svg') no-repeat;
+}
+.dealer-badge {
+  background: url('{{ imgAwsUrl }}/Frontend/images/trusted-badges/dealer-badge.svg') no-repeat 0 5px;
+}
+.fad-shop-icon {
+    background: url('{{ imgAwsUrl }}/Frontend/images/affiliate/FAD-Shop-icon.svg') no-repeat;
+}
+.alert-tooltip {
+    background: #FFFFFF url("{{ imgAwsUrl }}/Frontend/images/icons/alert-illustration.svg") no-repeat 90% 10px;
+}
+.featured .featured-ribbon {
+  background: url("{{ imgAwsUrl }}/Frontend/images/icons/featured-ribbon-pink.svg") no-repeat;
+}
+.visa {
+    background: url('{{ imgAwsUrl }}/Frontend/images/payment/visa.png') no-repeat 0 0 / 67px 42px;
+}
+.drag-ins-hr, .drag-ins-vr {
+    background: url('{{ imgAwsUrl }}/Frontend/images/icons/upload-image.png') no-repeat;
+}
+.adimg-thumb img {
+    cursor: url('{{ imgAwsUrl }}/Frontend/images/icons/move-cursor.png') 4 12,auto;
+}
+.my-msgs-icon {
+    background: url('{{ imgAwsUrl }}/Frontend/images/icons/messages-icon.svg') no-repeat 0 4px;
+}
+.my-saved-searches {
+    background: url('{{ imgAwsUrl }}/Frontend/images/icons/saved-searches-icon.svg') no-repeat 0 4px;
+}
+.dealer-badge {
+    background: url('{{ imgAwsUrl }}/Frontend/images/trusted-badges/dealer-badge.svg') no-repeat 0 5px;
+}
+.db-notifications .alert-box .close {
+    background: url('{{ imgAwsUrl }}/Frontend/images/icons/cross.svg') no-repeat center center;
+}
+.sold-icon {
+    background: url('{{ imgAwsUrl }}/Frontend/images/icons/sold-grey.svg') no-repeat;
+}
+.visa {
+    background: url('{{ imgAwsUrl }}/Frontend/images/payment/visa.png') no-repeat 0 0 / 67px 42px;
+}
+footer .fad-logo span {
+    background: url('{{ imgAwsUrl }}/Frontend/images/logos/Fad-footer.svg') no-repeat !important;
+}
+.footer-icons a.twitter {
+    background: url('{{ imgAwsUrl }}/Frontend/images/social/twitter.svg') no-repeat;
+}
+.nav-icon.open span.menu {
+     background: url('{{ imgAwsUrl }}/Frontend/images/icons/menu-icon-on.svg') no-repeat;
+}
+.dl-menuwrapper li > a:not(:only-child):after {
+   background: url('{{ imgAwsUrl }}/Frontend/images/icons/next-arrow.png') no-repeat 95% 50%;
+}
+a.basket-icon {
+   background: url('{{ imgAwsUrl }}/Frontend/images/icons/basket.svg') no-repeat 7px center;
+}
+.manage-profile-icon {
+   background: url('{{ imgAwsUrl }}/Frontend/images/icons/dashboard/profile.svg') no-repeat 10px 0 / 36px 36px !important;
+}
+.back-arrow-icon { background: url('{{ imgAwsUrl }}/Frontend/images/icons/breadcrumbs-back.png') 0 4px no-repeat !important; }
+
+/* Animals Images */
+.pets-dogs { background: url('{{ imgAwsUrl }}/Frontend/images/animals/Ic-btn-Dogs.png') no-repeat !important; }
+.pets-cats { background: url('{{ imgAwsUrl }}/Frontend/images/animals/Ic-btn-Cats.png') no-repeat !important; }
+.pets-birds { background: url('{{ imgAwsUrl }}/Frontend/images/animals/Ic-btn-Birds.png') no-repeat !important; }
+.pets-rabbits { background: url('{{ imgAwsUrl }}/Frontend/images/animals/Ic-btn-Rabbits.png') no-repeat !important; }
+.pets-guinea-pigs { background: url('{{ imgAwsUrl }}/Frontend/images/animals/Ic-btn-Guinea-Pigs.png') no-repeat !important; }
+.pets-reptiles { background: url('{{ imgAwsUrl }}/Frontend/images/animals/Ic-btn-Reptiles.png') no-repeat !important; }
+.pets-fish { background: url('{{ imgAwsUrl }}/Frontend/images/animals/Ic-btn-Fish.png') no-repeat !important; }
+.pets-insects { background: url('{{ imgAwsUrl }}/Frontend/images/animals/Ic-btn-Insects.png') no-repeat !important; }
+.pets-exotic-pets { background: url('{{ imgAwsUrl }}/Frontend/images/animals/Ic-btn-Exotic.png') no-repeat !important; }
+.pets-other-pets { background: url('{{ imgAwsUrl }}/Frontend/images/animals/Ic-btn-Other.png') no-repeat !important; }
+.pets-pet-accessories { background: url('{{ imgAwsUrl }}/Frontend/images/animals/Ic-btn-Pet-accessories.png') no-repeat !important; }
+.pets-pet-supplies { background: url('{{ imgAwsUrl }}/Frontend/images/animals/Ic-btn-Pet-supplies.png') no-repeat !important; }
+
+.pets-dogs:active, .pets-dogs:hover { background: url('{{ imgAwsUrl }}/Frontend/images/animals/Ic-btn-Dogs-Hover.png') no-repeat !important; }
+.pets-cats:active, .pets-cats:hover { background: url('{{ imgAwsUrl }}/Frontend/images/animals/Ic-btn-Cats-Hover.png') no-repeat !important; }
+.pets-birds:active, .pets-birds:hover { background: url('{{ imgAwsUrl }}/Frontend/images/animals/Ic-btn-Birds-Hover.png') no-repeat !important; }
+.pets-rabbits:active, .pets-rabbits:hover { background: url('{{ imgAwsUrl }}/Frontend/images/animals/Ic-btn-Rabbits-Hover.png') no-repeat !important; }
+.pets-guinea-pigs:active, .pets-guinea-pigs:hover { background: url('{{ imgAwsUrl }}/Frontend/images/animals/Ic-btn-Guinea-Pigs-Hover.png') no-repeat !important; }
+.pets-reptiles:active, .pets-reptiles:hover { background: url('{{ imgAwsUrl }}/Frontend/images/animals/Ic-btn-Reptiles-Hover.png') no-repeat !important; }
+.pets-fish:active, .pets-fish:hover { background: url('{{ imgAwsUrl }}/Frontend/images/animals/Ic-btn-Fish-Hover.png') no-repeat !important; }
+.pets-insects:active, .pets-insects:hover { background: url('{{ imgAwsUrl }}/Frontend/images/animals/Ic-btn-Insects-Hover.png') no-repeat !important; }
+.pets-exotic-pets:active, .pets-exotic-pets:hover { background: url('{{ imgAwsUrl }}/Frontend/images/animals/Ic-btn-Exotic-Hover.png') no-repeat !important; }
+.pets-other-pets:active, .pets-other-pets:hover { background: url('{{ imgAwsUrl }}/Frontend/images/animals/Ic-btn-Other-Hover.png') no-repeat !important; }
+.pets-pet-accessories:active, .pets-pet-accessories:hover { background: url('{{ imgAwsUrl }}/Frontend/images/animals/Ic-btn-Pet-accessories-Hover.png') no-repeat !important; }
+.pets-pet-supplies:active, .pets-pet-supplies:hover { background: url('{{ imgAwsUrl }}/Frontend/images/animals/Ic-btn-Pet-supplies-Hover.png') no-repeat !important; }
+
+/* Motors Images */
+.any-category:hover { background: url('{{ imgAwsUrl }}/Frontend/images/Ic-btn-Any-Hover.png') no-repeat !important; }
+.car-hatchback:hover { background: url('{{ imgAwsUrl }}/Frontend/images/motors/Ic-btn-Hatchback-Hover.png') no-repeat !important; }
+.car-coupes:hover { background: url('{{ imgAwsUrl }}/Frontend/images/motors/Ic-btn-Coupes-Hover.png') no-repeat !important; }
+.car-saloons:hover { background: url('{{ imgAwsUrl }}/Frontend/images/motors/Ic-btn-Saloons-Hover.png') no-repeat !important; }
+.car-convertibles:hover { background: url('{{ imgAwsUrl }}/Frontend/images/motors/Ic-btn-Convertibles-Hover.png') no-repeat !important; }
+.car-estates:hover { background: url('{{ imgAwsUrl }}/Frontend/images/motors/Ic-btn-Estates-Hover.png') no-repeat !important; }
+.car-mpvs:hover { background: url('{{ imgAwsUrl }}/Frontend/images/motors/Ic-btn-MPVs-Hover.png') no-repeat !important; }
+.car-4x4:hover { background: url('{{ imgAwsUrl }}/Frontend/images/motors/Ic-btn-4x4-Hover.png') no-repeat !important; }
+
+.any-category.active { background: url('{{ imgAwsUrl }}/Frontend/images/Ic-btn-Any-ON.png') no-repeat !important;border-radius: 5px !important;  }
+.car-hatchback.active { background: url('{{ imgAwsUrl }}/Frontend/images/motors/Ic-btn-Hatchback-ON.png') no-repeat !important;border-radius: 5px !important; }
+.car-coupes.active { background: url('{{ imgAwsUrl }}/Frontend/images/motors/Ic-btn-Coupes-ON.png') no-repeat !important;border-radius: 5px !important; }
+.car-saloons.active { background: url('{{ imgAwsUrl }}/Frontend/images/motors/Ic-btn-Saloons-ON.png') no-repeat !important;border-radius: 5px !important; }
+.car-convertibles.active { background: url('{{ imgAwsUrl }}/Frontend/images/motors/Ic-btn-Convertibles-ON.png') no-repeat !important;border-radius: 5px !important; }
+.car-estates.active { background: url('{{ imgAwsUrl }}/Frontend/images/motors/Ic-btn-Estates-ON.png') no-repeat !important;border-radius: 5px !important; }
+.car-mpvs.active { background: url('{{ imgAwsUrl }}/Frontend/images/motors/Ic-btn-MPVs-ON.png') no-repeat !important;border-radius: 5px !important; }
+.car-4x4.active { background: url('{{ imgAwsUrl }}/Frontend/images/motors/Ic-btn-4x4-ON.png') no-repeat !important;border-radius: 5px !important; }
+
+/* Property Images */
+.pt-commercial { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Commercial.png') no-repeat !important; }
+.pt-flats { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Flats.png') no-repeat !important; }
+.pt-garages { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Garages.png') no-repeat !important; }
+.pt-houses { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Houses.png') no-repeat !important; }
+.pt-land { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Land.png') no-repeat !important; }
+.pt-mobile-homes { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Mobile-Homes.png') no-repeat !important; }
+.pt-overseas { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Overseas.png') no-repeat !important; }
+.pt-parking { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Parking.png') no-repeat !important; }
+.pt-rooms { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Rooms.png') no-repeat !important; }
+
+.pt-commercial:hover { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Commercial-Hover.png') no-repeat !important; }
+.pt-flats:hover { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Flats-Hover.png') no-repeat !important; }
+.pt-garages:hover { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Garages-Hover.png') no-repeat !important; }
+.pt-houses:hover { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Houses-Hover.png') no-repeat !important; }
+.pt-land:hover { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Land-Hover.png') no-repeat !important; }
+.pt-mobile-homes:hover { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Mobile-Homes-Hover.png') no-repeat !important; }
+.pt-overseas:hover { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Overseas-Hover.png') no-repeat !important; }
+.pt-parking:hover { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Parking-Hover.png') no-repeat !important; }
+.pt-rooms:hover { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Rooms-Hover.png') no-repeat !important; }
+
+.pt-commercial.active { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Commercial-ON.png') no-repeat !important; }
+.pt-flats.active { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Flats-ON.png') no-repeat !important; }
+.pt-garages.active { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Garages-ON.png') no-repeat !important; }
+.pt-houses.active { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Houses-ON.png') no-repeat !important; }
+.pt-land.active { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Land-ON.png') no-repeat !important; }
+.pt-mobile-homes.active { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Mobile-Homes-ON.png') no-repeat !important; }
+.pt-overseas.active { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Overseas-ON.png') no-repeat !important; }
+.pt-parking.active { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Parking-ON.png') no-repeat !important; }
+.pt-rooms.active { background: url('{{ imgAwsUrl }}/Frontend/images/Properties/Rooms-ON.png') no-repeat !important; }
+
+/* Job Images */
+.job-full-time { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Full-Time.png') no-repeat !important; }
+.job-part-time { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Part-Time.png') no-repeat !important; }
+.job-contract { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Contract.png') no-repeat !important; }
+.job-weekend { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Weekends.png') no-repeat !important; }
+.job-evenings { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Evenings.png') no-repeat !important; }
+.job-home-working { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Home-Working.png') no-repeat !important; }
+.job-freelance { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Freelance.png') no-repeat !important; }
+.job-wanted { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Wanted.png') no-repeat !important; }
+.job-temporary { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Temporary.png') no-repeat !important; }
+
+.job-full-time:hover { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Full-Time-Hover.png') no-repeat !important; }
+.job-part-time:hover { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Part-Time-Hover.png') no-repeat !important; }
+.job-contract:hover { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Contract-Hover.png') no-repeat !important; }
+.job-weekend:hover { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Weekends-Hover.png') no-repeat !important; }
+.job-evenings:hover { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Evenings-Hover.png') no-repeat !important; }
+.job-home-working:hover { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Home-Working-Hover.png') no-repeat !important; }
+.job-freelance:hover { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Freelance-Hover.png') no-repeat !important; }
+.job-wanted:hover { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Wanted-Hover.png') no-repeat !important; }
+.job-temporary:hover { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Temporary-Hover.png') no-repeat !important; }
+
+.job-full-time.active { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Full-Time-ON.png') no-repeat !important; }
+.job-part-time.active { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Part-Time-ON.png') no-repeat !important; }
+.job-contract.active { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Contract-ON.png') no-repeat !important; }
+.job-weekend.active { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Weekends-ON.png') no-repeat !important; }
+.job-evenings.active { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Evenings-ON.png') no-repeat !important; }
+.job-home-working.active { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Home-Working-ON.png') no-repeat !important; }
+.job-freelance.active { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Freelance-ON.png') no-repeat !important; }
+.job-wanted.active { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Wanted-ON.png') no-repeat !important; }
+.job-temporary.active { background: url('{{ imgAwsUrl }}/Frontend/images/Jobs/Temporary-ON.png') no-repeat !important; }
+
+.list-dimensions .engine {
+    background: url('{{ imgAwsUrl }}/Frontend/images/icons/engine.svg') no-repeat;
+}
+.list-dimensions .fuel-type {
+    background: url('{{ imgAwsUrl }}/Frontend/images/icons/fuel-type.svg') no-repeat;
+}
+.detail-location.icon-forsale {
+    background: url('{{ imgAwsUrl }}/Frontend/images/icons/main-cat/for-sale.png') no-repeat;
+}
+.f-ad-sign {
+    background: url('{{ imgAwsUrl }}/Frontend/images/logos/Fad-logo-compact.svg') no-repeat !important;
+}
+.motors-subtitle{background:url('{{ imgAwsUrl }}/Frontend/images/subtitle/motors-subtitle.png') 0 0 / 245px 153px no-repeat; }
+.for_sale-subtitle{background:url('{{ imgAwsUrl }}/Frontend/images/subtitle/forsale-subtitle.png') 0 0 / 245px 153px no-repeat; }
+.jobs-subtitle{background:url('{{ imgAwsUrl }}/Frontend/images/subtitle/jobs-subtitle.png') 0 0 / 245px 153px no-repeat; }
+.services-subtitle{background:url('{{ imgAwsUrl }}/Frontend/images/subtitle/services-subtitle.png') 0 0 / 245px 153px no-repeat; }
+.adult-subtitle{background:url('{{ imgAwsUrl }}/Frontend/images/subtitle/adult-subtitle.png') 0 0 / 245px 153px no-repeat; }
+.property-subtitle{background:url('{{ imgAwsUrl }}/Frontend/images/subtitle/property-subtitle.png') 0 0 / 245px 153px no-repeat; }
+.classes_and_tuition-subtitle{background:url('{{ imgAwsUrl }}/Frontend/images/subtitle/classes-subtitle.png') 0 0 / 245px 153px no-repeat; }
+.clubs_societies_and_teams-subtitle{background:url('{{ imgAwsUrl }}/Frontend/images/subtitle/clubs-subtitle.png') 0 0 / 245px 153px no-repeat; }
+.friendship_and_dating-subtitle{background:url('{{ imgAwsUrl }}/Frontend/images/subtitle/dating-subtitle.png') 0 0 / 245px 153px no-repeat; }
+.in_your_area-subtitle{background:url('{{ imgAwsUrl }}/Frontend/images/subtitle/area-subtitle.png') 0 0 / 245px 153px no-repeat; }
+.animals-subtitle{background:url('{{ imgAwsUrl }}/Frontend/images/subtitle/animals-subtitle.png') 0 0 / 245px 153px no-repeat; }
+.whats_on-subtitle{background:url('{{ imgAwsUrl }}/Frontend/images/subtitle/whatson-subtitle.png') 0 0 / 245px 153px no-repeat; }
+
+.self-service-img {
+    background: url('{{ imgAwsUrl }}/Frontend/images/self-service-title.svg') no-repeat;
+}
+.magazines-img {
+    background: url('{{ imgAwsUrl }}/Frontend/images/magazines.png') no-repeat;
+}
+.available-payment-options {
+    background: url('{{ imgAwsUrl }}/Frontend/images/payment/payment-options.png') no-repeat center center;
+}
+.credit-cards-box {
+    background: url('{{ imgAwsUrl }}/Frontend/images/payment/credit-cards.svg') no-repeat center center;
+}
+.fb-btn, .gplus-btn {
+    background: url('{{ imgAwsUrl }}/Frontend/images/social/fb-btn.svg') no-repeat;
+}
+.fb-btn:hover {
+    background: url('{{ imgAwsUrl }}/Frontend/images/social/fb-btn-hover.svg') no-repeat;
+}
+.gplus-btn {
+    background: url('{{ imgAwsUrl }}/Frontend/images/social/google_signin.png') no-repeat;
+    &:hover {
+        background: url('{{ imgAwsUrl }}/Frontend/images/social/google_signin.png') no-repeat;
+    }
+}
+.modal-paypal-box{ background:transparent url('{{ imgAwsUrl }}/Frontend/images/payment/paypal-payment.png') no-repeat center center; }
+.get_online_decision select {
+    background-image: url('{{ imgAwsUrl }}/Frontend/images/zutocalc/arrow-down.svg');
+}
+
+@media (min-width: 320px) and (max-width: 759px) {
+    .available-payment-options {
+         background: url('{{ imgAwsUrl }}/Frontend/images/payment/payment-options-mobile.png') no-repeat center center;
+     }
+     .paa-block .credit-cards-box {
+          background: url('{{ imgAwsUrl }}/Frontend/images/payment/credit-cards-mobile.svg') no-repeat center center;
+     }
+}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

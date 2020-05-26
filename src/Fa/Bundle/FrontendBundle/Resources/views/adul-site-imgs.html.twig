@@ -1,0 +1,178 @@
+{% set container = fetch_container_instance() %}
+{% set imgAwsUrl = container.getParameter('fa.static.aws.url') %}
+<style>
+.name a.adul-logo img { content: url('{{ imgAwsUrl }}/Frontend/images/adul/fad-adul-logo.svg') !important; }
+.featured .featured-ribbon { 
+	background: url('{{ imgAwsUrl }}/Frontend/images/adul/icons/featured-ribbon.png') no-repeat;
+}
+.mob-adul-contacts { background: url('{{ imgAwsUrl }}/Frontend/images/adul/mob-adul-contacts.png') no-repeat; }
+.mob-adul-escorts { background: url('{{ imgAwsUrl }}/Frontend/images/adul/mob-adul-escorts.png') no-repeat; }
+.mob-adul-fetish-role { background: url('{{ imgAwsUrl }}/Frontend/images/adul/mob-adul-fetish-role.png') no-repeat; }
+.mob-adul-gay-male { background: url('{{ imgAwsUrl }}/Frontend/images/adul/mob-adul-gay-male.png') no-repeat; }
+.mob-adul-industry-jobs { background: url('{{ imgAwsUrl }}/Frontend/images/adul/mob-adul-industry-jobs.png') no-repeat; }
+.mob-adul-massage { background: url('{{ imgAwsUrl }}/Frontend/images/adul/mob-adul-massage.png') no-repeat; }
+/* Category Images */
+.discover-adult-contacts, .cat-adult-contacts { background: url('{{ imgAwsUrl }}/Frontend/images/adul/Ic-btn-contacts.png') no-repeat; }
+.discover-escorts, .cat-escorts { background: url('{{ imgAwsUrl }}/Frontend/images/adul/Ic-btn-escorts.png') no-repeat; }
+.discover-fetish-and-roleplay, .cat-fetish-and-roleplay { background: url('{{ imgAwsUrl }}/Frontend/images/adul/Ic-btn-fetish-and-roleplay.png') no-repeat; }
+.discover-gay-male-escort, .cat-gay-male-escort { background: url('{{ imgAwsUrl }}/Frontend/images/adul/Ic-btn-gay-male-escort.png') no-repeat; }
+.discover-adult-industry-jobs, .cat-adult-industry-jobs { background: url('{{ imgAwsUrl }}/Frontend/images/adul/Ic-btn-industry-jobs.png') no-repeat; }
+.discover-adult-massage, .cat-adult-massage { background: url('{{ imgAwsUrl }}/Frontend/images/adul/Ic-btn-massage.png') no-repeat; }
+
+.discover-adult-contacts:hover, .cat-adult-contacts:hover { background: url('{{ imgAwsUrl }}/Frontend/images/adul/Ic-btn-contacts-Hover.png') no-repeat; }
+.discover-escorts:hover, .cat-escorts:hover { background: url('{{ imgAwsUrl }}/Frontend/images/adul/Ic-btn-escorts-Hover.png') no-repeat; }
+.discover-fetish-and-roleplay:hover, .cat-fetish-and-roleplay:hover { background: url('{{ imgAwsUrl }}/Frontend/images/adul/Ic-btn-fetish-and-roleplay-Hover.png') no-repeat; }
+.discover-gay-male-escort:hover, .cat-gay-male-escort:hover { background: url('{{ imgAwsUrl }}/Frontend/images/adul/Ic-btn-gay-male-escort-Hover.png') no-repeat; }
+.discover-adult-industry-jobs:hover, .cat-adult-industry-jobs:hover { background: url('{{ imgAwsUrl }}/Frontend/images/adul/Ic-btn-industry-jobs-Hover.png') no-repeat; }
+.discover-adult-massage:hover, .cat-adult-massage:hover { background: url('{{ imgAwsUrl }}/Frontend/images/adul/Ic-btn-massage-Hover.png') no-repeat; }
+
+.discover-adult-contacts.active, .cat-adult-contacts.active { background: url('{{ imgAwsUrl }}/Frontend/images/adul/Ic-btn-contacts-ON.png') no-repeat;border-radius: 6px; }
+.discover-escorts.active, .cat-escorts.active { background: url('{{ imgAwsUrl }}/Frontend/images/adul/Ic-btn-escorts-ON.png') no-repeat;border-radius: 6px; }
+.discover-fetish-and-roleplay.active, .cat-fetish-and-roleplay.active { background: url('{{ imgAwsUrl }}/Frontend/images/adul/Ic-btn-fetish-and-roleplay-ON.png') no-repeat;border-radius: 6px; }
+.discover-gay-male-escort.active, .cat-gay-male-escort.active { background: url('{{ imgAwsUrl }}/Frontend/images/adul/Ic-btn-gay-male-escort-ON.png') no-repeat;border-radius: 6px; }
+.discover-adult-industry-jobs.active, .cat-adult-industry-jobs.active { background: url('{{ imgAwsUrl }}/Frontend/images/adul/Ic-btn-industry-jobs-ON.png') no-repeat;border-radius: 6px; }
+.discover-adult-massage.active, .cat-adult-massage.active { background: url('{{ imgAwsUrl }}/Frontend/images/adul/Ic-btn-massage-ON.png') no-repeat;border-radius: 6px; }
+
+.adult-modal { background-image:url('{{ imgAwsUrl }}/Frontend/images/adul-warning.svg') !important; }
+.safety-fe-incall { background-image:url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-incall.svg') !important; }
+.safety-fe-outcall { background-image:url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-outcall.svg') !important; }
+.travel-arrangement-in-call { background-image:url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-incalls.svg') !important; }
+.travel-arrangement-out-call { background-image:url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-outcalls.svg') !important; }
+.travel-arrangement-either { background-image:url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-in-out-call.svg') !important; }
+
+.adult-female { background-image:url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-female.svg') !important; }
+.adult-male { background-image:url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-male.svg') !important; }
+.adult-transexual { background-image:url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-trans.svg') !important; }
+
+.service-for-men { background-image:url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-men.svg') !important; }
+.service-for-women { background-image:url('{{ imgAwsUrl }}/Frontend/images/icons/adul/adul-women.svg') !important; }
+.service-for-couples { background-image:url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-couples.svg') !important; }
+
+.adult-independent { background-image:url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-independent.svg') !important; }
+.adult-agency { background-image:url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-agency.svg') !important; }
+
+.search-pref a.expand-search, .search-pref a.expand-search:hover {
+     background:url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-setplus.png') no-repeat left center !important;
+}
+.search-pref a.collapse-search, .search-pref a.collapse-search:hover{
+     background:url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-setminus.png') no-repeat left center !important;
+}
+.search-pin{
+    background:url('{{ imgAwsUrl }}/Frontend/images/adul/location-pin.png') no-repeat !important;
+}
+.your-details-icon{
+    background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/details.png') no-repeat 0 4px / 38px 38px !important;
+}
+.payment-sources-icon{
+    background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/payment.png') no-repeat 0 4px / 38px 38px !important;
+}
+.myacc-paypal-icon{
+    background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/paypal.png') no-repeat 0 4px / 38px 38px !important;
+}
+.address-book-icon{
+    background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/address.png') no-repeat 0 4px / 38px 38px !important;
+}
+.invoices-icon{
+    background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/invoices.png') no-repeat 0 4px / 38px 38px !important;
+}
+.deactivate-icon{
+    background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/de-activate.png') no-repeat 0 4px / 38px 38px !important;
+}
+.manage-my-items{
+    background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/mma.png') no-repeat 0 4px / 38px 38px !important;
+}
+.recent-view-icon{
+    background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/recent-views.png') no-repeat 0 4px / 38px 38px !important;
+}
+.db-my-favourites{
+    background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/favorite.png') no-repeat 0 4px / 38px 38px !important;
+}
+.db-my-reviews{
+    background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/reviews.png') no-repeat 0 4px / 38px 38px !important;
+}
+.home-icon{
+    background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/home-icon.png') no-repeat 10px 0 / 36px 36px !important;
+}
+.messages-icon{
+    background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/messages-icon.png') no-repeat 10px 0 / 36px 36px !important;
+}
+.reviews-icon{
+    background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/reviews-icon.png') no-repeat 10px 0 / 36px 36px !important;
+}
+.my-favourites-icon{
+    background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/favourites-icon.png') no-repeat 10px 0 / 36px 36px !important;
+}
+.saved-searches-icon{
+    background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/saved-search-icon.png') no-repeat 10px 0 / 36px 36px !important;
+}
+.manage-item-icon {
+    background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/manage-ads-icon.png') no-repeat 10px 0 / 36px 36px !important;
+}
+.manage-profile-icon{
+    background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/profile-icon.png') no-repeat 10px 0 / 36px 36px !important;
+}
+.alerts-icon{ 
+    background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/saved-search-icon.png') no-repeat 10px 0 / 36px 36px !important;
+}
+.orders-icon{
+	background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/order-icon.png') no-repeat 10px 0 / 36px 36px !important;
+}
+.account-icon{
+	background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/account-icon.png') no-repeat 10px 0 / 36px 36px !important;
+}
+.purchase-icon{
+	background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/purchases-icon.png') no-repeat 10px 0 / 36px 36px !important;
+}
+.my-msgs-icon {
+	background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/messages.png') no-repeat 0 4px / 38px 38px !important;
+}	
+.my-saved-searches{
+    background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/saved-search.png') no-repeat 0 4px / 38px 38px !important;
+}
+.newsleter-pref-icon {
+	background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/newsletter1.png') no-repeat 0 4px / 38px 38px !important;
+}
+.profile-icon {
+    background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/profile.png') no-repeat 0 4px / 38px 38px !important;
+}
+.design-icon {
+    background:url('{{ imgAwsUrl }}/Frontend/images/adul/menu-icons/design.png') no-repeat 0 4px / 38px 38px !important;
+}
+#featured-top-item-slider .featured-ribbon { background: url('{{ imgAwsUrl }}/Frontend/images/adul/icons/featured-ribbon.png') no-repeat; }
+.parallax-mirror, .parallax-window { background: url('{{ imgAwsUrl }}/Frontend/images/adul/hero-homepage-l.png') no-repeat !important; }
+
+.search-pref a.expand-search, .search-pref a.expand-search:hover {
+    background: url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-setplus.png') no-repeat left center !important;
+}
+.search-pref a.collapse-search, .search-pref a.collapse-search:hover {
+    background: url('{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-setminus.png') no-repeat left center !important;
+}
+.featured .featured-ribbon {
+    background: url('{{ imgAwsUrl }}/Frontend/images/adul/icons/featured-ribbon.png') no-repeat !important;
+}
+.alert-tooltip {
+    background: #FFFFFF url("{{ imgAwsUrl }}/Frontend/images/adul/icons/adul-alert-illustration.svg") no-repeat 90% 10px;
+}
+
+@media only screen and (min-width: 641px) and (max-width: 960px) {
+    .parallax-mirror, .parallax-window {
+        background: url('{{ imgAwsUrl }}/Frontend/images/adul/hero-homepage-s.png') no-repeat !important;
+     }
+}
+@media only screen and (min-width: 641px) and (max-width: 960px) {
+    .parallax-mirror, .parallax-window {
+        background: url('{{ imgAwsUrl }}/Frontend/images/adul/hero-homepage-s.png') no-repeat !important;
+    }
+}
+
+</style>
+
+
+
+
+
+
+
+
+
+
