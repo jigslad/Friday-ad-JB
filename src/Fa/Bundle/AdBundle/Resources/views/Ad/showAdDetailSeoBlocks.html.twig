@@ -15,10 +15,10 @@
                   		<div class="panel panel-default">
     	                    <div class="panel-heading {% if (panelCnt == 0) %} active{% endif %}" role="tab" id="panelBlock{{panelCnt}}">
     	                      <h4 class="panel-title">
-    	                        <a role="button" data-toggle="collapse" data-parent="#detail_seo_box" href="#addetailBlock{{panelCnt}}" aria-expanded="true" aria-controls="addetailBlock{{panelCnt}}">Top Counties <i class="fa float-right fa-plus"></i></a>
+    	                        <a role="button" data-toggle="collapse" data-parent="#addetailBlock" href="#addetailBlock{{panelCnt}}" aria-expanded="true" aria-controls="addetailBlock{{panelCnt}}">Top Counties <i class="fa float-right fa-plus"></i></a>
     	                      </h4>
     	                    </div>
-    	                    <div id="addetailBlock{{panelCnt}}" class="panel-collapse collapse {% if (currentDevice == 'D' and panelCnt == 0) %}show{% endif %}" role="tabpanel" aria-labelledby="ad-detail-headingOne">
+    	                    <div id="addetailBlock{{panelCnt}}" class="panel-collapse collapse {% if (currentDevice == 'D' and panelCnt == 0) %}show{% endif %}" role="tabpanel" aria-labelledby="panelBlock{{panelCnt}}">
     	                        <div class="panel-body list-panel-body">
     	                            <ul class="link-list">
     	                                
