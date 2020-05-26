@@ -584,6 +584,9 @@ a.xs-btn-1.button.expand,a.xs-btn-1.btn.btn-block, .db-section .manage-item-btns
 {
     color: #FFFFFF;
 }
+.adul-hp .mobile-p-0 {
+    margin-bottom: 20px !important;
+}
 @media only screen and (min-width: 641px) and (max-width: 960px) {
     .parallax-mirror, .parallax-window {
         background-position: center !important;
@@ -656,9 +659,12 @@ a.xs-btn-1.button.expand,a.xs-btn-1.btn.btn-block, .db-section .manage-item-btns
 	    margin-top: 94px;
 	    margin-bottom: 20px;
     }
-    .adul-hp .mobile-p-0 {
-        margin-bottom: 20px !important;
+    .adul-hp .advanced-search-option {
+        width: 100% !important;
+        text-align: center !important;
     }
+
+    
 
 }
 

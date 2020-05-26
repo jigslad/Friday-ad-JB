@@ -49,14 +49,14 @@
                                                 {% endif %}
                                             {% endfor %}
                                             {% for i in 0..columns-1 %}
-                                                <li">
+                                                
                                                     {% for k in 0..colCounter[i]-1 %}
                                                         {% if facetIdArray[ctr] is defined %}
-                                                            <a href="{{ facetIdArray[ctr]['url'] }}" {% if getNoFollowLink1  %}rel="nofollow"{% endif %} >{{ facetIdArray[ctr]['title'] }}</a>
+                                                            <li><a href="{{ facetIdArray[ctr]['url'] }}" {% if getNoFollowLink1  %}rel="nofollow"{% endif %} >{{ facetIdArray[ctr]['title'] }}</a></li>
                                                         {% endif %}
                                                         {% set ctr = ctr + 1 %}
                                                     {% endfor %}
-                                                </li>
+                                                
                                             {% endfor %}
                                         {% else %}
                                             {% set facetIdArray = block['facet']|keys %}
@@ -86,7 +86,7 @@
                                                 {% endif %}
                                             {% endif %}
                                             {% for i in 0..columns-1 %}
-                                                <li>
+
                                                     {% for k in 0..colCounter[i]-1 %}
                                                         {% if facetIdArray[ctr] is defined %}
                                                             {% set facetId = facetIdArray[ctr] %}
@@ -117,14 +117,13 @@
                                                                 {% endif %}
                                                             {% endif %}
                                                             {% if facetId == 0 %}
-                                                                <a href="{{ searchResultUrl }}" {% if getNoFollowLink1  %}rel="nofollow"{% endif %}>{{block['facet'][0]['title']}}</a>
+                                                                <li><a href="{{ searchResultUrl }}" {% if getNoFollowLink1  %}rel="nofollow"{% endif %}>{{block['facet'][0]['title']}}</a></li>
                                                             {% else %}
-                                                                <a href="{{ searchResultUrl }}" {% if getNoFollowLink1  %}rel="nofollow"{% endif %}>{{ entityCacheManager.getEntityNameById(block['repository'], facetId) }} {# ({{ block['facet'][facetId] }}) #}</a>
+                                                               <li> <a href="{{ searchResultUrl }}" {% if getNoFollowLink1  %}rel="nofollow"{% endif %}>{{ entityCacheManager.getEntityNameById(block['repository'], facetId) }} {# ({{ block['facet'][facetId] }}) #}</a></li>
                                                             {% endif %}
                                                         {% endif %}
                                                         {% set ctr = ctr + 1 %}
                                                     {% endfor %}
-                                                </li>
                                             {% endfor %}
                                         {% endif %}
                                 {% if block['show_all_link'] is defined and block['show_all_link'] and totalItems == block['facet_limit'] %}

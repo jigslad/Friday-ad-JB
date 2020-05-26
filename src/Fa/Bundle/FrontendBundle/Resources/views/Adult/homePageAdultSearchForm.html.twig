@@ -13,9 +13,9 @@
                         {{ form_widget(form.item__distance,{'attr':{'class':'select-control without-sel-box'}}) }}
                     </div>
                     <div class="col-13 col-md-6 col-lg-5 mobile-p-0 pl0 d-inline-flex">
-                        <label class="from-sec">{{ 'from'|trans({}, 'frontend')}}</label>
+                        <label class="from-sec mb0">{{ 'from'|trans({}, 'frontend')}}</label>
                         <div class="location-col">
-                        {{ form_widget(form.item__location_autocomplete,{'attr':{'class':'white-field'}}) }}
+                        {{ form_widget(form.item__location_autocomplete,{'attr':{'class':'white-field mb0'}}) }}
                         <a href="javascript:void(0);" id="fa_adult_home_page_search_item__location_close" class="adul-loc-close ui-autocomplete-close select2-search-choice-close"></a>
                         </div>
                      </div>
@@ -25,8 +25,8 @@
                         <div class="col-24 col-md-10 col-lg-11 mobile-p-0 multi-sel-box">
                             {{ form_widget(attribute(form, 'item_adult__services_id'),{'attr':{ 'class': 'multi-selbox select-control'  }}) }}
                         </div>
-                        <div class="col-24 col-md-7 col-lg-6 mobile-p-0 mt10">
-                        		<div class="form-control adult-radio-form white-check">
+                        <div class="col-24 col-md-7 col-lg-6 mobile-p-0">
+                        		<div class="form-control adult-radio-form white-check pt10">
                                     <input type="checkbox" id="fa_adult_home_page_search_item_adult__independent_or_agency_id_0" class="independent-or-agency-cls checkbox" name="fa_adult_home_page_search[item_adult__independent_or_agency_id][]" required="required" value="7317">                                
                                     <label for="fa_adult_home_page_search_item_adult__independent_or_agency_id_0" class="required radio-label"></label>Independent
                                     <input type="checkbox" id="fa_adult_home_page_search_item_adult__independent_or_agency_id_1" class="independent-or-agency-cls checkbox" name="fa_adult_home_page_search[item_adult__independent_or_agency_id][]" required="required" value="7318">                                
@@ -41,8 +41,8 @@
             </div>
             </div>
 
-            <div class="col-md-8 m-auto">
-                <button class="adv-srch-form-btn btn-block btn mb0 mt20" id="adul-hp-adv-srch" type="submit">{{ 'Search'|trans({}, 'frontend-left-search') }}</button>
+            <div class="col-md-8 m-auto pad-none">
+                <button class="adv-srch-form-btn btn-block btn mb0 mt10" id="adul-hp-adv-srch" type="submit">{{ 'Search'|trans({}, 'frontend-left-search') }}</button>
             </div>
         </div>
         {{ form_end(form) }}
