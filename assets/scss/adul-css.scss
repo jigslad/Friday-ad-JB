@@ -1,5 +1,3 @@
-<link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
-
 @import 'global';
 
 body, html, input, textarea, select { font-family: 'Poppins-Regular' !important;font-weight: normal !important; }
@@ -22,7 +20,7 @@ h5 {font-weight: normal !important;color: $common-text-color !important; font-fa
 
 .find-label, .change-location, .pkg-subtitle, 
 .list-price, .details-similar-item h2, .promo-code .show-code, .promo-code .show-code:hover, .promo-code .show-code:focus, 
-#home-search .location, , .small-slider .small-content b, .intro-text, .explore-price, 
+#home-search .location, .small-slider .small-content b, .intro-text, .explore-price, 
 .near-location, .section-head, .accordion dd>a.section-head, .section-head, .accordion dd>div.section-head, .manage-price, 
 .finance-btn, .no-photo-heading, .private-business-modal h2, .detail-thumb-img .img-placeholder span, 
 .total-credits-remaining, .adult-parallax h1 span  {
@@ -66,7 +64,7 @@ a:focus.secondary-btn-1, a:focus.secondary-btn-2, a:focus.secondary-btn-3, a:foc
     height:30px !important; padding:5px 10px !important; font-size:14px !important; line-height:16px !important; 
 }
 .xs-blue-btn { background: $white !important; }
-.xs-black-btn, , .xs-black-large-btn {
+.xs-black-btn, .xs-black-large-btn {
     background: transparent !important;
     border: 1px solid $common-text-color !important;
     color: $common-text-color !important;
@@ -424,7 +422,7 @@ button.signup-fb-btn.expand {
 .xs-black-btn, .xs-black-large-btn {
     background: transparent !important; border: 1px solid $common-text-color !important; color: $common-text-color !important;
 }
-.xs-black-btn:hover, .xs-black-btn:focus, .xs-black-btn:active, .xs-black-large-btn;hover, .xs-black-large-btn;focus, .xs-black-large-btn;active {
+.xs-black-btn:hover, .xs-black-btn:focus, .xs-black-btn:active, .xs-black-large-btn:hover, .xs-black-large-btn:focus, .xs-black-large-btn:active {
   background: $common-text-color !important; color: $white !important;
 }
 .manage-price { font-size: 20px !important; }

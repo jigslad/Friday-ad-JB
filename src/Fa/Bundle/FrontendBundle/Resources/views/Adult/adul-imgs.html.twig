@@ -1,0 +1,186 @@
+{% set container = fetch_container_instance() %}
+{% set imgAwsUrl = container.getParameter('fa.static.aws.url')~'/uploads/bundles/' %}
+<style>
+.name a.adul-logo img { content: url('/bundles/fafrontend/images/Fad-Adult-logo.svg') !important; }
+.adult-modal { background-image:url('{{ imgAwsUrl }}/adul/adul-warning.svg') !important; } 
+.safety-fe-incall { background-image:url('{{ imgAwsUrl }}/icons/adul/adul-incall.svg') !important; } 
+.safety-fe-outcall { background-image:url('{{ imgAwsUrl }}/icons/adul/adul-outcall.svg') !important; } 
+.travel-arrangement-in-call { background-image:url('{{ imgAwsUrl }}/icons/adul/adul-incalls.svg') !important; } 
+.travel-arrangement-out-call { background-image:url('{{ imgAwsUrl }}/icons/adul/adul-outcalls.svg') !important; } 
+.travel-arrangement-either { background-image:url('{{ imgAwsUrl }}/icons/adul/adul-in-out-call.svg') !important; } 
+
+.adult-female { background-image:url('{{ imgAwsUrl }}/icons/adul/adul-female.svg') !important; } 
+.adult-male { background-image:url('{{ imgAwsUrl }}/icons/adul/adul-male.svg') !important; } 
+.adult-transexual { background-image:url('{{ imgAwsUrl }}/icons/adul/adul-trans.svg') !important; } 
+
+.service-for-men { background-image:url('{{ imgAwsUrl }}/icons/adul/adul-men.svg') !important; } 
+.service-for-women { background-image:url('{{ imgAwsUrl }}/icons/adul/adul-women.svg') !important; } 
+.service-for-couples { background-image:url('{{ imgAwsUrl }}/icons/adul/adul-couples.svg') !important; } 
+
+.adult-independent { background-image:url('{{ imgAwsUrl }}/icons/adul/adul-independent.svg') !important; } 
+.adult-agency { background-image:url('{{ imgAwsUrl }}/icons/adul/adul-agency.svg') !important; } 
+.alert-tooltip { 
+    background-image:url('{{ imgAwsUrl }}/icons/adul/adul-alert-illustration.svg') !important;
+} 
+.search-pref a.expand-search, .search-pref a.expand-search:hover {
+     background:url('{{ imgAwsUrl }}/adul/adul-setplus.png') no-repeat left center !important;
+} 
+.search-pref a.collapse-search, .search-pref a.collapse-search:hover{
+     background:url('{{ imgAwsUrl }}/adul/adul-setminus.png') no-repeat left center !important;
+} 
+.your-details-icon {
+    background:url('{{ imgAwsUrl }}/adul/menu-icons/details.png') no-repeat 0 4px / 38px 38px !important;
+}  
+.payment-sources-icon{
+    background:url('{{ imgAwsUrl }}/adul/menu-icons/payment.png') no-repeat 0 4px / 38px 38px !important;
+}  
+.myacc-paypal-icon{
+    background:url('{{ imgAwsUrl }}/adul/menu-icons/paypal.png') no-repeat 0 4px / 38px 38px !important;
+}  
+.address-book-icon{
+    background:url('{{ imgAwsUrl }}/adul/menu-icons/address.png') no-repeat 0 4px / 38px 38px !important;
+}  
+.invoices-icon{
+    background:url('{{ imgAwsUrl }}/adul/menu-icons/invoices.png') no-repeat 0 4px / 38px 38px !important;
+}  
+.deactivate-icon{
+    background:url('{{ imgAwsUrl }}/adul/menu-icons/de-activate.png') no-repeat 0 4px / 38px 38px !important;
+}  
+.manage-my-items{
+    background:url('{{ imgAwsUrl }}/adul/menu-icons/mma.png') no-repeat 0 4px / 38px 38px !important;
+} 
+.recent-view-icon{
+    background:url('{{ imgAwsUrl }}/adul/menu-icons/recent-views.png') no-repeat 0 4px / 38px 38px !important;
+} 
+.db-my-favourites{
+     background:url('{{ imgAwsUrl }}/adul/menu-icons/favorite.png') no-repeat 0 4px / 38px 38px !important;
+}  
+.db-my-reviews{
+    background:url('{{ imgAwsUrl }}/adul/menu-icons/reviews.png') no-repeat 0 4px / 38px 38px !important;
+}  
+.tickmark-icon{
+    background:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2226%22%20height%3D%2225%22%20viewBox%3D%220%200%2026%2025%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%239C1F9F%3B%7D%0D%0A%09.st1%7Bfill%3Anone%3Bstroke%3A%23FFFFFF%3Bstroke-width%3A3%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3EFeatures-Check-ON%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-497.000000%2C%20-708.000000%29%22%3E%3Cg%20transform%3D%22translate%28466.000000%2C%20398.000000%29%22%3E%3Cg%20transform%3D%22translate%2818.000000%2C%20301.000000%29%22%3E%3Cg%20transform%3D%22translate%2813.734783%2C%209.000000%29%22%3E%3Ccircle%20class%3D%22st0%22%20cx%3D%2212.5%22%20cy%3D%2212.5%22%20r%3D%2212.5%22/%3E%3Cpath%20class%3D%22st1%22%20d%3D%22M7.4%2012l4%204L18%208%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat !important;
+}
+.breadcrumb .back-link{
+    background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%228%22%20height%3D%2214%22%20viewBox%3D%22-395%20229%208%2014%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3Anone%3Bstroke%3A%239C1F9F%3Bstroke-width%3A3%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Egreen-arrow%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-656.000000%2C%20-366.000000%29%22%3E%3Cg%20transform%3D%22translate%28-2.000000%2C%20144.000000%29%22%3E%3Cg%20transform%3D%22translate%28458.000000%2C%2027.000000%29%22%3E%3Cg%20transform%3D%22translate%282.000000%2C%20141.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-191%20285l-4%205%204%205%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') !important;
+}
+.home-icon{
+    background:url('{{ imgAwsUrl }}/adul/menu-icons/home-icon.png') no-repeat 10px 0 / 36px 36px !important;
+}  
+.messages-icon{
+    background:url('{{ imgAwsUrl }}/adul/menu-icons/messages-icon.png') no-repeat 10px 0 / 36px 36px !important;
+}  
+.reviews-icon{
+    background:url('{{ imgAwsUrl }}/adul/menu-icons/reviews-icon.png') no-repeat 10px 0 / 36px 36px !important;
+}  
+.my-favourites-icon{
+    background:url('{{ imgAwsUrl }}/adul/menu-icons/favourites-icon.png') no-repeat 10px 0 / 36px 36px !important;
+} 
+.saved-searches-icon{
+    background:url('{{ imgAwsUrl }}/adul/menu-icons/saved-search-icon.png') no-repeat 10px 0 / 36px 36px !important;
+}  
+.manage-item-icon {
+    background:url('{{ imgAwsUrl }}/adul/menu-icons/manage-ads-icon.png') no-repeat 10px 0 / 36px 36px !important;
+}  
+.manage-profile-icon{
+    background:url('{{ imgAwsUrl }}/adul/menu-icons/profile-icon.png') no-repeat 10px 0 / 36px 36px !important;
+}  
+.alerts-icon{ 
+    background:url('{{ imgAwsUrl }}/adul/menu-icons/saved-search-icon.png') no-repeat 10px 0 / 36px 36px !important;
+}  
+.orders-icon{
+	background:url('{{ imgAwsUrl }}/adul/menu-icons/order-icon.png') no-repeat 10px 0 / 36px 36px !important;
+}  
+.account-icon{
+	background:url('{{ imgAwsUrl }}/adul/menu-icons/account-icon.png') no-repeat 10px 0 / 36px 36px !important;
+}  
+.purchase-icon{
+	background:url('{{ imgAwsUrl }}/adul/menu-icons/purchases-icon.png') no-repeat 10px 0 / 36px 36px !important;
+}  
+.my-msgs-icon {
+	background:url('{{ imgAwsUrl }}/adul/menu-icons/messages.png') no-repeat 0 4px / 38px 38px !important;
+} 	 
+
+.my-saved-searches{
+    background:url('{{ imgAwsUrl }}/adul/menu-icons/saved-search.png') no-repeat 0 4px / 38px 38px !important;
+}  
+.newsleter-pref-icon {
+	background:url('{{ imgAwsUrl }}/adul/menu-icons/newsletter1.png') no-repeat 0 4px / 38px 38px !important;
+}  
+.profile-icon {
+    background:url('{{ imgAwsUrl }}/adul/menu-icons/profile.png') no-repeat 0 4px / 38px 38px !important;
+}  
+.design-icon {
+    background:url('{{ imgAwsUrl }}/adul/menu-icons/design.png') no-repeat 0 4px / 38px 38px !important;
+}  
+
+/* Category Images */
+.discover-adult-categories { margin:auto; }
+.discover-adult-contacts, .cat-adult-contacts { background: url('{{ imgAwsUrl }}/adul/Ic-btn-contacts.png') no-repeat !important; } 
+.discover-escorts, .cat-escorts { background: url('{{ imgAwsUrl }}/adul/Ic-btn-escorts.png') no-repeat !important; } 
+.discover-fetish-and-roleplay, .cat-fetish-and-roleplay { background: url('{{ imgAwsUrl }}/adul/Ic-btn-fetish-and-roleplay.png') no-repeat !important; } 
+.discover-gay-male-escort, .cat-gay-male-escort { background: url('{{ imgAwsUrl }}/adul/Ic-btn-gay-male-escort.png') no-repeat !important; } 
+.discover-adult-industry-jobs, .cat-adult-industry-jobs { background: url('{{ imgAwsUrl }}/adul/Ic-btn-industry-jobs.png') no-repeat !important; } 
+.discover-adult-massage, .cat-adult-massage { background: url('{{ imgAwsUrl }}/adul/Ic-btn-massage.png') no-repeat !important; } 
+
+.discover-adult-contacts:hover, .cat-adult-contacts:hover { background: url('{{ imgAwsUrl }}/adul/Ic-btn-contacts-Hover.png') no-repeat !important; } 
+.discover-escorts:hover, .cat-escorts:hover { background: url('{{ imgAwsUrl }}/adul/Ic-btn-escorts-Hover.png') no-repeat !important; } 
+.discover-fetish-and-roleplay:hover, .cat-fetish-and-roleplay:hover { background: url('{{ imgAwsUrl }}/adul/Ic-btn-fetish-and-roleplay-Hover.png') no-repeat !important; } 
+.discover-gay-male-escort:hover, .cat-gay-male-escort:hover { background: url('{{ imgAwsUrl }}/adul/Ic-btn-gay-male-escort-Hover.png') no-repeat !important; } 
+.discover-adult-industry-jobs:hover, .cat-adult-industry-jobs:hover { background: url('{{ imgAwsUrl }}/adul/Ic-btn-industry-jobs-Hover.png') no-repeat !important; } 
+.discover-adult-massage:hover, .cat-adult-massage:hover { background: url('{{ imgAwsUrl }}/adul/Ic-btn-massage-Hover.png') no-repeat !important; } 
+
+.discover-adult-contacts.active, .cat-adult-contacts.active { background: url('{{ imgAwsUrl }}/adul/Ic-btn-contacts-ON.png') no-repeat !important;border-radius: 6px !important; } 
+.discover-escorts.active, .cat-escorts.active { background: url('{{ imgAwsUrl }}/adul/Ic-btn-escorts-ON.png') no-repeat !important;border-radius: 6px !important; } 
+.discover-fetish-and-roleplay.active, .cat-fetish-and-roleplay.active { background: url('{{ imgAwsUrl }}/adul/Ic-btn-fetish-and-roleplay-ON.png') no-repeat !important;border-radius: 6px !important; } 
+.discover-gay-male-escort.active, .cat-gay-male-escort.active { background: url('{{ imgAwsUrl }}/adul/Ic-btn-gay-male-escort-ON.png') no-repeat !important;border-radius: 6px !important; } 
+.discover-adult-industry-jobs.active, .cat-adult-industry-jobs.active { background: url('{{ imgAwsUrl }}/adul/Ic-btn-industry-jobs-ON.png') no-repeat !important;border-radius: 6px !important; } 
+.discover-adult-massage.active, .cat-adult-massage.active { background: url('{{ imgAwsUrl }}/adul/Ic-btn-massage-ON.png') no-repeat !important;border-radius: 6px !important; } 
+.mob-adul-contacts {
+	background: url('{{ imgAwsUrl }}/adul/mob-adul-contacts.png') no-repeat !important;
+} 
+.mob-adul-escorts {
+	background: url('{{ imgAwsUrl }}/adul/mob-adul-escorts.png') no-repeat !important;
+} 
+.mob-adul-fetish-role {
+	background: url('{{ imgAwsUrl }}/adul/mob-adul-fetish-role.png') no-repeat !important;
+} 
+.mob-adul-gay-male {
+	background: url('{{ imgAwsUrl }}/adul/mob-adul-gay-male.png') no-repeat !important;
+} 
+.mob-adul-industry-jobs {
+	background: url('{{ imgAwsUrl }}/adul/mob-adul-industry-jobs.png') no-repeat !important;
+} 
+.mob-adul-massage {
+	background: url('{{ imgAwsUrl }}/adul/mob-adul-massage.png') no-repeat !important;
+} 
+.parallax-mirror, .parallax-window {
+	background: url('{{ imgAwsUrl }}/adul/hero-homepage-l.png') no-repeat !important;
+} 
+#featured-top-item-slider .featured-ribbon { background: url('{{ imgAwsUrl }}/adul/featured-ribbon.png') no-repeat; }
+.featured .featured-ribbon { 
+	background: url('{{ imgAwsUrl }}/adul/featured-ribbon.png') no-repeat !important;
+} 
+.search-pin{
+    background:url('{{ imgAwsUrl }}/adul/location-pin.png') no-repeat !important;
+}  
+@media only screen and (min-width: 320px) and (max-width: 959px) {
+   	#home-search .adult-search .search-btn button {
+	    background: url('/bundles/fafrontend/images/search-icon.svg') no-repeat center center / 16px 16px, linear-gradient(135deg, #A75BD8 0%, #E62EEB 100%) aliceblue !important;
+	} 
+} 
+@media only screen and (min-width:320px) and (max-width:559px){
+ .top-bar .toggle-topbar.menu-icon a span { background: url('/bundles/fafrontend/images/menu-icon.svg') no-repeat !important; }
+}
+@media only screen and (min-width: 320px) and (max-width: 960px) {
+    .parallax-mirror, .parallax-window {
+        background: url('{{ imgAwsUrl }}/adul/hero-homepage-s.png') no-repeat !important;
+     }
+} 
+
+@media only screen and (min-width: 320px) and (max-width: 640px) {
+    .top-bar .toggle-topbar.menu-icon a span.menu-on {
+        background: url('{{ imgAwsUrl }}/adul/menu-icon-on.svg') no-repeat !important;
+    }
+} 
+</style>
