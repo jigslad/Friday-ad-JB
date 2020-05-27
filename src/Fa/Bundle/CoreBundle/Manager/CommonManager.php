@@ -3546,7 +3546,7 @@ HTML;
                     $blogFeaturedMediaUrl = '';
                     if(!empty($blogMediaData)) {                        
                         $blogMediaData = json_decode($blogMediaData);
-                        $blogFeaturedMediaUrl = $blogMediaData->guid->rendered;
+                        $blogFeaturedMediaUrl = $blogMediaData->media_details->sizes->medium->source_url;
                     }
                     $blogDetails[] = array(
                         'title'=>$blogTitle,
