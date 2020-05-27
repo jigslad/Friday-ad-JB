@@ -129,7 +129,7 @@
                     <span class="item-status pkg-free">Package: {{adPackageArray[adId]['title']}}</span>
                     {% endif %}
                 <div class="clearfix"></div>
-                <div class="manage-list-desc manage-list-desc-desk-tab show-for-small-up-only">
+                <div class="manage-list-desc manage-list-desc-desk-tab hide-for-small-only">
                     {% if ad.qty is not null and ad.qty > 1 and (type == 'active' or type == '') %}
                         {{'Quantity remaining'|trans({}, 'frontend-manage-my-ad')}}: {{ ad.qty }}<br />
                     {% endif %}
@@ -180,7 +180,7 @@
               {% endif %}
         </div>#}
 
-        <div class="manage-list-desc show-for-small-only small-24 medium-24 large-24 columns">
+        <div class="manage-list-desc hide-for-small-only small-24 medium-24 large-24 columns">
                     {% if ad.qty is not null and ad.qty > 1 and type == 'active' %}
                         {% if ad.qty_sold is not null %}
                             {% set qtyRemaining = ad.qty - ad.qty_sold %}
@@ -242,12 +242,12 @@
                 </div>
 
                 {% if isBoostEnabled is defined and isBoostEnabled==1 and ad.boosted_at is defined and ad.is_boosted==1 %}
-                <div class="list-boosted-hours list-boosted-hours-desk-tab show-for-small-up-only">
+                <div class="list-boosted-hours list-boosted-hours-desk-tab hide-for-small-only">
                     {{ 'Boosted'|trans({}, 'frontend-manage-my-ad') }} {{ (ad.boosted_at|time_ago_in_words) }}
                 </div>
                 {% endif %}
-                {% if ad['status_id'] == adStatusLive %}
-                    <div class="clearfix dtl-social-icons-desk-tab dtl-social-icons manage-list-social-icons show-for-small-up-only">
+                {% if ad['status_id'] == adStatusLive %}                
+                    <div class="clearfix dtl-social-icons-desk-tab dtl-social-icons manage-list-social-icons hide-for-small-only">
                         <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/facebook/offer?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0','Facebook');" href="javascript:void(0);" title="{{'Facebook'|trans({}, 'frontend-show-ad')}}" class="dtl-fb" id="dtl-fb-id"></a>
                         <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/twitter/offer?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0', 'Twitter');" href="javascript:void(0);" title="{{'Twitter'|trans({}, 'frontend-show-ad')}}" class="dtl-twi" id="dtl-twi-id"></a>
                         <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/google_plusone_share/offer?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0', 'GooglePlus');" href="javascript:void(0);" title="{{'Google Plus'|trans({}, 'frontend-show-ad')}}" class="dtl-gpl" id="dtl-gpl-id"></a>
@@ -269,7 +269,7 @@
     {% if isBoostEnabled is defined and isBoostEnabled==1 and ad.boosted_at is defined and ad.is_boosted==1 and (createdInwords == boostedAtInWords) %}
         
     {% else %}
-        <div class="list-created-hours show-for-small-up-only list-created-hours-desk-tab">
+        <div class="list-created-hours hide-for-small-only list-created-hours-desk-tab">
             {{ 'Created'|trans({}, 'frontend-manage-my-ad') }} {{createdInwords}}
     </div>
     {% endif %}
