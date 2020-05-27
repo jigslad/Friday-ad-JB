@@ -804,3 +804,22 @@ footer a:hover, .footer-head:hover, .pkg-includes a {
 	    width: 240px !important;
 	}
 }
+@media (min-width: 320px) and (max-width: 640px) {
+	.manage-item-list .manage-item-button {
+	    width: 48.5% !important;
+	    margin: 0 0 8px 2px !important;
+	}
+	.manage-item-list .manage-item-button {
+	    width: 48.5% !important;
+	    margin: 0 0 8px 2px !important;
+	}
+}
+.top-bar-section .login-menu li:not(.has-form) a:not(.button) {
+    background: $accordian-head-color !important;
+    border-right: 1px solid $common-text-color !important;
+    box-shadow: none !important;
+}
+
+.top-bar-section .accordion dd > a, .top-bar-section .accordion dd > a:hover {
+	border-bottom: 1px solid $common-text-color !important;
+}

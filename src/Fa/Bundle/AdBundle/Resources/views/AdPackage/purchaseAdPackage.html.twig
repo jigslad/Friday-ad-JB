@@ -481,6 +481,7 @@
         var submitForm = true;
         var printEditionLimit = $('#package_print_edition_limit_'+packageId).val();
         blockPage();
+        $('input[name=package_id]').val(packageId);
         $('input[name=package_id][value='+packageId+']').trigger('click');
         $('#package_print_editions_'+packageId).show();
         if (printEditionLimit == 1) {
