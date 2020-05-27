@@ -133,7 +133,7 @@ a:hover.button, a:focus.button,a:hover.secondary-btn-1, a:focus.secondary-btn-1,
 .secondary-btn-1:hover, .secondary-btn-1:focus, .footer-newsletter-btn:hover, .footer-newsletter-btn:focus, 
 .xs-btn-1:hover, .xs-btn-1:focus, .primary-btn-2:hover, .primary-btn-2:focus
 {
-	background: linear-gradient(135deg, $secondary-btn-lh-color 0%, $secondary-btn-rh-colors 100%) !important;
+	background: linear-gradient(135deg, $secondary-btn-lh-color 0%, $secondary-btn-rh-color 100%) !important;
 	border: 1px solid $secondary-btn-lh-color !important;
 	color:$white !important;
 }
