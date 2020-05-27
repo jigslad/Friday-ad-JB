@@ -146,7 +146,7 @@
              
              {% if adDetailAndDimensionFields['safety_features'] is defined %}
              <div class="tab-pane fade" id="safety_features_panel_tab" role="tabpanel" aria-labelledby="nav-safety-features">
-                <a href="#safety_features_panel" class="d-block d-md-none" id="safety_features_panel_tab">{{'Safety & features'|trans({}, 'frontend-show-ad')}}<i class="fi-plus right"></i></a>
+                <a href="#safety_features_panel_tab" class="d-block d-md-none" id="safety_features_panel">{{'Safety & features'|trans({}, 'frontend-show-ad')}}<i class="fi-plus right"></i></a>
                     {% if metaData['ncap_rating'] is defined or adMotorRepository.hasISOFixFeature(featureIds) or safetyFeatureIds|length %}
                         <h5>{{'Safety'|trans({}, 'frontend-show-ad')}}</h5>
                         {% if metaData['ncap_rating'] is defined or adMotorRepository.hasISOFixFeature(featureIds) %}

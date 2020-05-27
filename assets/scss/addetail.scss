@@ -1604,3 +1604,25 @@ table.responsive-card-table {
     padding: 0;
   }
 }
+.save-item-btn, .saved-item-btn, .details-breadcrumb .back-link {
+  font-family: "Poppins-SemiBold" !important;
+  font-weight: normal !important;
+}
+.added-in-fav {
+  color: #82C249;
+}
+.saved-item-btn, .saved-item-btn:hover, .saved-item-btn:focus, .save-item-btn:hover, .save-item-btn:focus {
+  border-color: #82C249;
+  color: #82C249;
+}
+.save-item-btn, .saved-item-btn {
+  background: #fff;
+  border: 1px solid #CBD5D9;
+  border-top-color: rgb(203, 213, 217);
+  border-right-color: rgb(203, 213, 217);
+  border-bottom-color: rgb(203, 213, 217);
+  border-left-color: rgb(203, 213, 217);
+  vertical-align: middle;
+  color: #ACB0B7;
+  font-weight: 700;
+}
