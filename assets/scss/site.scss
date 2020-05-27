@@ -568,6 +568,10 @@ footer a:hover, .footer-head:hover, .pkg-includes a {
     margin-right: 30px !important;
     box-shadow: 0 0 19px 0 rgba(74, 74, 74, 0.5) !important;
 }
+.recommended-div.listing .recommended-more .outer-btn {
+    width: 30%;
+}
+
 @media only screen and (min-width: 760px) {
 	#package_purchase_form .equalizer-inner, #package_purchase_form .pkg-columns {
 	    display: grid !important;
@@ -752,6 +756,9 @@ footer a:hover, .footer-head:hover, .pkg-includes a {
 	.looking-for .ui-autocomplete-input {
 		border: 0px !important;
 	}
+	.manage-item-list .large-7 {
+        width: 100% !important;
+    }
 }
 @media only screen and (max-width: 640px) {
     .help-links {
