@@ -153,7 +153,7 @@
     {{ include('FaFrontendBundle::fa-main-css-new.html.twig') }}
     
     
-	{% set showAdultPages = 1 %}
+	{% if showAdultPages == 1 %}
 	    <link rel="stylesheet" href="{{ asset('build/css/adulcss.css') }}">
     	{{ include('FaFrontendBundle::adul-imgs.html.twig') }}
 	{% else %}
