@@ -152,6 +152,9 @@
     {% block scripttop %}{% endblock %}
     {{ include('FaFrontendBundle::fa-main-css-new.html.twig') }}
     
+    {% if (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration',4: 'show_draft_ad',5: 'ad_package_purchase',6: 'show_cart',7: 'cybersource_checkout'}) %}
+        <style>.nav-bar .top-bar-section, #top_search, #field_arrow { display:none !important; }</style>
+    {% endif %}
     
 	{% if showAdultPages == 1 %}
 	    <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">

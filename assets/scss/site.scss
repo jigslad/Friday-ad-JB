@@ -551,15 +551,22 @@ button.signup-fb-btn.expand {
 	background-position: center;
 }
 .website-btn-1, .website-btn-1:focus, .website-btn-1:active, .website-btn-1:visited {
-    border: 0px solid $adul-a-color !important;
+    border: 0px !important;
 }
 footer a:hover, .footer-head:hover, .pkg-includes a {
-    color: $adul-atag-light-color !important;
+    color: $atag-color !important;
 }
 .banner-mid-column #left_search .alertButton:hover,
 .banner-mid-column #left_search .alertButton:focus,
 .banner-mid-column #left_search .alertButton:active {
 	color: $white !important;
+}
+.list-featured-bz .item h3 {
+	text-align: left !important;
+}
+.read-online-block .thumbnail {
+    margin-right: 30px !important;
+    box-shadow: 0 0 19px 0 rgba(74, 74, 74, 0.5) !important;
 }
 @media only screen and (min-width: 760px) {
 	#package_purchase_form .equalizer-inner, #package_purchase_form .pkg-columns {
@@ -698,7 +705,7 @@ footer a:hover, .footer-head:hover, .pkg-includes a {
         background-size: 23px 23px !important; width:23px !important; height:23px !important;
     }
     .top-bar-section .accordion dd > a, .top-bar-section .accordion dd > a:hover, .top-bar-section .accordion dd.active > a {
-        background: $common-text-color !important;
+        background: $accordian-head-color !important;
         font-size: 12px;
         font-weight: normal !important;
         font-family: "Poppins-SemiBold" !important;
