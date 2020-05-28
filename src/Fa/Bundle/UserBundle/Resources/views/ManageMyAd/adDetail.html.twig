@@ -180,7 +180,7 @@
               {% endif %}
         </div>#}
 
-        <div class="manage-list-desc hide-for-small-only small-24 medium-24 large-24 columns">
+        <div class="manage-list-desc show-for-small-only small-24 medium-24 large-24 columns">
                     {% if ad.qty is not null and ad.qty > 1 and type == 'active' %}
                         {% if ad.qty_sold is not null %}
                             {% set qtyRemaining = ad.qty - ad.qty_sold %}
