@@ -9,80 +9,84 @@
 {% endif %}
 {% set locationRepository = fetch_repository('FaEntityBundle:Location') %}
 {% use "FaCoreBundle:GoogleMap:renderLocationUsingCircle.html.twig" %}
-<div class="col-md-24 justify-content-center pad-none">
-    <div class="paa-gray-box btm-pa-0 justify-content-center" id="location_div">
-        <h3 class="text-center">
-            {{ attribute(form, field).vars.label }}
-        </h3>
-        <div class="text-center">
-            <p class="mb0">
-                <span id="paa_location_autocomplete_tips">{{ 'Enter your postcode or town.'|trans({}, 'frontend-paa-fourth-step')}}</span>
-                {% if form.location_autocomplete.vars.attr['field-help'] is defined and form.location_autocomplete.vars.attr['field-help'] is not null %}&nbsp;
-                <div class="image-tooltip-wrapper text-left">
-                    <span class="image-tooltip">{{ form.location_autocomplete.vars.attr['field-help']|raw }}</span>
-                    <span class="info-icon">info</span>
-                </div>
-                {% endif %}
-            </p>
-        </div>
-        {% set selectedLocation      = 'United Kingdom' %}
-        {% set showHideLocationInst  = 'none' %}
-        {% set showHideLocationField = 'inline' %}
-        {% set showHideLocationMap   = 'false' %}
-        {% if attribute(form, field).vars.value and attribute(form, field).vars.value != 'United Kingdom' %}
-            {% set selectedLocation      = attribute(form, 'location_text').vars.value %}
-            {% set showHideLocationInst  = 'inline' %}
-            {% set showHideLocationField = 'none' %}
-            {% set showHideLocationMap   = 'true' %}
-        {% endif %}
-        {% if attribute(form, field).vars.errors|length %}
-            {% set showHideLocationField = 'inline' %}
-            {% set showHideLocationInst  = 'none' %}
-            {% set showHideLocationMap   = 'false' %}
-        {% endif %}
-        <div class="text-center" style="display:{{ showHideLocationInst }}">{{ 'It looks like you\'re based in %location%. If this isn\'t right or not where you will be selling your item from'|trans({'%location%': '<b>' ~ selectedLocation ~ '</b>'}, 'frontend-paa-fourth-step')|raw }}, <a href="javascript:void(0)" id="change_location_link">{{ 'change location'|trans({}, 'frontend-paa-fourth-step')}}.</a></div>
-        <div id="dispEditNurseryLocation" style="display:none;padding-bottom:10px;">{{ 'It looks like you\'re based in %actuallocation%'|trans({'%actuallocation%': '<b>' ~ curLocText ~ '</b>'}, 'frontend-paa-fourth-step')|raw }}</div>
-        <div id="location_field_div" class="map-location-field" style="display:{{ showHideLocationField }}">
-            <div class="row">
-                <div class="small-wrapper">
-                    <div class="loc-block">
-                        {{ form_widget(attribute(form, field), {'attr': {'class' : 'loc-autocomp white-field form-control ui-autocomplete-input', 'placeholder': ((attribute(form, field).vars.attr.placeholder is defined and attribute(form, field).vars.attr.placeholder is not null) ? attribute(form, field).vars.attr.placeholder : 'Type postal code or town') }}) }}
-                        <a href="javascript:void(0);" id="{{ formName }}_location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
-                        {{ form_errors(attribute(form, field), {'attr' : {'class' : '' }}) }}
-                    </div>
-                    <button id="find_on_map" class="secondary-btn-1 btn-block" type="button" style="display:none">{{ 'Search on map'|trans({}, 'frontend-paa-fourth-step') }}</button>
-                </div>
-            </div>
-        </div>
-        {% set isLocationArea = locationRepository.checkLocationIsArea(attribute(form, 'location').vars.value, attribute(form, 'area').vars.value, fetch_container_instance()) %}
-        {% if attribute(form, 'area_autocomplete').vars.errors|length or isLocationArea %}
-            {% set showHideAreaField = 'inline' %}
+<div class="paa-gray-box" id="location_div">
+    {#{ attribute(attribute(form, field).vars.attr, 'field-help') }#}
+    <h3 class="text-center">
+        {{ attribute(form, field).vars.label }}
+        {#% if attribute(form, field).vars.required %}
+            <span class="black-text">({{ 'required'|trans({}, 'frontend-paa-fourth-step') }})</span> 
         {% else %}
-            {% set showHideAreaField = 'none' %}
-        {% endif %}
-        <div id="location_area_div" style="display:{{ showHideAreaField }}">
-            <div class="row">
-                <div class="small-wrapper">
-                    <p class="paa-area-title">Type your postcode to find your area:</p>
-                    <div class="position-relative">
-                        {{ form_widget(attribute(form, 'area_autocomplete'), {'attr': {'placeholder': ((attribute(form, 'area_autocomplete').vars.attr.placeholder is defined and attribute(form, 'area_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'area_autocomplete').vars.attr.placeholder : ' ') }}) }}
-                        <a href="javascript:void(0);" id="{{ formName }}_area_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
-                    </div>
-                    {{ form_errors(attribute(form, 'area_autocomplete'), {'attr' : {'class' : '' }}) }}
+            <span class="black-text">({{ 'optional'|trans({}, 'frontend-paa-fourth-step') }})</span>
+        {% endif %#}
+    </h3>
+    <div class="text-center">
+        <p class="mb0">
+            <span id="paa_location_autocomplete_tips">{{ 'Enter your postcode or town.'|trans({}, 'frontend-paa-fourth-step')}}</span>
+            {% if form.location_autocomplete.vars.attr['field-help'] is defined and form.location_autocomplete.vars.attr['field-help'] is not null %}&nbsp;
+            <div class="image-tooltip-wrapper">
+                <span class="image-tooltip">{{ form.location_autocomplete.vars.attr['field-help']|raw }}</span>
+                <span class="info-icon">info</span>
+            </div>
+            {% endif %}
+        </p>
+    </div>
+    {% set selectedLocation      = 'United Kingdom' %}
+    {% set showHideLocationInst  = 'none' %}
+    {% set showHideLocationField = 'inline' %}
+    {% set showHideLocationMap   = 'false' %}
+    {% if attribute(form, field).vars.value and attribute(form, field).vars.value != 'United Kingdom' %}
+        {% set selectedLocation      = attribute(form, 'location_text').vars.value %}
+        {% set showHideLocationInst  = 'inline' %}
+        {% set showHideLocationField = 'none' %}
+        {% set showHideLocationMap   = 'true' %}
+    {% endif %}
+    {% if attribute(form, field).vars.errors|length %}
+        {% set showHideLocationField = 'inline' %}
+        {% set showHideLocationInst  = 'none' %}
+        {% set showHideLocationMap   = 'false' %}
+    {% endif %}
+    <div class="text-center" style="display:{{ showHideLocationInst }}">{{ 'It looks like you\'re based in %location%. If this isn\'t right or not where you will be selling your item from'|trans({'%location%': '<b>' ~ selectedLocation ~ '</b>'}, 'frontend-paa-fourth-step')|raw }}, <a href="javascript:void(0)" id="change_location_link">{{ 'change location'|trans({}, 'frontend-paa-fourth-step')}}.</a></div>
+    <div id="dispEditNurseryLocation" style="display:none;padding-bottom:10px;">{{ 'It looks like you\'re based in %actuallocation%'|trans({'%actuallocation%': '<b>' ~ curLocText ~ '</b>'}, 'frontend-paa-fourth-step')|raw }}</div>
+    <div id="location_field_div" class="map-location-field" style="display:{{ showHideLocationField }}">
+        <div class="row">
+            <div class="small-wrapper">
+                <div class="relative">
+                    {{ form_widget(attribute(form, field), {'attr': {'placeholder': ((attribute(form, field).vars.attr.placeholder is defined and attribute(form, field).vars.attr.placeholder is not null) ? attribute(form, field).vars.attr.placeholder : 'Type postal code or town') }}) }}
+                    <a href="javascript:void(0);" id="{{ formName }}_location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                    {{ form_errors(attribute(form, field), {'attr' : {'class' : '' }}) }}
                 </div>
+                <button id="find_on_map" class="secondary-btn-1 expand" type="button" style="display:none">{{ 'Search on map'|trans({}, 'frontend-paa-fourth-step') }}</button>
             </div>
         </div>
-        <div id="location_map_div" class="map-box ">
-             {% set geolocation = attribute(form, 'location_lat_lng').vars.value|split(', ') %}
-             {% if geolocation[0] is defined and geolocation[1] is defined %}
-                {% set latitude = geolocation[0] %}
-                {% set longitude = geolocation[1] %}
-                {% set mapHeight = '127px' %}
-                {% set mapWidth =  '228px' %}
-                {{ set_variables('adDetailMap', {'latitude':latitude, 'longitude': longitude, 'mapOnLoad' : 'true', 'locationField': '#'~formName~'_location_autocomplete', 'latlngField': '#'~formName~'_location_lat_lng', 'isShowMap' : showHideLocationMap}) }}
-            {% endif %}
-            {{ block('googlemap_location_html') }}
-        </div>
-        <div><span id="location_error_div" class="error"></span></div>
     </div>
+    {% set isLocationArea = locationRepository.checkLocationIsArea(attribute(form, 'location').vars.value, attribute(form, 'area').vars.value, fetch_container_instance()) %}
+    {% if attribute(form, 'area_autocomplete').vars.errors|length or isLocationArea %}
+        {% set showHideAreaField = 'inline' %}
+    {% else %}
+    	{% set showHideAreaField = 'none' %}
+    {% endif %}
+    <div id="location_area_div" style="display:{{ showHideAreaField }}">
+        <div class="row">
+            <div class="small-wrapper">
+                <p class="paa-area-title">Type your postcode to find your area:</p>
+                <div class="relative">
+                    {{ form_widget(attribute(form, 'area_autocomplete'), {'attr': {'placeholder': ((attribute(form, 'area_autocomplete').vars.attr.placeholder is defined and attribute(form, 'area_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'area_autocomplete').vars.attr.placeholder : ' ') }}) }}
+                    <a href="javascript:void(0);" id="{{ formName }}_area_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                </div>
+                {{ form_errors(attribute(form, 'area_autocomplete'), {'attr' : {'class' : '' }}) }}
+            </div>
+        </div>
+    </div>
+    <div id="location_map_div" class="map-box">
+         {% set geolocation = attribute(form, 'location_lat_lng').vars.value|split(', ') %}
+         {% if geolocation[0] is defined and geolocation[1] is defined %}
+            {% set latitude = geolocation[0] %}
+            {% set longitude = geolocation[1] %}
+            {% set mapHeight = '127px' %}
+            {% set mapWidth =  '228px' %}
+            {{ set_variables('adDetailMap', {'latitude':latitude, 'longitude': longitude, 'mapOnLoad' : 'true', 'locationField': '#'~formName~'_location_autocomplete', 'latlngField': '#'~formName~'_location_lat_lng', 'isShowMap' : showHideLocationMap}) }}
+        {% endif %}
+        {{ block('googlemap_location_html') }}
+    </div>
+    <div><span id="location_error_div" class="error"></span></div>
 </div>

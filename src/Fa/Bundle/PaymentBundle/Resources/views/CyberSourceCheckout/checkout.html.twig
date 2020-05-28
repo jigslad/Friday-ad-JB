@@ -36,12 +36,14 @@
                                 <div class="paa-bdr-box bdr-none">
                                 	<div {% if form.payment_method.vars.choices|length == 1 %}style="display:none;"{% endif %}>
                                         <h3 class="text-center">{{'Choose payment method'|trans({},'frontend-cyber-source')}}</h3>
-                                        <ul class="choose-payment-method white-radio" id="payment_method_id">
+                                        <ul class="choose-payment-method payment-card-option-block ml0" id="payment_method_id">
                                             {% for choice in form.payment_method.vars.choices %}
                                             <li>
-                                                <div class="small-wrapper label-inline">
-                                                    <span class="custom-radio {% if form.payment_method.vars.data == choice.value %}checked{% endif %} "><input onclick="return showHideCardDetail();" type="radio" value="{{ choice.value }}" {% if form.payment_method.vars.data == choice.value %}checked="checked"{% endif %} name="{{ form.payment_method.vars.full_name }}" id="{{ form.payment_method.vars.id }}_{{ choice.value }}" /></span>
-                                                    <label for="{{ form.payment_method.vars.id }}_{{ choice.value }}">{{ choice.label|raw }}</label>
+                                                <div class="d-flex mt10 mb10">
+                                                    <span class="grey-radio d-inline-flex {% if form.payment_method.vars.data == choice.value %}checked{% endif %} ">
+                                                       <input class="checkbox" onclick="return showHideCardDetail();" type="radio" value="{{ choice.value }}" {% if form.payment_method.vars.data == choice.value %}checked="checked"{% endif %} name="{{ form.payment_method.vars.full_name }}" id="{{ form.payment_method.vars.id }}_{{ choice.value }}" />
+                                                        <label for="{{ form.payment_method.vars.id }}_{{ choice.value }}"></label>{{ choice.label|raw }}
+                                                    </span>
                                                     {% if choice.value %}
                                                         <a href="{{ path('cybersource_delete_token', {'id': choice.value, 'subscription': subscription}) }}" onclick="javascript:return confirm('{{ 'Do you want to proceed deleting this option?'|trans({}, 'frontend-cyber-source') }}')" class="delete-icon"></a>
                                                     {% endif %}

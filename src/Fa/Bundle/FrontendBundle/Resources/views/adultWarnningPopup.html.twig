@@ -22,21 +22,21 @@
                 <div class="proceed-buttons">
                     <div class="row">
                     	{% if for_third_party_link is not defined and modification is not defined %}
-                            <div class="col-lg-12 col-md-12">
+                            <div class="col-12 col-lg-12 col-md-12">
                                 <button type="button" class="primary-btn-3 btn btn-block text-center btn-h-lg" onclick="takeMeBack();">{{'Take me back!'|trans({}, 'frontend-adult-warnning')}}</button>
                             </div>
-                            <div class="col-lg-12 col-md-12">
+                            <div class="col-12 col-lg-12 col-md-12">
                                 <button type="button" class="primary-btn-2 btn  btn-block text-center btn-h-lg" onclick="proceed18Plus();"><span>{{'Proceed'|trans({}, 'frontend-adult-warnning')}} <b>-</b></span> {{'I am over 18'|trans({}, 'frontend-adult-warnning')|raw}}</button>
                             </div>
                         {% elseif for_third_party_link is defined and for_third_party_link %}
-                        	 <div class="col-lg-12 col-md-12">
+                        	 <div class="col-12 col-lg-12 col-md-12">
                                 <button type="button" class="primary-btn-3 btn btn-block text-center btn-h-lg" onclick="closeCheckAgeModalBox();">{{'Take me back!'|trans({}, 'frontend-adult-warnning')}}</button>
                             </div>
-                            <div class="col-lg-12 col-md-12">
+                            <div class="col-12 col-lg-12 col-md-12">
                                 <button type="button" class="primary-btn-2 btn  btn-block text-center btn-h-lg" onclick="proceed18PlusForThirdParty();"><span>{{'Proceed'|trans({}, 'frontend-adult-warnning')}} <b>-</b></span> {{'I am over 18'|trans({}, 'frontend-adult-warnning')|raw}}</button>
                             </div>
                         {% elseif modification is defined and modification %}   
-                            <div class="col-lg-12 col-md-12">
+                            <div class="col-12 col-lg-12 col-md-12">
                                 <button type="button" class="primary-btn-2 btn  btn-block text-center btn-h-lg" onclick="closeCheckAgeModalBox();">{{'OK'|trans({}, 'frontend-adult-warnning')}}</button>
                             </div>
                         {% endif %}

@@ -215,8 +215,8 @@
             <div class="payment-row">
                 <div class="label-inline grey-check">
                     {{ form_widget(form.is_save_credit_card, {'attr': {'class': 'checkbox'}}) }}
-                    <label for="{{ form_label(form.is_save_credit_card.vars.id) }}"></label>
-                    {{ form_label(form.is_save_credit_card.vars.label) }}
+                    <label for="{{ form.is_save_credit_card.vars.id }}"></label>
+                    {{ form.is_save_credit_card.vars.label }}
                     {{ form_errors(form.is_save_credit_card) }}
                 </div>
             </div>

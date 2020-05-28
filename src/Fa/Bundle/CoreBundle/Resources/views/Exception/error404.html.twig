@@ -5,13 +5,17 @@
 {% endblock %}
 
 {% block body %}
-    <div class="row text-center error-page">
-        <div  class="bg-img404"></div>
-        <h1>Congratz! You’ve found the 404 Error page!</h1>
-        <h2 class="ptop_spac">Next, find something you really want from the search bar below or visit</h2>
-        <a href="{{ path('fa_frontend_homepage') }}" class="hp-link">Friday Ad homepage</a>
-        {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {}, 'isErrorSearch': true } )) }}
-    </div>
+	<div class="container">	
+        <div class="row text-center error-page">
+        	<div class="col m-auto">
+                <div  class="bg-img404"></div>
+                <h1>Congratz! You’ve found the 404 Error page!</h1>
+                <h2 class="ptop_spac">Next, find something you really want from the search bar below or visit</h2>
+                <a href="{{ path('fa_frontend_homepage') }}" class="hp-link">Friday Ad homepage</a>
+                {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {}, 'isErrorSearch': true } )) }}
+            </div>
+        </div>
+     </div>
 {% endblock %}
 
 {% block dimension2 %}

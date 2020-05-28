@@ -414,18 +414,12 @@ footer .fad-logo {
     padding: 0;
     text-indent: -9999px;
     margin-bottom: 26px;
-    background: url('/Frontend/images/social/fb-btn.svg') no-repeat;
     transition: none;
     border: 0px;
   }
-  .fb-btn:hover {
-    background: url('/Frontend/images/social/fb-btn-hover.svg') no-repeat;
-  }
   .gplus-btn {
-    background: url('/Frontend/images/social/google_signin.png') no-repeat;
     margin-left: 18px;
     &:hover {
-      background: url('/Frontend/images/social/google_signin.png') no-repeat;
       margin-left: 20px;
     }
   }
@@ -443,13 +437,11 @@ footer .fad-logo {
     color: #EAEFF0;
 }
 .self-service-img {
-    background: url('/Frontend/images/self-service-title.svg') no-repeat;
     display: inline-block;
     width: 201px;
     height: 164px;
 }
 .magazines-img {
-    background: url('/Frontend/images/magazines.png') no-repeat;
     display: inline-block;
     width: 222px;
     height: 179px;
@@ -541,8 +533,6 @@ footer .fad-logo {
     background: #FFFFFF;
   }
   .drag-ins-hr {
-
-    background: url('/Frontend/images/icons/upload-image.png') no-repeat;
     padding: 0 0 0 26px;
     margin-bottom: 10px;
     min-height: 15px;
@@ -551,8 +541,6 @@ footer .fad-logo {
     background-size: 20px 15px;
   }
   .drag-ins-vr {
-
-    background: url('/Frontend/images/icons/upload-image.png') no-repeat;
     padding: 43px 0 0 0;
     margin: 10px 0;
     background-position: center top;
@@ -618,7 +606,6 @@ footer .fad-logo {
     max-height: 98px;
     max-width: 130px;
     cursor: move;
-    cursor: url('/Frontend/images/icons/move-cursor.png') 4 12,auto;
 }
 .adimg-thumb .edit-img {
     padding: 5px 27px 7px !important;
@@ -652,6 +639,39 @@ footer .fad-logo {
     z-index: 1 !important;
     width: 100% !important;
     height: 100% !important;
+}
+.small-wrapper {
+    width: 300px;
+    margin: 0 auto;
+}
+.choose-payment-method {
+    margin: 0;
+    list-style: none;
+    border-top: 1px solid #CBD5D9;
+    box-shadow: inset 0 1px 0 #fff;
+}
+.delete-icon {
+    width: 12px;
+    height: 15px;
+    margin: -3px 5px 0 0;
+    vertical-align: middle;
+    display: inline-block;
+    background: url(data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org….8%201.8z%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E) no-repeat;
+    background-size: 12px 15px;
+}
+@media (min-width: 320px) and (max-width: 759px) {
+	.discover-categories a, .discover-categories a:hover, .discover-categories a:focus, .discover-categories a:active {
+	    background-size: cover !important;
+	    background-position: center !important;
+	}
+}
+.discover-categories a, .discover-categories a:hover, .discover-categories a:focus, .discover-categories a:active {
+	    background-size: cover !important;
+	    background-position: center !important;
+	}
+.paa-block .choose-all-categories a, .paa-block .choose-all-categories a:hover, .paa-block .choose-all-categories a:focus,  .paa-block .choose-all-categories a:active {
+	background-size: cover !important;
+	background-position: center !important;
 }
 @media only screen and (min-width: 320px) and (max-width: 640px) {
   .photos-box .inline-list > li {
@@ -794,7 +814,6 @@ footer .fad-logo {
   .available-payment-options {
     width: 100%;
     height: 47px;
-    background: url('/Frontend/images/payment/payment-options.png') no-repeat center center;
   }
 
   .weekly-pkg {
@@ -826,7 +845,6 @@ footer .fad-logo {
 @media (min-width: 320px) and (max-width: 759px) {
   .paa-block {
     .available-payment-options {
-      background: url('/Frontend/images/payment/payment-options-mobile.png') no-repeat center center;
       height: 100px;
     }
     .paa-pkg-main {
@@ -957,7 +975,6 @@ footer .fad-logo {
     padding-bottom: 55px;
   }
   .credit-cards-box {
-    background: url('/Frontend/images/payment/credit-cards.svg') no-repeat center center;
     height: 144px;
     border-radius: 2px;
     cursor: pointer;
@@ -989,7 +1006,6 @@ footer .fad-logo {
       display: inline-block !important;
     }
     .credit-cards-box {
-      background: url('/Frontend/images/payment/credit-cards-mobile.svg') no-repeat center center;
       width: 100%;
       height: 60px;
       float: none;
@@ -1275,19 +1291,6 @@ span#fa_payment_cyber_source_checkout_card_expity_month-button, span#fa_payment_
     width: 242px;
     height: 141px;
 }
-.motors-subtitle{background:url('/Frontend/images/subtitle/motors-subtitle.png') 0 0 / 245px 153px no-repeat}
-.for_sale-subtitle{background:url('/Frontend/images/subtitle/forsale-subtitle.png') 0 0 / 245px 153px no-repeat}
-.jobs-subtitle{background:url('/Frontend/images/subtitle/jobs-subtitle.png') 0 0 / 245px 153px no-repeat}
-.services-subtitle{background:url('/Frontend/images/subtitle/services-subtitle.png') 0 0 / 245px 153px no-repeat}
-.adult-subtitle{background:url('/Frontend/images/subtitle/adult-subtitle.png') 0 0 / 245px 153px no-repeat}
-.property-subtitle{background:url('/Frontend/images/subtitle/property-subtitle.png') 0 0 / 245px 153px no-repeat}
-.classes_and_tuition-subtitle{background:url('/Frontend/images/subtitle/classes-subtitle.png') 0 0 / 245px 153px no-repeat}
-.clubs_societies_and_teams-subtitle{background:url('/Frontend/images/subtitle/clubs-subtitle.png') 0 0 / 245px 153px no-repeat}
-.friendship_and_dating-subtitle{background:url('/Frontend/images/subtitle/dating-subtitle.png') 0 0 / 245px 153px no-repeat}
-.in_your_area-subtitle{background:url('/Frontend/images/subtitle/area-subtitle.png') 0 0 / 245px 153px no-repeat}
-.animals-subtitle{background:url('/Frontend/images/subtitle/animals-subtitle.png') 0 0 / 245px 153px no-repeat}
-.whats_on-subtitle{background:url('/Frontend/images/subtitle/whatson-subtitle.png') 0 0 / 245px 153px no-repeat}
-
 .paa-subtitle-img {
     width: 245px;
     height: 153px;
@@ -1339,11 +1342,69 @@ span#fa_payment_cyber_source_checkout_card_expity_month-button, span#fa_payment_
 #navbarSupportedContent, #top_search, .f-ad-sign, #fa_user_newsletter, #paa_steps_title, .fad-sign-bdr {
      display: none !important; 
 }
-@media only screen and (min-width: 1152px) {
-.dpaa-section .btn {
-    margin: auto;
-    width: 209px;
+
+#paa_similar_adverts .listing {
+    background: #EAEFF0;    
 }
+#paa_similar_adverts .media.listing { margin-bottom:20px; padding: 15px; }
+#paa_similar_adverts .featured-ribbon, #paa_similar_adverts .urgent-ribbon {
+    display: none;
+}
+#paa_similar_adverts .media-left {
+    width: 138px;
+}
+#paa_similar_adverts .media-body {
+    position: relative !important;
+}
+#paa_similar_adverts .listing .list-distance {
+    width: 240px !important;
+    bottom: auto !important;
+}
+#paa_similar_adverts .listing h3, #paa_similar_adverts .listing h5 {
+    width: auto;
+    float: none;
+    color: #212527;
+}
+#paa_similar_adverts h5 {
+    margin-bottom: 10px;
+}
+#paa_similar_adverts .listing .list-img {
+    background: #fff;
+}
+#paa_similar_adverts .list-desc {
+    display: none !important;
+}
+#paa_similar_adverts .list-price {
+    width: auto;
+    text-align: left;
+    float: none;
+}
+.paa-desc, .paa-desc p, .paa-desc li {
+    font-size: 14px;
+    color: #212527;
+    font-weight: normal;
+    line-height: 22px;
+    margin-bottom: 0;
+}
+
+.paa-desc {
+    float: left;
+    width: 77%;
+}
+@media only screen and (min-width: 1152px) {
+  .dpaa-section .btn {
+      margin: auto;
+      width: 209px;
+  }
+  #paa_similar_adverts .listing .list-img {
+        width: 138px;
+        height: 104px;
+    }
+
+    #paa_similar_adverts .listing .list-img img {
+        max-width: 138px;
+        max-height: 104px;
+    }
 }
 @media only screen and (min-width: 960px) and (max-width: 1151px) {
     .tab-pad {

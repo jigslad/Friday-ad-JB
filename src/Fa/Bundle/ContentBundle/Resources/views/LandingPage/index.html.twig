@@ -76,7 +76,7 @@
                                 <h1>{{ seoManager.parseSeoString(seoFields.h1_tag~h1LocationString, {'{location}': seoLocationName})|raw }}</h1>
                             {% endif %}
                             {% if categoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
-                                <div class="col-lg-12 offset-lg-6 col-md-18 offset-md-3 col-sm-18 offset-sm-3">
+                                <div class="col-lg-10 offset-lg-7 col-md-18 offset-md-3 col-sm-18 offset-sm-3">
                                         <div class="intro-text">
                                         {% if adCounts.a_parent_category_lvl_1_id_i is defined and attribute(adCounts.a_parent_category_lvl_1_id_i, categoryId) is defined %}
                                             {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(searchParams) %}

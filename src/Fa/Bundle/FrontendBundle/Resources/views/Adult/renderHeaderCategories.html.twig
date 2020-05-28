@@ -189,112 +189,93 @@
         			<div id="dl-menu" class="dl-menuwrapper">
         				<button class="dl-trigger ga-ahpCatDropdown" style="width:100%;">Menu</button>
         				<ul class="dl-menu dl-menuopen">
-                        {% for categoryId, categoryArray in headerCategories %}
-                            {% set secondLevelLength = 0 %}
-                            {% if categoryArray['children'] is defined and categoryArray['children']|length %}
-                                {% set secondLevelLength = categoryArray['children']|length %}
+{% for categoryId, categoryArray in headerCategories %}
+                    {% set secondLevelLength = 0 %}
+                    {% if categoryArray['children'] is defined and categoryArray['children']|length %}
+                        {% set secondLevelLength = categoryArray['children']|length %}
+                    {% endif %}
+                    
+                    {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['full_slug']) %}
+                    {% if secondLevelLength %}
+                        {% for secondLevelCategoryId, secondLevelCategoryArray in categoryArray['children'] %}
+                            {% set thirdLevelLength = 0 %}
+                            {% if secondLevelCategoryArray['children'] is defined and secondLevelCategoryArray['children']|length %}
+                                {% set thirdLevelLength = secondLevelCategoryArray['children']|length %}
                             {% endif %}
-                            <li {% if secondLevelLength %}class="has-dropdown"{% else %}class="last-level"{% endif %}>
-                            	{% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
-                                	{% set listurl1 = path('fa_adult_homepage') %}
-                                {% else %}
-                                    {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['full_slug']) %}
-                                {% endif %}
-                                <a href="{{ listurl1 }}" class="remove-arrow-f-child">{% if categoryArray['class'] is defined %}<span class="{{categoryArray['class']}}">&nbsp;</span>{% endif %}{{categoryArray['name']}} <span>({{ categoryArray['count'] is defined?categoryArray['count']|number_format:0}} {{'ads'|trans()}})</span></a>
-                                {% if secondLevelLength %}
-                                    <ul class="dl-submenu">
-                                    	<li><a href="{{ listurl1 }}" class="active-subcat">{% if categoryArray['class'] is defined %}<span class="{{categoryArray['class']}}">&nbsp;</span>{% endif %}{{categoryArray['name']}} <span>({{ categoryArray['count'] is defined?categoryArray['count']|number_format:0}} {{'ads'|trans()}})</span></a></li>
-                                            {% for secondLevelCategoryId, secondLevelCategoryArray in categoryArray['children'] %}
-                                                {% set thirdLevelLength = 0 %}
-                                                {% if secondLevelCategoryArray['children'] is defined and secondLevelCategoryArray['children']|length %}
-                                                    {% set thirdLevelLength = secondLevelCategoryArray['children']|length %}
-                                                {% endif %}
-                                                <li {% if thirdLevelLength %}class="has-dropdown"{% else %}class="last-level"{% endif %}>
-                                                {% if secondLevelCategoryArray['is_static'] is defined and secondLevelCategoryArray['is_static'] %}
-                                                    {% set listurl1 = secondLevelCategoryArray['link_url'] %}
-                                                {% else %}
-                                                    {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, secondLevelCategoryArray['full_slug']) %}
-                                                {% endif %}
-                                                <a href="{{ listurl1 }}" class="dlmain-cat">{% if secondLevelCategoryArray['is_static'] is defined and secondLevelCategoryArray['is_static'] %} {{secondLevelCategoryArray['link_text']}} {% else %}{{secondLevelCategoryArray['name']}}{% endif %}</a>
-                                                {% if thirdLevelLength %}
-                                                     <ul class="dl-submenu">
-                                                     	 <li><a href="{{ listurl1 }}" class="active-subcat">{% if secondLevelCategoryArray['is_static'] is defined and secondLevelCategoryArray['is_static'] %} {{secondLevelCategoryArray['link_text']}} {% else %}{{secondLevelCategoryArray['name']}}{% endif %}</a></li>                                                    
-                                                         {% for thirdLevelCategoryId, thirdLevelCategoryArray in secondLevelCategoryArray['children'] %}
-                                                            {% set fourthLevelLength = 0 %}
-                                                            {% if thirdLevelCategoryArray['children'] is defined and thirdLevelCategoryArray['children']|length %}
-                                                                {% set fourthLevelLength = thirdLevelCategoryArray['children']|length %}
-                                                            {% endif %}
-                                                            <li {% if fourthLevelLength %}class="has-dropdown"{% else %}class="last-level"{% endif %}>
-                                                            {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, thirdLevelCategoryArray['full_slug']) %}
-                                                             <a href="{{ listurl1 }}" class="dlmain-cat">{{thirdLevelCategoryArray['name']}}</a>
-                                                             {% if fourthLevelLength %}
-                                                                 <ul class="dl-submenu">
-                                                                 	<li><a href="{{ listurl1 }}" class="active-subcat">{{thirdLevelCategoryArray['name']}}</a></li>
-                                                                     {% for fourthLevelCategoryId, fourthLevelCategoryArray in thirdLevelCategoryArray['children'] %}
-                                                                        {% set fifthLevelLength = 0 %}
-                                                                        {% if fourthLevelCategoryArray['children'] is defined and fourthLevelCategoryArray['children']|length %}
-                                                                            {% set fifthLevelLength = fourthLevelCategoryArray['children']|length %}
-                                                                        {% endif %}
-                                                                         <li {% if fifthLevelLength %}class="has-dropdown"{% else %}class="last-level"{% endif %}>
-                                                                         {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, fourthLevelCategoryArray['full_slug']) %}
-                                                                         <a href="{{ listurl1 }}" class="dlmain-cat">{{fourthLevelCategoryArray['name']}}</a>
-                                                                         {% if fifthLevelLength %}
-                                                                             <ul class="dl-submenu">
-                                                                             	<li><a href="{{ listurl1 }}" class="active-subcat">{{fourthLevelCategoryArray['name']}}</a></li>
-                                                                                 {% for fifthLevelCategoryId, fifthLevelCategoryArray in fourthLevelCategoryArray['children'] %}
-                                                                                    {% set sixthLevelLength = 0 %}
-                                                                                    {% if fifthLevelCategoryArray['children'] is defined and fifthLevelCategoryArray['children']|length %}
-                                                                                        {% set sixthLevelLength = fifthLevelCategoryArray['children']|length %}
-                                                                                    {% endif %}
-                                                                                    <li {% if sixthLevelLength %}class="has-dropdown"{% else %}class="last-level"{% endif %}>
-                                                                                    {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, fifthLevelCategoryArray['full_slug']) %}
-                                                                                     <a href="{{ listurl1 }}"  class="dlmain-cat">{{fifthLevelCategoryArray['name']}}</a>
-                                                                                     {% if sixthLevelLength %}
-                                                                                         <ul class="dl-submenu">
-                                                                                         	<li><a href="{{ listurl1 }}"  class="active-subcat">{{fifthLevelCategoryArray['name']}}</a></li>
-                                                                                             {% for sixthLevelCategoryId, sixthLevelCategoryArray in fifthLevelCategoryArray['children'] %}
-                                                                                                 <li class="last-level">
-                                                                                                    {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, sixthLevelCategoryArray['full_slug']) %}
-                                                                                                    <a href="{{ listurl1 }}">{{sixthLevelCategoryArray['name']}}</a>
-                                                                                                 </li>
-                                                                                             {% endfor %}
-                                                                                         </ul>
-                                                                                     {% endif %}
-                                                                                     </li>
-                                                                                 {% endfor %}
-                                                                             </ul>
-                                                                         {% endif %}
-                                                                     {% endfor %}
-                                                                     </li>
-                                                                 </ul>
-                                                             {% endif %}
-                                                             </li>
-                                                         {% endfor %}
-                                                     </ul>
-                                                 {% endif %}
+                            <li {% if thirdLevelLength %}class="has-dropdown"{% else %}class="last-level"{% endif %}>
+                            {% if secondLevelCategoryArray['is_static'] is defined and secondLevelCategoryArray['is_static'] %}
+                                {% set listurl1 = secondLevelCategoryArray['link_url'] %}
+                            {% else %}
+                                {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, secondLevelCategoryArray['full_slug']) %}
+                            {% endif %}
+                            <a href="{{ listurl1 }}" class="main_category">{% if secondLevelCategoryArray['class'] is defined %}<span class="{{secondLevelCategoryArray['class']}} mob-adul-menu-icons">&nbsp;</span>{% endif %}{% if secondLevelCategoryArray['is_static'] is defined and secondLevelCategoryArray['is_static'] %} {{secondLevelCategoryArray['link_text']}} {% else %}{{secondLevelCategoryArray['name']}}{% endif %} <span>({{ secondLevelCategoryArray['count'] is defined?secondLevelCategoryArray['count']|number_format:0}} {{'ads'|trans()}})</span></a>
+                            {% if thirdLevelLength %}
+                                 <ul class="dropdown">
+                                     {% for thirdLevelCategoryId, thirdLevelCategoryArray in secondLevelCategoryArray['children'] %}
+                                        {% set fourthLevelLength = 0 %}
+                                        {% if thirdLevelCategoryArray['children'] is defined and thirdLevelCategoryArray['children']|length %}
+                                            {% set fourthLevelLength = thirdLevelCategoryArray['children']|length %}
+                                        {% endif %}
+                                        <li {% if fourthLevelLength %}class="has-dropdown"{% else %}class="last-level"{% endif %}>
+                                        {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, thirdLevelCategoryArray['full_slug']) %}
+                                         <a href="{{ listurl1 }}">{{thirdLevelCategoryArray['name']}}</a>
+                                         {% if fourthLevelLength %}
+                                             <ul class="dropdown">
+                                                 {% for fourthLevelCategoryId, fourthLevelCategoryArray in thirdLevelCategoryArray['children'] %}
+                                                    {% set fifthLevelLength = 0 %}
+                                                    {% if fourthLevelCategoryArray['children'] is defined and fourthLevelCategoryArray['children']|length %}
+                                                        {% set fifthLevelLength = fourthLevelCategoryArray['children']|length %}
+                                                    {% endif %}
+                                                     <li {% if fifthLevelLength %}class="has-dropdown"{% else %}class="last-level"{% endif %}>
+                                                     {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, fourthLevelCategoryArray['full_slug']) %}
+                                                     <a href="{{ listurl1 }}">{{fourthLevelCategoryArray['name']}}</a>
+                                                     {% if fifthLevelLength %}
+                                                         <ul class="dropdown">
+                                                             {% for fifthLevelCategoryId, fifthLevelCategoryArray in fourthLevelCategoryArray['children'] %}
+                                                                {% set sixthLevelLength = 0 %}
+                                                                {% if fifthLevelCategoryArray['children'] is defined and fifthLevelCategoryArray['children']|length %}
+                                                                    {% set sixthLevelLength = fifthLevelCategoryArray['children']|length %}
+                                                                {% endif %}
+                                                                <li {% if sixthLevelLength %}class="has-dropdown"{% else %}class="last-level"{% endif %}>
+                                                                {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, fifthLevelCategoryArray['full_slug']) %}
+                                                                 <a href="{{ listurl1 }}">{{fifthLevelCategoryArray['name']}}</a>
+                                                                 {% if sixthLevelLength %}
+                                                                     <ul class="dropdown">
+                                                                         {% for sixthLevelCategoryId, sixthLevelCategoryArray in fifthLevelCategoryArray['children'] %}
+                                                                             <li class="last-level">
+                                                                                {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, sixthLevelCategoryArray['full_slug']) %}
+                                                                                <a href="{{ listurl1 }}">{{sixthLevelCategoryArray['name']}}</a>
+                                                                             </li>
+                                                                         {% endfor %}
+                                                                     </ul>
+                                                                 {% endif %}
+                                                                 </li>
+                                                             {% endfor %}
+                                                         </ul>
+                                                     {% endif %}
+                                                 {% endfor %}
                                                  </li>
-                                                 
-                                            {% endfor %}
-                                            <li class="last-level">
-                                                {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}
-                                                    {% set staticPageUrls = fetch_repository('FaContentBundle:SeoTool').getLandingPageStaticPageUrlArray('motors', container, location_id) %}
-                                                    {% if staticPageUrls['Classic cars'] is defined %}
-                                                        <a href="{{ staticPageUrls['Classic cars'] }}">Classic Cars</a>
-                                                    {% endif %}
-                                                 {% endif %}
-                                            </li>
-                                            <li class="last-level">
-                                                {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
-                                                    {% set freeToCollectorUrl = container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID'), 'item__ad_type_id' : constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_TYPE_FREETOCOLLECTOR_ID'), 'item__location': location}) %}
-                                                    {% if freeToCollectorUrl %}
-                                                        <a href="{{ freeToCollectorUrl }}">Free to Collector</a>
-                                                    {% endif %}
-                                                 {% endif %}
-                                            </li>
-                                    </ul>
-                                {% endif %}
-                            </li>
-                        {% endfor %}
+                                             </ul>
+                                         {% endif %}
+                                         </li>
+                                     {% endfor %}
+                                 </ul>
+                                   </li>
+                             {% endif %}
+                               
+                                 
+                            {% endfor %}
+                        	<li class="last-level">
+                        		{% if thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox %}
+                            		<a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" ><span class="mob-adult mob-adul-menu-icons">&nbsp;</span>Live Sex Cams</a>
+                            		<a href="https://engine.partylemons.com/?414907182" rel="nofollow" target="_blank" ><span class="mob-adult mob-adul-menu-icons">&nbsp;</span>MILF Hookups</a>
+                        		{# {% else %}
+                            		<a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" ><span class="mob-adult mob-adul-menu-icons">&nbsp;</span>Live Sex Cams</a>
+                            		<a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" ><span class="mob-adult mob-adul-menu-icons">&nbsp;</span>MILF Hookups</a> #}
+                	            {% endif %}
+                    		</li>
+                        {% endif %}
+                {% endfor %}
                     </ul>
         			</div>
         		</div>

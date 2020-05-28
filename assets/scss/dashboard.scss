@@ -801,8 +801,6 @@
     background: #FFFFFF;
 }
 .drag-ins-hr {
-
-    background: url('/Fafrontend/images/icons/upload-image.png') no-repeat;
     padding: 0 0 0 26px;
     margin-bottom: 10px;
     min-height: 15px;
@@ -811,8 +809,6 @@
     background-size: 20px 15px;
 }
 .drag-ins-vr {
-
-    background: url('/Fafrontend/images/icons/upload-image.png') no-repeat;
     padding: 43px 0 0 0;
     margin: 10px 0;
     background-position: center top;
@@ -877,7 +873,6 @@
     max-height: 98px;
     max-width: 130px;
     cursor: move;
-    cursor: url('/Fafrontend/images/icons/move-cursor.png') 4 12,auto;
 }
 .adimg-thumb .edit-img {
     padding: 5px 27px 7px !important;
@@ -932,7 +927,6 @@
     right: 18px;
     top: 12px;
     height: 18px !important;
-    background: url('/Frontend/images/icons/cross.svg') no-repeat center center
 }
 
 .db-notifications .alert-box .alert-icon {
@@ -1329,17 +1323,11 @@ textarea[rows] {
 	margin-top: 15px;
 	border-top: solid 1px #FFFFFF;
 }
-.my-msgs-icon {
-    background: url('/Frontend/images/icons/messages-icon.svg') no-repeat 0 4px;
-}
 .manage-my-items {
     background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-278%20401.9%2040%2040%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23FFFFFF%3B%7D%0D%0A%09.st1%7Bfill%3A%23313133%3Bstroke%3A%23313133%3Bstroke-width%3A2%3B%7D%0D%0A%09.st2%7Bfill%3A%23A8DC28%3B%7D%0D%0A%3C/style%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-241.1%20419c-0.3-2.9-1.3-5.6-2.9-8h-15.9v8H-241.1z%22/%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-243.9%20430.7c1.5-2.3%202.5-5.1%202.8-8h-18.7v8H-243.9z%22/%3E%3Ctitle%3Eicon%20manage%20my%20ads%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%281.000000%2C%201.000000%29%22%3E%3Ccircle%20class%3D%22st1%22%20cx%3D%22-260%22%20cy%3D%22419.9%22%20r%3D%2218%22/%3E%3Cpath%20class%3D%22st2%22%20d%3D%22M-244.9%20429.7c1.5-2.3%202.5-5.1%202.8-8h-18.7v8H-244.9z%22/%3E%3Crect%20x%3D%22-270.8%22%20y%3D%22421.7%22%20class%3D%22st2%22%20width%3D%228%22%20height%3D%228%22/%3E%3Cpath%20class%3D%22st2%22%20d%3D%22M-242.1%20418c-0.3-2.9-1.3-5.6-2.9-8h-15.9v8H-242.1z%22/%3E%3Crect%20x%3D%22-270.8%22%20y%3D%22410%22%20class%3D%22st2%22%20width%3D%228%22%20height%3D%228%22/%3E%3C/g%3E%3C/svg%3E') no-repeat 0 4px;
 }
 .recent-view-icon {
     background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%220%200%2040%2040%22%20version%3D%221.1%22%3E%3Ctitle%3EIcon%20recent%20view%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20stroke%3D%22none%22%20stroke-width%3D%221%22%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Ccircle%20fill%3D%22%23313133%22%20cx%3D%2218%22%20cy%3D%2218%22%20r%3D%2218%22/%3E%3Cpath%20d%3D%22M18%2026.1C24.5%2026.1%2029.7%2018.9%2029.7%2018.9%2029.7%2018.9%2024.5%2011.7%2018%2011.7%2011.5%2011.7%206.3%2018.9%206.3%2018.9%206.3%2018.9%2011.5%2026.1%2018%2026.1L18%2026.1Z%22%20fill%3D%22%23A8DC28%22/%3E%3Ccircle%20fill%3D%22%23313133%22%20cx%3D%2218%22%20cy%3D%2218.9%22%20r%3D%223.6%22/%3E%3Ccircle%20fill%3D%22%23A8DC28%22%20cx%3D%2218%22%20cy%3D%2218.9%22%20r%3D%221.8%22/%3E%3C/g%3E%3C/svg%3E') no-repeat 0 4px;
-}
-.my-saved-searches {
-    background: url('/Frontend/images/icons/saved-searches-icon.svg') no-repeat 0 4px;
 }
 .db-my-favourites {
     background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-379%20216%2040%2040%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23FFFFFF%3B%7D%0D%0A%09.st1%7Bfill%3A%23313133%3Bstroke%3A%23313133%3Bstroke-width%3A2%3B%7D%0D%0A%09.st2%7Bfill%3A%23A8DC28%3B%7D%0D%0A%3C/style%3E%3Ccircle%20class%3D%22st0%22%20cx%3D%22-359%22%20cy%3D%22236%22%20r%3D%2218%22/%3E%3Ccircle%20class%3D%22st0%22%20cx%3D%22-359%22%20cy%3D%22236%22%20r%3D%2218%22/%3E%3Ctitle%3Eicon%20my%20favourites%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-456.000000%2C%20-2381.000000%29%22%3E%3Cg%20transform%3D%22translate%28447.000000%2C%20518.000000%29%22%3E%3Cg%20transform%3D%22translate%280.000000%2C%201856.000000%29%22%3E%3Cg%20transform%3D%22translate%2811.000000%2C%200.000000%29%22%3E%3Cg%20transform%3D%22translate%280.000000%2C%209.000000%29%22%3E%3Ccircle%20class%3D%22st1%22%20cx%3D%22-361%22%20cy%3D%22234%22%20r%3D%2218%22/%3E%3Ccircle%20class%3D%22st1%22%20cx%3D%22-361%22%20cy%3D%22234%22%20r%3D%2218%22/%3E%3Cpath%20class%3D%22st2%22%20d%3D%22M-355%20224.6c2.2%200.2%204.6%202.2%205%206v1.3c-0.3%203.6-3%208.1-11%2013.7%20-8-5.6-10.7-10.1-11-13.7v-1.3c0.3-3.8%202.8-5.8%205-6%200.4%200%200.7-0.1%201-0.1%202.5%200%203.7%201.1%205.1%202.7%201.4-1.6%202.6-2.7%205.1-2.7C-355.6%20224.5-355.3%20224.5-355%20224.6z%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat 0 4px;
@@ -1742,9 +1730,6 @@ textarea[rows] {
     margin-left: -9px;
     border-style: solid;
     border-width: 7px;
-}
-.dealer-badge {
-    background: url('/Frontend/images/trusted-badges/dealer-badge.svg') no-repeat 0 5px;
 }
 .trusted-user {
     width: 120px;
@@ -2606,7 +2591,6 @@ textarea[rows] {
     box-shadow: inset 0 1px 0 0 #fff, inset 0 -1px 0 0 #CBD5D9;
 }
 .sold-icon {
-    background: url('/Fafrontend/images/icons/sold-grey.svg') no-repeat;
     width: 41px;
     height: 19px;
     display: inline-block;
@@ -2729,7 +2713,6 @@ textarea[rows] {
     background: transparent !important;
 }
 .visa {
-    background: url('/Frontend/images/payment/visa.png') no-repeat 0 0 / 67px 42px;
     display: inline-block;
     width: 67px;
     height: 42px;
