@@ -332,7 +332,8 @@ button.signup-fb-btn.expand {
 }
 
 #home-search .looking-for input[type="text"], .site-search .search-box input[type="text"] {
-    border-radius: 0 !important;
+	border-radius: 0 !important;
+	border: 0px !important;
 }
 .paa-footer-links {column-count: 4;} 
 .paypal-acc-btn {
@@ -498,7 +499,11 @@ button.signup-fb-btn.expand {
 }
 .find-all .select2-choice, .find-all .select2-choice:hover, .find-all .select2-choice:focus, .find-all .select2-choice:active {
     border-top-left-radius: 4px !important;
-    border-bottom-left-radius: 4px !important;
+	border-bottom-left-radius: 4px !important;
+	border: 0px !important;
+}
+#top_search_location, #landingpage_search_location {
+	z-index: 999 !important;
 }
 /* remove arrow for adul */
 .top-bar-section .real-desktop li:last-child .main_category{
@@ -569,9 +574,15 @@ footer a:hover, .footer-head:hover, .pkg-includes a {
     box-shadow: 0 0 19px 0 rgba(74, 74, 74, 0.5) !important;
 }
 .recommended-div.listing .recommended-more .outer-btn {
-    width: 30%;
+    width: 30% !important;
 }
-
+#list_similar_adverts .listing .list-miles {
+	text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    padding-right: 0px;
+    width: 50%;
+}
 @media only screen and (min-width: 760px) {
 	#package_purchase_form .equalizer-inner, #package_purchase_form .pkg-columns {
 	    display: grid !important;

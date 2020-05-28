@@ -559,6 +559,12 @@ footer a:hover, .footer-head:hover, .pkg-includes a {
 }
 @media (max-width: 640px) {
   .button.special { padding: 17px 6px 22px 6px !important;  }
+  #home-search .adult-loc-search.location {
+	    margin-top: 8px !important;
+	}
+	.tagline {
+	    margin-bottom: 20px !important;
+	}
 }
 @media (min-width: 600px) {
     .myacc-details {
@@ -702,7 +708,7 @@ footer a:hover, .footer-head:hover, .pkg-includes a {
         font-family: "Poppins-SemiBold" !important;
     }
     .top-bar-section .login-menu li:not(.has-form) a:not(.button) {
-        background: $common-text-color !important;
+        background: $accordian-head-color !important;
         border-right: 1px solid $common-text-color !important;
         box-shadow: none !important;
     }
@@ -1841,7 +1847,7 @@ a.mobpaabtn {
 }
 
 .recommended-div.listing .recommended-more .outer-btn {
-    width: 30%;
+    width: 30% !important;
 }
 
 .adul-tablet-menu {
@@ -2548,7 +2554,13 @@ a {
 .details-price a {
   color: $adul-accent1-dark-color !important;
 }
-
+#list_similar_adverts .listing .list-miles {
+	text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    padding-right: 0px;
+    width: 50%;
+}
 @media only screen and (min-width: 40.063em) {
   .top-bar-section li.active:not(.has-form) a:not(.button), .no-js .top-bar-section ul li:active > a {
     background: $adul-accent1-dark-color !important;

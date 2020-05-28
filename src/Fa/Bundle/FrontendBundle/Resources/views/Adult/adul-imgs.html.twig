@@ -1,5 +1,6 @@
 {% set container = fetch_container_instance() %}
 {% set imgAwsUrl = container.getParameter('fa.static.aws.url')~'/uploads/bundles' %}
+{% set staticimgAwsUrl = container.getParameter('fa.static.aws.url') %}
 <style>
 .name a.adul-logo img { content: url('/bundles/fafrontend/images/Fad-Adult-logo.svg') !important; }
 .adult-modal { background-image:url('{{ imgAwsUrl }}/adul/adul-warning.svg') !important; } 
@@ -169,6 +170,7 @@
 	    background: url('/bundles/fafrontend/images/search-icon.svg') no-repeat center center / 16px 16px, linear-gradient(135deg, #A75BD8 0%, #E62EEB 100%) aliceblue !important;
 	} 
 } 
+
 @media only screen and (min-width:320px) and (max-width:559px){
  .top-bar .toggle-topbar.menu-icon a span { background: url('/bundles/fafrontend/images/menu-icon.svg') no-repeat !important; }
 }
@@ -178,12 +180,13 @@
      }
 } 
 
+
 @media only screen and (min-width: 320px) and (max-width: 640px) {
     .top-bar .toggle-topbar.menu-icon a span.menu-on {
         background: url('{{ imgAwsUrl }}/adul/menu-icon-on.svg') no-repeat !important;
     }
     .parallax-mirror, .parallax-window {
-        background-image: url('{{ imgAwsUrl }}/adul/hero-homepage-m.png') !important;
+        background-image: url('{{ imgAwsUrl }}/adul/hero-homepage-s.png') !important;
      }
 } 
 </style>
