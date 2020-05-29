@@ -3657,6 +3657,28 @@ HTML;
         }
     }
 
+    public function getIndividualUpsellModalDetails($upsellId) {
+        $upsellModalDetail = array();
+        switch ($upsellId) {
+            case 5:
+            case 51:
+            case 54:
+                $upsellModalDetail['title'] = 'Featured ad';
+                $upsellModalDetail['name'] = 'featuredTopUpsellModal';
+                break;
+        }
+        return $upsellModalDetail;
+    }
+    
+    public static function dateDiffInDays($date1, $date2)
+    {
+        // Calulating the difference in timestamps
+        $diff = $date2 - $date1;
+        
+        // 1 day = 24 hours
+        // 24 * 60 * 60 = 86400 seconds
+        return abs(round($diff / 86400));
+    } 
     public static function checkImageExistOnAws($container, $imageUrl)
     {
         $client = new S3Client([

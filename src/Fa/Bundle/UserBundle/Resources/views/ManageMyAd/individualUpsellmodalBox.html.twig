@@ -1,0 +1,157 @@
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+{% set container = fetch_container_instance() %}
+{% set packageIdArray = {} %}
+{% set packageId = '' %}
+
+{% set adRootCategoryId = null %}
+{% block body %}
+{{ include('FaUserBundle:ManageMyAd:individualUpsellmodalBox-css.html.twig') }}
+<a class="close-reveal-modal closeFeaturedUpsell" style="display:{% if popup_title is defined %}none{% else %}block{% endif %}">×</a> 
+<h5 class="modal-title text-center">{{ individualUpsellModalDetails['title'] }}</h5>
+<div class="individual-upsell-modal-content fe-modal-content">
+    <div data-alert="" class="alert-box alert radius" style="display:none;" id="deadlock_error_main">
+        <span class="alert-icon">&nbsp;</span>
+        <span id="deadlock_error"></span>
+        <a href="javascript:void(0)" class="close">×</a>
+    </div>   
+   {{ form_start(form, {'attr': {'novalidate': '', 'id': 'cyber_source_form'}}) }} 
+   <div class="modal-form-body">
+   {% if individualUpsellArr|length %} 
+    	{% set upsellPrice = format_currency(individualUpsellArr['price']) %}              
+        <div class="small-24 medium-12 large-12 columns upsell-l-block">
+            <div class="upsell-pkg-box">
+	        	<div class="upsell-pkg-inner-box">
+	        		<div class="upsell-head">{{ individualUpsellArr['title'] }}</div>
+	        		<div class="upsell-pkg-left">
+	        			<span class="upsell-img"></span>
+	        		</div>
+	        		<div class="upsell-pkg-right">
+	        		    <div class="upsell-subtitle">{{ individualUpsellArr['description'] }}</div>
+	        		</div>
+	        		<div class="upsell-price-corner"></div>
+	        		<div class="upsell-price">
+                    	<div class="price-count">{{ upsellPrice }}</div>
+                    	<div class="per-ad-text">per ad</div>
+                    </div>
+	        	</div>
+        	</div>
+        </div>         
+    {% endif %}    
+	        
+	    	<div class="small-24 medium-12 large-12 columns individual-upsell-payment-buttons upsell-r-block">
+	    		 {% set ccUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_CYBERSOURCE')}) %}
+                 {% set catPath = '' %}
+          
+				<ul id="payment_method_id" class="payment-card-option-block">				
+					{% if isAdultAdvertPresent is defined and isAdultAdvertPresent==0 %}
+					<li class="payment-buttons-block upgrade-payments">
+						{% set paypalUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL')}) %}
+                    	<div class="paypal-box" onclick="paypalIndividualUpsellPaymentProcess('{{ individualUpsellModalDetails['name'] }}', {{ individualUpsellArr['id'] }}, {{ adId }});"> </div>
+					</li>
+					{% endif %}
+					
+					{% for choice in form.payment_method.vars.choices %}
+                    	<li>
+                        	<div class="label-inline white-radio">
+                                <span class="custom-radio {% if form.payment_method.vars.data == choice.value %}checked{% endif %} "><input onclick="return showHideCardDetail();" type="radio" value="{{ choice.value }}" {% if form.payment_method.vars.data == choice.value %}checked="checked"{% endif %} name="{{ form.payment_method.vars.full_name }}" id="{{ form.payment_method.vars.id }}_{{ choice.value }}" /></span>
+                                <label for="{{ form.payment_method.vars.id }}_{{ choice.value }}">{{ choice.label|raw }}</label>
+                            </div>
+                    	</li>
+                    {% endfor %}
+                    {% do attribute(form, 'payment_method').setRendered %}	    			
+				</ul>
+	    	</div>
+	    	
+	    	<div class="clearfix"></div>
+	    	<div id="payment-form">
+	    	    {{ include('FaUserBundle:ManageMyAd:upgradePaymentForm.html.twig', {'form': form }) }}
+	    	    <div id="featuredAdIdWithUpsellCategory" data-selfeaturedid="0"></div>
+			</div>
+			
+			
+	   	    <div class="medium-14 medium-offset-5 columns remove-item-btn mb40">	   	    	
+                <div id="pay_now_btn" class="remove-item-btn">
+                    {{ form_widget(form.save, {'attr': {'class':'button secondary-btn-1 thin-btn expand mt20'}, 'label': 'Pay'}) }}
+                </div>               
+	    	</div>
+		</div>
+	{{ form_end(form) }}
+	<div class="clearfix"></div>
+    </div>        
+<script src="{{ asset_url('fafrontend/js/jquery.equalizer.min.js') }}"></script>
+<script src="{{ asset_url('facore/js/jquery.query-object.js') }}"></script>
+<script language="javascript" type="text/javascript">
+    $(document).ready(function(){
+        bindFormErrorEvents();
+        bindCustomRadioEvent();
+        bindCustomCheckboxEvent();
+
+        if (!$('.credit_btn').length) {
+            $('.free-button-spacing').each(function() {
+                $(this).removeClass('free-button-spacing');
+            });
+        }
+        
+        //checked the default first saved payment
+		{% if form.payment_method.vars.choices|length > 1 %}
+			triggerFirstCheckBox();
+	    {% endif %}
+
+	    {% if (gaStr is defined and gaStr != '') %}
+            ga('send', 'event', 'Category Upsell - Checkout', 'Form error', '{{gaStr}}');
+            triggerFirstCheckBox();
+        {% endif %}
+	    
+        showHideCardDetail();
+    });
+
+    function triggerFirstCheckBox() {
+    	$("#payment_method_id input:radio[name='fa_payment_cyber_source_checkout[payment_method]']:first").attr('checked', true);
+	    $("#payment_method_id input:radio[name='fa_payment_cyber_source_checkout[payment_method]']:first").trigger('click');
+	    return true;
+    }
+    
+    $("#cyber_source_form").submit(function(event) {  
+    	var paymentMethod = $("input[name='fa_payment_cyber_source_checkout[payment_method]']:checked").val();
+    	if(typeof paymentMethod  === "undefined") {
+    		$("#payment_method_id input:radio[name='fa_payment_cyber_source_checkout[payment_method]']:first").attr('checked', true);
+    	    $("#payment_method_id input:radio[name='fa_payment_cyber_source_checkout[payment_method]']:first").trigger('click');
+            return false
+    	}
+
+        blockElement('#upgradeBasicAdToFeaturedModal');
+        // Stop form from submitting normally
+        event.preventDefault();
+       
+        var packageId = '{{ packageId }}';
+        var paymentMethod = $("input[name='fa_payment_cyber_source_checkout[payment_method]']:checked").val();     
+        $.ajax({
+            type: "POST",
+            url: "{{app.request.getUri()}}",
+            data: new FormData(this),
+            contentType: false,
+            processData:false,
+        })
+        .done(function(response) {
+            if(response.error && response.error != '') {
+            	unblockElement('#upgradeBasicAdToFeaturedModal');
+            	$("#post-all-errors").html('<small class="error">'+response.error+'<br></small>');
+				return false;
+            } else if(response.htmlContent.success) { 
+            	window.location.href = response.htmlContent.redirectUrl;
+            } else {
+            	 unblockElement('#upgradeBasicAdToFeaturedModal');
+            	$('#payment-form').html(response.htmlContent);
+            	if (paymentMethod == 0) {
+                    $('#card_detail').show();
+                    $('#card_detail_save').show();
+                }
+            }            
+        });
+    });
+
+</script>
+
+{{ include('FaUserBundle:ManageMyAd:individualUpsellJs.html.twig') }}
+{% endblock %}
+

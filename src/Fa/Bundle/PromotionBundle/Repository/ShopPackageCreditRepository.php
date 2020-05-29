@@ -49,4 +49,28 @@ class ShopPackageCreditRepository extends EntityRepository
         ->getQuery()
         ->getResult();
     }
+    
+    /**
+     * Get featured credits by package.
+     *
+     * @param integer $packageId
+     */
+    public function getFeaturedCreditsByPackageId($packageId)
+    {
+        return $this->createQueryBuilder(self::ALIAS)
+        ->andWhere(self::ALIAS.'.package = '.$packageId)
+        ->andWhere('FIND_IN_SET(6, '.self::ALIAS.'.package_sr_no) > 0 or FIND_IN_SET(3, '.self::ALIAS.'.package_sr_no) > 0')
+        ->getQuery()
+        ->getResult();
+    }
+    
+    public function getCreditByPackageCategoryType($packageId,$package_sr_no,$categoryId) {
+        return $this->createQueryBuilder(self::ALIAS)
+        ->andWhere(self::ALIAS.'.package = '.$packageId)
+        ->andWhere(self::ALIAS.'.package_sr_no = '.$package_sr_no)
+        ->andWhere(self::ALIAS.'.category = '.$categoryId)
+        ->getQuery()
+        ->getResult();
+    }
+        
 }

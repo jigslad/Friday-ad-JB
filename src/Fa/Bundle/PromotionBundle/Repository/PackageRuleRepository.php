@@ -296,4 +296,48 @@ class PackageRuleRepository extends EntityRepository
             return $packages;
         }
     }
+    
+    public function getFeaturedPackageByCategoryId($categoryId, $locationGroupIdArray, $container = null)
+    {
+        $query = $this->createQueryBuilder(self::ALIAS)
+        ->select(self::ALIAS, PackageRepository::ALIAS)
+        ->leftJoin(self::ALIAS.'.package', PackageRepository::ALIAS)
+        ->leftJoin(PackageRepository::ALIAS.'.upsells', UpsellRepository::ALIAS)
+        ->andWhere(PackageRepository::ALIAS.'.status = 1')
+        ->andWhere(PackageRepository::ALIAS.'.package_for = :package_for')
+        ->setParameter('package_for', 'ad')
+        ->andWhere(self::ALIAS.'.category = :categoryId')
+        ->setParameter('categoryId', $categoryId)
+        ->andWhere(PackageRepository::ALIAS.'.is_admin_package = 0')
+        ->andWhere(PackageRepository::ALIAS.'.role = :userRole')
+        ->setParameter('userRole', RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID)
+        ->andWhere(UpsellRepository::ALIAS.'.type = :featured_upsell_type')
+        ->setParameter('ad_user_package_upsell_type', UpsellRepository::UPSELL_TYPE_TOP_ADVERT_ID)
+        ->addOrderBy(PackageRepository::ALIAS.'.role', 'DESC')
+        ->addOrderBy(PackageRepository::ALIAS.'.price', 'ASC')
+        ->addGroupBy(PackageRepository::ALIAS.'.id');
+        
+        //add location group.
+        if (!empty($locationGroupIdArray)) {
+            $query->andWhere(self::ALIAS.'.location_group IN (:locationGroupId) OR '.self::ALIAS.'.location_group IS NULL')
+            ->setParameter('locationGroupId', $locationGroupIdArray);
+        } else {
+            $query->andWhere(self::ALIAS.'.location_group IS NULL');
+        }
+
+        $packages =  $query->getQuery()->getResult();
+        
+        if (!count($packages) && $categoryId) {
+            $parentCategoryIds = array_keys($this->_em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId, false, $container));
+            array_pop($parentCategoryIds);
+            $parentCategoryIds = array_reverse($parentCategoryIds);
+            if (count($parentCategoryIds)) {
+                foreach ($parentCategoryIds as $parentCategoryId) {
+                    return $this->getFeaturedPackageByCategoryId($parentCategoryId, $locationGroupIdArray, $container);
+                }
+            }
+        }
+        
+        return $packages;
+    }
 }

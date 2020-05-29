@@ -17,3 +17,7 @@ faPromotionBundle_profile_upsell:
 FaPromotionBundle_package_discount_code:
         resource: '@FaPromotionBundle/Resources/config/routing/package_discount_code_admin.yml'
         prefix:   /package_discount_code
+        
+FaPromotionBundle_category_upsell:
+        resource: "@FaPromotionBundle/Resources/config/routing/category_upsell_admin.yml"
+        prefix:   /category_upsell
