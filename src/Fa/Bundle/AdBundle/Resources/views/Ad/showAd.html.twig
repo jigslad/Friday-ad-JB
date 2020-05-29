@@ -1638,7 +1638,97 @@
 
 //]]>
 </script>
+    <!-- Google TAG Manager Start -->
+    {# Ad Package @Jigar Lad #}
+    {% set adUserPackageRepository = fetch_repository('FaAdBundle:AdUserPackage') %}
+    {% set adUserPackage = adUserPackageRepository.getAdPackageArrayByAdId(adDetail.id) %}
+    {% for ad in adUserPackage %}
+        {% set adPackage = ad.package_id %}
+    {% endfor %}
+
+    {# Location Group @Jigar Lad #}
+    {% set locationGroupReposetry = fetch_repository('FaEntityBundle:LocationGroup') %}
+    {% set locationGroup = locationGroupReposetry.getLocationGroupNameByAdID(adId)%}
+
+    {# Category @Jigar Lad #}
+    {% set bannerCategoryPath = categoryRepository.getCategoryPathArrayById(adCategoryId, false, container) %}
+    {% set categoryArray = [] %}
+    {% for category in bannerCategoryPath %}
+        {% set categoryArray = categoryArray|merge([category]) %}
+    {% endfor %}
+
+    {# Response Type @Jigar Lad #}
+    {% if adDetail.user is defined %}
+        {% if adDetail.user.contact_through_phone == 'true' and adDetail.user.contact_through_email == 'true' %}
+            {% set responseType = 'both' %}
+        {% elseif adDetail.user.contact_through_phone == 'true' %}
+            {% set responseType = 'phone' %}
+        {% elseif adDetail.user.contact_through_email == 'true' %}
+            {% set responseType = 'email' %}
+        {% else %}
+            {% set responseType = 'node' %}
+        {% endif %}
+    {% else %}
+        {% if adDetail.a_user_phone_number_s is defined %}
+            {% set responseType = 'phone' %}
+        {% else %}
+            {% set responseType = 'none' %}
+        {% endif %}
+    {% endif %}
+    {% if userTypeText == 'Business ad' %}
+        {% set businessname = adDetail.a_s_business_name_s is defined ? adDetail.a_s_business_name_s :'Business advertiser' %}
+    {% else %}
+        {% set businessname = 'Private seller' %}
+    {% endif %}
+
+    {# Location @Jigar Lad #}
+    {% set locationReposetry = fetch_repository('FaEntityBundle:Location') %}
+    {% if adDetail.a_l_main_town_id_i is defined %}
+        {% set Country = locationReposetry.getCountyByTownId(adDetail.a_l_main_town_id_i)%}
+        {% set Town = locationReposetry.find(adDetail.a_l_main_town_id_i)%}
+        {% set Town = Town.name %}
+    {% else %}
+        {% set Country = 'UK' %}
+        {% set Town = 'null' %}
+    {% endif %}
+    <script>
+        {# get date and create as new #}
+        var publishedDate = new Date(1000*{{ adDetail.a_published_at_i }});
+        var expiredDate = new Date(1000*{{ adDetail.a_expires_at_i }});
+
+        $( document ).ready(function() {
+            window.dataLayer = window.dataLayer || [];
+            dataLayer.push({
+                "adDetails":{
+                    "category": "{{ (categoryArray.0 is defined ? categoryArray.0 : '')|raw }}",
+                    "subCategory": "{{ (categoryArray.1 is defined ? categoryArray.1 : '')|raw }}",
+                    "subSubCategory": "{{ (categoryArray.2 is defined ? categoryArray.2 : '')|raw }}",
+                    "subSubSubCategory": "{{ (categoryArray.3 is defined ? categoryArray.3 : '')|raw }}",
+                    "id": '{{ adId }}',
+                    "photos": '{{ adDetail.a_total_images_i }}',
+                    "county": "{{ Country|raw }}",
+                    "locationGroup": "{{ (locationGroup.name is defined ? locationGroup.name : locationGroup)|raw}}",
+                    "town": "{{ Town|raw }}",
+                    "video": '{{ youtubeVideoUrl is not  null ? 'True' : 'False' }}',
+                    "paypalEnabled": '{{ showBuyNowWithPaypal ? 'True' : 'False'}}',
+                    "publishDate": publishedDate.getFullYear() + "/" + (publishedDate.getMonth() + 1) + "/" + publishedDate.getDate(),
+                    "expiryDate": expiredDate.getFullYear()  + "/" + (expiredDate.getMonth() + 1) + "/" + expiredDate.getDate(),
+                    "price": '{{ adDetail.a_price_d is defined ? adDetail.a_price_d : 0 }}',
+                    "package": "{{ adPackage is defined ? adPackage : 0 }}",
+                    "businessName": "{{ businessname }}",
+                    "businessType": "{{ userTypeText == 'Business ad' ? 'Business': 'Private' }}" ,
+                    "responseType": "{{ responseType }}" ,
+                    "logo": '{{ adDetail.user.company_logo is defined ? 'true' : 'false' }}'    //True if showing logo/profile pic, False if nothing (showing default FAD)
+                },
+            });
+            var pageObj = window.dataLayer.find(o => o['page']);
+            pageObj.page.adOwner = {{ allowAdEdit ? 'true' : 'false' }};
+        });
+
+    </script>
+    <!-- Google TAG Manager End -->
 {% endblock %}
+
 
 {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(adCategoryId, false, fetch_container_instance()) %}
 {% if (adDetail['user']['role_id'] is defined and adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or adDetail['user']['role_id'] is defined and adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
