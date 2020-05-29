@@ -25,7 +25,7 @@
                         {% if mobileDetectManager.isMobile() or mobileDetectManager.isTablet() %}
                             </a>
                         {% endif %}
-                    </h1><a class="button xs-btn-1" id="btn_reveal" href="javascript:toggleContactNumber();"><span class="btn-white-arrow"></span>{{'Reveal'|trans({}, 'frontend-contact-seller')}}</a>
+                    </h1><a class="button xs-btn-1 ga-callNowAd" id="btn_reveal" href="javascript:toggleContactNumber();"><span class="btn-white-arrow ga-callNowAd"></span>{{'Reveal'|trans({}, 'frontend-contact-seller')}}</a>
                 </div>
             {% endif %}
             {% if userSiteObj and userSiteObj.getPhone2() is not null %}
@@ -63,7 +63,7 @@
                 </li>
             </ul>
 
-            {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 button expand mt20 mb0'}}) }}
+            {{ form_widget(form.save, {'attr': {'class':'ga-sendEmailProfile secondary-btn-1 button expand mt20 mb0'}}) }}
         {% else %}
             {% for fieldName, fieldValue in form.children %}
                 {% do attribute(form, fieldName).setRendered %}

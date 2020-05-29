@@ -410,7 +410,7 @@
                         {% if not isSoldExpiredAdFlag and ((adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) or (adDetail['user'] is defined and showBuyNowWithPaypal)) %}
                             <div class="clearfix {% if ((adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined)) and (adDetail['user'] is defined and showBuyNowWithPaypal) or (isOneclickenqbutton == true) %}double-buttons{% endif %}">
                                 {% if (adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) %}
-                                    <a href="javascript:void(0);" onclick="return contactSeller('{{ adId }}', 'Contact Seller button');" id="fixed_contact_button_anchor" class="primary-btn-1 button cont-seller-btn{% if (isOneclickenqbutton == false) %} expand{% endif %}">
+                                    <a href="javascript:void(0);" onclick="return contactSeller('{{ adId }}', 'Contact Seller button','Sticky');" id="fixed_contact_button_anchor" class="primary-btn-1 button cont-seller-btn{% if (isOneclickenqbutton == false) %} expand{% endif %}">
                                         <span class="btn-txt">
                                             {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
                                                 {{'Apply'|trans({}, 'frontend-show-ad')}}
@@ -428,7 +428,7 @@
                                     </a>
                                 {% endif %}
                                 {% if adDetail['user'] is defined and showBuyNowWithPaypal %}
-                                        <a href="{{ path('buy_now', {'adId': adId}) }}" class="primary-btn-1 button expand paypal-btn"><span class="btn-txt">{{'Buy now'|trans({}, 'frontend-show-ad')}}</span><span class="paypal-icon">paypal</span></a>
+                                        <a href="{{ path('buy_now', {'adId': adId}) }}" class="primary-btn-1 button expand paypal-btn"><span class="btn-txt">{{'Buy now'|trans({}, 'frontend-show-ad')}}</span><span class="paypal-icon ga-payPaypal">paypal</span></a>
                                 {% endif %}
 
                                 {% if (isOneclickenqbutton == true) %}
@@ -647,9 +647,9 @@
                                 {% else %}
                                     {% set optHideOrRemove = 'hide' %}
                                 {% endif %}
-                                {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [orgAdDesc, optHideOrRemove]) %}
+                                {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [orgAdDesc, optHideOrRemove,'AdDetails']) %}
                                 {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), adDescWithReplacedPhone) %}
-                                {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [adId, adDescWithReplacedPhone, optHideOrRemove])) %}
+                                {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [adId, adDescWithReplacedPhone, optHideOrRemove,'AdDetails'])) %}
                             {% endif %}
 
                             {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
@@ -688,9 +688,9 @@
                             {{ include('FaAdBundle:Ad:showMapImages.html.twig', { 'googlemap_location_html': block('googlemap_location_html'), 'image_slider_html': block('image_slider_html'), 'allowAdEdit': allowAdEdit, 'imageZoomBannerExist': imageZoomBannerExist }) }}
 
                             {% if attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
-                                {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [orgAdDesc, optHideOrRemove]) %}
+                                {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [orgAdDesc, optHideOrRemove,'AdDetails']) %}
                                 {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), adDescWithReplacedPhone) %}
-                                {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [adId, adDescWithReplacedPhone, optHideOrRemove])) %}
+                                {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [adId, adDescWithReplacedPhone, optHideOrRemove,'AdDetails'])) %}
                             {% endif %}
 
                             {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
@@ -835,7 +835,7 @@
 
                         {% if (adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) %}
                             <div class="{{ contactBtnWidthClass }} columns">
-                                <a href="javascript:void(0);" id="contact_seller_btn_mob" onclick="return contactSeller('{{ adId }}', 'Contact Seller button');" class="primary-btn-1 button expand">
+                                <a href="javascript:void(0);" id="contact_seller_btn_mob" onclick="return contactSeller('{{ adId }}', 'Contact Seller button','Sticky');" class="primary-btn-1 button expand">
                                     {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
                                         {{'Apply'|trans({}, 'frontend-show-ad')}}
                                     {% else %}
@@ -1012,7 +1012,7 @@
             reportAd({{app.request.get('id')}});
         {% endif %}
         {% if app.user and app.request.cookies.has('contact_seller_flag') and app.request.cookies.get('contact_seller_flag') and app.request.cookies.get('contact_seller_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') and app.request.get('id') %}
-            contactSeller({{app.request.get('id')}}, 'Contact Seller button');
+            contactSeller({{app.request.get('id')}}, 'Contact Seller button', 'Sticky');
         {% endif %}
         {% if app.user and app.request.cookies.has('save_search_agent_flag') and app.request.cookies.get('save_search_agent_flag') and app.request.cookies.get('save_search_agent_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') %}
             createAlert({{app.request.get('id')}});
@@ -1212,8 +1212,16 @@
         });
     }
 
-    function contactSeller(id, callFrom)
+    function contactSeller(id, callFrom,type)
     {
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+
+            'event' : 'Ad Action',
+            'eventCategory':  'CTA',
+            'eventAction': 'Contact Seller button',
+            'eventLabel': type+' - '+id+'{{ catText }}'
+        });
         ga('send', 'event', 'CTA', callFrom, '{{ adId }}{{ catText }}');
         {% if adImages|length %}
             $.fancybox.close();
@@ -1501,6 +1509,22 @@
     function socialShare(adId, windowUrl, windowTitle, windowWidth, windowHeight)
     {
         openWindow(windowUrl, windowTitle, windowWidth, windowHeight);
+        let eventAction;
+        if (windowTitle == 'fb-share') {
+            eventAction = 'Facebook';
+        } else if (windowTitle == 'twitter-share') {
+            eventAction = 'Twitter';
+        } else {
+            eventAction = windowTitle;
+        }
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+
+            'event' : 'Options',
+            'eventCategory':  'Options',
+            'eventAction': eventAction,
+            'eventLabel': adId
+        });
         adEnquiryIncrement('social_share', adId);
         if (windowTitle == 'fb-share') {
             OneSignal.push(["sendTags", {'Facebook': 'share'}]);
@@ -1572,6 +1596,14 @@
 
     function gaSendForRecommendedSlot(url, domain, title) 
     {
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+
+            'event' : 'Options',
+            'eventCategory':  'Ad Details',
+            'eventAction': 'Sponsored Ad',
+            'eventLabel': {{ app.request.get('category_string') }}
+        });
         ga('send', 'event', 'Ad details', 'Recommended external ads', '{{ catText|trim('-') }}-'+domain+'-'+title);
         window.open(url, '_blank');
     }
@@ -1638,7 +1670,97 @@
 
 //]]>
 </script>
+    <!-- Google TAG Manager Start -->
+    {# Ad Package @Jigar Lad #}
+    {% set adUserPackageRepository = fetch_repository('FaAdBundle:AdUserPackage') %}
+    {% set adUserPackage = adUserPackageRepository.getAdPackageArrayByAdId(adDetail.id) %}
+    {% for ad in adUserPackage %}
+        {% set adPackage = ad.package_id %}
+    {% endfor %}
+
+    {# Location Group @Jigar Lad #}
+    {% set locationGroupReposetry = fetch_repository('FaEntityBundle:LocationGroup') %}
+    {% set locationGroup = locationGroupReposetry.getLocationGroupNameByAdID(adId)%}
+
+    {# Category @Jigar Lad #}
+    {% set bannerCategoryPath = categoryRepository.getCategoryPathArrayById(adCategoryId, false, container) %}
+    {% set categoryArray = [] %}
+    {% for category in bannerCategoryPath %}
+        {% set categoryArray = categoryArray|merge([category]) %}
+    {% endfor %}
+
+    {# Response Type @Jigar Lad #}
+    {% if adDetail.user is defined %}
+        {% if adDetail.user.contact_through_phone == 'true' and adDetail.user.contact_through_email == 'true' %}
+            {% set responseType = 'both' %}
+        {% elseif adDetail.user.contact_through_phone == 'true' %}
+            {% set responseType = 'phone' %}
+        {% elseif adDetail.user.contact_through_email == 'true' %}
+            {% set responseType = 'email' %}
+        {% else %}
+            {% set responseType = 'node' %}
+        {% endif %}
+    {% else %}
+        {% if adDetail.a_user_phone_number_s is defined %}
+            {% set responseType = 'phone' %}
+        {% else %}
+            {% set responseType = 'none' %}
+        {% endif %}
+    {% endif %}
+    {% if userTypeText == 'Business ad' %}
+        {% set businessname = adDetail.a_s_business_name_s is defined ? adDetail.a_s_business_name_s :'Business advertiser' %}
+    {% else %}
+        {% set businessname = 'Private seller' %}
+    {% endif %}
+
+    {# Location @Jigar Lad #}
+    {% set locationReposetry = fetch_repository('FaEntityBundle:Location') %}
+    {% if adDetail.a_l_main_town_id_i is defined %}
+        {% set Country = locationReposetry.getCountyByTownId(adDetail.a_l_main_town_id_i)%}
+        {% set Town = locationReposetry.find(adDetail.a_l_main_town_id_i)%}
+        {% set Town = Town.name %}
+    {% else %}
+        {% set Country = 'UK' %}
+        {% set Town = 'null' %}
+    {% endif %}
+    <script>
+        {# get date and create as new #}
+        var publishedDate = new Date(1000*{{ adDetail.a_published_at_i }});
+        var expiredDate = new Date(1000*{{ adDetail.a_expires_at_i }});
+
+        $( document ).ready(function() {
+            window.dataLayer = window.dataLayer || [];
+            dataLayer.push({
+                "adDetails":{
+                    "category": "{{ (categoryArray.0 is defined ? categoryArray.0 : '')|raw }}",
+                    "subCategory": "{{ (categoryArray.1 is defined ? categoryArray.1 : '')|raw }}",
+                    "subSubCategory": "{{ (categoryArray.2 is defined ? categoryArray.2 : '')|raw }}",
+                    "subSubSubCategory": "{{ (categoryArray.3 is defined ? categoryArray.3 : '')|raw }}",
+                    "id": '{{ adId }}',
+                    "photos": '{{ adDetail.a_total_images_i }}',
+                    "county": "{{ Country|raw }}",
+                    "locationGroup": "{{ (locationGroup.name is defined ? locationGroup.name : locationGroup)|raw}}",
+                    "town": "{{ Town|raw }}",
+                    "video": '{{ youtubeVideoUrl is not  null ? 'True' : 'False' }}',
+                    "paypalEnabled": '{{ showBuyNowWithPaypal ? 'True' : 'False'}}',
+                    "publishDate": publishedDate.getFullYear() + "/" + (publishedDate.getMonth() + 1) + "/" + publishedDate.getDate(),
+                    "expiryDate": expiredDate.getFullYear()  + "/" + (expiredDate.getMonth() + 1) + "/" + expiredDate.getDate(),
+                    "price": '{{ adDetail.a_price_d is defined ? adDetail.a_price_d : 0 }}',
+                    "package": "{{ adPackage is defined ? adPackage : 0 }}",
+                    "businessName": "{{ businessname }}",
+                    "businessType": "{{ userTypeText == 'Business ad' ? 'Business': 'Private' }}" ,
+                    "responseType": "{{ responseType }}" ,
+                    "logo": '{{ adDetail.user.company_logo is defined ? 'true' : 'false' }}'    //True if showing logo/profile pic, False if nothing (showing default FAD)
+                },
+            });
+            var pageObj = window.dataLayer.find(o => o['page']);
+            pageObj.page.adOwner = {{ allowAdEdit ? 'true' : 'false' }};
+        });
+
+    </script>
+    <!-- Google TAG Manager End -->
 {% endblock %}
+
 
 {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(adCategoryId, false, fetch_container_instance()) %}
 {% if (adDetail['user']['role_id'] is defined and adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or adDetail['user']['role_id'] is defined and adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}

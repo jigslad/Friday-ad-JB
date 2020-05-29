@@ -51,6 +51,14 @@ $(function() {
           if ('{{ field }}' == '#fa_paa_category_select_category_id') {
             var eventLabel = $("{{ field }}"+'_autocomplete').val() + ' - ' + ui.item.value + ' - ' + ui.item.index;
             autoCompleteCategoryName = ui.item.value + ' - ' + ui.item.index;
+            window.dataLayer = window.dataLayer || []
+            dataLayer.push({
+
+              'event' : 'PAA Category Selection',
+              'eventCategory':  'PAA - Step 1',
+              'eventAction': 'Select searching bar',
+              'eventLabel': eventLabel
+            });
             ga('send', 'event', 'PAA - Step 1', 'Select searching bar', eventLabel);
           }
           
@@ -138,6 +146,13 @@ $(function() {
             var ans = ($("{{ field }}"+'_autocomplete').val() in cache);
             if ('{{ field }}' == '#fa_paa_category_select_category_id' && ans == false) {
                 if ($("{{ field }}"+'_autocomplete').val().length == 2) {
+                    window.dataLayer = window.dataLayer || []
+                    dataLayer.push({
+                        'event' : 'PAA Category Selection Start',
+                        'eventCategory':  'PAA - Step 1',
+                        'eventAction':'Start searching bar',
+                        'eventLabel': ans
+                    });
                   ga('send', 'event', 'PAA - Step 1', 'Start searching bar', '');
                 }
             }

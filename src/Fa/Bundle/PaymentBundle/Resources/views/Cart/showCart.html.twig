@@ -62,8 +62,15 @@
 {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
 <script language="javascript" type="text/javascript">
 //<![CDATA[
-    function removeCartItem(transactionId, categoryPath)
+    function removeCartItem(transactionId, categoryPath,Package)
     {
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+            'event' : 'PAA Cart',
+            'eventCategory':  'PAA - Step Cart',
+            'eventAction': 'Delete',
+            'eventLabel': categoryPath - Package
+        });
         ga('send', 'event', 'PAA - Step Cart', 'Delete', categoryPath);
         if (confirm('{{'Are you sure you want to remove selected item?'|trans({}, 'frontend-cart')}}')) {
             route = Routing.generate('remove_cart_item', { 'transactionId': transactionId });
@@ -189,6 +196,13 @@
 
     function sendGaAndRedirect(redirectUrl, action, label)
     {
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+            'event' : 'PAA Cart',
+            'eventCategory':  'PAA - Step Cart',
+            'eventAction': action,
+            'eventLabel': label
+        });
         ga('send', 'event', 'PAA - Step Cart', action, label);
         window.location.href = redirectUrl;
     }

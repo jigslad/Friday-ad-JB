@@ -55,8 +55,8 @@
 {% endif %}
 
 {% if attribute(ad, constant(solrMapping ~ 'TITLE')) is defined %}
-    {% set ad = replace_value_in_array(ad, constant(solrMapping ~ 'TITLE'), staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [attribute(ad, constant(solrMapping ~ 'TITLE')), 'remove'])) %}
-    {% set ad = replace_value_in_array(ad, constant(solrMapping ~ 'TITLE'), staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [ad.id, attribute(ad, constant(solrMapping ~ 'TITLE')), 'remove'])) %}
+    {% set ad = replace_value_in_array(ad, constant(solrMapping ~ 'TITLE'), staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [attribute(ad, constant(solrMapping ~ 'TITLE')), 'remove',''])) %}
+    {% set ad = replace_value_in_array(ad, constant(solrMapping ~ 'TITLE'), staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [ad.id, attribute(ad, constant(solrMapping ~ 'TITLE')), 'remove',''])) %}
 {% endif %}
 
 {% set categoryPath = categoryRepository.getCategoryPathArrayById(categoryId, false, container) %}
@@ -152,8 +152,8 @@
             {% endif %}
             <div class="list-desc {{aff_desc_cls}} hide-for-small-only">
                 {% if attribute(ad, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
-                    {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [attribute(ad, constant(solrMapping ~ 'DESCRIPTION')), 'remove']) %}
-                    {% set adDescWithReplacedEmail = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [ad.id, adDescWithReplacedPhone, 'remove']) %}
+                    {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [attribute(ad, constant(solrMapping ~ 'DESCRIPTION')), 'remove','']) %}
+                    {% set adDescWithReplacedEmail = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [ad.id, adDescWithReplacedPhone, 'remove','']) %}
                     {{trim_text(adDescWithReplacedEmail, adListFields|length ? 150 : 250)|replace({"\\n": "<br />"})|raw}}
                 {% endif %}
             </div>
