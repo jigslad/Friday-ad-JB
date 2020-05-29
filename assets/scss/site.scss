@@ -583,6 +583,9 @@ footer a:hover, .footer-head:hover, .pkg-includes a {
     padding-right: 0px;
     width: 50%;
 }
+#left_search .crawlable-checkbox li {
+	display: flex !important;
+}
 @media only screen and (min-width: 760px) {
 	#package_purchase_form .equalizer-inner, #package_purchase_form .pkg-columns {
 	    display: grid !important;
