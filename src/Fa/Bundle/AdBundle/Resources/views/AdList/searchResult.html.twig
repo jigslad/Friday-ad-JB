@@ -667,8 +667,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
         {% endif %}
 
         $(window).scroll(function () {
-            if ($("#banner_placeholder_2_4").length)
-            {
+            if ($("#banner_placeholder_2_4").length) {
                 var rightBannerOffset = $(".right-banner").offset().top;
                 var rightBannerPos = rightBannerOffset - $(window).scrollTop();
 
@@ -687,13 +686,18 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
             }
         });
 
-        function visitUserProfileOrAd(eventCategory, eventAction, eventLabel)
-        {
-            ga('send', 'event', eventCategory, eventAction, eventLabel);
+        function visitUserProfileOrAd(eventCategory, eventAction, eventLabel) {
+            window.dataLayer = window.dataLayer || []
+            dataLayer.push({
+                'event' : 'Position',
+                'eventCategory':  eventCategory,
+                'eventAction': eventAction,
+                'eventLabel': eventLabel
+            });
+          ga('send', 'event', eventCategory, eventAction, eventLabel);
         }
 
-        function gaSendForRecommendedSlotSearch(url, domain, title,slotindex,creativeOrd)
-        {
+        function gaSendForRecommendedSlotSearch(url, domain, title,slotindex,creativeOrd) {
             ga('send', 'event', 'Search List Page', 'Recommended external ads', 'Slot'+slotindex + "-Creative"+ creativeOrd +"-{{ catSrchText|trim('-') }}-" + domain + "-" + title);
             window.open(url, '_blank');
         }

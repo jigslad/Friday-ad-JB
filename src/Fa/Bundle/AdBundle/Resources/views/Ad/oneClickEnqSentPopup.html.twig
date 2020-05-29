@@ -39,12 +39,20 @@ function sendOneClickEnquiry()
     })
     .done(function(objResponse) {
         if (!objResponse.response) {
-          $('#onclick_sent_success_message').hide();
-          $('#onclick_sent_error_message').show();
+            $('#onclick_sent_success_message').hide();
+            $('#onclick_sent_error_message').show();
         } else {
-          $('#onclick_sent_success_message').show();
-          $('#onclick_sent_error_message').hide();
-          ga('send', 'event', 'CTA', 'Send email (one-click)', '{{ adId }}-{{ userTypeText }}{{ catText }}');
+            $('#onclick_sent_success_message').show();
+            $('#onclick_sent_error_message').hide();
+                window.dataLayer = window.dataLayer || []
+                dataLayer.push({
+
+                    'event' : 'Ad Action',
+                    'eventCategory':  'CTA',
+                    'eventAction': 'Contact Seller Link One Click Enquire',
+                    'eventLabel': '{{ adId }}{{ catText }}'
+                });
+            ga('send', 'event', 'CTA', 'Send email (one-click)', '{{ adId }}-{{ userTypeText }}{{ catText }}');
         }
         $('#oneClickEnquireSentModal').foundation('reveal', 'open');
         unblockPage();
@@ -54,7 +62,7 @@ function sendOneClickEnquiry()
 function getInTouch(adId)
 {
   $('#oneClickEnquireSentModal').foundation('reveal', 'close'); 
-  contactSeller(adId, 'Contact Seller Link One Click Enquire', '');
+  contactSeller(adId, 'Contact Seller Link One Click Enquire', 'Sticky');
 }
 //]]>
 </script>
