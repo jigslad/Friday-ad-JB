@@ -708,7 +708,6 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
     {# Location Group @Jigar Lad #}
     {% set locationGroupReposetry = fetch_repository('FaEntityBundle:LocationGroup') %}
     {% set locationGroup = locationGroupReposetry.getLocationGroupByLocation(searchParams.item__location)%}
-    {{ dump(app.request.get('keywords')) }}
     <script>
         if (performance.navigation.type == 1) {
             var searchResultMethod = 'Refresh';
