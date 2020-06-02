@@ -1,14 +1,10 @@
 <style>
-.custom-checkbox input[type="checkbox"]
-.custom-checkbox, .custom-checkbox.checked { width:21px !important; height:21px !important; }
-
 .manage-item-list .manage-price { min-width:100% !important; }
 .manage-item-list .pkg-free { margin:0px 0px 10px 0px !important;width:auto !important;max-width:100% !important; }
 .manage-item-list .manage-price-box { margin:10px 0px 15px 0px !important; }
 .manage-item-list .manage-item-btns .button  { /*display:inline-flex !important;*/ }
 .manage-item-list .manage-list-social-icons { width:100% !important; }
 .manage-item-list .manage-item-button { width:46%;padding: 5px 15px 5px 15px;margin: 0 0 8px 5px;    white-space: nowrap; }
-/*.manage-items-main .custom-checkbox input[type="checkbox"] { opacity:0.5 !important; }*/
 .manage-my-ad-boost-text.total-credits-remaining span { font-size:14px;color: #ACB0B7;line-height: 20px;padding-left:10px }
 
 .manage-item-list .list-boosted-hours { font-size: 13px;color: #ACB0B7;font-style: italic;text-align: right;line-height: 25px;white-space: nowrap;min-height: 25px;width: 40%;float: right;display: inline-block; }
@@ -130,7 +126,6 @@ ul.toplistWithBullets li.boostBtn::before { list-style: none;content: "";font-si
 .d-board-main-boost .inner-wrap { background-color: #313131 !important; }
 #markAdAsBoostedModal #db-right-part-boost.large-18 { width: 100%;box-shadow: 0 -3px 5px 0 rgba(0, 0, 0, 0.11);-moz-box-shadow: 0 -3px 5px 0 rgba(0, 0, 0, 0.11); }
 
-.boostRightContentBox .custom-checkbox input[type="checkbox"] { /*opacity:0.5 !important*/ }
 .boostRightContentBox .manage-list-desc { padding-top:10px; }
 
 .boostedModal { position: fixed;bottom: 0;width:100%;z-index:97; }
@@ -145,31 +140,17 @@ ul.toplistWithBullets li.boostBtn::before { list-style: none;content: "";font-si
 
 .in-mod-tooltip .info-icon { height: 35px !important; }
 .boostRightContentBox .selAdContent, .manage-lst .all-sel-text {
-	color: #212527 !important;
-    font-size: 12px !important;
-    letter-spacing: 0 !important;
-    line-height: 18px !important;
-}
-.xs-black-btn, .xs-black-large-btn {
-    background: transparent;
-    border: 1px solid #212527 !important;
-    color: #212527;
-    font-size: 14px;
-    line-height: 16px;
-    padding: 5px 20px 7px 20px;
-}
-.xs-black-large-btn {
-    margin-top: 0px;
-    padding-top: 15px !important;
-    padding-bottom: 15px !important;
-    font-size: 18px;
-}
-.xs-black-btn:focus, .xs-black-btn:hover, .xs-black-large-btn:focus, .xs-black-large-btn:hover {
-    background: #212527;
-    border: 1px solid #212527;
-    color: #FFFFFF;
+	color: #212527 !important;font-size: 12px !important;letter-spacing: 0 !important;line-height: 18px !important;
 }
 #db-right-part { float: right !important; }
+.manage-item-list .adUpgradeBlock { margin-bottom: 5px; }
+
+@media only screen and (min-width: 320px) and (max-width: 1024px) {
+    .manage-item-btns .item-status {
+        padding-right: 3px !important;
+    }
+}
+
 @media only screen and (min-width: 1921px)
 {  
     #db-left-part-boost.left-off-canvas-menu { box-sizing: border-box;overflow-x: visible;-webkit-transform: none;-ms-transform: none;-o-transform: none;transform: none;-webkit-transition: none;-ms-transition: none;-o-transition: none;transition: none; bottom: unset;left: auto;bottom: auto; }
@@ -224,11 +205,6 @@ ul.toplistWithBullets li.boostBtn::before { list-style: none;content: "";font-si
 }
 
 @media only screen and (min-width:641px) and (max-width:1024px){
-    /*.featured-switch.toggle-off .toggle-handler {  box-shadow: -0.5px 0.8px 0.5px 1.5px #ccc;left: 2.5px;top: 2.7px; }
-    .featured-switch.toggle-on .toggle-handler { box-shadow: -0.5px 0px 1px 1px #ccc;top: 2.5px;left: -2.5px; }
-    .featured-switch .toggle-handler { width: 10px;height: 10px; }
-    .featured-switch .toggle-bg-on { height: 17px;  }
-    .featured-switch { width: 35px;height: 17px;box-shadow: -0.5px 0px 1px 1px #ccc;margin-top: 3px; }*/
     .manage-item-btn .adRemoveBlock .xs-red-btn:hover,  .manage-item-btn .adRemoveBlock .xs-red-btn:focus { background: #ffffff !important; }
 	.xs-red-btn:focus, .xs-red-btn:hover, .xs-red-large-btn:focus, .xs-red-large-btn:hover {  background: transparent !important; color: #ff0000 !important; }    
 	.mma-pkg-title { height: 40px !important;overflow: hidden !important; }
@@ -237,7 +213,7 @@ ul.toplistWithBullets li.boostBtn::before { list-style: none;content: "";font-si
 @media only screen and (min-width: 760px) and (max-width: 1151px) {
    .manage-item-list .dtl-social-icons { margin:0px !important; }
    .list-created-hours, .list-expired-hours { text-align: left !important;float:left !important;width:100% !important; }
-   .manage-item-list .large-5 { width:130px !important; }
+   .manage-item-list .large-5 { width:150px !important; }
    .manage-item-list .large-12 { width: 50% !important; }
    .manage-price { margin:0px !important; }
    .manage-item-list .manage-list-social-icons a {
@@ -258,7 +234,6 @@ ul.toplistWithBullets li.boostBtn::before { list-style: none;content: "";font-si
    #db-right-part-boost { width: 75.8%; }
    .img-status-overlay { max-width: 125px !important; }
    .img-status-overlay .img-status-overlay-text { font-size: 13px !important; }
-
 }
 
 @media only screen and (min-width:641px) and (max-width:759px) {
@@ -279,7 +254,6 @@ ul.toplistWithBullets li.boostBtn::before { list-style: none;content: "";font-si
     .manage-item-list .list-boosted-hours{
     	float: right !important; text-align: left !important; margin-right: 10px;font-size: 12px;
     }
-    /*.select-diff-ads { width: auto !important; }    */
     .featured-switch.toggle-on .toggle-handler { top: 1px; left: 2.5px; }
     .featured-switch .toggle-handler { width:17px; height:17px; }
     .img-status-overlay { max-width: 170px !important; }
@@ -338,8 +312,6 @@ ul.toplistWithBullets li.boostBtn::before { list-style: none;content: "";font-si
 	.featured-switch .toggle-handler { width: 17px; height: 17px; }
 	.manage-list-img .image-tooltip { left: 0% !important; }
 	.manage-list-img .image-tooltip:before { left: 20% !important; }
-	.manage-item-btn .adRemoveBlock .xs-red-btn:hover,  .manage-item-btn .adRemoveBlock .xs-red-btn:focus { background: #ffffff !important; }
-	.xs-red-btn:focus, .xs-red-btn:hover, .xs-red-large-btn:focus, .xs-red-large-btn:hover {  background: transparent !important; color: #ff0000 !important; }
     .created-box { margin-top: 8px; }
     .mma-pkg-title { font-style: italic;position: relative !important;width: 100%;right: 0 !important;bottom: 8px !important;height: 40px !important;overflow: hidden !important; }
 }
