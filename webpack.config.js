@@ -25,6 +25,7 @@ Encore
      */
     .addStyleEntry('css/site', './assets/scss/site.scss')
     .addStyleEntry('css/adulcss', './assets/scss/adul-css.scss')
+    .addStyleEntry('css/mmacss', './assets/scss/mmacss.scss')
     // .addEntry('app', './assets/js/app.js')
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')

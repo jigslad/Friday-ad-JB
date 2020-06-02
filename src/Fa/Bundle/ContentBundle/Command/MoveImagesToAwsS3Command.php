@@ -77,7 +77,7 @@ class MoveImagesToAwsS3Command extends ContainerAwareCommand
                 $result = $client->putObject(array(
                     'Bucket'     => $this->getContainer()->getParameter('fa.aws_bucket'),
                     'Key'        => $destinationPath,
-                    'CacheControl' => 'max-age=21600',
+                    'CacheControl' => 'max-age=31536000',
                     'ACL'        => 'public-read',
                     'SourceFile' => $sourcePath,
                     'Metadata'   => array(

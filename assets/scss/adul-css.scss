@@ -462,10 +462,6 @@ button.signup-fb-btn.expand {
     border: 0px !important;
     border-bottom: 1px solid $form-border-color !important;
 }
-.manage-item-list .adEditBlock1 a {
-  color: $white !important;
-}
-
 
 /* other css */
 .nav-bg.homepage-nav { background: rgba(255,255,255,1) !important; }
@@ -904,7 +900,7 @@ a {
   }
 }
 
-.manage-item-list .adEditBlock1 a, #notification-area a.button {
+#notification-area a.button {
   color: $white !important;
 }
 
