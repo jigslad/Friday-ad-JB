@@ -1708,7 +1708,7 @@
         {% endif %}
     {% endif %}
     {% if userTypeText == 'Business ad' %}
-        {% set businessname = adDetail.a_s_business_name_s is defined ? adDetail.a_s_business_name_s :'Business advertiser' %}
+        {% set businessname = adDetail.a_s_business_name_s is defined ? adDetail.a_s_business_name_s : (adDetail.user.user_name is defined ? adDetail.user.user_name : 'Business advertiser' ) %}
     {% else %}
         {% set businessname = 'Private seller' %}
     {% endif %}

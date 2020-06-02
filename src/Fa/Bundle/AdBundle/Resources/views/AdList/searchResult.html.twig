@@ -718,7 +718,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                 {% set urlEnd = app.request.headers.get('referer')|split('/')|slice(0,-1)|last|split('-') %}
                 {% if ('page' not in urlEnd) and (urlEnd|length > 2) %}
                     var searchResultMethod = 'Ad Details';
-                {% elseif app.request.get('keywords') is defined %}
+                {% elseif app.request.get('keywords') is defined and app.request.get('keywords') is not null %}
                     var searchResultMethod = 'Site Search';
                 {% elseif app.request.get('cat_full_slug') is defined %}
                     var searchResultMethod = 'Category Click';
