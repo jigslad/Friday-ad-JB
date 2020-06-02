@@ -21,3 +21,8 @@ android_os_manifest_json:
 ajax_clear_ti_url_from_redis:
     path:   /ajax_/remove-ti-url
     defaults:  { _controller: FaFrontendBundle:Default:ajaxRemoveTiUrlFromRedis }
+    
+ajax_get_adul_header_image:
+    path:   /ajax/adul_header_image/
+    defaults:  { _controller: FaFrontendBundle:Adult:ajaxHomePageGetHeaderImage }
+    

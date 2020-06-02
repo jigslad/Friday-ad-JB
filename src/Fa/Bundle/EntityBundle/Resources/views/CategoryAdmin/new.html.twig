@@ -4,13 +4,7 @@
 {% block content -%}
 
 {{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
-<style>
-ul.creative_tabs { list-style: none;display: inline-flex;margin-left: 0px; }
-li.creative_tab { margin-right: 10px;background: #eee;padding: 2px 15px;color:#3278b4}
-.tabs-ouline { margin-top:20px; margin-bottom:20px; padding:10px; border:1px solid #ddd}
-#recommended_slot_searchlist_fields_main_div h4 { margin-top:20px; }
-.creative_tab_content { padding-top:20px }
-</style>
+    {{ include('FaEntityBundle:CategoryAdmin:new-css.html.twig') }}
 <div class="row">
     <div class="columns">
         <div class="panel">

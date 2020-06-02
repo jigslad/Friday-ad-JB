@@ -66,8 +66,7 @@
                                 {% if dimensionIsIndexable and child.vars.value not in nonCrawlableDimensionValues %}
                                     <a href="{{ listurl }}" class="crowable_checkbox_link" onclick="return false;" {% if app.request.get('searchQueryString') or getNoFollowLink or 'item_' in listurl %}rel="nofollow"{% endif %}>{{ child.vars.label~extraLabel }}</a>
                                 {% endif %}
-                                <label for="{{ child.vars.id }}" class="crowable_checkbox_link_label">{{ child.vars.label }}</label>
-                                ({{ adCount }})
+                                <label for="{{ child.vars.id }}" class="crowable_checkbox_link_label">{{ child.vars.label }} ({{ adCount }})</label>                                
                                 {% set childCount = childCount + 1 %}
                             </li>
                         {% endif %}

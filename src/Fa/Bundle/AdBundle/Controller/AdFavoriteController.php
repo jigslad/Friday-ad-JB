@@ -62,7 +62,7 @@ class AdFavoriteController extends CoreController
                     if ($type == 'list') {
                         $anchorHtml = '<a href="javascript:void(0)" onclick="return removeFromFavorite('.$ad->getId().');" class="saved-item outside-tricky">FA</a>';
                     } elseif ($type == 'detail') {
-                        $anchorHtml = '<a href="javascript:void(0);" onclick="return removeFromFavorite('.$ad->getId().');" class="saved-item-btn added-in-fav"><span class="saved-icon">save</span>'.$this->get('translator')->trans('Favourite', array(), 'frontend-show-ad').'</a>';
+                        $anchorHtml = '<a href="javascript:void(0);" onclick="return removeFromFavorite('.$ad->getId().');" class="saved-item-btn added-in-fav"><span class="favorite saved-icon">save</span>'.$this->get('translator')->trans('Favourite', array(), 'frontend-show-ad').'</a>';
                     }
                 } else {
                     $error = $this->get('translator')->trans('Problem in adding ad to favourite.', array(), 'frontend-search-result');

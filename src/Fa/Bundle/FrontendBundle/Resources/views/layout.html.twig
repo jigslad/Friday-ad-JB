@@ -36,7 +36,10 @@
     {% if ((app.request.uri == container.getParameter('base_url')~'/bristol/') and app.request.get('ti_url')) %}
         {% set showTiPopup = true %}
     {% endif %}
-
+    
+    {% if not app.request.cookies.has('is_over_18') and currentRoute == 'fa_adult_homepage' %}
+    	{% set showAdultPopup = 1 %}
+    {% endif %}
     {% if not app.request.cookies.has('is_over_18') and searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
         {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(searchParams.item__category_id, false, fetch_container_instance()) %}
         {% set catCnt = 0 %}
@@ -112,20 +115,63 @@
     {% if blockTwitterMeta %}
         {{blockTwitterMeta|raw}}
     {% endif %}
+    
+    {% set showAdultPages = 0 %}
+    {% set appUserRole = '' %}
+    {% set assignedCategoryId = 0 %}
+    {% if (app.user.getId() is defined) %}
+    	{% set appUserRole = fetch_repository('FaUserBundle:User').getUserRole(app.user.getId(), container) %}
+    {% endif %}
+        
+    {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null  %}
+    	{% set assignedCategoryId = searchParams.item__category_id %}
+	{% elseif currentRoute == 'ad_detail_page' and app.request.get('category_string') %}
+		{% set assignedCategoryId = fetch_repository('FaEntityBundle:Category').getIdBySlug(app.request.get('category_string'), fetch_container_instance()) %}
+	{% elseif (currentRoute == 'show_business_profile_page' or currentRoute == 'show_business_user_ads') and app.request.get('profileNameSlug') %}
+         {% set objUserSite = fetch_repository('FaUserBundle:UserSite').findOneBy({'slug':app.request.get('profileNameSlug')}) %}
+         {% set assignedCategoryId = objUserSite.getUser().getBusinessCategoryId() %}          
+	{% elseif (appUserRole is defined and (appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') or appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION'))) %}
+    	{% set assignedCategoryId = app.user.getBusinessCategoryId() %}
+	{% elseif (appUserRole is defined and appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION')) %}
+		{% set assignedCategoryId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+	{% endif %}
+
+	{% if assignedCategoryId!=0 %}
+    	{% set rootCategoryId = fetch_repository('FaEntityBundle:Category').getRootCategoryId(assignedCategoryId, fetch_container_instance()) %}
+        {% if (rootCategoryId == ADULT_CATEGORY_ID) %}
+              {% set showAdultPages = 1 %}
+        {% endif %}                
+    {% endif %}	
+            
+    {% if currentRoute=='fa_adult_homepage' %}
+    	{% set showAdultPages=1 %}
+    {% endif %}
+        
 
     {{ include('FaFrontendBundle::scriptTop.html.twig') }}
     {% block scripttop %}{% endblock %}
-    {{ include('FaFrontendBundle::fa-main-css.html.twig') }}
+    {{ include('FaFrontendBundle::fa-main-css-new.html.twig') }}
     
-    <style>
-    .choice-display-flex { display:inline-flex !important; }
-    .choice-display-flex label { margin-right:10px !important; line-height:25px !important; }
+    {% if (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration',4: 'show_draft_ad',5: 'ad_package_purchase',6: 'show_cart',7: 'cybersource_checkout'}) %}
+        <style>.nav-bar .top-bar-section, #top_search, #field_arrow, .nav-bg .search-icon a { display:none !important; }</style>
+    {% endif %}
     
+	{% if showAdultPages == 1 %}
+	    <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
+	    <link rel="stylesheet" href="{{ asset('build/css/adulcss.css') }}">
+    	{{ include('FaFrontendBundle:Adult:adul-imgs.html.twig') }}
+	{% else %}
+    	<link rel="stylesheet" href="{{ asset('build/css/site.css') }}">
+    	{{ include('FaFrontendBundle::site-imgs.html.twig') }}
+	{% endif %}
+	{# { include('FaFrontendBundle::new-fa-main-css.html.twig') } #}
+
+    <style>    
     .covid-19-block { background: #212527;padding: 15px 0; }
-    .covid-19-block .head {color: #FFFFFF; font-family: Asap; font-size: 20px;font-weight: bold; letter-spacing: 0.83px;line-height: 23px; }
-    .ask-for-offer-help { color: #FFFFFF;font-weight: normal !important;font-family: Asap; font-size: 18px;letter-spacing: 0; line-height: 21px;text-align: center;  }
+    .covid-19-block .head {color: #FFFFFF; font-size: 20px;font-weight: bold; letter-spacing: 0.83px;line-height: 23px; }
+    .ask-for-offer-help { color: #FFFFFF;font-weight: normal !important; font-size: 18px;letter-spacing: 0; line-height: 21px;text-align: center;  }
     .ask-for-offer-help a, .ask-for-offer-help a:hover, .ask-for-offer-help a:focus { color: #FFBE09 !important;text-decoration: underline !important; }
-    .place-free-ad-btn, .place-free-ad-btn:hover, .place-free-ad-btn:focus, a:hover.button.place-free-ad-btn, a:focus.button.place-free-ad-btn { height: 30px; width: 162px; background-color: #FFBE09;color: #343738 !important; font-family: "Bree Serif"; font-size: 14px; letter-spacing: 0;line-height: 16px;text-align: center; margin-bottom: 0px;padding: 6px 0px; }
+    .place-free-ad-btn, .place-free-ad-btn:hover, .place-free-ad-btn:focus, a:hover.button.place-free-ad-btn, a:focus.button.place-free-ad-btn { height: 30px; width: 162px; background-color: #FFBE09;color: #343738 !important; font-size: 14px; letter-spacing: 0;line-height: 16px;text-align: center; margin-bottom: 0px;padding: 6px 0px; }
     .align-text { text-align: right; }
     .covid-19-block.top-border { border-top: 4px solid #FFBE09 }
     .covid-19-block.bottom-border { border-bottom: 4px solid #FFBE09 }
@@ -140,8 +186,7 @@
         /* .home-slider-content, .hero-img { min-height: 430px !important;height: 430px !important; } */
     }
     </style>
-    {# { include('FaFrontendBundle::new-fa-main-css.html.twig') } #}
-  
+    
     {% block blockGaCode%}
         {{ include('FaFrontendBundle::gaCode.html.twig') }}
     {% endblock %}
@@ -195,7 +240,7 @@
  		"name": "Friday-Ad",
  		"url" : "https://www.friday-ad.co.uk",
   		"description" : "Friday-Ad is a community based classified ads website and newspaper in the UK.",
- 		"logo": "https://static.friday-ad.co.uk/bundles/fafrontend/images/fad-logo.svg",
+ 		"logo": "https://static.friday-ad.co.uk/bundles/fafrontend/images/fad-logo-new.svg",
 		"address": {
 		"@type": "PostalAddress",
 		"streetAddress": "London Road",
@@ -220,8 +265,14 @@
         {% if status_code == 200 %}
             {{ include('FaFrontendBundle::cookiePolicy.html.twig') }}
         {% endif %}
-
-        {{ include('FaFrontendBundle::header.html.twig', {'status_code': status_code}) }}
+        
+        
+        
+        {% if showAdultPages==1 and currentRoute not in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote', 11: 'fa_frontend_homepage'} %}
+            {{ include('FaFrontendBundle:Adult:header.html.twig', {'status_code': status_code}) }}
+        {% else %}
+        	{{ include('FaFrontendBundle::header.html.twig', {'status_code': status_code}) }}
+        {% endif %}
 	
         {% if status_code == 200 %}
             {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page'} %}
@@ -247,31 +298,38 @@
         {{ include('FaAdBundle:AdList:topSearchJs.html.twig', {'currentRoute':currentRoute}) }}
 
         {% block scriptbottom %}{% endblock %}
-
-        {% if status_code == 200 %}
-            {% set showFooterFlag = true %}
-            {% set showMblFooterFlag = false %}
-            {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() and currentRoute in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote'} %}
-                {% set showMblFooterFlag = true %}
-                {% set showFooterFlag = false %}
-            {% endif %}
-            {% if showFooterFlag %}
-            	{% if searchParams is not defined %}
-            		{% set searchParams = [] %}
-            	{% endif %}
-                {{ include('FaFrontendBundle::footer.html.twig', {'searchParams':searchParams}) }}
-            {% else %}
-                {% if showMblFooterFlag %}
-                    {% if searchParams is not defined %}
-                        {% set searchParams = [] %}
-                    {% endif %}
-                    {{ include('FaFrontendBundle::mobile-footer.html.twig', {'searchParams':searchParams}) }}
-                {% endif %}
-            {% endif %}
+		{% if (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration',4: 'show_draft_ad',5: 'ad_package_purchase',6: 'show_cart',7: 'cybersource_checkout'}) %}
+                {{ include('FaFrontendBundle::paaFooter.html.twig') }}
         {% else %}
-            {{ include('FaFrontendBundle::userLocation.html.twig') }}
-        {% endif %}
-
+            {% if status_code == 200 %}
+                {% set showFooterFlag = true %}
+                {% set showMblFooterFlag = false %}
+                {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() and currentRoute in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote'} %}
+                    {% set showMblFooterFlag = true %}
+                    {% set showFooterFlag = false %}
+                {% endif %}
+                {% if showFooterFlag %}
+                	{% if searchParams is not defined %}
+                		{% set searchParams = [] %}
+                	{% endif %}
+                	{% if showAdultPages==1 %}
+                        {{ include('FaFrontendBundle:Adult:footer.html.twig', {'searchParams':searchParams}) }}
+                    {% else %}
+                    	{{ include('FaFrontendBundle::footer.html.twig', {'searchParams':searchParams}) }}
+    		        {% endif %}
+                {% else %}
+                    {% if showMblFooterFlag %}
+                        {% if searchParams is not defined %}
+                            {% set searchParams = [] %}
+                        {% endif %}
+                        {{ include('FaFrontendBundle::mobile-footer.html.twig', {'searchParams':searchParams}) }}
+                    {% endif %}
+                 {% endif %}
+             {% else %}
+                {{ include('FaFrontendBundle::userLocation.html.twig') }}
+             {% endif %}
+		{% endif %}
+		
         {% if (showAdultPopup == 1) %}
             {{ include('FaFrontendBundle::adultWarnningPopup.html.twig') }}
         {% endif %}
@@ -338,9 +396,9 @@
                 .r-product-modal {border: 0px solid #e3e3e3;box-shadow: none;}
                 .r-product-modal .modal-block {}
                 .r-product-modal .r-logo {margin-top: 3em;margin-bottom: 3em;}
-                .r-product-modal .para {color:#333333;padding: 0 15%;margin-bottom: 15px;font-family: 'Asap',sans-serif;font-size: 14px;}
+                .r-product-modal .para {color:#333333;padding: 0 15%;margin-bottom: 15px;font-size: 14px;}
                 .r-product-modal .btn-tellme{background-color: #a8dc28;border-color: #a8dc28;border-radius: 2px;text-align: center;padding: 8px 20px 8px 20px;font-size: 16px; line-height: 18px;}
-                .r-product-modal .btn-tellme a {font-size: 16px;color:#ffffff;font-weight: normal;font-family: 'Bree Serif',serif !important;}
+                .r-product-modal .btn-tellme a {font-size: 16px;color:#ffffff;font-weight: normal;}
                 .r-product-modal .r-close {background:none;text-indent: 0;z-index: 1;font-size: 2rem;font-weight:400;}
             </style>
            <div id="tradeitModal" class="reveal-modal tiny r-product-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">

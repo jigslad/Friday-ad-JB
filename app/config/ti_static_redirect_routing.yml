@@ -383,7 +383,7 @@ ti_redirect_ukescorts:
   path: /uk/escorts/
   defaults:
         _controller: FrameworkBundle:Redirect:urlRedirect
-        path: /uk/adult/escort-services/
+        path: /uk/adult-services/escorts/
         permanent: true
   host: '%fa.tradeit.host%'
 

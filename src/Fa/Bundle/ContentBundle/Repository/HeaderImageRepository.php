@@ -234,7 +234,7 @@ class HeaderImageRepository extends EntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                //return $cachedValue;
+                return $cachedValue;
             }
         }
 
@@ -272,5 +272,90 @@ class HeaderImageRepository extends EntityRepository
         ->orWhere(self::ALIAS.'.phone_file_name = :phone_file_name')
         ->setParameter('phone_file_name', $imageName);
         return $qb->getQuery()->getSingleScalarResult();
+    }
+    
+    /**
+     * Get header category array.
+     *
+     * @param object  $container  Container identifier.
+     *
+     * @return array
+     */
+    public function getHeaderImageArrayByCatId($catId, $container = null)
+    {
+        if ($container) {
+            $culture     = CommonManager::getCurrentCulture($container);
+            $tableName   = $this->getHeaderImageTableName();
+            $cacheKey    = $tableName.'|'.__FUNCTION__.'|'.$culture;
+            $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
+            
+            if ($cachedValue !== false) {
+                return $cachedValue;
+            }
+        }
+                
+        $query = $this->getBaseQueryBuilder()
+        ->select(self::ALIAS.'.path', self::ALIAS.'.file_name', self::ALIAS.'.phone_file_name', self::ALIAS.'.screen_type', self::ALIAS.'.right_hand_image_url', self::ALIAS.'.override_image', CategoryRepository::ALIAS.'.id as category_id', LocationRepository::ALIAS.'d.id as domicile_id')
+        ->leftJoin(self::ALIAS.'.category', CategoryRepository::ALIAS)
+        ->leftJoin(self::ALIAS.'.location_domicile', LocationRepository::ALIAS.'d')
+        ->andWhere(self::ALIAS.'.category = :catId')
+        ->setParameter('catId', $catId)
+        ->andWhere(self::ALIAS.'.status = 1');
+        
+        $headeImages       = $query->getQuery()->getArrayResult();
+        $headerImagesArray = array();
+        
+        if (count($headeImages)) {
+            foreach ($headeImages as $index => $headeImage) {
+                $headerImagePath = $container->get('kernel')->getRootDir().'/../web/'.$headeImage['path'].'/'.$headeImage['file_name'];
+                if (is_file($headerImagePath)) {
+                    $key = '';
+                    /* if ($headeImage['town_id']) {
+                     $key .= $headeImage['town_id'].'_';
+                     }*/
+                    if ($headeImage['domicile_id']) {
+                        $key .= $headeImage['domicile_id'].'_';
+                    }
+                    if ($headeImage['category_id']) {
+                        $key .= $headeImage['category_id'].'_';
+                    }
+                    
+                    if ($headeImage['screen_type']) {
+                        $key .= $headeImage['screen_type'].'_';
+                    }
+                    
+                    $key = trim($key, '_');
+                    
+                    $imageSize = getimagesize($headerImagePath);
+                    
+                    $headerImagesArray[$key]['override_'.$headeImage['override_image']][$index] = array(
+                        'image'       => CommonManager::getSharedImageUrl($container, $headeImage['path'], $headeImage['file_name']),
+                        'width'       => $imageSize[0],
+                        'height'      => $imageSize[1],
+                    );
+                    $headerImagesArray['all'][$headeImage['screen_type']]['override_'.$headeImage['override_image']][$index] = array(
+                        'image'       => CommonManager::getSharedImageUrl($container, $headeImage['path'], $headeImage['file_name']),
+                        'width'       => $imageSize[0],
+                        'height'      => $imageSize[1],
+                    );
+                    
+                    if (isset($headeImage['phone_file_name']) && $headeImage['phone_file_name']) {
+                        $headerImagesArray[$key]['override_'.$headeImage['override_image']][$index]['phone_image'] = CommonManager::getSharedImageUrl($container, $headeImage['path'], $headeImage['phone_file_name']);
+                        $headerImagesArray['all'][$headeImage['screen_type']]['override_'.$headeImage['override_image']][$index]['phone_image'] = CommonManager::getSharedImageUrl($container, $headeImage['path'], $headeImage['phone_file_name']);
+                    }
+                    
+                    if (!empty($headeImage['right_hand_image_url'])) {
+                        $headerImagesArray[$key]['override_'.$headeImage['override_image']][$index]['phone_image_url'] = $headeImage['right_hand_image_url'];
+                        $headerImagesArray['all'][$headeImage['screen_type']]['override_'.$headeImage['override_image']][$index]['phone_image_url'] = $headeImage['right_hand_image_url'];
+                    }
+                }
+            }
+        }
+        
+        if ($container) {
+            CommonManager::setCacheVersion($container, $cacheKey, $headerImagesArray);
+        }
+        
+        return $headerImagesArray;
     }
 }

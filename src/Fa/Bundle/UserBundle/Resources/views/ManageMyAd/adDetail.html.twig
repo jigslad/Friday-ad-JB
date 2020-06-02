@@ -384,6 +384,7 @@
                      {% if ((userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) and upgradePackagesCount > 1) or (userRoleId != constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
                         <div class="right-manage-buttons adEditBlock1"><a class="secondary-btn-2 thin-btn expand button" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'promote'}) }}">{{'Upgrade'|trans({}, 'frontend-manage-my-ad')}}</a></div>
                      {% endif %}
+
                 {% endif %}
                                 
                 {% if ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_IN_MODERATION_ID') %}
@@ -399,7 +400,7 @@
     </div>   
 </div>
 {# Mobile Version Ends here #}  
-
+    </div>
 </div>
 {% if not app.request.isXmlHttpRequest() %} 
 </div>

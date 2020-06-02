@@ -1,3 +1,15 @@
+{% if currentRoute in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote' } %}
+    <style>
+    @media only screen and (min-width: 320px) and (max-width: 640px) {
+    	.top-bar .toggle-topbar.menu-icon {
+    		display:none; !important;
+    	}
+    	.top-bar .toggle-topbar.menu-icon a span, .top-bar .toggle-topbar.menu-icon a:hover span {
+            background: none !important;
+        }
+    }
+    </style>
+{% endif %} 
 <header class="relative">
     {% if status_code == 200 %}
         {% if currentRoute == 'ad_detail_page' %}
@@ -70,7 +82,7 @@
                         <li><a href="{{ path('logout') }}" id="logout-header-id">{{'Log Out'|trans({}, 'frontend-header-usermenu')}}</a></li>
                     </ul>
                 {% else %}
-                    <ul class="clearfix">
+                    <ul class="clearfix login-reg-flex">
                         <li><a href="{{ path('login') }}" id="login-header-id">{{'Log In'|trans({}, 'frontend-header-usermenu')}}</a>|</li>
                         <li><a href="{{ path('fa_user_register') }}" id="register-header-id">{{'Register'|trans({}, 'frontend-header-usermenu')}}</a></li>
                     </ul>
@@ -134,13 +146,9 @@
                 <nav class="top-bar" id="top_bar_nav" data-topbar="" data-options="sticky_on: large">
                     <ul class="title-area">
                         <li class="name">
-                        {% if currentRoute not in {0: 'landing_page_category', 1: 'landing_page_category_location', 2: 'listing_page', 3: 'motor_listing_page', 4: 'ad_detail_page'} %}
                         <h1>
-                        {% endif %}
-                             <a href="{{ path('fa_frontend_homepage') }}" class="logo {% if showTiLogo %}tradeit-logo{% endif %}">{% if showTiLogo %}<img src="{{ asset_url('fafrontend/images/fad-ti-logo.png') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" />{% else %}<img src="{{ asset_url('fafrontend/images/fad-logo.svg') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" />{% endif %}</a>
-                        {% if currentRoute not in {0: 'landing_page_category', 1: 'landing_page_category_location', 2: 'listing_page', 3: 'motor_listing_page', 4: 'ad_detail_page'} %}
+                             <a href="{{ path('fa_frontend_homepage') }}" class="logo {% if showTiLogo %}tradeit-logo{% endif %}">{% if showTiLogo %}<img src="{{ asset_url('fafrontend/images/fad-ti-logo.png') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" />{% else %}<img src="{{ asset_url('fafrontend/images/fad-logo-new.svg') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" />{% endif %}</a>
                         </h1>
-                        {% endif %}
                         </li>
                         <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
                         <li class="toggle-topbar menu-icon" id="mobile_menu_li"><a href="javascript:void(0);"><span class="menu" id="top_bar_nav_menu_span"></span></a></li>
@@ -159,10 +167,12 @@
                                 {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':0, 'is_mobile':0, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
                             {% endif %}
                         </div>
-                        <ul class="show-for-small-only login-menu">
+                       
                             {% if app.user %}
+                             <ul class="show-for-small-only login-menu">
                                 <li>
-                                    <a href="javascript:void(0);" class="logged-in-user">
+                                	{% set myProfileUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(app.user.getId()) %}
+                                    <a href="{% if myProfileUrl %}{{ myProfileUrl }}{% else %}javascript:void(0);{% endif %}" class="logged-in-user">
                                     {% if app.user.getFirstName() or  app.user.getLastName() %}
                                         {{app.user.getFirstName()}} {{app.user.getLastName()}}
                                     {% else %}
@@ -182,13 +192,16 @@
                                 {% endif %}
                                 
                                 <li><a href="{{ path('logout') }}" id="mob-logout-header-id">{{'Log Out'|trans({}, 'frontend-top-menu')}}</a></li>
-                            {% else %}
+                            </ul>
+                                {% else %}
+                            <ul class="show-for-small-only login-menu login-reg-flex">
                                 <li><a href="{{ path('login') }}" id="mob-login-header-id">{{'Log In'|trans({}, 'frontend-top-menu')}}</a></li>
                                 <li><a href="{{ path('fa_user_register') }}" id="mob-register-header-id">{{'Register'|trans({}, 'frontend-top-menu')}}</a></li>
-                            {% endif %}
-                        </ul>
+                            </ul>
+                                {% endif %}
+                        
                         <ul class="right place-item">
-                            <li class="place-item-btn"><a href="{{ path('ad_post_first_step') }}" title="{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}">{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}</a></li>
+                            <li class="place-item-btn"><a href="{{ path('ad_post_first_step') }}" title="{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}">{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}</a></li>
                         </ul>
                     </section>
                 </nav>

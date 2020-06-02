@@ -325,7 +325,7 @@ class UserSiteImageManager
                     $result = $client->putObject(array(
                         'Bucket'     => $this->container->getParameter('fa.aws_bucket'),
                         'Key'        => $imagekey,
-                        'CacheControl' => 'max-age=21600',
+                        'CacheControl' => 'max-age=31536000',
                         'ACL'        => 'public-read',
                         'SourceFile' => $im,
                         'Metadata'   => array(
@@ -336,7 +336,8 @@ class UserSiteImageManager
                     $result = $client->putObject(array(
                         'Bucket'     => $this->container->getParameter('fa.aws_bucket'),
                         'Key'        => $imagekey,
-                        'CacheControl' => 'max-age=21600',
+                        'CacheControl' => 'max-age=31536000',
+                        'ACL'        => 'public-read',
                         'SourceFile' => $im,
                         'Metadata'   => array(
                             'Last-Modified' => time(),
