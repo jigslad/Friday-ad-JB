@@ -67,6 +67,7 @@
         ga('send', 'event', 'PAA - Step Cart', 'Delete', categoryPath);
         if (confirm('{{'Are you sure you want to remove selected item?'|trans({}, 'frontend-cart')}}')) {
             route = Routing.generate('remove_cart_item', { 'transactionId': transactionId });
+            route = route.replace(':https','');
             window.location.href = route;
         } else {
             return false;

@@ -534,6 +534,7 @@
     function setStepSessionData(adId)
     {
       var url = Routing.generate('ad_post_set_step_session_data', { 'adId': adId});
+      url = url.replace(':https','');
       location.href = url;
     }
 

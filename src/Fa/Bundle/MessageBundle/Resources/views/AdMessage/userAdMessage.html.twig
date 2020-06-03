@@ -66,6 +66,7 @@
     function downloadAttachment(messageId)
     {
         var route = Routing.generate('download_message_attachment', { 'messageId': messageId });
+        route = route.replace(':https','');
         document.location = route;
     }
 //]]>
