@@ -195,12 +195,14 @@
     function downloadAttachment(messageId)
     {
         var route = Routing.generate('download_message_attachment', { 'messageId': messageId });
+        route = route.replace(':https','');
         document.location = route;
     }
     
     function downloadAttachments(messageId, attachmentId)
     {
         var route = Routing.generate('ajax_download_message_attachments', { 'messageId': messageId, 'attachmentId': attachmentId });
+        route = route.replace(':https','');
         document.location = route;
     }
 
@@ -235,6 +237,7 @@
     {
         blockPage();
         var route = Routing.generate('ajax_mark_message_field', { 'messageId': messageId, 'fieldName': fieldName, 'fieldValue': fieldValue });
+        route = route.replace(':https','');
         $.ajax({
           type: "POST",
           url: route,

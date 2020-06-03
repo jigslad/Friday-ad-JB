@@ -1127,6 +1127,7 @@
         {% endif %}
         $("<div class='row text-center' id='ajax_img_loading'><img src=\"{{ asset_url('facore/images/ajax_loader.gif') }}\"> {{ 'Please wait... '|trans({}, 'frontend-show-ad') }}</div>").insertBefore('#adDetailMainTabs');
         var route = Routing.generate('item_add_to_remote', { 'adId': id });
+        route = route.replace(':https','');
         $.ajax({
             async: false,
             type: "POST",
@@ -1154,6 +1155,7 @@
     function addToFavorite(id)
     {
         var route = Routing.generate('ad_add_to_favorite', { 'adId': id });
+        route = route.replace(':https','');
         $.ajax({
             type: "POST",
             url : route,
@@ -1176,6 +1178,7 @@
     function removeFromFavorite(id)
     {
         var route = Routing.generate('ad_remove_from_favorite', { 'adId': id });
+        route = route.replace(':https','');
         $.ajax({
             type: "POST",
             url : route,
@@ -1195,6 +1198,7 @@
     function postSimilarAd(id)
     {
         var route = Routing.generate('ad_post_similar_ad', { 'adId': id });
+        route = route.replace(':https','');
         $.ajax({
             async: false,
             type: "POST",
@@ -1228,6 +1232,7 @@
         {% endif %}
         blockPage();
         var route = Routing.generate('contact_seller', { 'adId': id });
+        route = route.replace(':https','');
         $.ajax({
             type: "GET",
             url : route,
@@ -1363,6 +1368,7 @@
         {
             blockPage();
             var route = Routing.generate('ajax_buy_now', { 'adId': id });
+            route = route.replace(':https','');
             $.ajax({
                 type: "POST",
                 url : route,
@@ -1612,6 +1618,7 @@
     	blockPage();
     	ga('send', 'event', 'Ad details', 'upgrade now', '{{ adId }}{{ catText }}');
         var route = Routing.generate('upgrade_to_next_ad', { 'adId': id, 'rootCategoryId': rootCategoryId});
+        route = route.replace(':https','');
         $.ajax({
             type: "GET",
             url : route,

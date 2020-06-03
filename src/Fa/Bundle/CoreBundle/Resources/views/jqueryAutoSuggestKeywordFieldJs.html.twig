@@ -12,8 +12,10 @@ $(function() {
                 response( cache[ term ] );
                 return;
             }
+            var rurl = Routing.generate("{{ route }}", { term: request.term });
+            rurl = rurl.replace(':https','');
             $.ajax({
-                url: Routing.generate("{{ route }}", { term: request.term }),
+                url: rurl,
                 dataType: 'json',
                 type: 'GET',
                 data: {page_limit: 10},

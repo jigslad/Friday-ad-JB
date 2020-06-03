@@ -217,6 +217,7 @@
         $('.expiry-date').nextAll('small.error').first().remove();
         $('#add_new_card_anchor').show();
         var route = Routing.generate('ajax_edit_address', { 'addressBookId': addressBookId });
+        route = route.replace(':https','');
         blockPage();
         $.ajax({
             type: "GET",
@@ -338,6 +339,7 @@
     function deleteAddress(addressBookId)
     {
         var route = Routing.generate('ajax_delete_address', { 'addressBookId': addressBookId });
+        route = route.replace(':https','');
         blockPage();
         $.ajax({
             type: "POST",
@@ -396,6 +398,7 @@
     function updateInvoiceAddress(addressBookId)
     {
         var route = Routing.generate('ajax_update_invoice_address', { 'addressBookId': addressBookId });
+        route = route.replace(':https','');
         blockElement('#panel6b');
         $.ajax({
             type: "POST",
@@ -447,12 +450,14 @@
     function viewInvoiceReceipt(orderId)
     {
         var route = Routing.generate('invoice_receipt', { 'orderId': orderId, 'action':'viewonly' });
+        route = route.replace(':https','');
         window.open(route,"Invoice receipt", "height=600, width=800, status=no, titlebar=no, menubar=no, location=no, toolbar=no, resizable=no, scrollbars=yes");
     }
 
     function printInvoiceReceipt(orderId)
     {
         var route = Routing.generate('invoice_receipt', { 'orderId': orderId, 'action':'viewandprint' });
+        route = route.replace(':https','');
         window.open(route,"Invoice receipt", "height=600, width=800, status=no, titlebar=no, menubar=no, location=no, toolbar=no, resizable=no, scrollbars=yes");
     }
 //]]>

@@ -33,6 +33,7 @@ function upgradeToFeaturedBtn(id, rootCategoryId) {
 	blockPage();
 	ga('send', 'event', 'Search Results', 'Upgrade', 'Click');
     var route = Routing.generate('upgrade_to_featured_ad', { 'adId': id, 'rootCategoryId': rootCategoryId});
+    route = route.replace(':https','');
     $.ajax({
         type: "GET",
         url : route,
@@ -70,7 +71,7 @@ function paypalPaymentProcess() {
     {% endif %}
 
     var route = Routing.generate(redirect_url);
-
+    route = route.replace(':https','');
     $.ajax({
         type: "POST",
         url: route,
@@ -212,6 +213,7 @@ function applePayButtonClicked() {
         ga('send', 'event', 'Search Results', 'Upgrade', 'Pay - Amazon Pay'); 
     {% endif %}
      var route = Routing.generate(redirect_url);
+     route = route.replace(':https','');
      $.ajax({
          type: "POST",
          url: route,
