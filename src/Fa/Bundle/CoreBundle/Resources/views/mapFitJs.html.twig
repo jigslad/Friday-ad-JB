@@ -153,10 +153,12 @@ function showCustomMarker(lat, lng, markerImage)
 }
 
 function checkIsNurseryGroup(townVal,adId, callback) {
+	var rurl = Routing.generate('ajax_nursery_location_group', { term: townVal, adId: adId });
+	rurl = rurl.replace(':https','');
     $.ajax({
         type: "GET",
         dataType: "json",
-        url: Routing.generate('ajax_nursery_location_group', { term: townVal, adId: adId }),
+        url: rurl,
         success: callback
     });
 }

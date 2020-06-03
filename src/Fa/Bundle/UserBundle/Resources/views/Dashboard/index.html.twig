@@ -238,6 +238,7 @@
     function removeFromFavorite(id)
     {
         var route = Routing.generate('ad_remove_from_favorite', { 'adId': id });
+        route = route.replace(':https','');
         blockPage();
         $.ajax({
             type: "POST",
@@ -284,6 +285,7 @@
     function updateSavedSearchAgent(id)
     {
         var route = Routing.generate('update_search_agent', { 'userSearchAgentId': id });
+        route = route.replace(':https','');
         {% if guid is defined %}
             route = route + "?guid={{ guid }}";
         {% endif %}
@@ -310,6 +312,7 @@
     {
         if (savedSearchIdToRemove != '') {
             var route = Routing.generate('delete_search_agent', { 'userSearchAgentId': savedSearchIdToRemove });
+            route = route.replace(':https','');
             blockPage();
             $.ajax({
                 type: "POST",
@@ -356,6 +359,7 @@
                 $('#blankTitleAlert').foundation('reveal', 'open');
             } else {
                 var route = Routing.generate('rename_search_agent', { 'userSearchAgentId': savedSearchIdToRename, 'userSearchAgentTitle': searchAgentTitle });
+                route = route.replace(':https','');
                 blockPage();
                 $.ajax({
                     type: "POST",
