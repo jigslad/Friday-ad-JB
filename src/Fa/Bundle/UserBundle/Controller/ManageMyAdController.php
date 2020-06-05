@@ -1372,5 +1372,6 @@ class ManageMyAdController extends CoreController
         } else {
             return new Response();
         }
+        }
     }
 }
