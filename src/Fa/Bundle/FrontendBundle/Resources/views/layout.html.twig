@@ -151,13 +151,27 @@
     {{ include('FaFrontendBundle::scriptTop.html.twig', {'showAdultPages': showAdultPages}) }}
     {% block scripttop %}{% endblock %}    
     
+    {% block stylesheets %}
+         {% stylesheets filter="uglifycss" output="bundles/css/adulapp.css"
+                "build/css/adulcss.css"
+            %}
+    	        <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
+    	{% endstylesheets %}
+    	{% stylesheets filter="uglifycss" output="bundles/css/app.css"
+                "build/css/site.css"
+            %}
+        {% endstylesheets %}
+    {% endblock %}
+    
     {% if (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration',4: 'show_draft_ad',5: 'ad_package_purchase',6: 'show_cart',7: 'cybersource_checkout'}) %}
         <style>.nav-bar .top-bar-section, #top_search, #field_arrow, .nav-bg .search-icon a { display:none !important; }</style>
     {% endif %}
     
 	{% if showAdultPages == 1 %}
+		<link rel="stylesheet" href="{{ asset('/bundles/css/adulapp.css') }}"/>
     	{{ include('FaFrontendBundle:Adult:adul-imgs.html.twig') }}
 	{% else %}
+	    <link rel="stylesheet" href="{{ asset('/bundles/css/app.css') }}"/>
     	{{ include('FaFrontendBundle::site-imgs.html.twig') }}
 	{% endif %}
 	{# { include('FaFrontendBundle::new-fa-main-css.html.twig') } #}
