@@ -1227,8 +1227,8 @@ class ManageMyAdController extends CoreController
             if (!empty($loggedinUser)) {
                 $user        = $this->getRepository('FaUserBundle:User')->find($loggedinUser->getId());
                 if (!empty($user)) {
-                    $adId 			  = $getBasicAdResult[0][AdSolrFieldMapping::ID];
-                    $categoryId       = $getBasicAdResult[0][AdSolrFieldMapping::CATEGORY_ID];
+                    $ad               = $this->getRepository('FaAdBundle:Ad')->find($adId);
+                    $categoryId       = $ad->getCategory()->getId();
                     $adRootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
                     if ($adRootCategoryId == CategoryRepository::ADULT_ID) {
                         $isAdultAdvertPresent = 1;
@@ -1249,7 +1249,7 @@ class ManageMyAdController extends CoreController
                     //get User featured Top Package
                     $getUserLastAdvert = $this->getRepository('FaAdBundle:Ad')->getUserLastBasicLiveAdvert($user->getId(), $adId, $adRootCategoryId, $this->container);
                     //check last user advert is Basic
-                    if (isset($availablePackageIds[0]) && in_array($getUserLastAdvert['packageId'], $availablePackageIds) && $getUserLastAdvert['package_price'] == 0) {
+                    if (isset($availablePackageIds[0]) && in_array($getUserLastAdvert['packageId'], $availablePackageIds)) {
                         //remove basic advert from package list and check Featured Top upsell exist for this package
                         array_shift($availablePackageIds);
                         $packageIds[] = $this->getRepository('FaAdBundle:Ad')->getFeaturedAdForUpgrade($availablePackageIds);
@@ -1373,5 +1373,63 @@ class ManageMyAdController extends CoreController
             return new Response();
         }
         }
+    }
+    private function addInfoToCart($userId, $adId, $selectedPackageId, $selectedPackagePrintId, $printEditionLimits, $adExpiryDays, $printEditionValues, $request, $categoryId)
+    {
+        //Add to the cart
+        $cart            = $this->getRepository('FaPaymentBundle:Cart')->getUserCart($userId, $this->container, false, false, true);
+        $cartDetails     = $this->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
+        if ($cartDetails) {
+            $adCartDetails   = $this->getRepository('FaPaymentBundle:Transaction')->getTransactionsByCartIdAndAdId($cart->getId(), $adId);
+            if ($adCartDetails) {
+                $adCartDetailValue = unserialize($adCartDetails[0]->getValue());
+            }
+        }
+        
+        //get Package Detail
+        $selectedPackageObj = $this->getRepository('FaPromotionBundle:Package')->findOneBy(array('id' => $selectedPackageId));
+        $selectedPackagePrint = null;
+        
+        $privateUserAdParams = $this->getRepository('FaAdBundle:Ad')->getPrivateUserPostAdParams($userId, $categoryId, $adId, $this->container);
+        
+        //check if cart is empty and package is free then process ad
+        $selectedPackage = $this->getRepository('FaPromotionBundle:Package')->find($selectedPackageId);
+        
+        //remove if same ad is in cart.
+        if (count($cartDetails) == 1 && $cartDetails[0]['ad_id'] == $adId) {
+            unset($cartDetails[0]);
+        }
+        
+        return $this->addAdPackage($adId, $selectedPackageId, $adExpiryDays, $selectedPackagePrintId, false, $printEditionValues, $privateUserAdParams);
+    }
+    
+    
+    /**
+     * Assign ad package.
+     *
+     * @param integer $adId                   Ad id.
+     * @param integer $packageId              Package id.
+     * @param integer $adExpiryDays           Ad expiry days.
+     * @param integer $selectedPackagePrintId Print duration id.
+     * @param integer $type                   Promote or Repost.
+     * @param integer $activeAdUserPackageId  Active ad user packge id.
+     * @param boolean $addAdToModeration      Need to send ad for moderation or not.
+     * @param array   $printEditionValues     Print edition array.
+
+     *
+     * @return Response|RedirectResponse A Response object.
+     */
+    public function addAdPackage($adId, $packageId, $adExpiryDays, $selectedPackagePrintId, $addAdToModeration = false, $printEditionValues = array(), $privateUserAdParams)
+    {
+        $ad      = $this->getRepository('FaAdBundle:Ad')->find($adId);
+        $package = $this->getRepository('FaPromotionBundle:Package')->find($packageId);
+        
+        $response = $this->checkIsValidAdUser($ad->getUser()->getId());
+        if ($response !== true) {
+            return $response;
+        }
+        
+        $this->getRepository('FaPaymentBundle:Cart')->addPackageToCart($this->getLoggedInUser()->getId(), $adId, $packageId, $this->container, true, $adExpiryDays, $selectedPackagePrintId, 'promote', null, $addAdToModeration, null, $printEditionValues, null, null, $privateUserAdParams);
+        return true;
     }
 }
