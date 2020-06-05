@@ -661,13 +661,14 @@ Are you sure you wish to remove the Feature option?</h5>
                 var adId = split_ad_id[1];
                 var upsellId = split_ad_id[2];
                 var catupsellId = split_ad_id[3];
+                var rootCatId = split_ad_id[3];
                 if($(this).hasClass('toggle-off')){
                   $(this).removeClass('toggle-off').addClass('toggle-on');
                   $('#featuredTopUpsellModal').data('selfeaturedid', elem_id);
                   {% if remainingFeaturedCredits > 0 %}                	
                   	useCreditForFeaturedIndividualUpsell(adId,upsellId);
                   {% else %}
-                  	featuredTopUpsellBtn(adId,upsellId, catupsellId);                 	             	
+                  	featuredTopPackageBtn(adId,rootCatId);                 	             	
                   {% endif %}
                 }else{
               	 featurredUpsellRemoveId = adId;

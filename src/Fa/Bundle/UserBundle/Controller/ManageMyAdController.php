@@ -947,7 +947,7 @@ class ManageMyAdController extends CoreController
                                 'subscription' => $request->get('subscription'),
                             );
                             
-                            $htmlContent = $this->renderView('FaAdBundle:Ad:upgradePaymentForm.html.twig', $parameters);
+                            $htmlContent = $this->renderView('FaUserBundle:ManageMyAd:upgradePaymentForm.html.twig', $parameters);
                         }
                     } else {                        
                         if((int)$dateRemainingForExpiry < (int)$upsellExpiry) {
@@ -1198,5 +1198,179 @@ class ManageMyAdController extends CoreController
         $selAdsOption               = $request->get('selAdsOption','ad_date');
         $this->container->get('session')->set('filterBy', $selAdsOption);
         return new JsonResponse(array('filterBy' => $this->container->get('session')->get('filterBy')));               
+    }
+
+    public function ajaxUpgradeToFeaturedAdAction($adId, $rootCategoryId, Request $request)
+    {
+        $redirectToUrl = '';
+        $error         = '';
+        $htmlContent   = '';
+        $deadlockError = '';
+        $deadlockRetry = $request->get('deadlockRetry', 0);
+        $cybersource3DSecureResponseFlag = false;
+        $redirectUrl	= '';
+        $gaStr	        = '';
+        
+        if ($request->isXmlHttpRequest()) {
+            $cyberSourceManager  = $this->get('fa.cyber.source.manager');
+            $loggedinUser     = $this->getLoggedInUser();
+            $getBasicAdResult = null;
+            $selectedPrintEditions = array();
+            $printEditionSelectedFlag = true;
+            $selectedPackageId = null;
+            $selectedPackagePrintId = null;
+            $packageIds = [];
+            $availablePackageIds = [];
+            $defaultSelectedPrintEditions = [];
+            $isAdultAdvertPresent = 0;
+            $errorMsg	= null;
+            if (!empty($loggedinUser)) {
+                $user        = $this->getRepository('FaUserBundle:User')->find($loggedinUser->getId());
+                if (!empty($user)) {
+                    $adId 			  = $getBasicAdResult[0][AdSolrFieldMapping::ID];
+                    $categoryId       = $getBasicAdResult[0][AdSolrFieldMapping::CATEGORY_ID];
+                    $adRootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
+                    if ($adRootCategoryId == CategoryRepository::ADULT_ID) {
+                        $isAdultAdvertPresent = 1;
+                    }
+                    
+                    //get user roles.
+                    $systemUserRoles  = $this->getRepository('FaUserBundle:Role')->getRoleArrayByType('C', $this->container);
+                    $userRole         = $this->getRepository('FaUserBundle:User')->getUserRole($user->getId(), $this->container);
+                    $userRolesArray[] = array_search($userRole, $systemUserRoles);
+                    $locationGroupIds = $this->getRepository('FaAdBundle:AdLocation')->getLocationGroupByAdId($adId);
+                    $availablePackages = $this->getRepository('FaPromotionBundle:PackageRule')->getActivePackagesByCategoryId($categoryId, $locationGroupIds, $userRolesArray, array(), $this->container);
+                    $adExpiryDays     = $this->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($categoryId, $this->container);
+                    
+                    //loop through all show packages
+                    foreach ($availablePackages as $package) {
+                        $availablePackageIds[] = $package->getPackage()->getId();
+                    }
+                    //get User featured Top Package
+                    $getUserLastAdvert = $this->getRepository('FaAdBundle:Ad')->getUserLastBasicLiveAdvert($user->getId(), $adId, $adRootCategoryId, $this->container);
+                    //check last user advert is Basic
+                    if (isset($availablePackageIds[0]) && in_array($getUserLastAdvert['packageId'], $availablePackageIds) && $getUserLastAdvert['package_price'] == 0) {
+                        //remove basic advert from package list and check Featured Top upsell exist for this package
+                        array_shift($availablePackageIds);
+                        $packageIds[] = $this->getRepository('FaAdBundle:Ad')->getFeaturedAdForUpgrade($availablePackageIds);
+                        //no featured top upsell exist
+                        if (empty($packageIds)) {
+                            return new JsonResponse(array('error' => 'No Featured Top Package Found', 'deadlockError' => $deadlockError, 'redirectToUrl' => $redirectToUrl, 'htmlContent' => $htmlContent, 'deadlockRetry' => $deadlockRetry));
+                        }
+                    }
+                    //get available fetaured top package
+                    $packages = $this->getRepository('FaPromotionBundle:PackageRule')->getPackageByCategoryId($packageIds[0]);
+                    //get Print Edition if exist
+                    $printEditionLimits = $this->getRepository('FaPromotionBundle:Package')->getPrintEditionLimitForPackages($packageIds);
+                    
+                    if (!empty($printEditionLimits)) {
+                        $defaultSelectedPrintEditions = $this->getRepository('FaAdBundle:AdPrint')->getPrintEditionForAd(max($printEditionLimits), $adId, true, $locationGroupIds);
+                        if (count($defaultSelectedPrintEditions)) {
+                            $defaultSelectedPrintEditions = array_combine(range(1, count($defaultSelectedPrintEditions)), array_values($defaultSelectedPrintEditions));
+                        }
+                    }
+                    $selectedPrintEditions = $defaultSelectedPrintEditions;
+                    //Payment gateway form
+                    $formManager = $this->get('fa.formmanager');
+                    $form        = $formManager->createForm(CyberSourceCheckoutType::class, array('subscription' => null));
+                                            
+                    if ('POST' === $request->getMethod()) {
+                        $form->handleRequest($request);
+                        if ($form->isValid()) {
+                            $selectedPackageId = $request->get('package_id', null);
+                            $printEditionValues = array();
+                            if (isset($printEditionLimits[$selectedPackageId]) && $printEditionLimits[$selectedPackageId]) {
+                                for ($editionCntr = 1; $editionCntr <= $printEditionLimits[$selectedPackageId]; $editionCntr++) {
+                                    if (!$request->get('print_editions_'.$selectedPackageId.'_'.$editionCntr, null)) {
+                                        $printEditionSelectedFlag = false;
+                                    }
+                                    $printEditionValues[$editionCntr] = $request->get('print_editions_'.$selectedPackageId.'_'.$editionCntr);
+                                }
+                                
+                                $selectedPrintEditions = $printEditionValues;
+                                $printEditionValues = array_unique($printEditionValues);
+                                if (count($printEditionValues) != $printEditionLimits[$selectedPackageId]) {
+                                    $printEditionSelectedFlag = false;
+                                    return new JsonResponse(array('error' => 'Please select unique print edition', 'deadlockError' => $deadlockError, 'redirectToUrl' => $redirectToUrl, 'htmlContent' => $htmlContent, 'deadlockRetry' => $deadlockRetry));  //select unique print edition
+                                }
+                            }
+                            
+                            if ($printEditionSelectedFlag) {
+                                $printDurationPrices = $this->getRepository('FaPromotionBundle:PackagePrint')->getPrintDurationForPackages(array($selectedPackageId), true);
+                                $selectedPackagePrintId = $request->get('package_print_id_'.$selectedPackageId, null);
+                                
+                                if (isset($printDurationPrices[$selectedPackageId]) && !in_array($selectedPackagePrintId, $printDurationPrices[$selectedPackageId])) {
+                                    return new JsonResponse(array('error' => 'Please select valid print option', 'deadlockError' => $deadlockError, 'redirectToUrl' => $redirectToUrl, 'htmlContent' => $htmlContent, 'deadlockRetry' => $deadlockRetry));
+                                }
+                            }
+                        
+                            $selectedPackageObj = $this->getRepository('FaPromotionBundle:Package')->findOneBy(array('id' => $selectedPackageId));
+                            if ($selectedPackageObj->getDuration()) {
+                                $getLastCharacter = substr($selectedPackageObj->getDuration(),-1);
+                                $noInDuration = substr($selectedPackageObj->getDuration(),0, -1);
+                                if($getLastCharacter=='m') { $adExpiryDays = $noInDuration*28;   }
+                                elseif($getLastCharacter=='d') { $adExpiryDays = $noInDuration; }
+                                else { $adExpiryDays = $selectedPackageObj->getDuration(); }
+                            }
+                            //Add to the cart
+                            $addCartInfo = $this->addInfoToCart($user->getId(), $adId, $selectedPackageId, $selectedPackagePrintId, $printEditionLimits, $adExpiryDays, $printEditionValues, $request, $categoryId);
+                            if ($addCartInfo) {
+                                //make it cybersource payment
+                                $redirectUrl = $request->headers->get('referer');
+                                $this->container->get('session')->set('upgrade_payment_success_redirect_url', $redirectUrl);
+                                $this->get('session')->set('upgrade_cybersource_params_'.$loggedinUser->getId(), array_merge($form->getData(), $request->get('fa_payment_cyber_source_checkout')));
+                                $htmlContent= array(
+                                        'success' 		=> true,
+                                        'redirectUrl' 	=> $this->generateUrl('process_payment', array('paymentMethod' => PaymentRepository::PAYMENT_METHOD_CYBERSOURCE), true)
+                                );
+                            }
+                        } elseif ($request->isXmlHttpRequest()) {
+                            $formErrors    = $formManager->getFormSimpleErrors($form, 'label');
+                            $errorMessages = '';
+                            foreach ($formErrors as $fieldName => $errorMessage) {
+                                if ($errorMessages != '') {
+                                    $errorMessages = $errorMessages . ' | ' . $fieldName . ': ' . $errorMessage[0];
+                                } else {
+                                    $errorMessages = $fieldName . ': ' . $errorMessage[0];
+                                }
+                            }
+                            $gaStr = $gaStr . $errorMessages;
+                            $parameters = array(
+                                    'form' => $form->createView(),
+                                    'subscription' => $request->get('subscription'),
+                                );
+                            
+                            $htmlContent = $this->renderView('FaAdBundle:Ad:upgradePaymentForm.html.twig', $parameters);
+                        }
+                    } else {
+                        $parameters = array(
+                            'packages' => $packages,
+                            'adExpiryDays' => $adExpiryDays,
+                            'adId' => $adId,
+                            'purchase' => true,
+                            'adObj'   => $getUserLastAdvert,
+                            'printEditionSelectedFlag' => $printEditionSelectedFlag,
+                            'selectedPackageId' => $selectedPackageId,
+                            'printEditionLimits' => $printEditionLimits,
+                            'selectedPrintEditions' => $selectedPrintEditions,
+                            'defaultSelectedPrintEditions' => $defaultSelectedPrintEditions,
+                            'isAdultAdvertPresent' => $isAdultAdvertPresent,
+                            'errorMsg' => $errorMsg,
+                            'categoryId' => $categoryId,
+                            'locationGroupIds' => $locationGroupIds,
+                            'form' => $form->createView(),
+                            'subscription' => $request->get('subscription'),
+                            'adId'	=>	$adId,
+                            'gaStr' => $gaStr
+                        );
+                                                
+                        $htmlContent = $this->renderView('FaAdBundle:Ad:upgradeFeaturedmodalBox.html.twig', $parameters);
+                    }
+                    
+            }
+            return new JsonResponse(array('error' => $error, 'deadlockError' => $deadlockError, 'redirectToUrl' => $redirectToUrl, 'htmlContent' => $htmlContent, 'deadlockRetry' => $deadlockRetry));
+        } else {
+            return new Response();
+        }
     }
 }
