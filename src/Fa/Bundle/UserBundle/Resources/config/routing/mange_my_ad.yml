@@ -80,3 +80,9 @@ ajax_manage_my_ads_stop_multiple_ad:
     path:     /ajax/manage_my_ads/stop_multiple_ad/
     defaults: { _controller: FaUserBundle:ManageMyAd:ajaxStopMultipleAd }
     
+upgrade_to_featured_ad_netsuite:
+    path:   /upgrade_to_featured_ad/{adId}/{rootCategoryId}
+    defaults:  { _controller: "FaUserBundle:ManageMyAd:ajaxUpgradeToFeaturedAd" }
+    options:
+        expose: true
+        
