@@ -170,6 +170,7 @@
                     if ($('#item_detail_link_'+key).children('a').length < 1) {
                         var item_title = $('#item_detail_link_'+key).html();
                         var item_url   = Routing.generate('ad_detail_page_by_id', {'id':key});
+                        item_url = item_url.replace(':https','');
                         $('#item_detail_link_'+key).html('<a href="'+item_url+'" target="_blank">'+item_title+'</a>');
                     }
                 }*/

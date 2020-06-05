@@ -16,6 +16,7 @@
     function deleteMessage()
     {
     	var route = Routing.generate('ajax_delete_message', { 'messageId': messageIdToRemove, 'userId': userIdToRemove, 'adId': adIdToRemove });
+    	route = route.replace(':https','');
     	$.ajax({
             type: "POST",
             url: route,
@@ -28,6 +29,7 @@
             	   location.reload();
             } else if (page == 'conversation') {
             	var redirectRoute = Routing.generate('user_ad_message_all');
+            	redirectRoute = redirectRoute.replace(':https','');
             	location.href = redirectRoute;
             }
         });
@@ -37,6 +39,7 @@
     {
       blockPage();
       var route = Routing.generate('fetch_category_text_by_ad_ajax', { 'adId': adId });
+      route = route.replace(':https','');
       $.ajax({
         type: "POST",
         url: route,
@@ -59,6 +62,7 @@
             .done(function(response) {
               unblockPage();
               var redirectRoute = Routing.generate('user_ad_message_all');
+              redirectRoute = redirectRoute.replace(':https','');
               location.href = redirectRoute;
             });
       });

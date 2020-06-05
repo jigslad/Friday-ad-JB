@@ -40,6 +40,7 @@
         searchAgent = false;
 
         var route = Routing.generate('contact_user', { 'adId': '{{adId}}', 'senderId': '{{senderId}}', 'receiverId': '{{receiverId}}', 'whoToWhome': '{{whoToWhome}}' });
+        route = route.replace(':https','');
         $.ajax({
             type: "POST",
             url: route,

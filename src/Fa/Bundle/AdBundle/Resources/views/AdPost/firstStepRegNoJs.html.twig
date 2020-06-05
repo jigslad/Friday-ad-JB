@@ -318,7 +318,7 @@
                     category_id = $('#fa_paa_category_select_category_4').val();
                 }
                 var route       = Routing.generate('ad_vrm_lookup_ajax', { 'vrm': regNo });
-        
+                route = route.replace(':https','');
                 $('#lookup_vehicle').html('{{ "Loading..."|trans({}, 'frontend-paa')}}');
                 $.ajax({
                     type: 'post',

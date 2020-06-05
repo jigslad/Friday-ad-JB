@@ -2862,7 +2862,9 @@ a {
     column-count: 3;
   }
 }
-
+#left_search .crawlable-checkbox li {
+	display: flex !important;
+}
 @media only screen and (min-width: 560px) and (max-width: 759px) {
   .top-bar-section li:not(.has-form) a:not(.button) span.notification-digit {
     color: $adul-primary-color !important;

@@ -140,6 +140,7 @@
     function displayNotifications()
     {
         var route = Routing.generate('notification_show');
+        route = route.replace(':https','');
         $.ajax({
             type: "GET",
             url : route,
@@ -157,6 +158,7 @@
     function removeNotificationMessage(id)
     {
         var route = Routing.generate('notification_remove', { 'messsageId': id });
+        route = route.replace(':https','');
         $.ajax({
             type: "POST",
             url : route,

@@ -364,6 +364,7 @@
 
        /* $('#fa_paa_lite_login_password').on('blur', function(){
             var route =  Routing.generate('paa_lite_login');
+            route = route.replace(':https','');
             var email = $('#fa_paa_lite_login_username').val();
             var password = $('#fa_paa_lite_login_password').val();
             if (email == '') {
@@ -401,6 +402,7 @@
             var route = '';
             if($('#fa_paa_lite_login_user_type_0').attr('checked')) {
                 route = Routing.generate('paa_lite_login');
+                route = route.replace(':https','');
             } else if ($('#fa_paa_lite_login_user_type_1').attr('checked')) {
             	$('#fa_paa_lite_login_user_type_1').prop('disabled', true);
                 $('#login-modal').foundation('reveal', 'close');
@@ -465,6 +467,7 @@
         });
         /*$('#fa_paa_lite_register_email').on('blur', function(){
             var route = Routing.generate('paa_lite_registration');
+            route = route.replace(':https','');
             var email = $('#fa_paa_lite_register_email').val();
             $('#register-error-span').hide();
             $('#register-error-span').html('');
@@ -510,6 +513,7 @@
                 $('#fa_paa_lite_login_user_type_1').attr('checked', false);
             } else if ($('#fa_paa_lite_register_user_type_1').attr("checked")) {
                 route = Routing.generate('paa_lite_registration');
+                route = route.replace(':https','');
             }
 
             if (email == '') {
@@ -788,6 +792,7 @@
     function addToCart(id, categoryId) {
         blockPage();
         var route = Routing.generate('ajax_add_to_cart');
+        route = route.replace(':https','');
         $.ajax({
             type: "GET",
             url : route,

@@ -290,6 +290,7 @@
             function updateContent(marker, iw)
             {
                 var route = Routing.generate('ad_show_ad_for_infobox', { 'adId': marker.id });
+                route = route.replace(':https','');
                 $.ajax({
                     type: "GET",
                     url : route,
@@ -369,6 +370,7 @@
 
         		 function updateContent(adId) {
                      var route = Routing.generate('ad_show_ad_for_infobox', { 'adId': adId });
+                     route = route.replace(':https','');
                      $.ajax({
                          type: "GET",
                          url : route,
