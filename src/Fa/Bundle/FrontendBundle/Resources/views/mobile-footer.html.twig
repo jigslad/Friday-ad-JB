@@ -1,0 +1,78 @@
+<footer id="footer_tag">
+    <div class="row">
+        <div class="large-6 columns">
+            <div class="help-links" style="margin: 10px 40px 0;">
+                <h6 class="footer-head">Can we help?</h6>
+                <div style="column-count: 2;  margin-bottom: 5px!important;">
+                    {{ render(controller('FaContentBundle:StaticPage:renderMobileStaticPageLink', {'currentRoute': currentRoute})) }}
+                </div>
+            </div>
+        </div>
+    </div>
+it
+    <div class="fad-logo">
+        <span>F-Ad</span>
+    </div>
+</footer>
+{{ include('FaFrontendBundle::userLocation.html.twig') }}
+{% block scriptbottom %}
+    <script language="javascript" type="text/javascript">
+        //<![CDATA[
+
+        $('#manage-my-ad-id').on('click', function() {
+            ga('send', 'event', 'Top Widget', 'MMM');
+        });
+
+        $('#login-header-id, #mob-login-header-id').on('click', function() {
+            ga('send', 'event', 'Top Widget', 'Sign In');
+        });
+
+        $('#logout-header-id, #mob-logout-header-id').on('click', function() {
+            ga('send', 'event', 'Top Widget', 'Sign Out');
+        });
+
+        $('#account-header-id, #mob-account-header-id').on('click', function() {
+            ga('send', 'event', 'Top Widget', 'My Account');
+        });
+
+        $('#register-header-id, #mob-register-header-id').on('click', function() {
+            ga('send', 'event', 'Top Widget', 'Register');
+        });
+
+        $('#saved-header-id').on('click', function() {
+            ga('send', 'event', 'Top Widget', 'Saved Ads');
+        });
+
+        $('#saved-search-header-id').on('click', function() {
+            ga('send', 'event', 'Top Widget', 'Email alerts');
+        });
+
+        $('#place-item-btn-id').on('click', function() {
+            ga('send', 'event', 'PAA', 'mobile');
+        });
+
+        $('#inbox-header-id, #mob-inbox-header-id').on('click', function() {
+            ga('send', 'event', 'Top Widget', 'Messaging');
+        });
+
+        $(document).ready(function() {
+            if (!checkCookie('FAD')) {
+                $('#cookie_notification_bar').show();
+            }
+        });
+
+        function setCookiePolicy()
+        {
+            var expiration_date = new Date();
+            expiration_date.setFullYear(expiration_date.getFullYear() + 10);
+            var domain = '.'+'{{ app.request.host }}';
+            document.cookie = "FAD=1; expires=" + expiration_date.toGMTString() + "; path=/; domain="+ domain +";";
+        }
+
+        function refreshParallax()
+        {
+            $(window).trigger('resize').trigger('scroll');
+        }
+        //]]>
+    </script>
+{% endblock %}

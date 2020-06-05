@@ -114,7 +114,7 @@
                                                                 <ul id="profile_image_upload" data-dropdown-content class="f-dropdown" aria-hidden="true">
                                                                     <li><a href="javascript:void(0)" class="pickProfileFile needsclick" id="pickProfileFile">{{'Upload logo'|trans({}, 'frontend-my-profile')}}</a></li>
                                                                     <li><a href="javascript:getProfileBigImage('{{ path(getProfileBigImageRoute, {'userId': app.user.getId(), 'isCompany': 1}) }}')">{{'Edit logo'|trans({}, 'frontend-my-profile')}}</a></li>
-                                                                    <li><a href="javascript:deleteImage('{{ path(deleteRoute, {'userId': app.user.getId(), 'isCompany': 1}) }}')">{{'Remove'|trans({}, 'frontend-my-profile')}}</a></li>
+                                                                    <li><a href="javascript:deleteProfileImage('{{ path(deleteRoute, {'userId': app.user.getId(), 'isCompany': 1}) }}')">{{'Remove'|trans({}, 'frontend-my-profile')}}</a></li>
                                                                 </ul>
                                                             </div>
                                                             <div id="profile_change_btn_without_opt" {% if userSiteObj.getPath() %}style="display:none;"{% endif %}>
@@ -237,7 +237,7 @@
                                                                     <div class="text-center">{{'Or choose from the options below'|trans({}, 'frontend-my-profile')}}</div>
                                                                     <ul class="cover-img-thumbs clearfix">
                                                                         {% for userSiteBannerOtherImage in userSiteBannerOtherImages%}
-                                                                            <li><a href="javascript:void(0);" onclick="return changeBanner('{{ userSiteBannerOtherImage.getId() }}');"><img src="{{ shared_url(userSiteBannerOtherImage.getPath()~'/'~userSiteBannerOtherImage.getFilename()|replace({'.png':''})~'_68x55.jpg') }}" alt="" /></a></li>
+                                                                            <li><a href="javascript:void(0);" onclick="return changeBanner('{{ userSiteBannerOtherImage.getId() }}');"><img src="{{ image_url(userSiteBannerOtherImage.getPath()~'/'~userSiteBannerOtherImage.getFilename()|replace({'.png':''})~'_68x55.jpg') }}" alt="" /></a></li>
                                                                         {% endfor %}
                                                                     </ul>
                                                                 </div>

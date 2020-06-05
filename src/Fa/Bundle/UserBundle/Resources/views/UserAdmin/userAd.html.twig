@@ -176,6 +176,7 @@
         function showPrintInsertDateList(id)
         {
             var route = Routing.generate('ajax_print_dates_list_admin', { 'id': id });
+            route = route.replace(':https','');
             blockPage();
             $.ajax({
                 type: "GET",

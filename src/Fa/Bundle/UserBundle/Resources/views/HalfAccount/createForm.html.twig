@@ -1,5 +1,5 @@
 {% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
-<style>.alert-flex { display:inline-flex !important; }#form_create_alert_email_alert label, #form_create_alert_third_partyemail_alert label { font-size:13px !important;font-weight:500 !important }</style>
+{{ include('FaUserBundle:HalfAccount:createForm-css.html.twig') }}
 {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
 {{ form_errors(form) }}
 <div class="mt20">

@@ -89,6 +89,7 @@ class UserSiteBannerController extends CoreController
 
             try {
                 if ($form->isValid()) {
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:upload-user-site-banner:image-s3 --user_site_id='.$userSiteId.' >/dev/null &');
                     exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:send:business-user-for-moderation --userId='.$user->getId().' >/dev/null &');
                 } else {
                     $error = $form->getErrors(true, false);
@@ -223,12 +224,32 @@ class UserSiteBannerController extends CoreController
 
             //regenerate images
             $imagePath = $this->get('kernel')->getRootDir().'/../web/'.$userSite->getBannerPath();
+            
+            $fileExistsInAws = 0;
+            if(CommonManager::checkImageExistOnAws($this->container,$userSite->getBannerPath().DIRECTORY_SEPARATOR.'banner_'.$userSiteId.'.jpg')) {
+                if (!file_exists($imagePath)) {
+                    mkdir($imagePath, 0777, true);
+                }
+                
+                $awsImagePath = $this->container->getParameter('fa.static.aws.url').DIRECTORY_SEPARATOR.$userSite->getBannerPath();
+                $orgawsurl = $awsImagePath.DIRECTORY_SEPARATOR.'banner_'.$userSiteId.'_org.jpg';
+                $orglocalimg = $imagePath.DIRECTORY_SEPARATOR.'banner_'.$userSiteId.'_org.jpg';
+                file_put_contents($orglocalimg, file_get_contents($orgawsurl));                
+                $fileExistsInAws = 1;
+            } 
+            
+            
             $userSiteBannerManager= new UserSiteBannerManager($this->container, $userSiteId, $imagePath);
             //create thumbnails
             $userSiteBannerManager->removeImage(true);
 
             //crop image
             exec('convert -rotate '.($request->get('banner_angle').' -resize '.($request->get('banner_scale') * 100).'% '.$imagePath.DIRECTORY_SEPARATOR.'banner_'.$userSiteId.'_org.jpg'.' -crop '.$request->get('banner_w').'x'.$request->get('banner_h').'+'.$request->get('banner_x').'+'.$request->get('banner_y').' '.$imagePath.DIRECTORY_SEPARATOR.'banner_'.$userSiteId.'.jpg'));
+            
+            if($fileExistsInAws==1) {
+                $userSiteBannerManager->uploadImagesToS3($userSiteId);                
+            }
+            
             exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:send:business-user-for-moderation --userId='.$userSite->getUser()->getId().' >/dev/null &');
             if (!$userSite) {
                 $error = $this->get('translator')->trans('Problem in croping banner.');

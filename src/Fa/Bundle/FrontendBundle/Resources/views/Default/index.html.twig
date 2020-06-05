@@ -56,7 +56,16 @@
             <div class="parallax-window" id="header_image_div"></div>
         </div>
     </div>
-
+    {# FFR-4030 starts Here #}
+    <div class="covid-19-block bottom-border">
+        <div class="row">
+            <div class="columns text-center">
+                <div class="medium-17  large-18 columns align-text"><div class="head">Covid-19. <span class="ask-for-offer-help">Ask for & Offer Help in our <a href="https://www.friday-ad.co.uk/uk/community/coronavirus-support/" class="ga-covid-19-support-link-homepage">Coronavirus Support section</a></span></div></div>
+                <div class="medium-7 large-6 columns align-text mt-space"><a class="button place-free-ad-btn thin-btn ga-covid-19-paa-link-homepage" href="https://www.friday-ad.co.uk/paa/first_step?categoryName=Coronavirus%20Support">Place Help Ad</a></div>
+            </div>
+        </div>
+    </div>
+    {# FFR-4030 ends Here #}
     <div class="what-u-discover">
         <div class="row">
             <div class="columns">
@@ -96,7 +105,7 @@
                     <a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}" class="discover-community">{{'Community'|trans({}, 'frontend-homepage')}}</a>
                     
                     {% set linkParams = { 'item__location': locationId, 'item__category_id': adultId } %}
-                    <a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}" class="discover-adult">{{'Adult'|trans({}, 'frontend-homepage')}}</a>
+                    <a href="{{ path('fa_adult_homepage') }}" class="discover-adult">{{'Adult'|trans({}, 'frontend-homepage')}}</a>
                 </div>
                 {% endcache %}
             </div>
@@ -107,7 +116,7 @@
         <div class="homepage-row">
             <div class="row">
                 <div class="columns">
-                    <h3 class="homepage-title">{{'Recommended for you'|trans({}, 'frontend-homepage')}}</h3>
+                    <div class="homepage-title">{{'Recommended for you'|trans({}, 'frontend-homepage')}}</div>
                     {{ include('FaFrontendBundle:Default:homePageRecommendedAdsSlider.html.twig', {'divId': 'recommended-item-slider', 'ads': recommendedAds}) }}
                 </div>
             </div>
@@ -119,13 +128,13 @@
         <div class="homepage-row latest-items">
             <div class="row">
                 <div class="columns">
-                    <h3 class="homepage-title">
+                    <div class="homepage-title">
                         {% if locationName is not null %}
                             {{'Latest in %locationName%'|trans({'%locationName%': locationName}, 'frontend-homepage')}}
                         {% else %}
                             {{'Latest ads'|trans({}, 'frontend-homepage')}}
                         {% endif %}
-                    </h3>
+                    </div>
                     {{ include('FaFrontendBundle:Default:homePageLatestAdsSlider.html.twig', {'divId': 'latest-item-slider'}) }}
                     {% if searchResultUrl is not null%}
                         <div class="small-wrapper">
@@ -137,7 +146,20 @@
         </div>
         {% endcache %}
     {% endif %}
-    
+
+    {% cache 'home|page|'~locationId~'front/home_page_read_fridayad_online' 120 %}
+        <div class="homepage-row ga-fadPrintWidget">
+            <div class="row">
+                <div class="columns">
+                    <div class="homepage-title">
+                        {{'Read the Friday-Ad Online'|trans({}, 'frontend-homepage')}}
+                    </div>
+                    {{ include('FaFrontendBundle:Default:readFridayAdOnline.html.twig') }}
+                </div>
+            </div>
+        </div>
+    {% endcache %}
+
     {% if popularShopsSearchParams is defined and popularShopsSearchParams|length %}
         {% cache 'home|page|'~locationId~'front/home_page_popular_shops' 120 %}
             {% set popularShops = adForSaleRepository.getPopularShops(container, popularShopsSearchParams) %}
@@ -145,9 +167,9 @@
                 <div class="homepage-row">
                     <div class="row">
                         <div class="columns">
-                            <h3 class="homepage-title">
+                            <div class="homepage-title">
                                 {{'Popular shops'|trans({}, 'frontend-homepage')}}
-                            </h3>
+                            </div>
                             <div class="owl-carousel fa-slider" id="popular_shops_slider" data-equalizer>
                                 {% set userRepository = fetch_repository('FaUserBundle:User') %}
                                 {% for popularShop in popularShops %}
@@ -182,7 +204,7 @@
         <div class="homepage-row">
             <div class="row">
                 <div class="columns">
-                    <h3 class="homepage-title">{{"What's popular"|trans({}, 'frontend-homepage')}}</h3>
+                    <div class="homepage-title">{{"What's popular"|trans({}, 'frontend-homepage')}}</div>
                     {{ include('FaFrontendBundle:Default:homePagePopular.html.twig') }}
                 </div>
             </div>
@@ -193,8 +215,8 @@
         <div class="homepage-row">
             <div class="row">
                 <div class="columns">
-                    <h3 class="homepage-title">{{'Best from our Friday adventurers'|trans({}, 'frontend-homepage')}}</h3>
-                    <h2 class="text-center">{{'Here are some of the best ads from our community members.'|trans({}, 'frontend-homepage')}}</h2>
+                    <div class="homepage-title">{{'Best from our Friday adventurers'|trans({}, 'frontend-homepage')}}</div>
+                    <h2 class="text-center sub-head-text">{{'Here are some of the best ads from our community members.'|trans({}, 'frontend-homepage')}}</h2>
                     {{ include('FaFrontendBundle:Default:homePageFeaturedAdsSlider.html.twig', {'divId': 'featured-item-slider'}) }}
                 </div>
             </div>
@@ -205,7 +227,7 @@
         <div class="homepage-row recently-viewed">
             <div class="row">
                 <div class="columns">
-                    <h3 class="homepage-title">{{'Recently viewed'|trans({}, 'frontend-homepage')}}</h3>
+                    <div class="homepage-title">{{'Recently viewed'|trans({}, 'frontend-homepage')}}</div>
                     {{ include('FaFrontendBundle:Default:homePageRecommendedAdsSlider.html.twig', {'divId': 'recently-viwed-item-slider', 'ads': recentlyViewedAds, noImageColor:'grey'}) }}
                 </div>
             </div>
@@ -214,17 +236,20 @@
 
     {% if facebookLoginUrl is not null %}
         <div class="homepage-row">
-            <h3 class="homepage-title-small">{{'Find out what your friends are selling'|trans({}, 'frontend-homepage')}}</h3>
-            <div class="small-wrapper">
-                <button class="signup-fb-btn button expand mb0" onclick="javascript:fbLoginPopup('{{ facebookLoginUrl }}');"><span class="signup-fb-icon">&nbsp;</span>{{'Sign In with Facebook'|trans({}, 'frontend-homepage')}}</button>
-            </div>
+            <div class="homepage-title-small">{{'Find out what your friends are selling'|trans({}, 'frontend-homepage')}}</div>
+            <div class="text-center small-wrapper m-auto pad-none">
+                <a href="javascript:fbLoginPopup('{{ facebookLoginUrl }}');" class="button special signup-fb-btn">
+                    <span class="fb-icon"></span> 
+                    <span class="btn-text">{{ 'Sign In with Facebook'|trans({}, 'frontend-homepage')}}</span>
+                </a>
+            </div>    
         </div>
     {% endif %}
     
     <div class="homepage-row">
         <div class="row">
             <div class="columns">
-                <h3 class="homepage-title">{{'Browse adverts in popular locations'|trans({}, 'frontend-homepage')}}</h3>
+                <div class="homepage-title">{{'Browse adverts in popular locations'|trans({}, 'frontend-homepage')}}</div>
                 {% cache 'home|page|location|block'~currentDevice 3600 %}
                     {{ render(controller('FaFrontendBundle:Default:showHomePageLocationBlocks')) }}
                 {% endcache %}
@@ -277,6 +302,9 @@
     $(document).ready(function() {
         $('div.homepage-row:even').addClass('white-bg');
         getHeaderImage();
+
+        $('#s2id_fa_top_search_item__category_id').attr('placeholder', 'All');
+        
         var recommendedItemSlider = $("#recommended-item-slider");
         recommendedItemSlider.owlCarousel({
             items : 6,
@@ -339,16 +367,6 @@
             });
         }
 
-        $( window ).scroll(function() {
-            if ($("#sticky_nav").hasClass('fixed')) {
-                $("#sticky_nav_top").addClass('fixed');
-                $("#sticky_nav_top").addClass('top-bar-shadow');
-            } else {
-                $("#sticky_nav_top").removeClass('fixed');
-                $("#sticky_nav_top").removeClass('top-bar-shadow');
-            }
-        });
-
         $(document).foundation({
             accordion: {
                 multi_expand: true,
@@ -357,6 +375,16 @@
                 }
             }
         });
+    });
+
+    $( window ).scroll(function() {
+        if ($("#sticky_nav").hasClass('fixed')) {
+            $("#sticky_nav_top").addClass('fixed');
+            $("#sticky_nav_top").addClass('top-bar-shadow');
+        } else {
+            $("#sticky_nav_top").removeClass('fixed');
+            $("#sticky_nav_top").removeClass('top-bar-shadow');
+        }
     });
 
     function accordionCallback(accordion)

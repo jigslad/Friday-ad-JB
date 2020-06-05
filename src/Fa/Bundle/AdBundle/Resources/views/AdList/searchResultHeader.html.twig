@@ -12,7 +12,14 @@
                         {% set locality_id = cookieLocationDetails['locality_id'] %}
                     {% endif %}
 
-                    <a href="{% if location_id and location_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID') %} {{ path('location_home_page', {'location': app.request.get('location')}) }} {% else %}{{ path('fa_frontend_homepage') }} {% endif %}" {% if searchParams is defined and (searchParams.item__category_id is not defined or searchParams.item__category_id is null) %}class="bg-none"{% endif%} {% if locality_id %} rel="nofollow"{% endif%}>{{'Homepage'|trans({}, 'frontend-search-result')}}</a>
+                    {% set homepageLink = '' %}
+                    {% if location_id == 2 %}
+                       {% set homepageLink = 'Homepage' %}
+                    {% else %}
+                        {% set homepageLink = app.request.get('location')|capitalize %}
+                    {% endif %}
+
+                    <a href="{% if location_id and location_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID') %} {{ path('location_home_page', {'location': app.request.get('location')}) }} {% else %}{{ path('fa_frontend_homepage') }} {% endif %}" {% if searchParams is defined and (searchParams.item__category_id is not defined or searchParams.item__category_id is null) %}class="bg-none"{% endif%} {% if locality_id %} rel="nofollow"{% endif%}>{{ homepageLink|trans({}, 'frontend-search-result')}}</a>
                     {% set searchTerm = null %}
                     {% set categoryPath = {} %}
                     {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
@@ -42,12 +49,12 @@
                 <div class="clearfix">
                     {% if seoFields.h1_tag is defined %}
                             {% set h1Title = seoManager.parseSeoStringForAdList(seoFields.h1_tag, searchParams, cookieLocationDetails)|replace({' in UK': ''})|trim %}
-                            <h1>{{ h1Title }}</h1><span class="no-of-results"> {% if h1Title|length %}-{% endif %} {{'%resultCount% results'|trans({'%resultCount%': resultCount}, 'frontend-search-result')}}</span>
+                            <h1 class="sub-page-head">{{ h1Title }}</h1><span class="no-of-results"> {% if h1Title|length %}-{% endif %} {{'%resultCount% results'|trans({'%resultCount%': resultCount}, 'frontend-search-result')}}</span>
                     {% elseif app.request.queryString %}
                         {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
-                            <h1>{{'%resultCount% results in %category%'|trans({'%resultCount%': resultCount, '%category%': fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id)}, 'frontend-search-result')}}</h1>
+                            <h1 class="sub-page-head">{{'%resultCount% results in %category%'|trans({'%resultCount%': resultCount, '%category%': fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id)}, 'frontend-search-result')}}</h1>
                         {% else %}
-                            <h1>{{'%resultCount% results'|trans({'%resultCount%': resultCount}, 'frontend-search-result')}}</h1>
+                            <h1 class="sub-page-head">{{'%resultCount% results'|trans({'%resultCount%': resultCount}, 'frontend-search-result')}}</h1>
                         {% endif %}
                     {% else %}
                         <h2>{{'%resultCount% results found %searchTerm%'|trans({'%resultCount%': resultCount, '%searchTerm%': searchTerm}, 'frontend-search-result')}}</h2>

@@ -175,8 +175,15 @@
         {% set HomePagePath = container.getParameter('base_url')~path('location_home_page', {'location': app.request.get('location')}) %} 
     {% else %}
         {% set HomePagePath =  container.getParameter('base_url')~path('fa_frontend_homepage') %}  
-    {% endif %} 
-    
+    {% endif %}
+
+    {% set locationName = '' %}
+    {% if location_id == 2 %}
+        {% set locationName = 'Homepage' %}
+    {% else %}
+        {% set locationName = app.request.get('location')|capitalize %}
+    {% endif %}
+
 	<script type="application/ld+json">
 	{
   		"@context": "https://schema.org",
@@ -184,7 +191,7 @@
   		"itemListElement": [{
     	"@type": "ListItem",
     	"position": 1,
-    	"name": "Homepage",
+    	"name": "{{locationName}}",
     	"item": "{{HomePagePath}}"
   	},
     {% set categoryPath = {} %}
@@ -235,7 +242,8 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 .bus-shop-user-item-slider .list-img {width:164px;height:123px}
 .bus-shop-user-item-slider .list-img img {max-width:164px;max-height:123px}
 .bus-shop-user-item-slider .list-price {float:none;text-align:left;margin:10px 0 0 0}
-.bus-shop-user-item-slider h3 {float:none;font-family:'Asap',sans-serif;font-size:14px;font-weight:700;height:60px;overflow:hidden}
+.bus-shop-user-item-slider h3 {float:none;font-size:14px !important;overflow:hidden;height: 45px !important;padding: 0px 10px !important; }
+
 .bus-shop-user-item-slider .owl-prev, .bus-shop-user-item-slider .owl-next {top:40%;position:absolute;width:40px}
 .bus-shop-user-item-slider .owl-item .item {margin:auto}
 .bus-shop-user-item-slider .owl-item .busad-item { width:164px;float:left;border:1px solid #eee;margin:0px 15px; }
@@ -285,11 +293,14 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 #fa_left_search_item__distance-button { width:100% !important; }
 .buildersbay-list-logo { background:url(/bundles/fafrontend/images/Builders-Bay.png) 100% 100% no-repeat;width: 124px;height: 40px; }
 .mcn-logo { background:url(/bundles/fafrontend/images/MCN-logo-1.png) 100% 100% no-repeat;width: 124px;height: 58px; }
+.studentjob-list-logo { background:url(/bundles/fafrontend/images/studentjob.png) 100% 100% no-repeat;width: 124px;height: 124px; }
 </style>
 {% if displayRecommendedSlot is defined and displayRecommendedSlot==1 %}
     {{ include('FaAdBundle:AdList:recommended_slot_css.html.twig') }}
 {% endif %}
 
+ {% set showAdultAlert = 0 %}
+ {% set ADULT_CATEGORY_ID = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
 {% set entityCacheManager = container.get('fa.entity.cache.manager') %}
 {{ include('FaAdBundle:AdList:searchResultHeader.html.twig') }}
 {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
@@ -297,6 +308,9 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
     {% set categorySrchPath = categoryRepository.getCategoryPathArrayById(searchParams.item__category_id, false, container) %}
     {% for categoryId,categoryName in categorySrchPath %}
         {% set catSrchString = catSrchString ~ '-' ~ categoryName %}
+        {% if (categoryId == ADULT_CATEGORY_ID) %}
+            {% set showAdultAlert = 1 %}
+        {% endif %}
     {% endfor %}
     {{ set_variables('SrchCatDetails', {'catSrchString':catSrchString}) }}
 {% endif %}

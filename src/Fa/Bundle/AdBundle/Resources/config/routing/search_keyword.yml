@@ -3,3 +3,9 @@ search_keyword_ajax_get_keywords_json:
     defaults: { _controller: "FaAdBundle:SearchKeyword:ajaxGetSearchKeywordsJson" }
     options:
         expose: true
+        
+search_keyword_ajax_get_keywords_by_cat_json:
+    path:     /ajax/get/keywords_by_cat_json
+    defaults: { _controller: "FaAdBundle:SearchKeyword:ajaxGetSearchKeywordsByCatJson" }
+    options:
+        expose: true

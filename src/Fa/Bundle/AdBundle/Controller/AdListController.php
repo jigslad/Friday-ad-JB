@@ -83,6 +83,8 @@ class AdListController extends CoreController
 
         if ($request->get('isHomeSearch')) {
             return $this->render('FaFrontendBundle:Default:homePageSearch.html.twig', $parameters);
+        } elseif ($request->get('isAdultHomeSearch')) {
+            return $this->render('FaFrontendBundle:Adult:homePageAdultSearch.html.twig', $parameters);
         } elseif ($request->get('isErrorSearch')) {
             return $this->render('FaFrontendBundle:Default:errorPageSearch.html.twig', $parameters);
         } else {
@@ -521,7 +523,7 @@ class AdListController extends CoreController
             }
         }
         // set search params in cookie.
-        $this->setSearchParamsCookie($data);
+        $this->setSearchParamsCookie($data,$request);
         //Get Recommmended Slots
         $getRecommendedSlots = array();
         $getRecommendedSlots = $this->getRecommendedSlot($data, $keywords, $page, $mapFlag, $request, $rootCategoryId);
@@ -902,8 +904,9 @@ class AdListController extends CoreController
      *
      * @param array $data Search parameters
      */
-    private function setSearchParamsCookie($data)
+    private function setSearchParamsCookie($data,$request)
     {
+        $currentRoute = $request->get('_route');
         if ((isset($data['search']) && count($data['search'])) || (isset($data['query_filters']) && count($data['query_filters']))) {
             if (isset($data['search']['item__category_id']) || isset($data['search']['keywords'])) {
                 $rootCategoryId = null;
@@ -916,7 +919,7 @@ class AdListController extends CoreController
                     $searchParams['keywords'] = $data['search']['keywords'];
                 }
 
-                if (!isset($data['search']['item__category_id']) || (isset($data['search']['item__category_id']) && $rootCategoryId != CategoryRepository::ADULT_ID)) {
+                if (!isset($data['search']['item__category_id']) || (isset($data['search']['item__category_id']) && $rootCategoryId == CategoryRepository::ADULT_ID && $currentRoute == 'fa_adult_homepage')) {
                     $response = new Response();
                     $response->headers->setCookie(new Cookie('home_page_search_params', serialize($searchParams), time() + (365*24*60*60*1000), '/', null, false, false));
                     $response->sendHeaders();
@@ -1201,7 +1204,7 @@ class AdListController extends CoreController
         }
         //$data['query_filters']['item']['is_blocked_ad'] = 0;
         // remove adult results when there is no category selected
-        if (!isset($data['search']['item__category_id']) && !in_array($currentRoute, array('show_business_user_ads', 'show_business_user_ads_page', 'show_business_user_ads_location'))) {
+        if (!isset($data['search']['item__category_id']) && !in_array($currentRoute, array('show_business_user_ads', 'show_business_user_ads_page', 'show_business_user_ads_location','fa_adult_homepage'))) {
             $data['static_filters'] = ' AND -'.AdSolrFieldMapping::ROOT_CATEGORY_ID.':'.CategoryRepository::ADULT_ID;
         }
 

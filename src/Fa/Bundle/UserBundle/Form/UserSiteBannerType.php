@@ -133,6 +133,7 @@ class UserSiteBannerType extends AbstractType
             $userSiteBannerManager->removeImage();
             //save original jpg image.
             $userSiteBannerManager->saveOriginalJpgImage($orgImageName);
+            $userSiteBannerManager->uploadImagesToS3($userSiteId);
         }
     }
 

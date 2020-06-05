@@ -32,7 +32,7 @@ use Fa\Bundle\PaymentBundle\Repository\PaymentRepository;
 use Fa\Bundle\PaymentBundle\Repository\PaymentTransactionRepository;
 use Fa\Bundle\AdBundle\Repository\AdRepository;
 use Symfony\Component\Validator\Constraints\IsNull;
-
+use Fa\Bundle\AdBundle\Manager\AdImageManager;
 /**
  * Ad post manager.
  *
@@ -481,7 +481,7 @@ class AdPostManager
         
         $this->saveAdLocation($ad, $data);
 
-        if ($isSaveImage && (isset($data['photo_error']) && $data['photo_error']==1)) {
+        if ($isSaveImage && (isset($data['photo_error']) && $data['photo_error']>0)) {
             $this->saveAdImages($ad, false, $data);
         }
 
@@ -1101,6 +1101,10 @@ class AdPostManager
                 $adImage->setPath($this->container->getParameter('fa.ad.image.dir').'/'.$adGroupDir);
                 $this->em->persist($adImage);
                 $this->em->flush();
+                
+                $imagePath = $this->container->getParameter('fa.ad.image.dir').'/'.CommonManager::getGroupDirNameById($adImage->getAd()->getId());
+                $adImageManager 		= new AdImageManager($this->container, $adImage->getAd()->getId(), $adImage->getHash(), $imagePath);
+                $adImageManager->uploadImagesToS3($adImage, $this->container);
             }
         }
     }

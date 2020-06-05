@@ -42,7 +42,8 @@
                             <span class="help-block">{{ 'Dimensions for Image: 2000px x 380px'|trans({}, 'messages')|raw }}</span>
                             <br />
                             {% if entity.id %}
-                                <img src="{{shared_url(entity.getPath()~'/'~entity.getFileName())}}?{{ random(1000) }}" width="100px" id="{{ form.file.vars.id }}_img" /><br /><br />
+                                {% set landingImgUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [fetch_container_instance(), 'uploads/landingpage/'~entity.getFileName()]) %}
+                                <img src="{{landingImgUrl}}?{{ random(1000) }}" width="100px" id="{{ form.file.vars.id }}_img" /><br /><br />
                             {% endif %}
                         </div>
                         {% if imagesArray is defined and imagesArray|length %}
@@ -77,7 +78,8 @@
                                                     {{ form_errors(attribute(form, image['field_name'])) }}
                                                     <br />
                                                     {% if entity.id and landingPageImages[sectionId][image['type']][image['id']]['file_name'] is defined %}
-                                                        <img src="{{shared_url(landingPageImages[sectionId][image['type']][image['id']]['file_name'])}}?{{ random(1000) }}" width="100px" id="{{ attribute(form, image['field_name']).vars.id }}_img" /><br /><br />
+                                                        {% set landingPageImgUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [fetch_container_instance(), landingPageImages[sectionId][image['type']][image['id']]['file_name']]) %}
+                                                        <img src="{{landingPageImgUrl}}?{{ random(1000) }}" width="100px" id="{{ attribute(form, image['field_name']).vars.id }}_img" /><br /><br />
                                                     {% endif %}
                                                 </div>
                                                 <div class="large-4 columns mb10">
@@ -86,7 +88,8 @@
                                                         {{ form_errors(attribute(form, image['field_name']~'_overlay')) }}
                                                         <br />
                                                         {% if entity.id and landingPageImages[sectionId][image['type']][image['id']]['overlay_file_name'] is defined %}
-                                                        <img src="{{shared_url(landingPageImages[sectionId][image['type']][image['id']]['overlay_file_name'])}}?{{ random(1000) }}" width="100px" id="{{ attribute(form, image['field_name']~'_overlay').vars.id }}_img" /><br /><br />
+                                                        {% set landingOverlayImgUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [fetch_container_instance(), landingPageImages[sectionId][image['type']][image['id']]['overlay_file_name']]) %}
+                                                        <img src="{{ landingOverlayImgUrl }}?{{ random(1000) }}" width="100px" id="{{ attribute(form, image['field_name']~'_overlay').vars.id }}_img" /><br /><br />
                                                     {% endif %}
                                                     {% endif %}
                                                 </div>
