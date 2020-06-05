@@ -2,23 +2,6 @@
 {{ include('FaFrontendBundle::jquery-js.html.twig') }}
 
 {{ include('FaFrontendBundle::fa-main-css-new.html.twig') }}
-{% block stylesheets %}
-     {% stylesheets filter="uglifycss" output="bundles/css/adulapp.css"
-            "build/css/adulcss.css"
-        %}
-	        <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
-	{% endstylesheets %}
-	{% stylesheets filter="uglifycss" output="bundles/css/app.css"
-            "build/css/site.css"
-        %}
-    {% endstylesheets %}
-    
-    {% if showAdultPages == 1 %}
-        <link rel="stylesheet" href="{{ asset('/bundles/css/adulapp.css') }}"/>
-	{% else %}
-		<link rel="stylesheet" href="{{ asset('/bundles/css/app.css') }}"/>
-    {% endif %}
-{% endblock %}
 
 {% javascripts filter='uglifyjs2' output='bundles/js/compiled/main.js'
     'bundles/facore/js/common.js'
