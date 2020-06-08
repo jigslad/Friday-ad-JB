@@ -34,7 +34,9 @@
                     </div>
 	        	</div>
         	</div>
-        </div>         
+        </div>  
+        <input type="hidden" name="categoryId" value="{{ categoryId }}">
+        <input type="hidden" name="package_id" value="{{ upsellId }}">       
     {% endif %}    
 	        
 	    	<div class="small-24 medium-12 large-12 columns individual-upsell-payment-buttons upsell-r-block">
@@ -52,7 +54,8 @@
 					{% for choice in form.payment_method.vars.choices %}
                     	<li>
                         	<div class="label-inline white-radio">
-                                <span class="custom-radio {% if form.payment_method.vars.data == choice.value %}checked{% endif %} "><input onclick="return showHideCardDetail();" type="radio" value="{{ choice.value }}" {% if form.payment_method.vars.data == choice.value %}checked="checked"{% endif %} name="{{ form.payment_method.vars.full_name }}" id="{{ form.payment_method.vars.id }}_{{ choice.value }}" /></span>
+                                <span class="custom-radio {% if form.payment_method.vars.data == choice.value %}checked{% endif %} ">
+                                <input onclick="return showHideCardDetail();" type="radio" value="{{ choice.value }}" {% if form.payment_method.vars.data == choice.value %}checked="checked"{% endif %} name="{{ form.payment_method.vars.full_name }}" id="{{ form.payment_method.vars.id }}_{{ choice.value }}" /></span>
                                 <label for="{{ form.payment_method.vars.id }}_{{ choice.value }}">{{ choice.label|raw }}</label>
                             </div>
                     	</li>
@@ -109,6 +112,10 @@
 	    $("#payment_method_id input:radio[name='fa_payment_cyber_source_checkout[payment_method]']:first").trigger('click');
 	    return true;
     }
+    $("#fa_payment_cyber_source_checkout_save").on('click', function(e){
+    	var paymentMethod = $("input[name='fa_payment_cyber_source_checkout[payment_method]']:checked").val();
+    	$("#cyber_source_form").submit();
+    })
     
     $("#cyber_source_form").submit(function(event) {  
     	var paymentMethod = $("input[name='fa_payment_cyber_source_checkout[payment_method]']:checked").val();
@@ -118,7 +125,7 @@
             return false
     	}
 
-        blockElement('#upgradeBasicAdToFeaturedModal');
+        blockElement('#featuredTopUpsellModal');
         // Stop form from submitting normally
         event.preventDefault();
        
@@ -133,13 +140,13 @@
         })
         .done(function(response) {
             if(response.error && response.error != '') {
-            	unblockElement('#upgradeBasicAdToFeaturedModal');
+            	unblockElement('#featuredTopUpsellModal');
             	$("#post-all-errors").html('<small class="error">'+response.error+'<br></small>');
 				return false;
             } else if(response.htmlContent.success) { 
             	window.location.href = response.htmlContent.redirectUrl;
             } else {
-            	 unblockElement('#upgradeBasicAdToFeaturedModal');
+            	 unblockElement('#featuredTopUpsellModal');
             	$('#payment-form').html(response.htmlContent);
             	if (paymentMethod == 0) {
                     $('#card_detail').show();
