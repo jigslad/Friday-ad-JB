@@ -80,7 +80,7 @@ class CyberSourceCheckoutController extends CoreController
         $formManager = $this->get('fa.formmanager');
         $form        = $formManager->createForm(CyberSourceCheckoutType::class, array('subscription' => $request->get('subscription')));
         $gaStr       = '';
-
+        
         if ('POST' === $request->getMethod() || $this->container->get('session')->has('upgrade_cybersource_params_'.$loggedinUser->getId())) {
             if ($cybersource3DSecureResponseFlag) {
 //                 $csrfToken     = $this->container->get('form.csrf_provider')->generateCsrfToken('fa_payment_cyber_source_checkout');
@@ -119,6 +119,7 @@ class CyberSourceCheckoutController extends CoreController
                 $paymentMethod       = $form->get('payment_method')->getData();
                 $saveToken           = false;
                 $subscriptionId      = null;
+                
                 if ($paymentMethod) {
                     $token = $this->getRepository('FaPaymentBundle:PaymentTokenization')->isValidUserToken($loggedinUser->getId(), $paymentMethod);
                     if (!$token) {
@@ -154,7 +155,7 @@ class CyberSourceCheckoutController extends CoreController
                 
                 //remove session for upgrade modal box
                 $this->container->get('session')->remove('upgrade_cybersource_params_'.$loggedinUser->getId());
-                
+               
                 if ((!$cybersource3DSecureResponseFlag && $cyberSourceReply && property_exists($cyberSourceReply, 'reasonCode') && $cyberSourceReply->reasonCode == PaymentCyberSourceRepository::SUCCESS_REASON_CODE) || ($cyberSourceReply && property_exists($cyberSourceReply, 'reasonCode') && $cyberSourceReply->reasonCode == PaymentCyberSourceRepository::SUCCESS_REASON_CODE && property_exists($cyberSourceReply, "payerAuthValidateReply") && property_exists($cyberSourceReply->payerAuthValidateReply, "authenticationResult") && in_array($cyberSourceReply->payerAuthValidateReply->authenticationResult, array(0, 1)))) {
                     $cartValue = unserialize($cart->getValue());
                     if (!is_array($cartValue)) {
@@ -174,6 +175,7 @@ class CyberSourceCheckoutController extends CoreController
                         }
                         $this->getRepository('FaPaymentBundle:PaymentTokenization')->addNewToken($loggedinUser->getId(), $subscriptionId, $cardNumber, $cardHolderName, $cardType, PaymentRepository::PAYMENT_METHOD_CYBERSOURCE, $billTo);
                     }
+                   
                     //update cart value and payment method.
                     $this->getEntityManager()->beginTransaction();
                     try {
@@ -184,6 +186,8 @@ class CyberSourceCheckoutController extends CoreController
                         $this->getEntityManager()->flush($cart);
                         $paymentId = $this->getRepository('FaPaymentBundle:Payment')->processPaymentSuccess($cart->getCartCode(), null, $this->container);
                         $this->getEntityManager()->getConnection()->commit();
+
+
                        
                         if($paymentFor != 'UP') {
                             try {
@@ -215,6 +219,8 @@ class CyberSourceCheckoutController extends CoreController
                                     return $this->handleMessage($this->get('translator')->trans('Your payment received successfully.', array(), 'frontend-cyber-source'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success', $cybersource3DSecureResponseFlag);
                                 }
                             }
+                        } else {
+                           return $this->handleMessage($this->get('translator')->trans('Your payment received successfully.', array(), 'frontend-cyber-source'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success', $cybersource3DSecureResponseFlag); 
                         }
                     } catch (\Exception $e) {
                         CommonManager::sendErrorMail($this->container, 'Error: Problem in payment', $e->getMessage(), $e->getTraceAsString());

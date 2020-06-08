@@ -172,7 +172,7 @@
                                         </div>
                                     {% endif %}
                                 {% endif %}
-                                <input type="hidden" name="categoryId" value="{{ categoryId }}" >
+                                <input type="hidden" name="categoryId" value="{{ categoryId }}">
                             </div>
                         </div>
                     </div>
@@ -212,7 +212,7 @@
     <div id="payment-form">
    	    {{ include('FaAdBundle:Ad:upgradePaymentForm.html.twig', {'form': form }) }}
 	</div>
-	<div id="card_detail_save" class="small-wrapper">
+	<div id="card_detail_save">
             <div class="payment-row">
                 <div class="label-inline white-checkbox">
                     {{ form_widget(form.is_save_credit_card) }}

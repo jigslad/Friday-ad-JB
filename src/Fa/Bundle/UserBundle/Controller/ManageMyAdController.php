@@ -915,7 +915,9 @@ class ManageMyAdController extends CoreController
                                             
                     if ('POST' === $request->getMethod()) {
                         $form->handleRequest($request);
-                        if ($form->isValid()) {
+                        $paymentMethod = $request->get('fa_payment_cyber_source_checkout')['payment_method'];
+                        
+                        if ($form->isValid() || ($paymentMethod!='' && $paymentMethod!=0)) {
                             $selectedUpsellId = $upsellId;
                             
                             //Add to the cart
@@ -956,7 +958,10 @@ class ManageMyAdController extends CoreController
                                 'adRootCategoryId' => $adRootCategoryId,
                                 'form' => $form->createView(),
                                 'dateRemainingForExpiry'=> $dateRemainingForExpiry,
-                                'upsellExpiry' => $upsellExpiry
+                                'upsellExpiry' => $upsellExpiry,
+                                'categoryId'  => $categoryId,
+                                'upsellId'  => $upsellId,
+                                'catupsellId' => $catupsellId
                             );
                             $htmlContent = $this->renderView('FaUserBundle:ManageMyAd:featuredTopNotApplicableModal.html.twig', $parameters);  
                         } else {
@@ -966,7 +971,10 @@ class ManageMyAdController extends CoreController
                                 'form' => $form->createView(),
                                 'individualUpsellArr' => $individualUpsellArr,
                                 'isAdultAdvertPresent' => $isAdultAdvertPresent,
-                                'individualUpsellModalDetails' => $individualUpsellModalDetails,         
+                                'individualUpsellModalDetails' => $individualUpsellModalDetails,  
+                                'categoryId'  => $categoryId,
+                                'upsellId'  => $upsellId,
+                                'catupsellId' => $catupsellId
                              );
                              $htmlContent = $this->renderView('FaUserBundle:ManageMyAd:individualUpsellmodalBox.html.twig', $parameters);                    
                         }
