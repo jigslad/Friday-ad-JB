@@ -40,9 +40,10 @@
         <span id="deadlock_error"></span>
         <a href="javascript:void(0)" class="close">&times;</a>
     </div>   
+    <div class="row fa-equalizer" id="package_equalizer">
 {% if packages|length %}     
     {{ form_start(form, {'attr': {'novalidate': '', 'id': 'cyber_source_form'}}) }}  
-    <div class="row fa-equalizer" id="package_equalizer">
+
         {% for package in packages %}
             {% set packageValues = array_unserialize(package.getPackage().getValue()) %}
             {% set packageActualPrice = 0 %}
@@ -82,7 +83,7 @@
             {% else %}
                 {% set packagePrice = 'Free'|trans({}, 'frontend-ad-package')%}
             {% endif %}
-            <div class="columns center">
+            <div class="small-24 medium-12 large-12 columns upsell-l-block">
                 <div class="paa-pkg-bg">
                     <span class="pkg-selection" id="package_selection_{{package.getPackage().getId()}}">Select Package</span>
                     {% set pkgBoxColorClass = 'pkg-green-head' %}
@@ -179,9 +180,9 @@
             </div>
             {% set packageId = package.getPackage().getId() %}
         {% endfor %}
-    </div>
     
-    <div class="large-24 columns" >
+    
+    <div class="small-24 medium-12 large-12 columns upsell-r-block" >
           {% set ccUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_CYBERSOURCE')}) %}
           {% set appleUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_APPLEPAY')}) %}
           {% set catPath = '' %}
@@ -206,6 +207,7 @@
                 {% endfor %}
                 {% do attribute(form, 'payment_method').setRendered %}
             </ul>            
+        </div>
     </div>
     <div id="payment-form">
    	    {{ include('FaAdBundle:Ad:upgradePaymentForm.html.twig', {'form': form }) }}
