@@ -54,12 +54,12 @@
     {% endif %}
 {% endif %}
 
-{% block stylesheets %}
-    {% stylesheets filter="uglifycss" output="bundles/css/mma.css"  
+{% block scripttop %}
+    {% stylesheets filter="uglifycss" output='bundles/css/compiled/mma.css'
          'build/css/mmacss.css'
          'build/css/upsell-featured.css'
     %}
-       <link rel="stylesheet" href="{{ asset_url }}"/>
+       <link rel="stylesheet" href="{{ asset('/bundles/css/compiled/mma.css') }}"/>
     {% endstylesheets %}
 {% endblock %}
 

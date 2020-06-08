@@ -211,14 +211,15 @@
 </script>
 {% endblock %}
 
-{% block stylesheets %}
-    {% stylesheets filter="uglifycss" output="bundles/css/srchlist.css"
-            "build/css/owl-carousel.css",
-            "build/css/featured-ads.css",
+{% block scripttop %}
+    {% stylesheets filter="uglifycss" output="bundles/css/compiled/srchlist.css"
+            "build/css/owl-carousel.css"
+            "build/css/featured-ads.css"
             "build/css/sponsored-slots.css"
+            "build/css/upgrade-featured.css"
         %}    	        
     {% endstylesheets %}
-    <link rel="stylesheet" href="{{ asset('/bundles/css/srchlist.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('/bundles/css/compiled/srchlist.css') }}"/>
 {% endblock %}
 
 {% block body %}
