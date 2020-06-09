@@ -1152,34 +1152,53 @@ class ManageMyAdController extends CoreController
     }  
     
     
-    public function ajaxCreditPaymentProcessForFeaturedAdPackage($adId, Request $request)
+    public function ajaxCreditPaymentProcessForFeaturedAdPackageAction($upsellId, $adId, Request $request)
     {
-        //$upsellId = 5;
-        //$adId = 17260111;
         if ($request->isXmlHttpRequest()) {
-            $redirectToUrl = '';
-            $error         = '';
-            $htmlContent   = '';
-            $deadlockError = '';
-            $deadlockRetry = '';
+            $cyberSourceManager  = $this->get('fa.cyber.source.manager');
             $loggedinUser     = $this->getLoggedInUser();
+            $getBasicAdResult = null;
+            $selectedPrintEditions = array();
+            $printEditionSelectedFlag = true;
+            $selectedPackageId = null;
+            $selectedPackagePrintId = null;
+            $packageIds = [];
+            $availablePackageIds = [];
+            $defaultSelectedPrintEditions = [];
             $errorMsg	= null;
-            
             if (!empty($loggedinUser)) {
                 $user        = $this->getRepository('FaUserBundle:User')->find($loggedinUser->getId());
-                $ad        = $this->getRepository('FaAdBundle:Ad')->find($adId);
-                
                 if (!empty($user)) {
-                    $categoryId = $ad->getCategory()->getId();
+                    $ad               = $this->getRepository('FaAdBundle:Ad')->find($adId);
+                    $categoryId       = $ad->getCategory()->getId();
+                    $adRootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
+                    
+                    //get user roles.
+                    $systemUserRoles  = $this->getRepository('FaUserBundle:Role')->getRoleArrayByType('C', $this->container);
+                    $userRole         = $this->getRepository('FaUserBundle:User')->getUserRole($user->getId(), $this->container);
+                    $userRolesArray[] = array_search($userRole, $systemUserRoles);
                     $locationGroupIds = $this->getRepository('FaAdBundle:AdLocation')->getLocationGroupByAdId($adId);
-                    $availableFeaturedPackages = $this->getRepository('FaPromotionBundle:PackageRule')->getFeaturedPackageByCategoryId($categoryId, $locationGroupIds, $this->container);                    
+                    $availablePackages = $this->getRepository('FaPromotionBundle:PackageRule')->getActivePackagesByCategoryId($categoryId, $locationGroupIds, $userRolesArray, array(), $this->container);
                     $adExpiryDays     = $this->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($categoryId, $this->container);
                     
                     //loop through all show packages
-                    foreach ($availableFeaturedPackages as $package) {
-                        $availableFeaturedPackagesIds[] = $package->getPackage()->getId();
+                    foreach ($availablePackages as $package) {
+                        $availablePackageIds[] = $package->getPackage()->getId();
                     }
-                    $packages = $this->getRepository('FaPromotionBundle:PackageRule')->getPackageByCategoryId($availableFeaturedPackagesIds[0]);
+                    //get User featured Top Package
+                    $getUserLastAdvert = $this->getRepository('FaAdBundle:Ad')->getUserLastBasicLiveAdvert($user->getId(), $adId, $adRootCategoryId, $this->container);
+                    //check last user advert is Basic
+                    if (isset($availablePackageIds[0]) && in_array($getUserLastAdvert['packageId'], $availablePackageIds)) {
+                        //remove basic advert from package list and check Featured Top upsell exist for this package
+                        array_shift($availablePackageIds);
+                        $packageIds[] = $this->getRepository('FaAdBundle:Ad')->getFeaturedAdForUpgrade($availablePackageIds);
+                        //no featured top upsell exist
+                        if (empty($packageIds)) {
+                            return new JsonResponse(array('error' => 'No Featured Top Package Found', 'deadlockError' => $deadlockError, 'redirectToUrl' => $redirectToUrl, 'htmlContent' => $htmlContent, 'deadlockRetry' => $deadlockRetry));
+                        }
+                    }
+                    //get available fetaured top package
+                    $packages = $this->getRepository('FaPromotionBundle:PackageRule')->getPackageByCategoryId($packageIds[0]);
                     //get Print Edition if exist
                     $printEditionLimits = $this->getRepository('FaPromotionBundle:Package')->getPrintEditionLimitForPackages($packageIds);
                     
@@ -1190,8 +1209,39 @@ class ManageMyAdController extends CoreController
                         }
                     }
                     $selectedPrintEditions = $defaultSelectedPrintEditions;
-                    return new JsonResponse(array('error' => $error, 'deadlockError' => $deadlockError, 'redirectToUrl' => $redirectToUrl, 'htmlContent' => $htmlContent, 'deadlockRetry' => $deadlockRetry));
-                }
+                    //Payment gateway form
+                    $selectedPackageId = $getUserLastAdvert['packageId'];
+                    $printEditionValues = array();
+                        
+                    $selectedPackageObj = $this->getRepository('FaPromotionBundle:Package')->findOneBy(array('id' => $selectedPackageId));
+                    if ($selectedPackageObj->getDuration()) {
+                        $getLastCharacter = substr($selectedPackageObj->getDuration(),-1);
+                        $noInDuration = substr($selectedPackageObj->getDuration(),0, -1);
+                        if($getLastCharacter=='m') { $adExpiryDays = $noInDuration*28;   }
+                        elseif($getLastCharacter=='d') { $adExpiryDays = $noInDuration; }
+                        else { $adExpiryDays = $selectedPackageObj->getDuration(); }
+                    }
+                   //Add to the cart
+                    $addCartInfo = $this->addInfoToCart($user->getId(), $adId, $selectedPackageId, $selectedPackagePrintId, $printEditionLimits, $adExpiryDays, $printEditionValues, $request, $categoryId);
+                    if ($addCartInfo) {
+                        //make it cybersource payment
+                        $redirectUrl = $request->headers->get('referer');
+                        $this->container->get('session')->set('upgrade_payment_success_redirect_url', $redirectUrl);
+                        $this->get('session')->set('upgrade_cybersource_params_'.$loggedinUser->getId(), array_merge($form->getData(), $request->get('fa_payment_cyber_source_checkout')));
+                        
+                        $adUserPackage      = $this->getRepository('FaAdBundle:AdUserPackage')->getActiveAdPackage($adId);
+                        if(!empty($adUserPackage)) {
+                            $adUserPackage->setIsUsedFeaturedCredit(1);
+                            $this->persist($adUserPackage);
+                            $this->flush();
+                        }
+
+                        $htmlContent= array(
+                                'success' 		=> true,
+                                'redirectUrl' 	=> $this->generateUrl('process_payment', array('paymentMethod' => PaymentRepository::PAYMENT_METHOD_CYBERSOURCE), true)
+                        );
+                    }
+             return new JsonResponse(array('error' => $error, 'deadlockError' => $deadlockError, 'redirectToUrl' => $redirectToUrl, 'htmlContent' => $htmlContent, 'deadlockRetry' => $deadlockRetry));                   }
             }
         }
     }  

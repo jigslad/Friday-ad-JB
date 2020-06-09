@@ -91,6 +91,22 @@ function useCreditForFeaturedIndividualUpsell(adId, upsellId) {
     });
 }
 
+function useCreditForFeaturedPackage(adId, upsellId) {
+	blockPage();
+    var route = Routing.generate('credit_payment_process_for_featured_ad_package', { 'upsellId': upsellId, 'adId': adId });
+    $.ajax({
+        type: "GET",
+        url : route,
+        data : {'redirectUrl': '{{app.request.getUri()}}'},   
+    })
+    .always(function(response) {
+        unblockPage();
+    })
+    .done(function(response) {
+    	window.location.href = '{{ path('manage_my_ads_active') }}';
+    });
+}
+
 function paypalIndividualUpsellPaymentProcess(upsellModalName, upsellId, adId) {
 	
 	var modalName = '#'+upsellModalName;
