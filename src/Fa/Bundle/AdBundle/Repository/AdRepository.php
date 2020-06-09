@@ -3780,10 +3780,10 @@ class AdRepository extends EntityRepository
         $userPackageAdLimit    = $userBasicCreditCnt = 0;
         if($objAd->getUser()->getId()!='') {
             $userPackageAdLimit = $this->_em->getRepository('FaUserBundle:UserPackage')->getUserPackageAdLimit($objAd->getUser()->getId());
-            $userBasicCreditCnt = $this->_em->getRepository('FaUserBundle:UserCredit')->getActiveBasicCreditCountForUser($objAd->getUser()->getId());
+            $userBasicCreditCnt = $this->_em->getRepository('FaUserBundle:UserCreditUsed')->getActiveBasicCreditCountForUser($objAd->getUser()->getId());
             
             if($userPackageAdLimit > $userBasicCreditCnt) {
-                $userBasicCreditCnt = $this->_em->getRepository('FaUserBundle:UserCredit')->getActiveBasicCreditCountForUser($objAd->getUser()->getId());
+                $userBasicCreditCnt = $this->_em->getRepository('FaUserBundle:UserCreditUsed')->getActiveBasicCreditCountForUser($objAd->getUser()->getId());
                 
             }
         }
