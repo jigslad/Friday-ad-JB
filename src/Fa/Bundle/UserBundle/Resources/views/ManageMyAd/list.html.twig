@@ -180,7 +180,7 @@
                                                 {#<div class="manage-list-desc">You will have <span class="leftoutAdCount">0</span> boosts left</div>#}
                                             </div>
                                             <div class="small-24 medium-6 large-6 columns">
-                                                <button type="button" id="stop-sel-ads-btn" class="button xs-black-large-btn  expand" onclick="closeRevealModel('#markAdAsBoostedModal');stopAds();">{{'Stop Ads'|trans({}, 'frontend-manage-my-ad')}}</button>
+                                                <button type="button" id="stop-sel-ads-btn" class="button xs-black-large-btn  expand" onclick="stopAds();">{{'Stop Ads'|trans({}, 'frontend-manage-my-ad')}}</button>
                                             </div>
                                             {% if isBoostEnabled is defined and isBoostEnabled==1 and boostAdRemaining is defined and boostAdRemaining > 0 %}
                                             <div class="small-24 medium-6 large-6 columns">
