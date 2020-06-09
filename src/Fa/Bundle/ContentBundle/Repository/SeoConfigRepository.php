@@ -12,6 +12,7 @@
 namespace Fa\Bundle\ContentBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use phpDocumentor\Reflection\DocBlock\Tags\Return_;
 
 /**
  * Seo Config repository.
@@ -88,4 +89,28 @@ class SeoConfigRepository extends EntityRepository
         ]);
     }
 
+    /**
+     * get meta tag for roboots
+     *
+     * @param $url
+     * @return object|null
+     */
+    public function getMetaRobots($url){
+        $metaRobots = $this->findOneBy([
+            'type' => self::META_ROBOTS
+        ]);
+        if($metaRobots){
+            if($metaRobots->getStatus()){
+                $metaDatas = $metaRobots->getData();
+                foreach ($metaDatas as $metaData){
+                    $metaData = explode(':',$metaData);
+                    if(strpos($url, $metaData[1]) !== false){
+                        return $metaData[0];
+
+                    }
+                }
+            }
+        }
+        return null;
+    }
 }

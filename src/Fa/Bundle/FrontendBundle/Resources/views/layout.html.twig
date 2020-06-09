@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,target-densityDpi=medium-dpi" />
     
 	{% set blockPageTitle = block('page_title') is defined ? block('page_title')|replace({' in UK': ''})|trim : false %}
-    {% set blockMetaRobots = block('meta_robots') is defined ? block('meta_robots')|trim : false %}
+        {% set blockMetaRobots = block('meta_robots') is defined ? block('meta_robots')|trim : false %}
     {% set blockMetaDescription = block('meta_description') is defined ? block('meta_description')|replace({' in UK': ''})|trim : false %}
     {% set blockMetaKeywords = block('meta_keywords') is defined ? block('meta_keywords')|trim : false %}
     {% set blockMetaCanonicalUrl = block('canonical_url') is defined ? block('canonical_url')|trim : false %}
@@ -82,9 +82,15 @@
     {% endif %}
 
     <title>{% block title %}{% if blockPageTitle %}{{blockPageTitle|raw}}{% else %}{{'Friday-Ad'|trans}}{% endif %}{% endblock %}</title>
-    {% if blockMetaRobots and (not app.request.get('advertgone') or app.request.get('expired_ads')) %}
-        <meta name="robots" content="{{blockMetaRobots}}" />
+    {% set seoConfigRepository = fetch_repository('FaContentBundle:SeoConfig') %}
+    {% set metaRobots = seoConfigRepository.getMetaRobots(app.request.uri) %}
+    {% if metaRobots is not null %}
+        <meta name="robots" content="{{metaRobots}}" />
     {% endif %}
+{#    Old code For meta robots#}
+{#    {% if blockMetaRobots and (not app.request.get('advertgone') or app.request.get('expired_ads')) %}#}
+{#        <meta name="robots" content="{{blockMetaRobots}}" />#}
+{#    {% endif %}#}
     {% if blockMetaDescription %}
         <meta name="description" content="{{blockMetaDescription|raw}}" />
     {% endif %}
