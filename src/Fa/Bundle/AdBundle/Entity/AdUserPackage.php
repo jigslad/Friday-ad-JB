@@ -131,6 +131,13 @@ class AdUserPackage
     private $ti_package;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="is_used_featured_credit", type="smallint", length=4, options={"default" = 0}, nullable=true)
+     */
+    private $is_used_featured_credit = 0;
+    
+    /**
      * @ORM\PrePersist()
      */
     public function setCreatedAtValue()
@@ -432,4 +439,28 @@ class AdUserPackage
     {
         return $this->ti_package;
     }
+
+    /**
+     * Set is_used_featured_credit
+     *
+     * @param boolean $isUsedFeaturedCredit
+     * @return AdUserPackage
+     */
+    public function setIsUsedFeaturedCredit($isUsedFeaturedCredit)
+    {
+        $this->is_used_featured_credit = $isUsedFeaturedCredit;
+
+        return $this;
+    }
+
+    /**
+     * Get is_used_featured_credit
+     *
+     * @return boolean
+     */
+    public function getIsUsedFeaturedCredit()
+    {
+        return $this->is_used_featured_credit;
+    }
+
 }
