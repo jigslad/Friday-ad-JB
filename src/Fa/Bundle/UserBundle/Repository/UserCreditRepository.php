@@ -125,6 +125,7 @@ class UserCreditRepository extends EntityRepository
                     $userCredit->setPaidUserOnly($shopPackageCredit->getPaidUserOnly());
                     $userCredit->setStatus(1);
                     $userCredit->setExpiresAt($expiresAt);
+                    $userCredit->setTotalCredit($shopCreditCnt);
                     $this->_em->persist($userCredit);
                 }
             }
