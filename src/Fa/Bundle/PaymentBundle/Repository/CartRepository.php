@@ -644,6 +644,11 @@ class CartRepository extends EntityRepository
                 $this->_em->persist($transactionDetail);
                 $this->_em->flush($transactionDetail);
             }
+            if($cartObj) {
+                $cartObj->setStatus(0);
+                $this->_em->persist($cartObj);
+                $this->_em->flush($cartObj);
+            }
         }
     }
 }
