@@ -1154,7 +1154,7 @@ class ManageMyAdController extends CoreController
     
     public function ajaxCreditPaymentProcessForFeaturedAdPackageAction($upsellId, $adId, Request $request)
     {
-       /* if ($request->isXmlHttpRequest()) { */
+        if ($request->isXmlHttpRequest()) {
             $cyberSourceManager  = $this->get('fa.cyber.source.manager');
             $loggedinUser     = $this->getLoggedInUser();
             $getBasicAdResult = null;
@@ -1234,22 +1234,14 @@ class ManageMyAdController extends CoreController
                         $redirectUrl = $request->headers->get('referer');
                         $this->container->get('session')->set('upgrade_payment_success_redirect_url', $redirectUrl);
                         
-                        $adUserPackage      = $this->getRepository('FaAdBundle:AdUserPackage')->getActiveAdPackage($adId);
-                        if(!empty($adUserPackage)) {
-                            $adUserPackage->setIsUsedFeaturedCredit(1);
-                            $this->getEntityManager()->persist($adUserPackage);
-                            $this->getEntityManager()->flush();
-                        }
-
                         $redirectToUrl = $this->generateUrl('process_payment', array('paymentMethod' => PaymentRepository::PAYMENT_METHOD_CYBERSOURCE), true);
                         $htmlContent= array(
                                 'success' 		=> true,
                                 'redirectUrl' 	=> $this->generateUrl('process_payment', array('paymentMethod' => PaymentRepository::PAYMENT_METHOD_CYBERSOURCE), true)
                         );
                     }
-                    return true;
-             /*return new JsonResponse(array('error' => $error, 'deadlockError' => $deadlockError, 'redirectToUrl' => $redirectToUrl, 'htmlContent' => $htmlContent, 'deadlockRetry' => $deadlockRetry));
-             } */
+             return new JsonResponse(array('error' => $error, 'deadlockError' => $deadlockError, 'redirectToUrl' => $redirectToUrl, 'htmlContent' => $htmlContent, 'deadlockRetry' => $deadlockRetry));
+             }
 
             }
         }
@@ -1287,6 +1279,7 @@ class ManageMyAdController extends CoreController
 
         $adUserPackage->setPrice($selpackage->getPrice());
         $adUserPackage->setDuration($selpackage->getDuration());
+        $adUserPackage->setIsUsedFeaturedCredit(1);
         $this->getEntityManager()->persist($adUserPackage);
         $this->getEntityManager()->flush();
 
