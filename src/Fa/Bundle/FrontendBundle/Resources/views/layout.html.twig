@@ -83,7 +83,7 @@
 
     <title>{% block title %}{% if blockPageTitle %}{{blockPageTitle|raw}}{% else %}{{'Friday-Ad'|trans}}{% endif %}{% endblock %}</title>
     {% if blockMetaRobots and (not app.request.get('advertgone') or app.request.get('expired_ads')) %}
-        <meta name="robots" content="{{blockMetaRobots}}" />
+        <meta name="robots" content="noindex, follow">
     {% endif %}
     {% if blockMetaDescription %}
         <meta name="description" content="{{blockMetaDescription|raw}}" />
