@@ -112,12 +112,12 @@
                        			<option value="ad_date"  {{ (filterBy=='ad_date')?'selected':'' }}>All ads</option>
                        			<option value="sel-basic"  {{ (filterBy=='sel-basic')?'selected':'' }}>Basic ads</option>
                        			<option value="sel-featured"  {{ (filterBy=='sel-featured')?'selected':'' }}>Featured ads</option>
-                       		</select></div>                           		
-               		   {# {% if isBoostEnabled==1 and boostAdRemaining > 0 and (currentRoute == 'manage_my_ads_active') %}  #}                              
-                                <div class="select-all-ads-active"><span class="all-sel-chkbox custom-checkbox"><input type="checkbox" class="boostad_selectall"></span> <span class="all-sel-text boostad_selectall"> {% if currentRoute == 'manage_my_ads_active' %}
-                                    Select all ads <span class="hide-for-small-only">on this page</span> ({{ onlyActiveAdInPageCount }})
-                                {% endif %} </span></div>                                                                    
-                                {# {% endif %} #}
+                       		</select></div>
+                            {% if onlyActiveAdInPageCount > 0 and (currentRoute == 'manage_my_ads_active' or currentRoute == 'dashboard_home') %}
+                                    <div class="select-all-ads-active"><span class="all-sel-chkbox custom-checkbox"><input type="checkbox" class="boostad_selectall"></span> <span class="all-sel-text boostad_selectall"> {% if currentRoute == 'manage_my_ads_active' %}
+                                        Select all ads <span class="hide-for-small-only">on this page</span> ({{ onlyActiveAdInPageCount }})
+                                    {% endif %} </span></div>
+                            {% endif %}
                        </div>
                        {% endif %} 
                            
@@ -202,7 +202,7 @@
 </div>
 
             
-<div id="markAdAsSoldOrExpireBulkModal" class="reveal-modal tiny remove-item-modal" data-reveal>
+<div id="markAdAsSoldOrExpireBulkModal" class="reveal-modal tiny remove-item-modal" data-options="close_on_background_click:false;close_on_esc:false;" data-reveal>
     <a class="close-reveal-modal">&#215;</a>
     <h5 class="modal-title">
         {{'Remove ad'|trans({}, 'frontend-manage-my-ad')}}
@@ -229,7 +229,7 @@
     </div>
 </div>          
                 
-<div id="markAdAsSoldOrExpireModal" class="reveal-modal tiny remove-item-modal" data-reveal>
+<div id="markAdAsSoldOrExpireModal" class="reveal-modal tiny remove-item-modal" data-options="close_on_background_click:false;close_on_esc:false;" data-reveal>
     <a class="close-reveal-modal">&#215;</a>
     <h5 class="modal-title">
         {{'Remove ad'|trans({}, 'frontend-manage-my-ad')}}
@@ -259,7 +259,7 @@
 
 
 
-<div id="markAdAsUnBoostModal" class="reveal-modal tiny remove-item-modal" data-reveal>
+<div id="markAdAsUnBoostModal" class="reveal-modal tiny remove-item-modal" data-options="close_on_background_click:false;close_on_esc:false;" data-reveal>
     <a class="close-reveal-modal">&#215;</a>
     <h5 class="modal-title">
         {{'Boost ads'|trans({}, 'frontend-manage-my-ad')}}
@@ -283,7 +283,7 @@
     </div>
 </div>
 
-<div id="markAdAsInactiveModal" class="reveal-modal tiny remove-item-modal" data-reveal>
+<div id="markAdAsInactiveModal" class="reveal-modal tiny remove-item-modal" data-options="close_on_background_click:false;close_on_esc:false;" data-reveal>
     <a class="close-reveal-modal">&#215;</a>
     <h5 class="modal-title">
         {{'Remove ad'|trans({}, 'frontend-manage-my-ad')}}
@@ -307,7 +307,7 @@
     </div>
 </div>
 
-<div id="socialShareMobileModal" class="reveal-modal tiny" data-reveal>
+<div id="socialShareMobileModal" class="reveal-modal tiny" data-options="close_on_background_click:false;close_on_esc:false;" data-reveal >
     <a class="close-reveal-modal">&#215;</a>
     <h5 class="modal-title">
         {{'Share this ad'|trans({}, 'frontend-manage-my-ad')}}
@@ -322,7 +322,7 @@
 </div>
 
 
-<div id="featuredOffConfirmModal" class="reveal-modal tiny remove-item-modal mini-modal-box" data-reveal>
+<div id="featuredOffConfirmModal" class="reveal-modal tiny remove-item-modal mini-modal-box"  data-options="close_on_background_click:false;close_on_esc:false;" data-reveal>
     <a class="close-reveal-modal closeFeaturedUpsell" onclick="turnOnFeaturedToggle();closeRevealModel('#featuredOffConfirmModal');">&#215;</a>
     <h5 class="modal-title"> 
         {{'Are you sure?'|trans({}, 'frontend-manage-my-ad')}}
@@ -347,7 +347,7 @@ Are you sure you wish to remove the Feature option?</h5>
     </div>
 </div>
 
-<div id="creditConfimBox" class="reveal-modal tiny remove-item-modal mini-modal-box" data-reveal>
+<div id="creditConfimBox" class="reveal-modal tiny remove-item-modal mini-modal-box" data-options="close_on_background_click:false;close_on_esc:false;" data-reveal>
     <a class="close-reveal-modal">&#215;</a>
     <h5 class="modal-title">
         {{'Use credit'|trans({}, 'frontend-ad-package')}}
@@ -372,7 +372,7 @@ Are you sure you wish to remove the Feature option?</h5>
     </div>
 </div>
 
-<div id="unsufficientCreditBox" class="reveal-modal tiny remove-item-modal mini-modal-box" data-reveal>
+<div id="unsufficientCreditBox" class="reveal-modal tiny remove-item-modal mini-modal-box" data-options="close_on_background_click:false;close_on_esc:false;" data-reveal>
     <a class="close-reveal-modal">&#215;</a>
     <h5 class="modal-title">
         {{'Use credit'|trans({}, 'frontend-ad-package')}}
@@ -387,7 +387,7 @@ Are you sure you wish to remove the Feature option?</h5>
     </div>
 </div>
     
-<div id="featuredTopUpsellModal" class="ga-featuredUnavailable reveal-modal xm remove-item-modal featured-top-modal mma-featured-pop small" data-reveal="" data-selfeaturedid=""></div>
+<div id="featuredTopUpsellModal" data-options="close_on_background_click:false;close_on_esc:false;" class="ga-featuredUnavailable reveal-modal xm remove-item-modal featured-top-modal mma-featured-pop small" data-reveal="" data-selfeaturedid=""></div>
 {% if successUpsellPaymentModalbox is defined and successUpsellPaymentModalbox %}
     {#  Featured Top Success Modal Box   #}
     {{ include('FaUserBundle:ManageMyAd:individualSuccessPaymentModal.html.twig') }}
