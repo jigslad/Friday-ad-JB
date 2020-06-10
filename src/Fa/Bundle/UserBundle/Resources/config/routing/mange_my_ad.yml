@@ -68,7 +68,7 @@ credit_payment_process_for_individual_upsell:
         
 credit_payment_process_for_featured_ad_package:
     path:   /credit_payment_process_for_featured_ad_package/{upsellId}/{adId}
-    defaults:  { _controller: "FaUserBundle:ManageMyAd:ajaxCreditPaymentProcessForFeaturedAdPackageAction" }
+    defaults:  { _controller: "FaUserBundle:ManageMyAd:ajaxCreditPaymentProcessForFeaturedAdPackage" }
     options:
         expose: true
                
