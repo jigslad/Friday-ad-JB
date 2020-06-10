@@ -82,18 +82,29 @@ class AdRequestListener
         }
 
         // remove odata from url
-//        $Odata = $this->em->getRepository('FaContentBundle:SeoConfig')->getOdata();
-//        if($Odata){
-//            $oDataArray = $Odata->getData();
-//            foreach ($oDataArray as $item) {
-//                //if (strpos($uri, $url) !== FALSE) { // Yoshi version
-//                if (strstr(strtolower($uri), strtolower($item))) { // mine version
-//                    $newUrl = str_replace(strtolower($item).'/',"",strtolower($uri));
-//                    $response = new RedirectResponse($newUrl);
-//                    $event->setResponse($response);
-//                }
-//            }
-//        }
+        $oDataArray = $this->em->getRepository('FaContentBundle:SeoConfig')->getOdataParams();
+        if($oDataArray){
+            foreach ($oDataArray as $item) {
+                //if (strpos($uri, $url) !== FALSE) { // Yoshi version
+                if (strstr(strtolower($uri), strtolower($item))) { // mine version
+                    $newUrl = str_replace(strtolower($item).'/',"",strtolower($uri));
+                    $response = new RedirectResponse($newUrl);
+                    $event->setResponse($response);
+                }
+            }
+        }
+
+        // remove Query Params from url
+        $queryParams = $this->em->getRepository('FaContentBundle:SeoConfig')->getQueryParams();
+        if($queryParams){
+            foreach ($queryParams as $item) {
+                if (strstr(strtolower($uri), strtolower($item))) { // mine version
+                    $newUrl = str_replace(strtolower($item).'/',"",strtolower($uri));
+                    $response = new RedirectResponse($newUrl);
+                    $event->setResponse($response);
+                }
+            }
+        }
 
         // If the ad-detail page url is having an entity in string, then forward to Ad-listings
         /*if ($this->_route($request) == 'ad_detail_page') {

@@ -83,10 +83,29 @@ class SeoConfigRepository extends EntityRepository
      *
      * @return object|null
      */
-    public function getOdata(){
-        return $this->findOneBy([
+    public function getOdataParams(){
+        $ODataParams = $this->findOneBy([
             'type' => self::UNNECESSARY_ODATA_PARAMS
         ]);
+        if($ODataParams){
+            return $ODataParams->getData();
+        }
+        return null;
+    }
+
+    /**
+     * get o data for removing from url
+     *
+     * @return object|null
+     */
+    public function getQueryParams(){
+        $QueryParams = $this->findOneBy([
+            'type' => self::UNNECESSARY_QUERY_PARAMS
+        ]);
+        if($QueryParams){
+            return $QueryParams->getData();
+        }
+        return null;
     }
 
     /**
