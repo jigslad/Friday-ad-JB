@@ -168,6 +168,7 @@
     	$(document).foundation('dropdown', 'closeall');
     	var newClass = orderStatusButtonColorClassesArray[newStatusId];
         var route = Routing.generate('ajax_update_order_status', { 'orderId': orderId });
+        route = route.replace(':https','');
         blockPage();
         $.ajax({
             type: "POST",
@@ -208,12 +209,14 @@
     function viewReceipt(orderId)
     {
     	var route = Routing.generate('order_receipt', { 'orderId': orderId, 'action':'viewonly' });
+    	route = route.replace(':https','');
     	window.open(route,"Order receipt", "height=600, width=750, status=no, titlebar=no, menubar=no, location=no, toolbar=no, resizable=no");
     }
 
     function printReceipt(orderId)
     {
     	var route = Routing.generate('order_receipt', { 'orderId': orderId, 'action':'viewandprint' });
+    	route = route.replace(':https','');
     	window.open(route,"Order receipt", "height=600, width=750, status=no, titlebar=no, menubar=no, location=no, toolbar=no, resizable=no");
     }
 
@@ -221,6 +224,7 @@
     {
         blockPage();
         var route = Routing.generate('contact_user', { 'adId': adId, 'senderId': senderId, 'receiverId': buyerId, 'whoToWhome': 'S2B' });
+        route = route.replace(':https','');
         $.ajax({
             type: "GET",
             url : route,
