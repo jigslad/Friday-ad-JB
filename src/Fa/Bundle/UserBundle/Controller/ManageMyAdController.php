@@ -1166,6 +1166,7 @@ class ManageMyAdController extends CoreController
             $availablePackageIds = [];
             $defaultSelectedPrintEditions = [];
             $errorMsg	= null;
+            $error = $deadlockError = $htmlContent = $deadlockRetry = $redirectToUrl = '';
             if (!empty($loggedinUser)) {
                 $user        = $this->getRepository('FaUserBundle:User')->find($loggedinUser->getId());
                 if (!empty($user)) {
@@ -1236,6 +1237,7 @@ class ManageMyAdController extends CoreController
                             $this->flush();
                         }
 
+                        $redirectToUrl = $this->generateUrl('process_payment', array('paymentMethod' => PaymentRepository::PAYMENT_METHOD_CYBERSOURCE), true);
                         $htmlContent= array(
                                 'success' 		=> true,
                                 'redirectUrl' 	=> $this->generateUrl('process_payment', array('paymentMethod' => PaymentRepository::PAYMENT_METHOD_CYBERSOURCE), true)
