@@ -1154,7 +1154,7 @@ class ManageMyAdController extends CoreController
     
     public function ajaxCreditPaymentProcessForFeaturedAdPackageAction($upsellId, $adId, Request $request)
     {
-        if ($request->isXmlHttpRequest()) {
+       /* if ($request->isXmlHttpRequest()) { */
             $cyberSourceManager  = $this->get('fa.cyber.source.manager');
             $loggedinUser     = $this->getLoggedInUser();
             $getBasicAdResult = null;
@@ -1188,6 +1188,7 @@ class ManageMyAdController extends CoreController
                     }
                     //get User featured Top Package
                     $getUserLastAdvert = $this->getRepository('FaAdBundle:Ad')->getUserLastBasicLiveAdvert($user->getId(), $adId, $adRootCategoryId, $this->container);
+
                     //check last user advert is Basic
                     if (isset($availablePackageIds[0]) && in_array($getUserLastAdvert['packageId'], $availablePackageIds)) {
                         //remove basic advert from package list and check Featured Top upsell exist for this package
@@ -1198,7 +1199,11 @@ class ManageMyAdController extends CoreController
                             return new JsonResponse(array('error' => 'No Featured Top Package Found', 'deadlockError' => $deadlockError, 'redirectToUrl' => $redirectToUrl, 'htmlContent' => $htmlContent, 'deadlockRetry' => $deadlockRetry));
                         }
                     }
-                    //get available fetaured top package
+
+                    if(!empty($packageIds)) {
+                        $this->addUserPackage($ad, $packageIds[0]);
+                    }
+
                     $packages = $this->getRepository('FaPromotionBundle:PackageRule')->getPackageByCategoryId($packageIds[0]);
                     //get Print Edition if exist
                     $printEditionLimits = $this->getRepository('FaPromotionBundle:Package')->getPrintEditionLimitForPackages($packageIds);
@@ -1228,13 +1233,12 @@ class ManageMyAdController extends CoreController
                         //make it cybersource payment
                         $redirectUrl = $request->headers->get('referer');
                         $this->container->get('session')->set('upgrade_payment_success_redirect_url', $redirectUrl);
-                        $this->get('session')->set('upgrade_cybersource_params_'.$loggedinUser->getId(), array_merge($form->getData(), $request->get('fa_payment_cyber_source_checkout')));
                         
                         $adUserPackage      = $this->getRepository('FaAdBundle:AdUserPackage')->getActiveAdPackage($adId);
                         if(!empty($adUserPackage)) {
                             $adUserPackage->setIsUsedFeaturedCredit(1);
-                            $this->persist($adUserPackage);
-                            $this->flush();
+                            $this->getEntityManager()->persist($adUserPackage);
+                            $this->getEntityManager()->flush();
                         }
 
                         $redirectToUrl = $this->generateUrl('process_payment', array('paymentMethod' => PaymentRepository::PAYMENT_METHOD_CYBERSOURCE), true);
@@ -1243,11 +1247,95 @@ class ManageMyAdController extends CoreController
                                 'redirectUrl' 	=> $this->generateUrl('process_payment', array('paymentMethod' => PaymentRepository::PAYMENT_METHOD_CYBERSOURCE), true)
                         );
                     }
-             return new JsonResponse(array('error' => $error, 'deadlockError' => $deadlockError, 'redirectToUrl' => $redirectToUrl, 'htmlContent' => $htmlContent, 'deadlockRetry' => $deadlockRetry));                   }
+                    return true;
+             /*return new JsonResponse(array('error' => $error, 'deadlockError' => $deadlockError, 'redirectToUrl' => $redirectToUrl, 'htmlContent' => $htmlContent, 'deadlockRetry' => $deadlockRetry));
+             } */
+
             }
         }
-    }  
-    
+    }
+    private function addUserPackage($ad, $packageId) {
+        $adId = $ad->getId();
+        $user = $ad->getUser();
+
+        $expireAdUserPackage = $this->getRepository('FaAdBundle:AdUserPackage')->forceExpireAdUserPackage($adId);
+        $expireAdUserPackageUpsell = $this->getRepository('FaAdBundle:AdUserPackageUpsell')->forceExpireAdPackageUpsell($adId);
+
+        $adUserPackage = new AdUserPackage();
+
+        // find & set package
+        $selpackage = $this->getRepository('FaPromotionBundle:Package')->find($packageId);
+        $adUserPackage->setPackage($selpackage);
+
+        // set ad
+        $adMain = $this->getRepository('FaAdBundle:AdMain')->find($adId);
+        $adUserPackage->setAdMain($adMain);
+        $adUserPackage->setAdId($adId);
+        $adUserPackage->setStatus(AdUserPackageRepository::STATUS_ACTIVE);
+        $adUserPackage->setStartedAt(time());
+        if ($selpackage->getDuration()) {
+            $adUserPackage->setExpiresAt(CommonManager::getTimeFromDuration($selpackage->getDuration()));
+        } elseif ($ad) {
+            $expirationDays = $this->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($ad->getCategory()->getId());
+            $adUserPackage->setExpiresAt(CommonManager::getTimeFromDuration($expirationDays.'d'));
+        }
+
+        // set user
+        if ($user) {
+            $adUserPackage->setUser($user);
+        }
+
+        $adUserPackage->setPrice($selpackage->getPrice());
+        $adUserPackage->setDuration($selpackage->getDuration());
+        $this->getEntityManager()->persist($adUserPackage);
+        $this->getEntityManager()->flush();
+
+        foreach ($selpackage->getUpsells() as $upsell) {
+            $this->addAdUserPackageUpsell($ad, $adUserPackage, $upsell);
+        }
+    }
+
+    /**
+     * Add ad user package upsell
+     *
+     * @param object $ad
+     * @param object $adUserPackage
+     * @param object $upsell
+     */
+    private function addAdUserPackageUpsell($ad, $adUserPackage, $upsell)
+    {
+        $adId = $ad->getId();
+        $adUserPackageUpsellObj = $this->getRepository('FaAdBundle:AdUserPackageUpsell')->findOneBy(array('ad_id' => $adId, 'ad_user_package' => $adUserPackage->getId(), 'status' => 1, 'upsell' => $upsell->getId()));
+        if (!$adUserPackageUpsellObj) {
+            $adUserPackageUpsell = new AdUserPackageUpsell();
+            $adUserPackageUpsell->setUpsell($upsell);
+
+            // set ad user package id.
+            if ($adUserPackage) {
+                $adUserPackageUpsell->setAdUserPackage($adUserPackage);
+            }
+
+            // set ad
+            $adMain = $this->getRepository('FaAdBundle:AdMain')->find($adId);
+            $adUserPackageUpsell->setAdMain($adMain);
+            $adUserPackageUpsell->setAdId($adId);
+
+            $adUserPackageUpsell->setValue($upsell->getValue());
+            $adUserPackageUpsell->setValue1($upsell->getValue1());
+            $adUserPackageUpsell->setDuration($upsell->getDuration());
+            $adUserPackageUpsell->setStatus(1);
+            $adUserPackageUpsell->setStartedAt(time());
+            if ($upsell->getDuration()) {
+                $adUserPackageUpsell->setExpiresAt(CommonManager::getTimeFromDuration($upsell->getDuration()));
+            } elseif ($ad) {
+                $expirationDays = $this->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($ad->getCategory()->getId());
+                $adUserPackageUpsell->setExpiresAt(CommonManager::getTimeFromDuration($expirationDays.'d'));
+            }
+
+            $this->getEntityManager()->persist($adUserPackageUpsell);
+            $this->getEntityManager()->flush();
+        }
+    }
     /**
      * Get ad status action
      *

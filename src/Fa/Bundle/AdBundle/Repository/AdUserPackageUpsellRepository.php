@@ -218,6 +218,22 @@ class AdUserPackageUpsellRepository extends EntityRepository
         } else { return false; }
     }
 
+    public function forceExpireAdPackageUpsell($adId)
+    {
+        $adUserPackageUpsells = array();
+
+        $adUserPackageUpsells = $this->_em->getRepository('FaAdBundle:AdUserPackageUpsell')->findBy(array('ad_id' => $adId, 'status' => 1))
+
+        if (!empty($adUserPackageUpsells)) {
+            foreach ($adUserPackageUpsells as $adUserPackageUpsell) {
+                $adUserPackageUpsell->setStatus(self::STATUS_EXPIRED);
+                $this->_em->persist($adUserPackageUpsell);
+                $this->_em->flush();
+            }
+            return true;
+        } else { return false; }
+    }
+
     /**
      * Find upsell by package.
      *
