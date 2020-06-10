@@ -222,7 +222,7 @@ class AdUserPackageUpsellRepository extends EntityRepository
     {
         $adUserPackageUpsells = array();
 
-        $adUserPackageUpsells = $this->_em->getRepository('FaAdBundle:AdUserPackageUpsell')->findBy(array('ad_id' => $adId, 'status' => 1))
+        $adUserPackageUpsells = $this->_em->getRepository('FaAdBundle:AdUserPackageUpsell')->findBy(array('ad_id' => $adId, 'status' => 1));
 
         if (!empty($adUserPackageUpsells)) {
             foreach ($adUserPackageUpsells as $adUserPackageUpsell) {
