@@ -35,11 +35,11 @@
 	        	</div>
         	</div>
         </div>  
-        <input type="hidden" name="categoryId" value="{{ categoryId }}">
-        <input type="hidden" name="package_id" value="{{ upsellId }}">       
-    {% endif %}    
-	        
-	    	<div class="small-24 medium-12 large-12 columns individual-upsell-payment-buttons upsell-r-block">
+
+    {% endif %}
+       <input type="hidden" name="categoryId" value="{{ categoryId }}">
+       <input type="hidden" name="package_id" value="{{ upsellId }}">
+       <div class="small-24 medium-12 large-12 columns individual-upsell-payment-buttons upsell-r-block">
 	    		 {% set ccUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_CYBERSOURCE')}) %}
                  {% set catPath = '' %}
           
