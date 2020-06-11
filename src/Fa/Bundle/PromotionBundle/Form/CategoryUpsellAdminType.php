@@ -139,7 +139,7 @@ class CategoryUpsellAdminType extends AbstractType
             $form = $event->getForm();
 
             $form->add('price', NumberType::class, array(
-                'required' => false,
+                'required' => true,
                 'data' => (empty($categoryUpsell->getPrice()) ? 0 : $categoryUpsell->getPrice()),
             ));
             if ($categoryUpsell->getId()) {
@@ -209,6 +209,10 @@ class CategoryUpsellAdminType extends AbstractType
 
         if ((empty($data->getId()) && ! empty($categoryUpsellObj)) || (! empty($data->getId()) && ! empty($categoryUpsellObj) && $categoryUpsellObj[0]->getId() != $data->getId())) {
             $form->get('upsell')->addError(new FormError('An upsell has already been created for this category.'));
+            return false;
+        }
+        if ($form->has('price') && $form->get('price')->getData()<=0) {
+            $form->get('price')->addError(new FormError('Price should not be empty.'));
             return false;
         }
 
