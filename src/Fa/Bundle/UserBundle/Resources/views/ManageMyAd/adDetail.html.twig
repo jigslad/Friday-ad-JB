@@ -192,7 +192,8 @@
             			<div class="featured-switch toggle-on">
             		{% else %} 
                 		{% if adFeaturedUpsellArray[adId] is defined and adFeaturedUpsellArray[adId] is not null %}
-                			<div class="featured-switch featured-indiv-upsell toggle-on" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}_{{ dateRemainingForExpiry }}">
+                            {% set dateRemainingForUpsellExpiry = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager','dateDiffInDays', [adFeaturedUpsellArray[adId]['expires_at'],date().timestamp]) %}
+                			<div class="featured-switch featured-indiv-upsell toggle-on" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}_{{ dateRemainingForUpsellExpiry }}">
                 		{% else %}
                 			<div class="featured-switch featured-indiv-upsell toggle-off" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}_{{ dateRemainingForExpiry }}">
                 		{% endif %}
@@ -257,7 +258,8 @@
             			<div class="featured-switch toggle-on">
             		{% else %}        
                         {% if adFeaturedUpsellArray[adId] is defined and adFeaturedUpsellArray[adId] is not null %}
-                			<div class="featured-switch featured-indiv-upsell toggle-on" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}_{{ dateRemainingForExpiry }}">
+                            {% set dateRemainingForUpsellExpiry = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager','dateDiffInDays', [adFeaturedUpsellArray[adId]['expires_at'],date().timestamp]) %}
+                			<div class="featured-switch featured-indiv-upsell toggle-on" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}_{{ dateRemainingForUpsellExpiry }}">
                 		{% else %}
                 			<div class="featured-switch featured-indiv-upsell toggle-off" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}_{{ dateRemainingForExpiry }}">
                 		{% endif %}

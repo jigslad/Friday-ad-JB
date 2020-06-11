@@ -126,7 +126,11 @@ class CartController extends CoreController
                 if($paymentFor=='UP') { 
                     //redirect back to manage my ads active tab.
                     $this->container->get('session')->set('payment_success_redirect_url', $this->generateUrl('manage_my_ads_active'));
-                    
+                    if($cart) {
+                        $cart->setStatus(0);
+                        $this->_em->persist($cart);
+                        $this->_em->flush($cart);
+                    }
                     return $this->handleMessage($this->get('translator')->trans('Your featured upsell added to the advert successfully.', array(), 'frontend-cart-payment'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success');
                     
                 } else {
