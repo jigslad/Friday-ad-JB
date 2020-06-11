@@ -99,7 +99,10 @@ class AdRequestListener
         if($queryParams){
             foreach ($queryParams as $item) {
                 if (strstr(strtolower($uri), strtolower($item))) { // mine version
-                    $newUrl = str_replace(strtolower($item).'/',"",strtolower($uri));
+                    $newUrl = str_replace(strtolower($item).'='.$request->query->get($item),"",strtolower($uri));
+                    if(substr($newUrl, -1) == '?'){
+                        $newUrl = str_replace(substr($newUrl, -1),"",strtolower($newUrl));
+                    }
                     $response = new RedirectResponse($newUrl);
                     $event->setResponse($response);
                 }
