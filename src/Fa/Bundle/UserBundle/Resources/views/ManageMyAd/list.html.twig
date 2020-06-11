@@ -106,7 +106,7 @@
                     </ul>
 
                    <div class="manage-items-main">
-               		   {% if userBusType is defined and userBusType == 'netsuite' and (currentRoute == 'manage_my_ads_active') %}
+               		   {% if pagination.getNbResults() and userBusType is defined and userBusType == 'netsuite' and (currentRoute == 'manage_my_ads_active') %}
                    		<div class="manage-item-list top-selects-mma" style="border-top:0px">                      			
                        		<div class="select-diff-ads mb10"><select id="select-featureds" class="fa-select-white">
                        			<option value="ad_date"  {{ (filterBy=='ad_date')?'selected':'' }}>All ads</option>
@@ -330,8 +330,7 @@
     <div class="modal-content remove-modal">
         <div class="row">
             <div class="columns">
-                <h5>You have paid to Feature this Ad and it still has another <span id="leftdaysforexpiry"></span> days left of being featured.
-Are you sure you wish to remove the Feature option?</h5>
+                <h5>You have paid to Feature this Ad and it still has another <span id="leftdaysforexpiry"></span> days left of being featured.<br>Are you sure you wish to remove the Feature option?</h5>
             </div>
         </div>
         <div class="mt20 remove-item-btn">

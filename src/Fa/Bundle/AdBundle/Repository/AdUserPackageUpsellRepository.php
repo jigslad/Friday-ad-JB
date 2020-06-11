@@ -599,7 +599,7 @@ class AdUserPackageUpsellRepository extends EntityRepository
     public function getAdFeaturedUpsellArrayByAdId($adId = array())
     {
         $qb = $this->createQueryBuilder(self::ALIAS)
-        ->select(self::ALIAS.'.id', UpsellRepository::ALIAS.'.id as upsell_id', UpsellRepository::ALIAS.'.duration as duration', UpsellRepository::ALIAS.'.title', UpsellRepository::ALIAS.'.price', self::ALIAS.'.ad_id')
+        ->select(self::ALIAS.'.id', self::ALIAS.'.expires_at', UpsellRepository::ALIAS.'.id as upsell_id', UpsellRepository::ALIAS.'.duration as duration', UpsellRepository::ALIAS.'.title', UpsellRepository::ALIAS.'.price', self::ALIAS.'.ad_id')
         ->leftJoin(self::ALIAS.'.upsell', UpsellRepository::ALIAS)
         ->andWhere(UpsellRepository::ALIAS . '.type='.UpsellRepository::UPSELL_TYPE_TOP_ADVERT_ID)
         ->andWhere(self::ALIAS.'.status = 1'); 
@@ -621,6 +621,7 @@ class AdUserPackageUpsellRepository extends EntityRepository
                 $adUpsellArr[$adUpsell['ad_id']]['price'] = $adUpsell['price'];
                 $adUpsellArr[$adUpsell['ad_id']]['upsell_id'] = $adUpsell['upsell_id'];
                 $adUpsellArr[$adUpsell['ad_id']]['duration'] = $adUpsell['duration'];
+                $adUpsellArr[$adUpsell['ad_id']]['expires_at'] = $adUpsell['expires_at'];
             }
         }
         
