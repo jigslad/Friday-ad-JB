@@ -26,6 +26,8 @@ use Fa\Bundle\UserBundle\Repository\RoleRepository;
 use Fa\Bundle\PromotionBundle\Repository\CategoryUpsellRepository;
 use Fa\Bundle\AdBundle\Repository\AdUserPackageUpsellRepository;
 use Fa\Bundle\AdBundle\Entity\AdUserPackageUpsell;
+use Fa\Bundle\AdBundle\Repository\AdUserPackageRepository;
+use Fa\Bundle\AdBundle\Entity\AdUserPackage;
 
 /**
  * This controller is used for user ads.
@@ -1231,6 +1233,7 @@ class ManageMyAdController extends CoreController
                     $addCartInfo = $this->addInfoToCart($user->getId(), $adId, $selectedPackageId, $selectedPackagePrintId, $printEditionLimits, $adExpiryDays, $printEditionValues, $request, $categoryId);
                     if ($addCartInfo) {
                         //make it cybersource payment
+                        $this->getRepository('FaUserBundle:UserCreditUsed')->addCreditUsedByUpsell($user->getId(), $ad);
                         $redirectUrl = $request->headers->get('referer');
                         $this->container->get('session')->set('upgrade_payment_success_redirect_url', $redirectUrl);
                         

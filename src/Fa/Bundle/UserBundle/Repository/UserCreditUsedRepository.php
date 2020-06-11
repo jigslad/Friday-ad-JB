@@ -104,7 +104,7 @@ class UserCreditUsedRepository extends EntityRepository
         $this->_em->flush($userCreditUsed);
     }
     
-    public function addCreditUsedByUpsell($userId,$adObj,$upsellObj) {
+    public function addCreditUsedByUpsell($userId,$adObj,$upsellObj=null) {
         $userFeaturedCredits = $this->_em->getRepository('FaUserBundle:UserCredit')->getActiveFeaturedCreditForUser($userId);
         $userObj = $this->_em->getRepository('FaUserBundle:User')->find($userId);        
         
