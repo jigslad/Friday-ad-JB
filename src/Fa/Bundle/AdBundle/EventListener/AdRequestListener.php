@@ -87,7 +87,12 @@ class AdRequestListener
             foreach ($oDataArray as $item) {
                 //if (strpos($uri, $url) !== FALSE) { // Yoshi version
                 if (strstr(strtolower($uri), strtolower($item))) { // mine version
-                    $newUrl = str_replace(strtolower($item).'/',"",strtolower($uri));
+                    if (strstr(strtolower($uri), strtolower($item).'/')) {
+                        $newUrl = str_replace(strtolower($item).'/',"",strtolower($uri));
+                    }
+                    elseif (strstr(strtolower($uri), strtolower($item))){
+                        $newUrl = str_replace(strtolower($item),"",strtolower($uri));
+                    }
                     $response = new RedirectResponse($newUrl);
                     $event->setResponse($response);
                 }
