@@ -580,6 +580,7 @@ footer a:hover, .footer-head:hover, .pkg-includes a {
 #left_search .crawlable-checkbox li {
 	display: flex !important;
 }
+.modal-content h5 { font-weight: normal !important; font-family:"Poppins-Regular" !important; }
 @media only screen and (min-width: 760px) {
 	#package_purchase_form .equalizer-inner, #package_purchase_form .pkg-columns {
 	    display: grid !important;
