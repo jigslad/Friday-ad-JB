@@ -191,6 +191,9 @@
             unblockElement('#contactSellerModal');
         })
         .done(function(response) {
+            if(response.redirectToUrl){
+                location.replace(response.redirectToUrl)
+            }
             if (response.htmlContent.length) {
                 $('#contactSellerModal').html(response.htmlContent);
                 $('#deadlockRetry').val(response.deadlockRetry);
