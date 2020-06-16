@@ -163,6 +163,11 @@
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     $(document).ready(function(){
+        var message = getCookie('contactAdMessageLogin');
+        if(message){
+            $("#fa_message_contact_seller_text_message").val(message);
+            setCookie('contactAdMessageLogin','',0)
+        }
         bindFormErrorEvents();
         bindCustomRadioEvent();
         bindCustomCheckboxEvent();
@@ -191,6 +196,10 @@
             unblockElement('#contactSellerModal');
         })
         .done(function(response) {
+            if(response.redirectToUrl){
+                setCookie('contactAdMessageLogin',$("#fa_message_contact_seller_text_message").val(),1);
+                // location.replace(response.redirectToUrl)
+            }
             if (response.htmlContent.length) {
                 $('#contactSellerModal').html(response.htmlContent);
                 $('#deadlockRetry').val(response.deadlockRetry);
