@@ -97,12 +97,13 @@ class ContactSellerController extends CoreController
                                 }
                                 elseif ($loggedInUser->getStatus() && $loggedInUser->getStatus()->getId() != EntityRepository::USER_STATUS_ACTIVE_ID) {
                                     $error = $this->get('translator')->trans('Your account was blocked.', array(), 'frontend-show-ad');
-                                } elseif ($loggedInUser->getId() == $adUserId) {
+                                }
+                                elseif ($loggedInUser->getId() == $adUserId) {
                                     $error = $this->get('translator')->trans('You can not contact for your own ad.', array(), 'frontend-show-ad');
                                 }
                                 else{
                                     $redirectToUrl = $this->generateUrl('login');
-                                    return new JsonResponse(array('redirectToUrl' => $redirectToUrl));
+                                    $error = $this->get('translator')->trans('You need to login to send to message to this ad. click <a href="'.$redirectToUrl.'">here</a> to login', array(), 'frontend-show-ad');
                                 }
                             }
                             if ($loggedInUser && !$error) {
@@ -202,7 +203,8 @@ class ContactSellerController extends CoreController
                                         $message->setAttachmentOrgFileName($objUploader->getClientOriginalName());
                                         $formManager->save($message);
                                     }
-                                } catch (\Exception $e) {
+                                }
+                                catch (\Exception $e) {
                                     $deadlockError = $this->get('translator')->trans('Our system is currently busy, please try again.', array(), 'frontend-show-ad');
                                     if ($deadlockRetry == 3) {
                                         CommonManager::sendErrorMail($this->container, 'Error in contact seller', $e->getMessage(), $e->getTraceAsString());
@@ -214,7 +216,8 @@ class ContactSellerController extends CoreController
                                 // send message into moderation.
                                 try {
                                     $this->getRepository('FaMessageBundle:Message')->sendContactIntoModeration($message, $this->container);
-                                } catch (\Exception $e) {
+                                }
+                                catch (\Exception $e) {
                                     // No need do take any action as we have cron
                                     //  in background to again send the request.
                                 }
@@ -225,11 +228,13 @@ class ContactSellerController extends CoreController
                                 //save search agent.
                                 if ($form->get('search_agent')->getData()) {
                                     $this->getRepository('FaUserBundle:UserSearchAgent')->saveUserSearch($ad, $loggedInUser, $this->container);
-                                } else {
+                                }
+                                else {
                                     $this->getRepository('FaUserBundle:UserSearchAgent')->removeUserSearch($ad, $loggedInUser, $this->container);
                                 }
                             }
-                        } elseif ($request->isXmlHttpRequest()) {
+                        }
+                        elseif ($request->isXmlHttpRequest()) {
                             $htmlContent = $this->renderView('FaMessageBundle:ContactSeller:ajaxContactSeller.html.twig', array('form' => $form->createView(), 'ad' => $ad, 'rootCategoryId' => $rootCategoryId, 'deadlockRetry' => $deadlockRetry));
                         }
                     } else {
@@ -238,7 +243,6 @@ class ContactSellerController extends CoreController
                     }
                 }
             }
-
             return new JsonResponse(array('error' => $error, 'deadlockError' => $deadlockError, 'redirectToUrl' => $redirectToUrl, 'htmlContent' => $htmlContent, 'deadlockRetry' => $deadlockRetry));
         } else {
             return new Response();
