@@ -13,9 +13,14 @@
         	{% if app.request.attributes.get('_route') != 'my_account_newsletter'  and app.request.attributes.get('_route') != 'newsletter_feedback' and app.request.attributes.get('_route') != 'newsletter_feedback_success' %}
             	<div class="clearfix"></div>
                 {{ render(controller('FaUserBundle:Newsletter:footerNewsletter')) }}
+<<<<<<< HEAD
             {% endif %}    
             <div class="clearfix"></div>       
             <h6 class="footer-head">{{ 'Find us on'|trans({}, 'frontend-footer') }}:</h6>
+=======
+            {% endif %}           
+            <h6 class="footer-head footer-h-new">{{ 'Find us on'|trans({}, 'frontend-footer') }}:</h6>
+>>>>>>> origin/FFR-3878
             <div class="footer-icons">
                 <a href="{{container.getParameter('fa.footer.facebook.page.link')}}" class="facebook" target="_blank" title="{{ 'Facebook'|trans({}, 'frontend-footer') }}">{{ 'Facebook'|trans({}, 'frontend-footer') }}</a>
                 <a href="{{container.getParameter('fa.footer.twitter.page.link')}}" class="twitter" target="_blank" title="{{ 'Twitter'|trans({}, 'frontend-footer') }}">{{ 'Twitter'|trans({}, 'frontend-footer') }}</a>
