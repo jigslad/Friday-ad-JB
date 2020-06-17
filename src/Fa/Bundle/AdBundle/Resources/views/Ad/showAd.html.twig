@@ -1220,7 +1220,9 @@
     {
         ga('send', 'event', 'CTA', callFrom, '{{ adId }}{{ catText }}');
         {% if adImages|length %}
+        if($.fancybox){
             $.fancybox.close();
+        }
         {% endif %}
         blockPage();
         var route = Routing.generate('contact_seller', { 'adId': id });
