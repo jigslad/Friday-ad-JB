@@ -163,10 +163,9 @@
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     $(document).ready(function(){
-        var message = getCookie('contactAdMessageLogin');
-        if(message){
-            $("#fa_message_contact_seller_text_message").val(message);
-            setCookie('contactAdMessageLogin','',0)
+        if(getCookie('contactAdMessageBeforeLogin-{{ ad.id }}') !== ""){
+            $("#fa_message_contact_seller_text_message").val(getCookie('contactAdMessageBeforeLogin-{{ ad.id }}'));
+            setCookie('contactAdMessageBeforeLogin-{{ ad.id }}','',0);
         }
         bindFormErrorEvents();
         bindCustomRadioEvent();
@@ -197,8 +196,9 @@
         })
         .done(function(response) {
             if(response.redirectToUrl){
-                setCookie('contactAdMessageLogin',$("#fa_message_contact_seller_text_message").val(),1);
-                // location.replace(response.redirectToUrl)
+                setCookie('contactAdMessageBeforeLogin-{{ ad.id }}',$("#fa_message_contact_seller_text_message").val(),1);
+                // auto redirect to login without error message
+                location.replace(response.redirectToUrl);
             }
             if (response.htmlContent.length) {
                 $('#contactSellerModal').html(response.htmlContent);

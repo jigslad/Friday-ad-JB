@@ -102,6 +102,7 @@ class ContactSellerController extends CoreController
                                     $error = $this->get('translator')->trans('You can not contact for your own ad.', array(), 'frontend-show-ad');
                                 }
                                 else{
+                                    $this->container->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('Please log in to your account to send the message.', array(), 'frontend-show-ad'));
                                     $redirectToUrl = $this->generateUrl('login');
                                     $error = $this->get('translator')->trans('You need to login to send to message to this ad. click <a href="'.$redirectToUrl.'">here</a> to login', array(), 'frontend-show-ad');
                                 }
