@@ -36,6 +36,7 @@ use Fa\Bundle\AdBundle\Form\PrintDeadlineAdminType;
 use Fa\Bundle\AdBundle\Form\LocationRadiusAdminType;
 use Fa\Bundle\AdFeedBundle\Form\AdFeedMappingAdminType;
 use Fa\Bundle\PromotionBundle\Form\CategoryUpsellAdminType;
+use Fa\Bundle\UserBundle\Form\BoostOverrideAdminType;
 
 /**
  * This controller is used for basic crud management.
@@ -378,6 +379,7 @@ abstract class CrudController extends CoreController
             'fa_ad_location_radius_admin' => LocationRadiusAdminType::class,
             'fa_adfeed_ad_feed_mapping_admin' => AdFeedMappingAdminType::class,
             'fa_promotion_category_upsell_admin' => CategoryUpsellAdminType::class,
+            'fa_user_boost_override_admin' => BoostOverrideAdminType::class,
         ];
         $formName = isset($formClassArray[$formName]) ? $formClassArray[$formName] : $formName;
         return $formName;
