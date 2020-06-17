@@ -70,6 +70,7 @@
     var adzunaMotorsFeedUserIds = {{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::ADZUNA_MOTORS_FEED_USER_IDS') }}
     var dotmailerEnrollmentProgramId = {{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::DOTMAILER_ENROLLMENT_PROGRAM_ID') }}
     var numberOfOrganicResults = {{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::NUMBER_OF_ORGANIC_RESULTS') }}
+    var LIMITSPONSOREDADS = {{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIMIT_SPONSORED_ADS') }}
     var numberOfBusinessPageSlots = {{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::NUMBER_OF_BUSINESSPAGE_SLOTS') }}
     var topBusinessPage = {{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::TOP_BUSINESSPAGE') }}
     var serviceCategory = {{ constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID') }}
@@ -148,7 +149,7 @@
                 $('#categoryDiv').hide();
                 $('#locationDiv').show();
                 $('#periodDiv').show();
-            } else if (config == listingTopAdSlots || config == periodBeforeCheckingViews || config == precedingPeriodToCheckViews || config == vatAmount || config == numberOfOrganicResults || config == clickEditVehicleAdvertsPackageId || config == adzunaMotorsFeedUserIds || config == dotmailerEnrollmentProgramId || config == mapFitApiKeyId) {
+            } else if (config == listingTopAdSlots || config == periodBeforeCheckingViews || config == precedingPeriodToCheckViews || config == vatAmount || config == numberOfOrganicResults || config == clickEditVehicleAdvertsPackageId || config == adzunaMotorsFeedUserIds || config == dotmailerEnrollmentProgramId || config == mapFitApiKeyId  || config == LIMITSPONSOREDADS) {
                 $('#categoryDiv').hide();
                 $('#locationDiv').hide();
                 $('#periodDiv').hide();
