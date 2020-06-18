@@ -80,11 +80,13 @@
                             <a href="{{ userCartUrl }}" class="basket-icon"><span>({{ userDetail|length }})</span></a>|
                         </li>
                         <li><a href="{{ path('logout') }}" id="logout-header-id">{{'Log Out'|trans({}, 'frontend-header-usermenu')}}</a></li>
+                        <li><a href="{{ path('location_home_page', {'location': 'contact-us'}) }}" id="contact-header-id">{{'Contact us'|trans({}, 'frontend-header-usermenu')}}</a></li>
                     </ul>
                 {% else %}
                     <ul class="clearfix login-reg-flex">
                         <li><a href="{{ path('login') }}" id="login-header-id">{{'Log In'|trans({}, 'frontend-header-usermenu')}}</a>|</li>
-                        <li><a href="{{ path('fa_user_register') }}" id="register-header-id">{{'Register'|trans({}, 'frontend-header-usermenu')}}</a></li>
+                        <li><a href="{{ path('fa_user_register') }}" id="register-header-id">{{'Register'|trans({}, 'frontend-header-usermenu')}}</a>|</li>
+                        <li><a href="{{ path('location_home_page', {'location': 'contact-us'}) }}" id="contact-header-id">{{'Contact us'|trans({}, 'frontend-header-usermenu')}}</a></li>
                     </ul>
                 {% endif %}
 
@@ -199,6 +201,9 @@
                                 <li><a href="{{ path('fa_user_register') }}" id="mob-register-header-id">{{'Register'|trans({}, 'frontend-top-menu')}}</a></li>
                             </ul>
                                 {% endif %}
+                        <ul class="show-for-small-only login-menu">
+                            <li><a href="{{ path('location_home_page', {'location': 'contact-us'}) }}" id="mob-contact-header-id">{{'Contact us'|trans({}, 'frontend-top-menu')}}</a></li>
+                        </ul>
                         
                         <ul class="right place-item">
                             <li class="place-item-btn"><a href="{{ path('ad_post_first_step') }}" title="{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}">{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}</a></li>
