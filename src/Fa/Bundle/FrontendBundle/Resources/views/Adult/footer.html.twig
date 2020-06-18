@@ -56,6 +56,20 @@
     <div class="fad-logo">
         <span>F-Ad</span>
     </div>
+    <div class="text-center gray-text pb30 hide-for-small-only">
+        <p>
+            <img src="{{ asset('bundles/fafrontend/images/Copyright.svg') }}">
+            Friday Media Group Ltd, London Road, Sayers Common, West Sussex, BN6 9HS - Copyright 2020
+        </p>
+    </div>
+    <div class="text-center gray-text pb30 show-for-small-only">
+        <p>
+            <img src="{{ asset('bundles/fafrontend/images/Copyright.svg') }}">
+            Friday Media Group Ltd <br />
+            London Road, Sayers Common, <br />
+            West Sussex, BN6 9HS - Copyright 2020
+        </p>
+    </div>
 
     {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_PIXEL_TRACKING_DESKTOP') %}
     {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
