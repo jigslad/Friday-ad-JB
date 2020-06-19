@@ -177,15 +177,17 @@
     $("button[type=submit], input[type=submit]").click(function(e){
         var clickedId = $(this).attr('id');
         var parentForm = $(this).parents("form").attr('name');
-        if(clickedId.match("^fa_paa_fourth_step_")) {
-            idFourthStepClicked = clickedId;
-            $('#'+idFourthStepClicked).attr('readonly', 'readonly');
-        } else {
-            idClicked = clickedId;
-            if(!$('#'+idClicked).hasClass('disabled')) {
-                $('#'+idClicked).attr('disabled', true);
+        if (typeof clickedId !== typeof undefined && clickedId !== false) {
+            if(clickedId.match("^fa_paa_fourth_step_")) {
+                idFourthStepClicked = clickedId;
+                $('#'+idFourthStepClicked).attr('readonly', 'readonly');
+            } else {
+                idClicked = clickedId;
+                if(!$('#'+idClicked).hasClass('disabled')) {
+                    $('#'+idClicked).attr('disabled', true);
+                }
+                $("form[name='"+parentForm+"']").submit();
             }
-            $("form[name='"+parentForm+"']").submit();
         }
     });
 
