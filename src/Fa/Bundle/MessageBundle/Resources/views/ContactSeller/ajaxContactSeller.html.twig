@@ -164,7 +164,7 @@
 //<![CDATA[
     $(document).ready(function(){
         if(getCookie('contactAdMessageBeforeLogin-{{ ad.id }}') !== ""){
-            $("#fa_message_contact_seller_text_message").val(decodeURI(getCookie('contactAdMessageBeforeLogin-{{ ad.id }}')));
+            $("#fa_message_contact_seller_text_message").val(decodeURIComponent(getCookie('contactAdMessageBeforeLogin-{{ ad.id }}')));
             setCookie('contactAdMessageBeforeLogin-{{ ad.id }}','',0);
         }
         bindFormErrorEvents();
