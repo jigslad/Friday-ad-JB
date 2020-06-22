@@ -92,49 +92,49 @@
         </div>
     </div>
     {# FFR-4031 starts Here #}
-   {% set isSetCovidSession =0 %}
-   {% set showCovidBanner = 1 %}
-   {% if app.request.cookies.has('is_over_18') %}
-        {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null  %}
-        	{% set assignedCategoryId = searchParams.item__category_id %}
-    	{% elseif currentRoute == 'ad_detail_page' and app.request.get('category_string') %}
-    		{% set assignedCategoryId = fetch_repository('FaEntityBundle:Category').getIdBySlug(app.request.get('category_string'), fetch_container_instance()) %}
-    	{% elseif (currentRoute == 'show_business_profile_page' or currentRoute == 'show_business_user_ads') and app.request.get('profileNameSlug') %}
-             {% set objUserSite = fetch_repository('FaUserBundle:UserSite').findOneBy({'slug':app.request.get('profileNameSlug')}) %}
-             {% set assignedCategoryId = objUserSite.getUser().getBusinessCategoryId() %}
-    	{% elseif (appUserRole is defined and (appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') or appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION'))) %}
-        	{% set assignedCategoryId = app.user.getBusinessCategoryId() %}
-    	{% endif %}
+{#        {% set isSetCovidSession =0 %}#}
+{#        {% set showCovidBanner = 1 %}#}
+{#        {% if app.request.cookies.has('is_over_18') %}#}
+{#            {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null  %}#}
+{#                {% set assignedCategoryId = searchParams.item__category_id %}#}
+{#            {% elseif currentRoute == 'ad_detail_page' and app.request.get('category_string') %}#}
+{#                {% set assignedCategoryId = fetch_repository('FaEntityBundle:Category').getIdBySlug(app.request.get('category_string'), fetch_container_instance()) %}#}
+{#            {% elseif (currentRoute == 'show_business_profile_page' or currentRoute == 'show_business_user_ads') and app.request.get('profileNameSlug') %}#}
+{#                 {% set objUserSite = fetch_repository('FaUserBundle:UserSite').findOneBy({'slug':app.request.get('profileNameSlug')}) %}#}
+{#                 {% set assignedCategoryId = objUserSite.getUser().getBusinessCategoryId() %}#}
+{#            {% elseif (appUserRole is defined and (appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') or appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION'))) %}#}
+{#                {% set assignedCategoryId = app.user.getBusinessCategoryId() %}#}
+{#            {% endif %}#}
 
-    	{% if assignedCategoryId!=0 %}
-        	{% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(assignedCategoryId, false, fetch_container_instance()) %}
-            {% set catCnt = 0 %}
-            {% if categoryPath|length %}
-                {% for categoryId, categoryName in categoryPath %}
-                    {% if catCnt == 0 %}
-                        {% if (categoryId == ADULT_CATEGORY_ID) %}
-                            {% set showCovidBanner = 0 %}
-                        {% endif %}
-                    {% endif %}
-                    {% set catCnt = catCnt + 1 %}
-                {% endfor %}
-            {% endif %}
-       {% endif %}	
-    {% endif %}
-   {% if container.get('session').has('CovidSession') %}
-   		{% set isSetCovidSession = container.get('session').get('CovidSession') %}
-   {% endif %}
-   {% if isSetCovidSession==0 and showCovidBanner==1 and currentRoute not in {0: 'fa_frontend_homepage', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote' } %}
-   <div class="covid-19-block top-border hide-for-small-only">
-        <div class="row">
-            <div class="columns text-center">
-                <div class="medium-17 large-18 columns align-text"><div class="head">Covid-19. <span class="ask-for-offer-help">Ask for & Offer Help in our <a href="https://www.friday-ad.co.uk/uk/community/coronavirus-support/" class="ga-covid-19-support-link-all-pages">Coronavirus Support section</a></span></div></div>
-                <div class="medium-7 large-6 columns mt-space"><a href="https://www.friday-ad.co.uk/paa/first_step?categoryName=Coronavirus%20Support" class="button place-free-ad-btn thin-btn ga-covid-19-paa-link-all-pages">Place Help Ad</a><span class="cross-btn align-text" onclick="setCovidSession()"></span></div>
-            </div>
-        </div>
-    </div>
-   {% endif %}
-   {# FFR-4031 Ends Here #}   
+{#            {% if assignedCategoryId!=0 %}#}
+{#                {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(assignedCategoryId, false, fetch_container_instance()) %}#}
+{#                {% set catCnt = 0 %}#}
+{#                {% if categoryPath|length %}#}
+{#                    {% for categoryId, categoryName in categoryPath %}#}
+{#                        {% if catCnt == 0 %}#}
+{#                            {% if (categoryId == ADULT_CATEGORY_ID) %}#}
+{#                                {% set showCovidBanner = 0 %}#}
+{#                            {% endif %}#}
+{#                        {% endif %}#}
+{#                        {% set catCnt = catCnt + 1 %}#}
+{#                    {% endfor %}#}
+{#                {% endif %}#}
+{#            {% endif %}#}
+{#        {% endif %}#}
+{#        {% if container.get('session').has('CovidSession') %}#}
+{#            {% set isSetCovidSession = container.get('session').get('CovidSession') %}#}
+{#        {% endif %}#}
+{#        {% if isSetCovidSession==0 and showCovidBanner==1 and currentRoute not in {0: 'fa_frontend_homepage', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote' } %}#}
+{#        <div class="covid-19-block top-border hide-for-small-only">#}
+{#            <div class="row">#}
+{#                <div class="columns text-center">#}
+{#                    <div class="medium-17 large-18 columns align-text"><div class="head">Covid-19. <span class="ask-for-offer-help">Ask for & Offer Help in our <a href="https://www.friday-ad.co.uk/uk/community/coronavirus-support/" class="ga-covid-19-support-link-all-pages">Coronavirus Support section</a></span></div></div>#}
+{#                    <div class="medium-7 large-6 columns mt-space"><a href="https://www.friday-ad.co.uk/paa/first_step?categoryName=Coronavirus%20Support" class="button place-free-ad-btn thin-btn ga-covid-19-paa-link-all-pages">Place Help Ad</a><span class="cross-btn align-text" onclick="setCovidSession()"></span></div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#        {% endif %}#}
+   {# FFR-4031 Ends Here #}
    {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
    <div id="sticky_nav_top">
     <div class="nav-bg {% if currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'listing_page', 3: 'landing_page_category_location', 4: 'landing_page_category'} %}homepage-nav{% endif %}">
@@ -213,16 +213,16 @@
         <div class="dropdown-bg"></div>
     </div>
 </div>
-   {% if isSetCovidSession==0 and showCovidBanner==1 and currentRoute not in {0: 'fa_frontend_homepage', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote' } %}
-   <div class="covid-19-block top-border show-for-small-only">
-        <div class="row">
-            <div class="columns text-left">
-                <div class="medium-17 large-18 columns align-left"><div class="head">Covid-19. <span class="ask-for-offer-help">Ask for & Offer Help in our <a href="https://www.friday-ad.co.uk/uk/community/coronavirus-support/" class="ga-covid-19-support-link-all-pages">Coronavirus Support section</a></span><span class="cross-btn align-text" onclick="setCovidSession()"></span></div></div>
-                <div class="medium-7 large-6 columns mt-space"><a href="https://www.friday-ad.co.uk/paa/first_step?categoryName=Coronavirus%20Support" class="button place-free-ad-btn thin-btn ga-covid-19-paa-link-all-pages">Place Help Ad</a></div>
-            </div>
-        </div>
-    </div>
-   {% endif %}
+{#   {% if isSetCovidSession==0 and showCovidBanner==1 and currentRoute not in {0: 'fa_frontend_homepage', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote' } %}#}
+{#   <div class="covid-19-block top-border show-for-small-only">#}
+{#        <div class="row">#}
+{#            <div class="columns text-left">#}
+{#                <div class="medium-17 large-18 columns align-left"><div class="head">Covid-19. <span class="ask-for-offer-help">Ask for & Offer Help in our <a href="https://www.friday-ad.co.uk/uk/community/coronavirus-support/" class="ga-covid-19-support-link-all-pages">Coronavirus Support section</a></span><span class="cross-btn align-text" onclick="setCovidSession()"></span></div></div>#}
+{#                <div class="medium-7 large-6 columns mt-space"><a href="https://www.friday-ad.co.uk/paa/first_step?categoryName=Coronavirus%20Support" class="button place-free-ad-btn thin-btn ga-covid-19-paa-link-all-pages">Place Help Ad</a></div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#   {% endif %}#}
     {% if status_code == 200 %}
         {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'cybersource_checkout'} %}
             {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {} } )) }}
