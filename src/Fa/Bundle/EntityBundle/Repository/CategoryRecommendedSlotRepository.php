@@ -110,11 +110,13 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                //return $cachedValue;
+                return $cachedValue;
             }
         }
         $recommendedSlotArray = array();
         $recommendedSlots = $this->createQueryBuilder(self::ALIAS)
+        ->leftJoin(self::ALIAS.'.category', CategoryRepository::ALIAS)
+        ->andWhere(CategoryRepository::ALIAS.'.has_recommended_slot = 1')
         ->andWhere(self::ALIAS.'.category = :categoryId')
         ->andWhere(self::ALIAS.'.is_searchlist = 0')
         ->setParameter('categoryId', $categoryId)
@@ -129,7 +131,8 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
                 'url' => $recommendedSlot->getUrl(),
                 'display_url' => $recommendedSlot->getDisplayUrl(),
                 'cta_text' => $recommendedSlot->getCtaText(),
-                'mobile_title' => $recommendedSlot->getMobileTitle()
+                'mobile_title' => $recommendedSlot->getMobileTitle(),
+                'show_sponsored_lbl' => $recommendedSlot->getShowSponsoredLbl()
             );
         }
 
@@ -157,7 +160,7 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                //return $cachedValue;
+                return $cachedValue;
             }
         }
         $recommendedSlotArray = array();
@@ -193,11 +196,12 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
                     'creative_ord' => $recommendedSlot->getCreativeOrd(),
                     'display_url' => $recommendedSlot->getDisplayUrl(),
                     'cta_text' => $recommendedSlot->getCtaText(),
-                    'mobile_title' => $recommendedSlot->getMobileTitle()
+                    'mobile_title' => $recommendedSlot->getMobileTitle(),
+                    'show_sponsored_lbl' => $recommendedSlot->getShowSponsoredLbl()
                 );
             }
         }
-       
+        
         if ($container && !empty($recommendedSlotArray)) {
             CommonManager::setCacheVersion($container, $cacheKey, $recommendedSlotArray);
         }
@@ -223,19 +227,21 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
             
             if ($cachedValue !== false) {
-                //return $cachedValue;
+                return $cachedValue;
             }
         }
         $recommendedSlotArray = array();
         $recommendedSlots =array();
         
         $recommendedSlots = $this->createQueryBuilder(self::ALIAS)
-                ->andWhere(self::ALIAS.'.category = :categoryId')
-                ->andWhere(self::ALIAS.'.is_searchlist = 1')
-                ->setParameter('categoryId', $categoryId)
-                ->orderBy(self::ALIAS.'.creative_group')
-                ->getQuery()
-                ->execute();          
+            ->leftJoin(self::ALIAS.'.category', CategoryRepository::ALIAS)
+            ->andWhere(CategoryRepository::ALIAS.'.has_recommended_slot_searchlist = 1')
+            ->andWhere(self::ALIAS.'.category = :categoryId')
+            ->andWhere(self::ALIAS.'.is_searchlist = 1')
+            ->setParameter('categoryId', $categoryId)
+            ->orderBy(self::ALIAS.'.creative_group')
+            ->getQuery()
+            ->execute();          
 
         if (!empty($recommendedSlots)) {
             foreach ($recommendedSlots as $recommendedSlot) {
@@ -248,11 +254,12 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
                     'creative_ord' => $recommendedSlot->getCreativeOrd(),
                     'display_url' => $recommendedSlot->getDisplayUrl(),
                     'cta_text' => $recommendedSlot->getCtaText(),
-                    'mobile_title' => $recommendedSlot->getMobileTitle(),                    
+                    'mobile_title' => $recommendedSlot->getMobileTitle(), 
+                    'show_sponsored_lbl' => $recommendedSlot->getShowSponsoredLbl(),
                 );
             }
-        }
-        
+        }        
+                
         if ($container && !empty($recommendedSlotArray)) {
             CommonManager::setCacheVersion($container, $cacheKey, $recommendedSlotArray);
         }
@@ -278,7 +285,7 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                //return $cachedValue;
+                return $cachedValue;
             }
         }
 
@@ -319,7 +326,7 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                //return $cachedValue;
+                return $cachedValue;
             }
         }
 

@@ -1,0 +1,269 @@
+<div class="row mt40 mb20 preference-center">
+        <div class="medium-20 medium-push-2 large-20 large-push-2 columns">
+            <div class="medium-13 large-14 columns p0 hide-for-small-only">
+                <h1>Let's get personal</h1>
+                <div class="mt20">We want you to get the most out of your Friday-Ad newsletter experience.<br>
+                Give us a hand by letting us know what you are most interested in.<br>
+                Tell us where you're based and we'll let you know about upcoming events and deals in your area!</div>
+            </div>
+            <div class="large-14 columns p0 text-center show-for-small-only">
+                <h1>Let's get personal</h1>
+                <div class="mt20 ">We want you to get the most out of your Friday-Ad newsletter experience. Give us a hand by letting us know what you are most interested in. Tell us where you're based and we'll let you know about upcoming events and deals in your area!</div>
+            </div>
+            <div class="large-10 columns p0 newsletter-block">
+                <div class="text-center newsletter-img"><img src="{{ asset_url('fafrontend/images/newsletter.png') }}" alt="Newsletter"></div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="medium-20 medium-push-2 large-20 large-push-2 columns form-section" id="updatemynewsletterpreferences">
+            {{ form_start(userNewsletterPrefForm, {'attr': {'novalidate': 'novalidate', 'class': ''}}) }}
+            {{ form_errors(userNewsletterPrefForm) }}
+                <div class="medium-12 large-12 columns p0 main-section">
+                    <div class="left-section">
+                        <div class="medium-21 large-24 columns p0">
+                            {{ form_row(form.email) }}
+                            <div class="text-left">
+                                <p class="mb0">
+                                    <div class="image-tooltip-wrapper"><span class="info-icon">info</span><span class="newsletter_info_txt">Please <a href="{{ path('my_account') }}">log in</a> to your Friday-Ad account to update your email address.</span></div>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="medium-21 large-24 columns p0">
+                            {{ form_row(form.firstname) }}
+                        </div>
+                        <div class="medium-21 large-24 columns p0">
+                            {{ form_row(form.lastname) }}
+                        </div>
+                        <div class="medium-21 large-24 columns p0 gender-block">
+                            {{ form_row(form.gender) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="medium-12 large-12 columns p0">
+                    <div class="right-section">
+                        <div class="medium-21 large-24 columns p0 hidden-block">
+                            <label>&nbsp;</label>
+                             <input class="form-control textcounter" > 
+                            <div class="text-left">
+                                <p class="mb0">
+                                <div>&nbsp;<br>&nbsp;<br>&nbsp;</div>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="medium-21 large-24 columns p0 top-space">
+                            <label>Date of birth</label>
+                            <div class="dob-block" style="">
+                                <div class="large-8 columns day-list">
+                                    {{ form_row(form.day) }}
+                                </div>
+                                <div class="large-8 columns month-list">
+                                    {{ form_row(form.month) }}
+                                </div>
+                                <div class="large-8 columns year-list">
+                                    {{ form_row(form.year) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="medium-21 large-24 columns p0">
+                            {{ form_row(form.postcode) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+        </div>
+    </div>
+    
+	<div class="homepage-row white-bg" id="updatemypreferences">
+        <div class="row ">
+            <div class="medium-20 medium-push-2 large-20 large-push-2 columns text-center" style="margin-bottom: 30px;">
+                <h1 class="mb20">What would you like to hear about?</h1>
+                <div>Tailor your Friday-Ad email experience by ticking the areas below that interest you. Find the cutest pets, hottest cars or upcoming events in your area, or get involved with our competitions.</div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="list-area-tabs">
+                <div class="columns">
+                <div class="">
+                     {% set totalChoices = newsletterMainCategoryArray|length %}
+                    {% set totalColumns = 3 %}
+                    {% set choicesPerColumn = (totalChoices / totalColumns)|round(0, 'ceil') %}
+                    {% set choiceCount = 0 %}
+                    {% set strForThirdParty = '' %}
+
+                    {% for mainCatId in newsletterMainCategoryArray %}
+                    	{% set child = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(mainCatId - 1)] %}
+                    	{% if choiceCount % 3 == 0  %}
+                        <ul class="inline-list">
+                        {% endif %}
+                            	<li class="prod-li newsletter-box">
+                                <div>
+                                    <div class="paa-bdr-box" id="element_personalized_{{ child.vars.name }}" style="border: 0px;">
+                                        <div class="border-btm" style="">
+                                            <h3 class="text-center">
+                                                <a href="javascript:void(0)" class="tab-down element_toggle" id="element_toggle_personalized_{{ child.vars.name }}">
+                                                <span class="detail-location icon-{{ child.vars.label|striptags|lower|replace({' ':''})  }} list-icons" style=""></span>
+                                                <span class="clearfix">{{ child.vars.label|striptags }}</span>
+                                                <span class="paa-tab-arrow"></span>
+                                                </a>
+                                            </h3>
+                                        </div>
+                                        <div class="pb10" id="element_toggle_personalized_{{ child.vars.name }}_target" style="display:none;">
+                                            <ul class="mt20" >
+                                                {% set childrenArray = newsletterTypeRepository.getChildrens(mainCatId, container)|keys %}
+                                                <li>
+                                                    <div class="label-inline mt0 mb0 main-cat-newsletter">
+                                                        {{ form_widget(child, {'attr': {'class':'parent_newsletter'}}) }} 
+                                                        <label for="{{ child.vars.id }}"><b>{{ child.vars.label|striptags }}</b></label>
+                                                    </div>
+                                                </li>
+                                                {% for subCatId in childrenArray %}
+                                                	{% set subChild = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(subCatId - 1)] %}
+                                                	<li>
+                                                        <div class="label-inline mt0 mb0">
+                                                            {{ form_widget(subChild, {'attr': {'class':'child_newsletter_'~mainCatId}}) }} 
+                                                            <label for="{{ subChild.vars.id }}">{{ subChild.vars.label|striptags }}</label>
+                                                        </div>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                              </li>
+                              {% if mainCatId == 43 %}
+                            	 <li class="prod-li newsletter-box">
+                                    <div>
+                                        <div class="paa-bdr-box" id="element_personalized_non_mappped" style="border: 0px;">
+                                            <div class="border-btm" style="">
+                                                <h3 class="text-center">
+                                                    <a href="javascript:void(0)" class="tab-down element_toggle" id="element_toggle_personalized_non_mappped">
+                                                    <span class="detail-location icon-competitions list-icons" style=""><!-- <img src="preference-center_files/images/newslettre-icon.png" width="80px" height="80px"> --></span>
+                                                    <span class="clearfix">{{ 'Competitions and deals'|trans({}, 'frontend-newsletter-pref') }}</span>
+                                                    <span class="paa-tab-arrow"></span>
+                                                    </a>
+                                                </h3>
+                                            </div>
+                                            <div class="pb10" id="element_toggle_personalized_non_mappped_target" style="display:none;">
+                                        <ul class="mt20">
+                                            {% set nonMappedChildrenArray = newsletterTypeRepository.getNonMappedCategories(container)|keys %}
+                                            {% set strForThirdParty = null %}
+                                            
+                                            {% for nonMappedCatId in nonMappedChildrenArray %}
+                                                 {% set nonMappedCatChild = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(nonMappedCatId - 1)] %}
+                                            	<li>
+                                                    <div class="label-inline mt0 mb0">
+                                                        {% if nonMappedCatChild.vars.name|raw == "47" %}
+                                                        	{% set strForThirdParty = nonMappedCatChild %}  
+                                                        {% else %}
+                                                            {{ form_widget(nonMappedCatChild) }}
+                                                       		<label for="{{ nonMappedCatChild.vars.id }}">{{ nonMappedCatChild.vars.label|striptags }}</label>
+                                                       	{% endif %}
+                                                    </div>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                        </div>
+                                    </div>
+                               </li>
+                            {% endif %}
+                            {% set choiceCount = choiceCount + 1 %}
+                        	</li>
+                    	{% if choiceCount % 3 == 0 and choiceCount > 0  %}
+                        </ul>
+                        {% endif %}
+                    	
+                    {% endfor %}
+                    
+                    </div>
+                </div>
+            </div>
+            
+            <div class="clearfix"></div>
+            <div class="medium-20 medium-push-2 large-22 large-push-1 columns text-center">
+            <div class="large-12 columns text-left" style="margin-top: 30px;">
+            		<h3 class="mb20">Offers and promotions from trusted partners</h3>
+                	<span style="display: inline-flex;" class="">	
+                	 {{ form_widget(strForThirdParty) }} 
+                    <label for="user_newsletterupdate_dotmailer_newsletter_type_id_47">{{ "I'd like to receive offers and promotions by email on behalf of carefully chosen partners."|trans }}</label>
+        			</span>
+    				<div class="mt10" style="margin-left:25px;">
+    					 By ticking this box, we will send you emails on behalf of trusted local partners, 
+    					 bringing you offers, promotions and local events that we think you may be interested in.
+    					 <b>We will never share your personal information with these partners.</b>
+    					 Learn more in our <a href="{{ path('location_home_page', {'location': 'privacy-policy'}) }}" target="__blank"> privacy policy</a>.
+    				</div>
+                </div>
+                <div class="medium-12 large-12 columns text-center">
+                    <img src="{{ asset_url('fafrontend/images/desktop-mobile-view.png') }}" alt="Desktop-Mobile-View">
+                </div>
+            
+            <div class="clearfix"></div>
+            <div class="large-20 large-push-2 columns text-left">
+                <div class="medium-8 medium-push-8 large-8 large-push-8 columns mt40 p0 text-center">
+                	{{ form_widget(form.update_newsletter_preferences, {'label': 'Update'|trans, 'attr': {'class':'button expand primary-btn-2', 'onClick': "newsletterUpdate(this)"}}) }}
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    
+    {# {% do userNewsletterPrefForm.dotmailer_newsletter_type_id.setRendered %}
+	<div class="homepage-row" id="unsubscribefrommails">
+        <div class="row">
+            <div class="medium-14 medium-push-5 large-14 large-push-5 columns text-center">
+                <div><img src="{{ asset_url('fafrontend/images/newslettre-icon.png') }}" alt="newsletter-icon"></div>
+                <h1 class="mb20">Unsubscribe</h1>
+                <h2 style="font-size:14px;">
+                	You can control the types of email that you receive using the categories above. 
+                	However if you would like to leave the Friday-Ad mailing list, please confirm by clicking Unsubscribe below. 
+                	We're sorry to see you go!
+                </h2>
+                <div class="medium-14 medium-push-5 large-12 large-push-6 columns mt40 p0 text-center">
+                    {{ form_widget(form.stop_third_party_emails, {'label': 'Stop third party emails'|trans, 'attr': {'class':'button expand primary-btn-2'}}) }} 
+                     {{ form_row(form.email_dis) }}
+                	{{ form_widget(form.unsubscribe_from_all_emails, {'label': 'Unsubscribe'|trans, 'attr': {'class':'button expand primary-btn-1', 'onClick': "newsletterUpdate(this)"}}) }}
+                </div>
+                <div class="clearfix"></div>
+                <div class="text-left mt20 mb20" style="font-size:13px; color:#a8a8a8;">
+                	By clicking 'Unsubscribe', you will be removed from the Friday-Ad mailing list. 
+                	If you are a registered Friday-Ad account holder, this will still be active. 
+                	You will continue to receive any search alert emails that you may have previously set up, 
+                	as well as email notifications about your adverts and your enquiries.
+                </div>
+            </div>
+        </div>
+    </div>    
+   {{ form_end(userNewsletterPrefForm) }}#}
+   {{ form_widget(form.clickedElementValue) }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+	/*$('.parent_newsletter').on('click', function() {
+		var parNewsId = $(this).val();
+		if($(this).is( ":checked" )) {
+            $('.child_newsletter_'+parNewsId).parent('span').addClass('checked');
+            $('.child_newsletter_'+parNewsId).each(function(){
+                    var id = $(this).attr('id');
+                    $('#'+id).attr('checked', 'checked');
+            });
+        } else {
+                $('.child_newsletter_'+parNewsId).parent('span').removeClass('checked');
+                $('.child_newsletter_'+parNewsId).each(function(){
+                        var id = $(this).attr('id');
+                        $('#'+id).removeAttr('checked');
+                });
+        }
+	})*/
+    function newsletterUpdate(e) {
+        var clickedElement = $(e).attr('id');
+        if(clickedElement =='user_newsletterupdate_update_newsletter_preferences') {
+            $('#user_newsletterupdate_clickedElementValue').val('update');
+        } else if(clickedElement =='user_newsletterupdate_unsubscribe_from_all_emails') {
+        	$('#user_newsletterupdate_clickedElementValue').val('unsubscribe');
+        }
+    	$(e).html('Please wait...');
+    	
+    	$("form[name='user_newsletterupdate']").submit();
+    	//return true;	
+    }
+//]]>
+</script>

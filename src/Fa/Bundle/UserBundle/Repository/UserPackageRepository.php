@@ -117,7 +117,11 @@ class UserPackageRepository extends EntityRepository
             if ($package->getPrice() > 0 && $user->getFreeTrialEnable()) {
                 $user->setFreeTrialEnable(0);
             }
-
+            
+            if ($user->getBoostOveride() && $user->getIsResetBoostCount()==1) {
+                $userPackage->setBoostOveride($user->getBoostOveride());
+            }
+            
             $userPackage->setRemark($remark);
 
             $user->setBusinessCategoryId($package->getShopCategory()->getId());
@@ -143,7 +147,7 @@ class UserPackageRepository extends EntityRepository
                 $userPackage->setIsAutoRenew(0);
             }
             
-            if ($remark == 'package-renew-thourgh-recurring') {
+            if ($remark == 'package-renew-thourgh-recurring'   || $remark == 'auto-renew-package-backend') {
                 $userPackage->setRenewedAt(time());
                 $userPackage->setIsRenewalMailSent(1);
             }
@@ -151,6 +155,11 @@ class UserPackageRepository extends EntityRepository
             $userPackage->setUpdatedAt(time());
             $userPackage->setBoostOveride(null);
             $userPackage->setRemark($remark);
+            
+            if ($user->getBoostOveride() && $user->getIsResetBoostCount()==1) {
+                $userPackage->setBoostOveride($user->getBoostOveride());
+            }
+            
             $this->_em->persist($userPackage);
             $this->_em->flush();
         }

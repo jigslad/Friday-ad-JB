@@ -21,7 +21,7 @@ ad_post_create_admin:
     requirements:
         user_id: '^(-?\d+|no_user)$'
         admin_ad_counter: \d+
-    methods: 'POST'
+    #methods: 'POST'
 
 ad_post_search_user_admin:
     path:    /search_user

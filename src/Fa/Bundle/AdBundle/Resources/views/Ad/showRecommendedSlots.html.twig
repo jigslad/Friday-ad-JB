@@ -29,9 +29,11 @@
                 {% endif %}
         </div>
         <div class="content-cls-recommend-1">
+            {%   if(recommendedSlot['show_sponsored_lbl']) %}
             <div class="recommendedtxt gray-text text-right sponsored-1">
-                Sponsored Ad
+                Sponsored Ad<span class="sponsored-ad-icon"></span>
             </div>
+            {% endif %}
             <div class="mt5 list-title"> 
               	<h3>{{ recommendedSlot['title'] }}</h3>
                 {% if recommendedSlot['display_url'] !='' %}
@@ -43,7 +45,7 @@
                     {{ recommendedSlot['sub_title']|length > 150 ? trim_text(recommendedSlot['sub_title'], 150)|raw ~ '...': recommendedSlot['sub_title'] }}
                 </div>
                 {% if recommendedSlot['cta_text'] !='' %}
-                <div class="outer-btn"><div class="button secondary-btn-1 right-block expand hide-for-small-only">{{ recommendedSlot['cta_text'] }}<span  class="btn-right-arrow"><i class="fi-arrow-right"></i></span></div></div>
+                <div class="outer-btn mt10"><div class="button secondary-btn-1 thin-btn right-block expand hide-for-small-only">{{ recommendedSlot['cta_text'] }}</div></div>
            		{% endif %}
            </div>                      
         </div>
@@ -52,13 +54,8 @@
 {% else %}
 	<div class="clearfix">
     <div class="s-block clearfix">
-        <div class="small-24 columns">
-            <div class="recommendedtxt gray-text text-right sponsored-{{ recommendedSlotCnt  }}">
-                Sponsored Ad
-            </div>
-        </div>
-        <div class="t-s-block">             
-            {% for recommendedSlot in recommendedSlotArray%}
+    {% for recommendedSlot in recommendedSlotArray%}   	
+        <div class="t-s-block">                         
                 {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), recommendedSlot['user_id'], true, true]) %}
                 {% set userName = userRepository.getUserProfileName(recommendedSlot['user_id'], container)~' - Friday-Ad' %}
                 {% set no_protocol = recommendedSlot['url']|split('//')[1] ?: recommendedSlot['url'] %}
@@ -73,15 +70,20 @@
                             {% endif %}
                     </div>
                     <div class="small-14  medium-19 large-19 columns t-s-subblock-right content-cls-recommend-{{recommendedSlotCnt}}">
+                        {% if(recommendedSlot['show_sponsored_lbl']) %}
+                        <div class="recommendedtxt gray-text sponsored-2-3">
+                            Sponsored Ad<span class="sponsored-ad-icon"></span>
+                        </div>
+                        {% endif %}
                         <div class="list-title show-title-r-ad-det"> {{ recommendedSlot['title']|length > 50 ? trim_text(recommendedSlot['title'], 50)|raw ~ '...': recommendedSlot['title'] }}</div>
                         <div class="list-title show-mob-title-r-ad-det"> {{ recommendedSlot['mobile_title']|length > 50 ? trim_text(recommendedSlot['mobile_title'], 50)|raw ~ '...': recommendedSlot['mobile_title'] }}</div>
                         {% if recommendedSlot['cta_text'] !='' and recommendedSlotArray|length == 2 %}
-                            <div class="outer-btn"><div class="button expand secondary-btn-1 recommended-2-slot-ad-detail-btn">{{ recommendedSlot['cta_text'] }}<span  class="btn-right-arrow"><i class="fi-arrow-right"></i></span></div></div>
+                            <div class="outer-btn mt10"><div class="button expand secondary-btn-1  thin-btn recommended-2-slot-ad-detail-btn recommended-2-3-slot-ad-detail-btn">{{ recommendedSlot['cta_text'] }}</div></div>
                        	{% endif %}
                     </div> 
-    			</div>
-           {% endfor %}
+    			</div>           
        </div>
+       {% endfor %}
     </div>
     </div>
  {% endif %}
@@ -111,9 +113,11 @@
                         {% endif %}
                 </div>
                 <div class="content-cls-recommend-1">
+                	{%   if(recommendedSlot['show_sponsored_lbl']) %}
                     <div class="recommendedtxt gray-text text-right sponsored-1">
-                        Sponsored Ad
+                        Sponsored Ad<span class="sponsored-ad-icon"></span>
                     </div>
+                    {% endif %}
                     <div class="mt5 list-title"> {{ recommendedSlot['mobile_title']|length > 50 ? trim_text(recommendedSlot['mobile_title'], 50)|raw ~ '...': recommendedSlot['mobile_title'] }}</div>                       
                 </div>
     		</div>
@@ -129,9 +133,11 @@
                         {% endif %}
                 </div>
                 <div class="content-cls-recommend-1">
+                    {%   if(recommendedSlot['show_sponsored_lbl']) %}
                     <div class="recommendedtxt gray-text text-right sponsored-1">
-                        Sponsored Ad
+                        Sponsored Ad<span class="sponsored-ad-icon"></span>
                     </div>
+                    {% endif %}
                     <div class="mt5 list-title"> {{ recommendedSlot['mobile_title']|length > 50 ? trim_text(recommendedSlot['mobile_title'], 50)|raw ~ '...': recommendedSlot['mobile_title'] }}</div>                       
                 </div>
     		</div>        

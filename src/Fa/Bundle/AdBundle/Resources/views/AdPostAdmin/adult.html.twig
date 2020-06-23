@@ -199,6 +199,11 @@
         $('.textcounter').keyup(function(e){
             updateCharCounter($(this).attr('id'));
         });
+        showRateSection();
+
+        $('#fa_paa_adult_admin_travel_arrangements_id').on( "change", function() {
+            showRateSection();           
+       	});
     });
 
     function updateCharCounter(fieldId)
@@ -217,6 +222,29 @@
            }
        }
     }
+
+    function showRateSection() {
+        var travelArrangementTxt = $("#fa_paa_adult_admin_travel_arrangements_id option:selected").text();
+        var tarvalArrVal = travelArrangementTxt.split(" ");
+
+      if(tarvalArrVal.indexOf('In-call') > -1) {
+                     $("#element_rates_id").show();
+                     $("#in-calls-subblock").show();
+                     $("#out-calls-subblock").hide();
+      } else if((tarvalArrVal.indexOf('Out-call') > -1)) {
+        $("#element_rates_id").show();
+                     $("#in-calls-subblock").hide();
+                     $("#out-calls-subblock").show();
+      } else if((tarvalArrVal.indexOf('Either') > -1)) {
+         $("#element_rates_id").show();
+                     $("#in-calls-subblock").show();
+                     $("#out-calls-subblock").show();
+      } else {
+         $("#element_rates_id").hide();
+                     $("#in-calls-subblock").hide();
+                     $("#out-calls-subblock").hide();
+      }
+     }
 //]]>
 </script>
 {% if (form.location_autocomplete) is defined %}

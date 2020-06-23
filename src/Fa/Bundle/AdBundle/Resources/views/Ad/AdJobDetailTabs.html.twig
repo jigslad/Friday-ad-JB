@@ -2,6 +2,8 @@
     <ul class="tabs hide-for-small-only" data-tab id="ad_property_tabs">
         {% if additionalJobReqIds|length or additionalJobBenefitIds|length %}
             <li class="tab-title active"><a href="#basic_info_panel" id="basic_info_panel_tab">{{'The basics'|trans({}, 'frontend-show-ad')}}</a></li>
+        {% endif %}
+        {% if additionalJobReqIds|length or additionalJobReqIds|length %}
             <li class="tab-title"><a href="#more_details_panel" id="more_details_panel_tab">{{'More details'|trans({}, 'frontend-show-ad')}}</a></li>
         {% endif %}
     </ul>

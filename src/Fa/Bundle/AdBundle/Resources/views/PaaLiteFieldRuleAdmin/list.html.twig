@@ -28,9 +28,9 @@
                                {% if paaliteFieldRuleEditGrant %}
                                  <li><a href="{{ path('paa_lite_field_rule_edit_admin', {'id': paaliteFieldRule.id}) }}"><i class="fi-pencil"></i> {{'Edit'|trans}}</a></li>
                                {% endif %}
-                               {% if paaliteFieldRuleDeleteGrant and paaliteFieldRule.category_lvl > 1 %}
+                               {# {% if paaliteFieldRuleDeleteGrant and paaliteFieldRule.category_lvl > 1 %}
                                    <li><a href="{{ path('paa_lite_field_rule_delete_admin', {'id': paaliteFieldRule.category_id}) }}" onclick="javascript:return confirm('{{ 'Do you want to delete this record?'|trans }}')"><i class="fi-trash"></i> {{ 'Delete'|trans }}</a></li>
-                               {% endif %}
+                               {% endif %} #}
                                </ul>
                               </td>
                           </tr>

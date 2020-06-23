@@ -5,19 +5,31 @@
 {% if is_edit is defined and is_edit is not null %}
     {% set formName = 'fa_paa_edit_'~categoryName|replace({' ':'_'})|lower %}
     {% set currentLocation = adLocationRepository.getLatestLocation(ad.id) %}
-    {% set curLocText = currentLocation.getLocationTown().getName() %}
+    {% set curLocText = (currentLocation)?currentLocation.getLocationTown().getName():'' %}
 {% endif %}
 {% set locationRepository = fetch_repository('FaEntityBundle:Location') %}
 {% use "FaCoreBundle:GoogleMap:renderLocationUsingCircle.html.twig" %}
 <div class="paa-gray-box" id="location_div">
+    {#{ attribute(attribute(form, field).vars.attr, 'field-help') }#}
     <h3 class="text-center">
         {{ attribute(form, field).vars.label }}
-        {% if attribute(form, field).vars.required %} 
+        {#% if attribute(form, field).vars.required %}
             <span class="black-text">({{ 'required'|trans({}, 'frontend-paa-fourth-step') }})</span> 
         {% else %}
             <span class="black-text">({{ 'optional'|trans({}, 'frontend-paa-fourth-step') }})</span>
-        {% endif %}
+        {% endif %#}
     </h3>
+    <div class="text-center">
+        <p class="mb0">
+            <span id="paa_location_autocomplete_tips">{{ 'Enter your postcode or town.'|trans({}, 'frontend-paa-fourth-step')}}</span>
+            {% if form.location_autocomplete.vars.attr['field-help'] is defined and form.location_autocomplete.vars.attr['field-help'] is not null %}&nbsp;
+            <div class="image-tooltip-wrapper">
+                <span class="image-tooltip">{{ form.location_autocomplete.vars.attr['field-help']|raw }}</span>
+                <span class="info-icon">info</span>
+            </div>
+            {% endif %}
+        </p>
+    </div>
     {% set selectedLocation      = 'United Kingdom' %}
     {% set showHideLocationInst  = 'none' %}
     {% set showHideLocationField = 'inline' %}
@@ -65,7 +77,7 @@
             </div>
         </div>
     </div>
-    <div id="location_map_div" class="map-box">
+   {# <div id="location_map_div" class="map-box">
          {% set geolocation = attribute(form, 'location_lat_lng').vars.value|split(', ') %}
          {% if geolocation[0] is defined and geolocation[1] is defined %}
             {% set latitude = geolocation[0] %}
@@ -75,6 +87,6 @@
             {{ set_variables('adDetailMap', {'latitude':latitude, 'longitude': longitude, 'mapOnLoad' : 'true', 'locationField': '#'~formName~'_location_autocomplete', 'latlngField': '#'~formName~'_location_lat_lng', 'isShowMap' : showHideLocationMap}) }}
         {% endif %}
         {{ block('googlemap_location_html') }}
-    </div>
+    </div> #}
     <div><span id="location_error_div" class="error"></span></div>
 </div>

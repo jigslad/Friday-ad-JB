@@ -89,6 +89,7 @@ class PaaFieldRuleAdminController extends CrudController implements ResourceAuth
         $paaField = $this->getRepository('FaAdBundle:PaaField')->findOneBy(array('field' => 'title'));
 
         // display only one entry for categorywise rule
+        $queryBuilder->andWhere($queryBuilder->getRootAlias().'.status = 1');
         $queryBuilder->andWhere($queryBuilder->getRootAlias().'.paa_field = '.$paaField->getId());
         $queryBuilder->andWhere($queryBuilder->getRootAlias().'.category != '.CategoryRepository::PHONE_AND_CAM_CHAT_ID);
         $query = $queryBuilder->getQuery();

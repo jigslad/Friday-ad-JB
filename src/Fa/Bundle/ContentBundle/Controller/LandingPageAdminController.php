@@ -210,7 +210,9 @@ class LandingPageAdminController extends CrudController implements ResourceAutho
             if (!$this->saveNewUsingForm) {
                 $formManager->save($entity);
             }
-
+            if($form->get('file')->getData()) {
+                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:move:single-image-s3 --file_path=landingpage/'.$entity->getFileName().' >/dev/null &');
+            }
             $message = $this->get('translator')->trans('Record has been added successfully.', array(), 'success');
 
             $redirectPath = $this->getRouteName('');
@@ -322,6 +324,9 @@ class LandingPageAdminController extends CrudController implements ResourceAutho
         if ($formManager->isValid($form)) {
             if (!$this->saveEditUsingForm) {
                 $this->getEntityManager()->flush();
+            }
+            if($form->get('file')->getData()) {
+                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:move:single-image-s3 --file_path=landingpage/'.$entity->getFileName().' >/dev/null &');
             }
             $message = $this->get('translator')->trans('Record has been updated successfully.', array(), 'success');
 

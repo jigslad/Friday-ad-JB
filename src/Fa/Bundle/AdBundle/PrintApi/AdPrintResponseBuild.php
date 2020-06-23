@@ -149,8 +149,12 @@ class AdPrintResponseBuild
 
         $this->printApiResponse[AdPrintFieldMappingInterface::EMAIL] = ($ad->getUser() ? $ad->getUser()->getEmail() : null);
         
-        if($ad->getUser()->getContactThroughPhone()) {
-            $this->printApiResponse[AdPrintFieldMappingInterface::PHONE_NUMBER] = ($ad->getBusinessPhone() ? $ad->getBusinessPhone() : ($ad->getPrivacyNumber() ? $ad->getPrivacyNumber() : ($ad->getUser() ? $ad->getUser()->getPhone() : null)));
+        if($ad->getUser()) {
+            if($ad->getUser()->getContactThroughPhone()!=null && $ad->getUser()->getContactThroughPhone() != '') {
+               $this->printApiResponse[AdPrintFieldMappingInterface::PHONE_NUMBER] = ($ad->getBusinessPhone() ? $ad->getBusinessPhone() : ($ad->getPrivacyNumber() ? $ad->getPrivacyNumber() : ($ad->getUser() ? $ad->getUser()->getPhone() : null)));
+            } else {
+                $this->printApiResponse[AdPrintFieldMappingInterface::PHONE_NUMBER] = null;
+            }
         } else {
             $this->printApiResponse[AdPrintFieldMappingInterface::PHONE_NUMBER] = null;
         }

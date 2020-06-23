@@ -44,8 +44,11 @@
     {{ include('FaFrontendBundle::scriptTop.html.twig') }}
     {% block scripttop %}{% endblock %}
     {{ include('FaFrontendBundle::fa-main-css.html.twig') }}
+    
+    {{ include('FaFrontendBundle::new-fa-main-css.html.twig') }}
+    
 
-    {#{% stylesheets filter='uglifycss' output='bundles/css/compiled/simpleLayout.css'
+    {# {% stylesheets filter='uglifycss' output='bundles/css/compiled/simpleLayout.css'
         'bundles/fafrontend/css/style.css'
         'bundles/fafrontend/css/responsive.css'
           %}
@@ -81,7 +84,9 @@
         {% endif %}
     {% endif %}
     
-    <!-- FB pixel code snippet -->
+   
+
+ <!-- FB pixel code snippet -->
     {{ include('FaFrontendBundle::fbPixelCodeSnippet.html.twig') }}
 </head>
 <body>

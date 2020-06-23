@@ -948,6 +948,12 @@ abstract class AdParser
                 $adImageManager = new AdImageManager($this->container, $ad->getId(), $hash, $imagePath);
                 $adImageManager->createThumbnail();
                 $adImageManager->createCropedThumbnail();
+                
+                $adImgPath = $imagePath.'/'.$ad->getId().'_'.$hash.'.jpg';
+                if (file_exists($adImgPath)) {
+                    $adImageManager->uploadImagesToS3($image);
+                    unlink($filePath);
+                } 
 
                 $i++;
             }
@@ -1033,7 +1039,7 @@ abstract class AdParser
             $this->setRejectedReason('Unique ID not found');
         }
 
-        if ($adArray['AdvertType'] == 'MotorhomeAdvert' || $adArray['AdvertType'] == 'ClickEditVehicleAdvert' || $adArray['AdvertType'] == 'JobAdvert') {
+        if ($adArray['AdvertType'] == 'MotorhomeAdvert' || $adArray['AdvertType'] == 'VehicleAdvert' || $adArray['AdvertType'] == 'ClickEditVehicleAdvert' || $adArray['AdvertType'] == 'JobAdvert') {
             $locationArray = array();
             if ($adArray['Advertiser']['Postcode']) {
                 $locationArray = $this->em->getRepository('FaEntityBundle:Postcode')->getPostCodInfoArrayByLocation($adArray['Advertiser']['Postcode'], $this->container, true);
