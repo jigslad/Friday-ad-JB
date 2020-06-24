@@ -47,7 +47,8 @@
     {% for key,value in adCategoryIdArray %}
     	{%  set  adCategoryIdValArray = adCategoryIdValArray|merge([value])  %}
     {% endfor %}
-    
+
+    {% set categoryUpsellArray = {} %}
     {% if adCategoryIdValArray|length >0 %}
     	{% set categoryUpsellArray    = categoryUpsellRepository.getCategoryUpsellForCategoryIds(adCategoryIdValArray) %}
     {% endif %}
@@ -386,12 +387,9 @@
     </div>
 </div>
     
-<div id="featuredTopUpsellModal" data-options="close_on_background_click:false;close_on_esc:false;" class="ga-featuredUnavailable tiny reveal-modal xm remove-item-modal mma-featured-pop small" data-reveal="" data-selfeaturedid=""></div>
-{% if successUpsellPaymentModalbox is defined and successUpsellPaymentModalbox %}
-    {#  Featured Top Success Modal Box   #}
-    {{ include('FaUserBundle:ManageMyAd:individualSuccessPaymentModal.html.twig') }}
-{% endif %}
-    	
+<div id="featuredTopUpsellModal" data-options="close_on_background_click:false;close_on_esc:false;" class="ga-featuredUnavailable medium reveal-modal remove-item-modal mma-featured-pop" data-reveal="" data-selfeaturedid=""></div>
+
+
 {% block scriptbottom%}
 {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
 <script language="javascript" type="text/javascript">	
@@ -623,11 +621,6 @@
             }
         }
     });
-
-    {% if successUpsellPaymentModalbox is defined and successUpsellPaymentModalbox %}
-    	$('#featuredTopSuccessPaymentModal').foundation('reveal', 'open');
-    	gaEvent('','','Featured On');
-    {% endif %}
 
 </script>
 <script>
