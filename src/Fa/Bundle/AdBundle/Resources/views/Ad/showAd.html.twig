@@ -1228,7 +1228,9 @@
         });
         ga('send', 'event', 'CTA', callFrom, '{{ adId }}{{ catText }}');
         {% if adImages|length %}
+        if($.fancybox){
             $.fancybox.close();
+        }
         {% endif %}
         blockPage();
         var route = Routing.generate('contact_seller', { 'adId': id });
@@ -1634,7 +1636,9 @@
     }
 
     $(document).ready(function(){
-
+        if(getCookie('contactAdMessageBeforeLogin-{{ adId }}') !== ""){
+            contactSeller('{{ adId }}', 'Auto Contact Seller','Auto');
+        }
         function zutoLoanCalcGA(action, flagView){
             if (!flagView) {
                 // ga('send', 'event', 'Zuto car finance', action, '[&amp;#163;' + $('#loan_amount').val() + '|' + $('#loan_period').val() + ']'); // todo add if GTM is not added later
