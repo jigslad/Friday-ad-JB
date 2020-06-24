@@ -936,10 +936,45 @@ class ManageMyAdController extends CoreController
                                 //$this->addOrRemoveFeaturedCredits($user->getId(), $adId);
                                 $this->container->get('session')->set('mma_payment_success_redirect_url', $redirectUrl);
                                 $this->get('session')->set('upgrade_cybersource_params_'.$loggedinUser->getId(), array_merge($form->getData(), $request->get('fa_payment_cyber_source_checkout')));
-                                $htmlContent= array(
-                                    'success' 		=> true,
-                                    'redirectUrl' 	=> $this->generateUrl('process_payment', array('paymentMethod' => PaymentRepository::PAYMENT_METHOD_CYBERSOURCE), true)
-                                );
+
+                                $cart         = $this->getRepository('FaPaymentBundle:Cart')->getUserCart($loggedinUser->getId(), $this->container);
+                                $paymentFor = '';
+
+                                $transactions = $this->getRepository('FaPaymentBundle:Transaction')->getTransactionsByCartId($cart->getId());
+
+                                if(!empty($cart)) {
+                                    $cartDetails  = $this->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
+                                    $cartDetailsValues = unserialize($cartDetails[0]['value']);
+                                    $paymentFor = isset($cartDetailsValues['payment_for'])?$cartDetailsValues['payment_for']:'';
+                                }
+
+                                $cartValue = unserialize($cart->getValue());
+                                //redirect to payment method or process payment.
+                                if ($cart->getAmount() <= 0 || ($cart->getAmount() > 0 && $this->container->getParameter('by_pass_payment'))) {
+                                    //update cart vlaue and payment method.
+                                    $this->getEntityManager()->beginTransaction();
+
+                                    $cart->setPaymentMethod($paymentMethod);
+                                    $this->getEntityManager()->persist($cart);
+                                    $this->getEntityManager()->flush($cart);
+                                    $paymentId = $this->getRepository('FaPaymentBundle:Payment')->processPaymentSuccess($cart->getCartCode(), null, $this->container);
+                                    $this->getEntityManager()->getConnection()->commit();
+
+                                    $transcationsGaTag = array();
+                                    if($transactions) {
+                                        $transcationsGaTag  = $this->getRepository('FaPaymentBundle:Payment')->getTranscationDetailsForGA($transactions->getTransactionId(), $loggedinUser);
+                                    }
+
+                                    if($cart) {
+                                        $cart->setStatus(0);
+                                        $this->_em->persist($cart);
+                                        $this->_em->flush($cart);
+                                    }
+                                    $categoryName       = $ad->getCategory()->getName();
+
+                                    $parameters = array( 'transcationsGaTag' => $transcationsGaTag, 'individualUpsellArr' => $individualUpsellArr,'categoryName'=>$categoryName);
+                                    $htmlContent = $this->renderView('FaUserBundle:ManageMyAd:individualSuccessPaymentModal.html.twig',$parameters);
+                                }
                             }
                         } elseif ($request->isXmlHttpRequest()) {
                             $formErrors    = $formManager->getFormSimpleErrors($form, 'label');
@@ -1105,8 +1140,6 @@ class ManageMyAdController extends CoreController
      */
     public function ajaxCreditPaymentProcessForIndividualUpsellAction($upsellId, $adId, Request $request)
     {
-        //$upsellId = 5;
-        //$adId = 17260111;
         if ($request->isXmlHttpRequest()) {
             $redirectToUrl = '';
             $error         = '';

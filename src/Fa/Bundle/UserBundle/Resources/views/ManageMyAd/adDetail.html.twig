@@ -183,6 +183,22 @@
                     {% endif %}
                 {% endif %}
                 {% endif %}
+                <div class="list-expired-hours">
+                    {{ 'Reference'|trans({}, 'frontend-manage-my-ad') }} {{ad.id}}
+                </div>
+                {% if adPackageArray[adId] is defined and adPackageArray[adId] is not null and adPackageArray[adId]['price'] > 0 %}
+                <div class="list-created-hours">
+                    {{ 'Ad package :'|trans({}, 'frontend-manage-my-ad') }}<span class="item-status mma-pkg-title">{{adPackageArray[adId]['title']}}</span>
+                </div>
+                {% endif %}
+
+                {% set adViewCounter = 0 %}
+                {% if adViewCounterArray[adId] is defined and adViewCounterArray[adId] is not null %}
+                    {% set adViewCounter = adViewCounterArray[adId] %}
+                {% endif %}
+                <div class="list-created-hours">
+                    {{ 'Page views: '|trans({}, 'frontend-manage-my-ad') }} {{ adViewCounter }}
+                </div>
                 
             </div>
         </div>
@@ -230,10 +246,7 @@
                      <a class="xs-black-btn expand button" href="javascript:void(0);" onclick="removeAdConfirmation('{{adId}}', '{{ad.status_id}}');">
                      {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') %} Stop this ad {% else %} Delete {% endif %}</a></div>
                 {% endif %}
-                
-                {% if adPackageArray[adId] is defined and adPackageArray[adId] is not null and adPackageArray[adId]['price'] > 0 %}
-                    <span class="item-status mma-pkg-title">{{adPackageArray[adId]['title']}}</span>
-                {% endif %}
+
             </div>
         </div>
     </div> 
