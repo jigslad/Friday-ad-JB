@@ -3180,6 +3180,17 @@ ul.select2-choices:after, .select2-choice:after {
 .list-featured-bz .item h3 {
 	text-align: left !important;
 }
+#category_autocomplete_div .textbox-wrapper input {
+  height: 48px !important;
+}
+.fancybox-close {
+  height: 26px !important;
+  background-size: cover !important;
+  background-position: top !important;
+}
+.shop-video-box img {
+  height: 100% !important;
+}
 @media only screen and (min-width: 759px) {
   .adul-hp-slider .top-msg {
     min-height: 140px;

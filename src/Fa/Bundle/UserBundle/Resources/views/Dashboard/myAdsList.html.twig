@@ -67,7 +67,15 @@
         {% endif %}
     {% endif %} #}
 {% endif %}
-{{ include('FaUserBundle:ManageMyAd:manageMyAd-css.html.twig') }}
+{% block scripttop %}
+    {% stylesheets filter="uglifycss" output='bundles/css/compiled/mma.css'
+        'build/css/mmacss.css'
+        'build/css/upsell-featured.css'
+    %}
+        <link rel="stylesheet" href="{{ asset('/bundles/css/compiled/mma.css') }}"/>
+    {% endstylesheets %}
+{% endblock %}
+
 {{ include('FaUserBundle:ManageMyAd:individualUpsellJs.html.twig') }}
        {% if pagination.getNbResults() %}
             {% for ad in pagination.getCurrentPageResults() %}
