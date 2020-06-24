@@ -581,6 +581,17 @@ footer a:hover, .footer-head:hover, .pkg-includes a {
 	display: flex !important;
 }
 .modal-content h5 { font-weight: normal !important; font-family:"Poppins-Regular" !important; }
+#category_autocomplete_div .textbox-wrapper input {
+  height: 48px !important;
+}
+.fancybox-close {
+  height: 26px !important;
+  background-size: cover !important;
+  background-position: top !important;
+}
+.shop-video-box img {
+  height: 100% !important;
+}
 @media only screen and (min-width: 760px) {
 	#package_purchase_form .equalizer-inner, #package_purchase_form .pkg-columns {
 	    display: grid !important;
