@@ -163,30 +163,26 @@
                 <div class="list-det-cr-pg">
                     {% set createdInwords = ad['ad_date'] |time_ago_in_words %}
                     {% if currentRoute == 'manage_my_ads_active' or currentRoute == 'dashboard_home' %}
-                    {% if (ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID')) and (ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID')) %}
-                    <div class="list-created-hours show-for-small-up-only list-created-hours-desk-tab">
-                         {% set createdInwords = (createdInwords=='less than 1 minute ago' or createdInwords=='less than a minute ago')?'1 minute ago':createdInwords %}
-                         {{ 'Created'|trans({}, 'frontend-manage-my-ad') }} {{createdInwords|replace({'minute': 'min'})}}
-                    </div>
-                    {% endif %}
-                    {% endif %}
-
-                    {% if currentRoute == 'manage_my_ads_active' or currentRoute == 'dashboard_home' %}
-                    {% if ad.expires_at is defined and ad.expires_at is not null and ad.published_at is defined and ad.published_at is not null%}
-                        {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') %}
-                            {#<div class="list-expired-hours">{{'Expired (%expire_date%)'|trans({'%expire_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.expires_at, container]) }, 'frontend-manage-my-ad')}}</div><br /> #}
-                        {% elseif ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
-                            {# <div class="list-expired-hours">{{'Marked as sold  (%sold_date%)'|trans({'%sold_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.sold_at, container]) }, 'frontend-manage-my-ad')}}</div><br />#}
-                        {% else %}
-                            <div class="list-expired-hours">{{'Expired %expire_in_word%'|trans({'%expire_in_word%': ad.expires_at|distance_of_time_in_words(date().timestamp), '%expire_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.expires_at, container]) }, 'frontend-manage-my-ad')}}</div>
-                            {# {% if date().timestamp > ad.expires_at %}
-                                <div class="list-expired-hours">{{'Expired %expire_in_word% (%expire_date%)'|trans({'%expire_in_word%': ad.expires_at|distance_of_time_in_words(date().timestamp), '%expire_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.expires_at, container]) }, 'frontend-manage-my-ad')}}</div>
-                            {% else %}
-                                <div class="list-expired-hours">{{'Expires %expire_in_word% (%expire_date%)'|trans({'%expire_in_word%': ad.expires_at|distance_of_time_in_words(date().timestamp), '%expire_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.expires_at, container])}, 'frontend-manage-my-ad')}}</div>
-                            {% endif %} #}
+                        {% if (ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID')) and (ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID')) %}
+                        <div class="list-created-hours show-for-small-up-only list-created-hours-desk-tab">
+                             {% set createdInwords = (createdInwords=='less than 1 minute ago' or createdInwords=='less than a minute ago')?'1 minute ago':createdInwords %}
+                             {{ 'Created'|trans({}, 'frontend-manage-my-ad') }} {{createdInwords|replace({'minute': 'min'})}}
+                        </div>
                         {% endif %}
                     {% endif %}
+                
+                    {% if currentRoute == 'manage_my_ads_active' or currentRoute == 'dashboard_home' %}
+                        {% if ad.expires_at is defined and ad.expires_at is not null and ad.published_at is defined and ad.published_at is not null%}
+                            {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') %}
+                                {#<div class="list-expired-hours">{{'Expired (%expire_date%)'|trans({'%expire_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.expires_at, container]) }, 'frontend-manage-my-ad')}}</div><br /> #}
+                            {% elseif ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
+                                {# <div class="list-expired-hours">{{'Marked as sold  (%sold_date%)'|trans({'%sold_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.sold_at, container]) }, 'frontend-manage-my-ad')}}</div><br />#}
+                            {% else %}
+                                <div class="list-expired-hours">{{'Expired %expire_in_word%'|trans({'%expire_in_word%': ad.expires_at|distance_of_time_in_words(date().timestamp), '%expire_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.expires_at, container]) }, 'frontend-manage-my-ad')}}</div>
+                            {% endif %}
+                        {% endif %}
                     {% endif %}
+
                     <div class="list-expired-hours">
                         {{ 'Reference : '|trans({}, 'frontend-manage-my-ad') }} {{ad.id}}
                     </div>
@@ -261,10 +257,10 @@
 	<div class="row">
     	<div class="small-24 columns">
             {% if ad.price > 0 %}
-        	<div class="manage-price-box-mobile">               
+            <div class="manage-price-box-mobile">               
                 <div class="manage-price">
-                    {{ format_currency(ad.price) }}
-                </div>                
+                   {{ format_currency(ad.price) }}
+                </div>
             </div>
             {% endif %}
 

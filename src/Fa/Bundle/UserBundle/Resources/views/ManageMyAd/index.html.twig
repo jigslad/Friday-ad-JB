@@ -41,7 +41,6 @@
 {% block scriptbottom %}
 {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
 {{ include('FaUserBundle:ManageMyAd:mma-js.html.twig', {}) }}
-
 <script>
 {% if ga_transaction is defined and ga_transaction.PAYMENT_ID is defined %}
     ga('require', 'ecommerce');
