@@ -62,6 +62,10 @@
 {% endfor %}
 {% endif %}
 
+{% if isFeaturedAd==1 %}
+    {% set featuredToggleFlag = 1 %}
+{% endif %}
+
 {% set featuredTopUpsell7days = constant('Fa\\Bundle\\PromotionBundle\\Repository\\UpsellRepository::UPSELL_FEATURED_TOP_7DAYS_ID')  %}
 
 {% if not app.request.isXmlHttpRequest() %} 
@@ -141,15 +145,13 @@
         </div>
         <div class="small-14 medium-10 large-11 columns medium-center-cols">
             <div class="clearfix">
+                {% if ad.price > 0 %}
             	<div class="manage-price-box clearfix">
                     <div class="manage-price">
-                        {% if ad.price > 0 %}
-                            {{ format_currency(ad.price) }}
-                        {% else %}
-                            
-                        {% endif %}
+                        {{ format_currency(ad.price) }}
                     </div>
                 </div>
+                {% endif %}
                 <h3 id="item_detail_link_{{adId}}">
                     {% if ad['status_id'] == adStatusLive %}
                         <a href="{{adUrl}}" target="_blank">{{ad['title']}}</a>
@@ -157,49 +159,49 @@
                         {{ad['title']}}
                     {% endif %}
                 </h3>
-                
-                {% set createdInwords = ad['ad_date'] |time_ago_in_words %}
-                {% if currentRoute == 'manage_my_ads_active' or currentRoute == 'dashboard_home' %}
-                {% if (ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID')) and (ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID')) %}                
-                <div class="list-created-hours show-for-small-up-only list-created-hours-desk-tab">
-                     {% set createdInwords = (createdInwords=='less than 1 minute ago' or createdInwords=='less than a minute ago')?'1 minute ago':createdInwords %}
-                     {{ 'Created'|trans({}, 'frontend-manage-my-ad') }} {{createdInwords|replace({'minute': 'min'})}}
-                </div>
-                {% endif %}
-                {% endif %}
-                
-                {% if currentRoute == 'manage_my_ads_active' or currentRoute == 'dashboard_home' %}
-                {% if ad.expires_at is defined and ad.expires_at is not null and ad.published_at is defined and ad.published_at is not null%}
-                    {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') %}
-                        {#<div class="list-expired-hours">{{'Expired (%expire_date%)'|trans({'%expire_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.expires_at, container]) }, 'frontend-manage-my-ad')}}</div><br /> #}
-                    {% elseif ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
-                        {# <div class="list-expired-hours">{{'Marked as sold  (%sold_date%)'|trans({'%sold_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.sold_at, container]) }, 'frontend-manage-my-ad')}}</div><br />#}
-                    {% else %}
-                        {% if date().timestamp > ad.expires_at %}
-                            <div class="list-expired-hours">{{'Expired %expire_in_word% (%expire_date%)'|trans({'%expire_in_word%': ad.expires_at|distance_of_time_in_words(date().timestamp), '%expire_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.expires_at, container]) }, 'frontend-manage-my-ad')}}</div>
-                        {% else %}
-                            <div class="list-expired-hours">{{'Expires %expire_in_word% (%expire_date%)'|trans({'%expire_in_word%': ad.expires_at|distance_of_time_in_words(date().timestamp), '%expire_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.expires_at, container])}, 'frontend-manage-my-ad')}}</div>
+
+                <div class="list-det-cr-pg">
+                    {% set createdInwords = ad['ad_date'] |time_ago_in_words %}
+                    {% if currentRoute == 'manage_my_ads_active' or currentRoute == 'dashboard_home' %}
+                        {% if (ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID')) and (ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID')) %}
+                        <div class="list-created-hours show-for-small-up-only list-created-hours-desk-tab">
+                             {% set createdInwords = (createdInwords=='less than 1 minute ago' or createdInwords=='less than a minute ago')?'1 minute ago':createdInwords %}
+                             {{ 'Created'|trans({}, 'frontend-manage-my-ad') }} {{createdInwords|replace({'minute': 'min'})}}
+                        </div>
                         {% endif %}
                     {% endif %}
-                {% endif %}
-                {% endif %}
-                <div class="list-expired-hours">
-                    {{ 'Reference'|trans({}, 'frontend-manage-my-ad') }} {{ad.id}}
+                
+                    {% if currentRoute == 'manage_my_ads_active' or currentRoute == 'dashboard_home' %}
+                        {% if ad.expires_at is defined and ad.expires_at is not null and ad.published_at is defined and ad.published_at is not null%}
+                            {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') %}
+                                {#<div class="list-expired-hours">{{'Expired (%expire_date%)'|trans({'%expire_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.expires_at, container]) }, 'frontend-manage-my-ad')}}</div><br /> #}
+                            {% elseif ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
+                                {# <div class="list-expired-hours">{{'Marked as sold  (%sold_date%)'|trans({'%sold_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.sold_at, container]) }, 'frontend-manage-my-ad')}}</div><br />#}
+                            {% else %}
+                                <div class="list-expired-hours">{{'Expired %expire_in_word%'|trans({'%expire_in_word%': ad.expires_at|distance_of_time_in_words(date().timestamp), '%expire_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.expires_at, container]) }, 'frontend-manage-my-ad')}}</div>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+
+                    <div class="list-expired-hours">
+                        {{ 'Reference : '|trans({}, 'frontend-manage-my-ad') }} {{ad.id}}
+                    </div>
+
+                    {% set adViewCounter = 0 %}
+                    {% if adViewCounterArray[adId] is defined and adViewCounterArray[adId] is not null %}
+                        {% set adViewCounter = adViewCounterArray[adId] %}
+                    {% endif %}
+                    <div class="list-created-hours">
+                        {{ 'Page views : '|trans({}, 'frontend-manage-my-ad') }} {{ adViewCounter }}
+                    </div>
                 </div>
                 {% if adPackageArray[adId] is defined and adPackageArray[adId] is not null and adPackageArray[adId]['price'] > 0 %}
-                <div class="list-created-hours">
-                    {{ 'Ad package :'|trans({}, 'frontend-manage-my-ad') }}<span class="item-status mma-pkg-title">{{adPackageArray[adId]['title']}}</span>
-                </div>
+                    <div class="list-created-hours">
+                        {{ 'Ad package : '|trans({}, 'frontend-manage-my-ad') }}<span class="pkg-title-mma">{{adPackageArray[adId]['title']}}</span>
+                    </div>
                 {% endif %}
 
-                {% set adViewCounter = 0 %}
-                {% if adViewCounterArray[adId] is defined and adViewCounterArray[adId] is not null %}
-                    {% set adViewCounter = adViewCounterArray[adId] %}
-                {% endif %}
-                <div class="list-created-hours">
-                    {{ 'Page views: '|trans({}, 'frontend-manage-my-ad') }} {{ adViewCounter }}
-                </div>
-                
+
             </div>
         </div>
 
@@ -256,15 +258,14 @@
 <div class="show-for-small-only">
 	<div class="row">
     	<div class="small-24 columns">
+            {% if ad.price > 0 %}
         	<div class="manage-price-box-mobile">               
                 <div class="manage-price">
-                    {% if ad.price > 0 %}
-                        {{ format_currency(ad.price) }}
-                    {% else %}
-                        
-                    {% endif %}
-                </div>                
+                   {{ format_currency(ad.price) }}
+                </div>
             </div>
+            {% endif %}
+
             {% if ad['status_id'] == adStatusLive %}
             <div class="featured-share-box-mobile">
             	<div class="featuredBlock1">            		
