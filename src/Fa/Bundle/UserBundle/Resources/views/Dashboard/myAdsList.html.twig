@@ -77,77 +77,27 @@
 {% endblock %}
 
 {{ include('FaUserBundle:ManageMyAd:individualUpsellJs.html.twig') }}
-       {% if pagination.getNbResults() %}
-            {% for ad in pagination.getCurrentPageResults() %}
-                {% set adId = ad.id %}
-                {% set adCategoryId = ad.cat_id %}
-                {% if ad['status_id'] == adStatusLive %}
-                    {% set adUrl = container.get('router').generate('ad_detail_page_by_id', {'id': adId}, true) %}
-                    {# {% set adUrl = adUrl|trim('/') %} #}
-                {% endif %}
-                
-                {% set dateRemainingForExpiry = 0 %}
-                {% set adExpiry = ad['expires_at'] %}
-                {% if adExpiry is defined and adExpiry > 0 %}
-                   {% set dateRemainingForExpiry = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager','dateDiffInDays', [adExpiry,date().timestamp]) %}
-                {% endif %}
-                                
-                {% if userBusType is defined and userBusType == 'netsuite' %}
-                    {{ include('FaUserBundle:ManageMyAd:adNetsuiteDetail.html.twig') }}                                    
-                {% else %}
-                    {{ include('FaUserBundle:ManageMyAd:adDetail.html.twig') }}
-                {% endif %}  
-            {% endfor %}
+{% if pagination.getNbResults() %}
+    {% for ad in pagination.getCurrentPageResults() %}
+        {% set adId = ad.id %}
+        {% set adCategoryId = ad.cat_id %}
+        {% if ad['status_id'] == adStatusLive %}
+            {% set adUrl = container.get('router').generate('ad_detail_page_by_id', {'id': adId}, true) %}
+            {# {% set adUrl = adUrl|trim('/') %} #}
         {% endif %}
 
+        {% set dateRemainingForExpiry = 0 %}
+        {% set adExpiry = ad['expires_at'] %}
+        {% if adExpiry is defined and adExpiry > 0 %}
+           {% set dateRemainingForExpiry = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager','dateDiffInDays', [adExpiry,date().timestamp]) %}
+        {% endif %}
 
-<div id="markAdAsSoldOrExpireModal" class="reveal-modal tiny" data-reveal>
-    <a class="close-reveal-modal">&#215;</a>
-    <h5 class="modal-title">
-        {{'Remove ad'|trans({}, 'frontend-manage-my-ad')}}
-    </h5>
-    <div class="modal-content remove-modal">
-        <div class="row">
-            <div class="columns">
-                <h5>{{'Was your advert successful?'|trans({}, 'frontend-manage-my-ad')}}</h5>
-            </div>
-        </div>
-        <div class="mt20">
-            <div class="row">
-                <div class="large-6 columns">
-                    <button type="button" class="button secondary-btn-4 thin-btn expand mb0" onclick="closeRevealModel('#markAdAsSoldOrExpireModal');changeAdStatus('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID')}}');">{{'Yes'|trans({}, 'frontend-manage-my-ad')}}</button>
-                </div>
-                <div class="large-6 columns">
-                    <button type="button" class="button secondary-btn-4 thin-btn expand mb0" onclick="closeRevealModel('#markAdAsSoldOrExpireModal');changeAdStatus('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID')}}');">{{'No'|trans({}, 'frontend-manage-my-ad')}}</button>
-                </div>
-                <div class="large-12 columns">
-                    <button type="button" class="button secondary-btn-1 thin-btn expand mb0" onclick="closeRemoveAdConfirmationBox('markAdAsSoldOrExpireModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+        {% if userBusType is defined and userBusType == 'netsuite' %}
+            {{ include('FaUserBundle:ManageMyAd:adNetsuiteDetail.html.twig') }}
+        {% else %}
+            {{ include('FaUserBundle:ManageMyAd:adDetail.html.twig') }}
+        {% endif %}
+    {% endfor %}
+{% endif %}
 
-<div id="markAdAsInactiveModal" class="reveal-modal tiny" data-reveal>
-    <a class="close-reveal-modal">&#215;</a>
-    <h5 class="modal-title">
-        {{'Remove ad'|trans({}, 'frontend-manage-my-ad')}}
-    </h5>
-    <div class="modal-content remove-modal">
-        <div class="row">
-            <div class="columns">
-                <h5>{{'Are you sure that you want to permanently delete this advert?'|trans({}, 'frontend-manage-my-ad')}}</h5>
-            </div>
-        </div>
-        <div class="mt20">
-            <div class="row">
-                <div class="large-12 columns">
-                    <button type="button" class="button secondary-btn-4 thin-btn expand mb0" onclick="closeRevealModel('#markAdAsInactiveModal');changeAdStatus('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_INACTIVE_ID')}}');">{{'Delete'|trans({}, 'frontend-manage-my-ad')}}</button>
-                </div>
-                <div class="large-12 columns">
-                    <button type="button" class="button secondary-btn-1 thin-btn expand mb0" onclick="closeRemoveAdConfirmationBox('markAdAsInactiveModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+{{ include('FaUserBundle:ManageMyAd:mma-js.html.twig') }}

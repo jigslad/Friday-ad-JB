@@ -60,7 +60,25 @@
     {% endif %}
 {% endfor %}
 
+{% if isFeaturedAd==1 %}
+    {% set featuredToggleFlag = 1 %}
+{% endif %}
+
 {% set featuredTopUpsell7days = constant('Fa\\Bundle\\PromotionBundle\\Repository\\UpsellRepository::UPSELL_FEATURED_TOP_7DAYS_ID')  %}
+
+{%  set adLocation = '' %}
+{% if (userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) and (userBusinessCategory is defined and userBusinessCategory == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')) and ad.status_id == adStatusLive %}
+        {% if ad['locality_id'] is defined and ad['locality_id'] is not null %}
+            {%  set adLocation = entityCacheManager.getEntityNameById('FaEntityBundle:Locality', ad['locality_id']) %}
+        {% elseif ad['town_id'] is defined and ad['town_id'] is not null %}
+            {% if ad['area_id'] is defined and ad['area_id'] is not null %}
+                {%  set adLocation = entityCacheManager.getEntityNameById('FaEntityBundle:Location', ad['area_id']) ~ ', ' ~ entityCacheManager.getEntityNameById('FaEntityBundle:Location', ad['town_id']) %}
+            {% else %}
+                {%  set adLocation = entityCacheManager.getEntityNameById('FaEntityBundle:Location', ad['town_id']) %}
+            {% endif %}
+        {% endif %}
+{% endif %}
+
 
 {% if not app.request.isXmlHttpRequest() %} 
 <div class="manage-item-list" id="item_card_{{adId}}">
@@ -151,17 +169,9 @@
                         {{ad['title']}}
                     {% endif %}
                 </h3>
-                {% if (userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) and (userBusinessCategory is defined and userBusinessCategory == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')) and ad.status_id == adStatusLive %}
-                    <div {% if ad['town_id'] is defined or ad['area_id'] is defined or ad['locality_id'] is defined %} class="list-miles clearfix" {% endif %}>
-                        {% if ad['locality_id'] is defined and ad['locality_id'] is not null %}
-                            <b>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Locality', ad['locality_id']) }}</b>
-                        {% elseif ad['town_id'] is defined and ad['town_id'] is not null %}
-                            {% if ad['area_id'] is defined and ad['area_id'] is not null %}
-                                <b>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', ad['area_id']) ~ ', ' ~ entityCacheManager.getEntityNameById('FaEntityBundle:Location', ad['town_id']) }}</b>
-                            {% else %}
-                                <b>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', ad['town_id']) }}</b>
-                            {% endif %}
-                        {% endif %}
+                {% if adLocation!='' %}
+                    <div class="list-miles clearfix">
+                        <b>{{ adLocation }}</b>
                     </div>
                 {% endif %}
                 
@@ -184,23 +194,24 @@
                     {% endif %} 
                 </div>
                 {% endif %}
-
+                <div class="list-det-cr-pg">
                 <div class="list-expired-hours">
-                    {{ 'Reference'|trans({}, 'frontend-manage-my-ad') }} {{ad.id}}
+                    {{ 'Reference : '|trans({}, 'frontend-manage-my-ad') }} {{ad.id}}
                 </div>
-                {% if adPackageArray[adId] is defined and adPackageArray[adId] is not null and adPackageArray[adId]['price'] > 0 %}
-                    <div class="list-created-hours">
-                        {{ 'Ad package :'|trans({}, 'frontend-manage-my-ad') }}<span class="item-status mma-pkg-title">{{adPackageArray[adId]['title']}}</span>
-                    </div>
-                {% endif %}
 
                 {% set adViewCounter = 0 %}
                 {% if adViewCounterArray[adId] is defined and adViewCounterArray[adId] is not null %}
                     {% set adViewCounter = adViewCounterArray[adId] %}
                 {% endif %}
                 <div class="list-created-hours">
-                    {{ 'Page views: '|trans({}, 'frontend-manage-my-ad') }} {{ adViewCounter }}
+                    {{ 'Page views : '|trans({}, 'frontend-manage-my-ad') }} {{ adViewCounter }}
                 </div>
+                </div>
+                {% if adPackageArray[adId] is defined and adPackageArray[adId] is not null and adPackageArray[adId]['price'] > 0 %}
+                    <div class="list-created-hours">
+                        {{ 'Ad package : '|trans({}, 'frontend-manage-my-ad') }}<span class="pkg-title-mma">{{adPackageArray[adId]['title']}}</span>
+                    </div>
+                {% endif %}
             </div>
         </div>
 

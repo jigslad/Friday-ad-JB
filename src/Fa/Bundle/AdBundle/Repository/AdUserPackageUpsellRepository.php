@@ -612,7 +612,7 @@ class AdUserPackageUpsellRepository extends EntityRepository
             $qb->andWhere(self::ALIAS.'.ad_id IN (:adId)');
             $qb->setParameter('adId', $adId);
         }
-        
+
         $adUpsells   = $qb->getQuery()->getArrayResult();
         $adUpsellArr = array();
         if (count($adUpsells)) {

@@ -89,6 +89,7 @@ class UserCreditUsedRepository extends EntityRepository
 
         $userCreditUsed = new UserCreditUsed();
         $userCreditUsed->setUser($transactionObj->getUser());
+        $userCreditUsed->setStatus(1);
         $userCreditUsed->setUserCredit($userCredit);
         $userCreditUsed->setCredit($value['user_credit']);
         $userCreditUsed->setPayment($this->_em->getReference('FaPaymentBundle:Payment', $paymentId));
@@ -116,6 +117,7 @@ class UserCreditUsedRepository extends EntityRepository
         $userCreditUsed->setUser($userObj);
         $userCreditUsed->setUserCredit($userFeaturedCredits);
         $userCreditUsed->setCredit(1);
+        $userCreditUsed->setStatus(1);
         $userCreditUsed->setAd($adObj);
         $userCreditUsed->setUpsell($upsellObj);
         $this->_em->persist($userCreditUsed);

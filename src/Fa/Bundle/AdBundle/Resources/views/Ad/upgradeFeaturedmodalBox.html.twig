@@ -213,26 +213,27 @@
    	    {{ include('FaAdBundle:Ad:upgradePaymentForm.html.twig', {'form': form }) }}
 	</div>
 	<div id="card_detail_save">
-            <div class="payment-row">
-                <div class="label-inline white-checkbox">
-                    {{ form_widget(form.is_save_credit_card) }}
-                    {{ form_label(form.is_save_credit_card) }}
-                    {{ form_errors(form.is_save_credit_card) }}
+        <div class="payment-row">
+            <div class="label-inline white-checkbox">
+                {{ form_widget(form.is_save_credit_card) }}
+                {{ form_label(form.is_save_credit_card) }}
+                {{ form_errors(form.is_save_credit_card) }}
+            </div>
+        </div>
+    </div>
+    <div class="mt20 mb20 remove-item-btn">
+        <div class="row">
+            <div class="columns">
+                <div id="pay_now_btn">
+                    {{ form_widget(form.save, {'attr': {'class':'button secondary-btn-1 thin-btn expand'}, 'label': 'Pay'}) }}
                 </div>
             </div>
-   	    </div>
-   	    <div class="mt20 mb20 remove-item-btn">
-       		<div class="row">
-               	<div class="columns">
-                    <div id="pay_now_btn">
-                        {{ form_widget(form.save, {'attr': {'class':'button secondary-btn-1 thin-btn expand'}, 'label': 'Pay'}) }}
-                    </div>
-                </div>
-            </div>
-    	</div>	
+        </div>
+    </div>
 {{ form_end(form) }}
 {% endif %}
 </div>
+    </div>
 <script src="{{ asset_url('fafrontend/js/jquery.equalizer.min.js') }}"></script>
 <script src="{{ asset_url('facore/js/jquery.query-object.js') }}"></script>
 <script language="javascript" type="text/javascript">
@@ -295,7 +296,7 @@
         showHideCardDetail();
     });
 
-    $('#fa_payment_cyber_source_checkout_save').click(function () {
+    $('#fa_payment_cyber_source_checkout_save').on('click', function () {
         window.dataLayer = window.dataLayer || []
         dataLayer.push({
             'event' : 'Options',
