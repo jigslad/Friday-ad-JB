@@ -90,13 +90,13 @@ class UserImageController extends CoreController
                 //upload original image.
                 $uploadedFile->move($orgImagePath, $orgImageName);
                 $dimension = getimagesize($imagePath.DIRECTORY_SEPARATOR.$orgImageName);
-                $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, 90, 'ImageMagickManager');
-                $origImage->loadFile($imagePath.DIRECTORY_SEPARATOR.$orgImageName);
-                $origImage->save($imagePath.DIRECTORY_SEPARATOR.$userId.'_original.jpg', 'image/jpeg');
-                unlink($imagePath.DIRECTORY_SEPARATOR.$orgImageName);
+                //$origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, 90, 'ImageMagickManager');
+                //$origImage->loadFile($imagePath.DIRECTORY_SEPARATOR.$orgImageName);
+                //$origImage->save($imagePath.DIRECTORY_SEPARATOR.$userId.'_original.jpg', 'image/jpeg');
+                //unlink($imagePath.DIRECTORY_SEPARATOR.$orgImageName);
 
                 $userImageManager = new UserImageManager($this->container, $userId, $orgImagePath, $isCompany);
-                $userImageManager->saveOriginalJpgImage($userId.'_original.jpg');
+                $userImageManager->saveOriginalJpgImage($orgImageName);
                 sleep(1);
 
                 return new Response();

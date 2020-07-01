@@ -120,14 +120,15 @@ class UserSiteBannerManager
         $imageQuality = $this->container->getParameter('fa.image.quality');
         $awsDefaultBannerUrl = $this->container->getParameter('fa.static.aws.url').DIRECTORY_SEPARATOR.$this->container->getParameter('fa.user.site.banner.image.dir');
         if ($userSiteBanner) {
-            $this->removeImage();
+           $this->removeImage(); die;
             //$dimension = getimagesize($siteBannerImagePath.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename());
             $dimension = getimagesize($awsDefaultBannerUrl.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename());
             //convert original image to jpg
-            $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, $imageQuality, 'ImageMagickManager');
-            copy($awsDefaultBannerUrl.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename(), $siteBannerImagePath.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename());            
-            $origImage->loadFile($siteBannerImagePath.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename());
-            $origImage->save($this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg', 'image/jpeg');
+            //$origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, $imageQuality, 'ImageMagickManager');
+            copy($awsDefaultBannerUrl.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename(), $siteBannerImagePath.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename());
+            //$origImage->loadFile($siteBannerImagePath.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename());
+            //$origImage->save($this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg', 'image/jpeg');
+            exec('convert -flatten '.escapeshellarg($siteBannerImagePath.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename()).' '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg');
             copy($this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg', $this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'_org.jpg');
             exec('convert -rotate 0 -resize 100% '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'_org.jpg'.' -crop 1190x400+0+'.($dimension[1]*45/100).' '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg');
             $this->uploadImagesToS3($this->getUserSiteId());
@@ -144,10 +145,12 @@ class UserSiteBannerManager
     {
         $imageQuality = $this->container->getParameter('fa.image.quality');
         $dimension = getimagesize($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName);
-        //convert original image to jpg
-        $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, $imageQuality, 'ImageMagickManager');
-        $origImage->loadFile($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName);
-        $origImage->save($this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg', 'image/jpeg');
+	//convert original image to jpg
+        exec('convert -flatten '.escapeshellarg($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName).' '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg');
+
+        //$origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, $imageQuality, 'ImageMagickManager');
+        //$origImage->loadFile($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName);
+        //$origImage->save($this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg', 'image/jpeg');
         if ($dimension['mime'] == 'image/gif') {
             if (is_file($this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'-0.jpg')) {
                 rename($this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'-0.jpg', $this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg');
@@ -292,7 +295,7 @@ class UserSiteBannerManager
                 
                 if ($resultData['statusCode'] == 200) {
                     //echo 'Moved File to AWS is Successfull ## '.$imagekey ;
-                    unlink($im);
+                    //unlink($im);
                 } else {
                     //echo 'Failed moving to AWS ## '.$imagekey ;
                 }
