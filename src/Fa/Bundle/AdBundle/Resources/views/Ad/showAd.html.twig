@@ -260,10 +260,10 @@
 {% endif %}
 
 {% block breadcrumb_script %}
-{% if location_id and location_slug and location_id is not null and location_slug is not null and location_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID') %} 
-    {% set HomePagePath = container.getParameter('base_url')~path('location_home_page', {'location': location_slug}) %} 
+{% if location_id and location_slug and location_id is not null and location_slug is not null and location_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID') %}
+    {% set HomePagePath = container.getParameter('base_url')~path('location_home_page', {'location': location_slug}) %}
 {% else %}
-    {% set HomePagePath = container.getParameter('base_url')~ path('fa_frontend_homepage') %} 
+    {% set HomePagePath = container.getParameter('base_url')~ path('fa_frontend_homepage') %}
 {% endif %}
 <script type="application/ld+json">
 	{
@@ -287,10 +287,10 @@
     		"position": {{breadcrumbCatCnt}},
     		"name": "{{categoryName}}",
     		"item": "{{catListUrl}}"
-  		}{% if breadcrumbCatCnt <= categoryPath|length %},{% endif %}    
+  		}{% if breadcrumbCatCnt <= categoryPath|length %},{% endif %}
 		{% set breadcrumbCatCnt = breadcrumbCatCnt + 1 %}
     {% endfor %}
-    
+
 {% endif %}
  ]
 	}
@@ -347,7 +347,7 @@
             {% endif %}
         {% endif %}
     {% endif %}
-{% endif %}          
+{% endif %}
 
 {% block body %}
 {{ include('FaAdBundle:Ad:showAd-css.html.twig') }}
@@ -1601,7 +1601,7 @@
         ga('send', 'event', 'Options', 'Copy dealer name - Ad detail', businessName);
     }
 
-    function gaSendForRecommendedSlot(url, domain, title) 
+    function gaSendForRecommendedSlot(url, domain, title)
     {
         window.dataLayer = window.dataLayer || []
         dataLayer.push({
@@ -1682,8 +1682,10 @@
 </script>
     <!-- Google TAG Manager Start -->
     {# Ad Package @Jigar Lad #}
+    {% set adPackage = 0 %}
     {% set adUserPackageRepository = fetch_repository('FaAdBundle:AdUserPackage') %}
     {% set adUserPackage = adUserPackageRepository.getAdPackageArrayByAdId(adDetail.id) %}
+    {{ dump(adUserPackage) }}
     {% for ad in adUserPackage %}
         {% set adPackage = ad.package_id %}
     {% endfor %}
@@ -1756,7 +1758,7 @@
                     "publishDate": publishedDate.getFullYear() + "/" + (publishedDate.getMonth() + 1) + "/" + publishedDate.getDate(),
                     "expiryDate": expiredDate.getFullYear()  + "/" + (expiredDate.getMonth() + 1) + "/" + expiredDate.getDate(),
                     "price": '{{ adDetail.a_price_d is defined ? adDetail.a_price_d : 0 }}',
-                    "package": "{{ adPackage is defined ? adPackage : 0 }}",
+                    "package": "{{ adPackage }}",
                     "businessName": "{{ businessname }}",
                     "businessType": "{{ userTypeText == 'Business ad' ? 'Business': 'Private' }}" ,
                     "responseType": "{{ responseType }}" ,
