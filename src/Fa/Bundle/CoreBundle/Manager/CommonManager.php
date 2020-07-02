@@ -2858,14 +2858,17 @@ HTML;
 
             if (isset($matches[0]) && count($matches[0])) {
                 foreach ($matches[0] as $index => $email) {
-                    $gaclass = '';
-                    if($pagetype = 'AdDetails') {
-                        $gaclass= 'ga-emailDescriptionAd';
-                    }
-                    elseif ($pagetype = 'Profile') {
-                        $gaclass= 'ga-emailDescriptionBusiness';
-                    }
-                    $string = str_replace($email, '<a class="'.$gaclass.'" href="javascript:contactSeller(\''.$adId.'\', \'Email contact click (Description)\');">click to contact</a>', $string);
+                    // datalayer discription class removed
+                    // jan confirm on 01/07/2020 FFR-4634
+//                    $gaclass = '';
+//                    if($pagetype = 'AdDetails') {
+//                        $gaclass= 'ga-emailDescriptionAd';
+//                    }
+//                    elseif ($pagetype = 'Profile') {
+//                        $gaclass= 'ga-emailDescriptionBusiness';
+//                    }
+//                    $string = str_replace($email, '<a class="'.$gaclass.'" href="javascript:contactSeller(\''.$adId.'\', \'Email contact click (Description)\');">click to contact</a>', $string);
+                    $string = str_replace($email, '<a href="javascript:contactSeller(\''.$adId.'\', \'Email contact click (Description)\');">click to contact</a>', $string);
                 }
             }
 
