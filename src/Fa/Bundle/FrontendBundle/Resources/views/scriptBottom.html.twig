@@ -336,7 +336,7 @@
     dataLayer.push({
         "page": {
             "pageType": pagType,
-            "loggedInStatus": '{{ login_status }}',
+            "loggedInStatus": {{ login_status }},
             "clientID": '{{ ClientID }}',
             "ipAddress": '{{ app.request.server.get("REMOTE_ADDR") }}',
             "loggedInType": '{{ userType }}',

@@ -1751,8 +1751,8 @@
                     "county": "{{ Country|raw }}",
                     "locationGroup": "{{ (locationGroup.name is defined ? locationGroup.name : locationGroup)|raw}}",
                     "town": "{{ Town|raw }}",
-                    "video": '{{ youtubeVideoUrl is not  null ? 'True' : 'False' }}',
-                    "paypalEnabled": '{{ showBuyNowWithPaypal ? 'True' : 'False'}}',
+                    "video": {{ youtubeVideoUrl is not  null ? 'true' : 'false' }},
+                    "paypalEnabled": {{ showBuyNowWithPaypal ? 'true' : 'false'}},
                     "publishDate": publishedDate.getFullYear() + "/" + (publishedDate.getMonth() + 1) + "/" + publishedDate.getDate(),
                     "expiryDate": expiredDate.getFullYear()  + "/" + (expiredDate.getMonth() + 1) + "/" + expiredDate.getDate(),
                     "price": '{{ adDetail.a_price_d is defined ? adDetail.a_price_d : 0 }}',
@@ -1760,7 +1760,7 @@
                     "businessName": "{{ businessname }}",
                     "businessType": "{{ userTypeText == 'Business ad' ? 'Business': 'Private' }}" ,
                     "responseType": "{{ responseType }}" ,
-                    "logo": '{{ adDetail.user.company_logo is defined ? 'true' : 'false' }}'    //True if showing logo/profile pic, False if nothing (showing default FAD)
+                    "logo": {{ adDetail.user.company_logo is defined ? 'true' : 'false' }}    //True if showing logo/profile pic, False if nothing (showing default FAD)
                 },
             });
             var pageObj = window.dataLayer.find(o => o['page']);
