@@ -1685,7 +1685,6 @@
     {% set adPackage = 0 %}
     {% set adUserPackageRepository = fetch_repository('FaAdBundle:AdUserPackage') %}
     {% set adUserPackage = adUserPackageRepository.getAdPackageArrayByAdId(adDetail.id) %}
-    {{ dump(adUserPackage) }}
     {% for ad in adUserPackage %}
         {% set adPackage = ad.package_id %}
     {% endfor %}
@@ -1762,7 +1761,7 @@
                     "businessName": "{{ businessname }}",
                     "businessType": "{{ userTypeText == 'Business ad' ? 'Business': 'Private' }}" ,
                     "responseType": "{{ responseType }}" ,
-                    "logo": {{ adDetail.user.company_logo is defined ? 'true' : 'false' }}    //True if showing logo/profile pic, False if nothing (showing default FAD)
+                    "logo": {{ (adDetail.user.company_logo is defined) and (adDetail.user.company_logo is not null)  ? 'true' : 'false' }}
                 },
             });
             var pageObj = window.dataLayer.find(o => o['page']);
