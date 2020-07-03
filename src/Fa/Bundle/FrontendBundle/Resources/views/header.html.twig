@@ -233,4 +233,8 @@
             {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {} } )) }}
         {% endif %}
     {% endif %}
+
+    {% if currentRoute in {0: 'fa_frontend_homepage'} %}
+        <div id='mob-banner-ad-a'></div>
+    {% endif %}
 </header>

@@ -57,6 +57,13 @@
 
     {% block blockGaCode %}
         {{ include('FaFrontendBundle::gaCode.html.twig') }}
+        <script>
+            googletag.cmd.push(function() {
+                dataLayerValues.each(function(key, value) {
+                    googletag.pubads().setTargeting(key, value);
+                });
+            });
+        </script>
     {% endblock %}
 
     {% if blockDimension2 %}

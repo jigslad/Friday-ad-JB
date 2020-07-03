@@ -345,6 +345,8 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                 <br>
             {% endif %}
 
+            <div id='dsk-box-ad-b'></div>
+
             {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_FILTERBOX') %}
             {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
         </div>
@@ -407,6 +409,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 	                	{% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_ABOVE_RESULTS') %}
 	                	{{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
 	                  {% endif %}
+                    <div id='mob-box-ad-a' class="p-b-20"></div>
 	             {% endif %} 
                 {% set slotAdCount = 0 %}{% set setExtendedHeading = 0 %}
                 {% set FeaturedAdCount = 0 %}
@@ -488,6 +491,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 		                	{% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_ABOVE_RESULTS') %}
 		                	{{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
 		                  {% endif %}
+                        <div id='mob-box-ad-b' class="p-b-20"></div>
 		             {% endif %}                    
 
                     {% if not mobileDetectManager.isMobile() or mobileDetectManager.isTablet() %}
@@ -501,6 +505,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                     {% if adCounter == 5 and pagination.getNbResults() > 5 %}
                         {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_IN_RESULTS_TOP') %}
                         {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                        <div id='dsk-box-ad-c'></div>
                     {% endif %}
 
                     {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
@@ -519,6 +524,8 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                             {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_IN_RESULTS') %}
                             {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
                         {% endif %}
+                        <div id='dsk-box-ad-d'></div>
+                        <div id='mob-box-ad-c' class="p-b-20"></div>
                     {% endif %}
                 {% endfor %}
 
@@ -576,6 +583,9 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 
                 {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_BELOW_RESULTS') %}
                 {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+
+                <div id='dsk-box-ad-e'></div>
+                <div id='mob-box-ad-d'></div>
             {% endif %}
 
             {% set locationUK = constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID') %}
@@ -593,6 +603,8 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                 
                 {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_PAGINATION_MOBILE') %}
                 {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+
+                <div id='dsk-box-ad-f' class="clearfix"></div>
             {% endif %}
 
             {% if searchParams is defined and (searchParams.expired_ads is not defined or (searchParams.expired_ads is defined and searchParams.expired_ads is null)) %}
@@ -690,6 +702,11 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
             	$("#banner_placeholder_2_4").removeClass("fixed-banner");
             }
         }
+        if (($('.search-filters').offset().top + $('.search-filters').height() - $(window).scrollTop() < -100) && ($('footer').offset().top - $(window).scrollTop() - $('#dsk-box-ad-b').height() > 0)) {
+            $('#dsk-box-ad-b').addClass('fixed-banner');
+        } else {
+            $('#dsk-box-ad-b').removeClass('fixed-banner');
+        }
     });
 
     function visitUserProfileOrAd(eventCategory, eventAction, eventLabel)
@@ -712,4 +729,21 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 {% if paymentTransactionJs['ga_transaction'] is defined and paymentTransactionJs['ga_transaction'].PAYMENT_ID is defined %}
         OneSignal.push(["sendTags", {'PAA_process': 'ad_placed'}]);
     {% endif %}
+{% endblock %}
+
+{% block dimension1 %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    {% set _logged_in = 'true' %}
+    {% if app.user.getId() is not defined or app.user.getId() is null %}
+    {% set _logged_in = 'false' %}
+    {% endif %}
+    googletag.cmd.push(function() {
+        googletag.pubads().setTargeting('page_type', 'Search Results');
+        googletag.pubads().setTargeting('adBlocker', false);
+        googletag.pubads().setTargeting('user_logged', {{ _logged_in }});
+        googletag.pubads().setTargeting('category', '{{ dimension6 }}');
+    });
+//]]>
+</script>
 {% endblock %}

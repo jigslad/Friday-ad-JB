@@ -481,6 +481,9 @@
     </div>
 </div>
 
+<div id='dsk-banner-ad-a' class='p-t-20'></div>
+<div id='mob-banner-ad-a'></div>
+
 {% if isSoldExpiredAdFlag %}
     <div class="details-expired-items">
         {{ block('similar_ads_html') }}
@@ -878,6 +881,7 @@
         {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
         {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_BOTTOM_MOBILE') %}
         {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
+        <div id='dsk-box-ad-c'></div>
 
         <div class="row">
             <div class="columns">
@@ -1700,5 +1704,46 @@
     {% endif %}
 {% endblock %}
 
+% block dimension1 %}
+<script language="javascript" type="text/javascript">
+    //<![CDATA[
+    {% set is_business_seller = 'false' %}
+    {% if adDetail['user']['business_category_id'] is defined and adDetail['user']['business_category_id'] is not null %}
+    {% set is_business_seller = 'true' %}
+    {% endif %}
 
+    {% set _logged_in = 'true' %}
+    {% if app.user.getId() is not defined or app.user.getId() is null %}
+    {% set _logged_in = 'false' %}
+    {% endif %}
+
+    /* ----- GA Enquiry method ----- */
+    {% set contactMethods = '' %}
+    {% if adDetail['user'] is defined and adDetail['user']['contact_through_email'] == 1 %}
+    {% set contactMethods = contactMethods ~ 'Email' %}
+    {% endif %}
+    {% if (adDetail['user'] is defined and adDetail['user']['contact_through_phone'] == 1) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) %}
+    {% if contactMethods != '' %}
+    {% set contactMethods = contactMethods ~ '|Phone' %}
+    {% else %}
+    {% set contactMethods = contactMethods ~ 'Phone' %}
+    {% endif %}
+    {% endif %}
+
+    googletag.cmd.push(function() {
+        googletag.pubads().setTargeting('page_type', 'Ad details');
+        googletag.pubads().setTargeting('adBlocker', false);
+        googletag.pubads().setTargeting('user_logged', {{ _logged_in }});
+        googletag.pubads().setTargeting('seller_name', '{{ adDetail['user']['user_name'] }}');
+        googletag.pubads().setTargeting('seller_type', {% if is_business_seller %} 'trade' {% else %} 'private' {% endif %});
+        googletag.pubads().setTargeting('ad_category', '{{ dimension6 }}');
+        googletag.pubads().setTargeting('ad_id', '{{ adId }}');
+        googletag.pubads().setTargeting('ad_location', '{{ adLocationName }}');
+        googletag.pubads().setTargeting('ad_published', '{{attribute(adDetail, constant(solrMapping ~ 'PUBLISHED_AT'))|time_ago_in_words}}');
+        googletag.pubads().setTargeting('ad_price', '{{ attribute(adDetail, constant(solrMapping ~ 'PRICE')) }}');
+        googletag.pubads().setTargeting('seller_contact_methods', '{{ contactMethods }}');
+    });
+    //]]>
+</script>
+{% endblock %}
 

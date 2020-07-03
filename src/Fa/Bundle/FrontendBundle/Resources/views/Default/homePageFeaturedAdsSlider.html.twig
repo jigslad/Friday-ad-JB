@@ -19,6 +19,13 @@
             {% if categoryBadgeArray[rootCategoryId] is defined %}
                 <span class="fa-slider-badge {{categoryBadgeArray[rootCategoryId]}}">Category</span>
             {% endif %}
+
+            {% if adCounter > 3 %}
+                <div id='mob-box-ad-a' class="p-b-20"></div>
+            {% elseif adCounter > 6 %}
+                <div id='mob-box-ad-b' class="p-b-20"></div>
+            {% endif %}
+
             <a class="tricky-link" href="{{ adUrl }}">
             	{% if attribute(featureAd, constant(featureAdSolrMapping ~ 'TITLE')) is defined %}
                    {{trim_text(attribute(featureAd, constant(featureAdSolrMapping ~ 'TITLE')), 30)|raw}}

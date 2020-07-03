@@ -69,6 +69,8 @@
                 {{ include('FaAdBundle:Ad:AdUserDetail.html.twig', {'adLatitude': latitude, 'adLongitude': longitude}) }}
             {% endif %}
 
+            <div id='dsk-box-ad-a' class="p-t-20"></div>
+
             {% if not isSoldExpiredAdFlag %}
                 <div class="interested-item hide-for-small-only">
                     {% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID'), 2: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ANIMALS_ID'), 3: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID')} %}
@@ -95,6 +97,8 @@
         {% if (currentDevice == 'D' or currentDevice == 'T') and relatedBusinesses is defined and relatedBusinesses|length %}
             {{ include('FaAdBundle:Ad:relatedBusinesses.html.twig') }}
         {% endif %}
+
+        <div id='mob-box-ad-a'></div>
 
         {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_RIGHT_DESKTOP') %}
         {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
