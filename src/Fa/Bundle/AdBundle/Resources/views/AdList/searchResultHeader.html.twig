@@ -46,7 +46,7 @@
             {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_IN_HEADER_TABLET') %}
             {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
             {% if mobileDetectManager.isMobile() %}
-                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_ADUL_BANNER') %}
+                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_TOP_MOBILE_LEADERBOARD') %}
                 {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
             {% endif %}
             <div class="sortby-area">
