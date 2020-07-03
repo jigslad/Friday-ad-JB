@@ -1736,9 +1736,18 @@
     {% endif %}
     <script>
         {# get date and create as new #}
-        var publishedDate = new Date(1000*{{ adDetail.a_published_at_i }});
-        var expiredDate = new Date(1000*{{ adDetail.a_expires_at_i }});
-
+        {% if adDetail.a_published_at_i is defined %}
+            var tempPublishedDate = new Date(1000*{{ adDetail.a_published_at_i }});
+            var publishedDate = tempPublishedDate.getFullYear() + "/" + (tempPublishedDate.getMonth() + 1) + "/" + tempPublishedDate.getDate();
+        {% else %}
+            var publishedDate = null;
+        {% endif %}
+        {% if adDetail.a_published_at_i is defined %}
+            var tempExpiredDate = new Date(1000*{{ adDetail.a_expires_at_i }});
+            var expiredDate =tempExpiredDate.getFullYear()  + "/" + (tempExpiredDate.getMonth() + 1) + "/" + tempExpiredDate.getDate();
+        {% else %}
+            var expiredDate = null;
+        {% endif %}
         $( document ).ready(function() {
             window.dataLayer = window.dataLayer || [];
             dataLayer.push({
@@ -1754,8 +1763,8 @@
                     "town": "{{ Town|raw }}",
                     "video": {{ youtubeVideoUrl is not  null ? 'true' : 'false' }},
                     "paypalEnabled": {{ showBuyNowWithPaypal ? 'true' : 'false'}},
-                    "publishDate": publishedDate.getFullYear() + "/" + (publishedDate.getMonth() + 1) + "/" + publishedDate.getDate(),
-                    "expiryDate": expiredDate.getFullYear()  + "/" + (expiredDate.getMonth() + 1) + "/" + expiredDate.getDate(),
+                    "publishDate": publishedDate,
+                    "expiryDate": expiredDate,
                     "price": '{{ adDetail.a_price_d is defined ? adDetail.a_price_d : 0 }}',
                     "package": "{{ adPackage }}",
                     "businessName": "{{ businessname }}",

@@ -733,7 +733,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
         dataLayer.push({
             "searchResults":{
                 "county": '{{ (cookieLocationDetails.paa_county  is defined ? cookieLocationDetails.paa_county : cookieLocationDetails.location_text)|raw }}',
-                "town": "{{ (cookieLocationDetails.paa_county  is defined ? cookieLocationDetails.town : 0)|raw }}",
+                "town": "{{ (cookieLocationDetails.town  is defined ? cookieLocationDetails.town : 0)|raw }}",
                 "locationGroup": "{{ (locationGroup.name is defined ? locationGroup.name : locationGroup)|raw }}",
                 "searchKeyword": '{{ app.request.get('keywords')|raw }}',
                 "searchResultMethod": searchResultMethod, //described below
