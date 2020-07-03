@@ -427,7 +427,7 @@
                                     </a>
                                 {% endif %}
                                 {% if adDetail['user'] is defined and showBuyNowWithPaypal %}
-                                        <a href="{{ path('buy_now', {'adId': adId}) }}" class="primary-btn-1 button expand paypal-btn"><span class="btn-txt">{{'Buy now'|trans({}, 'frontend-show-ad')}}</span><span class="paypal-icon ga-payPaypal">paypal</span></a>
+                                        <a href="{{ path('buy_now', {'adId': adId}) }}" class="primary-btn-1 button expand paypal-btn ga-payPaypal"><span class="btn-txt">{{'Buy now'|trans({}, 'frontend-show-ad')}}</span><span class="paypal-icon ga-payPaypal">paypal</span></a>
                                 {% endif %}
 
                                 {% if (isOneclickenqbutton == true) %}
