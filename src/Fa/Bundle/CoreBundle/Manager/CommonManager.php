@@ -2860,15 +2860,15 @@ HTML;
                 foreach ($matches[0] as $index => $email) {
                     // datalayer discription class removed
                     // jan confirm on 01/07/2020 FFR-4634
-//                    $gaclass = '';
-//                    if($pagetype = 'AdDetails') {
-//                        $gaclass= 'ga-emailDescriptionAd';
-//                    }
-//                    elseif ($pagetype = 'Profile') {
-//                        $gaclass= 'ga-emailDescriptionBusiness';
-//                    }
-//                    $string = str_replace($email, '<a class="'.$gaclass.'" href="javascript:contactSeller(\''.$adId.'\', \'Email contact click (Description)\');">click to contact</a>', $string);
-                    $string = str_replace($email, '<a href="javascript:contactSeller(\''.$adId.'\', \'Email contact click (Description)\');">click to contact</a>', $string);
+                    $gaclass = '';
+                    if($pagetype = 'AdDetails') {
+                        $gaclass= 'ga-emailDescriptionAd';
+                    }
+                    elseif ($pagetype = 'Profile') {
+                        $gaclass= 'ga-emailDescriptionBusiness';
+                    }
+                    $string = str_replace($email, '<a class="'.$gaclass.'" href="javascript:contactSeller(\''.$adId.'\', \'Email contact click (Description)\', \'Email\');">click to contact</a>', $string);
+//                    $string = str_replace($email, '<a href="javascript:contactSeller(\''.$adId.'\', \'Email contact click (Description)\');">click to contact</a>', $string);
                 }
             }
 
