@@ -4190,9 +4190,14 @@ class AdRepository extends EntityRepository
                 if ($transaction->getAd()) {
                     $ad = $transaction->getAd();
 
-                    //update created_at of ad.
-                    if ($transaction->getAmount() > 0 && $ad) {
-                        $ad->setCreatedAt(time());
+                    if($ad) {
+                        //update created_at of ad.
+                        if ($transaction->getAmount() > 0) {
+                            $ad->setCreatedAt(time());
+                        }
+                        if ($ad->getStatus()->getId() == BaseEntityRepository::AD_STATUS_DRAFT_ID) {
+                            $ad->getStatus(BaseEntityRepository::AD_STATUS_IN_MODERATION_ID);
+                        }
                         $this->_em->persist($ad);
                         $this->_em->flush($ad);
                     }

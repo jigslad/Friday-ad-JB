@@ -358,7 +358,7 @@ class PaymentRepository extends EntityRepository
         if (isset($value['package'])) {
             $adObj = $transaction->getAd();
             if ($adObj) {
-                $addAdToModeration = $this->handlePackage($value['package'], $adObj);
+                $addAdToModeration = $this->handlePackage($value['package'], $adObj, $container);
                 $futureAdPostFlag  = (isset($value['futureAdPostFlag']) ? $value['futureAdPostFlag'] : false);
             }
 
@@ -454,7 +454,7 @@ class PaymentRepository extends EntityRepository
      * @param array   $packages Packages array.
      * @param object  $adObj    Ad object.
      */
-    public function handlePackage(array $packages, $adObj)
+    public function handlePackage(array $packages, $adObj, $container = null)
     {
         foreach ($packages as $package) {
             //get ad moderation flag.
@@ -474,6 +474,11 @@ class PaymentRepository extends EntityRepository
             if ($adObj && $addAdToModeration) {
                 $this->handleAdModerate($adObj);
             }
+
+            if($adObj->getStatus()->getId() == BaseEntityRepository::AD_STATUS_DRAFT_ID) {
+                $this->handleAdModeration($adObj, $container);
+            }
+
             // make entry into ad user package
             $adUserPackageId = $this->_em->getRepository('FaAdBundle:AdUserPackage')->setAdUserPackage($package, $addAdToModeration, false, $futureAdPostFlag);
 
@@ -486,6 +491,35 @@ class PaymentRepository extends EntityRepository
         }
     }
 
+    public function handleAdModeration($adObj,$container)
+    {
+        $adModerate = $this->findOneBy(array('ad' => $adObj->getId()));
+
+        if ($adModerate) {
+            $buildRequest      = $container->get('fa_ad.moderation.request_build');
+            $moderationRequest = $buildRequest->init($adObj, $adModerate->getValue());
+            $moderationRequest = json_encode($moderationRequest);
+            $sentForModeration = $buildRequest->sendRequest($moderationRequest);
+
+            if ($sentForModeration) {
+                $this->_em->refresh($adObj);
+                $adObj = $this->_em->getRepository('FaAdBundle:Ad')->find($adObj->getId());
+                if ($adObj->getStatus()->getId() != BaseEntityRepository::AD_STATUS_LIVE_ID) {
+                    $adObj->setStatus($this->_em->getReference('FaEntityBundle:Entity', BaseEntityRepository::AD_STATUS_IN_MODERATION_ID));
+                    $this->_em->persist($adObj);
+                    $this->_em->flush($adObj);
+                }
+
+                $adModerate->setModerationQueue(AdModerateRepository::MODERATION_QUEUE_STATUS_SENT);
+                $adModerate->setStatus($this->_em->getReference('FaEntityBundle:Entity', BaseEntityRepository::AD_STATUS_IN_MODERATION_ID));
+                $this->_em->persist($adModerate);
+                $this->_em->flush($adModerate);
+
+                // remove notification for draft ad
+                $this->_em->getRepository('FaMessageBundle:NotificationMessageEvent')->closeNotificationByAdId('advert_incomplete', $adObj->getId());
+            }
+        }
+    }
     /**
      * Handle upsell of transaction.
      *

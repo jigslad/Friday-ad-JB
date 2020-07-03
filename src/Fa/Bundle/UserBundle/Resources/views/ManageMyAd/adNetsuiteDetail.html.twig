@@ -137,9 +137,9 @@
                     {% elseif ad.status_id == adStatusDraft %}
                     	{% set statusClass = 'draftCls' %}	
                     	{% set statusText = 'Draft' %}
-                    {% elseif ad.status_id == adStatusLive %}
+                    {# {% elseif ad.status_id == adStatusLive %}
                         {% set statusClass = 'activeCls' %}
-                        {% set statusText = '' %}
+                        {% set statusText = '' %} #}
                     {% else %}
                         {% set statusClass = '' %}   
                         {% set statusText = '' %}              
