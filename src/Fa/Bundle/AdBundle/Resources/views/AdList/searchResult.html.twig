@@ -707,9 +707,14 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
         //]]>
     </script>
     <!-- Google TAG Manager Start -->
+    {# Location @Jigar Lad #}
+    {% set locationReposetry = fetch_repository('FaEntityBundle:Location') %}
+    {% set town = locationReposetry.find(cookieLocationDetails.town_id)%}
+    {% set country = locationReposetry.getCountyByTownId(cookieLocationDetails.town_id)%}
+
     {# Location Group @Jigar Lad #}
     {% set locationGroupReposetry = fetch_repository('FaEntityBundle:LocationGroup') %}
-    {% set locationGroup = locationGroupReposetry.getLocationGroupByLocation(searchParams.item__location)%}
+    {% set locationGroup = locationGroupReposetry.getLocationGroupByLocation(cookieLocationDetails.town)%}
     <script>
         if (performance.navigation.type == 1) {
             var searchResultMethod = 'Refresh';
@@ -732,7 +737,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
         window.dataLayer = window.dataLayer || [];
         dataLayer.push({
             "searchResults":{
-                "county": '{{ (cookieLocationDetails.paa_county  is defined ? cookieLocationDetails.paa_county : cookieLocationDetails.location_text)|raw }}',
+                "county": '{{ country }}',
                 "town": "{{ (cookieLocationDetails.town  is defined ? cookieLocationDetails.town : 0)|raw }}",
                 "locationGroup": "{{ (locationGroup.name is defined ? locationGroup.name : locationGroup)|raw }}",
                 "searchKeyword": '{{ app.request.get('keywords')|raw }}',
