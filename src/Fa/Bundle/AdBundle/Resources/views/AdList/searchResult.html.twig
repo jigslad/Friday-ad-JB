@@ -645,7 +645,7 @@
 
     {# Location Group @Jigar Lad #}
     {% set locationGroupReposetry = fetch_repository('FaEntityBundle:LocationGroup') %}
-    {% set locationGroup = locationGroupReposetry.getLocationGroupByLocation(cookieLocationDetails.town)%}
+    {% set locationGroup = locationGroupReposetry.getLocationGroupByLocation(cookieLocationDetails.town_id)%}
     <script>
         if (performance.navigation.type == 1) {
             var searchResultMethod = 'Refresh';
