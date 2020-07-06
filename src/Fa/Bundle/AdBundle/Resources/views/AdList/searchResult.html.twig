@@ -639,9 +639,14 @@
     </script>
     <!-- Google TAG Manager Start -->
     {# Location @Jigar Lad #}
-    {% set locationReposetry = fetch_repository('FaEntityBundle:Location') %}
-    {% set town = locationReposetry.find(cookieLocationDetails.town_id)%}
-    {% set country = locationReposetry.getCountyByTownId(cookieLocationDetails.town_id)%}
+    {% if cookieLocationDetails.town_id is defined %}
+        {% set locationReposetry = fetch_repository('FaEntityBundle:Location') %}
+        {% set town = locationReposetry.find(cookieLocationDetails.town_id)%}
+        {% set country = locationReposetry.getCountyByTownId(cookieLocationDetails.town_id)%}
+    {% else %}
+        {% set town = ''%}
+        {% set country = 'UK' %}
+    {% endif %}
 
     {# Location Group @Jigar Lad #}
     {% set locationGroupReposetry = fetch_repository('FaEntityBundle:LocationGroup') %}
