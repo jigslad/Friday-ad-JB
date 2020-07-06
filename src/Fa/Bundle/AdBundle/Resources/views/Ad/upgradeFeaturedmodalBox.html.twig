@@ -212,20 +212,22 @@
     <div id="payment-form">
    	    {{ include('FaAdBundle:Ad:upgradePaymentForm.html.twig', {'form': form }) }}
 	</div>
-	<div id="card_detail_save">
-        <div class="payment-row">
-            <div class="label-inline white-checkbox">
-                {{ form_widget(form.is_save_credit_card) }}
-                {{ form_label(form.is_save_credit_card) }}
-                {{ form_errors(form.is_save_credit_card) }}
+    <div class="small-24 medium-12 large-12 columns">
+	    <div id="card_detail_save">
+            <div class="payment-row">
+                <div class="label-inline white-checkbox">
+                    {{ form_widget(form.is_save_credit_card) }}
+                    {{ form_label(form.is_save_credit_card) }}
+                    {{ form_errors(form.is_save_credit_card) }}
+                </div>
             </div>
-        </div>
+   	    </div>
     </div>
     <div class="mt20 mb20 remove-item-btn">
         <div class="row">
             <div class="columns">
                 <div id="pay_now_btn">
-                    {{ form_widget(form.save, {'attr': {'class':'button secondary-btn-1 thin-btn expand'}, 'label': 'Pay'}) }}
+                    {{ form_widget(form.save, {'attr': {'class':'button secondary-btn-1 expand'}, 'label': 'Pay'}) }}
                 </div>
             </div>
         </div>
