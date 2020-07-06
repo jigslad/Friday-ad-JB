@@ -427,7 +427,7 @@
                                     </a>
                                 {% endif %}
                                 {% if adDetail['user'] is defined and showBuyNowWithPaypal %}
-                                        <a href="{{ path('buy_now', {'adId': adId}) }}" class="primary-btn-1 button expand paypal-btn"><span class="btn-txt">{{'Buy now'|trans({}, 'frontend-show-ad')}}</span><span class="paypal-icon ga-payPaypal">paypal</span></a>
+                                        <a href="{{ path('buy_now', {'adId': adId}) }}" class="primary-btn-1 button expand paypal-btn ga-payPaypal"><span class="btn-txt">{{'Buy now'|trans({}, 'frontend-show-ad')}}</span><span class="paypal-icon ga-payPaypal">paypal</span></a>
                                 {% endif %}
 
                                 {% if (isOneclickenqbutton == true) %}
@@ -1217,14 +1217,16 @@
 
     function contactSeller(id, callFrom,type)
     {
-        window.dataLayer = window.dataLayer || []
-        dataLayer.push({
+        if(type != 'Email') {
+            window.dataLayer = window.dataLayer || []
+            dataLayer.push({
 
-            'event' : 'Ad Action',
-            'eventCategory':  'CTA',
-            'eventAction': 'Contact Seller button',
-            'eventLabel': type+' - '+id+'{{ catText }}'
-        });
+                'event': 'Ad Action',
+                'eventCategory': 'CTA',
+                'eventAction': 'Contact Seller button',
+                'eventLabel': type + ' - ' + id + '{{ catText }}'
+            });
+        }
         ga('send', 'event', 'CTA', callFrom, '{{ adId }}{{ catText }}');
         {% if adImages|length %}
         if($.fancybox){
@@ -1732,7 +1734,7 @@
         {% set Town = Town.name %}
     {% else %}
         {% set Country = 'UK' %}
-        {% set Town = 'null' %}
+        {% set Town = '' %}
     {% endif %}
     <script>
         {# get date and create as new #}

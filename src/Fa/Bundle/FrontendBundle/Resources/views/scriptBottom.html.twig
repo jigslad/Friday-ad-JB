@@ -190,7 +190,7 @@
         }
     });
 
-    
+
     /*function loadSavingDataGif(formName) {
         $('#form-save-button-div').html('<button type="button" class="primary-btn-1 expand loading-in-button"><img src="{{ asset_url('facontent/fileman/images/loading-dir.gif') }}" style="margin-right:15px">Saving data...</button>');
         $('#'+formName+'_save').attr('disabled', true);
@@ -259,9 +259,9 @@
         {% set userType = 'Private' %}
     {% endif %}
 {% else %}
-    {% set ClientID = 'null' %}
+    {% set ClientID = '' %}
     {% set login_status = 'false' %}
-    {% set userType = 'null' %}
+    {% set userType = '' %}
 {% endif %}
 {% if app.request.get('_route') in ['fa_frontend_homepage','landing_page_category'] %}
     {% set pageType = 'Homepage' %}
@@ -340,7 +340,6 @@
             "clientID": '{{ ClientID }}',
             "ipAddress": '{{ app.request.server.get("REMOTE_ADDR") }}',
             "loggedInType": '{{ userType }}',
-            {#"banners": '{{ bannerCount }}'#}
         },
     });
 </script>
