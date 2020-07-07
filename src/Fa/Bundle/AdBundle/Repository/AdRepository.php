@@ -4408,6 +4408,9 @@ class AdRepository extends EntityRepository
             $privateUserAdPostLimitRules = $this->_em->getRepository('FaCoreBundle:ConfigRule')->getPrivateUserAdPostLimit($categoryId, $container);
             $privateUserAdParams['adCategoryId'] = $categoryId;
             $privateUserAdParams['privateUserAdPostLimitRules'] = $privateUserAdPostLimitRules;
+            $subCategory = $this->_em->getRepository('FaEntityBundle:Category')->getCategoryArraySimpleById($privateUserAdPostLimitRules['configRuleCategoryId']);
+            array_push($subCategory,$privateUserAdPostLimitRules['configRuleCategoryId']);
+            $freePackage = $this->_em->getRepository('FaPromotionBundle:package')->getFreePacckageByCategory($subCategory);
 
             $query = $this->createQueryBuilder(self::ALIAS)
             ->select('COUNT(DISTINCT '.self::ALIAS.'.id) as ad_cnt')

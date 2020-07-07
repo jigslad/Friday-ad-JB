@@ -786,4 +786,20 @@ class PackageRepository extends EntityRepository
             return $packageInfo;
         }
     }
+    /**
+     * get free pacckage by category.
+     *
+     * @param array $categorys
+     *
+     * @return array
+     */
+    public function getFreePacckageByCategory($categorys){
+        $query = $this->createQueryBuilder(self::ALIAS)
+            ->select(self::ALIAS.'.id')
+            ->where(self::ALIAS.'.status = 0')
+            ->andWhere(self::ALIAS.'.category_name in (:category)')
+            ->setParameter('category', $categorys)
+            ->setMaxResults(1);
+        return $query->getQuery()->getResult();
+    }
 }

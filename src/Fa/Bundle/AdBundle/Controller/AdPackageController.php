@@ -116,6 +116,8 @@ class AdPackageController extends CoreController
             $isAdultAdvertPresent = 1;
         }
         $privateUserAdParams = $this->getRepository('FaAdBundle:Ad')->getPrivateUserPostAdParams($userId, $categoryId, $adId, $this->container);
+        dump($privateUserAdParams);
+        exit();
         $userRolesArray[] = array_search($userRole, $systemUserRoles);
         if ($request->get('business') && $request->get('business') == 1) {
             $privateUserUrlParams['business'] = 1;
