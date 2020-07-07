@@ -92,14 +92,23 @@
         if(value == 'Continue_placing_ad'){
             // button.setAttribute("onclick", "showBusinessPackages()");
             button.setAttribute('onclick','showBusinessPackages()');
+            button.classList.add('ga-continuePlacingAd');
+            button.classList.remove('ga-becomeBusinessAdv');
+            button.classList.remove('ga-manageMyAds');
             button.innerHTML = 'Continue placing ad';
         }
         if(value == 'business_user'){
             button.setAttribute('onclick','convertUserToBusiness()');
+            button.classList.add('ga-becomeBusinessAdv');
+            button.classList.remove('ga-continuePlacingAd');
+            button.classList.remove('ga-manageMyAds');
             button.innerHTML = 'Become a business advertiser';
         }
         if(value == 'my_ads_link'){
             button.setAttribute('onclick','showManageMyAds()');
+            button.classList.add('ga-manageMyAds');
+            button.classList.remove('ga-continuePlacingAd');
+            button.classList.remove('ga-becomeBusinessAdv');
             button.innerHTML = 'Manage my ads';
         }
     }
