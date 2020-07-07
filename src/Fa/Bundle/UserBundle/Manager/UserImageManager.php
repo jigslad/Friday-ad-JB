@@ -150,6 +150,10 @@ class UserImageManager
         $imageQuality = $this->container->getParameter('fa.image.quality');
         //convert original image to jpg
         $dimension = getimagesize($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName);
+        exec('convert -auto-orient '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.trim($orgImageName,"'"));
+
+        exec('convert -flatten '.escapeshellarg($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName).' '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName.'_original.jpg');
+
         if ($dimension['mime'] == 'image/png') {
             exec('convert -flatten '.escapeshellarg($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName).' '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserId().'_original.png');
             exec('convert '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserId().'_original.png '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserId().'_original.jpg');
@@ -157,9 +161,10 @@ class UserImageManager
                 unlink($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserId().'_original.png');
             }
         } else {
-            $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, $imageQuality, 'ImageMagickManager');
-            $origImage->loadFile($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName);
-            $origImage->save($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserId().'_original.jpg', 'image/jpeg');
+             exec('convert -flatten '.escapeshellarg($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName).' '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserId().'_original.jpg');
+            //$origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, $imageQuality, 'ImageMagickManager');
+            //$origImage->loadFile($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName);
+            //$origImage->save($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserId().'_original.jpg', 'image/jpeg');
         }
 
         if ($dimension['mime'] == 'image/gif') {
@@ -198,10 +203,11 @@ class UserImageManager
             try {
                 foreach ($thumbSize as $d) {
                     $dim        = explode('X', $d);
-                    $thumbImage = new ThumbnailManager($dim[0], $dim[1], true, false, $imageQuality, 'ImageMagickManager');
-                    $thumbImage->loadFile($orgImage);
-                    $thumbImage->save($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserId().'.jpg', 'image/jpeg');
-                    unset($thumbImage);
+                    exec('convert -auto-orient -define jpeg:size='.$dim[0].'x'.$dim[1].' '.$orgImage.' -thumbnail '.$d.' -gravity center -extent '.$d.' '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserId().'.jpg');
+                    //$thumbImage = new ThumbnailManager($dim[0], $dim[1], true, false, $imageQuality, 'ImageMagickManager');
+                    //$thumbImage->loadFile($orgImage);
+                    //$thumbImage->save($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserId().'.jpg', 'image/jpeg');
+                    //unset($thumbImage);
                 }
             } catch (\Exception $e) {
                 throw $e;

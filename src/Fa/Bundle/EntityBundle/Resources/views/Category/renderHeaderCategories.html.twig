@@ -24,7 +24,7 @@
                         {% endif %}
 			             <li class="inside-top-category-menu">
 			                 <a href="{{ listurl }}" class="main_category inside-top-category-menu">{{categoryArray['name']}}</a>
-			                 {% if categoryArray['children'] is defined and categoryArray['children']|length and categoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+			                 {% if categoryArray['children'] is defined and categoryArray['children']|length %}
                                 {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}
                                     {% set staticPageUrls = fetch_repository('FaContentBundle:SeoTool').getLandingPageStaticPageUrlArray('motors', container, location_id) %}
                                     {% set categoryArray  = append_to_array_by_index(categoryArray, {'10000': {'is_static': true, 'link_url' : (staticPageUrls['Classic cars']), 'link_text' : 'Classic Cars'}}, 'children') %}
@@ -112,7 +112,7 @@
         {% endif %}
             <li class="has-dropdown">
                 <a href="{{ listurl }}" class="main_category">{{categoryArray['name']}}</a>
-                {% if categoryArray['children'] is defined and categoryArray['children']|length and categoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+                {% if categoryArray['children'] is defined and categoryArray['children']|length) %}
                     {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}
                         {% set staticPageUrls = fetch_repository('FaContentBundle:SeoTool').getLandingPageStaticPageUrlArray('motors', container, location_id) %}
                         {% set categoryArray  = append_to_array_by_index(categoryArray, {'10000': {'is_static': true, 'link_url' : (staticPageUrls['Classic cars']), 'link_text' : 'Classic Cars'}}, 'children') %}
