@@ -147,6 +147,7 @@ sleep(5);
                 } else {
                   return $this->handleMessage($this->get('translator')->trans('Problem in payment.', array(), 'frontend-cart-payment'), 'checkout_payment_failure', array('cartCode' => $cart->getCartCode()), 'error');
                 }
+              }
             } catch (\Exception $e) {
                 $this->getEntityManager()->getConnection()->rollback();
                 CommonManager::sendErrorMail($this->container, 'Error: Problem in payment', $e->getMessage(), $e->getTraceAsString());
