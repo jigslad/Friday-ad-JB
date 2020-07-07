@@ -282,7 +282,6 @@ class CyberSourceCheckoutController extends CoreController
                     } else {
                         $this->container->get('session')->getFlashBag()->add('error', $cyberSourceManager->getError($cyberSourceReply->reasonCode));
                     }
-                }
             } else {
                 $formErrors    = $formManager->getFormSimpleErrors($form, 'label');
                 $errorMessages = '';
