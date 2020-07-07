@@ -68,7 +68,7 @@ class BannerZoneRepository extends EntityRepository
     const ZONE_HOMEPAGE_RECTANGLE_BLOCK_MOBILE       = 36;
     const ZONE_HOMEPAGE_SQUARE_BLOCK_2               = 37;
     const ZONE_HOMEPAGE_SQUARE_BLOCK_MOBILE_2        = 38;
-    const ZONE_TOP_MOBILE_LEADERBOARD                = 39;
+    const ZONE_TOP_MOBILE_LEADERBOARD                = 40;
     /**
      * Prepare query builder.
      *
