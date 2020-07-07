@@ -187,23 +187,7 @@ class CyberSourceCheckoutController extends CoreController
                         $paymentId = $this->getRepository('FaPaymentBundle:Payment')->processPaymentSuccess($cart->getCartCode(), null, $this->container);
                         $this->getEntityManager()->getConnection()->commit();
                         if($paymentId) {
-                        try {
-                            //send ads for moderation
-                            sleep(5);
-                            $this->getRepository('FaAdBundle:AdModerate')->sendAdsForModeration($paymentId, $this->container);
-
-                            if ($request->get('subscription') == 1) {
-                                $this->sendSubscriptionBillingEmail($loggedinUser, $cartDetails, $userPackage, $cart, $subscriptionId, $allow_zero_amount);
-                            }
-
-                            if ($request->get('subscription') == 1) {
-                                $packageObj = null;
-                                $values = unserialize($cartDetails[0]['value']);
-                                $package = $values['package'];
-                                $p = array_pop($package);
-
-                       
-                        if($paymentFor != 'UP') {
+                            if($paymentFor != 'UP') {
                             try {
                                 //send ads for moderation
                                 $this->getRepository('FaAdBundle:AdModerate')->sendAdsForModeration($paymentId, $this->container);
@@ -236,6 +220,7 @@ class CyberSourceCheckoutController extends CoreController
                         } else {
                            return $this->handleMessage($this->get('translator')->trans('Your payment received successfully.', array(), 'frontend-cyber-source'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success', $cybersource3DSecureResponseFlag); 
                         }
+
                       } else {
                         if ($request->get('subscription') == 1) {
                             return $this->handleMessage($this->get('translator')->trans('Problem in payment. Your transaction ID is %transaction_id%.', array('%transaction_id%' => $cart->getCartCode()), 'frontend-cyber-source'), 'my_profile', array(), 'error', $cybersource3DSecureResponseFlag);
@@ -282,6 +267,7 @@ class CyberSourceCheckoutController extends CoreController
                     } else {
                         $this->container->get('session')->getFlashBag()->add('error', $cyberSourceManager->getError($cyberSourceReply->reasonCode));
                     }
+                }
             } else {
                 $formErrors    = $formManager->getFormSimpleErrors($form, 'label');
                 $errorMessages = '';
