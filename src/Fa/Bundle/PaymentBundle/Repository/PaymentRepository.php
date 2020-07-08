@@ -157,7 +157,7 @@ class PaymentRepository extends EntityRepository
                     try {
                         // update dotmailer last paid at
                         if ($cart->getUser() && $cart->getUser()->getEmail()) {
-                            $this->_em->getRepository('FaPaymentBundle:Cart')->updateFieldByEmail($cart->getUser()->getEmail(), 'last_paid_at');
+                            $this->_em->getRepository('FaDotMailerBundle:Dotmailer')->updateFieldByEmail($cart->getUser()->getEmail(), 'last_paid_at');
                         }
                     } catch (\Exception $e) {
                     }
@@ -372,6 +372,7 @@ class PaymentRepository extends EntityRepository
                 $this->_em->getRepository('FaMessageBundle:NotificationMessageEvent')->closeNotificationByAdId('advert_live_for_21_days', $ad->getId());
             }
         } elseif (isset($value['promoteRepostAdFlag']) && $value['promoteRepostAdFlag'] == 'repost' && $addAdToModeration == false) {
+            $ad = $transaction->getAd();
             $this->_em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('advert_live', $ad->getId(), $ad->getUser()->getId());
             $this->_em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('share_on_facebook_twitter', $ad->getId(), $ad->getUser()->getId());
 
@@ -389,8 +390,9 @@ class PaymentRepository extends EntityRepository
                 $this->_em->getRepository('FaMessageBundle:NotificationMessageEvent')->closeNotificationByAdId('no_photos', $ad->getId());
             }
 
-            $this->_em->getRepository('FaMessageBundle:NotificationMessageEvent')->closeNotificationByAdId('advert_incomplete', $adObj->getId());
+            $this->_em->getRepository('FaMessageBundle:NotificationMessageEvent')->closeNotificationByAdId('advert_incomplete', $ad->getId());
         } elseif (isset($value['promoteRepostAdFlag']) && $value['promoteRepostAdFlag'] == 'renew' && $addAdToModeration == false) {
+            $ad = $transaction->getAd();
             $this->_em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('advert_live', $ad->getId(), $ad->getUser()->getId());
             $this->_em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('share_on_facebook_twitter', $ad->getId(), $ad->getUser()->getId());
 
