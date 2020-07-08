@@ -186,7 +186,6 @@ class CyberSourceCheckoutController extends CoreController
                         $this->getEntityManager()->flush($cart);
                         $paymentId = $this->getRepository('FaPaymentBundle:Payment')->processPaymentSuccess($cart->getCartCode(), null, $this->container);
                         $this->getEntityManager()->getConnection()->commit();
-                        if($paymentId) {
                             if($paymentFor != 'UP') {
                             try {
                                 //send ads for moderation
@@ -217,17 +216,10 @@ class CyberSourceCheckoutController extends CoreController
                                     return $this->handleMessage($this->get('translator')->trans('Your payment received successfully.', array(), 'frontend-cyber-source'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success', $cybersource3DSecureResponseFlag);
                                 }
                             }
+
                         } else {
                            return $this->handleMessage($this->get('translator')->trans('Your payment received successfully.', array(), 'frontend-cyber-source'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success', $cybersource3DSecureResponseFlag); 
                         }
-
-                      } else {
-                        if ($request->get('subscription') == 1) {
-                            return $this->handleMessage($this->get('translator')->trans('Problem in payment. Your transaction ID is %transaction_id%.', array('%transaction_id%' => $cart->getCartCode()), 'frontend-cyber-source'), 'my_profile', array(), 'error', $cybersource3DSecureResponseFlag);
-                        } else {
-                            return $this->handleMessage($this->get('translator')->trans('Problem in payment.', array(), 'frontend-cyber-source'), 'checkout_payment_failure', array('cartCode' => $cart->getCartCode()), 'error', $cybersource3DSecureResponseFlag);
-                        }
-                      }
                     } catch (\Exception $e) {
                         CommonManager::sendErrorMail($this->container, 'Error: Problem in payment', $e->getMessage(), $e->getTraceAsString());
                         $this->getEntityManager()->getConnection()->rollback();
