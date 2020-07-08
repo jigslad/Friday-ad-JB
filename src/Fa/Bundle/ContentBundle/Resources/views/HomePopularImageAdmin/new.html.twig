@@ -18,7 +18,8 @@
                    <span class="help-block">{{ 'Dimensions for Image: 250px x 324px'|trans({}, 'messages')|raw }}</span>
                    <br />
                    {% if entity.id %}
-                       <img src="{{shared_url(entity.getPath()~'/'~entity.getFileName())}}?{{ random(1000) }}" width="100px" /><br /><br />
+                   		{% set homePopularImgUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSharedImageUrl', [fetch_container_instance(), entity.getPath(), entity.getFileName()]) %}
+                       <img src="{{homePopularImgUrl}}?{{ random(1000) }}" width="100px" /><br /><br />
                    {% endif %}
                </div>
                <div class="form-group{% if form.overlay_file.vars.errors|length %} has-error{% endif %}">
@@ -28,7 +29,8 @@
                    <span class="help-block">{{ 'Allowed image extensions are jpg, png, gif and svg.'|trans({}, 'messages') }}</span>
                    <br />
                    {% if entity.id %}
-                       <img src="{{shared_url(entity.getPath()~'/'~entity.getOverLayFileName())}}?{{ random(1000) }}" width="100px" /><br /><br />
+                   		{% set homePopularOverLayImgUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSharedImageUrl', [fetch_container_instance(), entity.getPath(), entity.getOverLayFileName()]) %}
+                       <img src="{{homePopularOverLayImgUrl}}?{{ random(1000) }}" width="100px" /><br /><br />
                    {% endif %}
                </div>
                {{ form_row(form.url) }}

@@ -22,6 +22,7 @@
     function submitFormUsingAjax(backUrl)
     {
         var route = Routing.generate('ajax_edit_from_paa_fourth_step',{ 'url': backUrl });
+        route = route.replace(':https','');
         $('[id^=fa_paa_fourth_step_][id$=_preview]').click(function(){
             window.dataLayer = window.dataLayer || []
             dataLayer.push({
