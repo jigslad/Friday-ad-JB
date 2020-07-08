@@ -1219,4 +1219,14 @@ class DefaultController extends ThirdPartyLoginController
 
         return $this->render('FaFrontendBundle:Default:showHomePageLocationBlocks.html.twig', $parameters);
     }
+    /**
+     * Set covid 19 session data
+     *
+     */
+    public function ajaxCovidSetSessionDataAction()
+    {
+        $this->container->get('session')->set('CovidSession', 1);
+        return new JsonResponse(array('response' => true));
+        
+    }
 }

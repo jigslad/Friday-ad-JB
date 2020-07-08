@@ -133,6 +133,7 @@
 
         if (id) {
             var route = Routing.generate('ajax_dimension_get_dimension_admin', { 'category_id': id });
+            route = route.replace(':https','');
             $.ajax({
                 type: 'post',
                 url: route,

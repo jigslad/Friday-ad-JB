@@ -259,7 +259,7 @@ class SeoToolOverrideRepository extends EntityRepository
         if ($container) {
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
             if ($cachedValue !== false) {
-                // return $cachedValue;
+                return $cachedValue;
             }
         }
 

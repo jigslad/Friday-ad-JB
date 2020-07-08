@@ -18,7 +18,7 @@
             </a>
             {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, ad, '300X225', 1) %}
 
-            {% set imagePathExists = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'checkFileExists', [imagePath]) %}
+            {% set imagePathExists = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'path_exists', [container, imagePath]) %}
 
             <div class="small-img {% if not imagePath or not imagePathExists %}similar-placeholder{% endif %}">
                 {% if imagePath and imagePathExists %}

@@ -8,6 +8,8 @@ $(function() {
         minLength: 2,
         source: function( request, response ) {
             var term = request.term;
+            var rurl = Routing.generate("{{ route }}", { term: {% if 'location' in field %} request.term.replace(/[^a-z0-9\s]/gi, '') {% else %} request.term {% endif %} });
+            rurl = rurl.replace(':https','');
             {% if townIdForArea is defined %}
             	townId = {{ townIdForArea }};
         	{% endif %}
@@ -22,7 +24,7 @@ $(function() {
                 }
             {% endif %}
             $.ajax({
-                url: Routing.generate("{{ route }}", { term: {% if 'location' in field %} request.term.replace(/[^a-z0-9\s]/gi, '') {% else %} request.term {% endif %} }),
+                url: rurl,
                 dataType: 'json',
                 type: 'GET',
                 {% if parent_field is defined %}

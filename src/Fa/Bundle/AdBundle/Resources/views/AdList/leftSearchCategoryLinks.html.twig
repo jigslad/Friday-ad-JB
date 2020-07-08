@@ -83,6 +83,9 @@
                           {% endif %}
                       {% endfor %}
                   {% endif %}
+                  {% if searchParams.item__category_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+                  	<li><a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank">Live Sex Cams</a> </li>
+                   {% endif %}
               </ul>
               {% if (childCatCount - 1) > showCatsCount %}
                   <a href="javascript:void(0)" rel="nofollow" class="see_more" >{{ 'See more'|trans({}, 'frontend-left-search') }}</a>

@@ -1,5 +1,11 @@
 {% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
 {% set container = fetch_container_instance() %}
+{% set mapFitkey = '' %}
+{% set mapFitConfig = fetch_repository('FaCoreBundle:ConfigRule').getActiveConfigRulesByCategoryId(constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::MAPFIT_API_KEY_ID'), null, 1) %}
+{% if mapFitConfig and mapFitConfig.0.value is defined %}
+    {% set mapFitkey = mapFitConfig.0.value %}
+{% endif %}
+
 <a class="close-reveal-modal">&#215;</a>
 <h5 class="modal-title">{{'Edit location'|trans({}, 'frontend-my-profile')}}</h5>
 {{ form_start(form, {'attr': {'novalidate': '', 'id': 'edit_video_id'}}) }}
@@ -35,6 +41,7 @@
         </div>
     </div>
 {{ form_end(form) }}
+
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     $(document).ready(function() {
@@ -67,9 +74,10 @@
                     showMap = false;
                 }
                 if (showMap && 'latitude' in userDetail && userDetail.latitude && 'longitude' in userDetail && userDetail.longitude) {
-                    {# initialize();
-                	showCustomMarker(userDetail.latitude, userDetail.longitude, '{{ asset_url('fafrontend/images/map-marker.png') }}');
-                	 var profileMapOptions={zoom:9,
+
+					{#initialize(userDetail.latitude, userDetail.longitude);#}
+                	showCustomMarkerAx('{{mapFitkey}}', userDetail.latitude, userDetail.longitude, userDetail.markerUrl);
+                	{# var profileMapOptions={zoom:9,
                             zoomControl: true,
                             panControl:false,
                             streetViewControl: false,

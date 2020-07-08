@@ -240,10 +240,12 @@
     }
 
     function checkIsNurseryGroupPackage(adId, callback) {
+        var route = Routing.generate('ajax_nursery_location_group_package', { adId: adId });
+        route = route.replace(':https','');
         $.ajax({
             type: "GET",
             dataType: "json",
-            url: Routing.generate('ajax_nursery_location_group_package', { adId: adId }),
+            url: route,
             success: callback
         });
     }

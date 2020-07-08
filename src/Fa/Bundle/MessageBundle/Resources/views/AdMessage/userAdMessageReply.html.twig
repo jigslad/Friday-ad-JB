@@ -402,6 +402,7 @@
         hideAlertMessage();
         blockPage();
         var route = Routing.generate('ajax_report_user', { 'replyId': '{{app.request.get('replyId')}}' });
+        route = route.replace(':https','');
         $.ajax({
             type: "GET",
             url : route,

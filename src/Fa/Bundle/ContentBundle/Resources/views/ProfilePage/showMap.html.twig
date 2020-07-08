@@ -3,8 +3,32 @@
 {% if mapFitConfig and mapFitConfig.0.value is defined %}
     {% set mapFitkey = mapFitConfig.0.value %}
 {% endif %}
+
+{% set showAdultMapMarker = 0 %}
+{% set ADULT_CATEGORY_ID = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+{% if userDetail["show_map"] is defined and userDetail["business_category_id"] is not null %}
+	{% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(userDetail["business_category_id"], false, fetch_container_instance()) %}
+    {% set catCnt = 0 %}
+    {% if categoryPath|length %}
+        {% for categoryId, categoryName in categoryPath %}
+            {% if catCnt == 0 %}
+                {% if (categoryId == ADULT_CATEGORY_ID) %}
+                    {% set showAdultMapMarker = 1 %}
+                {% endif %}
+            {% endif %}
+            {% set catCnt = catCnt + 1 %}
+        {% endfor %}
+    {% endif %}      
+{% endif %}
+
+{% if showAdultMapMarker==1  %}
+    {% set markerUrl = asset_url('fafrontend/images/adul-map-marker.svg') %}
+{% else %}
+	{% set markerUrl = asset_url('fafrontend/images/map-marker.png') %}
+{% endif %}
+
 <link href="https://leafletjs-cdn.s3.amazonaws.com/content/leaflet/master/leaflet.css" rel="stylesheet" type="text/css"/>
-{{ include('FaCoreBundle::mapFitJs.html.twig', {'key' : mapFitkey}) }}
+{{  include('FaCoreBundle::mapFitJs.html.twig', {'key' : mapFitkey}) }}
 
 {% set showMap = true %}
 {% if userDetail["show_map"] is defined and not userDetail["show_map"] and userDetail["business_category_id"] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID')} %}
@@ -20,15 +44,16 @@
         {# <a href="//maps.google.com/maps?z=12&t=m&q=loc:{{userDetail['latitude']}}+{{userDetail['longitude']}}" target="_blank" class="right" onclick="javascript:updateUserSiteViewCounterField('{{userDetail['id']}}', 'profile_page_map_click_count', '');" >{{'View on Google Maps'|trans({}, 'frontend-profile-page')}}</a> #}
     </div>
 {% endif %}
+
 <script language="javascript" type="text/javascript">
-    $(window).on('load', function() { 
+	$(document).ready(function() {
     	{% set showMap = true %}
         {% if userDetail["show_map"] is defined and not userDetail["show_map"] and userDetail["business_category_id"] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID')} %}
             {% set showMap = false %}
         {% endif %}
         {% if showMap and userDetail["latitude"] is defined and userDetail["latitude"] and userDetail["longitude"] is defined and userDetail["longitude"] %}
             initialize('{{userDetail["latitude"]}}', '{{userDetail["longitude"]}}'); 
-            showCustomMarker('{{userDetail["latitude"]}}', '{{userDetail["longitude"]}}', '{{ asset_url('fafrontend/images/map-marker.png') }}');
+            showCustomMarker('{{userDetail["latitude"]}}', '{{userDetail["longitude"]}}', '{{ markerUrl }}');
         {% endif %}
     });
 </script>

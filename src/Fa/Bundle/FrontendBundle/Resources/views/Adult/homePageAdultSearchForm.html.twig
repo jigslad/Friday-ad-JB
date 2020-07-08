@@ -1,0 +1,59 @@
+<div class="adul-search-form choose-cat-block" style="background: #313133; padding: 15px 0 40px;">
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+        {{ form_errors(form) }}
+        <div class="row">
+            <div class="columns">
+                <div class="browse-by-category mt20">Choose by category</div>
+                <div>
+                    <div class="medium-11 large-12 columns mobile-p-0" style="padding-left: 0px;">
+                        {{ form_widget(attribute(form, 'item__category_id'),{'attr':{ 'class': 'form-control select-control without-sel-box'  }}) }}
+                    </div>
+                    <div class="small-9 medium-7 large-7 columns mobile-p-0">
+                        {{ form_widget(form.item__distance,{'attr':{'class':'form-control select-control without-sel-box'}}) }}
+                    </div>
+                    <div class="small-15 medium-6 large-5 columns mobile-p-0" style="display: inline-flex;">
+                        <label class="from-sec">{{ 'from'|trans({}, 'frontend')}}</label>
+                        <div class="location-col">
+                        {{ form_widget(form.item__location_autocomplete,{'attr':{'class':'white-field'}}) }}
+                        <a href="javascript:void(0);" id="fa_adult_home_page_search_item__location_close" class="adul-loc-close ui-autocomplete-close select2-search-choice-close"></a>
+                        </div>
+                     </div>
+                </div>
+                <div id="more_options" style="display: none">
+                    <div class="medium-10 large-11 columns mobile-p-0" style="padding-left: 0px;">
+                        {{ form_widget(attribute(form, 'item_adult__services_id'),{'attr':{ 'class': 'select-control without-sel-box'  }}) }}
+                    </div>
+                    <div class="medium-7 large-6 columns mobile-p-0 mt10">
+                    		<div class="form-control adult-radio-form white-checkbox">
+                               <span class="custom-checkbox">
+                                    <input type="checkbox" id="fa_adult_home_page_search_item_adult__independent_or_agency_id_0" class="independent-or-agency-cls" name="fa_adult_home_page_search[item_adult__independent_or_agency_id][]" required="required" value="7317">                                
+                                </span>
+                                <label for="fa_adult_home_page_search_item_adult__independent_or_agency_id_0" class="required radio-label">Independent</label>
+                                <span class="custom-checkbox">
+                                    <input type="checkbox" id="fa_adult_home_page_search_item_adult__independent_or_agency_id_1" class="independent-or-agency-cls" name="fa_adult_home_page_search[item_adult__independent_or_agency_id][]" required="required" value="7318">                                
+                                </span>
+                                <label for="fa_adult_home_page_search_item_adult__independent_or_agency_id_1" class="required radio-label">Agency</label>
+                            </div>
+                    </div>
+                    <div class="medium-7 large-7 columns mobile-p-0" style="display: inline-flex;">
+                        {{ form_widget(attribute(form, 'item_adult__ethnicity_id'),{'attr':{ 'class': 'form-control select-control without-sel-box'  }}) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="small-wrapper">
+                <button class="adv-srch-form-btn expand button mb0 mt0" id="adul-hp-adv-srch" type="submit">{{ 'Search'|trans({}, 'frontend-left-search') }}</button>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+        $('#fa_adult_home_page_search_item_adult__services_id').attr('placeholder','Services');
+        $('#fa_adult_home_page_search_item_adult__services_id').addClass('placeholderTxt');        
+    });
+</script>
+{{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_adult_home_page_search_item__location', 'placeHolder': 'City'|trans, 'route' : 'town_ajax_find_town_by_term', 'displayOnlyTown' : 'true'}) }}
+ 
+    

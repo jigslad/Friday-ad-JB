@@ -110,7 +110,7 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                //return $cachedValue;
+                return $cachedValue;
             }
         }
         $recommendedSlotArray = array();
@@ -160,7 +160,7 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                //return $cachedValue;
+                return $cachedValue;
             }
         }
         $recommendedSlotArray = array();
@@ -227,7 +227,7 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
             
             if ($cachedValue !== false) {
-                //return $cachedValue;
+                return $cachedValue;
             }
         }
         $recommendedSlotArray = array();
@@ -285,7 +285,7 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                //return $cachedValue;
+                return $cachedValue;
             }
         }
 
@@ -326,7 +326,7 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                //return $cachedValue;
+                return $cachedValue;
             }
         }
 

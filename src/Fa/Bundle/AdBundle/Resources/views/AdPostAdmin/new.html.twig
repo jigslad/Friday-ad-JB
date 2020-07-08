@@ -206,7 +206,7 @@
         {
             category_id = last_category_id ? last_category_id : autocomplete_category_id;
             route   = Routing.generate('ad_post_new_from_category_admin', { 'user_id': user_id, 'admin_ad_counter': '{{adminAdCounter}}','category_id': category_id });
-
+            route = route.replace(':https','');
             {% if app.request.get('return_url') %}
                 route = route + '?return_url=' + '{{ app.request.get("return_url") }}';
             {% endif %}

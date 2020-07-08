@@ -116,7 +116,12 @@
             {% endif %}
 
             {% if attribute(adDetail, constant(solrMapping ~ 'IMAGE_NAME'))[index] is defined %}
-                {% set image_name = attribute(adDetail, constant(solrMapping ~ 'IMAGE_NAME'))[index] %}
+                {% if  attribute(adDetail, constant(solrMapping ~ 'IMAGE_NAME'))[index] == attribute(adDetail, constant(solrMapping ~ 'HASH'))[index] %}
+                       {% set image_name = null %}
+                {% else %}
+                    {% set image_name = attribute(adDetail, constant(solrMapping ~ 'IMAGE_NAME'))[index] %}
+               {% endif %}
+            
             {% endif %}
 
             {% set adImages = adImages|merge([{'path': path, 'hash': attribute(adDetail, constant(solrMapping ~ 'HASH'))[index], 'ord': attribute(adDetail, constant(solrMapping ~ 'ORD'))[index], 'aws' : aws, 'image_name': image_name }]) %}
@@ -344,28 +349,7 @@
 {% endif %}          
 
 {% block body %}
-<style>
-.get_online_decision .apply-new-left img.logo_img { height:60px !important; }
-.details-img-icons { right: 1px !important; bottom: 0px !important;}
-.vif-overlay { bottom: 0px !important;z-index:1 }
-.sticky-finance-btn { bottom: 0px !important;}
-#big-image-slider .owl-item .item { position:relative; }
-.photos-block { position:relative; }
-.finance-btn { bottom:30px; z-index:2 !important }
-@media only screen and (min-width: 641px) and (max-width: 759px){	
-	.finance-btn:before { background:transparent !important;right: -14px !important; }
-	
-	.finance-btn {
-	    position: absolute;
-	    background:transparent !important;
-	    color: #9bcc21 !important;
-	}
-}
-
-@media only screen and (min-width:320px) and (max-width:640px) {
-	.get_online_decision .mobile-logo-button img.logo_img { height:48px !important; }
-}
-</style>
+{{ include('FaAdBundle:Ad:showAd-css.html.twig') }}
 
 {% set imageZoomeZoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_IN_IMAGE_ZOOM') %}
 {% set imageZoomBannerExist = false %}
@@ -1143,6 +1127,7 @@
         {% endif %}
         $("<div class='row text-center' id='ajax_img_loading'><img src=\"{{ asset_url('facore/images/ajax_loader.gif') }}\"> {{ 'Please wait... '|trans({}, 'frontend-show-ad') }}</div>").insertBefore('#adDetailMainTabs');
         var route = Routing.generate('item_add_to_remote', { 'adId': id });
+        route = route.replace(':https','');
         $.ajax({
             async: false,
             type: "POST",
@@ -1170,6 +1155,7 @@
     function addToFavorite(id)
     {
         var route = Routing.generate('ad_add_to_favorite', { 'adId': id });
+        route = route.replace(':https','');
         $.ajax({
             type: "POST",
             url : route,
@@ -1192,6 +1178,7 @@
     function removeFromFavorite(id)
     {
         var route = Routing.generate('ad_remove_from_favorite', { 'adId': id });
+        route = route.replace(':https','');
         $.ajax({
             type: "POST",
             url : route,
@@ -1211,6 +1198,7 @@
     function postSimilarAd(id)
     {
         var route = Routing.generate('ad_post_similar_ad', { 'adId': id });
+        route = route.replace(':https','');
         $.ajax({
             async: false,
             type: "POST",
@@ -1232,10 +1220,13 @@
     {
         ga('send', 'event', 'CTA', callFrom, '{{ adId }}{{ catText }}');
         {% if adImages|length %}
+        if($.fancybox){
             $.fancybox.close();
+        }
         {% endif %}
         blockPage();
         var route = Routing.generate('contact_seller', { 'adId': id });
+        route = route.replace(':https','');
         $.ajax({
             type: "GET",
             url : route,
@@ -1371,6 +1362,7 @@
         {
             blockPage();
             var route = Routing.generate('ajax_buy_now', { 'adId': id });
+            route = route.replace(':https','');
             $.ajax({
                 type: "POST",
                 url : route,
@@ -1596,6 +1588,7 @@
     	blockPage();
     	ga('send', 'event', 'Ad details', 'upgrade now', '{{ adId }}{{ catText }}');
         var route = Routing.generate('upgrade_to_next_ad', { 'adId': id, 'rootCategoryId': rootCategoryId});
+        route = route.replace(':https','');
         $.ajax({
             type: "GET",
             url : route,
@@ -1611,7 +1604,9 @@
     }
 
     $(document).ready(function(){
-
+        if(getCookie('contactAdMessageBeforeLogin-{{ adId }}') !== ""){
+            contactSeller('{{ adId }}', 'Auto Contact Seller','Auto');
+        }
         function zutoLoanCalcGA(action, flagView){
             if (!flagView) {
                 // ga('send', 'event', 'Zuto car finance', action, '[&amp;#163;' + $('#loan_amount').val() + '|' + $('#loan_period').val() + ']'); // todo add if GTM is not added later

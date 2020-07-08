@@ -15,6 +15,7 @@
     function submitFormUsingAjax(backUrl)
     {
       var route = Routing.generate('ajax_edit_from_paa_fourth_step',{ 'url': backUrl });
+      route = route.replace(':https','');
       blockPage();
       $.ajax({
           type: "GET",

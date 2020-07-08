@@ -62,9 +62,11 @@
                 </div>
                 <div class="big-wrapper">
                     <h2 class="text-center" id="choose_cat_msg">{{ 'or Choose from all categories'|trans({}, 'frontend-paa-first-step') }}</h2>
+{#                    uncomment id ask for change #}
+{#                    <h2 class="text-center" id="choose_cat_msg">choose from all categories</h2>#}
                     <h3 class="text-center mt10" id="redirect_msg" style="display:none">{{ 'please wait…'|trans({}, 'frontend-paa-first-step') }}</h3>
                 </div>
-                <div class="big-wrapper">
+                <div class="choose-list">
                     <div class="choose-all-categories">
                         {% set categories = fetch_repository('FaEntityBundle:Category').getCategoryByLevelArray(1, fetch_container_instance()) %}
                         {% for categoryId, categoryName in categories %}
@@ -553,6 +555,7 @@
     function setStepSessionData(adId)
     {
       var url = Routing.generate('ad_post_set_step_session_data', { 'adId': adId});
+      url = url.replace(':https','');
       location.href = url;
     }
 

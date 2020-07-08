@@ -15,6 +15,7 @@ use Doctrine\ORM\EntityRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\ContentBundle\Manager\BannerManager;
 use Fa\Bundle\AdBundle\Solr\AdSolrFieldMapping;
+use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 
 /**
  * Banner repository.
@@ -97,11 +98,15 @@ class BannerRepository extends EntityRepository
         }
 
         if ($pageId == false) {
-            if ($currentRoute == 'location_home_page' || $currentRoute == 'landing_page_category' || $currentRoute == 'landing_page_category_location') {
+            if ($currentRoute == 'fa_adult_homepage' || $currentRoute == 'location_home_page' || $currentRoute == 'landing_page_category' || $currentRoute == 'landing_page_category_location') {
                 $pageId = BannerPageRepository::PAGE_HOME;
             } else {
                 $pageId = BannerPageRepository::PAGE_ALL_OTHER;
             }
+        }
+        
+        if($currentRoute == 'fa_adult_homepage') {
+            $categoryId = CategoryRepository::ADULT_ID;
         }
 
         if ($container) {
