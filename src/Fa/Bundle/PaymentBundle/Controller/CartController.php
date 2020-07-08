@@ -145,7 +145,7 @@ class CartController extends CoreController
             } catch (\Exception $e) {
                 $this->getEntityManager()->getConnection()->rollback();
                 CommonManager::sendErrorMail($this->container, 'Error: Problem in payment', $e->getMessage(), $e->getTraceAsString());
-                return $this->handleMessage($this->get('translator')->trans('Problem in payment.', array(), 'frontend-cart-payment'), 'checkout_payment_failure', array('cartCode' => $cart->getCartCode()), 'error');
+                return $this->handleMessage($this->get('translator')->trans('Problem in paymentCart.', array(), 'frontend-cart-payment'), 'checkout_payment_failure', array('cartCode' => $cart->getCartCode()), 'error');
             }
         } else {
             //redirect user to selected payment method.

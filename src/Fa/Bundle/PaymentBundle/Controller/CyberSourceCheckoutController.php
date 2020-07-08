@@ -227,7 +227,7 @@ class CyberSourceCheckoutController extends CoreController
                         if ($request->get('subscription') == 1) {
                             return $this->handleMessage($this->get('translator')->trans('Problem in payment. Your transaction ID is %transaction_id%.', array('%transaction_id%' => $cart->getCartCode()), 'frontend-cyber-source'), 'my_profile', array(), 'error', $cybersource3DSecureResponseFlag);
                         } else {
-                            return $this->handleMessage($this->get('translator')->trans('Problem in payment.', array(), 'frontend-cyber-source'), 'checkout_payment_failure', array('cartCode' => $cart->getCartCode()), 'error', $cybersource3DSecureResponseFlag);
+                            return $this->handleMessage($this->get('translator')->trans('Problem in paymentCyber.', array(), 'frontend-cyber-source'), 'checkout_payment_failure', array('cartCode' => $cart->getCartCode()), 'error', $cybersource3DSecureResponseFlag);
                         }
                     }
                     return $this->handleMessage($this->get('translator')->trans('Your payment received successfully.', array(), 'frontend-cyber-source'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success', $cybersource3DSecureResponseFlag);

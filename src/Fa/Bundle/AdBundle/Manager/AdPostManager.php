@@ -635,8 +635,8 @@ class AdPostManager
                     $this->em->getConnection()->commit();
                 } catch (\Exception $e) {
                     $this->em->getConnection()->rollback();
-                    CommonManager::sendErrorMail($this->container, 'Error: Problem in payment', $e->getMessage(), $e->getTraceAsString());
-                    $error = 'Problem in payment.';
+                    CommonManager::sendErrorMail($this->container, 'Error: Problem in paymentPostManager', $e->getMessage(), $e->getTraceAsString());
+                    $error = 'Problem in paymentPostManager.';
                 }
             }
         }
