@@ -154,15 +154,11 @@ class PaypalCheckoutController extends CoreController
                 $this->getEntityManager()->flush($cart);
                 $paymentId = $this->getRepository('FaPaymentBundle:Payment')->processPaymentSuccess($cart->getCartCode(), null, $this->container);
                 $this->getEntityManager()->getConnection()->commit();
-                if($paymentId) {
+
                 //send ads for moderation
-sleep(5);
                 $this->getRepository('FaAdBundle:AdModerate')->sendAdsForModeration($paymentId, $this->container);
 
                 return $this->handleMessage($this->get('translator')->trans('Your payment received successfully.', array(), 'frontend-paypal'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success');
-               } else {
-                   return $this->handleMessage($this->get('translator')->trans('Problem in payment.', array(), 'frontend-paypal'), 'checkout_payment_failure', array('cartCode' => $cart->getCartCode()), 'error');
-               }
             } catch (\Exception $e) {
                 $this->getEntityManager()->getConnection()->rollback();
                 CommonManager::sendErrorMail($this->container, 'Error: Problem in payment', $e->getMessage(), $e->getTraceAsString());
