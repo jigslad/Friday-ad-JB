@@ -474,11 +474,7 @@ class PaymentRepository extends EntityRepository
             if ($adObj && $addAdToModeration) {
                 $this->handleAdModerate($adObj);
             }
-
-            if($adObj->getStatus()->getId() == BaseEntityRepository::AD_STATUS_DRAFT_ID) {
-                $this->handleAdModeration($adObj, $container);
-            }
-
+            
             // make entry into ad user package
             $adUserPackageId = $this->_em->getRepository('FaAdBundle:AdUserPackage')->setAdUserPackage($package, $addAdToModeration, false, $futureAdPostFlag);
 
