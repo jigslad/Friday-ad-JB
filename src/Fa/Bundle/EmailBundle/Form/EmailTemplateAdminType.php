@@ -73,6 +73,7 @@ class EmailTemplateAdminType extends AbstractType
             ->add('body_text', TextareaType::class, array('attr' => array('rows' => 10)))
             ->add('sender_email')
             ->add('sender_name')
+            ->add('bcc_emails')
             ->add('params_help')
             ->add(
                 'status',
