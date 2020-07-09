@@ -203,8 +203,7 @@ class EmailTemplate
     /**
      * @var string
      *
-     * @ORM\Column(name="bcc
-     * _emails", type="string", length=255)
+     * @ORM\Column(name="bcc_emails", type="string", length=255)
      */
     private $bcc_emails;
 
