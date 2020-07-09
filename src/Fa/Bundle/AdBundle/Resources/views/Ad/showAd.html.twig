@@ -1224,7 +1224,7 @@
                 'event': 'Ad Action',
                 'eventCategory': 'CTA',
                 'eventAction': 'Contact Seller button',
-                'eventLabel': type + ' - ' + id + '{{ catText }}'
+                'eventLabel': type + ' - ' + id + ' {{ catText }}'
             });
         }
         ga('send', 'event', 'CTA', callFrom, '{{ adId }}{{ catText }}');
@@ -1611,7 +1611,7 @@
             'event' : 'Options',
             'eventCategory':  'Ad Details',
             'eventAction': 'Sponsored Ad',
-            'eventLabel': {{ app.request.get('category_string') }}
+            'eventLabel': '{{ app.request.get('category_string') }}''
         });
         ga('send', 'event', 'Ad details', 'Recommended external ads', '{{ catText|trim('-') }}-'+domain+'-'+title);
         window.open(url, '_blank');

@@ -82,11 +82,11 @@
                                                         {% else %}
                                                             {% set editUrl = path('ad_package_purchase', {'adId': cartDetail['ad_id'], 'packageId': packageId, 'packagePrintId': packagePrintId, 'business': businessValue}) %} 
                                                         {% endif %}
-                                                        <a href="javascript:void(0);" onclick="return sendGaAndRedirect('{{ editUrl }}', 'Change', '{{categoryPath|e('js')}}');" class="secondary-btn-3 button expand">{{'Change'|trans({}, 'frontend-cart')}}</a>
+                                                        <a href="javascript:void(0);" onclick="return sendGaAndRedirect('{{ editUrl }}', 'Change', '{{categoryPath|e('js')}}  - {{ packageId }}');" class="secondary-btn-3 button expand">{{'Change'|trans({}, 'frontend-cart')}}</a>
                                                     </div>
                                                 {% endif %}
                                                 <div class="large-12 columns">
-                                                    <a href="javascript:void(0);" onclick="return removeCartItem('{{cartDetail['id']}}', '{{categoryPath|e('js')}}','{{packageObj.getTitle()}}|{{ packageId }}');" class="secondary-btn-3 button expand">{{'Delete'|trans({}, 'frontend-cart')}}</a>
+                                                    <a href="javascript:void(0);" onclick="return removeCartItem('{{cartDetail['id']}}', '{{categoryPath|e('js')}}','{{ packageId }}');" class="secondary-btn-3 button expand">{{'Delete'|trans({}, 'frontend-cart')}}</a>
                                                 </div>
                                             </div>
                                         {% endif %}
