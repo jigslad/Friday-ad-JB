@@ -65,9 +65,17 @@
 
 function socialShare(adId, url, socialSite)
 {
+    window.dataLayer = window.dataLayer || []
+    dataLayer.push({
+
+        'event' : 'Options',
+        'eventCategory':  'Options',
+        'eventAction': socialSite+'(profile)',
+        'eventLabel': adId
+    });
   if (socialSite == 'Facebook') {
     ga('send', 'event', 'Options', socialSite+' (profile)', adId);
-    openWindow(url, 'fb-share', '500', '300');
+      openWindow(url, 'fb-share', '500', '300');
     OneSignal.push(["sendTags", {'Facebook': 'share'}]);
   } else if (socialSite == 'Twitter') {
     ga('send', 'event', 'Options', socialSite+' (profile)', adId);
