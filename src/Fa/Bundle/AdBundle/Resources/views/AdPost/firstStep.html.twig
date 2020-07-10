@@ -137,6 +137,9 @@
                                     <div id="category_choice_div_{{ i }}" class="category_choice_div">
                                         {% set field = 'category_' ~ i %}
                                         {{ form_widget(attribute(form, field)) }}
+                                        <div id="category_choice_div_selected_{{ i }}" class="category_choice_div_selected_div">
+                                            <span class="tickmark-icon right hide-for-small-only">&nbsp;</span>
+                                        </div>
                                     </div>
                                 {% endfor %}
                             </div>
@@ -198,6 +201,7 @@
             openDraftAdPopup();
           {% endif %}
         $('.category_choice_div').hide();
+        $('.category_choice_div_selected_div').hide();
         enableDisableNextBtn();
         // showCategoryFieldArrow();
         // Remove selected auto complete category when category changed from choice field
@@ -218,7 +222,7 @@
            } else {
                $("#category_choices_div").prependTo("#main_div");
            }
-
+           $('#category_choice_div_selected_' + nextLevel).hide();
            resetCategoryAutocompleteField();
            loadCategoryByLevel($(this).val(), nextLevel);
            if (level == 2 && $.inArray( parseInt($(this).val()), regNoFieldCategoryIds) != -1) {
@@ -311,6 +315,7 @@
                 if (catLevel == 2 && $.inArray( parseInt(catArray[1]), regNoFieldCategoryIds) != -1 && '{{app.request.get('is_edit')}}' != '1') {
                   loadCategoryByLevel('{{key}}', (catLevel + 1), catArray[catLevel]);
                   $('#category_choice_div_' + (catLevel+1)).hide();
+                  $('#category_choice_div_selected_' + (catLevel-1)).hide();
                   getMotorsRegNoFields(catArray[1], false);
                 } else if (catArray[catLevel] !== 'undefined') {
                   loadCategoryByLevel('{{key}}', (catLevel + 1), catArray[catLevel]);
@@ -393,6 +398,7 @@
                     if (data.length > 0) {
                         lastLevel = level;
                         $('#category_choice_div_' + level).show();
+                        $('#category_choice_div_selected_' + (level-1)).show();
                         $(category_selector).show();
                         for (var i=0, total = data.length; i < total; i++) {
                             category_selector.append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
@@ -447,6 +453,7 @@
     function changeMainCategory(categoryId, selectedValue, removeRegNo)
     {
         $("#category_choices_div").prependTo("#main_div");
+        $('.category_choice_div_selected_div').hide();
         
         if ($('#maincategory_' + categoryId).hasClass('active')) {
             $('.main_category').removeClass('active');
@@ -501,6 +508,7 @@
         var category_id = last_category_id ? last_category_id : autocomplete_category_id;
 
         if (category_id) {
+            $('#category_choice_div_selected_' + lastLevel).show();
             $('#fa_paa_category_select_save').removeClass('disabled');
             // save selected category
             {% if (app.request.get('is_edit') is defined) and (app.request.get('is_edit') is not null) %}
