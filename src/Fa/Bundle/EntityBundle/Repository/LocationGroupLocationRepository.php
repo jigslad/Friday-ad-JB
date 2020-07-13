@@ -356,7 +356,6 @@ class LocationGroupLocationRepository extends BaseEntityRepository
             ->select(self::ALIAS.'.id', LocationGroupRepository::ALIAS.'.id as location_group_id')
             ->innerJoin(self::ALIAS.'.location_group', LocationGroupRepository::ALIAS)
             ->andWhere(self::ALIAS.'.location_town = (:id)')
-            ->orWhere(self::ALIAS.'.location_domicile = (:id)')
             ->setParameter('id', $Id);
 
         $locationGroups = $query->getQuery()->getResult();
