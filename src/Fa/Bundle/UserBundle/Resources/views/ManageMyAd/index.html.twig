@@ -347,16 +347,16 @@ function socialShare(adId, url, socialSite)
         window.dataLayer = window.dataLayer || []
         dataLayer.push({
             "transactionId": '{{ ga_transaction.ID }}',
-            "transactionTotal": '{{ ga_transaction.Revenue }}',
+            "transactionTotal": {{ ga_transaction.Revenue }},
             "transactionProducts": [
                 {% for item in ga_transaction.items %}
                 {
                     'sku': '{{ item.SKU }}',
                     'name': '{{ item.Name }}',
                     'category': '{{ item.Category }}',
-                    'price': '{{ item.Price }}',
-                    'quantity': '{{ item.Quantity }}',
-                    'coupon': ((transactionarray.length = 3) ? transactionarray[2] : 'null'),
+                    'price': {{ item.Price }},
+                    'quantity': {{ item.Quantity }},
+                    // 'coupon': ((transactionarray.length = 3) ? transactionarray[2] : 'null'),
                 },
                 {% endfor %}
             ]
