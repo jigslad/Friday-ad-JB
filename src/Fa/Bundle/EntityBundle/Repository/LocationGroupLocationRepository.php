@@ -359,9 +359,9 @@ class LocationGroupLocationRepository extends BaseEntityRepository
             ->orWhere(self::ALIAS.'.location_domicile = (:id)')
             ->setParameter('id', $Id);
 
-        $locationGroups = $query->getQuery()->getOneOrNullResult();
+        $locationGroups = $query->getQuery()->getResult();
         if ($locationGroups) {
-            return $locationGroups['location_group_id'];
+            return $locationGroups[0]['location_group_id'];
         }
         return null;
     }
