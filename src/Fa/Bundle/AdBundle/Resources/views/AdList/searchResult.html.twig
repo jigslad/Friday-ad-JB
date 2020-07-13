@@ -708,7 +708,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
     </script>
     <!-- Google TAG Manager Start -->
     {# Location @Jigar Lad #}
-    {% if cookieLocationDetails.town_id is defined %}
+    {% if cookieLocationDetails.town_id is defined and cookieLocationDetails.town_id is not null %}
         {# Location and Group @Jigar Lad #}
         {% set locationReposetry = fetch_repository('FaEntityBundle:Location') %}
         {% set town = locationReposetry.find(cookieLocationDetails.town_id)%}
