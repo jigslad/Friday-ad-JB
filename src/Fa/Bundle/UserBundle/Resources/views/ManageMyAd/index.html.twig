@@ -348,6 +348,7 @@ function socialShare(adId, url, socialSite)
         dataLayer.push({
             "transactionId": '{{ ga_transaction.ID }}',
             "transactionTotal": {{ ga_transaction.Revenue }},
+            "transactionTax": {{ ga_transaction.Tax }},
             "transactionProducts": [
                 {% for item in ga_transaction.items %}
                 {
@@ -356,7 +357,6 @@ function socialShare(adId, url, socialSite)
                     'category': '{{ item.Category }}',
                     'price': {{ item.Price }},
                     'quantity': {{ item.Quantity }},
-                    // 'coupon': ((transactionarray.length = 3) ? transactionarray[2] : 'null'),
                 },
                 {% endfor %}
             ]
