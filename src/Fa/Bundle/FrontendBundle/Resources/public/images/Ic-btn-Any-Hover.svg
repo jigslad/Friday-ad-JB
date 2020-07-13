@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="112px" height="112px" viewBox="0 0 112 112" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>Any Button / Hover / Ic-btn-Any-Hover</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Any-Button-/-Hover-/-Ic-btn-Any-Hover" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Badge-/-Any-/-active"></g>
+        <g id="Badge-/-Any-/-active"></g>
+        <g id="Badge-/-Any-/-active"></g>
+        <g id="Badge-/-z.Base-/-Shapes-/-Large" fill="#FFFFFF" stroke="#CBD5D9">
+            <rect id="Rectangle" x="0.5" y="0.5" width="111" height="111" rx="4"></rect>
+        </g>
+        <text id="Any-Copy-2" font-family="Poppins-SemiBold, Poppins" font-size="16" font-weight="500" line-spacing="21" fill="#82C148">
+            <tspan x="40" y="62">Any</tspan>
+        </text>
+    </g>
+</svg>

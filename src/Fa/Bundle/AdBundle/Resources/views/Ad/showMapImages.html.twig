@@ -30,7 +30,7 @@
             {% endif %}
             <dd {% if not adImages|length and not (allowAdEdit is defined and allowAdEdit) and  not youtubeVideoUrl|length %} class="active" {% endif %}><a href="#map_panel" id="map_tab_anchor"><span class="map-tab">Map-tab</span>{{'Map'|trans({}, 'frontend-show-ad')}}</a></dd>
         {% endif %}
-        <dd class="text-right report-tab hide-for-small-only"><span class="report" onclick="return reportAd('{{ adId }}');" id="add-report-id">{{'Report'|trans({}, 'frontend-show-ad')}}</span></dd>
+        <dd class="text-right report-tab hide-for-small-only"><span class="xs-black-btn button" onclick="return reportAd('{{ adId }}');" id="add-report-id">{{'Report this ad'|trans({}, 'frontend-show-ad')}}</span></dd>
     </dl>
     <div class="tabs-content">
         <div class="content {% if adImages|length or (allowAdEdit is defined and allowAdEdit) %}active{% endif %}" id="photo_panel">
@@ -104,13 +104,13 @@
             <div class="clearfix">
                 <span id="fav_{{ adId }}">
                     {% if adId in adFavoriteAdIds %}
-                        <a href="javascript:void(0);" onclick="return removeFromFavorite('{{adId}}');" class="save-item-btn added-in-fav" id="save-item-btn-id"><span class="saved-icon">save</span>{{'Favourite'|trans({}, 'frontend-show-ad')}}</a>
+                        <a href="javascript:void(0);" onclick="return removeFromFavorite('{{adId}}');" class="save-item-btn added-in-fav" id="save-item-btn-id"><span class="favorite saved-icon">save</span>{{'Favourite'|trans({}, 'frontend-show-ad')}}</a>
                     {% else %}
                         <a href="javascript:void(0);" onclick="return addToFavorite('{{adId}}');" class="save-item-btn" id="save-item-btn-id"><span class="save-icon">save</span>{{'Favourite'|trans({}, 'frontend-show-ad')}}</a>
                     {% endif %}
                 </span>
 
-                <span class="report show-for-small-only" onclick="return reportAd('{{ adId }}');" id="add-report-id">{{'Report'|trans({}, 'frontend-show-ad')}}</span>
+                <span class="report xs-black-btn button show-for-small-only" onclick="return reportAd('{{ adId }}');" id="add-report-id">{{'Report this ad'|trans({}, 'frontend-show-ad')}}</span>
             </div>
         </div>
         <div class="large-12 columns">

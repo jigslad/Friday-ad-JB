@@ -199,7 +199,7 @@
     {
         {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_IN_IMAGE_ZOOM') %}
         var url = Routing.generate('banner_ajax_get_banner_by_zone', { 'zoneId': '{{ zoneId }}', 'id': '{{ adId }}' });
-
+        url = url.replace(':https','');
         if (parseInt(imageZoomBannerExist) == 1) {
           blockPage();
           $.ajax({
@@ -295,6 +295,7 @@
         imgParams = imgParams.slice(0,-1);
 
         var url = Routing.generate('ajax_rotate_ad_image', { 'adId': '{{ adId }}', 'size': size, 'imageHash': imageHash });
+        url = url.replace(':https','');
         $.ajax({
             type: "POST",
             url: url,

@@ -249,5 +249,11 @@ class RegistrationController extends ThirdPartyLoginController
 
         $userImageManager = new UserImageManager($this->container, $userId, $imagePath, $isCompany);
         $userImageManager->createThumbnail();
+        
+        if($isCompany) {
+            $userImageManager->uploadImagesToS3($userId,'company');
+        } else {
+            $userImageManager->uploadImagesToS3($userId,'user');
+        }
     }
 }

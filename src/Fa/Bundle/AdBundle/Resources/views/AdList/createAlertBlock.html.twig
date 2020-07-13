@@ -7,11 +7,46 @@
 {% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
     {% set currentDevice = 'T' %}
 {% endif %}
+
+{% set searchParams = {} %}
+{% set displayCriteriaText = '' %}
+{% set searchResultVariables = get_variables('searchResult') %}
+{% if searchResultVariables.searchAgentData is defined %}
+    {% set searchAgentCriteria = searchResultVariables.searchAgentData %}
+    {% if searchAgentCriteria['search'] is defined %}
+        {% set searchParams = searchParams|merge(searchAgentCriteria['search']) %}
+    {% endif %}
+    {% if searchAgentCriteria['sorter'] is defined %}
+        {% set searchParams = searchParams|merge(searchAgentCriteria['sorter']) %}
+    {% endif %}
+
+    {% set displayCriteriaArray = userSearchAgentRepository.getSearchAgentDisplayCriteriaArray(searchParams, container) %}
+
+    {% for displayCriteria in displayCriteriaArray %}
+        {% set displayCriteriaText = displayCriteriaText~'<span>'~displayCriteria~'</span>' %}
+    {% endfor %}
+{% endif %}
+               
+{% set showAdultAlert = 0 %}
+{% set ADULT_CATEGORY_ID = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+{% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+    {% set categorySrchPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(searchParams.item__category_id, false, container) %}
+    {% for categoryId,categoryName in categorySrchPath %}        
+        {% if (categoryId == ADULT_CATEGORY_ID) %}
+            {% set showAdultAlert = 1 %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
 <div class="listing alert-block">
     <div class="clearfix">
         <div class="list-col-1">
             <div class="list-img">
-                <img src="{{ asset_url('fafrontend/images/alert-illustration.svg') }}" alt="alert-illustration" />
+            {% if showAdultAlert==1 %}
+                <img src="{{ asset_url('fafrontend/images/adul-alert-illustration.svg') }}" alt="alert-illustration" />
+            {% else %}
+            	<img src="{{ asset_url('fafrontend/images/alert-illustration.svg') }}" alt="alert-illustration" />
+            {% endif %}
             </div>
         </div>
         <div class="list-col-2">
@@ -27,23 +62,7 @@
                 {{ 'Get new email alerts for new ads matching this search:'|trans({}, 'frontend-create-alert-block')}}
             </div>
             <div class="list-dimensions hide-for-small-only">
-                {% set searchParams = {} %}
-                {% set searchResultVariables = get_variables('searchResult') %}
-                {% if searchResultVariables.searchAgentData is defined %}
-                    {% set searchAgentCriteria = searchResultVariables.searchAgentData %}
-                    {% if searchAgentCriteria['search'] is defined %}
-                        {% set searchParams = searchParams|merge(searchAgentCriteria['search']) %}
-                    {% endif %}
-                    {% if searchAgentCriteria['sorter'] is defined %}
-                        {% set searchParams = searchParams|merge(searchAgentCriteria['sorter']) %}
-                    {% endif %}
-
-                    {% set displayCriteriaArray = userSearchAgentRepository.getSearchAgentDisplayCriteriaArray(searchParams, container) %}
-
-                    {% for displayCriteria in displayCriteriaArray %}
-                        <span>{{ displayCriteria }}</span>
-                    {% endfor %}
-                {% endif %}
+               {{ displayCriteriaText|raw }}
             </div>
             <div class="clearfix notify-me opened">
 

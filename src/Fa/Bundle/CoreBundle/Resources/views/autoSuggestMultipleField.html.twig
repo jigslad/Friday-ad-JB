@@ -11,13 +11,15 @@ $("{{ field }}").select2({
         self = this;
         var key = query.term;
         var cachedData = self.cacheDataSource[key];
+        var rurl = Routing.generate('{{ route }}', { term: query.term });
+        rurl = rurl.replace(':https','');
 
         if(cachedData) {
             query.callback({results: cachedData.results});
             return;
         } else {
             $.ajax({
-                url: Routing.generate('{{ route }}', { term: query.term }),
+                url: rurl,
                 dataType: 'json',
                 type: 'GET',
                 data: {page_limit: 10, {% if dimension_field is defined %} cd_id: $('{{ dimension_field }}').val(),  {% endif %}},

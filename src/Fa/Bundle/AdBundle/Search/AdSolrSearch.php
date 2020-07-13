@@ -347,6 +347,19 @@ class AdSolrSearch extends SolrSearch
             $this->query .= ' AND ('.$query.')';
         }
     }
+    /**
+     * Add root category id filter to solr query.
+     *
+     * @param integer $id Root category id.
+     */
+    protected function addRootCategoryIdFilter($id = null)
+    {
+        if (defined($this->getSolrFieldMappingClass().'::ROOT_CATEGORY_ID')) {
+            $query = constant($this->getSolrFieldMappingClass().'::ROOT_CATEGORY_ID').':'.$id;
+            $query = ' AND ('.$query.')';
+            $this->query .= $query;
+        }
+    }
 
     /**
      * Add location filter to solr query.
