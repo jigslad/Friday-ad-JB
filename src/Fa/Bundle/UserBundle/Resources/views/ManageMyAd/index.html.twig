@@ -346,22 +346,20 @@ function socialShare(adId, url, socialSite)
         var transactionarray = transactionstring.split('-');
         window.dataLayer = window.dataLayer || []
         dataLayer.push({
-            "PAA":{
-                "transactionId": '{{ ga_transaction.ID }}',
-                "transactionTotal": '{{ ga_transaction.Revenue }}',
-                "transactionProducts": [
-                    {% for item in ga_transaction.items %}
-                    {
-                        'sku': '{{ item.SKU }}',
-                        'name': '{{ item.Name }}',
-                        'category': '{{ item.Category }}',
-                        'price': '{{ item.Price }}',
-                        'quantity': '{{ item.Quantity }}',
-                        'coupon': ((transactionarray.length = 3) ? transactionarray[2] : 'null'),
-                    },
-                    {% endfor %}
-                ]
-            }
+            "transactionId": '{{ ga_transaction.ID }}',
+            "transactionTotal": '{{ ga_transaction.Revenue }}',
+            "transactionProducts": [
+                {% for item in ga_transaction.items %}
+                {
+                    'sku': '{{ item.SKU }}',
+                    'name': '{{ item.Name }}',
+                    'category': '{{ item.Category }}',
+                    'price': '{{ item.Price }}',
+                    'quantity': '{{ item.Quantity }}',
+                    'coupon': ((transactionarray.length = 3) ? transactionarray[2] : 'null'),
+                },
+                {% endfor %}
+            ]
         });
     </script>
     <!-- Google Tag Manager End -->

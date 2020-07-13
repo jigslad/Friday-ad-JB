@@ -1523,7 +1523,13 @@
             eventAction = 'Facebook';
         } else if (windowTitle == 'twitter-share') {
             eventAction = 'Twitter';
-        } else {
+        } else if (windowTitle == 'google-plush-share') {
+            eventAction = 'GooglePlus';
+        } else if (windowTitle == 'pinterest-share') {
+            eventAction = 'Pinterest';
+        } else if (windowTitle == 'email-share') {
+            eventAction = 'Email';
+        }else {
             eventAction = windowTitle;
         }
         window.dataLayer = window.dataLayer || []
@@ -1611,7 +1617,7 @@
             'event' : 'Options',
             'eventCategory':  'Ad Details',
             'eventAction': 'Sponsored Ad',
-            'eventLabel': '{{ app.request.get('category_string') }}'
+            'eventLabel': '{{ app.request.get('category_string') }} - '+domain+' - '+title
         });
         ga('send', 'event', 'Ad details', 'Recommended external ads', '{{ catText|trim('-') }}-'+domain+'-'+title);
         window.open(url, '_blank');

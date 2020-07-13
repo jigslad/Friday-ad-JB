@@ -744,7 +744,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
         dataLayer.push({
             "searchResults":{
                 "county": '{{ country }}',
-                "town": "{{ (cookieLocationDetails.town  is defined ? cookieLocationDetails.town : 0)|raw }}",
+                "town": "{{ (cookieLocationDetails.town  is defined ? cookieLocationDetails.town : '')|raw }}",
                 "locationGroup": "{{ (locationGroup.name is defined ? locationGroup.name : locationGroup)|raw }}",
                 "searchKeyword": '{{ app.request.get('keywords')|raw }}',
                 "searchResultMethod": searchResultMethod, //described below
