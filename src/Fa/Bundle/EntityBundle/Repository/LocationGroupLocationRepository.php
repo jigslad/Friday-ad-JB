@@ -343,4 +343,27 @@ class LocationGroupLocationRepository extends BaseEntityRepository
         return $resCount['total'];
     }
 
+    /**
+     * Get location group id by town ID or domicile ID.
+     *
+     * @param integer $Id id of town or domicile.
+     *
+     * @return array
+     */
+    public function getLocationGroupIdByTownOrDomicileId($Id)
+    {
+        $query = $this->createQueryBuilder(self::ALIAS)
+            ->select(self::ALIAS.'.id', LocationGroupRepository::ALIAS.'.id as location_group_id')
+            ->innerJoin(self::ALIAS.'.location_group', LocationGroupRepository::ALIAS)
+            ->andWhere(self::ALIAS.'.location_town = (:id)')
+            ->orWhere(self::ALIAS.'.location_domicile = (:id)')
+            ->setParameter('id', $Id);
+
+        $locationGroups = $query->getQuery()->getOneOrNullResult();
+        if ($locationGroups) {
+            return $locationGroups['location_group_id'];
+        }
+        return null;
+    }
+
 }

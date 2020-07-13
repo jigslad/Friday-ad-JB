@@ -184,14 +184,15 @@ class LocationGroupRepository extends BaseEntityRepository
      */
     public function getLocationGroupByLocation($locationId)
     {
-        $locationArry = [$locationId];
-        //$locationData = $this->_em->getRepository('FaEntityBundle:Category')->find($locationId);
-        $location = $this->getEntityManager()->getRepository('FaEntityBundle:LocationGroupLocation')->getLocationGroupIdByTownDomicile($locationArry);
+        $locationData = $this->_em->getRepository('FaEntityBundle:location')->find($locationId);
+        if($locationData->getLvl() == 4){
+            $locationId = $locationData->getParent()->getId();
+        }
+        $location = $this->getEntityManager()->getRepository('FaEntityBundle:LocationGroupLocation')->getLocationGroupIdByTownOrDomicileId($locationId);
         if ($location) {
-            $locationGroup = $this->find($location[0]);
-            return $locationGroup;
+            return $this->find($location);
         } else {
-            return '';
+            return null;
         }
     }
 
