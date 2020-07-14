@@ -166,7 +166,7 @@
                         {% if (ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID')) and (ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID')) %}
                         <div class="list-created-hours show-for-small-up-only list-created-hours-desk-tab">
                              {% set createdInwords = (createdInwords=='less than 1 minute ago' or createdInwords=='less than a minute ago')?'1 minute ago':createdInwords %}
-                             {{ 'Created'|trans({}, 'frontend-manage-my-ad') }} {{createdInwords|replace({'minute': 'min'})}}
+                             {{ 'Created'|trans({}, 'frontend-manage-my-ad') }} {{createdInwords|replace({'minute': 'min', 'about' : '', 'hours' : 'hrs', 'hour' : 'hr'})}}
                         </div>
                         {% endif %}
                     {% endif %}
@@ -366,7 +366,7 @@
                     {% if (ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID')) and (ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID')) %}                    
                     <div class="list-created-hours">
                      {% set createdInwords = (createdInwords=='less than 1 minute ago' or createdInwords=='less than a minute ago')?'1 minute ago':createdInwords %}
-                     {{ 'Created'|trans({}, 'frontend-manage-my-ad') }} {{createdInwords|replace({'minute': 'min'})}}                    
+                     {{ 'Created'|trans({}, 'frontend-manage-my-ad') }} {{createdInwords|replace({'minute': 'min', 'about' : '', 'hours' : 'hrs', 'hour' : 'hr'})}}
                     </div>
                     {% endif %}
                     {% endif %}

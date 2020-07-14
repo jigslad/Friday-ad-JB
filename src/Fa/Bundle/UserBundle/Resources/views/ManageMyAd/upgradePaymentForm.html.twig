@@ -71,14 +71,12 @@
                     </div>
                     {{ form_errors(form.card_security_code) }}
             </div>
-            <div class="small-24 medium-12 large-12 columns">
+            <div class="payment-row">
                 <div id="card_detail_save">
-                    <div class="payment-row">
-                        <div class="label-inline gray-checkbox">
-                            {{ form_widget(form.is_save_credit_card) }}
-                            {{ form_label(form.is_save_credit_card) }}
-                            {{ form_errors(form.is_save_credit_card) }}
-                        </div>
+                    <div class="label-inline gray-checkbox">
+                        {{ form_widget(form.is_save_credit_card) }}
+                        {{ form_label(form.is_save_credit_card) }}
+                        {{ form_errors(form.is_save_credit_card) }}
                     </div>
                 </div>
             </div>
