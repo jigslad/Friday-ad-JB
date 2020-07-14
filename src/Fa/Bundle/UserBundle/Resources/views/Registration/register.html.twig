@@ -155,20 +155,19 @@
                     <h5>{{'This is the contact info buyers will use to get in touch.'|trans({}, 'frontend-register')}}</h5>
                 </div>
             {% else %}
-            <div class="mobile-block-reg">
+                 <div class="mobile-block-reg">
             	<div class="text-center mb20">
-                    <a href="javascript:fbLoginPopup('{{ facebookLoginUrl }}');" class="button special signup-fb-btn">
-                        <span class="fb-icon"></span> 
-                        <span class="btn-text">{{ 'Sign Up with Facebook'|trans({}, 'frontend') }}</span>
+                    <a href="javascript:fbLoginPopup('{{ facebookLoginUrl }}');" class="button special signup-fb-btn ga-facebookLogin">
+                        <span class="fb-icon ga-facebookLogin"></span>
+                        <span class="btn-text ga-facebookLogin">{{ 'Sign Up with Facebook'|trans({}, 'frontend') }}</span>
                     </a>
                 </div>
                 <div class="text-center mb20">
-                    <a href="javascript:googleLoginPopup('{{ googleLoginUrl }}');" class="button special signup-google-btn">
-                        <span class="google-icon"></span> 
-                        <span class="btn-text">{{ 'Sign Up with Google'|trans({}, 'frontend') }}</span>
+                    <a href="javascript:googleLoginPopup('{{ googleLoginUrl }}');" class="button special signup-google-btn ga-googleLogin">
+                        <span class="google-icon ga-googleLogin"></span>
+                        <span class="btn-text ga-googleLogin">{{ 'Sign Up with Google'|trans({}, 'frontend') }}</span>
                     </a>
                 </div>
-                    
                 <span class="signup-ins">
                     {{'We won\'t post anything <b>without your permission.</b>'|trans({}, 'frontend-login')|raw}}{{ include('FaAdBundle:AdPost:paaToolTipHelp.html.twig', {'paaBlockSlug': 'registration-login-help'}) }}
                 </span>

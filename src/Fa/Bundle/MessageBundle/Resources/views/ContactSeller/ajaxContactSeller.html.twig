@@ -67,7 +67,7 @@
                     {% if mobileDetectManager.isMobile() or mobileDetectManager.isTablet() %}
                         </a>
                     {% endif %}
-                </h1><a class="button xs-btn-1" id="btn_reveal" href="javascript:toggleContactNumber();"><span class="btn-white-arrow"></span>{{'Reveal'|trans({}, 'frontend-contact-seller')}}</a>
+                </h1><a class="button xs-btn-1 ga-callNowBusiness" id="btn_reveal" href="javascript:toggleContactNumber();"><span class="btn-white-arrow ga-callNowBusiness"></span>{{'Reveal'|trans({}, 'frontend-contact-seller')}}</a>
             </div>
         {% else %}
             {% if adPhoneNumber and (adUser and adUser.getContactThroughPhone() or adUser is null) %}
@@ -82,7 +82,7 @@
                         {% if mobileDetectManager.isMobile() or mobileDetectManager.isTablet() %}
                             </a>
                         {% endif %}
-                    </h1><a class="button xs-btn-1" id="btn_reveal" href="javascript:toggleContactNumber();"><span class="btn-white-arrow"></span>{{'Reveal'|trans({}, 'frontend-contact-seller')}}</a>
+                    </h1><a class="button xs-btn-1 ga-callNowAd" id="btn_reveal" href="javascript:toggleContactNumber();"><span class="btn-white-arrow ga-callNowAd"></span>{{'Reveal'|trans({}, 'frontend-contact-seller')}}</a>
                     {% if ad.getPrivacyNumber() %}
                         <div class="text-center">{{'This is a privacy number.'|trans({}, 'frontend-contact-seller')}} <a href="javascript:void(0)" data-reveal-id="privacyNumberModal">{{'Find out more'|trans({}, 'frontend-contact-seller')}}</a></div>
                     {% endif %}
@@ -149,7 +149,7 @@
                 </li>
             </ul>
 
-            {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 button expand','tabindex': 7}}) }}
+            {{ form_widget(form.save, {'attr': {'class':'ga-sendEmailAdDetails secondary-btn-1 button expand','tabindex': 7}}) }}
         {% else %}
             {% for fieldName, fieldValue in form.children %}
                 {% do attribute(form, fieldName).setRendered %}
