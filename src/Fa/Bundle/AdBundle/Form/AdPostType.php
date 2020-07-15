@@ -194,7 +194,6 @@ class AdPostType extends AbstractType
                 // First: if field is defined in PAA field rules of parent category.
                 foreach ($paaFieldRules as $paaFieldRule) {
                     $paaField = $paaFieldRule['paa_field'];
-
                     // show only active fields from rule
                     if ($paaFieldRule['status'] && (! $this->step || ($paaFieldRule['step'] == $this->step))) {
                         if ($paaField['field'] == 'location') {
@@ -261,6 +260,13 @@ class AdPostType extends AbstractType
         } else {
             $fieldOptions['required'] = false;
         }
+
+        if ($paaFieldRule['hide_field']) {
+            $fieldOptions['attr']['hide_field'] = true;
+        } else {
+            $fieldOptions['attr']['hide_field'] = false;
+        }
+
         $fieldOptions['label']= $paaField['label'];
         $fieldOptions['mapped']= false;
         $fieldOptions['choices'] = array_flip($this->em->getRepository('FaPaymentBundle:Payment')->getPaymentMethodOptionsArray($this->container, $categoryId));
@@ -384,6 +390,13 @@ class AdPostType extends AbstractType
         } else {
             $fieldOptions['required'] = false;
         }
+
+        if ($paaFieldRule['hide_field']) {
+            $fieldOptions['attr']['hide_field'] = true;
+        } else {
+            $fieldOptions['attr']['hide_field'] = false;
+        }
+
 
         if ($paaFieldRule['min_value'] || $paaFieldRule['max_value']) {
             $lengthOptions = array();
