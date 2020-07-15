@@ -60,7 +60,20 @@
                                 {{ form_widget(attribute(form, field), {'attr': {'class' : 'radio-capsule-btn'}}) }}
                             </div>
                             <div class="paa-paypal-mail" id="paypal_section_id" {% if not form.paypal_email.vars.errors|length %}style="display:none;"{% endif %}>
-                                <p class="text-center mt20">{{'Please provide the first name, last name and the email address used for your Paypal account'|trans({}, 'frontend-paa-fourth-step')}}</p>
+                                <div class="text-center">
+                                    <p class="mt20">
+                                    <div id="paa_paypal_mail_tips">
+                                        {{'Please provide your PayPal details exactly as they appear on your PayPal account.'|trans({}, 'frontend-paa-fourth-step')}}
+                                        <div class="image-tooltip-wrapper">
+                                                <span class="image-tooltip">
+                                                    {{ 'Friday-Ad cares about the security of our sellers and buyers. To protect you we ask that you provide details for a verified PayPal account. You can find out more'|trans({}, 'frontend-paa-fourth-step')}}
+                                                    <a href="https://www.paypal.com/uk/smarthelp/article/how-do-i-verify-my-paypal-account-faq444" target="_blank">{{ 'here' }}</a>
+                                                </span>
+                                            <span><a>{{ 'Why do we ask this?' }}</a></span>
+                                        </div>
+                                    </div>
+                                    </p>
+                                </div>
                                 {% set paypalUserEmail = null %}
                                 {% set paypalFirstName = null %}
                                 {% set paypalLastName = null %}
@@ -86,6 +99,7 @@
                                 {{ form_widget(attribute(form, 'paypal_email'), {'value': paypalUserEmail, 'attr': {'class' : 'white-field', 'placeholder': 'Paypal email address'|trans({}, 'frontend-paa-fourth-step')}}) }}
                                 <button type="button" class="secondary-btn-1 mb0" id="verify_paypal_email_button">{{'Verify'|trans({}, 'frontend-paa-fourth-step')}}</button><span class="error-icon" id="paypal_email_verify_status" style="display:none;">error</span>
                                 {{ form_errors(attribute(form, 'paypal_email')) }}
+                                <div id="paypal_err_id" class='error'></div>
                                 <div class="paypal-ins" id="paypal_text_id"></div>
                             </div>
                             {{ form_errors(attribute(form, field), {'attr': {'class' : 'error center'}}) }}

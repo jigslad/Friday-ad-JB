@@ -4,13 +4,27 @@
         <span>&nbsp;</span>
     </a>
     <div id="panel3b" class="content">
-        {{ 'This is the account that will receive funds when you accept payment through Paypal. Please provide the first name, last name and the email address used for your Paypal account.'|trans({}, 'frontend-paypal-email') }}
+        <div class="text-center">
+            <p class="mt20">
+            <div id="paa_paypal_mail_tips">
+                {{'Please provide your PayPal details exactly as they appear on your PayPal account.'|trans({}, 'frontend-paa-fourth-step')}}
+                <div class="image-tooltip-wrapper">
+                                                <span class="image-tooltip">
+                                                    {{ 'Friday-Ad cares about the security of our sellers and buyers. To protect you we ask that you provide details for a verified PayPal account. You can find out more'|trans({}, 'frontend-paa-fourth-step')}}
+                                                    <a href="https://www.paypal.com/uk/smarthelp/article/how-do-i-verify-my-paypal-account-faq444" target="_blank">{{ 'here' }}</a>
+                                                </span>
+                    <span><a>{{ 'Why do we ask this?' }}</a></span>
+                </div>
+            </div>
+            </p>
+        </div>
         <div class="myacc-paypal mb10" id="paypal_section_id">
             <label>{{ 'Paypal details'|trans({}, 'frontend-paypal-email') }}</label>
             <input type="text" class="white-field" name="paypal_first_name" id="paypal_first_name" value="{{ app.user.getPaypalFirstName() }}" placeholder="{{ 'Paypal first name'|trans({}, 'frontend-paypal-email') }}"/><br />
             <input type="text" class="white-field" name="paypal_last_name" id="paypal_last_name" value="{{ app.user.getPaypalLastName() }}"  placeholder="{{ 'Paypal last name'|trans({}, 'frontend-paypal-email') }}"/><br />
             <input type="text" class="white-field" name="paypal_email" id="paypal_email" value="{{ app.user.getPaypalEmail() }}"  placeholder="{{ 'Paypal email address'|trans({}, 'frontend-paypal-email') }}"/>
         </div>
+        <div id="paypal_err_id" class='error'></div>
         <div class="myacc-details white-checkbox paypal-acc-btn">
             <div class="mt20">
                 <button class="secondary-btn-1 button mb0" name="save_paypal_changes" id="save_paypal_changes" type="button" onclick="javascript:updatePaypalEmail();">{{ 'Save changes'|trans({}, 'frontend-paypal-email') }}</button>
