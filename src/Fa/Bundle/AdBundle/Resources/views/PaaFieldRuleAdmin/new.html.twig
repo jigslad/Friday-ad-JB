@@ -100,8 +100,10 @@
         $("#fa_ad_paa_field_rule_admin_category_id").on("change", function(e) { 
             var category_id = e.val;
             var route = Routing.generate('paa_field_rule_new_admin');
+            route = route.replace(':https','');
             if (category_id != '') {
                 route = Routing.generate('paa_field_rule_new_from_category_admin', { 'category_id': category_id });
+                route = route.replace(':https','');
             }
 
             window.location.replace(route);

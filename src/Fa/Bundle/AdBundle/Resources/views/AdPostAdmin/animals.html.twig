@@ -12,10 +12,7 @@
 {% endblock %}
 
 {% block content %}
-<style>
-.select2-container.custom_select { width:100% !important; }
-.custom_select_options.select2-drop.select2-with-searchbox { min-width:300px !important; }
-</style>
+    {{ include('FaAdBundle:AdPostAdmin:animals-css.html.twig') }}
 {{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
 {% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
 {% if entity.id %}

@@ -7,6 +7,7 @@ $(document).ready(function(){
                 var adTitle = $(this).val();
                 adTitle = adTitle.replace('/', '-');
                 var route = Routing.generate('ad_post_ajax_auto_populate_brand_admin', { 'cd_id': '{{categoryDimensionId}}', 'ad_title': adTitle });
+                route = route.replace(':https','');
                 $.ajax({
                     async: false,
                     type: "POST",

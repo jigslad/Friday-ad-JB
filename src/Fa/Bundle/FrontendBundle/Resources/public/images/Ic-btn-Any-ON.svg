@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="112px" height="112px" viewBox="0 0 112 112" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="background: #FFFFFF;">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>Any Button / Selected / Ic-btn-Any-ON</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Any-Button-/-Selected-/-Ic-btn-Any-ON" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="#FFFFFF" x="0" y="0" width="112" height="112"></rect>
+        <g id="Badge-/-Any-/-active"></g>
+        <g id="Badge-/-z.Base-/-Shapes-/-Large" stroke="#91D851" stroke-width="3">
+            <rect id="Rectangle" x="1.5" y="1.5" width="109" height="109" rx="4"></rect>
+        </g>
+        <text id="Any-Copy" font-family="Poppins-SemiBold, Poppins" font-size="16" font-weight="500" line-spacing="21" fill="#82C148">
+            <tspan x="40" y="62">Any</tspan>
+        </text>
+        <g id="Icon-/-Check-/-Checkbox" transform="translate(80.000000, 8.000000)" fill="#91D851">
+            <path d="M10.9709463,13.366529 L16.3112027,6.57437624 C16.8225102,5.92405564 17.7675383,5.80875183 18.4219821,6.31683796 C19.0764259,6.8249241 19.1924607,7.76399831 18.6811532,8.41431891 C14.2260171,13.9508613 11.8927875,16.7447414 11.6814646,16.7959592 C11.0876228,17.1417187 10.3115238,17.0459069 9.82251261,16.5248105 L6.403984,12.8819836 C5.83758363,12.2784203 5.87081232,11.3328702 6.47820235,10.7700383 C7.08559238,10.2072064 8.0371375,10.2402257 8.60353787,10.843789 L10.9709463,13.366529 Z" id="Path"></path>
+        </g>
+    </g>
+</svg>

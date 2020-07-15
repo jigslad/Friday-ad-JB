@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Fa\Bundle\CoreBundle\Controller\CoreController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 
 /**
  * This controller is used for admin side category management.
@@ -42,6 +43,20 @@ class SearchKeywordController extends CoreController
             return new JsonResponse($keywordArray);
         }
 
+        return new Response();
+    }
+    
+    public function ajaxGetSearchKeywordsByCatJsonAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $keywordArray            = array();
+            $keywordArray['more']    = false;
+            $categoryId = CategoryRepository::ADULT_ID;
+            $keywordArray['results'] = $this->getRepository('FaAdBundle:SearchKeywordCategory')->getKeywordsArrayByTextCat($request->get('term'),$categoryId);
+            
+            return new JsonResponse($keywordArray);
+        }
+        
         return new Response();
     }
 }

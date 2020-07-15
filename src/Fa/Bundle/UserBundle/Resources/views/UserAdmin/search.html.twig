@@ -186,6 +186,7 @@ $("#user_change_status_button").click(function(e){
             userIds = userIds + ',' + id;
         });
         var route = Routing.generate('user_change_status', { 'id': userIds });
+        route = route.replace(':https','');
         location.href = route;
   } else {
     alert("Please select at least one user!");

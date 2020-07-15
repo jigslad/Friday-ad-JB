@@ -43,7 +43,7 @@
         {
             if ($('.pickProfileFile').length > 0) {
                 $('.pickProfileFile').each(function(e) {
-                     var mainUploader = setUpUploader($(this).attr('id'), removeFileList);
+                     var mainUploader = setUpProfileUploader($(this).attr('id'), removeFileList);
                      mainUploader.init();
                 });
             }
@@ -53,7 +53,7 @@
             }
         }
 
-        function setUpUploader(id, removeFileList)
+        function setUpProfileUploader(id, removeFileList)
         {
             var errorFlag  = false;
             var userId     = '{{userId}}';
@@ -166,7 +166,7 @@
             });
         }
 
-        function deleteImage(url)
+        function deleteProfileImage(url)
         {
             closeProfileMenu();
             $('.remove-logo-btn').unbind("click");

@@ -1,0 +1,14 @@
+<div class="change-category clearfix">                       
+	<div class=" left cat-name-wrap media-object" style="display: inline-flex;">                           	    
+	    <div class="media-object-section">
+		<div class="breadcrumb">
+		    <div class="clearfix category-text">
+			{{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|last('<span class="separator"></span>')|raw }}
+		   </div>
+		</div>
+	    </div>
+	</div>
+	<div class="right">
+	    <a href="{{ path('ad_post_first_step', {'is_edit' : 1}) }}" title="{{ 'Change category'|trans({}, 'frontend-paa-second-step') }}">{{ 'Change'|trans({}, 'frontend-paa-second-step') }}</a>
+	</div>
+</div>

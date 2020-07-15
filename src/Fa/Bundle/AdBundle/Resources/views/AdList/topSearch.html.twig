@@ -5,6 +5,7 @@
     {% if searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
         {% set showInSearch = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'showPriceInSearchFilter', [searchParams.item__category_id, fetch_container_instance()]) %}
     {% endif %}
+
     <div class="row">
     	<div class="columns">
 	        <div class="find-label hide-for-small-only">{{ form_widget(attribute(form, 'item__category_id'), {'attr': {'class':'find-all custom_select' }}) }}</div>
@@ -74,3 +75,10 @@
     </div>
     {{ form_end(form) }}
 </div>
+{% if searchParams.item__distance is defined and searchParams.item__distance is not null %}
+  <script language="javascript" type="text/javascript">
+    $(document).ready(function(){
+        $('#distance_slider').val({{ searchParams.item__distance }});
+    });
+  </script>
+{% endif %}

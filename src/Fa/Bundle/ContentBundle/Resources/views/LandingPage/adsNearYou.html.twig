@@ -3,7 +3,7 @@
 <div class="homepage-row {{ bgColour }}">
     <div class="row">
         <div class="columns">
-            <h3 class="homepage-title">{{ 'Ads near you'|trans({}, 'frontend-landing-page') }}</h3>
+            <div class="homepage-title">{{ 'Ads near you'|trans({}, 'frontend-landing-page') }}</div>
             <div class="{{ mapBgColour }}">
                 <div class="clearfix">
                     <div class="near-location">
@@ -188,6 +188,7 @@
         function addToFavorite(id)
         {
             var route = Routing.generate('ad_add_to_favorite', { 'adId': id });
+            route = route.replace(':https','');
             $.ajax({
                 type: "POST",
                 url : route,
@@ -210,6 +211,7 @@
         function removeFromFavorite(id)
         {
             var route = Routing.generate('ad_remove_from_favorite', { 'adId': id });
+            route = route.replace(':https','');
             $.ajax({
                 type: "POST",
                 url : route,
@@ -274,6 +276,7 @@
                                 route = Routing.generate('landing_page_category', { 'category_string': '{{ category}}' }, true);
                              }
                              if (route) {
+                            	route = route.replace(':https','');
                                 window.location.href = route;
                              }
                          } else {
@@ -291,13 +294,16 @@
                 $('#landingpage_search_editable_location_a').show();
                 $('#landingpage_search_editable_location_span').show();
 
-                window.location.href = Routing.generate('landing_page_category', { 'category_string': '{{ category}}' }, true);
+                var rurl = Routing.generate('landing_page_category', { 'category_string': '{{ category}}' }, true );
+                rurl = rurl.replace(':https','');
+                window.location.href = rurl;
             }
             return false;
         }
         
         function updateContent(adId) {	
             var route = Routing.generate('ad_show_ad_for_infobox', { 'adId': adId });
+            route = route.replace(':https','');
             $.ajax({
                 type: "GET",
                 url : route,
