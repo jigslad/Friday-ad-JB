@@ -2858,6 +2858,8 @@ HTML;
 
             if (isset($matches[0]) && count($matches[0])) {
                 foreach ($matches[0] as $index => $email) {
+                    // datalayer discription class removed
+                    // jan confirm on 01/07/2020 FFR-4634
                     $gaclass = '';
                     if($pagetype = 'AdDetails') {
                         $gaclass= 'ga-emailDescriptionAd';
@@ -2865,7 +2867,8 @@ HTML;
                     elseif ($pagetype = 'Profile') {
                         $gaclass= 'ga-emailDescriptionBusiness';
                     }
-                    $string = str_replace($email, '<a class="'.$gaclass.'" href="javascript:contactSeller(\''.$adId.'\', \'Email contact click (Description)\');">click to contact</a>', $string);
+                    $string = str_replace($email, '<a class="'.$gaclass.'" href="javascript:contactSeller(\''.$adId.'\', \'Email contact click (Description)\', \'Email\');">click to contact</a>', $string);
+//                    $string = str_replace($email, '<a href="javascript:contactSeller(\''.$adId.'\', \'Email contact click (Description)\');">click to contact</a>', $string);
                 }
             }
 
@@ -3657,6 +3660,28 @@ HTML;
         }
     }
 
+    public function getIndividualUpsellModalDetails($upsellId) {
+        $upsellModalDetail = array();
+        switch ($upsellId) {
+            case 5:
+            case 51:
+            case 54:
+                $upsellModalDetail['title'] = 'Featured ad';
+                $upsellModalDetail['name'] = 'featuredTopUpsellModal';
+                break;
+        }
+        return $upsellModalDetail;
+    }
+    
+    public static function dateDiffInDays($date1, $date2)
+    {
+        // Calulating the difference in timestamps
+        $diff = $date2 - $date1;
+        
+        // 1 day = 24 hours
+        // 24 * 60 * 60 = 86400 seconds
+        return abs(round($diff / 86400));
+    } 
     public static function checkImageExistOnAws($container, $imageUrl)
     {
         $client = new S3Client([
@@ -3721,5 +3746,21 @@ HTML;
             $imgRelPath = $imagePath . '/' . $adId . '_' . $imageHash . ($size ? '_' . $size : '') . '.jpg';
         }
         return $imgRelPath;
+    }
+    public static function multisort($sortArray, $sortField,$sortAs) {
+        $sortColumn = array_column($sortArray, $sortField);
+        
+        //echo '<pre>'; print_r($sortColumn);die;
+        /*$sortColumn = array();
+        foreach($sortArray as $sortRow) {
+            $sortColumn[] = $sortRow[$sortField];
+        }*/       
+        if($sortAs=='desc') { 
+            array_multisort($sortColumn, SORT_DESC, $sortArray);
+        } else {
+            array_multisort($sortColumn, SORT_ASC, $sortArray);
+        }
+        
+        return $sortArray;
     }
 }

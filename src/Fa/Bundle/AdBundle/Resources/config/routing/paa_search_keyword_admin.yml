@@ -1,0 +1,28 @@
+paa_search_keyword_admin:
+    path:     /
+    defaults: { _controller: "FaAdBundle:PaaSearchKeywordAdmin:index" }
+    
+paa_search_keyword_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaAdBundle:PaaSearchKeywordAdmin:edit" }
+
+paa_search_keyword_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaAdBundle:PaaSearchKeywordAdmin:update" }
+    requirements: { methods: post|put }
+
+paa_search_keyword_upload_csv_admin:
+    path:     /upload_csv
+    defaults: { _controller: "FaAdBundle:PaaSearchKeywordAdmin:uploadCsv" }
+
+paa_search_keyword_import_keywords_admin:
+    path:     /import_keywords
+    defaults: { _controller: "FaAdBundle:PaaSearchKeywordAdmin:importKeywords" }
+
+paa_search_keyword_process_keywords_admin:
+    path:     /process_keywords
+    defaults: { _controller: "FaAdBundle:PaaSearchKeywordAdmin:processKeywords" }
+
+paa_search_keyword_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaAdBundle:PaaSearchKeywordAdmin:delete" }

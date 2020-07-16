@@ -1,0 +1,5 @@
+paa_search_keyword_ajax_get_keywords_json:
+    path:     /ajax/get/paa_keywords_json
+    defaults: { _controller: "FaAdBundle:PaaSearchKeyword:ajaxGetPaaSearchKeywordsJson" }
+    options:
+        expose: true

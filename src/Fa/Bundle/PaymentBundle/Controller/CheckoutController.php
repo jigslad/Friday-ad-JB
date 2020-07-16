@@ -68,12 +68,14 @@ class CheckoutController extends CoreController
         $transcations = $this->getRepository('FaPaymentBundle:Payment')->getTranscationDetailsForGA($cart->getCartCode(), $loggedinUser);
         $redirectUrl  = null;
 
-        if ($this->container->get('session')->has('upgrade_payment_success_redirect_url') || $this->container->get('session')->has('payment_success_redirect_url') || $this->container->get('session')->has('paalite_payment_success_redirect_url')) {
+        if ($this->container->get('session')->has('upgrade_payment_success_redirect_url') || $this->container->get('session')->has('payment_success_redirect_url') || $this->container->get('session')->has('paalite_payment_success_redirect_url') || $this->container->get('session')->has('mma_payment_success_redirect_url')) {
             if (!$this->container->get('session')->has('paalite_payment_success_redirect_url') && $this->container->get('session')->has('upgrade_payment_success_redirect_url') && $this->container->get('session')->get('upgrade_payment_success_redirect_url') != '') {
                 $this->container->get('session')->set('payment_success_for_upgrade', $this->container->get('session')->get('upgrade_payment_success_redirect_url'));
                 $redirectUrl = $this->container->get('session')->get('upgrade_payment_success_redirect_url');
             } elseif ($this->container->get('session')->has('paalite_payment_success_redirect_url') && $this->container->get('session')->get('paalite_payment_success_redirect_url') != '') {
                 $redirectUrl = $this->container->get('session')->get('paalite_payment_success_redirect_url');
+            } elseif ($this->container->get('session')->has('mma_payment_success_redirect_url') && $this->container->get('session')->get('mma_payment_success_redirect_url') != '') {
+                $redirectUrl = $this->container->get('session')->get('mma_payment_success_redirect_url');
             } else {
                 $redirectUrl = $this->container->get('session')->get('payment_success_redirect_url');
             }

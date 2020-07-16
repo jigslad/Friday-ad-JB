@@ -29,7 +29,6 @@
 {% set adRootCategoryId = null %}
 {% block body %}
 
-{{ include('FaAdBundle:Ad:upgradeFeaturedmodalBox-css.html.twig') }}
 <a class="close-reveal-modal" style="display:{% if popup_title is defined %}none{% else %}block{% endif %}">&#215;</a> 
 
 <h5 class="modal-title">
@@ -41,9 +40,10 @@
         <span id="deadlock_error"></span>
         <a href="javascript:void(0)" class="close">&times;</a>
     </div>   
+    <div class="row fa-equalizer" id="package_equalizer">
 {% if packages|length %}     
     {{ form_start(form, {'attr': {'novalidate': '', 'id': 'cyber_source_form'}}) }}  
-    <div class="row fa-equalizer" id="package_equalizer">
+
         {% for package in packages %}
             {% set packageValues = array_unserialize(package.getPackage().getValue()) %}
             {% set packageActualPrice = 0 %}
@@ -83,7 +83,7 @@
             {% else %}
                 {% set packagePrice = 'Free'|trans({}, 'frontend-ad-package')%}
             {% endif %}
-            <div class="columns center">
+            <div class="small-24 medium-12 large-12 columns upsell-l-block">
                 <div class="paa-pkg-bg">
                     <span class="pkg-selection" id="package_selection_{{package.getPackage().getId()}}">Select Package</span>
                     {% set pkgBoxColorClass = 'pkg-green-head' %}
@@ -172,7 +172,7 @@
                                         </div>
                                     {% endif %}
                                 {% endif %}
-                                <input type="hidden" name="categoryId" value="{{ categoryId }}" >
+                                <input type="hidden" name="categoryId" value="{{ categoryId }}">
                             </div>
                         </div>
                     </div>
@@ -180,9 +180,9 @@
             </div>
             {% set packageId = package.getPackage().getId() %}
         {% endfor %}
-    </div>
     
-    <div class="large-24 columns" >
+    
+    <div class="small-24 medium-12 large-12 columns upsell-r-block" >
           {% set ccUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_CYBERSOURCE')}) %}
           {% set appleUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_APPLEPAY')}) %}
           {% set catPath = '' %}
@@ -207,11 +207,13 @@
                 {% endfor %}
                 {% do attribute(form, 'payment_method').setRendered %}
             </ul>            
+        </div>
     </div>
     <div id="payment-form">
    	    {{ include('FaAdBundle:Ad:upgradePaymentForm.html.twig', {'form': form }) }}
 	</div>
-	<div id="card_detail_save" class="small-wrapper">
+    <div class="payment-row">
+	    <div id="card_detail_save">
             <div class="payment-row">
                 <div class="label-inline white-checkbox">
                     {{ form_widget(form.is_save_credit_card) }}
@@ -220,18 +222,20 @@
                 </div>
             </div>
    	    </div>
-   	    <div class="mt20 mb20 remove-item-btn">
-       		<div class="row">
-               	<div class="columns">
-                    <div id="pay_now_btn">
-                        {{ form_widget(form.save, {'attr': {'class':'button secondary-btn-1 thin-btn expand'}, 'label': 'Pay'}) }}
-                    </div>
+    </div>
+    <div class="mt20 mb20 remove-item-btn">
+        <div class="row">
+            <div class="columns">
+                <div id="pay_now_btn">
+                    {{ form_widget(form.save, {'attr': {'class':'button secondary-btn-1 expand'}, 'label': 'Pay'}) }}
                 </div>
             </div>
-    	</div>	
+        </div>
+    </div>
 {{ form_end(form) }}
 {% endif %}
 </div>
+    </div>
 <script src="{{ asset_url('fafrontend/js/jquery.equalizer.min.js') }}"></script>
 <script src="{{ asset_url('facore/js/jquery.query-object.js') }}"></script>
 <script language="javascript" type="text/javascript">
@@ -280,11 +284,28 @@
 	    {% endif %}
 
 	    {% if (gaStr is defined and gaStr != '') %}
+            window.dataLayer = window.dataLayer || []
+            dataLayer.push({
+                'event' : 'Form Error PAA',
+                'eventCategory':  'PAA - Step Cart',
+                'eventAction': 'Form error',
+                'eventLabel': '{{gaStr}}'
+            });
             ga('send', 'event', 'Category PAA - Checkout', 'Form error', '{{gaStr}}');
             triggerFirstCheckBox();
         {% endif %}
 	    
         showHideCardDetail();
+    });
+
+    $('#fa_payment_cyber_source_checkout_save').on('click', function () {
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+            'event' : 'Options',
+            'eventCategory':  'Search Results',
+            'eventAction': 'Upgrade',
+            'eventLabel': 'Cybersource'
+        });
     });
 
     function triggerFirstCheckBox() {

@@ -1,0 +1,36 @@
+<div class="row">
+    <div class="columns">
+        <div class="outline">
+            <table class="mb0">
+                <thead>
+                    <tr>
+                        <th width="20%">{{ 'Keyword'|trans }}</th>
+                        <th width="10%">{{ 'Number of searches'|trans }}</th>
+                        <th width="20%">{{ 'Categories'|trans }}</th>
+                    </tr>
+                 </thead>
+                 <tbody>
+                    {% if pagination.getNbResults() %}
+                        {% for searchKeyword in pagination.getCurrentPageResults() %}
+                            <tr class="gradeX">
+                               <td>                                   
+                                   <a href="{{ searchKeyword.id }}">{{ searchKeyword.synonyms_keywords }}</a>
+                               </td>
+                               <td>
+                                   0
+                               </td>
+                               <td>
+                                    {{ searchKeyword.name }}
+                               </td>                              
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr class="gradeX">
+                            <td colspan="11" align="center">{{ 'No Data Found'|trans }}</td>
+                        </tr>
+                    {% endif %}
+                 </tbody>
+            </table>
+        </div>
+    </div>
+</div>

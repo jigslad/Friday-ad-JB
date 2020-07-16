@@ -176,19 +176,21 @@
     $("button[type=submit], input[type=submit]").click(function(e){
         var clickedId = $(this).attr('id');
         var parentForm = $(this).parents("form").attr('name');
-        if(clickedId.match("^fa_paa_fourth_step_")) {
-            idFourthStepClicked = clickedId;
-            $('#'+idFourthStepClicked).attr('readonly', 'readonly');
-        } else {
-            idClicked = clickedId;
-            if(!$('#'+idClicked).hasClass('disabled')) {
-                $('#'+idClicked).attr('disabled', true);
+        if (typeof clickedId !== typeof undefined && clickedId !== false) {
+            if(clickedId.match("^fa_paa_fourth_step_")) {
+                idFourthStepClicked = clickedId;
+                $('#'+idFourthStepClicked).attr('readonly', 'readonly');
+            } else {
+                idClicked = clickedId;
+                if(!$('#'+idClicked).hasClass('disabled')) {
+                    $('#'+idClicked).attr('disabled', true);
+                }
+                $("form[name='"+parentForm+"']").submit();
             }
-            $("form[name='"+parentForm+"']").submit();
         }
     });
 
-    
+
     /*function loadSavingDataGif(formName) {
         $('#form-save-button-div').html('<button type="button" class="primary-btn-1 expand loading-in-button"><img src="{{ asset_url('facontent/fileman/images/loading-dir.gif') }}" style="margin-right:15px">Saving data...</button>');
         $('#'+formName+'_save').attr('disabled', true);
@@ -257,9 +259,9 @@
         {% set userType = 'Private' %}
     {% endif %}
 {% else %}
-    {% set ClientID = 'null' %}
+    {% set ClientID = '' %}
     {% set login_status = 'false' %}
-    {% set userType = 'null' %}
+    {% set userType = '' %}
 {% endif %}
 {% if app.request.get('_route') in ['fa_frontend_homepage','landing_page_category'] %}
     {% set pageType = 'Homepage' %}
@@ -267,7 +269,7 @@
 {% elseif app.request.get('_route') in ['ad_detail_page']%}
     {% set pageType = 'Ad Details' %}
 
-{% elseif app.request.get('_route') in ['ad_post_first_step', 'ad_post_second_step', 'ad_post_third_step','ad_post_third_step_registration','ad_post_fourth_step']%}
+{% elseif app.request.get('_route') in ['ad_post_first_step', 'ad_post_second_step', 'ad_post_third_step','ad_post_third_step_registration','ad_post_fourth_step','ad_package_purchase','show_cart','cybersource_checkout','paypal_checkout','checkout_payment_success','checkout_payment_failure']%}
     {% set pageType = 'PAA process page' %}
 
 {% elseif app.request.get('_route') in ['location_home_page','testimonials','show_all_locations'] %}
@@ -287,8 +289,12 @@
     {% endif %}
 
 {% else %}
-    {% set pageType = 'Not Specified' %}
-
+    {% if (app.request.get('_route') == 'manage_my_ads_active') and ((app.request.get('transaction_id') is defined) and (app.request.get('transaction_id') is not null )) %}
+{#        feture maa required that time ask for tranzactionid#}
+        {% set pageType = 'PAA process page' %}
+    {% else %}
+        {% set pageType = 'Not Specified' %}
+    {% endif %}
 {% endif %}
 {% set bannerCount = 0 %}
 {% set bannerCurrentDevice       = 'D' %}
@@ -330,11 +336,10 @@
     dataLayer.push({
         "page": {
             "pageType": pagType,
-            "loggedInStatus": '{{ login_status }}',
+            "loggedInStatus": {{ login_status }},
             "clientID": '{{ ClientID }}',
             "ipAddress": '{{ app.request.server.get("REMOTE_ADDR") }}',
             "loggedInType": '{{ userType }}',
-            "banners": '{{ bannerCount }}'
         },
     });
 </script>

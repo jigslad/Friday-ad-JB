@@ -5,7 +5,8 @@
     {% set categoryName = 'For Sale' %}
     {% for field in orderedFields %}
         {% if attribute(form, field) is defined %}
-             {{ set_variables('formFields', {'lastField':field}) }}
+            {{ set_variables('formFields', {'lastField':field}) }}
+
                 {% if field == 'location_autocomplete' %}
                     {{ include('FaAdBundle:AdPost:paaLocationWithMap.html.twig') }}
                 {% elseif field == 'photo_error' %}
@@ -24,11 +25,13 @@
                     <div class="paa-gray-box paa-quantity btm-pa-0" id="element_{{ field }}" {% if not hasItemQtyUpsell %}style="display:none;"{% endif %}>
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                        <div class="pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+
+                            <div class="pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+
                             <div class="text-center">{{ 'How many are you selling?'|trans({}, 'frontend-paa-fourth-step') }}</div>
                             {{ form_widget(attribute(form, field), {'attr': {'placeholder': ((attribute(form, field).vars.attr.placeholder is defined and attribute(form, field).vars.attr.placeholder is not null) ? attribute(form, field).vars.attr.placeholder : '1'), 'min': '1', 'class': 'white-field'}}) }}
                             {{ form_errors(attribute(form, field)) }}
-                        </div>
+                    </div>
                     </div>
                 {% elseif field == 'delivery_method_option_id' %}
                      <div class="paa-gray-box btm-pa-0" id="element_{{ field }}">
@@ -60,7 +63,20 @@
                                 {{ form_widget(attribute(form, field), {'attr': {'class' : 'radio-capsule-btn'}}) }}
                             </div>
                             <div class="paa-paypal-mail" id="paypal_section_id" {% if not form.paypal_email.vars.errors|length %}style="display:none;"{% endif %}>
-                                <p class="text-center mt20">{{'Please provide the first name, last name and the email address used for your Paypal account'|trans({}, 'frontend-paa-fourth-step')}}</p>
+                                <div class="text-center">
+                                    <p class="mt20">
+                                    <div id="paa_paypal_mail_tips">
+                                        {{'Please provide your PayPal details exactly as they appear on your PayPal account.'|trans({}, 'frontend-paa-fourth-step')}}
+                                        <div class="image-tooltip-wrapper">
+                                                <span class="image-tooltip">
+                                                    {{ 'Friday-Ad cares about the security of our sellers and buyers. To protect you we ask that you provide details for a verified PayPal account. You can find out more'|trans({}, 'frontend-paa-fourth-step')}}
+                                                    <a href="https://www.paypal.com/uk/smarthelp/article/how-do-i-verify-my-paypal-account-faq444" target="_blank">{{ 'here' }}</a>
+                                                </span>
+                                            <span><a>{{ 'Why do we ask this?' }}</a></span>
+                                        </div>
+                                    </div>
+                                    </p>
+                                </div>
                                 {% set paypalUserEmail = null %}
                                 {% set paypalFirstName = null %}
                                 {% set paypalLastName = null %}
@@ -86,6 +102,7 @@
                                 {{ form_widget(attribute(form, 'paypal_email'), {'value': paypalUserEmail, 'attr': {'class' : 'white-field', 'placeholder': 'Paypal email address'|trans({}, 'frontend-paa-fourth-step')}}) }}
                                 <button type="button" class="secondary-btn-1 mb0" id="verify_paypal_email_button">{{'Verify'|trans({}, 'frontend-paa-fourth-step')}}</button><span class="error-icon" id="paypal_email_verify_status" style="display:none;">error</span>
                                 {{ form_errors(attribute(form, 'paypal_email')) }}
+                                <div id="paypal_err_id" class='error'></div>
                                 <div class="paypal-ins" id="paypal_text_id"></div>
                             </div>
                             {{ form_errors(attribute(form, field), {'attr': {'class' : 'error center'}}) }}
@@ -129,9 +146,12 @@
                     </div>
                 {% elseif field == 'condition_id' %}
                     <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
+
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                        <div class="pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+
+            <div class="pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+
                             <div class="paa-title-ins">
                                 {{ 'Let your potential buyers know how well you\'ve looked after your car.'|trans({}, 'frontend-paa-fourth-step')}}<br /><br />
                                 {{ 'The condition of my item is:'|trans({}, 'frontend-paa-fourth-step')}}
@@ -150,8 +170,11 @@
                                 {% endfor %}
                             </div>
                             {{ form_errors(attribute(form, field), {'attr': {'class' : 'error center'}}) }}
+
                         </div>
+
                     </div>
+
                 {% elseif field == 'personalized_title' %}
                     <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}

@@ -1,0 +1,46 @@
+<div id="featuredTopSuccessPaymentModal" class="reveal-modal tiny" data-reveal>
+ 	<a class="close-reveal-modal">×</a>
+    <h5 class="modal-title">
+       Upgrade
+    </h5>
+	<div class="modal-content remove-modal">
+		<div class="large-24 columns mt20">
+            <div data-alert="" class="alert-box success radius">
+                <span class="alert-icon">&nbsp;</span>
+                Success: your ad has been added to featured top
+            </div>
+        </div>
+        <div class="mt20 remove-item-btn">
+            <div class="row">
+                <div class="columns">
+                    <button type="button" class="button secondary-btn-1 thin-btn expand continue-btn">Continue</button>
+                </div>
+            </div>
+    	</div>
+    	<div class="mt20 remove-item-btn">
+            <div class="row">
+                <div class="columns">
+                	<a href="{{ path('manage_my_ads_active') }}">
+                    	<button type="button" class="button secondary-btn-2 thin-btn expand">Manage My Ads</button>
+                	</a>
+                </div>
+            </div>
+    	</div>
+ 	</div>
+</div>
+<script>
+    window.dataLayer = window.dataLayer || []
+    dataLayer.push({
+        "MMA Featured 7 Day Upsell'":{
+            "transactionId": '{{ transcationsGaTag['id'] }}',
+            "transactionTotal": '{{ transcationsGaTag['Revenue'] }}',
+            "transactionProducts": [
+                'sku': '{{ individualUpsellArr['id'] }}',
+                'name': '{{ individualUpsellArr['title'] }}',
+                'category': '{{ categoryName }}',
+                'price': '{{ individualUpsellArr['price'] }}',
+                'quantity': '1'
+            ]
+        }
+    });
+</script>

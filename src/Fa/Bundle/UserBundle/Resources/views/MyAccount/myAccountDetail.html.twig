@@ -11,20 +11,17 @@
             <div class="myacc-details white-checkbox">
                 {{ form_row(userDetailForm.email, {'attr': {'class': 'white-field'}}) }}
                 <label>Social connections</label>
-                <button class="signup-fb-btn ga-facebookLogin button expand" type="button" {% if not app.user.getFacebookId() %}onclick="javascript:fbLoginPopup('{{ facebookLoginUrl }}');"{% endif %}><span class="signup-fb-icon ga-facebookLogin">&nbsp;</span>{{ 'Connect with Facebook'|trans({}, 'frontend-user-account-detail') }}{% if app.user.getFacebookId() %}<span class="tickmark-icon right">&nbsp;</span>{% endif %}</button>
-                <button class="signup-google-btn ga-googleLogin button expand" type="button" {% if not app.user.getGoogleId() %}onclick="javascript:googleLoginPopup('{{ googleLoginUrl }}');"{% endif %}><span class="signup-google-icon ga-googleLogin">&nbsp;</span>{{ 'Connected with Google'|trans({}, 'frontend-user-account-detail') }}{% if app.user.getGoogleId() %}<span class="tickmark-icon right">&nbsp;</span>{% endif %}</button>
-                
                 <div class="mobile-block-reg">
                 	<div class="text-center mb20">
-                        <a href="#" {% if not app.user.getFacebookId() %}onclick="javascript:fbLoginPopup('{{ facebookLoginUrl }}');"{% endif %} class="button special signup-fb-btn">
-                            <span class="fb-icon"></span> 
-                            <span class="btn-text">{{ 'Connect with Facebook'|trans({}, 'frontend-user-account-detail') }}{% if app.user.getFacebookId() %}<span class="tickmark-icon right">&nbsp;</span>{% endif %}</span>
+                        <a href="#" {% if not app.user.getFacebookId() %}onclick="javascript:fbLoginPopup('{{ facebookLoginUrl }}');"{% endif %} class="button special signup-fb-btn ga-facebookLogin">
+                            <span class="fb-icon ga-facebookLogin"></span>
+                            <span class="btn-text ga-facebookLogin">{{ 'Connect with Facebook'|trans({}, 'frontend-user-account-detail') }}{% if app.user.getFacebookId() %}<span class="tickmark-icon right">&nbsp;</span>{% endif %}</span>
                         </a>
                     </div>
                     <div class="text-center mb20">
-                        <a href="#" {% if not app.user.getGoogleId() %}onclick="javascript:googleLoginPopup('{{ googleLoginUrl }}');"{% endif %} class="button special signup-google-btn">
-                            <span class="google-icon"></span> 
-                            <span class="btn-text">{{ 'Connected with Google'|trans({}, 'frontend-user-account-detail') }}{% if app.user.getGoogleId() %}<span class="tickmark-icon right">&nbsp;</span>{% endif %}</span>
+                        <a href="#" {% if not app.user.getGoogleId() %}onclick="javascript:googleLoginPopup('{{ googleLoginUrl }}');"{% endif %} class="button special signup-google-btn ga-googleLogin">
+                            <span class="google-icon ga-googleLogin"></span>
+                            <span class="btn-text ga-googleLogin">{{ 'Connected with Google'|trans({}, 'frontend-user-account-detail') }}{% if app.user.getGoogleId() %}<span class="tickmark-icon right">&nbsp;</span>{% endif %}</span>
                         </a>
                     </div>
                 </div>
