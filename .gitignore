@@ -31,8 +31,4 @@
 /.settings
 /.idea
 /node_modules/
-<<<<<<< HEAD
 /web/build/
-=======
-/web/build/
->>>>>>> origin/css-new
