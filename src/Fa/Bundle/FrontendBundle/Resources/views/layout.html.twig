@@ -176,6 +176,12 @@
     	{{ include('FaFrontendBundle:Adult:adul-imgs.html.twig') }}
 	{% else %}
 	    <link rel="stylesheet" href="{{ asset('/bundles/css/app.css') }}"/>
+    	<link rel="stylesheet" href="{{ asset('build/css/site.css') }}">
+    	<link rel="stylesheet" href="{{ asset('build/css/sitenew.css') }}">
+    	<link rel="stylesheet" href="{{ asset('build/css/file01.css') }}">
+    	<link rel="stylesheet" href="{{ asset('build/css/file02.css') }}">
+    	<link rel="stylesheet" href="{{ asset('build/css/file03.css') }}">
+    	<link rel="stylesheet" href="{{ asset('build/css/file04.css') }}">
     	{{ include('FaFrontendBundle::site-imgs.html.twig') }}
 	{% endif %}
 	{# { include('FaFrontendBundle::new-fa-main-css.html.twig') } #}
