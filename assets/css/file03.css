@@ -1128,7 +1128,7 @@
     #home-search .search-btn button {
         text-indent: -9999px;
         display: block;
-        vertical-align: top
+        vertical-align: top;
         border-radius: 0 2px 2px 0;
     }
     #home-search #top_search_location {
