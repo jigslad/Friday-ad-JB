@@ -15,6 +15,7 @@ use phpDocumentor\Reflection\Types\Collection;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -77,7 +78,7 @@ class EmailTemplateAdminType extends AbstractType
             ->add('body_text', TextareaType::class, array('attr' => array('rows' => 10)))
             ->add('sender_email')
             ->add('sender_name')
-            ->add('bcc_emails')
+            ->add('bcc_emails',TextType::class,array('attr'=>array('maxlength'=>'300')))
             ->add('params_help')
             ->add(
                 'status',
