@@ -46,6 +46,13 @@
       })
       .done(function(objResponse) {
             var otherDetail = ans + ' - ' + callFrom + ' - ' + objResponse.categoryText;
+            window.dataLayer = window.dataLayer || []
+            dataLayer.push({
+              'event' : 'Options',
+              'eventCategory':  'CTA',
+              'eventAction': 'Seller Availability Response',
+              'eventLabel': otherDetail
+            });
             ga('send', 'event', 'CTA', 'Seller Availability Response', otherDetail);
             $.ajax({
               type: "POST",
