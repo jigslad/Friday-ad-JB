@@ -36,9 +36,6 @@
                     <label for="my_ads_link" style="color: #a8dc28">Expire one of your live ads and continue with this one instead</label>
                 </li>
             </ul>
-            {#            <p>{{'a) Click \'Continue placing ad\' to place ad at our competitive business rates'|trans({}, 'frontend-contact-seller')}}</p>#}
-            {#            <p>{{'b) %business_user_link% and place unlimited ads'|trans({'%business_user_link%': '<a href="javascript:void(0);" class="bold" onclick="convertUserToBusiness();">Become a business advertiser</a>'}, 'frontend-contact-seller')|raw}}</p>#}
-            {#            <p>{{'c) Visit %my_ads_link% to expire one of your live ads and continue with this one'|trans({'%my_ads_link%': '<a href="javascript:void(0);" class="bold" onclick="showManageMyAds();">Manage my ads</a>'}, 'frontend-contact-seller')|raw}}</p>#}
         </div>
     </div>
     <div class="row center mt10">
@@ -58,7 +55,12 @@
         }
     });
 
-    function convertUserToBusiness()
+    function sendMyAccount() {
+        ga('send', 'event', 'CTA', 'Ad limit - Become business adv');
+        window.location = '{{ path('my_account') }}';
+    }
+
+        function convertUserToBusiness()
     {
         ga('send', 'event', 'CTA', 'Ad limit - Become business adv');
         blockElement('#privateUserMaxAdPostLimitModal');
@@ -95,10 +97,11 @@
             button.classList.add('ga-continuePlacingAd');
             button.classList.remove('ga-becomeBusinessAdv');
             button.classList.remove('ga-manageMyAds');
-            button.innerHTML = 'Continue placing ad';
+            button.innerHTML = 'Continue placing my ad';
         }
         if(value == 'business_user'){
-            button.setAttribute('onclick','convertUserToBusiness()');
+            // button.setAttribute('onclick','convertUserToBusiness()');
+            button.setAttribute('onclick','sendMyAccount()');
             button.classList.add('ga-becomeBusinessAdv');
             button.classList.remove('ga-continuePlacingAd');
             button.classList.remove('ga-manageMyAds');
