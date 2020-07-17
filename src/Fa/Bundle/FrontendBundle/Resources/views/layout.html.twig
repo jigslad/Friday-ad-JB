@@ -27,7 +27,10 @@
     {% set ADULT_CATEGORY_ID = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
     {% set showTiLogo = false %}
     {# {% if (app.user and app.user.getUserMasterSite()|lower == 'ti') or (not app.user and app.request.get('ti_url')) or (not app.user and app.request.cookies.has('ti_url')) %} #}
-    {% if (app.user and app.user.getUserMasterSite()|lower == 'ti') or (not app.user and app.request.get('ti_url')) or (not app.user and app.request.cookies.has('new_ti_url')) %}
+    {#    {% if (app.user and app.user.getUserMasterSite()|lower == 'ti') or (not app.user and app.request.get('ti_url')) or (not app.user and app.request.cookies.has('new_ti_url')) %}#}
+    {#        {% set showTiLogo = true %}#}
+    {#    {% endif %}#}
+    {% if app.request.get('ti_url') or app.request.cookies.has('new_ti_url') %}
         {% set showTiLogo = true %}
     {% endif %}
 
@@ -35,6 +38,7 @@
     
     {% if ((app.request.uri == container.getParameter('base_url')~'/bristol/') and app.request.get('ti_url')) %}
         {% set showTiPopup = true %}
+        {% set showTiLogo = true %}
     {% endif %}
     
     {% if not app.request.cookies.has('is_over_18') and currentRoute == 'fa_adult_homepage' %}
