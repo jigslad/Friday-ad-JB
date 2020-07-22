@@ -150,6 +150,11 @@
 
     {{ include('FaFrontendBundle::scriptTop.html.twig') }}
     {% block scripttop %}{% endblock %}
+    {#
+        main-css.css - Common CSS - taken from src/Fa/Bundle/FrontendBundle/Resources/views/main-css.html.twig - moved from src/Fa/Bundle/FrontendBundle/Resources/views/scriptTop.html.twig
+        main.css - Common CSS - taken from src/Fa/Bundle/FrontendBundle/Resources/views/fa-main-css-new.html.twig
+        covid-edition.css - Covid related CSS - Inline CSS
+    #}
     {% stylesheets filter='uglifycss' output='bundles/css/compiled/fa-main.css'
         'bundles/fafrontend/css/main-css.css'
         'bundles/fafrontend/css/main.css'

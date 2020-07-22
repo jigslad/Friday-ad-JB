@@ -1,3 +1,5 @@
+/* CSS for owl carousel - start */
+
 .owl-carousel,
 .owl-carousel .owl-item {
     -webkit-tap-highlight-color: transparent;
@@ -173,7 +175,7 @@
     height: 100%;
     width: 100%;
 }
-
+/* CSS for owl carousel - end */
 ul.fourlocationlist { margin: 10px auto 0px auto;text-align:center; }
 ul.fourlocationlist li { display:inline; list-style-type: none; }
 ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }

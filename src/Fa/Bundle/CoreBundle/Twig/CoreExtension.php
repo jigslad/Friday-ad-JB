@@ -703,7 +703,7 @@ class CoreExtension extends \Twig_Extension implements \Twig_Extension_InitRunti
             $timestamp = filemtime($realPath);
         }
 
-        return $path . '?' . $timestamp;
+        return $path . '?c_version=' . $timestamp;
 
     }
 }
