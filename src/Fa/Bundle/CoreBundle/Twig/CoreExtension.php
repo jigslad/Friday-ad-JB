@@ -113,6 +113,7 @@ class CoreExtension extends \Twig_Extension implements \Twig_Extension_InitRunti
                    new \Twig_SimpleFunction('substr_exist', array($this, 'substrExist')),
                    new \Twig_SimpleFunction('is_paginator', array($this, 'is_paginator')),
                    new \Twig_SimpleFunction('pagination_heads', array($this, 'pagination_heads')),
+                   new \Twig_SimpleFunction('cached_asset', array($this,'cached_asset')),
                );
     }
     
@@ -520,7 +521,7 @@ class CoreExtension extends \Twig_Extension implements \Twig_Extension_InitRunti
      */
     public function asset_url($path)
     {
-        return $this->container->getParameter('fa.static.url').'/'.$path;
+        return $this->cached_asset($this->container->getParameter('fa.static.url').'/'.$path);
     }
 
     /**
@@ -531,7 +532,7 @@ class CoreExtension extends \Twig_Extension implements \Twig_Extension_InitRunti
      */
     public function static_asset_url($path)
     {
-        return $this->container->getParameter('fa.static.asset.url').$path;
+        return $this->cached_asset($this->container->getParameter('fa.static.asset.url').$path);
     }
 
     /**
@@ -542,7 +543,7 @@ class CoreExtension extends \Twig_Extension implements \Twig_Extension_InitRunti
      */
     public function shared_url($path)
     {
-        return $this->container->getParameter('fa.static.shared.url').'/'.$path;
+        return $this->cached_asset($this->container->getParameter('fa.static.shared.url').'/'.$path);
     }
 
     /**
@@ -553,7 +554,7 @@ class CoreExtension extends \Twig_Extension implements \Twig_Extension_InitRunti
      */
     public function image_url($path)
     {
-        return $this->container->getParameter('fa.static.aws.url').'/'.$path;
+        return $this->cached_asset($this->container->getParameter('fa.static.aws.url').'/'.$path);
     }
 
     /**
@@ -688,5 +689,21 @@ class CoreExtension extends \Twig_Extension implements \Twig_Extension_InitRunti
         }
 
         return implode("\n", $html);
+    }
+
+    public function cached_asset($path)
+    {
+        $webRoot  = realpath($this->container->get('kernel')->getRootDir() . '/../web/');
+        $realPath = realpath($webRoot.'/'.$path);
+
+        if (!file_exists($realPath)) {
+            $timestamp = time();
+        } else {
+            // Get the last updated timestamp of the file.
+            $timestamp = filemtime($realPath);
+        }
+
+        return $path . '?' . $timestamp;
+
     }
 }

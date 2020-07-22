@@ -215,84 +215,21 @@
 
 {% block scripttop %}
     {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) %}
-        {#{ include('FaFrontendBundle:Default:home-css.html.twig') }#}
-        {{ include('FaAdBundle:AdList:owl-carousel-2-css.html.twig') }}
+        {% stylesheets filter='uglifycss' output='bundles/css/compiled/search-result.css'
+            'bundles/fafrontend/css/ad-list.css'
+        %}
+            <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
+        {% endstylesheets %}
     {% endif %}
 {% endblock %}
 
 {% block body %}
-
-<style>
-ul.fourlocationlist { margin: 10px auto 0px auto;text-align:center; }
-ul.fourlocationlist li { display:inline; list-style-type: none; }
-ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
-
-.boost-ribbon { display:none; }
-.boosted_ad .boost-ribbon { display:block;background:url(/bundles/fafrontend/images/featured-arrow.svg) no-repeat;width:25px;height:25px;position:absolute;right:0px;top:0px;text-indent:100%;overflow:hidden;white-space:nowrap;z-index:1}
-.boosted_ad .boost-ribbon span {right: -21px;position: relative;top: 6px;color: #ffffff;}
-
-.businessExposureCarousel { margin:30px 0px 50px; }
-#shop-user-item-slider .owl-stage { transform:none !important; }
-.bus-shop-user-item-slider { padding:0px 0px; }
-.bus-shop-user-item-slider .owl-item .item {width:100%;border:0;}
-.bus-shop-user-item-slider .list-img {width:164px;height:123px}
-.bus-shop-user-item-slider .list-img img {max-width:164px;max-height:123px}
-.bus-shop-user-item-slider .list-price {float:none;text-align:left;margin:10px 0 0 0}
-.bus-shop-user-item-slider h3 {float:none;font-size:14px !important;overflow:hidden;height: 45px !important;padding: 0px 10px !important; }
-
-.bus-shop-user-item-slider .owl-prev, .bus-shop-user-item-slider .owl-next {top:40%;position:absolute;width:40px}
-.bus-shop-user-item-slider .owl-item .item {margin:auto}
-.bus-shop-user-item-slider .owl-item .busad-item { width:164px;float:left;border:1px solid #eee;margin:0px 15px; }
-.bus-shop-user-item-slider .owl-item .busad-item:first-child { margin-left:15px; }
-.bus-shop-user-item-slider .owl-item .busad-item:last-child { margin-right:1px; }
-.businessExposureCarousel .fa-slider .owl-controls .owl-buttons div { background:transparent !important; }
-.businessExposureCarousel .fa-slider .owl-controls .owl-buttons div img { top:60% !important }
-.bus-det-box h2 { height: 50px;overflow: hidden;line-height: 24px !important;font-size: 16px !important;}
-.bus-abt-us-div { height:220px; max-height:230px; overflow:hidden;padding-left:30px;padding-right:30px; }
-.bus-shop-user-item-slider item:hover h3.featured-single, .fa-slider .owl-item .item:hover h3.featured-single { color:#313133 !important; }
-#busshop-user-single-item-slider .bus-abt-us-div p { margin-bottom:0px;line-height:20px }
-.bus-shop-user-item-slider h3.featured-single { font-family:'Bree Serif',serif;height:auto;font-size:18px;font-weight:400 }
-
-@media only screen and (min-width:960px) and (max-width:1151px) {
-	.bus-shop-user-item-slider .busad-item .list-img, .bus-shop-user-item-slider .busad-item .list-img img {width:145px;}
-	.bus-shop-user-item-slider .owl-item .busad-item { width:145px; margin:0px 10px; }
-	.bus-shop-user-item-slider .owl-item .busad-item:first-child { margin-left:20px; }
-	.bus-shop-user-item-slider .owl-item .busad-item:last-child { margin-right:0px; }
-}
-@media only screen and (min-width:760px) and (max-width:959px) {
-	.bus-shop-user-item-slider .owl-item .busad-item { margin:0px 8px; }
-	.bus-shop-user-item-slider .owl-item .busad-item:first-child { margin-left:8px; }
-	.bus-shop-user-item-slider .owl-item .busad-item:last-child { margin-right:0px; }
-}
-@media only screen and (min-width:641px) and (max-width:759px) {
-	.bus-shop-user-item-slider .busad-item .list-img, .bus-shop-user-item-slider .busad-item .list-img img {width:130px;}
-	.bus-shop-user-item-slider .owl-item .busad-item { width:130px; margin:0px 8px; }
-	.bus-shop-user-item-slider .owl-item .busad-item:first-child { margin-left:15px; }
-	.bus-shop-user-item-slider .owl-item .busad-item:last-child { margin-right:0px; }
-	.bus-det-box h2 {  width:100%;text-align:center !important;margin: 0px 0px !important; float: none !important;height: 50px; overflow: auto; text-overflow: initial;white-space:normal; }
-}
-@media only screen and (min-width:320px) and (max-width:640px) {
-	.bus-shop-user-item-slider .busad-item .list-img, .bus-shop-user-item-slider .busad-item .list-img img {width:130px;}
-	.bus-shop-user-item-slider .owl-item .busad-item { width:130px; margin:0px 8px; }
-	.bus-shop-user-item-slider .owl-item .busad-item:first-child { margin-left:15px; }
-	.bus-shop-user-item-slider .owl-item .busad-item:last-child { margin-right:0px; }
-
-   .bus-shop-user-item-slider .bus-det-box { width: 75%;text-align: center;margin: auto !important;float: none !important; }
-   .bus-shop-user-item-slider .exposure-logo, 
-   .bus-shop-user-item-slider .exposure-logo-thumb, 
-   .bus-shop-user-item-slider .exposure-logo-thumb .profile-placeholder {
- 	  width:175px !important;height:120px !important;margin:0 auto !important;float:none !important;
-   }
-   .bus-det-box h2 {  width: 175px;margin: 10px auto 0px; float: none !important;height: auto; overflow: auto; text-overflow: initial;white-space:normal;}
-}
-
-#fa_left_search_item__distance-button { width:100% !important; }
-.buildersbay-list-logo { background:url(/bundles/fafrontend/images/Builders-Bay.png) 100% 100% no-repeat;width: 124px;height: 40px; }
-.mcn-logo { background:url(/bundles/fafrontend/images/MCN-logo-1.png) 100% 100% no-repeat;width: 124px;height: 58px; }
-.studentjob-list-logo { background:url(/bundles/fafrontend/images/studentjob.png) 100% 100% no-repeat;width: 124px;height: 124px; }
-</style>
 {% if displayRecommendedSlot is defined and displayRecommendedSlot==1 %}
-    {{ include('FaAdBundle:AdList:recommended_slot_css.html.twig') }}
+    {% stylesheets filter='uglifycss' output='bundles/css/compiled/recommended-slots.css'
+        'bundles/fafrontend/css/recommended-slots.css'
+    %}
+        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
+    {% endstylesheets %}
 {% endif %}
 
  {% set showAdultAlert = 0 %}
