@@ -43,11 +43,19 @@
     
     {{ include('FaFrontendBundle::scriptTop.html.twig') }}
     {% block scripttop %}{% endblock %}
-    {{ include('FaFrontendBundle::fa-main-css.html.twig') }}
+    {#
+        main-css.css - Common CSS - taken from src/Fa/Bundle/FrontendBundle/Resources/views/main-css.html.twig - moved from src/Fa/Bundle/FrontendBundle/Resources/views/scriptTop.html.twig
+        main.css - Common CSS - taken from src/Fa/Bundle/FrontendBundle/Resources/views/fa-main-css-new.html.twig
+        simple-layout.css - taken from src/Fa/Bundle/FrontendBundle/Resources/views/new-fa-main-css.html.twig
+    #}
+    {% stylesheets filter='uglifycss' output='bundles/css/compiled/fa-main.css'
+        'bundles/fafrontend/css/main-css.css'
+        'bundles/fafrontend/css/main.css'
+        'bundles/fafrontend/css/simple-layout.css'
+    %}
+        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
+    {% endstylesheets %}
     
-    {{ include('FaFrontendBundle::new-fa-main-css.html.twig') }}
-    
-
     {# {% stylesheets filter='uglifycss' output='bundles/css/compiled/simpleLayout.css'
         'bundles/fafrontend/css/style.css'
         'bundles/fafrontend/css/responsive.css'
