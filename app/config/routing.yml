@@ -373,4 +373,9 @@ FaUserBundle_user_address_book_admin:
     resource: '@FaUserBundle/Resources/config/routing/user_address_book_admin.yml'
     prefix:   /admin/user_address_book
     schemes:  [http|https]
-    
+
+fa_adult_blog:
+    path:     /adult-services/blog/
+    host: '%fa.main.host%'
+    schemes:  [https]
+    defaults: { _controller: FaFrontendBundle:Adult:blog }
