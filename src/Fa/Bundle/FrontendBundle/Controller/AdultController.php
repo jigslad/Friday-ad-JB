@@ -74,13 +74,13 @@ class AdultController extends ThirdPartyLoginController
         $featuredAdvertisers = $this->getFeaturedAdvertisers($request, $cookieLocationDetails);
         
         //get blog details from external site
-        $blogArray = array(
+        /*$blogArray = array(
             '0'=>array('url'=>AdultHomepageRepository::EXTERNAL_BLOG_URL1,'btn'=>AdultHomepageRepository::EXTERNAL_BLOG_BTN1),
             '1'=> array('url'=>AdultHomepageRepository::EXTERNAL_BLOG_URL2,'btn'=>AdultHomepageRepository::EXTERNAL_BLOG_BTN2)            
         );
         
         $externalSiteBlogDetails = array();
-        $externalSiteBlogDetails  = CommonManager::getWordpressBlogDetails($blogArray);
+        $externalSiteBlogDetails  = CommonManager::getWordpressBlogDetails($blogArray);*/
         
         $entityCacheManager = $this->container->get('fa.entity.cache.manager');
         $seoLocationName    = $entityCacheManager->getEntityNameById('FaEntityBundle:Location', LocationRepository::COUNTY_ID);
@@ -105,12 +105,35 @@ class AdultController extends ThirdPartyLoginController
             'seoLocationName' => $seoLocationName,
             'businessExposureUsersDetails' => $featuredAdvertisers,
             'form' => $form->createView(),
-            'externalSiteBlogDetails' => $externalSiteBlogDetails,
+            /*'externalSiteBlogDetails' => $externalSiteBlogDetails,*/
             'bannersArray' => $bannersArray,
             'latestAdultAds' => $latestAdultAds,
             'featureAds' => $featureAds,
         );
         return $this->render('FaFrontendBundle:Adult:index.html.twig', $parameters);
+    }
+
+    /**
+     * Adult Blog action.
+     *
+     * @param Request $request A Request object.
+     *
+     * @param Response A Response object.
+     * @return Response
+     */
+    public function blogAction(Request $request)
+    {
+        //get blog details from external site
+        $blogArray = array(
+            '0'=>array('url'=>AdultHomepageRepository::EXTERNAL_BLOG_URL1,'btn'=>AdultHomepageRepository::EXTERNAL_BLOG_BTN1),
+            '1'=> array('url'=>AdultHomepageRepository::EXTERNAL_BLOG_URL2,'btn'=>AdultHomepageRepository::EXTERNAL_BLOG_BTN2)
+        );
+
+        $parameters  = array(
+            'externalSiteBlogDetails' => CommonManager::getWordpressBlogDetails($blogArray)
+        );
+
+        return $this->render('FaFrontendBundle:Adult:homePageLatestBlog.html.twig', $parameters);
     }
 
     /**

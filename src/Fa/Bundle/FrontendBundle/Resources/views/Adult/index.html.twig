@@ -158,17 +158,10 @@
         </div>
     </div>
 	{% endif %}
-	
-	{% if externalSiteBlogDetails|length %}
-    <div class="homepage-row">
-        <div class="row">
-            <div class="columns">
-                <div class="homepage-title">{{'Latest from the blog'|trans({}, 'frontend-homepage')}}</div>
-             </div>
-                {{ include('FaFrontendBundle:Adult:homePageLatestBlog.html.twig', {'divId': 'recently-viwed-item-slider', 'ads': '', noImageColor:'grey'}) }}
-            </div>
-        </div>
-	{% endif %}
+
+    <div>
+        <iframe id="externalAdultBlog" type="text/html" width="100%" height="200px" src="{{ path('fa_adult_blog') }}" frameborder="0"></iframe>
+    </div>
 	
 	{# <div class="homepage-row white-bg">
     {% if mobileDetectManager.isMobile() %}
