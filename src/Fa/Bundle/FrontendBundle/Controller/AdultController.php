@@ -12,6 +12,7 @@
 namespace Fa\Bundle\FrontendBundle\Controller;
 
 use Fa\Bundle\AdBundle\Form\AdultHomePageSearchType;
+use Fa\Bundle\ContentBundle\Repository\SeoToolRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -127,6 +128,7 @@ class AdultController extends ThirdPartyLoginController
         // set location in cookie.
         $cookieValue = $this->setLocationInCookie($request);
         $searchParams     = $request->get('searchParams');
+        $seoToolRepository = $this->getRepository('FaContentBundle:SeoTool');
 
         // get location from cookie
         if ($cookieValue) {
@@ -164,6 +166,15 @@ class AdultController extends ThirdPartyLoginController
 
         $featureAds  = $this->getAdultFeatureAds($request, $cookieLocationDetails);
 
+        $seoFields = [];
+        $seoPageRules = $seoToolRepository->getSeoRulesKeyValueArray(SeoToolRepository::HOME_PAGE, $this->container);
+        if (! empty($seoPageRules[SeoToolRepository::HOME_PAGE.'_global'])) {
+            $seoPageRule = $seoPageRules[SeoToolRepository::HOME_PAGE.'_global'];
+            if (! empty($seoPageRule)) {
+                $seoFields = CommonManager::getSeoFields($seoPageRule);
+            }
+        }
+
         $formManager  = $this->get('fa.formmanager');
         $form               = $formManager->createForm(AdultHomePageSearchType::class, null, array('method' => 'GET', 'action' => $this->generateUrl('ad_landing_page_search_result')));
         $parameters = array(
@@ -172,10 +183,58 @@ class AdultController extends ThirdPartyLoginController
             'businessExposureUsersDetails' => $featuredAdvertisers,
             'form' => $form->createView(),
             'bannersArray' => $bannersArray,
-            'latestAdultAds' => $latestAdultAds,
-            'featureAds' => $featureAds,
+            'latestAdultAds' => array(
+                'ads' => $latestAdultAds,
+                'img_alts' => empty($latestAdultAds) ? [] : $seoToolRepository->getSeoPageRuleDetailForAds($latestAdultAds, SeoToolRepository::ADVERT_IMG_ALT, $this->container),
+                'ad_urls' => empty($latestAdultAds) ? [] : $this->getAdUrls($latestAdultAds),
+                'img_paths' => empty($latestAdultAds) ? [] : $this->getAdImagePaths($latestAdultAds),
+                'root_category_name' => empty($latestAdultAds) ? [] : $this->getRootCategoryName($latestAdultAds)
+            ),
+            'featureAds' => array(
+                'ads' => $featureAds,
+                'img_alts' => empty($featureAds) ? [] : $seoToolRepository->getSeoPageRuleDetailForAds($featureAds, SeoToolRepository::ADVERT_IMG_ALT, $this->container),
+                'ad_urls' => empty($featureAds) ? [] : $this->getAdUrls($featureAds),
+                'img_paths' => empty($featureAds) ? [] : $this->getAdImagePaths($featureAds),
+                'root_category_name' => empty($featureAds) ? [] : $this->getRootCategoryName($featureAds)
+            ),
+            'seoFields' => $seoFields
         );
-        return $this->renderWithTwigParameters('FaFrontendBundle:Adult:indexNew.html.twig', $parameters);
+        return $this->renderWithTwigParameters('FaFrontendBundle:Adult:indexNew.html.twig', $parameters, $request);
+    }
+
+    private function getAdUrls($adObjs)
+    {
+        $adUrls = [];
+        $adRoutingManager = $this->container->get('fa_ad.manager.ad_routing');
+
+        foreach ($adObjs as $adObj) {
+            $adUrls[$adObj[AdSolrFieldMapping::ID]] = $adRoutingManager->getDetailUrl($adObj);
+        }
+
+        return $adUrls;
+    }
+
+    private function getAdImagePaths($adObjs)
+    {
+        $imagePaths = [];
+        $adImageRepository = $this->getRepository('FaAdBundle:AdImage');
+
+        foreach ($adObjs as $adObj) {
+            $imagePaths[$adObj[AdSolrFieldMapping::ID]] = $adImageRepository->getImagePath($this->container, $adObj, '300X225', 1);
+        }
+
+        return $imagePaths;
+    }
+
+    private function getRootCategoryName($adObjs)
+    {
+        $rootCategoryName = [];
+
+        foreach ($adObjs as $adObj) {
+            $rootCategoryName[$adObj[AdSolrFieldMapping::ID]] = CommonManager::getCategoryClassNameById($adObj[AdSolrFieldMapping::ROOT_CATEGORY_ID], true);
+        }
+
+        return $rootCategoryName;
     }
 
     /**
@@ -645,7 +704,7 @@ class AdultController extends ThirdPartyLoginController
         return null;
     }
 
-    private function renderWithTwigParameters($view, $parameters)
+    private function renderWithTwigParameters($view, $parameters, $request)
     {
         if ($this->isAuth()) {
             //check for own ad.
@@ -663,7 +722,13 @@ class AdultController extends ThirdPartyLoginController
 
             $userCart = $this->getRepository('FaPaymentBundle:Cart')->getUserCart($loggedInUserId, $this->container);
             $parameters['userDetail'] = $this->getRepository('FaPaymentBundle:Transaction')->getCartDetail($userCart->getId());
+        } else {
+            $parameters['totalUnreadMsg'] = 0;
         }
+
+        $location = $request->get('location');
+        $locationDetails = $this->getRepository('FaEntityBundle:Location')->getLocationDetailForHeaderCategories($this->container, $request, $location);
+        $parameters['headerCategories'] = $this->getRepository('FaEntityBundle:Category')->getAdultHeaderCategories($this->container, $locationDetails);
 
         return $this->render($view, $parameters);
     }

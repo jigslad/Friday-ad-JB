@@ -6,15 +6,6 @@
 {% set adRepository = fetch_repository('FaAdBundle:Ad') %}
 {% set adPropertyRepository = fetch_repository('FaAdBundle:AdProperty') %}
 {% set adForSaleRepository = fetch_repository('FaAdBundle:AdForSale') %}
-{% set seoToolRepository = fetch_repository('FaContentBundle:SeoTool') %}
-{% set seoPageRule = {} %}
-{% set seoPageRules = seoToolRepository.getSeoRulesKeyValueArray(constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::HOME_PAGE'), container) %}
-{% if seoPageRules[constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::HOME_PAGE')~'_global'] is defined and seoPageRules[constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::HOME_PAGE')~'_global']|length %}
-    {% set seoPageRule = seoPageRules[constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::HOME_PAGE')~'_global'] %}
-{% endif %}
-{% if seoPageRule|length %}
-    {% set seoFields = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSeoFields', [seoPageRule]) %}
-{% endif %}
 
 {% block page_title %}
     {% if seoFields.page_title is defined %}
@@ -81,23 +72,23 @@
         <div class="row">
             <div class="columns">
             	<div class="browse-by-category large-19 discover-adult-categories ">Browse by category</div>
-                {# {% cache 'home|page|'~locationId~'front/home_page_discover' 1800 %} #}
-                <div class="discover-categories large-20 discover-adult-categories text-center">
-                    {% set adRoutingManager = container.get('fa_ad.manager.ad_routing') %}
+                {% cache 'home|page|'~locationId~'front/home_page_discover' 1800 %}
+                    <div class="discover-categories large-20 discover-adult-categories text-center">
+                        {% set adRoutingManager = container.get('fa_ad.manager.ad_routing') %}
 
-                    <a href="{{ adRoutingManager.getCategoryUrlById(locationId, escortsId) }}" class="discover-escorts ga-ahpDiscover">{{'Escorts'|trans({}, 'frontend-homepage')}}</a>
+                        <a href="{{ adRoutingManager.getCategoryUrlById(locationId, escortsId) }}" class="discover-escorts ga-ahpDiscover">{{'Escorts'|trans({}, 'frontend-homepage')}}</a>
 
-                    <a href="{{ adRoutingManager.getCategoryUrlById(locationId, adultContactId) }}" class="discover-adult-contacts ga-ahpDiscover">{{'Adult Contacts'|trans({}, 'frontend-homepage')}}</a>
+                        <a href="{{ adRoutingManager.getCategoryUrlById(locationId, adultContactId) }}" class="discover-adult-contacts ga-ahpDiscover">{{'Adult Contacts'|trans({}, 'frontend-homepage')}}</a>
 
-                    <a href="{{ adRoutingManager.getCategoryUrlById(locationId, fetishRoleplayId) }}" class="discover-fetish-and-roleplay ga-ahpDiscover">{{'Fetish and Role Play'|trans({}, 'frontend-homepage')}}</a>
+                        <a href="{{ adRoutingManager.getCategoryUrlById(locationId, fetishRoleplayId) }}" class="discover-fetish-and-roleplay ga-ahpDiscover">{{'Fetish and Role Play'|trans({}, 'frontend-homepage')}}</a>
 
-                    <a href="{{ adRoutingManager.getCategoryUrlById(locationId, gayMaleEscortId) }}" class="discover-gay-male-escort ga-ahpDiscover">{{'Gay Male Escort'|trans({}, 'frontend-homepage')}}</a>
+                        <a href="{{ adRoutingManager.getCategoryUrlById(locationId, gayMaleEscortId) }}" class="discover-gay-male-escort ga-ahpDiscover">{{'Gay Male Escort'|trans({}, 'frontend-homepage')}}</a>
 
-                    <a href="{{ adRoutingManager.getCategoryUrlById(locationId, adultIndustryJobsId) }}" class="discover-adult-industry-jobs ga-ahpDiscover">{{'Adult Industry Jobs'|trans({}, 'frontend-homepage')}}</a>
+                        <a href="{{ adRoutingManager.getCategoryUrlById(locationId, adultIndustryJobsId) }}" class="discover-adult-industry-jobs ga-ahpDiscover">{{'Adult Industry Jobs'|trans({}, 'frontend-homepage')}}</a>
 
-                    <a href="{{ adRoutingManager.getCategoryUrlById(locationId, adultMassageId) }}" class="discover-adult-massage ga-ahpDiscover">{{'Adult Massage'|trans({}, 'frontend-homepage')}}</a>
-                </div>
-                    {# {% endcache %} #}
+                        <a href="{{ adRoutingManager.getCategoryUrlById(locationId, adultMassageId) }}" class="discover-adult-massage ga-ahpDiscover">{{'Adult Massage'|trans({}, 'frontend-homepage')}}</a>
+                     </div>
+                {% endcache %}
             </div>
         </div>
     </div>
@@ -117,7 +108,7 @@
                 <div class="homepage-title">{{'Latest ads'|trans({}, 'frontend-homepage')}}</div>
             </div>
 	        <div class="medium-24 large-15 columns">
-                {{ include('FaFrontendBundle:Adult:homePageLatestAds.html.twig', {'divId': 'featured-top-item-slider', 'ads': ''}) }}
+                {{ include('FaFrontendBundle:Adult:homePageLatestAdsNew.html.twig', {'divId': 'featured-top-item-slider', 'ads': ''}) }}
             </div>
             <div class="medium-24 large-9 columns latest-ad-r-block">
 	        	<div class="mb20 square-block-img ga-ahpBlockAResults">

@@ -1469,11 +1469,26 @@ class CategoryRepository extends NestedTreeRepository
      */
     public function getRootCategoryName($categoryId, $container = null, $isCamelCase = false)
     {
+        if ($container) {
+            $tableName   = $this->getCategoryTableName();
+            $cacheKey    = $tableName.'|'.__FUNCTION__.'|'.$categoryId . '|' . $isCamelCase;
+            $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
+
+            if ($cachedValue !== false) {
+                return $cachedValue;
+            }
+        }
+
         $categoryPath = $this->getCategoryPathArrayById($categoryId, false, $container);
         $categories   = array_keys($categoryPath);
 
         if (isset($categories[0]) && $categories[0]) {
-            return CommonManager::getCategoryClassNameById($categories[0], $isCamelCase);
+            $name = CommonManager::getCategoryClassNameById($categories[0], $isCamelCase);
+
+            if ($container) {
+                CommonManager::setCacheVersion($container, $cacheKey, $name);
+            }
+            return $name;
         }
 
         return null;
@@ -2416,14 +2431,14 @@ class CategoryRepository extends NestedTreeRepository
     public function getAdultHeaderCategories($container = null, $locationDetails = array())
     {
         $em = $container->get('doctrine')->getManager();
+        $locationSlug = null;
+        if (!empty($locationDetails) && isset($locationDetails['slug'])) {
+            $locationSlug = $locationDetails['slug'];
+        }
+        if (!$locationSlug) {
+            $locationSlug = $em->getRepository('FaEntityBundle:Location')->getSlugById(LocationRepository::COUNTY_ID, $container);
+        }
         if ($container) {
-            $locationSlug = null;
-            if (!empty($locationDetails) && isset($locationDetails['slug'])) {
-                $locationSlug = $locationDetails['slug'];
-            }
-            if (!$locationSlug) {
-                $locationSlug = $em->getRepository('FaEntityBundle:Location')->getSlugById(LocationRepository::COUNTY_ID, $container);
-            }
             $culture     = CommonManager::getCurrentCulture($container);
             $tableName   = $this->getCategoryTableName();
             $cacheKey    = $tableName.'|'.__FUNCTION__.'|'.$locationSlug.'|'.$culture;
@@ -2498,7 +2513,17 @@ class CategoryRepository extends NestedTreeRepository
                         }
                     }
                     
-                    $categoryArray = array('name' => $category['name'], 'id' => $category['id'], 'slug' => $category['slug'], 'count' => $count, 'full_slug' => $category['full_slug'], 'children' => array(),'header_sortable'=>$category['is_children_header_sortable'],'sort_ord'=> $category['header_sort_order'] );
+                    $categoryArray = array(
+                        'name' => $category['name'],
+                        'id' => $category['id'],
+                        'slug' => $category['slug'],
+                        'count' => $count,
+                        'full_slug' => $category['full_slug'],
+                        'children' => array(),
+                        'header_sortable'=>$category['is_children_header_sortable'],
+                        'sort_ord'=> $category['header_sort_order'],
+                        'list_url' => $container->get('fa_ad.manager.ad_routing')->getCategoryUrl($locationSlug, $category['full_slug'])
+                    );
 
                     if ($category['lvl'] == 1 && !array_key_exists($category['id'], $headerCategoryArray)) {
                         if (isset($categoryClassArray[$category['id']])) {
