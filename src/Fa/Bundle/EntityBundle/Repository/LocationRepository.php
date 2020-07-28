@@ -1483,6 +1483,15 @@ class LocationRepository extends BaseEntityRepository
     }
 
 
+    /**
+     * Get location details of header categories.
+     *
+     * @param integer $location  Id of location.
+     * @param Request $request  request object
+     * @param object $container Container interface.
+     *
+     * @return array  $locationDetails
+     */
     public function getLocationDetailForHeaderCategories($container, $request, $location=null)
     {
         $locationDetails = CommonManager::getLocationDetailFromParamsOrCookie($location, $request, $container);

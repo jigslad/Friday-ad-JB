@@ -29,7 +29,12 @@
     {% endif %}
 {% endblock %}
 {% block scripttop %}
-    {{ include('FaFrontendBundle:Default:home-css.html.twig') }}
+    {# CSS for homepage - taken from src/Fa/Bundle/FrontendBundle/Resources/views/Default/home-css.html.twig #}
+    {% stylesheets filter='uglifycss' output='bundles/css/compiled/fa-home.css'
+        'bundles/fafrontend/css/home.css'
+    %}
+        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
+    {% endstylesheets %}
 {% endblock %}
 
 {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
@@ -140,7 +145,7 @@
                 <div class="homepage-title">{{'Featured advertisers'|trans({}, 'frontend-homepage')}}</div>
             </div>
             <div class="columns">
-                {{ include('FaFrontendBundle:Adult:homePageFeaturedAdvertisers.html.twig') }}
+                {{ include('FaFrontendBundle:Adult:homePageFeaturedAdvertisersNew.html.twig') }}
             </div>
         </div>
     </div>
@@ -150,9 +155,7 @@
         <div class="row">
             <div class="columns">
                 <div class="homepage-title">{{'Browse adverts in popular locations'|trans({}, 'frontend-homepage')}}</div>
-                {# {% cache 'home|page|location|block'~currentDevice 3600 %} #}
-                    {{ render(controller('FaFrontendBundle:Adult:showAdultHomePageLocationBlocks')) }}
-                {# {% endcache %} #}
+                {{ include('FaFrontendBundle:Adult:showAdultHomePageLocationBlocks.html.twig', {'blocks': locationBlocks['blocks'], 'searchParams': locationBlocks['searchParams']}) }}
             </div>
         </div>
     </div>

@@ -339,6 +339,15 @@ class SeoToolRepository extends EntityRepository
         return $seoRule;
     }
 
+    /**
+     * Get active seo page rule detail for array of ad solr objects.
+     *
+     * @param object  $ads        array of Ad solr obj.
+     * @param string  $page       Page code.
+     * @param object  $container  Container identifier.
+     *
+     * @return array
+     */
     public function getSeoPageRuleDetailForAds($ads, $page, $container = null)
     {
         $seoRuleArray = $this->getSeoRulesKeyValueArray($page, $container);

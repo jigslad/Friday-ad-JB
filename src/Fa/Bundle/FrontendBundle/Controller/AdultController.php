@@ -11,21 +11,21 @@
 
 namespace Fa\Bundle\FrontendBundle\Controller;
 
-use Fa\Bundle\AdBundle\Form\AdultHomePageSearchType;
-use Fa\Bundle\ContentBundle\Repository\SeoToolRepository;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Cookie;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Fa\Bundle\EntityBundle\Repository\LocationRepository;
-use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Fa\Bundle\AdBundle\Solr\AdSolrFieldMapping;
-use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
-use Fa\Bundle\UserBundle\Controller\ThirdPartyLoginController;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Fa\Bundle\AdBundle\Form\AdultHomePageSearchType;
+use Fa\Bundle\EntityBundle\Repository\EntityRepository;
+use Fa\Bundle\ContentBundle\Repository\SeoToolRepository;
+use Fa\Bundle\EntityBundle\Repository\LocationRepository;
+use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Fa\Bundle\UserBundle\Solr\UserShopDetailSolrFieldMapping;
-/*use Fa\Bundle\FrontendBundle\Repository\AdultHomepageRepository;*/
+use Fa\Bundle\UserBundle\Controller\ThirdPartyLoginController;
+use Fa\Bundle\FrontendBundle\Repository\AdultHomepageRepository;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 
 /**
@@ -197,11 +197,72 @@ class AdultController extends ThirdPartyLoginController
                 'img_paths' => empty($featureAds) ? [] : $this->getAdImagePaths($featureAds),
                 'root_category_name' => empty($featureAds) ? [] : $this->getRootCategoryName($featureAds)
             ),
-            'seoFields' => $seoFields
+            'seoFields' => $seoFields,
+            'locationBlocks' => $this->getAdultHPLocationBlocks()
         );
         return $this->renderWithTwigParameters('FaFrontendBundle:Adult:indexNew.html.twig', $parameters, $request);
     }
 
+    /**
+     * The function to get the location details to be displayed in the adult page
+     * 
+     * @return array
+     */
+    private function getAdultHPLocationBlocks()
+    {
+        $searchParams = array();
+        // Active ads
+        $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
+        $data['query_filters']['item']['category_id'] = CategoryRepository::ADULT_ID;
+
+        $blocks = array(
+            AdSolrFieldMapping::DOMICILE_ID => array(
+                'heading' => $this->get('translator')->trans('Top Counties', array(), 'frontend-search-list-block'),
+                'search_field_name' => 'item__location',
+                'facet_limit'          => 30,
+                'repository'           => 'FaEntityBundle:Location',
+            ),
+            AdSolrFieldMapping::TOWN_ID => array(
+                'heading' => $this->get('translator')->trans('Top Towns', array(), 'frontend-search-list-block'),
+                'search_field_name' => 'item__location',
+                'facet_limit'          => 30,
+                'repository'           => 'FaEntityBundle:Location',
+            ),
+        );
+
+        $data['facet_fields'] = array(
+            AdSolrFieldMapping::DOMICILE_ID => array('limit' => $blocks[AdSolrFieldMapping::DOMICILE_ID]['facet_limit'], 'min_count' => 1),
+            AdSolrFieldMapping::TOWN_ID     => array('limit' => $blocks[AdSolrFieldMapping::TOWN_ID]['facet_limit'], 'min_count' => 1),
+        );
+
+        // initialize solr search manager service and fetch data based of above prepared search options
+        $this->get('fa.solrsearch.manager')->init('ad', '', $data);
+        $solrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
+        // fetch result set from solr
+        $facetResult = $this->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
+
+        if ($facetResult) {
+            $facetResult = get_object_vars($facetResult);
+            foreach ($blocks as $solrFieldName => $block) {
+                if (isset($facetResult[$solrFieldName]) && !empty($facetResult[$solrFieldName])) {
+                    $blocks[$solrFieldName]['facet'] = get_object_vars($facetResult[$solrFieldName]);
+                }
+            }
+        }
+
+        return array(
+            'blocks'          => $blocks,
+            'searchParams'    => $searchParams,
+        );
+    }
+
+    /**
+     * to get ad urls of solr ad objs
+     *
+     * @param $adObjs
+     *
+     * @return array
+     */
     private function getAdUrls($adObjs)
     {
         $adUrls = [];
@@ -214,6 +275,13 @@ class AdultController extends ThirdPartyLoginController
         return $adUrls;
     }
 
+    /**
+     * to get ad images of solr ad objs
+     *
+     * @param $adObjs
+     *
+     * @return array
+     */
     private function getAdImagePaths($adObjs)
     {
         $imagePaths = [];
@@ -226,6 +294,13 @@ class AdultController extends ThirdPartyLoginController
         return $imagePaths;
     }
 
+    /**
+     * to get root category name of solr ad objs
+     *
+     * @param $adObjs
+     *
+     * @return array
+     */
     private function getRootCategoryName($adObjs)
     {
         $rootCategoryName = [];
@@ -247,7 +322,8 @@ class AdultController extends ThirdPartyLoginController
         $businessExposureUsers = array();
         $businessExposureMiles = array();
         $categoryId            =  CategoryRepository::ADULT_ID;
-        
+        $adRoutingManager = $this->container->get('fa_ad.manager.ad_routing');
+
         $location     = null;
         
         if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['location']) && $cookieLocationDetails['location']) {
@@ -287,6 +363,7 @@ class AdultController extends ThirdPartyLoginController
                             'company_logo' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_COMPANY_LOGO_PATH]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_COMPANY_LOGO_PATH] : null),
                             'status_id' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID] : null),
                             'user_name' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME] : null),
+                            'profile_url' => $adRoutingManager->getProfilePageUrl($businessExposureUser[UserShopDetailSolrFieldMapping::ID])
                         );
                     }
                 }
@@ -298,7 +375,15 @@ class AdultController extends ThirdPartyLoginController
         
         return $businessExposureUserDetails;
     }
-    
+
+    /**
+     * to get business exposure user details
+     *
+     * @param $searchParams
+     * @param $exposureMiles
+     *
+     * @return solr object
+     */
     private function getBusinessExposureUser($searchParams, $exposureMiles)
     {
         $data               = array();
@@ -351,50 +436,7 @@ class AdultController extends ThirdPartyLoginController
      */
     public function showAdultHomePageLocationBlocksAction(Request $request)
     {
-        $searchParams = array();
-        // Active ads
-        $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
-        $data['query_filters']['item']['category_id'] = CategoryRepository::ADULT_ID;
-        
-        $blocks = array(
-            AdSolrFieldMapping::DOMICILE_ID => array(
-                'heading' => $this->get('translator')->trans('Top Counties', array(), 'frontend-search-list-block'),
-                'search_field_name' => 'item__location',
-                'facet_limit'          => 30,
-                'repository'           => 'FaEntityBundle:Location',
-            ),
-            AdSolrFieldMapping::TOWN_ID => array(
-                'heading' => $this->get('translator')->trans('Top Towns', array(), 'frontend-search-list-block'),
-                'search_field_name' => 'item__location',
-                'facet_limit'          => 30,
-                'repository'           => 'FaEntityBundle:Location',
-            ),
-        );
-        
-        $data['facet_fields'] = array(
-            AdSolrFieldMapping::DOMICILE_ID => array('limit' => $blocks[AdSolrFieldMapping::DOMICILE_ID]['facet_limit'], 'min_count' => 1),
-            AdSolrFieldMapping::TOWN_ID     => array('limit' => $blocks[AdSolrFieldMapping::TOWN_ID]['facet_limit'], 'min_count' => 1),
-        );
-        
-        // initialize solr search manager service and fetch data based of above prepared search options
-        $this->get('fa.solrsearch.manager')->init('ad', '', $data);
-        $solrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
-        // fetch result set from solr
-        $facetResult = $this->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
-        
-        if ($facetResult) {
-            $facetResult = get_object_vars($facetResult);
-            foreach ($blocks as $solrFieldName => $block) {
-                if (isset($facetResult[$solrFieldName]) && !empty($facetResult[$solrFieldName])) {
-                    $blocks[$solrFieldName]['facet'] = get_object_vars($facetResult[$solrFieldName]);
-                }
-            }
-        }
-        
-        $parameters = array(
-            'blocks'          => $blocks,
-            'searchParams'    => $searchParams,
-        );
+        $parameters = $this->getAdultHPLocationBlocks();
         
         return $this->render('FaFrontendBundle:Adult:showAdultHomePageLocationBlocks.html.twig', $parameters);
     }
