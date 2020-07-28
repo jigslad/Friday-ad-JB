@@ -11,21 +11,21 @@
 
 namespace Fa\Bundle\FrontendBundle\Controller;
 
-use Fa\Bundle\AdBundle\Form\AdultHomePageSearchType;
-use Fa\Bundle\ContentBundle\Repository\SeoToolRepository;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Cookie;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Fa\Bundle\EntityBundle\Repository\LocationRepository;
-use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Fa\Bundle\AdBundle\Solr\AdSolrFieldMapping;
-use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
-use Fa\Bundle\UserBundle\Controller\ThirdPartyLoginController;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Fa\Bundle\AdBundle\Form\AdultHomePageSearchType;
+use Fa\Bundle\EntityBundle\Repository\EntityRepository;
+use Fa\Bundle\ContentBundle\Repository\SeoToolRepository;
+use Fa\Bundle\EntityBundle\Repository\LocationRepository;
+use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Fa\Bundle\UserBundle\Solr\UserShopDetailSolrFieldMapping;
-/*use Fa\Bundle\FrontendBundle\Repository\AdultHomepageRepository;*/
+use Fa\Bundle\UserBundle\Controller\ThirdPartyLoginController;
+use Fa\Bundle\FrontendBundle\Repository\AdultHomepageRepository;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 
 /**
@@ -202,6 +202,13 @@ class AdultController extends ThirdPartyLoginController
         return $this->renderWithTwigParameters('FaFrontendBundle:Adult:indexNew.html.twig', $parameters, $request);
     }
 
+    /**
+     * to get ad urls of solr ad objs
+     *
+     * @param $adObjs
+     *
+     * @return array
+     */
     private function getAdUrls($adObjs)
     {
         $adUrls = [];
@@ -214,6 +221,13 @@ class AdultController extends ThirdPartyLoginController
         return $adUrls;
     }
 
+    /**
+     * to get ad images of solr ad objs
+     *
+     * @param $adObjs
+     *
+     * @return array
+     */
     private function getAdImagePaths($adObjs)
     {
         $imagePaths = [];
@@ -226,6 +240,13 @@ class AdultController extends ThirdPartyLoginController
         return $imagePaths;
     }
 
+    /**
+     * to get root category name of solr ad objs
+     *
+     * @param $adObjs
+     *
+     * @return array
+     */
     private function getRootCategoryName($adObjs)
     {
         $rootCategoryName = [];
@@ -247,7 +268,8 @@ class AdultController extends ThirdPartyLoginController
         $businessExposureUsers = array();
         $businessExposureMiles = array();
         $categoryId            =  CategoryRepository::ADULT_ID;
-        
+        $adRoutingManager = $this->container->get('fa_ad.manager.ad_routing');
+
         $location     = null;
         
         if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['location']) && $cookieLocationDetails['location']) {
@@ -287,6 +309,7 @@ class AdultController extends ThirdPartyLoginController
                             'company_logo' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_COMPANY_LOGO_PATH]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_COMPANY_LOGO_PATH] : null),
                             'status_id' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID] : null),
                             'user_name' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME] : null),
+                            'profile_url' => $adRoutingManager->getProfilePageUrl($businessExposureUser[UserShopDetailSolrFieldMapping::ID])
                         );
                     }
                 }
@@ -298,7 +321,15 @@ class AdultController extends ThirdPartyLoginController
         
         return $businessExposureUserDetails;
     }
-    
+
+    /**
+     * to get business exposure user details
+     *
+     * @param $searchParams
+     * @param $exposureMiles
+     *
+     * @return solr object
+     */
     private function getBusinessExposureUser($searchParams, $exposureMiles)
     {
         $data               = array();

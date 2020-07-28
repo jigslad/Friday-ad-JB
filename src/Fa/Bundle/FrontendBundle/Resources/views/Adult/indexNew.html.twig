@@ -140,7 +140,7 @@
                 <div class="homepage-title">{{'Featured advertisers'|trans({}, 'frontend-homepage')}}</div>
             </div>
             <div class="columns">
-                {{ include('FaFrontendBundle:Adult:homePageFeaturedAdvertisers.html.twig') }}
+                {{ include('FaFrontendBundle:Adult:homePageFeaturedAdvertisersNew.html.twig') }}
             </div>
         </div>
     </div>
@@ -150,9 +150,9 @@
         <div class="row">
             <div class="columns">
                 <div class="homepage-title">{{'Browse adverts in popular locations'|trans({}, 'frontend-homepage')}}</div>
-                {# {% cache 'home|page|location|block'~currentDevice 3600 %} #}
+                {% cache 'home|page|location|block'~currentDevice 3600 %}
                     {{ render(controller('FaFrontendBundle:Adult:showAdultHomePageLocationBlocks')) }}
-                {# {% endcache %} #}
+                {% endcache %}
             </div>
         </div>
     </div>
