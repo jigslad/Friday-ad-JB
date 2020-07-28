@@ -38,15 +38,15 @@
 </div>
 <div class="mt20 latest-ads">
     {% for latestAdultAd in latestAdultAds['ads']  %}
-        {% set rootCategoryName =  latestAdultAds['root_category_name'][attribute(featureAd, const_ad_id)] %}
+        {% set rootCategoryName =  latestAdultAds['root_category_name'][attribute(latestAdultAd, const_ad_id)] %}
         {% set latestAdultAdSolrMapping = 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::' %}
         {% set adUserDetail = null %}
         {% if attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'USER_ID')) is defined and userDetails[attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'USER_ID'))] is defined %}
             {% set adUserDetail = userDetails[attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'USER_ID'))] %}
         {% endif %}
-        {% set adUrl = latestAdultAds['ad_urls'][attribute(featureAd, const_ad_id)] %}
-        {% set imagePath = latestAdultAds['img_paths'][attribute(featureAd, const_ad_id)] %}
-        {% set imageAltString = latestAdultAds['img_alts'][attribute(featureAd, const_ad_id)] %}
+        {% set adUrl = latestAdultAds['ad_urls'][attribute(latestAdultAd, const_ad_id)] %}
+        {% set imagePath = latestAdultAds['img_paths'][attribute(latestAdultAd, const_ad_id)] %}
+        {% set imageAltString = latestAdultAds['img_alts'][attribute(latestAdultAd, const_ad_id)] %}
         <div class="small-12 medium-8 large-8 columns mb20 list">
             <div class="card">
                 <div class="item" data-equalizer-watch>
