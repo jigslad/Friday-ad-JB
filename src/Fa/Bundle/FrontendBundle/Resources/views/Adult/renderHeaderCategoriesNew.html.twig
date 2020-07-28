@@ -1,0 +1,363 @@
+{% set container = fetch_container_instance() %}
+{% set adultCategoryId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+{% set liveCamsUrl = constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') %}
+<style>
+#tablet-header-menus { display:none; }
+@media only screen and (min-width: 760px) and (max-width: 959px)  {
+	#tablet-header-menus { display:block; }
+	#desktop-header-menus { display:none; }
+}
+</style>
+<div id="tablet-header-menus">
+<a href="{{ path('fa_frontend_homepage') }}" class="main_category backtofad">Friday-Ad Homepage</a>
+<a class="tab-cat-link ga-ahpCatDropdown" id="tab_cat_link">Adult Categories</a>
+{# {% cache 'header|menu|'~location_id|replace({' ':''})~'front/header_menu_tablet' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0 ) (staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isBot', [container]) ? 600 : 86400) %} #}
+    <div id="top_category_menu" class="real-tablet">
+    	<div class="row main-row">
+    		<div class="columns">
+    			<ul class="inside-top-category-menu">
+			         {% for categoryId, categoryArray in headerCategories %}
+			             {% if categoryId == adultCategoryId %}
+                        	{% set listurl = path('fa_adult_homepage') %}
+                        {% else %}
+                            {% set listurl = categoryArray['list_url'] %}
+                        {% endif %}
+			             <li class="inside-top-category-menu">
+			                 <a href="{{ listurl }}" class="main_category inside-top-category-menu">{{categoryArray['name']}}</a>
+			                 {% if categoryArray['children'] is defined and categoryArray['children']|length %}                                
+			                     <ul class="sub-cat-menu inside-top-category-menu">
+			                         <li class="inside-top-category-menu">
+			                             <div class="row inside-top-category-menu">
+			                                 {% set columns = 3 %}
+			                                 {% set ctr = 0 %}
+			                                 {% set totalItems = categoryArray['children']|length %}
+			                                 {% if categoryId == adultCategoryId %}
+			                                     {% set totalItems = totalItems + 1 %}
+			                                 {% endif %}
+			                                 {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
+			                                 {% set extraColumn = (totalItems % columns) %}
+			                                 {% set colCounter = {} %}
+			                                 {% set staticTxtCnt = 0 %}
+			                                 {% for i in 0..columns-1 %}
+			                                     {% if loop.index0 < extraColumn %}
+			                                         {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
+			                                     {% else  %}
+			                                         {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
+			                                     {% endif %}
+			                                 {% endfor %}
+			                                 {% set subCategoryArray = categoryArray['children']|keys %}
+			                                 {% for i in 0..columns-1 %}
+                                                     {% for k in 0..colCounter[i]-1 %}
+                                                         {% if subCategoryArray[ctr] is defined %}
+                                                            {% if categoryArray['children'][subCategoryArray[ctr]]['is_static'] is defined and categoryArray['children'][subCategoryArray[ctr]]['is_static'] %}
+                                                                <div class="large-8 columns inside-top-category-menu"><a href="{{ categoryArray['children'][subCategoryArray[ctr]]['link_url'] }}" class="inside-top-category-menu">{{ categoryArray['children'][subCategoryArray[ctr]]['link_text'] }}</a></div>
+                                                            {% else %}
+                                                                <div class="large-8 columns inside-top-category-menu"><a href="{{ categoryArray['children'][subCategoryArray[ctr]]['list_url'] }}" class="inside-top-category-menu">{{categoryArray['children'][subCategoryArray[ctr]]['name']}}</a></div>
+                                                            {% endif %}
+                                                         {% elseif staticTxtCnt == 0 and categoryId == adultCategoryId %}
+                                                				{% if (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox) or (app.request.cookies.has('is_over_18')) %}
+                                                            		<div class="large-8 columns inside-top-category-menu"><a href="{{ liveCamsUrl }}" rel="nofollow" target="_blank" >Live Sex Cams</a></div>
+                                                            	    <div class="large-8 columns inside-top-category-menu"><a href="https://engine.partylemons.com/?414907182" rel="nofollow" target="_blank" >MILF Hookups</a></div>
+                                                	            {% endif %}
+                                                				{% set staticTxtCnt = 1 %}
+                                                         {% endif %}
+                                                         {% set ctr = ctr + 1 %}
+                                                     {% endfor %}
+                                                
+			                                 {% endfor %}
+			                             </div>
+			                         </li>
+			                     </ul>
+			                 {% endif %}
+			             </li>
+			         {% endfor %}
+			    </ul>
+    		</div>
+    	</div>
+    </div>
+{# {% endcache %} #}
+</div>
+<div id="desktop-header-menus">
+{% if headerCategories|length %}
+{# {% cache 'header|menu|'~location_id|replace({' ':''})~'front/header_menu' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0 ) (staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isBot', [container]) ? 600 : 86400) %} #}
+    <ul class="left hide-for-small-only real-desktop" id="top_category_menu">
+    	<li class="">
+			<div><a href="{{ path('fa_frontend_homepage') }}" class="main_category backtofad">Friday-Ad Homepage</a></div>
+		</li>
+        {% for categoryId, categoryArray in headerCategories %}
+        {% if categoryId == adultCategoryId %}
+            {% set listurl = path('fa_adult_homepage') %}
+        {% else %} 
+            {% set listurl = categoryArray['list_url'] %}
+        {% endif %}
+            <li class="has-dropdown">
+                <a href="{{ listurl }}" class="main_category ga-ahpCatDropdown">Adult Categories</a>
+                {% if categoryArray['children'] is defined and categoryArray['children']|length %}                    
+                    <ul class="dropdown">
+                        <li>
+                            <div class="row">
+                                {% set columns = 4 %}
+                                {% set ctr = 0 %}
+                                {% set totalItems = categoryArray['children']|length %}
+                                {% if categoryId == adultCategoryId %}
+                                	{% set totalItems = totalItems + 1 %}
+                                {% endif %}
+                                {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
+                                {% set extraColumn = (totalItems % columns) %}
+                                {% set colCounter = {} %}
+                                {% set staticTxtCnt = 0 %}
+                                {% for i in 0..columns-1 %}
+                                    {% if loop.index0 < extraColumn %}
+                                        {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
+                                    {% else  %}
+                                        {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% set subCategoryArray = categoryArray['children']|keys %}
+                                {% for i in 0..columns-1 %}
+                                        {% for k in 0..colCounter[i]-1 %}
+                                            {% if subCategoryArray[ctr] is defined %}
+                                                {% if categoryArray['children'][subCategoryArray[ctr]]['is_static'] is defined and categoryArray['children'][subCategoryArray[ctr]]['is_static'] %}
+                                                    <div class="large-6 columns"><a href="{{ categoryArray['children'][subCategoryArray[ctr]]['link_url'] }}">{{ categoryArray['children'][subCategoryArray[ctr]]['link_text'] }}</a></div>
+                                                {% else %}
+                                                    {% if secondLevelCategoryArray['is_static'] is defined and secondLevelCategoryArray['is_static'] %}
+                                                        {% set listurl1 = secondLevelCategoryArray['link_url'] %}
+                                                    {% else %}
+                                                        {% set listurl1 = categoryArray['children'][subCategoryArray[ctr]]['list_url'] %}
+                                                    {% endif %}
+                                                    <div class="large-6 columns"><a href="{{ listurl1 }}">{{categoryArray['children'][subCategoryArray[ctr]]['name']}}</a></div>
+                                                {% endif %}
+                                             {% elseif staticTxtCnt == 0 and categoryId == adultCategoryId %}
+                                            	{% if (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox) or (app.request.cookies.has('is_over_18')) %}
+                                            		<div class="large-6 columns live-cam-url"><a href="{{ liveCamsUrl }}" rel="nofollow" target="_blank" >Live Sex Cams</a></div>
+                                            	    <div class="large-6 columns live-cam-url"><a href="https://engine.partylemons.com/?414907182" rel="nofollow" target="_blank">MILF Hookups</a></div>
+                                            	{# {% else %}
+                                            		<div class="large-6 columns live-cam-url"><a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup(0,'live-cams');">Live Sex Cams</a></div>
+                                            		<div class="large-6 columns live-cam-url"><a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup(0,'live-cams');" >MILF Hookups</a></div> #}
+                                            	{% endif %}
+                                            	{% set staticTxtCnt = 1 %}
+                                            {% endif %}                                            
+                                            {% set ctr = ctr + 1 %}
+                                        {% endfor %}
+                                {% endfor %}
+                                
+                            </div>
+                        </li>
+                    </ul>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+   {# {% endcache %} #}
+{% endif %}
+</div>
+<div class="fullwidth show-for-small-only">
+<ul class="show-for-small-only login-menu">
+    <li class="m-back-to-hp"><a href="{{ path('fa_frontend_homepage') }}"><span class="back-arrow-icon">&nbsp;</span>FRIDAY-AD HOMEPAGE</a></li>
+</ul>
+<dl class="accordion show-for-small-only" data-accordion>
+    {% if headerCategories|length %}
+    {# {% cache 'header|menu|'~location_id~'front/header_menu_mobile' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0) 86400 %} #}
+    <dd class="accordion-navigation">
+        <a href="#cat-mob-menu ga-ahpCatDropdown">MENU</a>
+        <div id="cat-mob-menu" class="content active">
+            <ul class="show-for-small-only">               
+                {% for categoryId, categoryArray in headerCategories %}
+                    {% set secondLevelLength = 0 %}
+                    {% if categoryArray['children'] is defined and categoryArray['children']|length %}
+                        {% set secondLevelLength = categoryArray['children']|length %}
+                    {% endif %}
+                    
+                    {% set listurl1 = categoryArray['list_url'] %}
+                    {% if secondLevelLength %}
+                        {% for secondLevelCategoryId, secondLevelCategoryArray in categoryArray['children'] %}
+                            {% set thirdLevelLength = 0 %}
+                            {% if secondLevelCategoryArray['children'] is defined and secondLevelCategoryArray['children']|length %}
+                                {% set thirdLevelLength = secondLevelCategoryArray['children']|length %}
+                            {% endif %}
+                            <li {% if thirdLevelLength %}class="has-dropdown"{% else %}class="last-level"{% endif %}>
+                            {% if secondLevelCategoryArray['is_static'] is defined and secondLevelCategoryArray['is_static'] %}
+                                {% set listurl1 = secondLevelCategoryArray['link_url'] %}
+                            {% else %}
+                                {% set listurl1 = secondLevelCategoryArray['list_url'] %}
+                            {% endif %}
+                            <a href="{{ listurl1 }}" class="main_category">{% if secondLevelCategoryArray['class'] is defined %}<span class="{{secondLevelCategoryArray['class']}} mob-adul-menu-icons">&nbsp;</span>{% endif %}{% if secondLevelCategoryArray['is_static'] is defined and secondLevelCategoryArray['is_static'] %} {{secondLevelCategoryArray['link_text']}} {% else %}{{secondLevelCategoryArray['name']}}{% endif %} <span>({{ secondLevelCategoryArray['count'] is defined?secondLevelCategoryArray['count']|number_format:0}} {{'ads'|trans()}})</span></a>
+                            {% if thirdLevelLength %}
+                                 <ul class="dropdown">
+                                     {% for thirdLevelCategoryId, thirdLevelCategoryArray in secondLevelCategoryArray['children'] %}
+                                        {% set fourthLevelLength = 0 %}
+                                        {% if thirdLevelCategoryArray['children'] is defined and thirdLevelCategoryArray['children']|length %}
+                                            {% set fourthLevelLength = thirdLevelCategoryArray['children']|length %}
+                                        {% endif %}
+                                        <li {% if fourthLevelLength %}class="has-dropdown"{% else %}class="last-level"{% endif %}>
+                                        {% set listurl1 = thirdLevelCategoryArray['list_url'] %}
+                                         <a href="{{ listurl1 }}">{{thirdLevelCategoryArray['name']}}</a>
+                                         {% if fourthLevelLength %}
+                                             <ul class="dropdown">
+                                                 {% for fourthLevelCategoryId, fourthLevelCategoryArray in thirdLevelCategoryArray['children'] %}
+                                                    {% set fifthLevelLength = 0 %}
+                                                    {% if fourthLevelCategoryArray['children'] is defined and fourthLevelCategoryArray['children']|length %}
+                                                        {% set fifthLevelLength = fourthLevelCategoryArray['children']|length %}
+                                                    {% endif %}
+                                                     <li {% if fifthLevelLength %}class="has-dropdown"{% else %}class="last-level"{% endif %}>
+                                                     {% set listurl1 = fourthLevelCategoryArray['list_url'] %}
+                                                     <a href="{{ listurl1 }}">{{fourthLevelCategoryArray['name']}}</a>
+                                                     {% if fifthLevelLength %}
+                                                         <ul class="dropdown">
+                                                             {% for fifthLevelCategoryId, fifthLevelCategoryArray in fourthLevelCategoryArray['children'] %}
+                                                                {% set sixthLevelLength = 0 %}
+                                                                {% if fifthLevelCategoryArray['children'] is defined and fifthLevelCategoryArray['children']|length %}
+                                                                    {% set sixthLevelLength = fifthLevelCategoryArray['children']|length %}
+                                                                {% endif %}
+                                                                <li {% if sixthLevelLength %}class="has-dropdown"{% else %}class="last-level"{% endif %}>
+                                                                {% set listurl1 = fifthLevelCategoryArray['list_url'] %}
+                                                                 <a href="{{ listurl1 }}">{{fifthLevelCategoryArray['name']}}</a>
+                                                                 {% if sixthLevelLength %}
+                                                                     <ul class="dropdown">
+                                                                         {% for sixthLevelCategoryId, sixthLevelCategoryArray in fifthLevelCategoryArray['children'] %}
+                                                                             <li class="last-level">
+                                                                                {% set listurl1 = sixthLevelCategoryArray['list_url'] %}
+                                                                                <a href="{{ listurl1 }}">{{sixthLevelCategoryArray['name']}}</a>
+                                                                             </li>
+                                                                         {% endfor %}
+                                                                     </ul>
+                                                                 {% endif %}
+                                                                 </li>
+                                                             {% endfor %}
+                                                         </ul>
+                                                     {% endif %}
+                                                 {% endfor %}
+                                                 </li>
+                                             </ul>
+                                         {% endif %}
+                                         </li>
+                                     {% endfor %}
+                                 </ul>
+                                   </li>
+                             {% endif %}
+                               
+                                 
+                            {% endfor %}
+                        	<li class="last-level">
+                        		{% if thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox %}
+                            		<a href="{{ liveCamsUrl }}" rel="nofollow" target="_blank" ><span class="mob-adult mob-adul-menu-icons">&nbsp;</span>Live Sex Cams</a>
+                            		<a href="https://engine.partylemons.com/?414907182" rel="nofollow" target="_blank" ><span class="mob-adult mob-adul-menu-icons">&nbsp;</span>MILF Hookups</a>
+                        		{# {% else %}
+                            		<a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" ><span class="mob-adult mob-adul-menu-icons">&nbsp;</span>Live Sex Cams</a>
+                            		<a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" ><span class="mob-adult mob-adul-menu-icons">&nbsp;</span>MILF Hookups</a> #}
+                	            {% endif %}
+                    		</li>
+                        {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </dd>
+   {# {% endcache %} #}
+{% endif %}
+
+{% if app.user %}
+    <dd class="accordion-navigation">
+        <a href="#db-mob-menu">MY DASHBOARD</a>
+        <div id="db-mob-menu" class="content">
+            <ul class="db-menu-mobile">
+                <li><a href="{{ path('dashboard_home') }}" class="home-icon">{{ 'Dashboard home'|trans({}, 'frontend-header-usermenu') }}</a></li>
+                <li><a href="{{ path('user_ad_message_all') }}" class="messages-icon">{{ 'Messages'|trans({}, 'frontend-header-usermenu') }}{% if totalUnreadMsg > 0 %}&nbsp;<span class="notification-digit">({{totalUnreadMsg}})</span>{% endif %}</a></li>
+                <li><a href="{{ path('user_review_list') }}" class="reviews-icon">{{ 'Reviews'|trans({}, 'frontend-header-usermenu') }}</a></li>
+                <li><a href="{{ path('manage_my_ads_active') }}" id="manage-my-ad-id" class="manage-item-icon">{{'Manage my ads'|trans({}, 'frontend-header-usermenu')}}</a></li>
+                <li><a href="{{ path('my_profile') }}" class="manage-profile-icon">{{ 'Edit profile'|trans({}, 'frontend-header-usermenu') }}</a></li>
+                <li><a href="{{ path('my_orders') }}" class="orders-icon">{{ 'Orders'|trans({}, 'frontend-header-usermenu') }}</a></li>
+                <li><a href="{{ path('my_favourite') }}" class="my-favourites-icon">{{ 'My favourites'|trans({}, 'frontend-header-usermenu') }}</a></li>
+                <li><a href="{{ path('list_search_agent') }}" id="saved-search-header-id" class="saved-searches-icon">{{'Alerts and searches'|trans({}, 'frontend-header-usermenu')}}</a></li>
+                <li><a href="{{ path('my_purchases') }}" id="shop-header-id" class="purchase-icon">{{ 'Purchases'|trans({}, 'frontend-header-usermenu') }}</a></li>
+                <li><a href="{{ path('my_account') }}" id="account-header-id" class="account-icon">{{ 'Account'|trans({}, 'frontend-header-usermenu') }}</a></li>
+            </ul>
+        </div>
+    </dd>
+{% endif %}
+</dl>
+</div>
+<div id="show-confirm-age-main"></div>
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        $('#tab_cat_link').click(function() {
+            if ($('#tab_cat_link').hasClass('active')) {
+                $('#tab_cat_link').removeClass('active');
+            } else {
+            	$('#tab_cat_link').addClass('active');
+            }
+            $("#top_category_menu").toggle();
+
+        });
+
+        $(document).click(function(e){
+            if(!$('.tab-cat-link').is(e.target) || !$('.tab-cat-link').has(e.target)) {
+                if (!($(e.target).hasClass('inside-top-category-menu'))) {
+                    $("#top_category_menu").hide();
+                    $('#tab_cat_link').removeClass('active');
+                }
+            }
+        });
+    });
+
+$(window).on('load', function() {
+    $(document).foundation('topbar', 'reflow');
+    $(document).foundation('accordion', 'reflow');
+    $(document).foundation({
+          accordion: {
+            // allow multiple accordion panels to be active at the same time
+            multi_expand: false,
+          }
+    });
+});
+    $(document).click(function (e){
+        var container = $("#top_bar_nav");
+        if (!container.is(e.target) // if the target of the click isn't the container...
+            && container.has(e.target).length === 0){ // ... nor a descendant of the container
+            container.removeClass('expanded');
+            $("#top_bar_nav_menu_span").removeClass("menu-on");
+            $("#top_bar_nav_menu_span").addClass("menu");
+        }
+      });
+     $(document).ready(function() {
+     	$("#top_bar_nav_menu_span").click(function (e){
+             if (!$("#top_bar_nav").hasClass("expanded")) {
+                 $("#top_bar_nav_menu_span").removeClass("menu");
+                 $("#top_bar_nav_menu_span").addClass("menu-on");
+             } else {
+                 $("#top_bar_nav_menu_span").removeClass("menu-on");
+                 $("#top_bar_nav_menu_span").addClass("menu");
+             }
+         });
+     });
+
+     $("#cat-mob-menu").click(function (e){
+         scrollToElement('#cat-mob-menu', '1000', -100);
+     });
+
+
+function showAdultPopup(modify = 0,elem = null)
+{ 
+    var redrctlink= null;
+    if(elem!=null) {
+    	if(elem=='live-cams') {
+    	    redrctlink = "{{ liveCamsUrl }}";
+    	} 
+    }
+    $.ajax({
+        type: "POST",
+        url: "{{path('eighteen_plus_warnning_model_ajax')}}",
+        data: {'popupModification': modify,'redirectlink':redrctlink}
+    })
+    .done(function(response) {
+        if(response.success) {
+            $("#show-confirm-age-main").html(response.htmlContent);
+            $('#eighteenPlusWarnningModel').foundation('reveal', 'open',{
+            	close_on_background_click: false,
+            	close_on_esc: false,
+            });
+        }
+    });
+	
+}
+</script>

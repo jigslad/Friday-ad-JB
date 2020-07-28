@@ -1,0 +1,74 @@
+{% set const_root_category_id = constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::ROOT_CATEGORY_ID') %}
+{% set const_ad_id = constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::ID') %}
+
+<div class="owl-carousel fa-slider" id="{{ divId }}" data-equalizer style="display: block">  {# id="popular_shops_slider1" #}
+    {% for featureAd in featureAds['ads'] %}
+        {% set rootCategoryName =  featureAds['root_category_name'][attribute(featureAd, const_ad_id)] %}
+        {% set featureAdSolrMapping = 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::' %}
+        {% set adUrl = featureAds['ad_urls'][attribute(featureAd, const_ad_id)] %}
+        {% set adUserDetail = null %}
+        {% if attribute(featureAd, constant(featureAdSolrMapping ~ 'USER_ID')) is defined and userDetails[attribute(featureAd, constant(featureAdSolrMapping ~ 'USER_ID'))] is defined %}
+            {% set adUserDetail = userDetails[attribute(featureAd, constant(featureAdSolrMapping ~ 'USER_ID'))] %}
+        {% endif %}
+
+        {% set imageAltString = featureAds['img_alts'][attribute(featureAd, const_ad_id)] %}
+        <div class="item" data-equalizer-watch>
+            <a class="tricky-link" href="{{ adUrl }}">
+                {% if attribute(featureAd, constant(featureAdSolrMapping ~ 'TITLE')) is defined %}
+                    {{trim_text(attribute(featureAd, constant(featureAdSolrMapping ~ 'TITLE')), 30)|raw}}
+                {% endif %}
+            </a>
+            <div class="featured-ribbon">featured</div>
+            {% set imagePath = featureAds['img_paths'][attribute(featureAd, const_ad_id)] %}
+
+            <div class="list-img {% if not imagePath %}similar-placeholder{% endif %}">
+                {% if imagePath %}
+                    <img class="lazyOwl" src="{{ imagePath }}" alt="{{ imageAltString }}" />
+                {% else %}
+                    <img class="lazyOwl" src="{{ asset_url('fafrontend/images/no-image.svg') }}"  alt="{{ imageAltString }}" />
+                {% endif %}
+            </div>
+            <h3>
+                {% if attribute(featureAd, constant(featureAdSolrMapping ~ 'TITLE')) is defined %}
+                    {{trim_text(attribute(featureAd, constant(featureAdSolrMapping ~ 'TITLE')), 30)|raw}}
+                {% endif %}
+            </h3>
+        </div>
+    {% endfor %}
+</div>
+<div class="mt20 latest-ads">
+    {% for latestAdultAd in latestAdultAds['ads']  %}
+        {% set rootCategoryName =  latestAdultAds['root_category_name'][attribute(featureAd, const_ad_id)] %}
+        {% set latestAdultAdSolrMapping = 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::' %}
+        {% set adUserDetail = null %}
+        {% if attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'USER_ID')) is defined and userDetails[attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'USER_ID'))] is defined %}
+            {% set adUserDetail = userDetails[attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'USER_ID'))] %}
+        {% endif %}
+        {% set adUrl = latestAdultAds['ad_urls'][attribute(featureAd, const_ad_id)] %}
+        {% set imagePath = latestAdultAds['img_paths'][attribute(featureAd, const_ad_id)] %}
+        {% set imageAltString = latestAdultAds['img_alts'][attribute(featureAd, const_ad_id)] %}
+        <div class="small-12 medium-8 large-8 columns mb20 list">
+            <div class="card">
+                <div class="item" data-equalizer-watch>
+                    <a class="tricky-link" href="{{ adUrl }}">
+                        {% if attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'TITLE')) is defined %}
+                            {{trim_text(attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'TITLE')), 30)|raw}}
+                        {% endif %}
+                    </a>
+                    <div class="list-img {% if not imagePath %}similar-placeholder{% endif %}">
+                        {% if imagePath %}
+                            <img class="lazyOwl" src="{{ imagePath }}" alt="{{ imageAltString }}" />
+                        {% else %}
+                            <img class="lazyOwl" src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
+                        {% endif %}
+                    </div>
+                    <h3>
+                        {% if attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'TITLE')) is defined %}
+                            {{trim_text(attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'TITLE')), 30)|raw}}
+                        {% endif %}
+                    </h3>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

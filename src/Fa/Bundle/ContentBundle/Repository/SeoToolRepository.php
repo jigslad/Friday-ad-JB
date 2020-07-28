@@ -339,6 +339,42 @@ class SeoToolRepository extends EntityRepository
         return $seoRule;
     }
 
+    public function getSeoPageRuleDetailForAds($ads, $page, $container = null)
+    {
+        $seoRuleArray = $this->getSeoRulesKeyValueArray($page, $container);
+        $imageAlts = [];
+
+        foreach ($ads as $adSolrObj) {
+            $adSolrObj = get_object_vars($adSolrObj);
+            $seoRule = null;
+            $categoryId = (isset($adSolrObj[AdSolrFieldMapping::CATEGORY_ID]) ? $adSolrObj[AdSolrFieldMapping::CATEGORY_ID] : null);
+            $categoryLevel = (isset($adSolrObj[AdSolrFieldMapping::CATEGORY_LEVEL]) ? ($adSolrObj[AdSolrFieldMapping::CATEGORY_LEVEL] - 1) : 0);
+
+            if (isset($seoRuleArray[$page . '_' . $categoryId])) {
+                $seoRule = $seoRuleArray[$page . '_' . $categoryId];
+            } else {
+                for ($i = $categoryLevel; $i >= 1; $i--) {
+                    $parentConst = 'a_parent_category_lvl_' . $i . '_id_i';
+                    $parentCategoryId = (isset($adSolrObj[$parentConst]) ? $adSolrObj[$parentConst] : null);
+                    if (isset($seoRuleArray[$page . '_' . $parentCategoryId])) {
+                        $seoRule = $seoRuleArray[$page . '_' . $parentCategoryId];
+                        break;
+                    }
+                }
+            }
+
+            if (!$seoRule && isset($seoRuleArray[$page . '_global'])) {
+                $seoRule = $seoRuleArray[$page . '_global'];
+            }
+
+            if (! empty($seoRule['image_alt'])) {
+                $imageAlts[$adSolrObj[AdSolrFieldMapping::ID]] = CommonManager::getAdImageAlt($container, $seoRule['image_alt'], $adSolrObj);
+            }
+        }
+
+        return $imageAlts;
+    }
+
     /**
      * Get active seo page rule detail by category id for search result.
      *
