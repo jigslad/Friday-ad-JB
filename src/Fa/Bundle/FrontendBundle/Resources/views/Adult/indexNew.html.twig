@@ -6,15 +6,6 @@
 {% set adRepository = fetch_repository('FaAdBundle:Ad') %}
 {% set adPropertyRepository = fetch_repository('FaAdBundle:AdProperty') %}
 {% set adForSaleRepository = fetch_repository('FaAdBundle:AdForSale') %}
-{% set seoToolRepository = fetch_repository('FaContentBundle:SeoTool') %}
-{% set seoPageRule = {} %}
-{% set seoPageRules = seoToolRepository.getSeoRulesKeyValueArray(constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::HOME_PAGE'), container) %}
-{% if seoPageRules[constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::HOME_PAGE')~'_global'] is defined and seoPageRules[constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::HOME_PAGE')~'_global']|length %}
-    {% set seoPageRule = seoPageRules[constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::HOME_PAGE')~'_global'] %}
-{% endif %}
-{% if seoPageRule|length %}
-    {% set seoFields = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSeoFields', [seoPageRule]) %}
-{% endif %}
 
 {% block page_title %}
     {% if seoFields.page_title is defined %}
@@ -38,12 +29,7 @@
     {% endif %}
 {% endblock %}
 {% block scripttop %}
-    {# CSS for homepage - taken from src/Fa/Bundle/FrontendBundle/Resources/views/Default/home-css.html.twig #}
-    {% stylesheets filter='uglifycss' output='bundles/css/compiled/fa-home.css'
-        'bundles/fafrontend/css/home.css'
-    %}
-        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
-    {% endstylesheets %}
+    {{ include('FaFrontendBundle:Default:home-css.html.twig') }}
 {% endblock %}
 
 {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
@@ -71,7 +57,7 @@
                 
 {% block body %}
 <div class="adul-hp">
-    <div class="{% if currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2:'fa_adult_homepage'} %}homepage-hero{% endif %}">
+    <div class="homepage-hero">
         <div class="hero-img">
             {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {}, 'isAdultHomeSearch': true } )) }}
             <div class="parallax-window" id="header_image_div"></div>
@@ -86,27 +72,23 @@
         <div class="row">
             <div class="columns">
             	<div class="browse-by-category large-19 discover-adult-categories ">Browse by category</div>
-                {# {% cache 'home|page|'~locationId~'front/home_page_discover' 1800 %} #}
-                <div class="discover-categories large-20 discover-adult-categories text-center">
-                    {% set linkParams = { 'item__location': locationId, 'item__category_id': escortsId } %}
-                    <a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}" class="discover-escorts ga-ahpDiscover">{{'Escorts'|trans({}, 'frontend-homepage')}}</a>
-                	
-                    {% set linkParams = { 'item__location': locationId, 'item__category_id': adultContactId } %}
-                    <a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}" class="discover-adult-contacts ga-ahpDiscover">{{'Adult Contacts'|trans({}, 'frontend-homepage')}}</a>
+                {% cache 'home|page|'~locationId~'front/home_page_discover' 1800 %}
+                    <div class="discover-categories large-20 discover-adult-categories text-center">
+                        {% set adRoutingManager = container.get('fa_ad.manager.ad_routing') %}
 
-                    {% set linkParams = { 'item__location': locationId, 'item__category_id': fetishRoleplayId } %}
-                    <a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}" class="discover-fetish-and-roleplay ga-ahpDiscover">{{'Fetish and Role Play'|trans({}, 'frontend-homepage')}}</a>
+                        <a href="{{ adRoutingManager.getCategoryUrlById(locationId, escortsId) }}" class="discover-escorts ga-ahpDiscover">{{'Escorts'|trans({}, 'frontend-homepage')}}</a>
 
-                    {% set linkParams = { 'item__location': locationId, 'item__category_id': gayMaleEscortId } %}
-                    <a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}" class="discover-gay-male-escort ga-ahpDiscover">{{'Gay Male Escort'|trans({}, 'frontend-homepage')}}</a>
+                        <a href="{{ adRoutingManager.getCategoryUrlById(locationId, adultContactId) }}" class="discover-adult-contacts ga-ahpDiscover">{{'Adult Contacts'|trans({}, 'frontend-homepage')}}</a>
 
-                    {% set linkParams = { 'item__location': locationId, 'item__category_id': adultIndustryJobsId } %}
-                    <a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}" class="discover-adult-industry-jobs ga-ahpDiscover">{{'Adult Industry Jobs'|trans({}, 'frontend-homepage')}}</a>
+                        <a href="{{ adRoutingManager.getCategoryUrlById(locationId, fetishRoleplayId) }}" class="discover-fetish-and-roleplay ga-ahpDiscover">{{'Fetish and Role Play'|trans({}, 'frontend-homepage')}}</a>
 
-                    {% set linkParams = { 'item__location': locationId, 'item__category_id': adultMassageId } %}
-                    <a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}" class="discover-adult-massage ga-ahpDiscover">{{'Adult Massage'|trans({}, 'frontend-homepage')}}</a>
-                </div>
-                    {# {% endcache %} #}
+                        <a href="{{ adRoutingManager.getCategoryUrlById(locationId, gayMaleEscortId) }}" class="discover-gay-male-escort ga-ahpDiscover">{{'Gay Male Escort'|trans({}, 'frontend-homepage')}}</a>
+
+                        <a href="{{ adRoutingManager.getCategoryUrlById(locationId, adultIndustryJobsId) }}" class="discover-adult-industry-jobs ga-ahpDiscover">{{'Adult Industry Jobs'|trans({}, 'frontend-homepage')}}</a>
+
+                        <a href="{{ adRoutingManager.getCategoryUrlById(locationId, adultMassageId) }}" class="discover-adult-massage ga-ahpDiscover">{{'Adult Massage'|trans({}, 'frontend-homepage')}}</a>
+                     </div>
+                {% endcache %}
             </div>
         </div>
     </div>
@@ -126,7 +108,7 @@
                 <div class="homepage-title">{{'Latest ads'|trans({}, 'frontend-homepage')}}</div>
             </div>
 	        <div class="medium-24 large-15 columns">
-                {{ include('FaFrontendBundle:Adult:homePageLatestAds.html.twig', {'divId': 'featured-top-item-slider', 'ads': ''}) }}
+                {{ include('FaFrontendBundle:Adult:homePageLatestAdsNew.html.twig', {'divId': 'featured-top-item-slider', 'ads': ''}) }}
             </div>
             <div class="medium-24 large-9 columns latest-ad-r-block">
 	        	<div class="mb20 square-block-img ga-ahpBlockAResults">
@@ -163,29 +145,6 @@
         </div>
     </div>
 	{% endif %}
-	
-	{# Commenting out adult blog section based on business decision
-    {% if externalSiteBlogDetails|length %}
-    <div class="homepage-row">
-        <div class="row">
-            <div class="columns">
-                <div class="homepage-title">{{'Latest from the blog'|trans({}, 'frontend-homepage')}}</div>
-             </div>
-                {{ include('FaFrontendBundle:Adult:homePageLatestBlog.html.twig', {'divId': 'recently-viwed-item-slider', 'ads': '', noImageColor:'grey'}) }}
-            </div>
-        </div>
-	{% endif %}
-	#}
-	
-	{# <div class="homepage-row white-bg">
-    {% if mobileDetectManager.isMobile() %}
-        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_RECTANGLE_BLOCK_MOBILE') %}
-        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
-    {% else %}
-        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_RECTANGLE_BLOCK') %}
-        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}    	
-    {% endif %}
-    </div> #}
 	
     <div class="homepage-row">
         <div class="row">
