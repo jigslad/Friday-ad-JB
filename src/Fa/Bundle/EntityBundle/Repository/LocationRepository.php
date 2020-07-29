@@ -1499,13 +1499,13 @@ class LocationRepository extends BaseEntityRepository
             if ($locationDetails['location']!='') {
                 $splitLocation = explode(',', $locationDetails['location']);
                 if (count($splitLocation)>1) {
-                    $locationDetails = $this->getRepository('FaEntityBundle:Location')->getArrayByTownId($locationDetails['town_id']);
+                    $locationDetails = $this->_em->getRepository('FaEntityBundle:Location')->getArrayByTownId($locationDetails['town_id']);
                 }
             }
         }
 
         if (!isset($locationDetails['location'])) {
-            $locationDetails['location'] = $this->getRepository('FaEntityBundle:Location')->getIdBySlug('uk');
+            $locationDetails['location'] = $this->_em->getRepository('FaEntityBundle:Location')->getIdBySlug('uk');
             $locationDetails['locality'] = null;
             $locationDetails['locality_id'] = 'uk';
             $locationDetails['slug'] = null;

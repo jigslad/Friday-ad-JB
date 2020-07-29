@@ -5,7 +5,7 @@
         {% set profilePageUrl = businessExposureUsersDetail['profile_url'] %}
         <div class="item" data-equalizer-watch>
             <a class="tricky-link" href="{{ profilePageUrl }}">{{ shopName }}</a>
-            {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [container, businessExposureUsersDetail['company_logo'], businessExposureUsersDetail['user_id'], null, null, true, true, businessExposureUsersDetail['status_id'], businessExposureUsersDetail['user_name']]) %}
+            {% set userCompanyLogo = businessExposureUsersDetail['user_logo'] %}
             {% set userName = businessExposureUsersDetail['user_name'] %}
             <div class="list-img">
                 {{ userCompanyLogo|raw }}
