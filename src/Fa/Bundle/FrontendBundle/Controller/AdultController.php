@@ -12,6 +12,7 @@
 namespace Fa\Bundle\FrontendBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Cookie;
+use Fa\Bundle\AdBundle\Form\AdTopSearchType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Fa\Bundle\AdBundle\Solr\AdSolrFieldMapping;
@@ -24,7 +25,6 @@ use Fa\Bundle\EntityBundle\Repository\LocationRepository;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Fa\Bundle\UserBundle\Solr\UserShopDetailSolrFieldMapping;
 use Fa\Bundle\UserBundle\Controller\ThirdPartyLoginController;
-use Fa\Bundle\FrontendBundle\Repository\AdultHomepageRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 
@@ -198,19 +198,94 @@ class AdultController extends ThirdPartyLoginController
                 'root_category_name' => empty($featureAds) ? [] : $this->getRootCategoryName($featureAds)
             ),
             'seoFields' => $seoFields,
-            'locationBlocks' => $this->getAdultHPLocationBlocks()
+            'locationBlocks' => $this->getAdultHPLocationBlocks(),
+            'topSearchForm' => $this->getTopSearchForm($request)
         );
         return $this->renderWithTwigParameters('FaFrontendBundle:Adult:indexNew.html.twig', $parameters, $request);
     }
 
     /**
+     * get adult footer static pages
+     *
+     * @param $request
+     *
+     * @return array
+     */
+    private function getAdultFooterStaticBlock(Request $request)
+    {
+        $staticPages = $this->getRepository('FaContentBundle:StaticPage')->getStaticPagesForFooter($this->container);
+        return array('staticPages' => $staticPages, 'currentRoute' => $request->get('currentRoute'));
+    }
+
+    /**
+     * get adult footer categories
+     *
+     * @return array
+     */
+    private function getAdultFooterCategories()
+    {
+        $locationDetails = array();
+        $locationDetails['location'] = null;
+        $footerCategories = $this->getRepository('FaEntityBundle:Category')->getFooterCategories($this->container, $locationDetails);
+        $parameters       = array('footerCategories' => $footerCategories, 'location_id' => $locationDetails['location']);
+
+        // fetch location directly
+        if (!$parameters['location_id']) {
+            $parameters['location_id'] = 'uk';
+        } else {
+            $parameters['location_id'] = $locationDetails['slug'];
+        }
+
+        $parameters['location'] = $locationDetails['location'];
+        $parameters['searchParams'] = [];
+
+        return $parameters;
+    }
+
+    /**
+     * top search form
+     *
+     * @param $request
+     *
+     * @return form
+     */
+    private function getTopSearchForm($request)
+    {
+        $formManager = $this->get('fa.formmanager');
+
+        $form        = $formManager->createForm(AdTopSearchType::class, null, array('method' => 'GET', 'action' => $this->generateUrl('ad_search_result')));
+
+        $bindSearchParams = array();
+        $searchParams     = $request->get('searchParams');
+
+        if ($searchParams && count($searchParams)) {
+            foreach ($form->all() as $field) {
+                if (isset($searchParams[$field->getName()])) {
+                    $bindSearchParams[$field->getName()] = $searchParams[$field->getName()];
+                }
+            }
+
+            if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
+                $bindSearchParams['tmpLeafLevelCategoryId'] = $searchParams['item__category_id'];
+                $cat = $this->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($searchParams['item__category_id'], false, $this->container);
+                $parent = $this->getRepository('FaEntityBundle:Category')->getCategoryArrayById(key($cat), $this->container);
+                if ($parent) {
+                    $bindSearchParams['item__category_id'] =  $parent['id'];
+                }
+            }
+            $form->submit($bindSearchParams);
+        }
+
+        return $form->createView();
+    }
+
+    /**
      * The function to get the location details to be displayed in the adult page
-     * 
+     *
      * @return array
      */
     private function getAdultHPLocationBlocks()
     {
-        $searchParams = array();
         // Active ads
         $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
         $data['query_filters']['item']['category_id'] = CategoryRepository::ADULT_ID;
@@ -236,6 +311,8 @@ class AdultController extends ThirdPartyLoginController
         );
 
         // initialize solr search manager service and fetch data based of above prepared search options
+        $entityCacheManager = $this->container->get('fa.entity.cache.manager');
+        $adRoutingManager = $this->container->get('fa_ad.manager.ad_routing');
         $this->get('fa.solrsearch.manager')->init('ad', '', $data);
         $solrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
         // fetch result set from solr
@@ -245,15 +322,17 @@ class AdultController extends ThirdPartyLoginController
             $facetResult = get_object_vars($facetResult);
             foreach ($blocks as $solrFieldName => $block) {
                 if (isset($facetResult[$solrFieldName]) && !empty($facetResult[$solrFieldName])) {
-                    $blocks[$solrFieldName]['facet'] = get_object_vars($facetResult[$solrFieldName]);
+                    $data = get_object_vars($facetResult[$solrFieldName]);
+
+                    foreach ($data as $location_id => $unknown) {
+                        $blocks[$solrFieldName]['facet'][$location_id]['search_result_url'] = $adRoutingManager->getCustomListingUrl([ ($block['search_field_name']) => $location_id],'adult-services/escorts');
+                        $blocks[$solrFieldName]['facet'][$location_id]['location_name'] = $entityCacheManager->getEntityNameById('FaEntityBundle:Location', $location_id);
+                    }
                 }
             }
         }
 
-        return array(
-            'blocks'          => $blocks,
-            'searchParams'    => $searchParams,
-        );
+        return $blocks;
     }
 
     /**
@@ -363,7 +442,8 @@ class AdultController extends ThirdPartyLoginController
                             'company_logo' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_COMPANY_LOGO_PATH]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_COMPANY_LOGO_PATH] : null),
                             'status_id' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID] : null),
                             'user_name' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME] : null),
-                            'profile_url' => $adRoutingManager->getProfilePageUrl($businessExposureUser[UserShopDetailSolrFieldMapping::ID])
+                            'profile_url' => $adRoutingManager->getProfilePageUrl($businessExposureUser[UserShopDetailSolrFieldMapping::ID]),
+                            'user_logo' => CommonManager::getUserLogo($this->container, $businessExposureUser[UserShopDetailSolrFieldMapping::USER_COMPANY_LOGO_PATH], $businessExposureUser[UserShopDetailSolrFieldMapping::ID], null, null, true, true, $businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID], $businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME])
                         );
                     }
                 }
@@ -436,7 +516,50 @@ class AdultController extends ThirdPartyLoginController
      */
     public function showAdultHomePageLocationBlocksAction(Request $request)
     {
-        $parameters = $this->getAdultHPLocationBlocks();
+        $searchParams = array();
+        // Active ads
+        $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
+        $data['query_filters']['item']['category_id'] = CategoryRepository::ADULT_ID;
+
+        $blocks = array(
+            AdSolrFieldMapping::DOMICILE_ID => array(
+                'heading' => $this->get('translator')->trans('Top Counties', array(), 'frontend-search-list-block'),
+                'search_field_name' => 'item__location',
+                'facet_limit'          => 30,
+                'repository'           => 'FaEntityBundle:Location',
+            ),
+            AdSolrFieldMapping::TOWN_ID => array(
+                'heading' => $this->get('translator')->trans('Top Towns', array(), 'frontend-search-list-block'),
+                'search_field_name' => 'item__location',
+                'facet_limit'          => 30,
+                'repository'           => 'FaEntityBundle:Location',
+            ),
+        );
+
+        $data['facet_fields'] = array(
+            AdSolrFieldMapping::DOMICILE_ID => array('limit' => $blocks[AdSolrFieldMapping::DOMICILE_ID]['facet_limit'], 'min_count' => 1),
+            AdSolrFieldMapping::TOWN_ID     => array('limit' => $blocks[AdSolrFieldMapping::TOWN_ID]['facet_limit'], 'min_count' => 1),
+        );
+
+        // initialize solr search manager service and fetch data based of above prepared search options
+        $this->get('fa.solrsearch.manager')->init('ad', '', $data);
+        $solrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
+        // fetch result set from solr
+        $facetResult = $this->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
+
+        if ($facetResult) {
+            $facetResult = get_object_vars($facetResult);
+            foreach ($blocks as $solrFieldName => $block) {
+                if (isset($facetResult[$solrFieldName]) && !empty($facetResult[$solrFieldName])) {
+                    $blocks[$solrFieldName]['facet'] = get_object_vars($facetResult[$solrFieldName]);
+                }
+            }
+        }
+
+        $parameters = array(
+            'blocks'          => $blocks,
+            'searchParams'    => $searchParams,
+        );
         
         return $this->render('FaFrontendBundle:Adult:showAdultHomePageLocationBlocks.html.twig', $parameters);
     }
@@ -771,6 +894,8 @@ class AdultController extends ThirdPartyLoginController
         $location = $request->get('location');
         $locationDetails = $this->getRepository('FaEntityBundle:Location')->getLocationDetailForHeaderCategories($this->container, $request, $location);
         $parameters['headerCategories'] = $this->getRepository('FaEntityBundle:Category')->getAdultHeaderCategories($this->container, $locationDetails);
+        $parameters['footerDetails'] = $this->getAdultFooterCategories();
+        $parameters['footerStaticBlock'] = $this->getAdultFooterStaticBlock($request);
 
         return $this->render($view, $parameters);
     }
