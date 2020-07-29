@@ -523,14 +523,14 @@ class AdultController extends ThirdPartyLoginController
 
         $blocks = array(
             AdSolrFieldMapping::DOMICILE_ID => array(
-                'heading' => $this->get('translator')->trans('Top Counties', array(), 'frontend-search-list-block'),
-                'search_field_name' => 'item__location',
+                'heading'              => $this->get('translator')->trans('Top Counties', array(), 'frontend-search-list-block'),
+                'search_field_name'    => 'item__location',
                 'facet_limit'          => 30,
                 'repository'           => 'FaEntityBundle:Location',
             ),
             AdSolrFieldMapping::TOWN_ID => array(
-                'heading' => $this->get('translator')->trans('Top Towns', array(), 'frontend-search-list-block'),
-                'search_field_name' => 'item__location',
+                'heading'              => $this->get('translator')->trans('Top Towns', array(), 'frontend-search-list-block'),
+                'search_field_name'    => 'item__location',
                 'facet_limit'          => 30,
                 'repository'           => 'FaEntityBundle:Location',
             ),

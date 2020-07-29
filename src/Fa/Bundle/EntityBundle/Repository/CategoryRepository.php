@@ -2445,7 +2445,7 @@ class CategoryRepository extends NestedTreeRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
             
             if ($cachedValue !== false) {
-                return $cachedValue;
+                //return $cachedValue;
             }
         }
         
