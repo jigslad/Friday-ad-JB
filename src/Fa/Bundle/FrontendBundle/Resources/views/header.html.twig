@@ -9,7 +9,7 @@
         }
     }
     </style>
-{% endif %} 
+{% endif %}
 <header class="relative">
     {% if status_code == 200 %}
         {% if currentRoute == 'ad_detail_page' %}
@@ -53,8 +53,10 @@
                             |<a href="{% if myProfileUrl %}{{ myProfileUrl }}{% else %}javascript:void(0);{% endif %}">
                                 <span class="topbar-user-icon {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}rounded{% endif %}">
                                     <span id="top_profile_image_div">
-                                        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), app.user.getId(), true, false, app.user.getProfileName() ]) %}
-                                        {{userLogo|replace({'<div': '<span', '</div>':'</span>'})|raw}}
+                                        {#{% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), app.user.getId(), true, false, app.user.getProfileName() ]) %}
+                                        {{userLogo|replace({'<div': '<span', '</div>':'</span>'})|raw}}#}
+                                        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserAwsLogoByUserId', [fetch_container_instance(), app.user.getId(), true, true, app.user.getProfileName() ]) %}
+                                        <img src = "{{userLogo|raw}}" />
                                     </span>
                                 </span>
                                 {% if app.user.getFullName() %}

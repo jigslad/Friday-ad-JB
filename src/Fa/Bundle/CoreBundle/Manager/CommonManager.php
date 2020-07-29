@@ -1130,6 +1130,56 @@ class CommonManager
                 return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).(($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) ? '<div class="profile-placeholder">' : '').'<img src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.($appendTime ? '?'.time() : null).'" alt="'.$userName.'" '.($userRole == RoleRepository::ROLE_SELLER? 'class="pvt-no-img"':null).' />'.(($userRole == RoleRepository::ROLE_BUSINESS_SELLER  || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) ? '</div>' : '');
             }
         }
+    }/**
+     * Get user logo aws url.
+     *
+     * @param object  $container   Container identifier.
+     * @param integer $userId      User id.
+     * @param boolean $appendTime  Append time in url.
+     * @param boolean $getUrlOnly  Get url only.
+     * @param string  $userName    User profile name.
+     *
+     * @return string|boolean
+     */
+    public static function getUserAwsLogoByUserId($container, $userId, $appendTime = false, $getUrlOnly = false, $userName = null)
+    {
+        $path = null;
+        if (!is_numeric($userId)) {
+            $imagePath  = $container->get('kernel')->getRootDir().'/../web/uploads/tmp/'.$userId.'_org.jpg';
+            if (is_file($imagePath)) {
+                if ($getUrlOnly) {
+                    return $container->getParameter('fa.static.shared.url').'/uploads/tmp/'.$userId.'_org.jpg'.($appendTime ? '?'.time() : null);
+                }
+            }
+        }
+
+        $userStatus = $container->get('doctrine')->getManager()->getRepository('FaUserBundle:User')->getUserStatus($userId, $container);
+        $userRole   = $container->get('doctrine')->getManager()->getRepository('FaUserBundle:User')->getUserRole($userId, $container);
+        if (!$userName) {
+            $userName = $container->get('doctrine')->getManager()->getRepository('FaUserBundle:User')->getUserProfileName($userId, $container);
+        }
+
+        $userName .= ' - Friday-Ad';
+        $imagePath = null;
+
+        if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
+            $path = $container->getParameter('fa.company.image.dir').'/'.self::getGroupDirNameById($userId, 5000);
+            $imagePath  = $container->get('kernel')->getRootDir().'/../web/'.$path.'/'.$userId.'.jpg';
+        } elseif ($userRole == RoleRepository::ROLE_SELLER) {
+            $path = $container->getParameter('fa.user.image.dir').'/'.self::getGroupDirNameById($userId, 5000);
+            $imagePath  = $container->get('kernel')->getRootDir().'/../web/'.'/'.$path.'/'.$userId.'.jpg';
+        }
+        $newAwsImagePath = $container->getParameter('fa.static.aws.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null);
+        return $newAwsImagePath;
+//        if ($getUrlOnly) {
+//            return $container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null);
+//        } else {
+//            if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
+//                return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img src="'.$newAwsImagePath.'" alt="'.$userName.'" />';
+//            } else {
+//                return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<span style="background-image: url('.$newAwsImagePath.($appendTime ? '?'.time() : null).')" title="'.$userName.'"></span>';
+//            }
+//        }
     }
 
     /**
