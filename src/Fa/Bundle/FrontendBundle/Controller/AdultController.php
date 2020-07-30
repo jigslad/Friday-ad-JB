@@ -174,7 +174,7 @@ class AdultController extends ThirdPartyLoginController
                 $seoManager = $this->container->get('fa.seo.manager');
                 $seoFields = CommonManager::getSeoFields($seoPageRule);
                 foreach ($seoFields as $index => $seoField) {
-                    $seoFields[$index] = $seoManager->parseSeoString($seoField, ['location' => $seoLocationName]);
+                    $seoFields[$index] = $seoManager->parseSeoString($seoField, ['{location}' => $seoLocationName]);
                 }
             }
         }
