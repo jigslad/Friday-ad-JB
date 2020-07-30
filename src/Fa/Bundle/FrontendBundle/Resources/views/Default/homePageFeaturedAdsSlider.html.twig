@@ -1,39 +1,21 @@
 <div class="owl-carousel fa-slider" id="{{ divId }}" data-equalizer>
-    {% set categoryBadgeArray = categoryRepository.getCategoryBadgeClassArray() %}
     {% for featureAd in featureAds %}
-        {% set adCategoryId = attribute(featureAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::CATEGORY_ID')) %}
-        {% set rootCategoryId = attribute(featureAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::ROOT_CATEGORY_ID')) %}
-        {% set rootCategoryName =  staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [rootCategoryId, true]) %}
-        {% set featureAdSolrMapping = 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::' %}
-        {% set adUrl = container.get('fa_ad.manager.ad_routing').getDetailUrl(featureAd) %}
-        {% set adUserDetail = null %}
-        {% if attribute(featureAd, constant(featureAdSolrMapping ~ 'USER_ID')) is defined and userDetails[attribute(featureAd, constant(featureAdSolrMapping ~ 'USER_ID'))] is defined %}
-            {% set adUserDetail = userDetails[attribute(featureAd, constant(featureAdSolrMapping ~ 'USER_ID'))] %}
+        {% if featureAd['user_id'] is defined %}
+            {% set adUserDetail = userDetails[featureAd['user_id']] %}
         {% endif %}
-        {% set seoRule = seoToolRepository.getSeoPageRuleDetailForSolrResult(featureAd, constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_IMG_ALT'), container) %}
-        {% set imageAltString = null %}
-        {% if seoRule['image_alt'] is defined %}
-            {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], featureAd]) %}
-        {% endif %}
+        {{ dump(adUserDetail) }}
         <div class="item" data-equalizer-watch>
-            {% if categoryBadgeArray[rootCategoryId] is defined %}
-                <span class="fa-slider-badge {{categoryBadgeArray[rootCategoryId]}}">Category</span>
+            {% if featureAd['badge'] is defined %}
+                <span class="fa-slider-badge {{featureAd['badge']}}">Category</span>
             {% endif %}
-            <a class="tricky-link" href="{{ adUrl }}">
-            	{% if attribute(featureAd, constant(featureAdSolrMapping ~ 'TITLE')) is defined %}
-                   {{trim_text(attribute(featureAd, constant(featureAdSolrMapping ~ 'TITLE')), 30)|raw}}
+            <a class="tricky-link" href="{{ featureAd['url'] }}">
+                {% if featureAd['title'] is defined %}
+                   {{trim_text(featureAd['title'], 30)|raw}}
                 {% endif %}
             </a>
-            {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, featureAd, '300X225', 1) %}
 
-            {% set imagePathExists = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'path_exists', [container, featureAdSolrMapping ~ 'PATH']) %}
-
-            <div class="list-img {% if not imagePath  or not imagePathExists %}similar-placeholder{% endif %}">
-                {% if imagePath and imagePathExists %}
-                    <img class="lazyOwl" src="#empty" data-src="{{ imagePath }}" alt="{{ imageAltString }}" />
-                {% else %}
-                    <img class="lazyOwl" src="#empty" data-src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
-                {% endif %}
+            <div class="list-img {% if featureAd['no-img_exists'] %}similar-placeholder{% endif %}">
+                <img class="lazyOwl" src="#empty" data-src="{{ featureAd['img_url'] }}" alt="{{ featureAd['img_alt'] }}" />
             </div>
             <div class="member-info">
                 <div class="clearfix">
@@ -51,22 +33,8 @@
                         {% endif %}
                     </div>
                     <div class="large-7 columns text-right">
-                        {% set userCompanyLogo = null %}
-                        {% set userLogo = null %}
-                        {% if adUserDetail|length %}
-                            {% if (adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
-                                {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adUserDetail['company_logo'], adUserDetail['id'], null, null, true, true, adUserDetail['status_id'], adUserDetail['user_name']]) %}
-                            {% endif %}
-                            {% if adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER_ID') %}
-                                {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adUserDetail['image'], adUserDetail['id'], 'null', 'null', true, false, adUserDetail['status_id'], adUserDetail['user_name']]) %}
-                            {% endif %}
-                        {% endif %}
                         <div class="member-icon {% if (adUserDetail|length and adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or adUserDetail|length and adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}member-logo{% endif %}">
-                            {% if userCompanyLogo %}
-                                {{userCompanyLogo|raw}}
-                            {% elseif userLogo %}
-                                {{userLogo|raw}}
-                            {% endif %}
+                            {{ adUserDetail['company_logo']|raw }}
                         </div>
                     </div>
                 </div>
@@ -75,17 +43,17 @@
             <div class="fa-price">
                 <div class="large-24 columns">
                     <h4>
-                        {% if attribute(featureAd, constant(featureAdSolrMapping ~ 'PRICE')) is defined %}
+                        {% if featureAd['price'] is defined %}
                             <span>
-                                {{ format_currency(attribute(featureAd, constant(featureAdSolrMapping ~ 'PRICE'))) }}
-                                {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') and attribute(featureAd, constant(featureAdSolrMapping ~ 'RENT_PER_ID')) is defined %}
-                                    {{ adPropertyRepository.getRentPostFixText(attribute(featureAd, constant(featureAdSolrMapping ~ 'RENT_PER_ID')), container)}}
-                                {% endif %}
+                                {{ format_currency(featureAd['price']) }}
+                                {# {% if featureAd['rootCatId'] == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') and featureAd['rent_per'] is defined %}
+                                    {{ adPropertyRepository.getRentPostFixText(featureAd['rent_per'], container)}}
+                                {% endif %} #}
                             </span>
                         {% endif %}
                         
-                        {% if attribute(featureAd, constant(featureAdSolrMapping ~ 'TITLE')) is defined %}
-                           {{trim_text(attribute(featureAd, constant(featureAdSolrMapping ~ 'TITLE')), 30)|raw}}
+                        {% if featureAd['title'] is defined %}
+                           {{trim_text(featureAd['title'], 30)|raw}}
                         {% endif %}
                     </h4>
                 </div>

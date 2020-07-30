@@ -11,8 +11,6 @@
 
 namespace Fa\Bundle\FrontendBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Fa\Bundle\CoreBundle\Controller\CoreController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,8 +23,8 @@ use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Fa\Bundle\UserBundle\Controller\ThirdPartyLoginController;
 use Fa\Bundle\ContentBundle\Repository\StaticPageRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Fa\Bundle\ContentBundle\Repository\SeoToolRepository;
 
 /**
  * This is default controller for front side.
@@ -295,17 +293,11 @@ class DefaultController extends ThirdPartyLoginController
         }
 
         // get getFeatureAds ads.
-        $featureAds  = $this->getFeatureAds($request, $cookieLocationDetails);
-        $userDetails = array();
-        if (count($featureAds)) {
-            $userIds = array();
-            foreach ($featureAds as $featureAd) {
-                if (isset($featureAd[AdSolrFieldMapping::USER_ID]) && $featureAd[AdSolrFieldMapping::USER_ID]) {
-                    $userIds[] = $featureAd[AdSolrFieldMapping::USER_ID];
-                }
-            }
-            array_unique($userIds);
-            $userDetails = $this->getRepository('FaUserBundle:User')->getHomePageFeatureAdUserDetail($userIds);
+        $featureBlockDet  = $this->getFeatureAds($request, $cookieLocationDetails);
+        $featureAds = $userFeaturedDet = array();
+        if(!empty($featureBlockDet)) {
+            $featureAds = $featureBlockDet['ad'];
+            $userFeaturedDet = $featureBlockDet['user'];
         }
 
         //get recently viewed ads.
@@ -322,6 +314,8 @@ class DefaultController extends ThirdPartyLoginController
             $seoLocationName = $cookieLocationDetails['town'];
         }
 
+        $seoPageFields = $this->container->get('fa.seo.manager')->seoFieldDataByPage(SeoToolRepository::HOME_PAGE, $seoLocationName);
+
         $parameters = array(
             'recommendedAds'  => $recommendedAds,
             'latestAds'       => $latestAds,
@@ -330,11 +324,13 @@ class DefaultController extends ThirdPartyLoginController
             'recentlyViewedAds' => $recentlyViewedAds,
             'facebookLoginUrl' => $facebookLoginUrl,
             'featureAds' => $featureAds,
-            'userDetails' => $userDetails,
+            'userDetails' => $userFeaturedDet,
             'homePopularImagesArray' => $homePopularImagesArray,
             'cookieLocationDetails' => $cookieLocationDetails,
             'seoLocationName' => $seoLocationName,
             'popularShopsSearchParams' => $popularShopsSearchParams,
+            'seoPageFields' => $seoPageFields,
+            'container' => $this->container,
         );
 
         return $this->render('FaFrontendBundle:Default:index.html.twig', $parameters);
@@ -543,6 +539,7 @@ class DefaultController extends ThirdPartyLoginController
     {
         // get location from cookie
         $location = null;
+        $blockFeaturedAds = array();
 
         if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['location']) && $cookieLocationDetails['location']) {
             $location = $cookieLocationDetails['location'];
@@ -558,7 +555,10 @@ class DefaultController extends ThirdPartyLoginController
             $featureAds = $this->getFeatureAdsSolrResult();
         }
 
-        return $featureAds;
+        if(!empty($featureAds)) {
+            $blockFeaturedDet = CommonManager::getAdBlock($featureAds, $this->container);
+        }
+        return $blockFeaturedDet;
     }
 
     /**
@@ -589,9 +589,10 @@ class DefaultController extends ThirdPartyLoginController
         $solrSearchManager = $this->get('fa.solrsearch.manager');
         $solrSearchManager->init('ad', $keywords, $data, $page, $recordsPerPage);
         if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['latitude']) && isset($cookieLocationDetails['longitude'])) {
-            $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocationDetails['latitude'].', '.$cookieLocationDetails['longitude']);
+            $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocationDetails['latitude'].','.$cookieLocationDetails['longitude'], 'd' => $distanceRange);
             $solrSearchManager->setGeoDistQuery($geoDistParams);
         }
+
         $solrResponse = $solrSearchManager->getSolrResponse();
 
         return $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponse);

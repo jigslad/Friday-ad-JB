@@ -16,6 +16,7 @@ use Symfony\Component\Translation\MessageSelector;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Fa\Bundle\EntityBundle\Repository\LocationRepository;
 use Fa\Bundle\ContentBundle\Repository\BannerPageRepository;
+use Fa\Bundle\ContentBundle\Repository\SeoToolRepository;
 use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Fa\Bundle\UserBundle\Repository\RoleRepository;
 use Fa\Bundle\PromotionBundle\Repository\PackageDiscountCodeRepository;
@@ -3705,5 +3706,68 @@ HTML;
             $imgRelPath = $imagePath . '/' . $adId . '_' . $imageHash . ($size ? '_' . $size : '') . '.jpg';
         }
         return $imgRelPath;
+    }
+
+    public static function getAdBlock($adArr, $container) {
+        $adBlockArr = $blockArr = $blockUserIds = $userBlockArr = array();
+        $i=0;
+        $categoryBadgeArray = $container->get('doctrine')->getManager()->getRepository('FaEntityBundle:Category')->getCategoryBadgeClassArray();
+
+        foreach($adArr as $ad) {
+            $imageAltString = '';
+            $adCategoryId = $ad->a_category_id_i;
+            $rootCategoryId = $ad->a_parent_category_lvl_1_id_i;
+            //$rootCategoryName =  self::getCategoryClassNameById($rootCategoryId,true);
+            $adUrl = $container->get('fa_ad.manager.ad_routing')->getDetailUrl($ad);
+            $seoRule = $container->get('doctrine')->getManager()->getRepository('FaContentBundle:SeoTool')->getSeoPageRuleDetailForSolrResult($ad, SeoToolRepository::ADVERT_IMG_ALT, $container);
+
+            if(!empty($seoRule) && isset($seoRule['image_alt'])) {
+                $imageAltString = self::getAdImageAlt($container, $seoRule['image_alt'], $ad);
+            }
+            $imagePath = $container->get('doctrine')->getManager()->getRepository('FaAdBundle:AdImage')->getImagePath($container, $ad, '300X225', 1);
+
+            $imagePathExists = self::path_exists($container, $imagePath);
+
+            $adListFields = $container->get('doctrine')->getManager()->getRepository('FaAdBundle:Ad')->getAdListingFields($adCategoryId, $ad, $container);
+
+            $adBlockArr[$i]['title']         = $ad->a_title_s;
+            $adBlockArr[$i]['desc']          = $ad->a_description_desc;
+            //$adBlockArr[$i]['price']         = $ad->a_price_d;
+            $adBlockArr[$i]['rootCatId']     = $rootCategoryId;
+
+            if($rootCategoryId == CategoryRepository::PROPERTY_ID) {
+               //$adBlockArr[$i]['rent_per']   = $container->get('doctrine')->getManager()->getRepository('FaAdBundle:AdProperty')->getRentPostFixText($ad->a_title_s, $container);
+            }
+
+            $adBlockArr[$i]['badge']         = $categoryBadgeArray[$rootCategoryId];
+            $adBlockArr[$i]['publish_at']    = $ad->a_published_at_i;
+            $adBlockArr[$i]['refresh_at']    = $ad->a_weekly_refresh_at_i;
+            $adBlockArr[$i]['url']           = $adUrl;
+            $adBlockArr[$i]['img_alt']       = $imageAltString;
+            $blockUserIds[] = $adBlockArr[$i]['user_id'] = $ad->a_user_id_i;
+
+            if($imagePath && $imagePathExists) {
+                $adBlockArr[$i]['img_url'] = $imagePath;
+                $adBlockArr[$i]['no-img_exists'] = 0;
+            } else {
+                $adBlockArr[$i]['img_url'] = $container->getParameter('fa.static.url').'/fafrontend/images/no-image-grey.svg';
+                $adBlockArr[$i]['no-img_exists'] = 1;
+            }
+
+            /*if(!empty($adListFields)) {
+                foreach($adListFields as $adListField) {
+
+                }
+            }*/
+
+            $i = $i+1;
+        }
+
+        if(!empty($blockUserIds)) {
+            array_unique($blockUserIds);
+            $userBlockArr = $container->get('doctrine')->getManager()->getRepository('FaUserBundle:User')->getHomePageFeatureAdUserDetail($blockUserIds);
+        }
+
+        return $blockArr = array('ad' => $adBlockArr, 'user' => $userBlockArr);
     }
 }

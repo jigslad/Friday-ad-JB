@@ -446,4 +446,24 @@ class SeoManager
             return false;
         }
     }
+
+    public function seoFieldDataByPage($pageConst,$seolocation) {
+        $seoPageRule = $seoFields  = $seoField  = array();
+        $seoPageRules = $this->em->getRepository('FaContentBundle:SeoTool')->getSeoRulesKeyValueArray($pageConst, $this->container);
+        if ($pageConst) {
+            $seoPageRule = $seoPageRules[$pageConst.'_global'];
+        }
+
+        if(!empty($seoPageRule)) {
+            $seoFields = CommonManager::getSeoFields($seoPageRule);
+        }
+
+        if(!empty($seoFields)) {
+            $seoField['page_title'] = isset($seoFields['page_title'])?self::parseSeoString($seoFields['page_title'],array('{location}', $seolocation)):'';
+            $seoField['meta_description'] = isset($seoFields['meta_description'])?self::parseSeoString($seoFields['meta_description'],array('{location}', $seolocation)):'';
+            $seoField['meta_keywords'] = isset($seoFields['meta_keywords'])?self::parseSeoString($seoFields['meta_keywords'],array('{location}', $seolocation)):'';
+        }
+
+        return $seoField;
+    }
 }

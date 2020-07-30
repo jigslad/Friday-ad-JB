@@ -1,30 +1,18 @@
 {% extends 'FaFrontendBundle::layout.html.twig' %}
 
-{% set container = fetch_container_instance() %}
-{% set seoManager = container.get('fa.seo.manager') %}
 {% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
-{% set adRepository = fetch_repository('FaAdBundle:Ad') %}
-{% set adPropertyRepository = fetch_repository('FaAdBundle:AdProperty') %}
-{% set adForSaleRepository = fetch_repository('FaAdBundle:AdForSale') %}
 {% set seoToolRepository = fetch_repository('FaContentBundle:SeoTool') %}
-{% set seoPageRule = {} %}
-{% set seoPageRules = seoToolRepository.getSeoRulesKeyValueArray(constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::HOME_PAGE'), container) %}
-{% if seoPageRules[constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::HOME_PAGE')~'_global'] is defined and seoPageRules[constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::HOME_PAGE')~'_global']|length %}
-    {% set seoPageRule = seoPageRules[constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::HOME_PAGE')~'_global'] %}
-{% endif %}
-{% if seoPageRule|length %}
-    {% set seoFields = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSeoFields', [seoPageRule]) %}
-{% endif %}
+{% set adForSaleRepository = fetch_repository('FaAdBundle:AdForSale') %}
 
 {% block page_title %}
-    {% if seoFields.page_title is defined %}
-        {{ seoManager.parseSeoString(seoFields.page_title, {'{location}': seoLocationName}) }}
+    {% if seoPageFields.page_title is defined %}
+        {{ seoPageFields.page_title }}
     {% endif %}
 {% endblock %}
 
 {% block meta_description %}
-    {% if seoFields.meta_description is defined %}
-        {{ seoManager.parseSeoString(seoFields.meta_description, {'{location}': seoLocationName}) }}
+    {% if seoPageFields.meta_description is defined %}
+        {{ seoPageFields.meta_description }}
     {% endif %}
 {% endblock %}
 
@@ -33,8 +21,8 @@
 {% endblock %}
 
 {% block meta_keywords %}
-    {% if seoFields.meta_keywords is defined %}
-        {{ seoManager.parseSeoString(seoFields.meta_keywords, {'{location}': seoLocationName}) }}
+    {% if seoPageFields.meta_keywords is defined %}
+        {{ seoPageFields.meta_keywords }}
     {% endif %}
 {% endblock %}
 {% block scripttop %}
