@@ -171,15 +171,23 @@ class AdultController extends ThirdPartyLoginController
         if (! empty($seoPageRules[SeoToolRepository::HOME_PAGE.'_global'])) {
             $seoPageRule = $seoPageRules[SeoToolRepository::HOME_PAGE.'_global'];
             if (! empty($seoPageRule)) {
+                $seoManager = $this->container->get('fa.seo.manager');
                 $seoFields = CommonManager::getSeoFields($seoPageRule);
+                foreach ($seoFields as $index => $seoField) {
+                    $seoFields[$index] = $seoManager->parseSeoString($seoField, ['{location}' => $seoLocationName]);
+                }
             }
         }
+
+        $locationId = '';
+        if (! empty($cookieLocationDetails) && ! empty($cookieLocationDetails['location'])) {
+            $locationId = $cookieLocationDetails['location'];
+        }
+        $adultCategories = $this->getAdultCategoryConstants($locationId);
 
         $formManager  = $this->get('fa.formmanager');
         $form               = $formManager->createForm(AdultHomePageSearchType::class, null, array('method' => 'GET', 'action' => $this->generateUrl('ad_landing_page_search_result')));
         $parameters = array(
-            'cookieLocationDetails' => $cookieLocationDetails,
-            'seoLocationName' => $seoLocationName,
             'businessExposureUsersDetails' => $featuredAdvertisers,
             'form' => $form->createView(),
             'bannersArray' => $bannersArray,
@@ -199,9 +207,68 @@ class AdultController extends ThirdPartyLoginController
             ),
             'seoFields' => $seoFields,
             'locationBlocks' => $this->getAdultHPLocationBlocks(),
-            'topSearchForm' => $this->getTopSearchForm($request)
+            'topSearchForm' => $this->getTopSearchForm($request),
+            'adultCategories' => $adultCategories['values'],
+            'adultCategoriesConstants' => $adultCategories['constants'],
+            'locationId' => $locationId
         );
         return $this->renderWithTwigParameters('FaFrontendBundle:Adult:indexNew.html.twig', $parameters, $request);
+    }
+
+    /**
+     * get adult category constants with name and URL
+     *
+     * @param $locationId
+     *
+     * @return array
+     */
+    private function getAdultCategoryConstants($locationId)
+    {
+        $categories = $constants = [];
+        $adRoutingManager = $this->container->get('fa_ad.manager.ad_routing');
+
+        $constants = [
+            'categoryAdultId'       => CategoryRepository::ADULT_ID,
+            'escortServicesId'      => CategoryRepository::ESCORT_SERVICES_ID
+        ];
+
+        $categories['escortServicesId'] = [
+            'class'     => 'discover-escorts',
+            'name'      => 'Escorts',
+            'url'       => $adRoutingManager->getCategoryUrlById($locationId, $constants['escortServicesId'])
+        ];
+
+        $categories['adultContactId'] = [
+            'class'     => 'discover-adult-contacts',
+            'name'      => 'Adult Contacts',
+            'url'       => $adRoutingManager->getCategoryUrlById($locationId, CategoryRepository::ADULT_CONTACTS_ID)
+        ];
+
+        $categories['fetishRoleplayId'] = [
+            'class'     => 'discover-fetish-and-roleplay',
+            'name'      => 'Fetish and Role Play',
+            'url'       => $adRoutingManager->getCategoryUrlById($locationId, CategoryRepository::FETISH_AND_ROLE_PLAY_ID)
+        ];
+
+        $categories['gayMaleEscortId'] = [
+            'class'     => 'discover-gay-male-escort',
+            'name'      => 'Gay Male Escort',
+            'url'       => $adRoutingManager->getCategoryUrlById($locationId, CategoryRepository::GAY_MALE_ESCORT_ID)
+        ];
+
+        $categories['adultIndustryJobsId'] = [
+            'class'     => 'discover-adult-industry-jobs',
+            'name'      => 'Adult Industry Jobs',
+            'url'       => $adRoutingManager->getCategoryUrlById($locationId, CategoryRepository::ADULT_INDUSTRY_JOBS_ID)
+        ];
+
+        $categories['adultMassageId'] = [
+            'class'     => 'discover-adult-massage',
+            'name'      => 'Adult Massage',
+            'url'       => $adRoutingManager->getCategoryUrlById($locationId, CategoryRepository::ADULT_MASSAGE_ID)
+        ];
+
+        return ['values' => $categories, 'constants' => $constants];
     }
 
     /**

@@ -1,21 +1,16 @@
 {% extends 'FaFrontendBundle::layout.html.twig' %}
 
 {% set container = fetch_container_instance() %}
-{% set seoManager = container.get('fa.seo.manager') %}
-{% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
-{% set adRepository = fetch_repository('FaAdBundle:Ad') %}
-{% set adPropertyRepository = fetch_repository('FaAdBundle:AdProperty') %}
-{% set adForSaleRepository = fetch_repository('FaAdBundle:AdForSale') %}
 
 {% block page_title %}
     {% if seoFields.page_title is defined %}
-        {{ seoManager.parseSeoString(seoFields.page_title, {'{location}': seoLocationName}) }}
+        {{ seoFields.page_title }}
     {% endif %}
 {% endblock %}
 
 {% block meta_description %}
     {% if seoFields.meta_description is defined %}
-        {{ seoManager.parseSeoString(seoFields.meta_description, {'{location}': seoLocationName}) }}
+        {{ seoFields.meta_description }}
     {% endif %}
 {% endblock %}
 
@@ -25,7 +20,7 @@
 
 {% block meta_keywords %}
     {% if seoFields.meta_keywords is defined %}
-        {{ seoManager.parseSeoString(seoFields.meta_keywords, {'{location}': seoLocationName}) }}
+        {{ seoFields.meta_keywords }}
     {% endif %}
 {% endblock %}
 {% block scripttop %}
@@ -45,20 +40,8 @@
     {% set currentDevice = 'T' %}
 {% endif %}
 
-{% set categoryAdultId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
-{% set escortServicesId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ESCORT_SERVICES_ID') %}
-
-{% set adultContactId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_CONTACTS_ID') %}
-{% set escortsId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ESCORT_SERVICES_ID') %}
-{% set fetishRoleplayId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FETISH_AND_ROLE_PLAY_ID') %}
-{% set gayMaleEscortId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::GAY_MALE_ESCORT_ID') %}
-{% set adultIndustryJobsId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_INDUSTRY_JOBS_ID') %}
-{% set adultMassageId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_MASSAGE_ID') %}
-
-{% set locationId = '' %}
-{% if cookieLocationDetails is defined and cookieLocationDetails is not null and cookieLocationDetails.location is defined and cookieLocationDetails.location %}
-    {% set locationId = cookieLocationDetails.location %}
-{% endif %}
+{% set categoryAdultId      = adultCategoriesConstants['categoryAdultId'] %}
+{% set escortServicesId     = adultCategoriesConstants['escortServicesId'] %}
                 
 {% block body %}
 <div class="adul-hp">
@@ -79,19 +62,9 @@
             	<div class="browse-by-category large-19 discover-adult-categories ">Browse by category</div>
                 {% cache 'home|page|'~locationId~'front/home_page_discover' 1800 %}
                     <div class="discover-categories large-20 discover-adult-categories text-center">
-                        {% set adRoutingManager = container.get('fa_ad.manager.ad_routing') %}
-
-                        <a href="{{ adRoutingManager.getCategoryUrlById(locationId, escortsId) }}" class="discover-escorts ga-ahpDiscover">{{'Escorts'|trans({}, 'frontend-homepage')}}</a>
-
-                        <a href="{{ adRoutingManager.getCategoryUrlById(locationId, adultContactId) }}" class="discover-adult-contacts ga-ahpDiscover">{{'Adult Contacts'|trans({}, 'frontend-homepage')}}</a>
-
-                        <a href="{{ adRoutingManager.getCategoryUrlById(locationId, fetishRoleplayId) }}" class="discover-fetish-and-roleplay ga-ahpDiscover">{{'Fetish and Role Play'|trans({}, 'frontend-homepage')}}</a>
-
-                        <a href="{{ adRoutingManager.getCategoryUrlById(locationId, gayMaleEscortId) }}" class="discover-gay-male-escort ga-ahpDiscover">{{'Gay Male Escort'|trans({}, 'frontend-homepage')}}</a>
-
-                        <a href="{{ adRoutingManager.getCategoryUrlById(locationId, adultIndustryJobsId) }}" class="discover-adult-industry-jobs ga-ahpDiscover">{{'Adult Industry Jobs'|trans({}, 'frontend-homepage')}}</a>
-
-                        <a href="{{ adRoutingManager.getCategoryUrlById(locationId, adultMassageId) }}" class="discover-adult-massage ga-ahpDiscover">{{'Adult Massage'|trans({}, 'frontend-homepage')}}</a>
+                        {% for adultCategory in adultCategories %}
+                            <a href="{{ adultCategory['url'] }}" class="{{ adultCategory['class'] }} ga-ahpDiscover">{{adultCategory['name']|trans({}, 'frontend-homepage')}}</a>
+                        {% endfor %}
                      </div>
                 {% endcache %}
             </div>
@@ -171,8 +144,7 @@
     %}
     <script defer src="{{ static_asset_url(asset_url) }}"></script>
     {% endjavascripts %}
-    
-    {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+
     {% if mobileDetectManager.is('IE') %}
         {% javascripts filter='uglifyjs2' output='bundles/js/compiled/parallaxFix.js'
             'bundles/fafrontend/js/scroll.js'
@@ -180,10 +152,8 @@
         %}
         <script src="{{ static_asset_url(asset_url) }}"></script>
         {% endjavascripts %}
-    {% endif %}
-    <script language="javascript" type="text/javascript">
-        //<![CDATA[
-        {% if mobileDetectManager.is('IE') %}
+
+        <script language="javascript" type="text/javascript">
             $(function(){
                 var $window = $(window);
                 var scrollTime = 1.2;
@@ -195,13 +165,16 @@
                     var finalScroll = scrollTop - parseInt(delta*scrollDistance);
                     TweenMax.to($window, scrollTime, {
                         scrollTo : { y: finalScroll, autoKill:true },
-                            ease: Power1.easeOut,
-                            overwrite: 1
-                        });
+                        ease: Power1.easeOut,
+                        overwrite: 1
+                    });
                 });
             });
-        {% endif %}
-        
+        </script>
+    {% endif %}
+
+    <script language="javascript" type="text/javascript">
+        //<![CDATA[
         var expand = false;
         $(".m-pop-click").on('click',function(){
            //console.log('test');
@@ -224,39 +197,35 @@
         var headerParallax;
         $(document).ready(function() {
             $('div.homepage-row:even').addClass('white-bg');
-            getHeaderImage();            
 
             setDefaultLocatonFromCookie();
             $('#fa_top_search_item__distance').val(5);
             $('#fa_top_search_item__category_id').val({{ categoryAdultId }});
             $('.select-control').select2({ minimumResultsForSearch: -1 });
-            
-            var featuredAdvertisersItemSlider = $("#featured_advertisers_slider");
-            featuredAdvertisersItemSlider.owlCarousel({
+
+            $("#featured_advertisers_slider").owlCarousel({
             	items : 4,
                 itemsCustom:[[320, 2], [568, 3], [768, 3], [1024, 4]],
                 navigation: true,
                 pagination:false,
                 responsiveRefreshRate : 100,
-                navigationText: ['<img src="https://fmtinew.friday-ad.co.uk/bundles/fafrontend/images/small-slider-prev.svg" alt="" />', '<img src="https://fmtinew.friday-ad.co.uk/bundles/fafrontend/images/small-slider-next.svg" alt="" />'],
+                navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
                 lazyLoad: true,
                 scrollPerPage: true,
             });
 
-            var featuredItemSlider = $("#featured-top-item-slider");
-            featuredItemSlider.owlCarousel({
+            $("#featured-top-item-slider").owlCarousel({
             	items : 3,
                 itemsCustom:[[320, 2], [568, 3], [641, 2], [760, 3]],
                 navigation: true,
                 pagination:false,
                 responsiveRefreshRate : 100,
-                navigationText: ['<img src="https://fmtinew.friday-ad.co.uk/bundles/fafrontend/images/small-slider-prev.svg" alt="" />', '<img src="https://fmtinew.friday-ad.co.uk/bundles/fafrontend/images/small-slider-next.svg" alt="" />'],
+                navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
                 lazyLoad: true,
                 scrollPerPage: true
             });
 
-            var recentlyViwedItemSlider = $("#recently-viwed-item-slider");
-            recentlyViwedItemSlider.owlCarousel({
+            $("#recently-viwed-item-slider").owlCarousel({
                 items : 6,
                 itemsCustom:[[320, 1], [568, 3], [768, 4], [1024, 5], [1151, 6]],
                 navigation: true,
@@ -267,9 +236,8 @@
                 scrollPerPage: true,
             });
 
-            var popularShopsSlider = $("#popular_shops_slider");
-            if (popularShopsSlider) {
-                popularShopsSlider.owlCarousel({
+            if ($("#popular_shops_slider").length) {
+                $("#popular_shops_slider").owlCarousel({
                     items : 4,
                     itemsCustom:[[320, 1], [568, 2], [768, 3], [1024, 4]],
                     navigation: true,
@@ -329,6 +297,14 @@
             $('#top_search_location_homepage_ok').click(function() {
             	$("form[name='fa_top_search']").submit();
             });
+
+            {% if currentDevice == 'D' %}
+                var loc_first_accordion = $('#list_home_location_box').find('.accordion-navigation:first');
+                $(loc_first_accordion).addClass('active');
+                $(loc_first_accordion).find('i').removeClass('fi-plus');
+                $(loc_first_accordion).find('i').addClass('fi-minus');
+                $(loc_first_accordion).find('div.content').addClass('active');
+            {% endif %}
             
         });
 
@@ -343,10 +319,6 @@
         function accordionCallback(accordion) {
             $(accordion).siblings('a').find('i').toggleClass("fi-plus fi-minus");
             $(accordion).find('select.fa-select').selectmenu().selectmenu('refresh',true);
-        }
-
-        function getHeaderImage() {
-        	
         }
         //]]>
         function showHideAdvanceSearch() {
