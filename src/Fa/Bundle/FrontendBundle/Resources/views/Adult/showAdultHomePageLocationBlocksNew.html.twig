@@ -1,25 +1,11 @@
 {% if blocks|length %}
-    {% set container = fetch_container_instance() %}
-    {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
-    {% set currentDevice = 'D' %}
-    {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
-        {% set currentDevice = 'M' %}
-    {% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
-        {% set currentDevice = 'T' %}
-    {% endif %}
-
     <div id="list_home_location_box" class="fa-accordion">
         <dl class="accordion" data-accordion>
             {% set panelCnt = 0 %}
-            {% if currentDevice == 'T'%}
-                {% set columns = 5 %}
-            {% else %}
-                {% set columns = 6 %}
-            {% endif %}
             {% for solrFieldName, block in blocks %}
-                <dd class="accordion-navigation{% if (currentDevice == 'D' and panelCnt == 0) %} active{% endif %}">
-                    <a href="#panelBlock{{panelCnt}}" class="clearfix"><h5 class="left">{{ block['heading'] }}</h5> <i class="{% if (currentDevice == 'D' and panelCnt == 0) %} fi-minus{% else %}fi-plus{% endif %} right"></i></a>
-                    <div id="panelBlock{{panelCnt}}" class="content clearfix{% if (currentDevice == 'D' and panelCnt == 0) %} active{% endif %}">
+                <dd class="accordion-navigation">
+                    <a href="#panelBlock{{panelCnt}}" class="clearfix"><h5 class="left">{{ block['heading'] }}</h5> <i class="fi-plus right"></i></a>
+                    <div id="panelBlock{{panelCnt}}" class="content clearfix">
                         <ul class="link-list">
                             <li>
                                 {% set blockfacet = block['facet'] %}
