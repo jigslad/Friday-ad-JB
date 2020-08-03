@@ -273,7 +273,7 @@
                     type: 'HEAD',
                     error: function(){
                         url = "{{ container.getParameter('fa.static.url') }}/fafrontend/images/"+noImageName;
-                        element.css('background-image','ur('+url+')');
+                        element.style.backgroundImage = "url('"+url+"')";
                     }
                 });
             }
