@@ -1180,11 +1180,11 @@ class AdRepository extends EntityRepository
             if ($cookieLocation && $cookieLocation != CommonManager::COOKIE_DELETED) {
                 $cookieLocation = get_object_vars(json_decode($cookieLocation));
                 if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
-                    $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
+                    $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].','.$cookieLocation['longitude']);
 
                     // Sort by nearest first if location is set
                     if ($sortBy && $sortBy == 'geodist') {
-                        $data['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
+                        //$data['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
                     }
                 }
             }
