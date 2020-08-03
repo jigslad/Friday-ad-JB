@@ -247,4 +247,37 @@
     }
 //]]>
 </script>
+{% if app.user %}
+    <script>
+        {% if appUserRole == 'ROLE_BUSINESS_SELLER' or appUserRole == 'ROLE_NETSUITE_SUBSCRIPTION' %}
+        noImageName = 'user-no-logo.svg';
+        {% else %}
+        noImageName = 'user-icon.svg';
+        {% endif %}
+        document.addEventListener('error', function(element) {
+            var target = $(element.target);
+            if ((target.nodeName == 'IMG')) {
+                target.src = "{{ container.getParameter('fa.static.url') }}/fafrontend/images/"+noImageName;
+            }
+            else {
+                // console.log(target);
+            }
+        }, true);
+
+        var imageURLs = $('span');
+        imageURLs.each(function(index, element){
+            var imageURL = $(element).css('background-image').replace('url("', '').replace('")', '');
+            if (imageURL != "none"){
+                $.ajax({
+                    url: imageURL,
+                    type: 'HEAD',
+                    error: function(){
+                        url = "{{ container.getParameter('fa.static.url') }}/fafrontend/images/"+noImageName;
+                        element.css('background-image','ur('+url+')');
+                    }
+                });
+            }
+        });
+    </script>
+{% endif %}
 {# <script src="//maps.googleapis.com/maps/api/js?v=3.exp&key={{container.getParameter('fa.googlemap.api.key')}}&sensor=true&libraries=adsense"></script> #}
