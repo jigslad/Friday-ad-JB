@@ -189,13 +189,13 @@ show_business_user_ads_location:
         page_string: '.+'
         
 fa_adult_homepage:
-    path:     /adult-services/
+    path:     /adult-services-old/
     host: '%fa.main.host%'
     schemes:  [https]
     defaults: { _controller: FaFrontendBundle:Adult:index }
 
 fa_new_adult_homepage:
-    path:     /adult-services-new/
+    path:     /adult-services/
     host: '%fa.main.host%'
     schemes:  [https]
     defaults: { _controller: FaFrontendBundle:Adult:indexNew }

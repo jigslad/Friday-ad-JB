@@ -23,6 +23,7 @@ use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Fa\Bundle\ContentBundle\Repository\SeoToolRepository;
 use Fa\Bundle\EntityBundle\Repository\LocationRepository;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
+use Fa\Bundle\ContentBundle\Repository\StaticPageRepository;
 use Fa\Bundle\UserBundle\Solr\UserShopDetailSolrFieldMapping;
 use Fa\Bundle\UserBundle\Controller\ThirdPartyLoginController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -963,6 +964,16 @@ class AdultController extends ThirdPartyLoginController
         $parameters['headerCategories'] = $this->getRepository('FaEntityBundle:Category')->getAdultHeaderCategories($this->container, $locationDetails);
         $parameters['footerDetails'] = $this->getAdultFooterCategories();
         $parameters['footerStaticBlock'] = $this->getAdultFooterStaticBlock($request);
+
+        $staticPageArray = $this->getRepository('FaContentBundle:StaticPage')->getStaticPageLinkArray($this->container);
+
+        if (! empty($staticPageArray) && ! empty($staticPageArray[StaticPageRepository::STATIC_PAGE_COOKIES_POLICY_ID])) {
+            $parameters['cookiePolicyLink'] = $this->get('router')->generate('location_home_page', array(
+                'location' => $staticPageArray[StaticPageRepository::STATIC_PAGE_COOKIES_POLICY_ID]
+            ), true);
+        } else {
+            $parameters['cookiePolicyLink'] = 'javascript:void();';
+        }
 
         return $this->render($view, $parameters);
     }
