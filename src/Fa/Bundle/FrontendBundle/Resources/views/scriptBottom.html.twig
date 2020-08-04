@@ -255,29 +255,18 @@
         noImageName = 'user-icon.svg';
         {% endif %}
         document.addEventListener('error', function(element) {
-            var target = $(element.target);
-            if ((target.nodeName == 'IMG')) {
-                target.src = "{{ container.getParameter('fa.static.url') }}/fafrontend/images/"+noImageName;
-            }
-            else {
-                // console.log(target);
+            var target = $(element.target)[0];
+            if ((target.nodeName === 'IMG')) {
+                if($(target).hasClass('private-logo')){
+                    $(target).hide();
+                    $('.private-logo-placeholder').show();
+                }
+                if($(target).hasClass('business-logo')){
+                    $(target).hide();
+                    $('.business-logo-placeholder').show();
+                }
             }
         }, true);
-
-        var imageURLs = $('span');
-        imageURLs.each(function(index, element){
-            var imageURL = $(element).css('background-image').replace('url("', '').replace('")', '');
-            if (imageURL != "none"){
-                $.ajax({
-                    url: imageURL,
-                    type: 'HEAD',
-                    error: function(){
-                        url = "{{ container.getParameter('fa.static.url') }}/fafrontend/images/"+noImageName;
-                        element.style.backgroundImage = "url('"+url+"')";
-                    }
-                });
-            }
-        });
     </script>
 {% endif %}
 {# <script src="//maps.googleapis.com/maps/api/js?v=3.exp&key={{container.getParameter('fa.googlemap.api.key')}}&sensor=true&libraries=adsense"></script> #}

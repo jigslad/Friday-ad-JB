@@ -40,10 +40,21 @@
                             |<a href="{% if myProfileUrl %}{{ myProfileUrl }}{% else %}javascript:void(0);{% endif %}">
                                 <span class="topbar-user-icon {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}rounded{% endif %}">
                                     <span id="top_profile_image_div">
-{#                                        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), app.user.getId(), true, false, app.user.getProfileName() ]) %}#}
-{#                                        {{userLogo|replace({'<div': '<span', '</div>':'</span>'})|raw}}#}
-                                        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserAwsLogoByUserId', [fetch_container_instance(), app.user.getId(), true, true, app.user.getProfileName() ]) %}
-                                        <img src = "{{userLogo|replace({'<div': '<span', '</div>':'</span>'})|raw}}" />
+                                        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserAwsLogoByUserId', [fetch_container_instance(), app.user.getId(), true ]) %}
+                                        {% if appUserRole == 'ROLE_SELLER' %}
+                                            {% set  roleClass="pvt-no-img" %}
+                                        {% else %}
+                                            {% set  roleClass="" %}
+                                        {% endif %}
+                                        {% if appUserRole == 'ROLE_BUSINESS_SELLER' or appUserRole == 'ROLE_NETSUITE_SUBSCRIPTION' %}
+                                            <img class="business-logo" src = "{{userLogo|raw}}" alt="{{ app.user.getProfileName() }} - Friday-Ad" />
+                                            <div class="profile-placeholder business-logo-placeholder" style="display: none">
+                                                <img class="{{ roleClass }} "  src = "/bundles/fafrontend/images/user-no-logo.svg" alt="{{ app.user.getProfileName() }} - Friday-Ad" />
+                                            </div>
+                                        {% else %}
+                                            <img class="private-logo" src = "{{userLogo|raw}}" alt="{{ app.user.getProfileName() }} - Friday-Ad" />
+                                            <img class="{{ roleClass }} private-logo-placeholder" style="display: none" src = "/bundles/fafrontend/images/user-icon.svg" alt="{{ app.user.getProfileName() }} - Friday-Ad" />
+                                        {% endif %}
                                     </span>
                                 </span>
                                 {% if app.user.getFullName() %}
