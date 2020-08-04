@@ -198,7 +198,7 @@ class AdForSaleRepository extends EntityRepository
 
             //for business advertiser only.
             if ($ad->getIsTradeAd() && $ad->getUser()) {
-                $logoURL = CommonManager::getUserLogoByUserId($container, $ad->getUser()->getId(), false, true);
+                $logoURL = CommonManager::getUserAwsLogoByUserId($container, $ad->getUser()->getId(), false);
             }
 
             $document = $this->addField($document, AdForSaleSolrFieldMapping::HAS_USER_LOGO, ($logoURL ? true : false));

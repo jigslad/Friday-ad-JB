@@ -249,11 +249,6 @@
 </script>
 {% if app.user %}
     <script>
-        {% if appUserRole == 'ROLE_BUSINESS_SELLER' or appUserRole == 'ROLE_NETSUITE_SUBSCRIPTION' %}
-        noImageName = 'user-no-logo.svg';
-        {% else %}
-        noImageName = 'user-icon.svg';
-        {% endif %}
         document.addEventListener('error', function(element) {
             var target = $(element.target)[0];
             if ((target.nodeName === 'IMG')) {

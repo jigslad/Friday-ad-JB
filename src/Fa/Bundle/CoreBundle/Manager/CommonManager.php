@@ -1130,18 +1130,18 @@ class CommonManager
                 return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).(($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) ? '<div class="profile-placeholder">' : '').'<img src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.($appendTime ? '?'.time() : null).'" alt="'.$userName.'" '.($userRole == RoleRepository::ROLE_SELLER? 'class="pvt-no-img"':null).' />'.(($userRole == RoleRepository::ROLE_BUSINESS_SELLER  || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) ? '</div>' : '');
             }
         }
-    }/**
+    }
+
+    /**
      * Get user logo aws url.
      *
      * @param object  $container   Container identifier.
      * @param integer $userId      User id.
      * @param boolean $appendTime  Append time in url.
-     * @param boolean $getUrlOnly  Get url only.
-     * @param string  $userName    User profile name.
      *
      * @return string|boolean
      */
-    public static function getUserAwsLogoByUserId($container, $userId, $appendTime = false)
+    public static function getUserAwsLogoByUserId ( $container, $userId, $appendTime = false )
     {
         $path = null;
         if (!is_numeric($userId)) {

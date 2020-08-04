@@ -187,7 +187,7 @@ class ThirdPartyLoginController extends CoreController
                         //If user does not have logo then upload his logo from facebook.
                         $userRoleName = $this->getRepository('FaUserBundle:User')->getUserRole($fbUserObj->getId());
                         if ($userRoleName == RoleRepository::ROLE_SELLER) {
-                            $hasUserLogo  = CommonManager::getUserLogoByUserId($this->container, $fbUserObj->getId(), false, true);
+                            $hasUserLogo  = CommonManager::getUserAwsLogoByUserId($this->container, $fbUserObj->getId(), false);
                             if (!$hasUserLogo) {
                                 $userLogoTmpPath = $this->container->get('kernel')->getRootDir().'/../web/uploads/tmp';
                                 if (($fbUserObj->getId()) && (($this->container->get('session')->has('tempUserIdREG') && file_exists($userLogoTmpPath.'/'.$this->container->get('session')->get('tempUserIdREG').'.jpg')) || ($this->container->get('session')->has('tempUserIdREGPL') && file_exists($userLogoTmpPath.'/'.$this->container->get('session')->get('tempUserIdREGPL').'.jpg')) || ($this->container->get('session')->has('tempUserIdAP') && file_exists($userLogoTmpPath.'/'.$this->container->get('session')->get('tempUserIdAP').'.jpg')) || ($this->container->get('session')->has('tempUserIdAPL') && file_exists($userLogoTmpPath.'/'.$this->container->get('session')->get('tempUserIdAPL').'.jpg')))) {
@@ -381,7 +381,7 @@ class ThirdPartyLoginController extends CoreController
                     $googleUserObj = $this->getRepository('FaUserBundle:User')->findOneBy(array('google_id' => $googleFieldArray['id'], 'is_half_account' => 0));
                     if ($googleUserObj) {
                         //If user does not have logo then upload his logo from google.
-                        $hasUserLogo = CommonManager::getUserLogoByUserId($this->container, $googleUserObj->getId(), false, true);
+                        $hasUserLogo = CommonManager::getUserAwsLogoByUserId($this->container, $googleUserObj->getId(), false);
                         if (!$hasUserLogo) {
                             $userLogoTmpPath = $this->container->get('kernel')->getRootDir().'/../web/uploads/tmp';
                             if (($this->container->get('session')->has('tempUserIdREG') && file_exists($userLogoTmpPath.'/'.$this->container->get('session')->get('tempUserIdREG').'.jpg')) || ($this->container->get('session')->has('tempUserIdAP') && file_exists($userLogoTmpPath.'/'.$this->container->get('session')->get('tempUserIdAP').'.jpg'))  || ($this->container->get('session')->has('tempUserIdREGPL') && file_exists($userLogoTmpPath.'/'.$this->container->get('session')->get('tempUserIdREGPL').'.jpg')) || ($this->container->get('session')->has('tempUserIdAPL') && file_exists($userLogoTmpPath.'/'.$this->container->get('session')->get('tempUserIdAPL').'.jpg'))) {

@@ -239,7 +239,7 @@ class BusinessUserModerationRequestBuild
         }
 
         // user logo
-        $userLogoUrl = CommonManager::getUserLogoByUserId($this->container, $user->getId(), true, true);
+        $userLogoUrl = CommonManager::getUserAwsLogoByUserId($this->container, $user->getId(), true);
         if ($userLogoUrl) {
             if (!preg_match("~^(?:ht)tps?://~i", $userLogoUrl)) {
                 $userLogoUrl = str_replace('//', 'http://', $userLogoUrl);

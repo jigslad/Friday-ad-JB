@@ -374,7 +374,7 @@ class UserImageController extends CoreController
                     $imageUrl = $orgImagePath.DIRECTORY_SEPARATOR.$userId.'_org.jpg?'.time();
                     $htmlContent = $this->renderView('FaUserBundle:UserImage:renderProfileBigImage.html.twig', array('userId' => $userId, 'isCompany' => $isCompany, 'imageUrl' => $imageUrl, 'fromProfilePage' => $fromProfilePage));
                 } elseif (file_exists($orgImagePath.DIRECTORY_SEPARATOR.$userId.'.jpg')) {
-                    $imageUrl    = str_replace('.jpg', '_org.jpg', CommonManager::getUserLogoByUserId($this->container, $userId, true, true));
+                    $imageUrl    = str_replace('.jpg', '_org.jpg', CommonManager::getUserAwsLogoByUserId($this->container, $userId, true));
                     $htmlContent = $this->renderView('FaUserBundle:UserImage:renderProfileBigImage.html.twig', array('userId' => $userId, 'isCompany' => $isCompany, 'imageUrl' => $imageUrl, 'fromProfilePage' => $fromProfilePage));
                 } else {
                     $error = $this->get('translator')->trans('Problem in loading image.');
@@ -546,7 +546,7 @@ class UserImageController extends CoreController
             $orgImagePath = $webPath.DIRECTORY_SEPARATOR.'uploads/tmp';
 
             if (file_exists($orgImagePath.DIRECTORY_SEPARATOR.$userId.'_org.jpg')) {
-                $imageUrl    = CommonManager::getUserLogoByUserId($this->container, $userId, true, true);
+                $imageUrl    = CommonManager::getUserAwsLogoByUserId($this->container, $userId, true);
                 $htmlContent = $this->renderView('FaUserBundle:UserImage:renderProfileBigImageRegistration.html.twig', array('userId' => $userId, 'isCompany' => $isCompany, 'imageUrl' => $imageUrl));
             } else {
                 $error = $this->get('translator')->trans('Problem in loading image.');
