@@ -60,7 +60,7 @@
         <div class="row">
             <div class="columns">
             	<div class="browse-by-category large-19 discover-adult-categories ">Browse by category</div>
-                {% cache 'home|page|'~locationId~'front/home_page_discover' 1800 %}
+                {% cache 'home|page|'~locationId~'front/adult_home_page_discover' 1800 %}
                     <div class="discover-categories large-20 discover-adult-categories text-center">
                         {% for adultCategory in adultCategories %}
                             <a href="{{ adultCategory['url'] }}" class="{{ adultCategory['class'] }} ga-ahpDiscover">{{adultCategory['name']|trans({}, 'frontend-homepage')}}</a>
