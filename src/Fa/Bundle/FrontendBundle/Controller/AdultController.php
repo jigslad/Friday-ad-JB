@@ -903,7 +903,12 @@ class AdultController extends ThirdPartyLoginController
         $categoryList = $this->getRepository('FaEntityBundle:Category')->getNestedLeafChildrenIdsByCategoryId(CategoryRepository::ADULT_ID);
         $latestAdultAdsList = $this->getRepository('FaAdBundle:Ad')->getRecentAdByCategoryArray($categoryList,$searchParams);
         if(!empty($latestAdultAdsList)){
-            $latestAdultAds = $this->getlatestAdSolrResultbyIds($latestAdultAdsList);
+            foreach ($latestAdultAdsList as $latestAd){
+                $solrData = $this->getlatestAdSolrResultbyId($latestAd);
+                if($solrData !== null){
+                    $latestAdultAds[] = $solrData;
+                }
+            }
         }
         return $latestAdultAds;
     }
@@ -912,12 +917,8 @@ class AdultController extends ThirdPartyLoginController
      * @param $id
      * @return |null
      */
-    private function getlatestAdSolrResultbyIds($id)
+    private function getlatestAdSolrResultbyId($id)
     {
-        if (is_array($id)) {
-            $id = '(' . implode(' OR ', $id) . ')';
-        }
-
         $data           = array();
         $keywords       = null;
         $page           = 1;
@@ -932,7 +933,7 @@ class AdultController extends ThirdPartyLoginController
 
         $data = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponse);
         if(!empty($data)){
-            return $data;
+            return $data[0];
         }
         return null;
     }
