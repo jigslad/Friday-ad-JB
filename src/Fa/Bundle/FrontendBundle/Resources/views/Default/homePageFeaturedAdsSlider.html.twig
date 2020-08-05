@@ -51,21 +51,20 @@
                         {% endif %}
                     </div>
                     <div class="large-7 columns text-right">
-                        {% set userCompanyLogo = null %}
-                        {% set userLogo = null %}
-                        {% if adUserDetail|length %}
-                            {% if (adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
-                                {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adUserDetail['company_logo'], adUserDetail['id'], null, null, true, true, adUserDetail['status_id'], adUserDetail['user_name']]) %}
-                            {% endif %}
-                            {% if adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER_ID') %}
-                                {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adUserDetail['image'], adUserDetail['id'], 'null', 'null', true, false, adUserDetail['status_id'], adUserDetail['user_name']]) %}
-                            {% endif %}
-                        {% endif %}
                         <div class="member-icon {% if (adUserDetail|length and adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or adUserDetail|length and adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}member-logo{% endif %}">
-                            {% if userCompanyLogo %}
-                                {{userCompanyLogo|raw}}
-                            {% elseif userLogo %}
-                                {{userLogo|raw}}
+                            {% if adUserDetail|length %}
+                                {% if (adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
+                                    {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserAwsLogo', [fetch_container_instance(), adUserDetail['company_logo'], adUserDetail['id'], null, null, true, true, adUserDetail['status_id'], adUserDetail['user_name']]) %}
+                                    <img class="featured-ad-business-logo" src="{{ userCompanyLogo }}" alt="{{ adUserDetail['user_name'] }} - Friday-Ad" />
+                                    <div class="profile-placeholder featured-ad-business-logo-placeholder" style="display: none">
+                                        <img src = "/bundles/fafrontend/images/user-no-logo.svg" alt="{{ adUserDetail['user_name'] }} - Friday-Ad" />
+                                    </div>
+                                {% endif %}
+                                {% if adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER_ID') %}
+                                    {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserAwsLogo', [fetch_container_instance(), adUserDetail['image'], adUserDetail['id'], null, null, true, false, adUserDetail['status_id'], adUserDetail['user_name']]) %}
+                                    <img class="featured-ad-private-logo" src="{{ userLogo }}" alt="{{ adUserDetail['user_name'] }} - Friday-Ad" />
+                                    <img class="pvt-no-img featured-ad-private-logo-placeholder" style="display: none" src = "/bundles/fafrontend/images/user-icon.svg" alt="{{ adUserDetail['user_name'] }} - Friday-Ad" />
+                                {% endif %}
                             {% endif %}
                         </div>
                     </div>

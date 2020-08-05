@@ -247,21 +247,23 @@
     }
 //]]>
 </script>
-{% if app.user %}
-    <script>
-        document.addEventListener('error', function(element) {
-            var target = $(element.target)[0];
-            if ((target.nodeName === 'IMG')) {
-                if($(target).hasClass('private-logo')){
-                    $(target).hide();
-                    $('.private-logo-placeholder').show();
-                }
-                if($(target).hasClass('business-logo')){
-                    $(target).hide();
-                    $('.business-logo-placeholder').show();
-                }
+<script>
+    document.addEventListener('error', function(element) {
+        var target = $(element.target)[0];
+        if ((target.nodeName === 'IMG')) {
+            if($(target).hasClass('private-logo')){
+                $(target).hide();
+                $('.private-logo-placeholder').show();
             }
-        }, true);
-    </script>
-{% endif %}
+            if($(target).hasClass('business-logo')){
+                $(target).hide();
+                $('.business-logo-placeholder').show();
+            }
+            if($(target).hasClass('featured-ad-private-logo') || $(target).hasClass('featured-ad-business-logo')) {
+                $(target).hide();
+                $(target).next().css( "display", "block" );
+            }
+        }
+    }, true);
+</script>
 {# <script src="//maps.googleapis.com/maps/api/js?v=3.exp&key={{container.getParameter('fa.googlemap.api.key')}}&sensor=true&libraries=adsense"></script> #}
