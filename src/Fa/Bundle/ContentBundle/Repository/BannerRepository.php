@@ -55,6 +55,10 @@ class BannerRepository extends EntityRepository
      */
     public function getBannersArrayByPage($currentRoute, $container)
     {
+        if ($currentRoute == 'fa_new_adult_homepage') {
+            $currentRoute = 'fa_adult_homepage';
+        }
+
         $bannerPageRoutes  = CommonManager::getBannerPageRoutes();
         $pageId            = array_search($currentRoute, $bannerPageRoutes);
         $pageId            = rtrim($pageId, 'l');
