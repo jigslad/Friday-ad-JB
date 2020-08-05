@@ -18,7 +18,7 @@
     			<ul class="inside-top-category-menu">
 			         {% for categoryId, categoryArray in headerCategories %}
 			             {% if categoryId == adultCategoryId %}
-                        	{% set listurl = path('fa_adult_homepage') %}
+                        	{% set listurl = path('fa_new_adult_homepage') %}
                         {% else %}
                             {% set listurl = categoryArray['list_url'] %}
                         {% endif %}
@@ -86,7 +86,7 @@
 		</li>
         {% for categoryId, categoryArray in headerCategories %}
         {% if categoryId == adultCategoryId %}
-            {% set listurl = path('fa_adult_homepage') %}
+            {% set listurl = path('fa_new_adult_homepage') %}
         {% else %} 
             {% set listurl = categoryArray['list_url'] %}
         {% endif %}

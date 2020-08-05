@@ -19,7 +19,7 @@
 			         {% for categoryId, categoryArray in headerCategories %}
 			            {% set linkParam = { 'item__location': location_id, 'item__category_id': categoryId} %}		                
 			             {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
-                        	{% set listurl = path('fa_adult_homepage') %}
+                        	{% set listurl = path('fa_new_adult_homepage') %}
                         {% else %}
                             {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['full_slug']) %}
                         {% endif %}
@@ -92,7 +92,7 @@
         {% for categoryId, categoryArray in headerCategories %}
         {% set linkParam = { 'item__location': location_id, 'item__category_id': categoryId} %}
         {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
-            {% set listurl = path('fa_adult_homepage') %}
+            {% set listurl = path('fa_new_adult_homepage') %}
         {% else %} 
             {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['full_slug']) %}
         {% endif %}
