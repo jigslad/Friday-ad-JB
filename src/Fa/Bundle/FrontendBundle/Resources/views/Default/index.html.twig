@@ -118,7 +118,7 @@
                     <a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}" class="discover-community">{{'Community'|trans({}, 'frontend-homepage')}}</a>
                     
                     {% set linkParams = { 'item__location': locationId, 'item__category_id': adultId } %}
-                    <a href="{{ path('fa_adult_homepage') }}" class="discover-adult">{{'Adult'|trans({}, 'frontend-homepage')}}</a>
+                    <a href="{{ path('fa_new_adult_homepage') }}" class="discover-adult">{{'Adult'|trans({}, 'frontend-homepage')}}</a>
                 </div>
                 {% endcache %}
             </div>
