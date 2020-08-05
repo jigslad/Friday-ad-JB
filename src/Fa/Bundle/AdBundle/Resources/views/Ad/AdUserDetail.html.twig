@@ -51,7 +51,7 @@
         {% endif %}
         
         {% if allowAdEdit and currentDevice == 'D' %}
-            {% set hasUserLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), adDetail['user']['id'], false, true]) %}
+            {% set hasUserLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserAwsLogoByUserId', [fetch_container_instance(), adDetail['user']['id'], false]) %}
             <div class="profile-box" id="profile_change_btn_with_opt" {% if not hasUserLogo|length %}style="display:none;"{% endif %}>
                 <a href="javascript:void(0);" id="profile_change_btn_with_opt_anchor" data-dropdown="profile_image_upload" aria-controls="profile_image_upload" aria-expanded="false" class="photo-icon thin-btn dropdown needsclick"><label>{{'Edit image'|trans({}, 'frontend-my-profile')}}</label></a>
                 <ul id="profile_image_upload" data-dropdown-content class="f-dropdown" aria-hidden="true">
@@ -68,7 +68,7 @@
 
     <div class="pvt-seller-info">
         {% if allowAdEdit and currentDevice != 'D' %}
-            {% set hasUserLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), adDetail['user']['id'], false, true]) %}
+            {% set hasUserLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserAwsLogoByUserId', [fetch_container_instance(), adDetail['user']['id'], false]) %}
             <div class="mt10 mb10">
                 <div id="profile_change_btn_with_opt" {% if not hasUserLogo|length %}style="display:none;"{% endif %}>
                     <a href="javascript:void(0);" id="profile_change_btn_with_opt_anchor" data-dropdown="profile_image_upload" aria-controls="profile_image_upload" aria-expanded="false" class="dropdown needsclick" >{{'Edit image'|trans({}, 'frontend-my-profile')}}</a>

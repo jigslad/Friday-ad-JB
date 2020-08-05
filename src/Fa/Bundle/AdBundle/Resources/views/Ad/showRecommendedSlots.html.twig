@@ -14,7 +14,7 @@
 <div class="recommended-div listing mb20 recommended-ad-detail hide-for-small-only">
 {% if recommendedSlotCnt==1 %}
 	{% for recommendedSlot in recommendedSlotArray%}
-        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), recommendedSlot['user_id'], true, true]) %}
+        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserAwsLogoByUserId', [fetch_container_instance(), recommendedSlot['user_id'], true]) %}
         {% set userName = userRepository.getUserProfileName(recommendedSlot['user_id'], container)~' - Friday-Ad' %}
         {% set no_protocol = recommendedSlot['url']|split('//')[1] ?: recommendedSlot['url'] %}
         {% set only_domains = no_protocol|split('/')[0] ?: no_protocol %}
@@ -56,7 +56,7 @@
     <div class="s-block clearfix">
     {% for recommendedSlot in recommendedSlotArray%}   	
         <div class="t-s-block">                         
-                {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), recommendedSlot['user_id'], true, true]) %}
+                {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserAwsLogoByUserId', [fetch_container_instance(), recommendedSlot['user_id'], true]) %}
                 {% set userName = userRepository.getUserProfileName(recommendedSlot['user_id'], container)~' - Friday-Ad' %}
                 {% set no_protocol = recommendedSlot['url']|split('//')[1] ?: recommendedSlot['url'] %}
                 {% set only_domains = no_protocol|split('/')[0] ?: no_protocol %}
@@ -96,7 +96,7 @@
 	<div class="recommended-div listing mb20 recommended-ad-detail owl-carousel" id="recommended-slot-slider" data-equalizer style="display:block">
 {% endif %}
 {% for recommendedSlot in recommendedSlotArray%}
-    {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), recommendedSlot['user_id'], true, true]) %}
+    {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserAwsLogoByUserId', [fetch_container_instance(), recommendedSlot['user_id'], true]) %}
     {% set userName = userRepository.getUserProfileName(recommendedSlot['user_id'], container)~' - Friday-Ad' %}
     {% set no_protocol = recommendedSlot['url']|split('//')[1] ?: recommendedSlot['url'] %}
     {% set only_domains = no_protocol|split('/')[0] ?: no_protocol %}

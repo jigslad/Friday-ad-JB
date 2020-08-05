@@ -414,7 +414,7 @@
                                     {% set profilePageUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(adUserId) %}
                                     <div class="item" data-equalizer-watch>
                                         <a class="tricky-link" href="{{ profilePageUrl }}">{{ shopName }}</a>
-                                        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), adUserId, true, true]) %}
+                                        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserAwsLogoByUserId', [fetch_container_instance(), adUserId, true]) %}
                                         {% set userName = shopName~' - Friday-Ad' %}
                                         <div class="list-img">
                                             {% if userLogo %}
@@ -457,7 +457,7 @@
                                     {% set profilePageUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(adUserId) %}
                                     <div class="item" data-equalizer-watch>
                                         <a class="tricky-link" href="{{ profilePageUrl }}">{{ shopName }}</a>
-                                        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), adUserId, true, true]) %}
+                                        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserAwsLogoByUserId', [fetch_container_instance(), adUserId, true]) %}
                                         {% set userName = userRepository.getUserProfileName(adUserId, container)~' - Friday-Ad' %}
                                         <div class="list-img">
                                             {% if userLogo %}

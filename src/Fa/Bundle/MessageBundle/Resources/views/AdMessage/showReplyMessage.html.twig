@@ -35,7 +35,7 @@
                 {% if (message['oneclickenq_reply'] == NULL or message['oneclickenq_reply'] == 'Yes') %}
                 <div class="large-3 columns">
                     {% set userRole = userRepository.getUserRole(message['sender_user_id']) %}
-                    {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), message['sender_user_id']], true) %}
+                    {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instatruence(), message['sender_user_id']], true) %}
                     <div class="chat-usericon {% if (userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') or userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION')) %}square{% endif %}">
                         {% if userLogo %}
                             {{userLogo|raw}}

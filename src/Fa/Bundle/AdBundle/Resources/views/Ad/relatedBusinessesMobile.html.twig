@@ -11,7 +11,7 @@
                         {% set profilePageUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(relatedBusinessUserId) %}
                         <div class="item" data-equalizer-watch>
                             
-                            {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), relatedBusinessUserId, true, true]) %}
+                            {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserAwsLogoByUserId', [fetch_container_instance(), relatedBusinessUserId, true]) %}
                             {% set userName = userRepository.getUserProfileName(relatedBusinessUserId, container) %}
                             {% set userNameAltText = userRepository.getUserProfileName(relatedBusinessUserId, container)~' - Friday-Ad' %}
                             <a class="tricky-link" href="{{ profilePageUrl }}">{{ userName }}</a>
