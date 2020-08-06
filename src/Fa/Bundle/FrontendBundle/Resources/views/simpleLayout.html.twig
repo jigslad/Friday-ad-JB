@@ -42,11 +42,20 @@
     {% endif %}
     
     {{ include('FaFrontendBundle::scriptTop.html.twig') }}
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900,Poppins-SemiBold&display=swap" rel="stylesheet">
     {% block scripttop %}{% endblock %}
-    {{ include('FaFrontendBundle::fa-main-css.html.twig') }}
-    
-    {{ include('FaFrontendBundle::new-fa-main-css.html.twig') }}
-    
+    {#
+        main-css.css - Common CSS - taken from src/Fa/Bundle/FrontendBundle/Resources/views/main-css.html.twig - moved from src/Fa/Bundle/FrontendBundle/Resources/views/scriptTop.html.twig
+        main.css - Common CSS - taken from src/Fa/Bundle/FrontendBundle/Resources/views/fa-main-css-new.html.twig
+        simple-layout.css - taken from src/Fa/Bundle/FrontendBundle/Resources/views/new-fa-main-css.html.twig
+    #}
+    {% stylesheets filter='uglifycss' output='bundles/css/compiled/fa-main-simple-layout.css'
+        'bundles/fafrontend/css/main-css.css'
+        'bundles/fafrontend/css/main.css'
+        'bundles/fafrontend/css/simple-layout.css'
+    %}
+        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
+    {% endstylesheets %}
 
     {# {% stylesheets filter='uglifycss' output='bundles/css/compiled/simpleLayout.css'
         'bundles/fafrontend/css/style.css'
