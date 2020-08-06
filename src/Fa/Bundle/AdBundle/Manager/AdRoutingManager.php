@@ -410,6 +410,23 @@ class AdRoutingManager
     /**
      * get category url based on search parameters
      *
+     * @param string $locationId
+     * @param string $categoryId
+     *
+     * @return string
+     */
+    public function getCategoryUrlById($locationId, $categoryId)
+    {
+        $location = $this->em->getRepository('FaEntityBundle:Location')->getSlugById($locationId, $this->container);
+        return $this->router->generate('listing_page', array(
+            'location' => $location,
+            'page_string' => $this->em->getRepository('FaEntityBundle:Category')->find($categoryId)->getFullSlug()
+        ), true);
+    }
+
+    /**
+     * get category url based on search parameters
+     *
      * @param string $location
      * @param string $categoryFullSlug
      *
