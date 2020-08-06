@@ -4,7 +4,7 @@
         {% set shopName = businessExposureUsersDetail['user_name'] %}
         {% set profilePageUrl = businessExposureUsersDetail['profile_url'] %}
         <div class="item" data-equalizer-watch>
-            <a class="tricky-link" href="{{ profilePageUrl }}">{{ shopName }}</a>
+            <a class="tricky-link" href="{{ profilePageUrl }}">&nbsp;{# {{ shopName }} #}</a>
             {% set userCompanyLogo = businessExposureUsersDetail['user_logo'] %}
             {% set userName = businessExposureUsersDetail['user_name'] %}
             <div class="list-img">
