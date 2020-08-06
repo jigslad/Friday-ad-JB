@@ -17,7 +17,7 @@
     {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
     {% set showTiLogo = false %}
     {# {% if (app.user and app.user.getUserMasterSite()|lower == 'ti') or (not app.user and app.request.get('ti_url')) or (not app.user and app.request.cookies.has('ti_url')) %} #}
-    {% if (not app.user and app.request.get('ti_url')) or (not app.user and app.request.cookies.has('new_ti_url')) %}
+    {% if app.request.get('ti_url') or app.request.cookies.has('new_ti_url') %}
         {% set showTiLogo = true %}
     {% endif %}
     

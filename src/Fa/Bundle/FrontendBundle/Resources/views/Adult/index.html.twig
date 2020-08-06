@@ -159,7 +159,8 @@
     </div>
 	{% endif %}
 	
-	{% if externalSiteBlogDetails|length %}
+	{# Commenting out adult blog section based on business decision
+    {% if externalSiteBlogDetails|length %}
     <div class="homepage-row">
         <div class="row">
             <div class="columns">
@@ -169,6 +170,7 @@
             </div>
         </div>
 	{% endif %}
+	#}
 	
 	{# <div class="homepage-row white-bg">
     {% if mobileDetectManager.isMobile() %}

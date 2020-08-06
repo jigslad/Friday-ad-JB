@@ -254,8 +254,15 @@
              if ($("#fa_paa_category_select_has_reg_no > .checked >").val() == '0') {
                eventLabel = eventLabel + ' - No';
              }
+                window.dataLayer = window.dataLayer || []
+                dataLayer.push({
 
-             ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
+                   'event' : 'PAA Category Selection',
+                   'eventCategory':  'PAA - Step 1',
+                   'eventAction': 'Category icon click',
+                   'eventLabel': eventLabel
+                });
+                ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
            }
            //GA Analytics code end
         });
@@ -286,7 +293,13 @@
               if ($("#fa_paa_category_select_has_reg_no > .checked >").val() == '0') {
                 eventLabel = eventLabel + ' - No';
               }
-
+                window.dataLayer = window.dataLayer || []
+                dataLayer.push({
+                    'event' : 'PAA Next Step',
+                    'eventCategory':  'Next Step',
+                    'eventAction': '',
+                    'eventLabel': category_id
+                });
               ga('send', 'event', 'PAA - Step 1', 'Category icon Next step', eventLabel);
             }
             //GA Analytics code end
@@ -343,6 +356,14 @@
                    regLookupResult = ' - Lookup unsuccessful || '+regNo;
                  }
                  var eventLabel = categoryPath + regLookupResult;
+                 window.dataLayer = window.dataLayer || []
+                 dataLayer.push({
+
+                     'event' : 'PAA Category Selection',
+                     'eventCategory':  'PAA - Step 1',
+                     'eventAction': 'Category icon click',
+                     'eventLabel': eventLabel
+                 });
                  ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
                  //GA Analytics code end
              });
@@ -470,7 +491,15 @@
            		incrscroll = 80;
            	} else if(winwidth>=400 && winwidth<=500) {
            		incrscroll = 40;
-           	} 
+           	}
+            window.dataLayer = window.dataLayer || []
+            dataLayer.push({
+
+                'event' : 'PAA Category Selection',
+                'eventCategory':  'PAA - Step 1',
+                'eventAction': 'Category icon click',
+                'eventLabel': eventLabel
+            });
             ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
             //GA Analytics code end
             

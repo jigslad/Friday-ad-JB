@@ -439,7 +439,7 @@ class AdImageRepository extends EntityRepository
                     if (isset($ad[AdSolrFieldMapping::PATH][$imgNo])) {
                         return CommonManager::getAdImageUrl($container, $ad[AdSolrFieldMapping::ID], $ad[AdSolrFieldMapping::PATH][$imgNo], $ad[AdSolrFieldMapping::HASH][$imgNo], $size, $ad[AdSolrFieldMapping::AWS][$imgNo], $ad[AdSolrFieldMapping::IMAGE_NAME][$imgNo]);
                     } else {
-                        return null;
+                        return $container->getParameter('fa.static.url').'/fafrontend/images/no-image-grey.svg';
                     }
                 }
             }

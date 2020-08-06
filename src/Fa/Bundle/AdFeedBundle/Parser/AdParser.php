@@ -621,7 +621,7 @@ abstract class AdParser
 
         $adMain->setTransId($this->advert['unique_id']);
         $this->em->persist($adMain);
-        $this->em->flush();
+        $this->em->flush($adMain);
         return $adMain;
     }
 
@@ -941,9 +941,10 @@ abstract class AdParser
                 $image->setAws(0);
                 $this->em->persist($image);
 
-                $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, 75, 'ImageMagickManager');
-                $origImage->loadFile($filePath);
-                $origImage->save($imagePath.'/'.$ad->getId().'_'.$hash.'.jpg', 'image/jpeg');
+                //$origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, 75, 'ImageMagickManager');
+                //$origImage->loadFile($filePath);
+                //$origImage->save($imagePath.'/'.$ad->getId().'_'.$hash.'.jpg', 'image/jpeg');
+                exec('convert -flatten '.escapeshellarg($filePath).' '.$imagePath.'/'.$ad->getId().'_'.$hash.'.jpg');
 
                 $adImageManager = new AdImageManager($this->container, $ad->getId(), $hash, $imagePath);
                 $adImageManager->createThumbnail();

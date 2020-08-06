@@ -151,6 +151,13 @@
 //<![CDATA[
     $(document).ready(function(){
         {% if (gaStr is defined and gaStr != '') %}
+            window.dataLayer = window.dataLayer || []
+            dataLayer.push({
+                'event' : 'Form Error PAA',
+                'eventCategory':  'PAA - Step 3b',
+                'eventAction': 'Form error',
+                'eventLabel': '{{gaStr}}'
+            });
            ga('send', 'event', 'PAA - Step 3b', 'Form error', '{{gaStr}}');
         {% else %}
            ga('send', 'event', 'PAA - Step 3', 'Next step', 'registration');
