@@ -217,7 +217,6 @@
         {{ set_variables('profileImageUploadStylesheets', {'loaded':'true'}) }}
         {{ block('imageUploadStylesheets') }}
     {% endif %}
-    <link href="/build/css/sponsored-slots.css" rel="stylesheet">
     <link href="/bundles/faad/css/zutoLoanCalc.css" rel="stylesheet">
 {% endblock %}
 
@@ -362,6 +361,10 @@
     {% set orgAdDesc = attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) %}
 {% endif %}
 
+{% if recommendedSlotArray is defined and recommendedSlotArray|length %}
+       {{ include('FaAdBundle:AdList:recommended_slot_css.html.twig') }}
+{% endif %}
+    
 {% if currentDevice == 'D' or currentDevice == 'T' %}
     <div class="details-top-banner" id="sticky_item_information_id" style="display:none">
         <div class="row">

@@ -1443,7 +1443,12 @@ class CommonManager
         } else {
             $imageUrl = $container->getParameter('fa.static.shared.url').'/'.$imagePath.'/'.$adId.'_'.$imageHash.($size ? '_'.$size : '').'.jpg';
         }
-        return $imageUrl;
+        if(self::does_url_exists($imageUrl)) {
+            $adImageUrl   = $imageUrl;
+        } else {
+            $adImageUrl = $container->getParameter('fa.static.shared.url').'/bundles/fafrontend/images/no-image-grey.svg';
+        }
+        return $adImageUrl;
     }
 
     /**

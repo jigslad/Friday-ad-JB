@@ -90,11 +90,7 @@
                         <img data-original="{{ imagePath }}" alt="{{ imageAltString }}" class="lazy" src="{{ asset_url('facore/images/ajax_loader.gif') }}" />
                     {% endif %}
                 {% else %}
-                    {% if fromSimilarAdverts is defined %}
-                        <img src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ imageAltString }}" />
-                    {% else %}
-                        <img src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
-                    {% endif %}
+                    <img src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ imageAltString }}" />
                 {% endif %}
             </div>
             <div class="clearfix list-mob-icons">
