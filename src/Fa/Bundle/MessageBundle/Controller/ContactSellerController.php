@@ -95,16 +95,16 @@ class ContactSellerController extends CoreController
                                         $error = $this->get('translator')->trans('Unable to find user.', array(), 'frontend-show-ad');
                                     }
                                 }
-                                elseif ($loggedInUser->getStatus() && $loggedInUser->getStatus()->getId() != EntityRepository::USER_STATUS_ACTIVE_ID) {
-                                    $error = $this->get('translator')->trans('Your account was blocked.', array(), 'frontend-show-ad');
-                                }
-                                elseif ($loggedInUser->getId() == $adUserId) {
-                                    $error = $this->get('translator')->trans('You can not contact for your own ad.', array(), 'frontend-show-ad');
-                                }
                                 else{
-                                    $this->container->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('Please log in to your account to send the message.', array(), 'frontend-show-ad'));
                                     $redirectToUrl = $this->generateUrl('login');
                                     $error = $this->get('translator')->trans('You need to login to send to message to this ad. click <a href="'.$redirectToUrl.'">here</a> to login', array(), 'frontend-show-ad');
+                                }
+                            }
+                            if ($loggedInUser && !$error) {
+                                if ($loggedInUser->getStatus() && $loggedInUser->getStatus()->getId() != EntityRepository::USER_STATUS_ACTIVE_ID) {
+                                    $error = $this->get('translator')->trans('Your account was blocked.', array(), 'frontend-show-ad');
+                                } elseif ($loggedInUser->getId() == $adUserId) {
+                                    $error = $this->get('translator')->trans('You can not contact for your own ad.', array(), 'frontend-show-ad');
                                 }
                             }
                             if ($loggedInUser && !$error) {
