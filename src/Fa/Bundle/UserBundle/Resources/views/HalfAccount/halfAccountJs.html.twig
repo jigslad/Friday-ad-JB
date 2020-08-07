@@ -9,7 +9,15 @@
 	        sendGaForCreateAnAlert();
             isDetailPage = true;
         }
+        let SearchAlert= '{{ app.request.get('cat_full_slug') }}'+' - '+'{{ app.request.get('location') }}'+' - '+callFromGlobalHA;
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
 
+            'event' : 'Options',
+            'eventCategory':  'Search Results',
+            'eventAction': 'Search Alert',
+            'eventLabel': SearchAlert
+        });
         hideAlertMessage();
         blockPage();
         $.ajax({
