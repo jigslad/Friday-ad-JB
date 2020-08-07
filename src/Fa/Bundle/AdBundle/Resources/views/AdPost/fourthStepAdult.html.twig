@@ -311,6 +311,7 @@
                       if (isPaypalVerifiedEmail) {
                           $('#paypal_email_verify_status').addClass('success-icon');
                           $('#paypal_email_verify_status').show('inline-block');
+                          $('#paypal_err_id').html("");
                           $('#fa_paa_fourth_step_adult_paypal_email, #fa_paa_fourth_step_adult_paypal_first_name, #fa_paa_fourth_step_adult_paypal_last_name').removeClass('error');
                       } else {
                           $('#paypal_email_verify_status').addClass('error-icon');
