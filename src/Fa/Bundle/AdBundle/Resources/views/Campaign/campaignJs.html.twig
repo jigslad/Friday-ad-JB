@@ -346,13 +346,13 @@ function showPaypalSection(showMessage, paymentMethodId)
                           if ($('#fa_paa_lite_common_paypal_email').is(':visible') && $('#fa_paa_lite_common_paypal_email').val().length) {
                               if (showMessage) {
                                   $('#fa_paa_lite_common_paypal_email, #fa_paa_lite_common_paypal_first_name, #fa_paa_lite_common_paypal_last_name').addClass('error');
-                                  $("<small class='error'>{{'Paypal account is not verified.'|trans({}, 'frontend-paa-lite-common')}}</small>").insertBefore('#paypal_text_id');
+                                  $("<small class='error'>{{'PayPal account is not verified.'|trans({}, 'frontend-paa-lite-common')}}</small>").insertBefore('#paypal_text_id');
                                   $('#paypal_email_verify_status').show('inline-block');
                               }
                           } else {
                               if (showMessage) {
                                   $('#fa_paa_lite_common_paypal_email, #fa_paa_lite_common_paypal_first_name, #fa_paa_lite_common_paypal_last_name').addClass('error');
-                                  $("<small class='error'>{{'Paypal account is not verified.'|trans({}, 'frontend-paa-lite-common')}}</small>").insertBefore('#paypal_text_id');
+                                  $("<small class='error'>{{'PayPal account is not verified.'|trans({}, 'frontend-paa-lite-common')}}</small>").insertBefore('#paypal_text_id');
                                   $('#paypal_email_verify_status').show('inline-block');
                               }
                           }

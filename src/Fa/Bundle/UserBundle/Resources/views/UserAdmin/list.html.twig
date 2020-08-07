@@ -134,7 +134,7 @@
                                        {% endif %}
 
                                        {% if userConfigRuleAddEditGrant %}
-                                         <li><a href="{{ path('user_config_rule_add_edit_admin', {'user_id': user.id, 'config_id': constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::PAYPAL_COMMISION')}) }}"><i class="fi-wrench"></i> {{ 'Set Paypal Commission'|trans }}</a></li>
+                                         <li><a href="{{ path('user_config_rule_add_edit_admin', {'user_id': user.id, 'config_id': constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::PAYPAL_COMMISION')}) }}"><i class="fi-wrench"></i> {{ 'Set PayPal Commission'|trans }}</a></li>
                                          <li><a href="{{ path('user_config_rule_add_edit_admin', {'user_id': user.id, 'config_id': constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::PRODUCT_INSERTION_FEE')}) }}"><i class="fi-wrench"></i> {{ 'Set Product Insertion Fee'|trans }}</a></li>
                                        {% endif %}
                                        
