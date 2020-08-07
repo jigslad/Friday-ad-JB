@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,target-densityDpi=medium-dpi" />
-    
+
 	{% set blockPageTitle = block('page_title') is defined ? block('page_title')|replace({' in UK': ''})|trim : false %}
     {% set blockMetaRobots = block('meta_robots') is defined ? block('meta_robots')|trim : false %}
     {% set blockMetaDescription = block('meta_description') is defined ? block('meta_description')|replace({' in UK': ''})|trim : false %}
@@ -27,7 +27,10 @@
     {% set ADULT_CATEGORY_ID = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
     {% set showTiLogo = false %}
     {# {% if (app.user and app.user.getUserMasterSite()|lower == 'ti') or (not app.user and app.request.get('ti_url')) or (not app.user and app.request.cookies.has('ti_url')) %} #}
-    {% if (app.user and app.user.getUserMasterSite()|lower == 'ti') or (not app.user and app.request.get('ti_url')) or (not app.user and app.request.cookies.has('new_ti_url')) %}
+    {#    {% if (app.user and app.user.getUserMasterSite()|lower == 'ti') or (not app.user and app.request.get('ti_url')) or (not app.user and app.request.cookies.has('new_ti_url')) %}#}
+    {#        {% set showTiLogo = true %}#}
+    {#    {% endif %}#}
+    {% if app.request.get('ti_url') or app.request.cookies.has('new_ti_url') %}
         {% set showTiLogo = true %}
     {% endif %}
 
@@ -35,6 +38,7 @@
     
     {% if ((app.request.uri == container.getParameter('base_url')~'/bristol/') and app.request.get('ti_url')) %}
         {% set showTiPopup = true %}
+        {% set showTiLogo = true %}
     {% endif %}
     
     {% if not app.request.cookies.has('is_over_18') and currentRoute == 'fa_adult_homepage' %}
@@ -240,7 +244,7 @@
  		"name": "Friday-Ad",
  		"url" : "https://www.friday-ad.co.uk",
   		"description" : "Friday-Ad is a community based classified ads website and newspaper in the UK.",
- 		"logo": "https://static.friday-ad.co.uk/bundles/fafrontend/images/fad-logo-new.svg",
+ 		"logo": "https://www.friday-ad.co.uk/bundles/fafrontend/images/fad-logo-new.svg",
 		"address": {
 		"@type": "PostalAddress",
 		"streetAddress": "London Road",
@@ -302,7 +306,7 @@
         {{ include('FaAdBundle:AdList:topSearchJs.html.twig', {'currentRoute':currentRoute}) }}
 
         {% block scriptbottom %}{% endblock %}
-		{% if (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration',4: 'show_draft_ad',5: 'ad_package_purchase',6: 'show_cart',7: 'cybersource_checkout'}) %}
+		{% if (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration',4: 'show_draft_ad',5: 'ad_package_purchase',6: 'show_cart',7: 'cybersource_checkout', 8: 'ad_post_fourth_step'}) %}
                 {{ include('FaFrontendBundle::paaFooter.html.twig') }}
         {% else %}
             {% if status_code == 200 %}
