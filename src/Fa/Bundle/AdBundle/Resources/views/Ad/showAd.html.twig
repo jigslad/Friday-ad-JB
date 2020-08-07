@@ -218,6 +218,12 @@
         {{ block('imageUploadStylesheets') }}
     {% endif %}
     <link href="/bundles/faad/css/zutoLoanCalc.css" rel="stylesheet">
+    {# CSS for ad details - taken from src/Fa/Bundle/AdBundle/Resources/views/Ad/showAd-css.html.twig #}
+    {% stylesheets filter='uglifycss' output='bundles/css/compiled/show-ad.css'
+        'bundles/fafrontend/css/show-ad.css'
+    %}
+        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
+    {% endstylesheets %}
 {% endblock %}
 
 {% block meta_robots %}
@@ -362,9 +368,14 @@
 {% endif %}
 
 {% if recommendedSlotArray is defined and recommendedSlotArray|length %}
-       {{ include('FaAdBundle:AdList:recommended_slot_css.html.twig') }}
+    {# CSS for recommended slots - taken from src/Fa/Bundle/AdBundle/Resources/views/AdList/recommended_slot_css.html.twig #}
+    {% stylesheets filter='uglifycss' output='bundles/css/compiled/recommended-slots.css'
+        'bundles/fafrontend/css/recommended-slots.css'
+    %}
+        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
+    {% endstylesheets %}
 {% endif %}
-    
+
 {% if currentDevice == 'D' or currentDevice == 'T' %}
     <div class="details-top-banner" id="sticky_item_information_id" style="display:none">
         <div class="row">
