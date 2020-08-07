@@ -120,7 +120,7 @@ class UserSiteBannerManager
         $imageQuality = $this->container->getParameter('fa.image.quality');
         $awsDefaultBannerUrl = $this->container->getParameter('fa.static.aws.url').DIRECTORY_SEPARATOR.$this->container->getParameter('fa.user.site.banner.image.dir');
         if ($userSiteBanner) {
-           $this->removeImage(); die;
+           $this->removeImage(); 
             //$dimension = getimagesize($siteBannerImagePath.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename());
             $dimension = getimagesize($awsDefaultBannerUrl.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename());
             //convert original image to jpg

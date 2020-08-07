@@ -24,7 +24,7 @@ use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Fa\Bundle\UserBundle\Controller\ThirdPartyLoginController;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\UserBundle\Solr\UserShopDetailSolrFieldMapping;
-use Fa\Bundle\FrontendBundle\Repository\AdultHomepageRepository;
+/*use Fa\Bundle\FrontendBundle\Repository\AdultHomepageRepository;*/
 
 
 /**
@@ -74,13 +74,14 @@ class AdultController extends ThirdPartyLoginController
         $featuredAdvertisers = $this->getFeaturedAdvertisers($request, $cookieLocationDetails);
         
         //get blog details from external site
-        $blogArray = array(
+        /* Commenting out the adult blog section based on the business discussion */
+        /*$blogArray = array(
             '0'=>array('url'=>AdultHomepageRepository::EXTERNAL_BLOG_URL1,'btn'=>AdultHomepageRepository::EXTERNAL_BLOG_BTN1),
             '1'=> array('url'=>AdultHomepageRepository::EXTERNAL_BLOG_URL2,'btn'=>AdultHomepageRepository::EXTERNAL_BLOG_BTN2)            
         );
         
         $externalSiteBlogDetails = array();
-        $externalSiteBlogDetails  = CommonManager::getWordpressBlogDetails($blogArray);
+        $externalSiteBlogDetails  = CommonManager::getWordpressBlogDetails($blogArray);*/
         
         $entityCacheManager = $this->container->get('fa.entity.cache.manager');
         $seoLocationName    = $entityCacheManager->getEntityNameById('FaEntityBundle:Location', LocationRepository::COUNTY_ID);
@@ -105,7 +106,7 @@ class AdultController extends ThirdPartyLoginController
             'seoLocationName' => $seoLocationName,
             'businessExposureUsersDetails' => $featuredAdvertisers,
             'form' => $form->createView(),
-            'externalSiteBlogDetails' => $externalSiteBlogDetails,
+            /*'externalSiteBlogDetails' => $externalSiteBlogDetails,*/
             'bannersArray' => $bannersArray,
             'latestAdultAds' => $latestAdultAds,
             'featureAds' => $featureAds,
