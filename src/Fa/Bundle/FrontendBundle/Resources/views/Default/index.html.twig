@@ -38,7 +38,12 @@
     {% endif %}
 {% endblock %}
 {% block scripttop %}
-    {{ include('FaFrontendBundle:Default:home-css.html.twig') }}
+    {# CSS for homepage - taken from src/Fa/Bundle/FrontendBundle/Resources/views/Default/home-css.html.twig #}
+    {% stylesheets filter='uglifycss' output='bundles/css/compiled/fa-home.css'
+        'bundles/fafrontend/css/home.css'
+    %}
+        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
+    {% endstylesheets %}
 {% endblock %}
 
 {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
@@ -113,7 +118,7 @@
                     <a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}" class="discover-community">{{'Community'|trans({}, 'frontend-homepage')}}</a>
                     
                     {% set linkParams = { 'item__location': locationId, 'item__category_id': adultId } %}
-                    <a href="{{ path('fa_adult_homepage') }}" class="discover-adult">{{'Adult'|trans({}, 'frontend-homepage')}}</a>
+                    <a href="{{ path('fa_new_adult_homepage') }}" class="discover-adult">{{'Adult'|trans({}, 'frontend-homepage')}}</a>
                 </div>
                 {% endcache %}
             </div>
@@ -385,14 +390,24 @@
         });
     });
 
-    $( window ).scroll(function() {
-        if ($("#sticky_nav").hasClass('fixed')) {
+    $(window).scroll(function() {
+        if ($(window).scrollTop() > ($('.top-links').height() + $('#sticky_nav_top').height())) {
+            $("#sticky_nav").addClass('fixed');
+            $("#sticky_nav_top").addClass('fixed');
+            $("#sticky_nav_top").addClass('top-bar-shadow');
+        } else {
+            $("#sticky_nav").removeClass('fixed');
+            $("#sticky_nav_top").removeClass('fixed');
+            $("#sticky_nav_top").removeClass('top-bar-shadow');
+        }
+
+        /*if ($("#sticky_nav").hasClass('fixed')) {
             $("#sticky_nav_top").addClass('fixed');
             $("#sticky_nav_top").addClass('top-bar-shadow');
         } else {
             $("#sticky_nav_top").removeClass('fixed');
             $("#sticky_nav_top").removeClass('top-bar-shadow');
-        }
+        }*/
     });
 
     function accordionCallback(accordion)

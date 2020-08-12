@@ -4946,10 +4946,10 @@ class AdRepository extends EntityRepository
         }
 
         $dayBeforeStartDate = CommonManager::getTimeStampFromStartDate(date('Y-m-d', strtotime('-1 day')));
-        
+
         $query = $this->createQueryBuilder(self::ALIAS)
         ->select(self::ALIAS.'.id')
-        ->andWhere(self::ALIAS.'.category = (:catId)')
+        ->andWhere(self::ALIAS.'.category IN (:catId)')
         ->setParameter('catId', $category)
         ->andWhere('IDENTITY('.self::ALIAS.'.status) ='.BaseEntityRepository::AD_STATUS_LIVE_ID)
         ->andWhere('(' . self::ALIAS . '.created_at <= ' . $dayBeforeStartDate . ' AND '. self::ALIAS . '.updated_at <= ' . $dayBeforeStartDate . ')')
@@ -4965,12 +4965,16 @@ class AdRepository extends EntityRepository
             }
         }
         $query->orderBy(self::ALIAS.'.id', 'DESC');
-        $query->setMaxResults(1);
+        $query->groupBy(self::ALIAS.'.category');
         $adList = $query->getQuery()->getArrayResult();
+
+        $adIds = [];
         if (!empty($adList)) {
-            $adId = $adList[0]['id'];
+            foreach($adList as $ad) {
+                $adIds[] = $ad['id'];
+            }
         }
-        return $adId;
+        return $adIds;
     }
     
     /** getRecentAdByCategoryArray
@@ -4980,14 +4984,6 @@ class AdRepository extends EntityRepository
      */
     public function getRecentAdByCategoryArray($categoryList, $searchParams){
         
-        $recentAd  = array();
-        $recentAdByCatArr = null;
-        foreach ($categoryList as $category){
-            $recentAdByCatArr = $this->getRecentAdByCategory($category, $searchParams);
-            if($recentAdByCatArr!='') {
-                $recentAd[$category] = $recentAdByCatArr;
-            }
-        }
-        return $recentAd;
+        return $this->getRecentAdByCategory($categoryList, $searchParams);
     }
 }

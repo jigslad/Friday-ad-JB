@@ -222,6 +222,14 @@
         %}    	        
     {% endstylesheets %}
     <link rel="stylesheet" href="{{ asset('/bundles/css/compiled/srchlist.css') }}"/>
+    {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) %}
+        {# CSS for owl carousel - taken from Fa/Bundle/AdBundle/Resources/views/AdList/owl-carousel-2-css.html.twig and inline CSS for listing page #}
+        {% stylesheets filter='uglifycss' output='bundles/css/compiled/search-result.css'
+            'bundles/fafrontend/css/ad-list.css'
+        %}
+            <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
+        {% endstylesheets %}
+    {% endif %}
 {% endblock %}
 
 {% block body %}
@@ -296,7 +304,12 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 .studentjob-list-logo { background:url(/bundles/fafrontend/images/studentjob.png) 100% 100% no-repeat;width: 124px;height: 124px; }
 </style>
 {% if displayRecommendedSlot is defined and displayRecommendedSlot==1 %}
-    {{ include('FaAdBundle:AdList:recommended_slot_css.html.twig') }}
+    {# CSS for recommended slots - taken from src/Fa/Bundle/AdBundle/Resources/views/AdList/recommended_slot_css.html.twig #}
+    {% stylesheets filter='uglifycss' output='bundles/css/compiled/recommended-slots.css'
+        'bundles/fafrontend/css/recommended-slots.css'
+    %}
+        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
+    {% endstylesheets %}
 {% endif %}
 
  {% set showAdultAlert = 0 %}
