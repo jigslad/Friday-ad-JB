@@ -6069,3 +6069,7 @@ input[type="text"].door-no {
 .find-property .capsule-links a:last-child {
     margin: 0
 }
+.myacc-details .mt20{
+    position: relative;
+    width: 300px;
+}
