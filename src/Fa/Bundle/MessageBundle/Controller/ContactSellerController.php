@@ -64,7 +64,7 @@ class ContactSellerController extends CoreController
                     //check for own ad.
                     $loggedInUser = $this->getLoggedInUser();
                     if ($loggedInUser->getId() == $adUserId) {
-                        $error = $this->get('translator')->trans('You can not contact for your own ad.', array(), 'frontend-show-ad');
+                        $error = $this->get('translator')->trans('Sorry, it looks like you’re trying to enquire on your own advert!', array(), 'frontend-show-ad');
                         $this->getRepository('FaUserBundle:User')->removeUserCookies();
                     }
                 }
