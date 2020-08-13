@@ -103,8 +103,12 @@
     document.addEventListener('error', function(e) {
         var target = $(e.target);
         if (e.target.nodeName == 'IMG' && $(target).hasClass('ndult-company-logo')) {
-            $(target).closest('.list-img').addClass('profile-placeholder');
-            e.target.src = '{{ asset('bundles/fafrontend/images/user-no-logo.svg') }}';
+            var parent = $(target).closest('.list-img');
+
+            $(parent).html(
+                $('<div>').addClass('profile-placeholder')
+                    .append($(target).attr('src', '{{ asset('bundles/fafrontend/images/user-no-logo.svg') }}'))
+            );
         }
     }, true);
 
