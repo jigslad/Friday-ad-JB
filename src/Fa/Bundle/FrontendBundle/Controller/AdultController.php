@@ -11,20 +11,22 @@
 
 namespace Fa\Bundle\FrontendBundle\Controller;
 
-use Fa\Bundle\AdBundle\Form\AdultHomePageSearchType;
+use Symfony\Component\HttpFoundation\Cookie;
+use Fa\Bundle\AdBundle\Form\AdTopSearchType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Cookie;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Fa\Bundle\EntityBundle\Repository\LocationRepository;
-use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Fa\Bundle\AdBundle\Solr\AdSolrFieldMapping;
-use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
-use Fa\Bundle\UserBundle\Controller\ThirdPartyLoginController;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Fa\Bundle\AdBundle\Form\AdultHomePageSearchType;
+use Fa\Bundle\EntityBundle\Repository\EntityRepository;
+use Fa\Bundle\ContentBundle\Repository\SeoToolRepository;
+use Fa\Bundle\EntityBundle\Repository\LocationRepository;
+use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
+use Fa\Bundle\ContentBundle\Repository\StaticPageRepository;
 use Fa\Bundle\UserBundle\Solr\UserShopDetailSolrFieldMapping;
-use Fa\Bundle\FrontendBundle\Repository\AdultHomepageRepository;
+use Fa\Bundle\UserBundle\Controller\ThirdPartyLoginController;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 
 /**
@@ -74,13 +76,14 @@ class AdultController extends ThirdPartyLoginController
         $featuredAdvertisers = $this->getFeaturedAdvertisers($request, $cookieLocationDetails);
         
         //get blog details from external site
-        $blogArray = array(
+        /* Commenting out the adult blog section based on the business discussion */
+        /*$blogArray = array(
             '0'=>array('url'=>AdultHomepageRepository::EXTERNAL_BLOG_URL1,'btn'=>AdultHomepageRepository::EXTERNAL_BLOG_BTN1),
             '1'=> array('url'=>AdultHomepageRepository::EXTERNAL_BLOG_URL2,'btn'=>AdultHomepageRepository::EXTERNAL_BLOG_BTN2)            
         );
         
         $externalSiteBlogDetails = array();
-        $externalSiteBlogDetails  = CommonManager::getWordpressBlogDetails($blogArray);
+        $externalSiteBlogDetails  = CommonManager::getWordpressBlogDetails($blogArray);*/
         
         $entityCacheManager = $this->container->get('fa.entity.cache.manager');
         $seoLocationName    = $entityCacheManager->getEntityNameById('FaEntityBundle:Location', LocationRepository::COUNTY_ID);
@@ -105,12 +108,355 @@ class AdultController extends ThirdPartyLoginController
             'seoLocationName' => $seoLocationName,
             'businessExposureUsersDetails' => $featuredAdvertisers,
             'form' => $form->createView(),
-            'externalSiteBlogDetails' => $externalSiteBlogDetails,
+            /*'externalSiteBlogDetails' => $externalSiteBlogDetails,*/
             'bannersArray' => $bannersArray,
             'latestAdultAds' => $latestAdultAds,
             'featureAds' => $featureAds,
         );
         return $this->render('FaFrontendBundle:Adult:index.html.twig', $parameters);
+    }
+
+    /**
+     * Adult Home page action.
+     *
+     * @param Request $request A Request object.
+     *
+     * @param Response A Response object.
+     * @return Response
+     */
+    public function indexNewAction(Request $request)
+    {
+        // set location in cookie.
+        $cookieValue = $this->setLocationInCookie($request);
+        $searchParams     = $request->get('searchParams');
+        $seoToolRepository = $this->getRepository('FaContentBundle:SeoTool');
+
+        // get location from cookie
+        if ($cookieValue) {
+            $cookieLocationDetails = json_decode($cookieValue, true);
+        } else {
+            $cookieLocationDetails = json_decode($request->cookies->get('location'), true);
+        }
+
+        if (isset($cookieLocationDetails['location']) && $cookieLocationDetails['location']) {
+            $searchParams['item__location'] = $cookieLocationDetails['location'];
+
+            $distance = CategoryRepository::OTHERS_DISTANCE;
+
+            $searchParams['item__distance'] = $distance;
+        }
+
+        //get latest adult ads
+        $latestAdultAds = $this->getLatestAds($searchParams);
+
+        //get featured advertisers
+        $featuredAdvertisers = $this->getFeaturedAdvertisers($request, $cookieLocationDetails);
+
+        $entityCacheManager = $this->container->get('fa.entity.cache.manager');
+        $seoLocationName    = $entityCacheManager->getEntityNameById('FaEntityBundle:Location', LocationRepository::COUNTY_ID);
+
+        if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['locality']) && $cookieLocationDetails['locality']) {
+            $seoLocationName = $cookieLocationDetails['locality'];
+        } elseif (is_array($cookieLocationDetails) && isset($cookieLocationDetails['county']) && $cookieLocationDetails['county']) {
+            $seoLocationName = $cookieLocationDetails['county'];
+        } elseif (is_array($cookieLocationDetails) && isset($cookieLocationDetails['town']) && $cookieLocationDetails['town']) {
+            $seoLocationName = $cookieLocationDetails['town'];
+        }
+
+        $bannersArray = $this->getRepository("FaContentBundle:Banner")->getBannersArrayByPage('homepage', $this->container);
+
+        $featureAds  = $this->getAdultFeatureAds($request, $cookieLocationDetails);
+
+        $seoFields = [];
+        $seoPageRules = $seoToolRepository->getSeoRulesKeyValueArray(SeoToolRepository::HOME_PAGE, $this->container);
+        if (! empty($seoPageRules[SeoToolRepository::HOME_PAGE.'_global'])) {
+            $seoPageRule = $seoPageRules[SeoToolRepository::HOME_PAGE.'_global'];
+            if (! empty($seoPageRule)) {
+                $seoManager = $this->container->get('fa.seo.manager');
+                $seoFields = CommonManager::getSeoFields($seoPageRule);
+                foreach ($seoFields as $index => $seoField) {
+                    $seoFields[$index] = $seoManager->parseSeoString($seoField, ['{location}' => $seoLocationName]);
+                }
+            }
+        }
+
+        $locationId = '';
+        if (! empty($cookieLocationDetails) && ! empty($cookieLocationDetails['location'])) {
+            $locationId = $cookieLocationDetails['location'];
+        }
+        $adultCategories = $this->getAdultCategoryConstants($locationId);
+
+        $formManager  = $this->get('fa.formmanager');
+        $form               = $formManager->createForm(AdultHomePageSearchType::class, null, array('method' => 'GET', 'action' => $this->generateUrl('ad_landing_page_search_result')));
+        $parameters = array(
+            'businessExposureUsersDetails' => $featuredAdvertisers,
+            'form' => $form->createView(),
+            'bannersArray' => $bannersArray,
+            'latestAdultAds' => array(
+                'ads' => $latestAdultAds,
+                'img_alts' => empty($latestAdultAds) ? [] : $seoToolRepository->getSeoPageRuleDetailForAds($latestAdultAds, SeoToolRepository::ADVERT_IMG_ALT, $this->container),
+                'ad_urls' => empty($latestAdultAds) ? [] : $this->getAdUrls($latestAdultAds),
+                'img_paths' => empty($latestAdultAds) ? [] : $this->getAdImagePaths($latestAdultAds),
+                'root_category_name' => empty($latestAdultAds) ? [] : $this->getRootCategoryName($latestAdultAds)
+            ),
+            'featureAds' => array(
+                'ads' => $featureAds,
+                'img_alts' => empty($featureAds) ? [] : $seoToolRepository->getSeoPageRuleDetailForAds($featureAds, SeoToolRepository::ADVERT_IMG_ALT, $this->container),
+                'ad_urls' => empty($featureAds) ? [] : $this->getAdUrls($featureAds),
+                'img_paths' => empty($featureAds) ? [] : $this->getAdImagePaths($featureAds),
+                'root_category_name' => empty($featureAds) ? [] : $this->getRootCategoryName($featureAds)
+            ),
+            'seoFields' => $seoFields,
+            'locationBlocks' => $this->getAdultHPLocationBlocks(),
+            'topSearchForm' => $this->getTopSearchForm($request),
+            'adultCategories' => $adultCategories['values'],
+            'adultCategoriesConstants' => $adultCategories['constants'],
+            'locationId' => $locationId
+        );
+        return $this->renderWithTwigParameters('FaFrontendBundle:Adult:indexNew.html.twig', $parameters, $request);
+    }
+
+    /**
+     * get adult category constants with name and URL
+     *
+     * @param $locationId
+     *
+     * @return array
+     */
+    private function getAdultCategoryConstants($locationId)
+    {
+        $categories = $constants = [];
+        $adRoutingManager = $this->container->get('fa_ad.manager.ad_routing');
+
+        $constants = [
+            'categoryAdultId'       => CategoryRepository::ADULT_ID,
+            'escortServicesId'      => CategoryRepository::ESCORT_SERVICES_ID
+        ];
+
+        $categories['escortServicesId'] = [
+            'class'     => 'discover-escorts',
+            'name'      => 'Escorts',
+            'url'       => $adRoutingManager->getCategoryUrlById($locationId, $constants['escortServicesId'])
+        ];
+
+        $categories['adultContactId'] = [
+            'class'     => 'discover-adult-contacts',
+            'name'      => 'Adult Contacts',
+            'url'       => $adRoutingManager->getCategoryUrlById($locationId, CategoryRepository::ADULT_CONTACTS_ID)
+        ];
+
+        $categories['fetishRoleplayId'] = [
+            'class'     => 'discover-fetish-and-roleplay',
+            'name'      => 'Fetish and Role Play',
+            'url'       => $adRoutingManager->getCategoryUrlById($locationId, CategoryRepository::FETISH_AND_ROLE_PLAY_ID)
+        ];
+
+        $categories['gayMaleEscortId'] = [
+            'class'     => 'discover-gay-male-escort',
+            'name'      => 'Gay Male Escort',
+            'url'       => $adRoutingManager->getCategoryUrlById($locationId, CategoryRepository::GAY_MALE_ESCORT_ID)
+        ];
+
+        $categories['adultIndustryJobsId'] = [
+            'class'     => 'discover-adult-industry-jobs',
+            'name'      => 'Adult Industry Jobs',
+            'url'       => $adRoutingManager->getCategoryUrlById($locationId, CategoryRepository::ADULT_INDUSTRY_JOBS_ID)
+        ];
+
+        $categories['adultMassageId'] = [
+            'class'     => 'discover-adult-massage',
+            'name'      => 'Adult Massage',
+            'url'       => $adRoutingManager->getCategoryUrlById($locationId, CategoryRepository::ADULT_MASSAGE_ID)
+        ];
+
+        return ['values' => $categories, 'constants' => $constants];
+    }
+
+    /**
+     * get adult footer static pages
+     *
+     * @param $request
+     *
+     * @return array
+     */
+    private function getAdultFooterStaticBlock(Request $request)
+    {
+        $staticPages = $this->getRepository('FaContentBundle:StaticPage')->getStaticPagesForFooter($this->container);
+        return array('staticPages' => $staticPages, 'currentRoute' => $request->get('currentRoute'));
+    }
+
+    /**
+     * get adult footer categories
+     *
+     * @return array
+     */
+    private function getAdultFooterCategories()
+    {
+        $locationDetails = array();
+        $locationDetails['location'] = null;
+        $footerCategories = $this->getRepository('FaEntityBundle:Category')->getFooterCategories($this->container, $locationDetails);
+        $parameters       = array('footerCategories' => $footerCategories, 'location_id' => $locationDetails['location']);
+
+        // fetch location directly
+        if (!$parameters['location_id']) {
+            $parameters['location_id'] = 'uk';
+        } else {
+            $parameters['location_id'] = $locationDetails['slug'];
+        }
+
+        $parameters['location'] = $locationDetails['location'];
+        $parameters['searchParams'] = [];
+
+        return $parameters;
+    }
+
+    /**
+     * top search form
+     *
+     * @param $request
+     *
+     * @return form
+     */
+    private function getTopSearchForm($request)
+    {
+        $formManager = $this->get('fa.formmanager');
+
+        $form        = $formManager->createForm(AdTopSearchType::class, null, array('method' => 'GET', 'action' => $this->generateUrl('ad_search_result')));
+
+        $bindSearchParams = array();
+        $searchParams     = $request->get('searchParams');
+
+        if ($searchParams && count($searchParams)) {
+            foreach ($form->all() as $field) {
+                if (isset($searchParams[$field->getName()])) {
+                    $bindSearchParams[$field->getName()] = $searchParams[$field->getName()];
+                }
+            }
+
+            if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
+                $bindSearchParams['tmpLeafLevelCategoryId'] = $searchParams['item__category_id'];
+                $cat = $this->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($searchParams['item__category_id'], false, $this->container);
+                $parent = $this->getRepository('FaEntityBundle:Category')->getCategoryArrayById(key($cat), $this->container);
+                if ($parent) {
+                    $bindSearchParams['item__category_id'] =  $parent['id'];
+                }
+            }
+            $form->submit($bindSearchParams);
+        }
+
+        return $form->createView();
+    }
+
+    /**
+     * The function to get the location details to be displayed in the adult page
+     *
+     * @return array
+     */
+    private function getAdultHPLocationBlocks()
+    {
+        // Active ads
+        $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
+        $data['query_filters']['item']['category_id'] = CategoryRepository::ADULT_ID;
+
+        $blocks = array(
+            AdSolrFieldMapping::DOMICILE_ID => array(
+                'heading' => $this->get('translator')->trans('Top Counties', array(), 'frontend-search-list-block'),
+                'search_field_name' => 'item__location',
+                'facet_limit'          => 30,
+                'repository'           => 'FaEntityBundle:Location',
+            ),
+            AdSolrFieldMapping::TOWN_ID => array(
+                'heading' => $this->get('translator')->trans('Top Towns', array(), 'frontend-search-list-block'),
+                'search_field_name' => 'item__location',
+                'facet_limit'          => 30,
+                'repository'           => 'FaEntityBundle:Location',
+            ),
+        );
+
+        $data['facet_fields'] = array(
+            AdSolrFieldMapping::DOMICILE_ID => array('limit' => $blocks[AdSolrFieldMapping::DOMICILE_ID]['facet_limit'], 'min_count' => 1),
+            AdSolrFieldMapping::TOWN_ID     => array('limit' => $blocks[AdSolrFieldMapping::TOWN_ID]['facet_limit'], 'min_count' => 1),
+        );
+
+        // initialize solr search manager service and fetch data based of above prepared search options
+        $entityCacheManager = $this->container->get('fa.entity.cache.manager');
+        $adRoutingManager = $this->container->get('fa_ad.manager.ad_routing');
+        $this->get('fa.solrsearch.manager')->init('ad', '', $data);
+        $solrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
+        // fetch result set from solr
+        $facetResult = $this->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
+
+        if ($facetResult) {
+            $facetResult = get_object_vars($facetResult);
+            foreach ($blocks as $solrFieldName => $block) {
+                if (isset($facetResult[$solrFieldName]) && !empty($facetResult[$solrFieldName])) {
+                    $data = get_object_vars($facetResult[$solrFieldName]);
+
+                    foreach ($data as $location_id => $unknown) {
+                        $blocks[$solrFieldName]['facet'][$location_id]['search_result_url'] = $adRoutingManager->getCustomListingUrl([ ($block['search_field_name']) => $location_id],'adult-services/escorts');
+                        $blocks[$solrFieldName]['facet'][$location_id]['location_name'] = $entityCacheManager->getEntityNameById('FaEntityBundle:Location', $location_id);
+                    }
+                }
+            }
+        }
+
+        return $blocks;
+    }
+
+    /**
+     * to get ad urls of solr ad objs
+     *
+     * @param $adObjs
+     *
+     * @return array
+     */
+    private function getAdUrls($adObjs)
+    {
+        $adUrls = [];
+        $adRoutingManager = $this->container->get('fa_ad.manager.ad_routing');
+
+        foreach ($adObjs as $adObj) {
+            $adUrls[$adObj[AdSolrFieldMapping::ID]] = $adRoutingManager->getDetailUrl($adObj);
+        }
+
+        return $adUrls;
+    }
+
+    /**
+     * to get ad images of solr ad objs
+     *
+     * @param $adObjs
+     *
+     * @return array
+     */
+    private function getAdImagePaths($adObjs)
+    {
+        $imagePaths = [];
+        $adImageRepository = $this->getRepository('FaAdBundle:AdImage');
+
+        foreach ($adObjs as $adObj) {
+            $imagePaths[$adObj[AdSolrFieldMapping::ID]] = $adImageRepository->getImagePath($this->container, $adObj, '300X225', 1);
+        }
+
+        return $imagePaths;
+    }
+
+    /**
+     * to get root category name of solr ad objs
+     *
+     * @param $adObjs
+     *
+     * @return array
+     */
+    private function getRootCategoryName($adObjs)
+    {
+        $rootCategoryName = [];
+
+        foreach ($adObjs as $adObj) {
+            $rootCategoryName[$adObj[AdSolrFieldMapping::ID]] = CommonManager::getCategoryClassNameById($adObj[AdSolrFieldMapping::ROOT_CATEGORY_ID], true);
+        }
+
+        return $rootCategoryName;
     }
 
     /**
@@ -123,7 +469,8 @@ class AdultController extends ThirdPartyLoginController
         $businessExposureUsers = array();
         $businessExposureMiles = array();
         $categoryId            =  CategoryRepository::ADULT_ID;
-        
+        $adRoutingManager = $this->container->get('fa_ad.manager.ad_routing');
+
         $location     = null;
         
         if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['location']) && $cookieLocationDetails['location']) {
@@ -150,14 +497,6 @@ class AdultController extends ThirdPartyLoginController
                 }
             }
             
-            if (!count($businessExposureUsers)) {
-                foreach ($businessExposureMiles as $businessExposureMile) {
-                    foreach ($this->getBusinessExposureUser($data, $businessExposureMile) as $businessExposureUser) {
-                        $businessExposureUsers[] = $businessExposureUser;
-                    }
-                }
-            }
-            
             if (!empty($businessExposureUsers)) {
                 shuffle($businessExposureUsers);
                 $businessPageLimit = count($businessExposureUsers);
@@ -171,6 +510,8 @@ class AdultController extends ThirdPartyLoginController
                             'company_logo' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_COMPANY_LOGO_PATH]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_COMPANY_LOGO_PATH] : null),
                             'status_id' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID] : null),
                             'user_name' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME] : null),
+                            'profile_url' => $adRoutingManager->getProfilePageUrl($businessExposureUser[UserShopDetailSolrFieldMapping::ID]),
+                            'user_logo' => CommonManager::getUserLogo($this->container, $businessExposureUser[UserShopDetailSolrFieldMapping::USER_COMPANY_LOGO_PATH], $businessExposureUser[UserShopDetailSolrFieldMapping::ID], null, null, true, true, $businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID], $businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME])
                         );
                     }
                 }
@@ -182,7 +523,15 @@ class AdultController extends ThirdPartyLoginController
         
         return $businessExposureUserDetails;
     }
-    
+
+    /**
+     * to get business exposure user details
+     *
+     * @param $searchParams
+     * @param $exposureMiles
+     *
+     * @return solr object
+     */
     private function getBusinessExposureUser($searchParams, $exposureMiles)
     {
         $data               = array();
@@ -239,33 +588,33 @@ class AdultController extends ThirdPartyLoginController
         // Active ads
         $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
         $data['query_filters']['item']['category_id'] = CategoryRepository::ADULT_ID;
-        
+
         $blocks = array(
             AdSolrFieldMapping::DOMICILE_ID => array(
-                'heading' => $this->get('translator')->trans('Top Counties', array(), 'frontend-search-list-block'),
-                'search_field_name' => 'item__location',
+                'heading'              => $this->get('translator')->trans('Top Counties', array(), 'frontend-search-list-block'),
+                'search_field_name'    => 'item__location',
                 'facet_limit'          => 30,
                 'repository'           => 'FaEntityBundle:Location',
             ),
             AdSolrFieldMapping::TOWN_ID => array(
-                'heading' => $this->get('translator')->trans('Top Towns', array(), 'frontend-search-list-block'),
-                'search_field_name' => 'item__location',
+                'heading'              => $this->get('translator')->trans('Top Towns', array(), 'frontend-search-list-block'),
+                'search_field_name'    => 'item__location',
                 'facet_limit'          => 30,
                 'repository'           => 'FaEntityBundle:Location',
             ),
         );
-        
+
         $data['facet_fields'] = array(
             AdSolrFieldMapping::DOMICILE_ID => array('limit' => $blocks[AdSolrFieldMapping::DOMICILE_ID]['facet_limit'], 'min_count' => 1),
             AdSolrFieldMapping::TOWN_ID     => array('limit' => $blocks[AdSolrFieldMapping::TOWN_ID]['facet_limit'], 'min_count' => 1),
         );
-        
+
         // initialize solr search manager service and fetch data based of above prepared search options
         $this->get('fa.solrsearch.manager')->init('ad', '', $data);
         $solrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
         // fetch result set from solr
         $facetResult = $this->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
-        
+
         if ($facetResult) {
             $facetResult = get_object_vars($facetResult);
             foreach ($blocks as $solrFieldName => $block) {
@@ -274,7 +623,7 @@ class AdultController extends ThirdPartyLoginController
                 }
             }
         }
-        
+
         $parameters = array(
             'blocks'          => $blocks,
             'searchParams'    => $searchParams,
@@ -587,6 +936,47 @@ class AdultController extends ThirdPartyLoginController
             return $data[0];
         }
         return null;
+    }
+
+    private function renderWithTwigParameters($view, $parameters, $request)
+    {
+        if ($this->isAuth()) {
+            //check for own ad.
+            $loggedInUser = $this->getLoggedInUser();
+            $loggedInUserId = $loggedInUser->getId();
+            $userProfileName = $loggedInUser->getProfileName();
+
+            $parameters['totalUnreadMsg'] = $this->getRepository('FaMessageBundle:Message')->getMessageCount($loggedInUserId, 'all', $this->container);
+            $parameters['userRole'] = $this->getRepository('FaUserBundle:User')->getUserRole($loggedInUserId, $this->container);
+            $parameters['myProfileUrl'] = $this->container->get('fa_ad.manager.ad_routing')->getProfilePageUrl($loggedInUserId);
+            $parameters['userLogo'] = CommonManager::getUserLogoByUserId($this->container, $loggedInUserId, true, false, $userProfileName);
+
+            $notifications = $this->getRepository('FaMessageBundle:NotificationMessageEvent')->getActiveNotification($loggedInUserId);
+            $parameters['notification_count'] = count($notifications);
+
+            $userCart = $this->getRepository('FaPaymentBundle:Cart')->getUserCart($loggedInUserId, $this->container);
+            $parameters['userDetail'] = $this->getRepository('FaPaymentBundle:Transaction')->getCartDetail($userCart->getId());
+        } else {
+            $parameters['totalUnreadMsg'] = 0;
+        }
+
+        $location = $request->get('location');
+        $locationDetails = $this->getRepository('FaEntityBundle:Location')->getLocationDetailForHeaderCategories($this->container, $request, $location);
+        $parameters['headerCategories'] = $this->getRepository('FaEntityBundle:Category')->getAdultHeaderCategories($this->container, $locationDetails);
+        $parameters['footerDetails'] = $this->getAdultFooterCategories();
+        $parameters['footerStaticBlock'] = $this->getAdultFooterStaticBlock($request);
+
+        $staticPageArray = $this->getRepository('FaContentBundle:StaticPage')->getStaticPageLinkArray($this->container);
+
+        if (! empty($staticPageArray) && ! empty($staticPageArray[StaticPageRepository::STATIC_PAGE_COOKIES_POLICY_ID])) {
+            $parameters['cookiePolicyLink'] = $this->get('router')->generate('location_home_page', array(
+                'location' => $staticPageArray[StaticPageRepository::STATIC_PAGE_COOKIES_POLICY_ID]
+            ), true);
+        } else {
+            $parameters['cookiePolicyLink'] = 'javascript:void();';
+        }
+
+        return $this->render($view, $parameters);
     }
 }
 

@@ -218,12 +218,12 @@ EOF
             foreach ($result as $key => $ad) {
                 $adTitle = (property_exists($ad, AdSolrFieldMapping::TITLE) ? $ad->{AdSolrFieldMapping::TITLE} : null);
                 if ($adTitle) {
-                    $adTitle = CommonManager::hideOrRemovePhoneNumber($adTitle, 'remove');
-                    $adTitle = CommonManager::hideOrRemoveEmail($ad->id, $adTitle, 'remove');
+                    $adTitle = CommonManager::hideOrRemovePhoneNumber($adTitle, 'remove','');
+                    $adTitle = CommonManager::hideOrRemoveEmail($ad->id, $adTitle, 'remove','');
                 }
-                $adDesc = (property_exists($ad, AdSolrFieldMapping::DESCRIPTION) ? CommonManager::hideOrRemovePhoneNumber($ad->{AdSolrFieldMapping::DESCRIPTION}, 'remove') : null);
+                $adDesc = (property_exists($ad, AdSolrFieldMapping::DESCRIPTION) ? CommonManager::hideOrRemovePhoneNumber($ad->{AdSolrFieldMapping::DESCRIPTION}, 'remove','') : null);
                 if ($adDesc) {
-                    $adDesc = CommonManager::hideOrRemoveEmail($ad->id, $adDesc, 'remove');
+                    $adDesc = CommonManager::hideOrRemoveEmail($ad->id, $adDesc, 'remove','');
                 }
                 $index = $key + 1;
                 $adArray[$index]['id']              = $ad->id;
