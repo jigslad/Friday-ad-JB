@@ -511,7 +511,7 @@ class AdultController extends ThirdPartyLoginController
                             'status_id' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID] : null),
                             'user_name' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME] : null),
                             'profile_url' => $adRoutingManager->getProfilePageUrl($businessExposureUser[UserShopDetailSolrFieldMapping::ID]),
-                            'user_logo' => CommonManager::getUserLogo($this->container, $businessExposureUser[UserShopDetailSolrFieldMapping::USER_COMPANY_LOGO_PATH], $businessExposureUser[UserShopDetailSolrFieldMapping::ID], null, null, true, true, $businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID], $businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME])
+                            'user_logo' => CommonManager::getCustomUserLogo($this->container, $businessExposureUser[UserShopDetailSolrFieldMapping::USER_COMPANY_LOGO_PATH], $businessExposureUser[UserShopDetailSolrFieldMapping::ID], null, null, true, true, $businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID], $businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME])
                         );
                     }
                 }
