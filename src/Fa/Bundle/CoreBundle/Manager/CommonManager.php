@@ -883,7 +883,7 @@ class CommonManager
      *
      * @return string|boolean
      */
-    public static function getUserLogoForAdultFeaturedAdvertisers($container, $path, $userId, $imageWidth = "88", $imageHeight = '88', $appendTime = false, $isCompany = false, $userStatus = null, $userName = null)
+    public static function getCustomUserLogo($container, $path, $userId, $imageWidth = "88", $imageHeight = '88', $appendTime = false, $isCompany = false, $userStatus = null, $userName = null)
     {
         if (!$userStatus) {
             $userStatus = $container->get('doctrine')->getManager()->getRepository('FaUserBundle:User')->getUserStatus($userId, $container);
