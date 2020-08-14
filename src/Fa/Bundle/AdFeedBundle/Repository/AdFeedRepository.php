@@ -93,7 +93,7 @@ class AdFeedRepository extends EntityRepository
             ->where(self::ALIAS . '.ad = ' . $ad)
             ->andWhere(self::ALIAS . ".status = 'E'")
             ->getQuery()->getOneOrNullResult();
-        if (count($res)) {
+        if(($res) && (count($res))) {
             return true;
         } else {
             return false;
