@@ -150,6 +150,12 @@
                 {% if attribute(ad, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
                     {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [attribute(ad, constant(solrMapping ~ 'DESCRIPTION')), 'remove','']) %}
                     {% set adDescWithReplacedEmail = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [ad.id, adDescWithReplacedPhone, 'remove','']) %}
+                    {% if (attribute(ad, constant(solrMapping ~ 'IS_FEED_AD')) is defined) and (attribute(ad, constant(solrMapping ~ 'IS_FEED_AD')) == 1) %}
+                        {% set AdFeedRepository = fetch_repository('FaAdFeedBundle:AdFeed') %}
+                        {% if AdFeedRepository.isFeedAdExpired(ad.id) %}
+                            {{ '<b>SOLD! No longer available.</b><br />' }}
+                            {% endif %}
+                    {% endif%}
                     {{trim_text(adDescWithReplacedEmail, adListFields|length ? 150 : 250)|replace({"\\n": "<br />"})|raw}}
                 {% endif %}
             </div>

@@ -81,4 +81,22 @@ class AdFeedRepository extends EntityRepository
         $this->queryBuilder->andWhere(self::ALIAS.'.ref_site_id = :ad_feed_ref_site_id');
         $this->queryBuilder->setParameter('ad_feed_ref_site_id', $ref_site_id);
     }
+
+    /**
+     * Check feed ad is expired or not
+     *
+     * @param string $ad Text
+     * @return boolean true/false
+     */
+    public function isFeedAdExpired($ad){
+        $res = $this->getBaseQueryBuilder()
+            ->where(self::ALIAS . '.ad = ' . $ad)
+            ->andWhere(self::ALIAS . ".status = 'E'")
+            ->getQuery()->getOneOrNullResult();
+        if(($res) && (count($res))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
