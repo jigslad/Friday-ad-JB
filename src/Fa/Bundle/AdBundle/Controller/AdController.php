@@ -319,7 +319,7 @@ class AdController extends CoreController
         if ($cookieLocation && $cookieLocation != CommonManager::COOKIE_DELETED) {
             $cookieLocation = get_object_vars(json_decode($cookieLocation));
             if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
-                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
+                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].','.$cookieLocation['longitude']);
                 $solrSearchManager->setGeoDistQuery($geoDistParams);
             }
         }
@@ -673,7 +673,7 @@ class AdController extends CoreController
                     $this->get('fa.solrsearch.manager')->init('ad', '', $data);
                     if (!empty($cookieLocation)) {
                         if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
-                            $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
+                            $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].','.$cookieLocation['longitude']);
                             $this->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
                         }
                     }

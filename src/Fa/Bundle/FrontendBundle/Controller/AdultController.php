@@ -742,7 +742,11 @@ class AdultController extends ThirdPartyLoginController
         $solrSearchManager = $this->get('fa.solrsearch.manager');
         $solrSearchManager->init('ad', $keywords, $data, $page, $recordsPerPage);
         if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['latitude']) && isset($cookieLocationDetails['longitude'])) {
-            $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocationDetails['latitude'].', '.$cookieLocationDetails['longitude']);
+            if ($location) {
+                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocationDetails['latitude'] . ',' . $cookieLocationDetails['longitude'], 'd' => $distanceRange);
+            } else {
+                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocationDetails['latitude'].','.$cookieLocationDetails['longitude']);
+            }
             $solrSearchManager->setGeoDistQuery($geoDistParams);
         }
         $solrResponse = $solrSearchManager->getSolrResponse();
