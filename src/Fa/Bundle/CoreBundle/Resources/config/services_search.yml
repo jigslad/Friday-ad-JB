@@ -55,6 +55,11 @@ services:
         class: '%fa.solr.client.class%'
         arguments:
             - '%fa.solr.client.ad.view.counter%'
+
+    fa.solr.client.ad.new:
+        class: '%fa.solr.client.class%'
+        arguments:
+            - '%fa.solr.client.ad.new%'
             
     fa.searchfilters.manager:
         class: '%fa.searchfilters.manager.class%'

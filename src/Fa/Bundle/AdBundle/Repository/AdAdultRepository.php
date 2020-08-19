@@ -156,6 +156,23 @@ class AdAdultRepository extends EntityRepository
     }
 
     /**
+     * Returns ad solr document object.
+     *
+     * @param object $ad Ad object.
+     * @param object $container
+     *
+     * @return Apache_Solr_Document
+     */
+    public function getSolrDocumentNew($ad, $container)
+    {
+        $document = new \SolrInputDocument($ad);
+
+        $document = $this->_em->getRepository('FaAdBundle:Ad')->getSolrDocumentNew($ad, $document, $container);
+
+        return $document;
+    }
+
+    /**
      * Add field to solr document.
      *
      * @param object $document Solr document object.
@@ -167,6 +184,10 @@ class AdAdultRepository extends EntityRepository
     private function addField($document, $field, $value)
     {
         if ($value != null) {
+            if (is_array($value)) {
+                $value = json_encode($value);
+            }
+
             $document->addField($field, $value);
         }
 

@@ -115,6 +115,15 @@ class AdCommunityRepository extends EntityRepository
         return $document;
     }
 
+    public function getSolrDocumentNew($ad, $container)
+    {
+        $document = new \SolrInputDocument($ad);
+
+        $document = $this->_em->getRepository('FaAdBundle:Ad')->getSolrDocumentNew($ad, $document, $container);
+
+        return $document;
+    }
+
     /**
      * Get ad vertical data array.
      *
@@ -163,6 +172,10 @@ class AdCommunityRepository extends EntityRepository
     private function addField($document, $field, $value)
     {
         if ($value != null) {
+            if (is_array($value)) {
+                $value = json_encode($value);
+            }
+
             $document->addField($field, $value);
         }
 

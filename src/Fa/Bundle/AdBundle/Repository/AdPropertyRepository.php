@@ -129,6 +129,15 @@ class AdPropertyRepository extends EntityRepository
         return $document;
     }
 
+    public function getSolrDocumentNew($ad, $container)
+    {
+        $document = new \SolrInputDocument($ad);
+
+        $document = $this->_em->getRepository('FaAdBundle:Ad')->getSolrDocumentNew($ad, $document, $container);
+
+        return $document;
+    }
+
     /**
      * Add field to solr document.
      *
@@ -141,6 +150,10 @@ class AdPropertyRepository extends EntityRepository
     private function addField($document, $field, $value)
     {
         if ($value != null) {
+            if (is_array($value)) {
+                $value = json_encode($value);
+            }
+
             $document->addField($field, $value);
         }
 

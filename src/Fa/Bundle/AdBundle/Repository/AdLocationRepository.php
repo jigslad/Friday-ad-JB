@@ -126,6 +126,55 @@ class AdLocationRepository extends EntityRepository
     }
 
     /**
+     * Returns ad solr document object.
+     *
+     * @param object $ad       Ad object.
+     * @param object $document Solr document object.
+     *
+     * @return Apache_Solr_Document
+     */
+    public function getSolrDocumentNew($ad, $document = null)
+    {
+        if (!$document) {
+            $document = new \SolrInputDocument($ad);
+        }
+
+        $locations = $this->findBy(array('ad' => $ad->getId()));
+        $mainTownId = '';
+
+        foreach ($locations as $location) {
+            $document = $this->addField($document, AdSolrFieldMapping::POSTCODE, $location->getPostcode());
+            $document = $this->addField($document, AdSolrFieldMapping::DOMICILE_ID, ($location->getLocationDomicile() ? $location->getLocationDomicile()->getId() : null));
+            $document = $this->addField($document, AdSolrFieldMapping::TOWN_ID, ($location->getLocationTown() ? $location->getLocationTown()->getId() : null));
+            $document = $this->addField($document, AdSolrFieldMapping::LATITUDE, $location->getLatitude());
+            $document = $this->addField($document, AdSolrFieldMapping::LONGITUDE, $location->getLongitude());
+            $document = $this->addField($document, AdSolrFieldMapping::LOCALITY_ID, ($location->getLocality() ? $location->getLocality()->getId() : null));
+            //for Location Area
+            if ($location->getLocationArea()) {
+                $document = $this->addField($document, AdSolrFieldMapping::AREA_ID, $location->getLocationArea()->getId());
+                if ($location->getLocationArea()->getIsSpecialArea()) {
+                    $document = $this->addField($document, AdSolrFieldMapping::IS_SPECIAL_AREA_LOCATION, '1');
+                } else {
+                    $document = $this->addField($document, AdSolrFieldMapping::IS_SPECIAL_AREA_LOCATION, '0');
+                }
+            }
+
+            if (($location->getLatitude() && $location->getLongitude())) {
+                $document = $this->addField($document, AdSolrFieldMapping::STORE, $location->getLatitude().','.$location->getLongitude());
+            }
+
+            /* Issuing with multiple Town record along with same Advert Id bcz of MAIN_TOWN_ID is string type "i" adding condition and make it as string */
+            $mainTownId = ($location->getLocationTown() ? $location->getLocationTown()->getId() : null);
+        }
+
+        if ($mainTownId != '') {
+            $document = $this->addField($document, AdSolrFieldMapping::MAIN_TOWN_ID, $mainTownId);
+        }
+
+        return $document;
+    }
+
+    /**
      * Add field to solr document.
      *
      * @param object $document Solr document object.
@@ -137,6 +186,10 @@ class AdLocationRepository extends EntityRepository
     private function addField($document, $field, $value)
     {
         if ($value != null) {
+            if (is_array($value)) {
+                $value = json_encode($value);
+            }
+
             $document->addField($field, $value);
         }
 

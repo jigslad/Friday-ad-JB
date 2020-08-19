@@ -753,6 +753,171 @@ class AdRepository extends EntityRepository
         return $document;
     }
 
+    public function getSolrDocumentNew($ad, $document = null, $container = null)
+    {
+        if (!$document) {
+            $document = new \SolrInputDocument($ad);
+        }
+
+        $categoryObj    = ($ad->getCategory() ? $ad->getCategory() : null);
+        $categoryId     = ($categoryObj ? $categoryObj->getId() : null);
+        $categoryLevel  = ($categoryObj ? $categoryObj->getLvl() : null);
+        $adUpsellValues = $this->_em->getRepository('FaAdBundle:AdUserPackageUpsell')->getAdPackageUpsellValueArray($ad->getId(), $categoryId, $container);
+
+        $document = $this->addField($document, 'id', $ad->getId());
+        $document = $this->addField($document, 'user_id', ($ad->getUser() ? $ad->getUser()->getId() : null));
+        $document = $this->addField($document, 'status_id', ($ad->getStatus() ? $ad->getStatus()->getId() : null));
+        $document = $this->addField($document, 'type_id', ($ad->getType() ? $ad->getType()->getId() : null));
+
+        $allParentCategories = $this->_em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId, false, $container);
+
+        $document = $this->addField($document, 'category_ids', array_keys($allParentCategories));
+        $document = $this->addField($document, 'category_names', array_values($allParentCategories));
+
+        $document = $this->addField($document, 'price', $ad->getPrice());
+        $document = $this->addField($document, 'use_privacy_number', $ad->getUsePrivacyNumber());
+        $document = $this->addField($document, 'privacy_number', $ad->getPrivacyNumber());
+        $document = $this->addField($document, 'user_phone_number', $ad->getPhone());
+        $document = $this->addField($document, 'title', $ad->getTitle());
+        $document = $this->addField($document, 'description', $ad->getDescription());
+        $document = $this->addField($document, 'has_video', $ad->getHasVideo());
+        $document = $this->addField($document, 'renewed_at', $ad->getRenewedAt());
+        $document = $this->addField($document, 'expires_at', $ad->getExpiresAt());
+        $document = $this->addField($document, 'sold_at', $ad->getSoldAt());
+        $document = $this->addField($document, 'sold_price', $ad->getSoldPrice());
+        $document = $this->addField($document, 'created_at', $ad->getCreatedAt());
+        $document = $this->addField($document, 'published_at', $ad->getPublishedAt());
+        $document = $this->addField($document, 'updated_at', $ad->getUpdatedAt());
+        $document = $this->addField($document, 'personalized_title', $ad->getPersonalizedTitle());
+        $document = $this->addField($document, 'quantity', $ad->getQty());
+        $document = $this->addField($document, 'quantity_sold', $ad->getQtySold());
+        $document = $this->addField($document, 'delivery_method_option', $ad->getDeliveryMethodOption() ? [
+            'id' => $ad->getDeliveryMethodOption()->getId(),
+            'name' => $ad->getDeliveryMethodOption()->getName()] : null);
+        $document = $this->addField($document, 'postage_price', $ad->getPostagePrice());
+        $document = $this->addField($document, 'payment_method_option_id', $ad->getPaymentMethodId() ? $ad->getPaymentMethodId() : null);
+        $document = $this->addField($document, 'youtube_url', $ad->getYoutubeVideoUrl());
+
+        if ($ad->getIsNew() != null) {
+            $document = $this->addField($document, 'is_new', ($ad->getIsNew() ? $ad->getIsNew() : '0'));
+        }
+
+        if ($ad->getIsTradeAd() != null || $ad->getIsTradeAd() == 0) {
+            $document = $this->addField($document, 'is_trade_ad', ($ad->getIsTradeAd() ? $ad->getIsTradeAd() : '0'));
+        }
+
+        // Is top ad
+        if ($ad->isTopAd($container)) {
+            $document = $this->addField($document, 'is_top_ad', 1);
+        }
+
+        // Is highlight ad
+        if ($ad->isUrgentAd($container)) {
+            $document = $this->addField($document, 'is_urgent_ad', 1);
+        }
+
+        // Is home page featured ad
+        if ($ad->isHomeFeaturedAd($container)) {
+            $document = $this->addField($document, 'is_homepage_featured_at', 1);
+        }
+
+        if ($ad->getAffiliate()) {
+            $this->addField($document, 'is_affiliate_ad', 1);
+        } else {
+            $this->addField($document, 'is_affiliate_ad', '0');
+        }
+
+        if ($ad->getIsFeedAd()) {
+            $this->addField($document, 'is_feed_ad', 1);
+        } else {
+            $this->addField($document, 'is_feed_ad', '0');
+        }
+
+        if ($ad->getAdRef()) {
+            $this->addField($document, 'ad_ref', $ad->getAdRef());
+        }
+
+        if ($ad->getTrackBackUrl()) {
+            $this->addField($document, 'track_back_url', $ad->getTrackBackUrl());
+        }
+
+        if ($ad->getSource()) {
+            $this->addField($document, 'ad_source', $ad->getSource());
+        }
+
+        // Weekly refresh at
+        $document = $this->addField($document, 'weekly_refresh_at', $ad->getWeeklyRefreshAt());
+        $document = $this->addField($document, 'weekly_refresh_count', $ad->getManualRefresh());
+
+        // Weekly refresh at & created at
+        if ($ad->getWeeklyRefreshAt() && $ad->getPublishedAt() && $ad->getWeeklyRefreshAt() > $ad->getPublishedAt()) {
+            $document = $this->addField($document, 'weekly_refresh_published_at', $ad->getWeeklyRefreshAt());
+        } else {
+            $document = $this->addField($document, 'weekly_refresh_published_at', $ad->getPublishedAt());
+        }
+
+        $document = $this->addField($document, 'upsells', [
+            'boost' => $ad->getBoostedAt()
+        ]);
+
+
+        //ad user business category id
+        //shop detail.
+        if ($ad->getUser() && $ad->getUser()->getBusinessCategoryId()) {
+            $document = $this->addField($document, 'ad_user_business_category_id', $ad->getUser()->getBusinessCategoryId());
+        }
+
+        //shop detail.
+        if ($ad->getUser() && !in_array($ad->getUser()->getBusinessCategoryId(), array(CategoryRepository::ADULT_ID, CategoryRepository::SERVICES_ID))) {
+            $hasProfileExposureFlag  = false;
+            $hasProfileExposureMiles = '-1';
+            $profileExposurePackageCatId = null;
+            $userPackagePurchasedAt = null;
+            $userActivePackage = $this->_em->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($ad->getUser());
+            if ($userActivePackage) {
+                $userUpsells = $this->_em->getRepository('FaUserBundle:UserUpsell')->getUserUpsellArrayWithValue($ad->getUser()->getId());
+                foreach ($userUpsells as $upsellId => $upsellValue) {
+                    if (in_array($upsellId, $this->_em->getRepository('FaPromotionBundle:Upsell')->getProfileExposureUpsellIdsIdsArray())) {
+                        $hasProfileExposureFlag  = true;
+                        $hasProfileExposureMiles = (!$upsellValue['upsell_value'] ? '0' : $upsellValue['upsell_value']);
+                        $profileExposurePackageCatId = $upsellValue['package_category_id'];
+                        $userPackagePurchasedAt = ($userActivePackage->getUpdatedAt() ? $userActivePackage->getUpdatedAt() : $userActivePackage->getCreatedAt());
+                        break;
+                    }
+                }
+            }
+
+            if ($hasProfileExposureFlag) {
+                $document = $this->addField($document, 'has_profile_exposure', 1);
+                $document = $this->addField($document, 'profile_exposure_miles', $hasProfileExposureMiles);
+                $document = $this->addField($document, 'shop_package_category_id', $profileExposurePackageCatId);
+                $document = $this->addField($document, 'shop_package_purchased_at', $userPackagePurchasedAt);
+            } else {
+                $document = $this->addField($document, 'has_profile_exposure', 0);
+                $document = $this->addField($document, 'profile_exposure_miles', null);
+                $document = $this->addField($document, 'shop_package_category_id', null);
+                $document = $this->addField($document, 'shop_package_purchased_at', $userPackagePurchasedAt);
+            }
+        }
+        // Index images
+        $imageLimit = 0;
+
+        if (count($allParentCategories)) {
+            $parentCategoryIds = array_keys($allParentCategories);
+            $imagelimitCategoryName = CommonManager::getCategoryClassNameById($parentCategoryIds[0]);
+            $imageLimit = $container->getParameter('fa.image.'.$imagelimitCategoryName.'_upload_limit');
+        }
+        if (isset($adUpsellValues[UpsellRepository::UPSELL_TYPE_ADDITIONAL_PHOTO_VALUE])) {
+            $imageLimit = $adUpsellValues[UpsellRepository::UPSELL_TYPE_ADDITIONAL_PHOTO_VALUE];
+        }
+        $document = $this->_em->getRepository('FaAdBundle:AdImage')->getSolrDocumentNew($container, $ad, $document, $imageLimit);
+
+        // Index locations
+        $document = $this->_em->getRepository('FaAdBundle:AdLocation')->getSolrDocumentNew($ad, $document);
+
+        return $document;
+    }
+
     /**
      * Add field to solr document.
      *
@@ -765,6 +930,10 @@ class AdRepository extends EntityRepository
     private function addField($document, $field, $value)
     {
         if ($value != null) {
+            if (is_array($value)) {
+                $value = json_encode($value);
+            }
+
             $document->addField($field, $value);
         }
 
