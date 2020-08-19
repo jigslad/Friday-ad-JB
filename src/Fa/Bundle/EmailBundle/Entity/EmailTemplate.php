@@ -185,6 +185,31 @@ class EmailTemplate
     private $type = 0;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="bcc_emails", type="string", length=255)
+     */
+    private $bccEmails;
+
+    /**
+     * @return string
+     */
+    public function getBccEmails()
+    {
+        return $this->bccEmails;
+    }
+
+    /**
+     * @param string $bccEmails
+     */
+    public function setBccEmails($bccEmails)
+    {
+        $this->bccEmails = $bccEmails;
+    }
+
+
+
+    /**
      * Construct.
      */
     public function __construct()
