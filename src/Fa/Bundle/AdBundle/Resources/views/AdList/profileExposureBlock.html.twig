@@ -1,6 +1,6 @@
 {% if profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length %}
     {% set userProfileUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(profileUserDetail['user_id']) %}
-    {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), profileUserDetail['company_logo'], profileUserDetail['user_id'], null, null, true, true, profileUserDetail['status_id'], profileUserDetail['user_name']]) %}
+    {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCustomUserLogo', [fetch_container_instance(), profileUserDetail['company_logo'], profileUserDetail['user_id'], null, null, true, true, profileUserDetail['status_id'], profileUserDetail['user_name']]) %}
     {% set adPropertyRepository = fetch_repository('FaAdBundle:AdProperty') %}
     <div class="listing-exposure">
         <div class="gray-text text-right">{{'Featured business'|trans({}, 'frontend-profile-exposure')}}</div>

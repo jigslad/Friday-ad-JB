@@ -102,13 +102,34 @@
 
     document.addEventListener('error', function(e) {
         var target = $(e.target);
-        if (e.target.nodeName == 'IMG' && $(target).hasClass('ndult-company-logo')) {
-            var parent = $(target).closest('.list-img');
+        var parent = $(target).parent();
 
-            $(parent).html(
-                $('<div>').addClass('profile-placeholder')
-                    .append($(target).attr('src', '{{ asset('bundles/fafrontend/images/user-no-logo.svg') }}'))
-            );
+        // For Images
+        if (e.target.nodeName == 'IMG') {
+
+            // For Adult Listing Page: Business Exposure Slider Block.
+            // profileExposureBlock.html.twig / businessExposureSingleBlock.html.twig / businessExposureSliderBlock.html.twig
+            if ($(parent).hasClass('exposure-logo-thumb')) {
+                $(target).attr('src', '{{ asset('bundles/fafrontend/images/user-no-logo.svg') }}');
+                $(parent).addClass('profile-placeholder');
+                return;
+            }
+
+            // For Ad List Image
+            if ($(parent).hasClass('list-img')) {
+                $(target).attr('src', '{{ asset('bundles/fafrontend/images/no-image-grey.svg') }}');
+                $(parent).addClass('list-placeholder');
+                return;
+            }
+
+            // For AHP - Featured Advertisers
+            if ($(target).hasClass('ndult-company-logo')) {
+                $(parent).html(
+                    $('<div>').addClass('profile-placeholder')
+                        .append($(target).attr('src', '{{ asset('bundles/fafrontend/images/user-no-logo.svg') }}'))
+                );
+                return;
+            }
         }
     }, true);
 
