@@ -490,6 +490,8 @@
             {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
             {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_IN_HEADER_TABLET') %}
             {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
+            <div id='dsk-banner-ad-a' class='p-t-20'></div>
+            <div id='mob-banner-ad-a'></div>
         </div>
     </div>
 </div>
@@ -815,6 +817,7 @@
                             {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
                             {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_BELOW_DESCRIPTION_TABLET') %}
                             {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                            <div id='dsk-box-ad-c'></div>
                         </div>
                         {{ include('FaAdBundle:Ad:AdDetailRightPanel.html.twig') }}
                     </div>
@@ -1757,6 +1760,13 @@
         {% set Town = '' %}
     {% endif %}
     <script>
+        {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(adCategoryId, false, fetch_container_instance()) %}
+
+        {% set dimension6 = '' %}
+        {% if categoryPath|length %}
+        {% set dimension6 = categoryPath|join(':') %}
+        {% endif %}
+
         {# get date and create as new #}
         {% if adDetail.a_published_at_i is defined %}
             var tempPublishedDate = new Date(1000*{{ adDetail.a_published_at_i }});
@@ -1770,7 +1780,43 @@
         {% else %}
             var expiredDate = null;
         {% endif %}
+        {% set is_business_seller = 'false' %}
+        {% if adDetail['user']['business_category_id'] is defined and adDetail['user']['business_category_id'] is not null %}
+        {% set is_business_seller = 'true' %}
+        {% endif %}
+
+        {% set _logged_in = 'true' %}
+        {% if app.user.getId() is not defined or app.user.getId() is null %}
+        {% set _logged_in = 'false' %}
+        {% endif %}
+
+        /* ----- GA Enquiry method ----- */
+        {% set contactMethods = '' %}
+        {% if adDetail['user'] is defined and adDetail['user']['contact_through_email'] == 1 %}
+        {% set contactMethods = contactMethods ~ 'Email' %}
+        {% endif %}
+        {% if (adDetail['user'] is defined and adDetail['user']['contact_through_phone'] == 1) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) %}
+        {% if contactMethods != '' %}
+        {% set contactMethods = contactMethods ~ '|Phone' %}
+        {% else %}
+        {% set contactMethods = contactMethods ~ 'Phone' %}
+        {% endif %}
+        {% endif %}
         $( document ).ready(function() {
+            googletag.cmd.push(function() {
+                googletag.pubads().setTargeting('page_type', 'Ad details');
+                googletag.pubads().setTargeting('adBlocker', false);
+                googletag.pubads().setTargeting('user_logged', {{ _logged_in }});
+                googletag.pubads().setTargeting('seller_name', '{{ businessname }}');
+                googletag.pubads().setTargeting('seller_type', {% if is_business_seller %} 'trade' {% else %} 'private' {% endif %});
+                googletag.pubads().setTargeting('ad_category', '{{ dimension6 }}');
+                googletag.pubads().setTargeting('ad_id', '{{ adId }}');
+                googletag.pubads().setTargeting('ad_location', '{{ adLocationName }}');
+                googletag.pubads().setTargeting('ad_published', '{{attribute(adDetail, constant(solrMapping ~ 'PUBLISHED_AT'))|time_ago_in_words}}');
+                googletag.pubads().setTargeting('ad_price', '{{ attribute(adDetail, constant(solrMapping ~ 'PRICE')) }}');
+                googletag.pubads().setTargeting('seller_contact_methods', '{{ contactMethods }}');
+            });
+
             window.dataLayer = window.dataLayer || [];
             dataLayer.push({
                 "adDetails":{

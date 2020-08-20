@@ -82,6 +82,13 @@
         //]]>
         </script>
     {% endif %}
+    <script>
+        googletag.cmd.push(function() {
+            dataLayerValues.each(function(key, value) {
+                googletag.pubads().setTargeting(key, value);
+            });
+        });
+    </script>
     
     {% if mobileDetectManager.isMobile() or mobileDetectManager.isTablet() %}
         {% if mobileDetectManager.isiOS() and not mobileDetectManager.isWindowsMobileOS() and not mobileDetectManager.isWindowsPhoneOS() %}
