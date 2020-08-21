@@ -319,7 +319,7 @@ class AdController extends CoreController
         if ($cookieLocation && $cookieLocation != CommonManager::COOKIE_DELETED) {
             $cookieLocation = get_object_vars(json_decode($cookieLocation));
             if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
-                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
+                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].','.$cookieLocation['longitude']);
                 $solrSearchManager->setGeoDistQuery($geoDistParams);
             }
         }
@@ -359,8 +359,8 @@ class AdController extends CoreController
         }
         //remove phone or email from title
         if (isset($adDetail[0][AdSolrFieldMapping::TITLE])) {
-            $adDetail[0][AdSolrFieldMapping::TITLE] = CommonManager::hideOrRemovePhoneNumber($adDetail[0][AdSolrFieldMapping::TITLE], 'remove');
-            $adDetail[0][AdSolrFieldMapping::TITLE] = CommonManager::hideOrRemoveEmail($adId, $adDetail[0][AdSolrFieldMapping::TITLE], 'remove');
+            $adDetail[0][AdSolrFieldMapping::TITLE] = CommonManager::hideOrRemovePhoneNumber($adDetail[0][AdSolrFieldMapping::TITLE], 'remove','');
+            $adDetail[0][AdSolrFieldMapping::TITLE] = CommonManager::hideOrRemoveEmail($adId, $adDetail[0][AdSolrFieldMapping::TITLE], 'remove','');
         }
 
         //get location from cookie.
@@ -669,7 +669,7 @@ class AdController extends CoreController
                     $this->get('fa.solrsearch.manager')->init('ad', '', $data);
                     if (!empty($cookieLocation)) {
                         if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
-                            $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
+                            $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].','.$cookieLocation['longitude']);
                             $this->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
                         }
                     }

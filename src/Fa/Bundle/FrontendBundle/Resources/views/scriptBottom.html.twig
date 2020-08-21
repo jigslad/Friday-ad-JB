@@ -172,24 +172,25 @@
             displayNotifications();
          });
     }
-
     var idClicked = '';var idFourthStepClicked = '';
     $("button[type=submit], input[type=submit]").click(function(e){
         var clickedId = $(this).attr('id');
         var parentForm = $(this).parents("form").attr('name');
-        if(clickedId.match("^fa_paa_fourth_step_")) {
-            idFourthStepClicked = clickedId;
-            $('#'+idFourthStepClicked).attr('readonly', 'readonly');
-        } else {
-            idClicked = clickedId;
-            if(!$('#'+idClicked).hasClass('disabled')) {
-                $('#'+idClicked).attr('disabled', true);
+        if (typeof clickedId !== typeof undefined && clickedId !== false) {
+            if(clickedId.match("^fa_paa_fourth_step_")) {
+                idFourthStepClicked = clickedId;
+                $('#'+idFourthStepClicked).attr('readonly', 'readonly');
+            } else {
+                idClicked = clickedId;
+                if(!$('#'+idClicked).hasClass('disabled')) {
+                    $('#'+idClicked).attr('disabled', true);
+                }
+                $("form[name='"+parentForm+"']").submit();
             }
-            $("form[name='"+parentForm+"']").submit();
         }
     });
 
-    
+
     /*function loadSavingDataGif(formName) {
         $('#form-save-button-div').html('<button type="button" class="primary-btn-1 expand loading-in-button"><img src="{{ asset_url('facontent/fileman/images/loading-dir.gif') }}" style="margin-right:15px">Saving data...</button>');
         $('#'+formName+'_save').attr('disabled', true);
@@ -248,3 +249,98 @@
 //]]>
 </script>
 {# <script src="//maps.googleapis.com/maps/api/js?v=3.exp&key={{container.getParameter('fa.googlemap.api.key')}}&sensor=true&libraries=adsense"></script> #}
+<!-- Google TAG Manager -->
+{% if app.user %}
+    {% set ClientID = app.user.id %}
+    {% set login_status = 'true' %}
+    {% if app.user.role == 'ROLE_BUSINESS_SELLER' %}
+        {% set userType = 'Business' %}
+    {% else %}
+        {% set userType = 'Private' %}
+    {% endif %}
+{% else %}
+    {% set ClientID = '' %}
+    {% set login_status = 'false' %}
+    {% set userType = '' %}
+{% endif %}
+{% if app.request.get('_route') in ['fa_frontend_homepage','landing_page_category'] %}
+    {% set pageType = 'Homepage' %}
+
+{% elseif app.request.get('_route') in ['ad_detail_page']%}
+    {% set pageType = 'Ad Details' %}
+
+{% elseif app.request.get('_route') in ['ad_post_first_step', 'ad_post_second_step', 'ad_post_third_step','ad_post_third_step_registration','ad_post_fourth_step','ad_package_purchase','show_cart','cybersource_checkout','paypal_checkout','checkout_payment_success','checkout_payment_failure']%}
+    {% set pageType = 'PAA process page' %}
+
+{% elseif app.request.get('_route') in ['location_home_page','testimonials','show_all_locations'] %}
+    {% set pageType = 'Peripheral Content' %}
+
+{% elseif app.request.get('_route') in ['login' ,'fa_user_register', 'facebook_paa_login','google_paa_login'] %}
+    {% set pageType = 'LoginRegister' %}
+
+{% elseif app.request.get('_route') == 'show_business_profile_page' %}
+    {% set pageType = 'Business Profile Page' %}
+
+{% elseif app.request.get('_route') == 'listing_page' %}
+    {% if app.request.get('keywords') %}
+        {% set pageType = 'Search Results Page' %} <!-- 'Search Results Page(keywords=' ~ app.request.get('keywords')' ~')' -->
+    {% else %}
+        {% set pageType = 'Category Results Page' %}
+    {% endif %}
+
+{% else %}
+    {% if (app.request.get('_route') == 'manage_my_ads_active') and ((app.request.get('transaction_id') is defined) and (app.request.get('transaction_id') is not null )) %}
+{#        feture maa required that time ask for tranzactionid#}
+        {% set pageType = 'PAA process page' %}
+    {% else %}
+        {% set pageType = 'Not Specified' %}
+    {% endif %}
+{% endif %}
+{% set bannerCount = 0 %}
+{% set bannerCurrentDevice       = 'D' %}
+{% set container           = fetch_container_instance() %}
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+{% set zone_above_header   = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_ABOVE_HEADER') %}
+{% set page_all_other      = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerPageRepository::PAGE_ALL_OTHER') %}
+{% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+    {% set bannerCurrentDevice = 'M' %}
+{% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
+    {% set bannerCurrentDevice = 'T' %}
+{% endif %}
+{% if bannersArray is defined %}
+    {% for banner in bannersArray %}
+        {% set showBanner = 0 %}
+        {% if ((bannerCurrentDevice == 'D' and banner['is_desktop'] == 1) or (bannerCurrentDevice == 'T' and banner['is_tablet'] == 1) or (bannerCurrentDevice == 'M' and banner['is_mobile'] == 1)) %}
+            {% set showBanner = 1 %}
+        {% else %}
+            {% set showBanner = 0 %}
+        {% endif %}
+        {% if banner['zone_id'] == zone_above_header and banner['page_id'] == page_all_other %}
+            {% if not app.request.attributes.get('static_page') %}
+                {% set showBanner = 0 %}
+            {% endif %}
+        {% endif %}
+        {% if (showBanner == 1) %}
+            {% set bannerCount = bannerCount + 1 %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+<script>
+    if(typeof dataLayerPageType !== 'undefined'){
+        var pagType = dataLayerPageType;
+    }
+    else {
+        var pagType = "{{ pageType }}";
+    }
+    window.dataLayer = window.dataLayer || [];
+    dataLayer.push({
+        "page": {
+            "pageType": pagType,
+            "loggedInStatus": {{ login_status }},
+            "clientID": '{{ ClientID }}',
+            "ipAddress": '{{ app.request.server.get("REMOTE_ADDR") }}',
+            "loggedInType": '{{ userType }}',
+        },
+    });
+</script>
+<!-- Google TAG Manager -->

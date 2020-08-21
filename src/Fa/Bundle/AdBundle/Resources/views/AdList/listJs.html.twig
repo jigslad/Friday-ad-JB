@@ -8,6 +8,7 @@
 {{ include('FaUserBundle:HalfAccount:halfAccountJs.html.twig') }}
 <script language="javascript" type="text/javascript">
 //<![CDATA[
+var callFromGlobal = '';
     $(window).on('load', function() {
         var callFromGlobal = '';
 	    var isDragging = false;
@@ -169,7 +170,20 @@
 
     function saveSearchAgent(userId, callFrom)
     {
-    	callFromGlobal = callFrom;
+    	var gtmLabel = 'Top Button';
+        if (callFrom != '' && callFrom == 'ListingBottom') {
+            gtmLabel = 'Bottom Button';
+        }
+        var callFromGlobal = callFrom;
+        let SearchAlert= '{{ app.request.get('cat_full_slug') }}'+' - '+'{{ app.request.get('location') }}'+' - '+gtmLabel;
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+
+            'event' : 'Options',
+            'eventCategory':  'Search Results',
+            'eventAction': 'Search Alert',
+            'eventLabel': SearchAlert
+        });
     	hideAlertMessage();
         blockPage();
         {% set searchResultVariables = get_variables('searchResult') %}
@@ -370,6 +384,13 @@
             asPosStr = '6+';
           } 
           var eventAction = 'Click pos. '+asPosStr;
+          window.dataLayer = window.dataLayer || []
+          dataLayer.push({
+              'event' : 'Position',
+              'eventCategory':  'Click Ad Position',
+              'eventAction': eventAction ,
+              'eventLabel': catString
+          });
       }
     }
 //]]>

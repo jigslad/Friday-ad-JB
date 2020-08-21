@@ -1466,6 +1466,22 @@ class LocationRepository extends BaseEntityRepository
         
         return $townArray;
     }
+    /**
+     * Get location text by location.
+     *
+     * @param integer $town  town id
+     * @return string
+     */
+    public function getCountyByTownId($town)
+    {
+        $location = $this->find($town);
+        $county = $this->find($location->getParent());
+        if ($county){
+            return $county->getName();
+        }
+        return null;
+    }
+
 
     /**
      * Get location details of header categories.
