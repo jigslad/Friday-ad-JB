@@ -198,7 +198,20 @@
     	<link rel="stylesheet" href="{{ asset('build/css/fad-custome-4.css') }}">
     	{{ include('FaFrontendBundle::site-imgs.html.twig') }}
 	{% endif %}
-    
+
+    <!-- START TPD HEAD CODE -->
+    <script async type="text/javascript" src="https://cdn.tpdads.com/configs/dogsandpuppies.js"></script>
+    <script async type="text/javascript" src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+    <!-- END TPD HEAD CODE -->
+
+
+    <script>
+
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+
+    </script>
+
     {% block blockGaCode%}
         {{ include('FaFrontendBundle::gaCode.html.twig') }}
     {% endblock %}
@@ -217,6 +230,12 @@
             	ga('set', 'dimension9', 'logged in');
             {% endif %}
             ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Peripheral_Content'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %}});
+
+            googletag.cmd.push(function() {
+                googletag.pubads().setTargeting('page_type', '{{ blockPageTitle }}');
+                googletag.pubads().setTargeting('adBlocker', false);
+                googletag.pubads().setTargeting('user_logged', {{ _logged_in }});
+            });
         //]]>
         </script>
     {% endif %}
@@ -274,6 +293,8 @@
     <!-- End TrustBox script -->
 </head>
 <body {% if (showAdultPopup == 1) %} class="transbox" {% endif %}>
+
+
         {% if status_code is not defined %}
             {% set status_code = 200 %}
         {% endif %}

@@ -364,6 +364,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 
             {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_FILTERBOX') %}
             {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+            <div id='dsk-box-ad-b'></div>
         </div>
 
         <div id="listingDiv" class="large-18 columns">
@@ -423,6 +424,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                 	 	{% set bannerStatus = false %}	
 	                	{% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_ABOVE_RESULTS') %}
 	                	{{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                         <div id='mob-box-ad-a' class="p-b-20"></div>
 	                  {% endif %}
 	             {% endif %} 
                 {% set slotAdCount = 0 %}{% set setExtendedHeading = 0 %}
@@ -504,6 +506,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                     	 {% if (adCounter == 2 	and totalAdsOnPage > 2 and bannerStatus) %}
 		                	{% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_ABOVE_RESULTS') %}
 		                	{{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                             <div id='mob-box-ad-b' class="p-b-20"></div>
 		                  {% endif %}
 		             {% endif %}                    
 
@@ -518,6 +521,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                     {% if adCounter == 5 and pagination.getNbResults() > 5 %}
                         {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_IN_RESULTS_TOP') %}
                         {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                        <div id='dsk-box-ad-c'></div>
                     {% endif %}
 
                     {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
@@ -536,6 +540,8 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                             {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_IN_RESULTS') %}
                             {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
                         {% endif %}
+                        <div id='dsk-box-ad-d'></div>
+                        <div id='mob-box-ad-c' class="p-b-20"></div>
                     {% endif %}
                 {% endfor %}
 
@@ -593,6 +599,8 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 
                 {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_BELOW_RESULTS') %}
                 {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                <div id='dsk-box-ad-e'></div>
+                <div id='mob-box-ad-d'></div>
             {% endif %}
 
             {% set locationUK = constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID') %}
@@ -610,6 +618,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                 
                 {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_PAGINATION_MOBILE') %}
                 {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                <div id='dsk-box-ad-f' class="clearfix"></div>
             {% endif %}
 
             {% if searchParams is defined and (searchParams.expired_ads is not defined or (searchParams.expired_ads is defined and searchParams.expired_ads is null)) %}
@@ -665,6 +674,15 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
     {% if get_variables('SrchCatDetails') is not null and get_variables('SrchCatDetails').catSrchString is defined %}
         {% set catSrchText = get_variables('SrchCatDetails').catSrchString %}
     {% endif %}
+
+    {% set dimension6 = '' %}
+    {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+        {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(searchParams.item__category_id, false, fetch_container_instance()) %}
+        {% if categoryPath|length %}
+            {% set dimension6 = categoryPath|join(':') %}
+        {% endif %}
+    {% endif %}
+
     <script language="javascript" type="text/javascript">
         //<![CDATA[
 
@@ -703,6 +721,12 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                 if (parseInt(footerPos) <= 630) {
                     $("#banner_placeholder_2_4").removeClass("fixed-banner");
                 }
+            }
+            if (($('.search-filters').offset().top + $('.search-filters').height() - $(window).scrollTop() < -100) && ($('footer').offset().top - $(window).scrollTop() - $('#dsk-box-ad-b').height() > 0)) {
+                $('#dsk-box-ad-b').addClass('fixed-banner');
+                $('#dsk-box-ad-b').css('left', $('#listingDiv').offset().left - $('#dsk-box-ad-b').width());
+            } else {
+                $('#dsk-box-ad-b').removeClass('fixed-banner');
             }
         });
 
@@ -758,6 +782,18 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                 {% endif %}
             {% endif %}
         }
+
+        {% set _logged_in = 'true' %}
+        {% if app.user.getId() is not defined or app.user.getId() is null %}
+        {% set _logged_in = 'false' %}
+        {% endif %}
+        googletag.cmd.push(function() {
+            googletag.pubads().setTargeting('page_type', 'Search Results');
+            googletag.pubads().setTargeting('adBlocker', false);
+            googletag.pubads().setTargeting('user_logged', {{ _logged_in }});
+            googletag.pubads().setTargeting('category', '{{ dimension6 }}');
+        });
+
         window.dataLayer = window.dataLayer || [];
         dataLayer.push({
             "searchResults":{
