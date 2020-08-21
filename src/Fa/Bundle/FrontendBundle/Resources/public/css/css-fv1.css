@@ -1,0 +1,33 @@
+footer .search-box-col {
+    float: none !important;
+}
+iframe[name="__cmpLocator"] {
+  display:none !important;
+}
+
+#top_search_location, #landingpage_search_location {
+	z-index: 11 !important;
+	width: 215px !important;
+}
+.find-all, .find-all:hover, .find-all:focus, .find-all:active {
+    border: 1px solid #cbd5d9 !important;
+}
+.hero-img {
+    overflow: inherit !important;
+}
+.top-bar-section .has-dropdown a {
+    padding: 0 17px 0 10px !important;
+}
+.disp-inline { display: inline-flex !important; }
+#shop-user-item-slider h3 {
+	height: 74px !important;
+}
+.site-search .find-all, .site-search .find-all:hover, .site-search .find-all:focus, .site-search .find-all:active {
+    border: 1px solid #cbd5d9 !important;
+}
+@media only screen and (min-width: 960px) and (max-width: 1151px)
+    .top-bar-section .real-desktop .has-dropdown a {
+        padding: 0 9px 0px 4px !important;
+    }
+}
+
