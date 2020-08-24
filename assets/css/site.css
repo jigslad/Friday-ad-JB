@@ -6336,3 +6336,11 @@ footer a:hover,
 .top-bar-section .accordion dd>a:hover {
 	border-bottom:1px solid #212527!important
 }
+@media only screen and (min-width: 320px) and (max-width: 640px) {
+    .one-click-upsell .listing h5 {
+        max-height: 35px !important;
+    }
+    .upgrade-btn button {
+        font-size: 95% !important;
+    }
+}
