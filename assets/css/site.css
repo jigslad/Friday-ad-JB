@@ -6347,3 +6347,7 @@ footer a:hover,
 .featured-upgrade-border .outside-tricky {
     z-index: 5 !important;
 }
+
+#listingDiv .alert-box.info {
+    margin-top: 10px !important;
+}
