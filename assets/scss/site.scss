@@ -787,9 +787,9 @@ footer a:hover, .footer-head:hover, .pkg-includes a {
 }
 @media only screen and (max-width: 640px) {
     .help-links {
-        margin: 10px 0px 0 !important !important;
-        column-count: 1 !important !important;
-        width: 100% !important !important;
+        margin: 10px 0px 0 !important;
+        column-count: 1 !important;
+        width: 100% !important;
     }
    .paa-footer-links { column-count: 2; }                   
    .big-wrapper { width: auto !important;}  
@@ -866,4 +866,14 @@ footer a:hover, .footer-head:hover, .pkg-includes a {
 }
 .category_choice_div {
   position: relative;
+}
+.error {
+  font-weight: normal;
+  background: transparent;
+  margin-top: 10px;
+  font-size: 12px;
+  font-style: normal;
+  padding-left: 0;
+  color: #f74d4d;
+  line-height: 15px;
 }
