@@ -6073,3 +6073,8 @@ input[type="text"].door-no {
     position: relative;
     width: 300px;
 }
+.myacc-details .error-icon{
+    position: absolute !important;
+    right: -30px !important;
+    top: 7px !important;
+}
