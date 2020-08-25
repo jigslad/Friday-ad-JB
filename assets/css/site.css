@@ -6053,16 +6053,16 @@ footer a:hover,
 	}
 }
 @media only screen and (min-width: 320px) and (max-width: 759px) {
-	#home-search .all-cat-select {
-		min-width:52px!important;
-		width:52px!important
-	}
+    #home-search .all-cat-select {
+        min-width: auto !important;
+        width: auto !important;
+    }
+    #home-search .find-all .select2-choice {
+        min-width: auto !important;
+        width: auto !important;
+    }
 	#home-search .looking-for {
 		width:100%!important
-	}
-	#home-search .find-all .select2-choice {
-		min-width:52px!important;
-		width:52px!important
 	}
 	.find-all .select2-choice,
 	.find-all .select2-choice:hover,
