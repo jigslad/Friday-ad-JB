@@ -6254,9 +6254,9 @@ footer a:hover,
 }
 @media only screen and (max-width: 640px) {
 	.help-links {
-		margin:10px 0px 0!important!important;
-		column-count:1!important!important;
-		width:100%!important!important
+		margin:10px 0px 0!important;
+		column-count:1!important;
+		width:100%!important
 	}
 	.paa-footer-links {
 		column-count:2
@@ -6337,7 +6337,7 @@ footer a:hover,
 	border-bottom:1px solid #212527!important
 }
 @media only screen and (min-width: 320px) and (max-width: 640px) {
-    .one-click-upsell .listing h5 {
+    .one-click-upsell h5 {
         max-height: 35px !important;
     }
     .upgrade-btn button {
