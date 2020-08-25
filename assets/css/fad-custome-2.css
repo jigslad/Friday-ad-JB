@@ -509,7 +509,8 @@
     width: 100%;
     height: 45px;
     float: none;
-    padding: 0 12px
+    padding: 0 12px;
+    line-height: 21px !important;
 }
 
 .other-latest-items #latest-item-slider .owl-prev,

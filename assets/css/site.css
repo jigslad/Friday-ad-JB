@@ -6053,16 +6053,16 @@ footer a:hover,
 	}
 }
 @media only screen and (min-width: 320px) and (max-width: 759px) {
-	#home-search .all-cat-select {
-		min-width:52px!important;
-		width:52px!important
-	}
+    #home-search .all-cat-select {
+        min-width: auto !important;
+        width: auto !important;
+    }
+    #home-search .find-all .select2-choice {
+        min-width: auto !important;
+        width: auto !important;
+    }
 	#home-search .looking-for {
 		width:100%!important
-	}
-	#home-search .find-all .select2-choice {
-		min-width:52px!important;
-		width:52px!important
 	}
 	.find-all .select2-choice,
 	.find-all .select2-choice:hover,
@@ -6335,4 +6335,19 @@ footer a:hover,
 .top-bar-section .accordion dd>a,
 .top-bar-section .accordion dd>a:hover {
 	border-bottom:1px solid #212527!important
+}
+@media only screen and (min-width: 320px) and (max-width: 640px) {
+    .one-click-upsell .listing h5 {
+        max-height: 35px !important;
+    }
+    .upgrade-btn button {
+        font-size: 95% !important;
+    }
+}
+.featured-upgrade-border .outside-tricky {
+    z-index: 5 !important;
+}
+
+#listingDiv .alert-box.info {
+    margin-top: 10px !important;
 }
