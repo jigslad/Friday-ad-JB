@@ -867,7 +867,11 @@ class CategoryRepository extends NestedTreeRepository
         }
         if (count($locationDetails)) {
             if (isset($locationDetails['latitude']) && isset($locationDetails['longitude'])) {
-                $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'].', '.$locationDetails['longitude']);
+                if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
+                    $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'] . ',' . $locationDetails['longitude'], 'd' => 15);
+                } else {
+                    $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'] . ',' . $locationDetails['longitude']);
+                }
                 $container->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
             }
         }
@@ -1116,7 +1120,11 @@ class CategoryRepository extends NestedTreeRepository
             }
             if (!empty($locationDetails)) {
                 if (isset($locationDetails['latitude']) && isset($locationDetails['longitude'])) {
-                    $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'].', '.$locationDetails['longitude']);
+                    if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
+                        $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'].','.$locationDetails['longitude'], 'd' => 15);
+                    } else {
+                        $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'].','.$locationDetails['longitude']);
+                    }
                     $container->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
                 }
             }
@@ -2467,7 +2475,11 @@ class CategoryRepository extends NestedTreeRepository
             //$data['query_filters']['item']['category_id'] = self::ADULT_ID;
             if (!empty($locationDetails)) {
                 if (isset($locationDetails['latitude']) && isset($locationDetails['longitude'])) {
-                    $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'].', '.$locationDetails['longitude']);
+                    if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
+                        $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'] . ',' . $locationDetails['longitude'], 'd' => 15);
+                    } else {
+                        $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'] . ',' . $locationDetails['longitude']);
+                    }
                     $container->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
                 }
             }
