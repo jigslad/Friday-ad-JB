@@ -676,10 +676,12 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
     {% endif %}
 
     {% set dimension6 = '' %}
+    {% set catArr =  {} %}
     {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
         {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(searchParams.item__category_id, false, fetch_container_instance()) %}
         {% if categoryPath|length %}
             {% set dimension6 = categoryPath|join(':') %}
+            {% set catArr = dimension6|split(':')  %}
         {% endif %}
     {% endif %}
 
@@ -746,24 +748,24 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
             window.open(url, '_blank');
         }
 
-        //]]>
-    </script>
     <!-- Google TAG Manager Start -->
     {# Location @Jigar Lad #}
     {% if cookieLocationDetails.town_id is defined and cookieLocationDetails.town_id is not null %}
         {# Location and Group @Jigar Lad #}
-        {% set locationReposetry = fetch_repository('FaEntityBundle:Location') %}
-        {% set town = locationReposetry.find(cookieLocationDetails.town_id)%}
-        {% set country = locationReposetry.getCountyByTownId(cookieLocationDetails.town_id)%}
-        {% set locationGroupReposetry = fetch_repository('FaEntityBundle:LocationGroup') %}
-        {% set locationGroup = locationGroupReposetry.getLocationGroupByLocation(cookieLocationDetails.town_id)%}
+        {% set locationRepository = fetch_repository('FaEntityBundle:Location') %}
+        {% set town = locationRepository.find(cookieLocationDetails.town_id)%}
+        {% set county = locationRepository.getCountyByTownId(cookieLocationDetails.town_id)%}
+        {% set locationGroupRepository = fetch_repository('FaEntityBundle:LocationGroup') %}
+        {% set locationGroup = locationGroupRepository.getLocationGroupByLocation(cookieLocationDetails.town_id)%}
+        {% set lvl = cookieLocationDetails.lvl %}
     {% else %}
         {% set town = ''%}
-        {% set country = 'UK' %}
+        {% set county = 'UK' %}
         {% set locationGroup = '' %}
+        {% set lvl = 1 %}
     {% endif %}
 
-    <script>
+
         if (performance.navigation.type == 1) {
             var searchResultMethod = 'Refresh';
         } else {
@@ -787,17 +789,54 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
         {% if app.user.getId() is not defined or app.user.getId() is null %}
         {% set _logged_in = 'false' %}
         {% endif %}
+
+        {% set user_type = 'Others' %}
+        {% if searchParams.item__is_trade_ad is defined and searchParams.item__is_trade_ad==1 %}
+            {% set user_type = 'Dealer' %}
+        {% elseif searchParams.item__is_trade_ad is defined and searchParams.item__is_trade_ad==0 %}
+            {% set user_type = 'Private' %}
+        {% endif %}
+
         googletag.cmd.push(function() {
             googletag.pubads().setTargeting('page_type', 'Search Results');
+            googletag.pubads().setTargeting('user_type', {{ user_type }});
+
+            {% if catArr is defined %}
+            {% if catArr[0] is defined %}
+                googletag.pubads().setTargeting('category', '{{ catArr[0] }}');
+            {% endif %}
+                {% if catArr[1] is defined %}
+                googletag.pubads().setTargeting('class', '{{ catArr[1] }}');
+                {% endif %}
+                {% if catArr[2] is defined %}
+                googletag.pubads().setTargeting('sub_class', '{{ catArr[2] }}');
+                {% endif %}
+                {% if catArr[3] is defined %}
+                googletag.pubads().setTargeting('sub_sub_class', '{{ catArr[3] }}');
+                {% endif %}
+            {% endif %}
+
+            googletag.pubads().setTargeting('town', '{{ town }}');
+            {% if lvl==4 and town is defined %}
+            googletag.pubads().setTargeting('london_areas', '{{ town }}');
+            {% endif %}
+            googletag.pubads().setTargeting('county', '{{ county }}');
+
+            googletag.pubads().setTargeting('country', 'UK');
+            googletag.pubads().setTargeting('edition_area', "{{ (locationGroup is defined and locationGroup.name is defined)?'Print':'Non Print' }}");
+
+            {% if searchParams.keywords is defined %}
+                googletag.pubads().setTargeting('search_keyword', '{{ searchParams.keywords }}');
+            {% endif %}
             googletag.pubads().setTargeting('adBlocker', false);
             googletag.pubads().setTargeting('user_logged', {{ _logged_in }});
-            googletag.pubads().setTargeting('category', '{{ dimension6 }}');
+
         });
 
         window.dataLayer = window.dataLayer || [];
         dataLayer.push({
             "searchResults":{
-                "county": '{{ country }}',
+                "county": '{{ county }}',
                 "town": "{{ (cookieLocationDetails.town  is defined ? cookieLocationDetails.town : '')|raw }}",
                 "locationGroup": "{{ (locationGroup.name is defined ? locationGroup.name : locationGroup)|raw }}",
                 "searchKeyword": '{{ app.request.get('keywords')|raw }}',
@@ -807,6 +846,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                 "popularSearch": {{ seoFields.popular_search is defined ? 'true' : 'false' }}
             }
         });
+        //]]>
     </script>
     <!-- Google TAG Manager End -->
 {% endblock %}
