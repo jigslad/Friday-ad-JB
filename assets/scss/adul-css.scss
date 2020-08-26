@@ -3371,3 +3371,6 @@ ul.select2-choices:after, .select2-choice:after {
     background-size: auto !important;
   }
 }
+#sticky_nav_top .nav-bg {
+  z-index: 999;
+}
