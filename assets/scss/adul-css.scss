@@ -462,6 +462,10 @@ button.signup-fb-btn.expand {
     border: 0px !important;
     border-bottom: 1px solid $form-border-color !important;
 }
+.manage-item-list .adEditBlock1 a {
+  color: $white !important;
+}
+
 
 /* other css */
 .nav-bg.homepage-nav { background: rgba(255,255,255,1) !important; }
@@ -900,7 +904,7 @@ a {
   }
 }
 
-#notification-area a.button {
+.manage-item-list .adEditBlock1 a, #notification-area a.button {
   color: $white !important;
 }
 
@@ -3179,21 +3183,6 @@ ul.select2-choices:after, .select2-choice:after {
 }
 .list-featured-bz .item h3 {
 	text-align: left !important;
-}
-#category_autocomplete_div .textbox-wrapper input {
-  height: 48px !important;
-}
-.fancybox-close {
-  height: 26px !important;
-  background-size: cover !important;
-  background-position: top !important;
-}
-.shop-video-box img {
-  height: 100% !important;
-}
-.blockMsg h1 {
-  font-size: 28px !important;
-  line-height: 36px !important;
 }
 @media only screen and (min-width: 759px) {
   .adul-hp-slider .top-msg {
