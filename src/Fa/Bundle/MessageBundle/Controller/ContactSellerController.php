@@ -90,6 +90,7 @@ class ContactSellerController extends CoreController
                                     );
                                     $halfAccountForm = $formManager->createForm(UserHalfAccountType::class, null, array('method' => 'POST'));
                                     $halfAccountForm->submit($halfAccountData);
+                                    $this->getEntityManager()->flush();
                                     $loggedInUser = $this->getRepository('FaUserBundle:User')->findOneBy(array('email' => $form->get('sender_email')->getData()));
                                     if(!$loggedInUser){
                                         $error = $this->get('translator')->trans('Unable to find user.', array(), 'frontend-show-ad');

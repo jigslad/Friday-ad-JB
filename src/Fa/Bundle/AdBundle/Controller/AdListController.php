@@ -336,7 +336,7 @@ class AdListController extends CoreController
         $geoDistParams = array();
         if ($mapFlag) {
             if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['latitude']) && isset($cookieLocationDetails['longitude'])) {
-                $data['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
+                //$data['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
             }
         }
 
@@ -430,7 +430,7 @@ class AdListController extends CoreController
         
         if (!$mapFlag && $setDefUKLoc==0 && $isBusinessPage==0) {
             if (isset($otherMatchingData['search']['item__distance'])) {
-                $otherMatchingData['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
+                //$otherMatchingData['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
             }
             $this->get('fa.solrsearch.manager')->init('ad', $keywords, $otherMatchingData, 1, 1, 0, true);
             
@@ -592,7 +592,7 @@ class AdListController extends CoreController
                             $fourLocWithDistanceData['query_filters']['item']['location'] = $fourLocationsDetail['town_id'];
                         }
                     }
-                    $fourLocWithDistanceData['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
+                    //$fourLocWithDistanceData['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
                     $this->get('fa.solrsearch.manager')->init('ad', $keywords, $fourLocWithDistanceData);
                     $fourLocWithDistanceSolrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
                     $fourLocWithDistanceResultCount = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($fourLocWithDistanceSolrResponse);
@@ -1133,7 +1133,7 @@ class AdListController extends CoreController
 
             if (isset($data['search']['item__location']) && $data['search']['item__location'] != LocationRepository::COUNTY_ID && (!isset($data['search']['item__distance']) || (isset($data['search']['item__distance']) && $data['search']['item__distance'] >= 0 && $data['search']['item__distance'] <= CategoryRepository::MAX_DISTANCE))) {
                 if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['latitude']) && isset($cookieLocationDetails['longitude'])) {
-                    $data['query_sorter']['item']['geodist'] = 'asc';
+                    //$data['query_sorter']['item']['geodist'] = 'asc';
                 }
             }
 
@@ -1467,7 +1467,7 @@ class AdListController extends CoreController
             );
         } else {
             if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
-                $data['query_sorter']['item']['geodist'] = 'asc';
+                //$data['query_sorter']['item']['geodist'] = 'asc';
             }
 
             // for jobs and property and all their children categories need to show county seo box.
@@ -1492,7 +1492,7 @@ class AdListController extends CoreController
         $this->get('fa.solrsearch.manager')->init('ad', '', $data);
         if (!empty($cookieLocation)) {
             if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
-                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
+                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].','.$cookieLocation['longitude']);
                 $this->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
             }
         }
@@ -2008,7 +2008,11 @@ class AdListController extends CoreController
         
         if (!empty($cookieLocation)) {
             if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
-                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
+                if (isset($searchParams['search']['item__location']) && $searchParams['search']['item__location']) {
+                    $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'] . ',' . $cookieLocation['longitude'], 'd' => 30);
+                } else {
+                    $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].','.$cookieLocation['longitude']);
+                }
                 $this->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
             }
         }
@@ -2160,7 +2164,7 @@ class AdListController extends CoreController
             if(isset($searchParams['query_filters']['item']['distance'])) {
                 $data['query_filters']['item']['distance']=200;
                 $data['query_filters']['item']['location']= $searchParams['search']['item__location'].'|200';
-                $data['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
+                //$data['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
             } else {
                 $data['query_sorter']['item']['weekly_refresh_published_at'] = array('sort_ord' => 'desc', 'field_ord' => 1);
             } 

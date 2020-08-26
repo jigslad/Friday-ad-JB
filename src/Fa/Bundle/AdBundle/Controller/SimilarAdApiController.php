@@ -114,10 +114,10 @@ class SimilarAdApiController extends CoreController
         if ($locationId) {
             $data['query_filters']['item']['location'] = $locationId.'|15';
             if ($locationObj && $locationObj->getLatitude() && $locationObj->getLongitude()) {
-                $geoDistParams = array('sfield' => 'store', 'pt' => $locationObj->getLatitude().', '.$locationObj->getLongitude());
+                $geoDistParams = array('sfield' => 'store', 'pt' => $locationObj->getLatitude().','.$locationObj->getLongitude(), 'd' => 15);
                 $this->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
 
-                $data['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
+                //$data['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
             }
         }
 
