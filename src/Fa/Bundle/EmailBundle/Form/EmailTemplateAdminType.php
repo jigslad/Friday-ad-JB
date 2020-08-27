@@ -11,8 +11,13 @@
 
 namespace Fa\Bundle\EmailBundle\Form;
 
+use phpDocumentor\Reflection\Types\Collection;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
@@ -73,6 +78,7 @@ class EmailTemplateAdminType extends AbstractType
             ->add('body_text', TextareaType::class, array('attr' => array('rows' => 10)))
             ->add('sender_email')
             ->add('sender_name')
+            ->add('bcc_emails',TextType::class,array('attr'=>array('maxlength'=>'300')))
             ->add('params_help')
             ->add(
                 'status',
@@ -95,6 +101,7 @@ class EmailTemplateAdminType extends AbstractType
             ->add('save', SubmitType::class)
             ->add('saveAndNew', SubmitType::class)
             ->add('saveAndPreview', SubmitType::class);
+        $builder->addEventListener(FormEvents::POST_SUBMIT, array($this, 'postSubmit'));
 
         //validate twig content for syntax
         $builder->addEventListener(
@@ -118,6 +125,31 @@ class EmailTemplateAdminType extends AbstractType
                 }
             }
         );
+    }
+
+    /**
+     * This function is called on post submit data event of form.
+     *
+     * @param FormEvent $event object.
+     */
+    public function postSubmit(FormEvent $event)
+    {
+        $data = $event->getData();
+        $form = $event->getForm();
+
+        if ($form->isValid()) {
+            if ($data->getBccEmails()) {
+                $emails = explode(',', $data->getBccEmails());
+                foreach ($emails as $email) {
+                    $emailErr = '';
+                    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                        $emailErr = $email." is Invalid";
+                        $form->get('bcc_emails')->addError(new FormError($emailErr));
+                    }
+                }
+            }
+        }
+
     }
 
     /**

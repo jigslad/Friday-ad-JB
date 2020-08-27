@@ -59,7 +59,7 @@ class MyFavouriteController extends CoreController
             $solrSearchManager = $this->get('fa.solrsearch.manager');
             $solrSearchManager->init('ad', $keywords, $data, $page, $recordsPerPage);
             if (!empty($cookieLocation) && !empty($adIdsArray) && isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
-                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
+                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].','.$cookieLocation['longitude']);
                 $this->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
             }
             $solrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();

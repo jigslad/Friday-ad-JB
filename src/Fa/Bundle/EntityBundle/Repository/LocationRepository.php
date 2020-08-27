@@ -1482,4 +1482,35 @@ class LocationRepository extends BaseEntityRepository
         return null;
     }
 
+
+    /**
+     * Get location details of header categories.
+     *
+     * @param integer $location  Id of location.
+     * @param Request $request  request object
+     * @param object $container Container interface.
+     *
+     * @return array  $locationDetails
+     */
+    public function getLocationDetailForHeaderCategories($container, $request, $location=null)
+    {
+        $locationDetails = CommonManager::getLocationDetailFromParamsOrCookie($location, $request, $container);
+        if (!empty($locationDetails)) {
+            if ($locationDetails['location']!='') {
+                $splitLocation = explode(',', $locationDetails['location']);
+                if (count($splitLocation)>1) {
+                    $locationDetails = $this->_em->getRepository('FaEntityBundle:Location')->getArrayByTownId($locationDetails['town_id']);
+                }
+            }
+        }
+
+        if (!isset($locationDetails['location'])) {
+            $locationDetails['location'] = $this->_em->getRepository('FaEntityBundle:Location')->getIdBySlug('uk');
+            $locationDetails['locality'] = null;
+            $locationDetails['locality_id'] = 'uk';
+            $locationDetails['slug'] = null;
+        }
+
+        return $locationDetails;
+    }
 }

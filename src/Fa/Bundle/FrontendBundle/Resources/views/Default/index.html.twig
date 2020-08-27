@@ -38,7 +38,12 @@
     {% endif %}
 {% endblock %}
 {% block scripttop %}
-    {{ include('FaFrontendBundle:Default:home-css.html.twig') }}
+    {# CSS for homepage - taken from src/Fa/Bundle/FrontendBundle/Resources/views/Default/home-css.html.twig #}
+    {% stylesheets filter='uglifycss' output='bundles/css/compiled/fa-home.css'
+        'bundles/fafrontend/css/home.css'
+    %}
+        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
+    {% endstylesheets %}
 {% endblock %}
 
 {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
@@ -60,14 +65,14 @@
     <div class="covid-19-block bottom-border">
         <div class="row">
             <div class="columns text-center">
-                <div class="medium-17  large-18 columns align-text">
+                <div class="small-24 medium-15 large-14 columns align-text">
 {#                    <div class="head">Covid-19. <span class="ask-for-offer-help">Ask for & Offer Help in our <a href="https://www.friday-ad.co.uk/uk/community/coronavirus-support/" class="ga-covid-19-support-link-homepage">Coronavirus Support section</a></span></div>#}
-                    <div class="head">Friday-Ad is the home for local trusted services</div>
+                    <div class="head">NEW mobile app available now</div>
                 </div>
 {#                <div class="medium-7 large-6 columns align-text mt-space"><a class="button place-free-ad-btn thin-btn ga-covid-19-paa-link-homepage" href="https://www.friday-ad.co.uk/paa/first_step?categoryName=Coronavirus%20Support">Place Help Ad</a></div>#}
-                <div class="medium-7 large-6 columns align-text mt-space">
-                    <a class="button place-free-ad-btn thin-btn ga-covid-19-paa-link-homepage" href="https://www.friday-ad.co.uk/uk/services/">
-                        Browse now
+                <div class="small-24 medium-9 large-10 columns mt-space">
+                    <a class="button place-free-ad-btn thin-btn ga-covid-19-paa-link-homepage" href="http://onelink.to/rpu3jn">
+                        Get the App
                     </a>
                 </div>
             </div>
@@ -113,7 +118,7 @@
                     <a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}" class="discover-community">{{'Community'|trans({}, 'frontend-homepage')}}</a>
                     
                     {% set linkParams = { 'item__location': locationId, 'item__category_id': adultId } %}
-                    <a href="{{ path('fa_adult_homepage') }}" class="discover-adult">{{'Adult'|trans({}, 'frontend-homepage')}}</a>
+                    <a href="{{ path('fa_new_adult_homepage') }}" class="discover-adult">{{'Adult'|trans({}, 'frontend-homepage')}}</a>
                 </div>
                 {% endcache %}
             </div>
@@ -385,14 +390,24 @@
         });
     });
 
-    $( window ).scroll(function() {
-        if ($("#sticky_nav").hasClass('fixed')) {
+    $(window).scroll(function() {
+        if ($(window).scrollTop() > ($('.top-links').height() + $('#sticky_nav_top').height())) {
+            $("#sticky_nav").addClass('fixed');
+            $("#sticky_nav_top").addClass('fixed');
+            $("#sticky_nav_top").addClass('top-bar-shadow');
+        } else {
+            $("#sticky_nav").removeClass('fixed');
+            $("#sticky_nav_top").removeClass('fixed');
+            $("#sticky_nav_top").removeClass('top-bar-shadow');
+        }
+
+        /*if ($("#sticky_nav").hasClass('fixed')) {
             $("#sticky_nav_top").addClass('fixed');
             $("#sticky_nav_top").addClass('top-bar-shadow');
         } else {
             $("#sticky_nav_top").removeClass('fixed');
             $("#sticky_nav_top").removeClass('top-bar-shadow');
-        }
+        }*/
     });
 
     function accordionCallback(accordion)
