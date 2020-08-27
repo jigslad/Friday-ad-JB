@@ -5942,12 +5942,6 @@ button.signup-fb-btn.expand {
 	border-bottom-left-radius:4px!important;
 	border:0!important
 }
-.top-bar-section .real-desktop li:last-child .main_category {
-	padding-right:15px!important
-}
-.top-bar-section .real-desktop li:last-child a::after {
-	content:none!important
-}
 .search-filters {
 	border:0 solid #cbd5d9!important
 }
