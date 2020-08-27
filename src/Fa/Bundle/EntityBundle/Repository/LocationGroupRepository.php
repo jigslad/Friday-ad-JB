@@ -12,6 +12,7 @@
 namespace Fa\Bundle\EntityBundle\Repository;
 
 use Doctrine\ORM\EntityRepository as BaseEntityRepository;
+use Fa\Bundle\AdBundle\FaAdBundle;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 
 /**
@@ -173,5 +174,45 @@ class LocationGroupRepository extends BaseEntityRepository
         }
 
         return $printEditionArray;
+    }
+    /**
+     * Get location Group by location.
+     *
+     * @param integer $locationId Location id.
+     *
+     * @return array
+     */
+    public function getLocationGroupByLocation($locationId)
+    {
+        $locationData = $this->_em->getRepository('FaEntityBundle:location')->find($locationId);
+        if($locationData->getLvl() == 4){
+            $locationId = $locationData->getParent()->getId();
+        }
+        $location = $this->getEntityManager()->getRepository('FaEntityBundle:LocationGroupLocation')->getLocationGroupIdByTownOrDomicileId($locationId);
+        if ($location) {
+            return $this->find($location);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Get Location Group By AdId.
+     *
+     * @param integer $AdId Ad id.
+     *
+     * @return array
+     */
+    public function getLocationGroupNameByAdID($AdId)
+    {
+        $location = $this->getEntityManager()->getRepository('FaAdBundle:AdLocation')->getLocationGroupByAdId($AdId);
+        if($location){
+            $locationGroup = $this->find($location[0]);
+            return $locationGroup;
+        }
+        else
+        {
+            return '';
+        }
     }
 }

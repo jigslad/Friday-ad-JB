@@ -11,7 +11,7 @@ ajax_get_ad_images:
     defaults: { _controller: FaAdBundle:AdImage:ajaxRenderUploadedImage }
 
 ajax_delete_ad_images:
-    path:     /ajax/delete_image/{adId}/{imageId}/{imageHash}/{vertical}
+    path:     /ajax/delete_image/{vertical}/{adId}/{imageId}/{imageHash}
     defaults: { _controller: FaAdBundle:AdImage:ajaxDeleteImage }
 
 ajax_get_big_ad_image:
@@ -31,7 +31,7 @@ ajax_make_main_image:
     defaults: { _controller: FaAdBundle:AdImage:ajaxMakeMainImage }
 
 ajax_reset_ad_image:
-    path:     /ajax/reset_image/{adId}/{imageId}/{imageHash}/{vertical}
+    path:     /ajax/reset_image/{vertical}/{adId}/{imageId}/{imageHash}
     defaults: { _controller: FaAdBundle:AdImage:ajaxResetImage }
     
 ajax_rotate_ad_image:

@@ -1,0 +1,408 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+
+{% set container = fetch_container_instance() %}
+
+{% block page_title %}
+    {% if seoFields.page_title is defined %}
+        {{ seoFields.page_title }}
+    {% endif %}
+{% endblock %}
+
+{% block meta_description %}
+    {% if seoFields.meta_description is defined %}
+        {{ seoFields.meta_description }}
+    {% endif %}
+{% endblock %}
+
+{% block canonical_url %}
+    {{ app.request.uri|replace({('?'~app.request.queryString) : ''}) }}
+{% endblock %}
+
+{% block meta_keywords %}
+    {% if seoFields.meta_keywords is defined %}
+        {{ seoFields.meta_keywords }}
+    {% endif %}
+{% endblock %}
+{% block scripttop %}
+    {# CSS for homepage - taken from src/Fa/Bundle/FrontendBundle/Resources/views/Default/home-css.html.twig #}
+    {% stylesheets filter='uglifycss' output='bundles/css/compiled/fa-home.css'
+        'bundles/fafrontend/css/home.css'
+    %}
+        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+{% set currentDevice = 'D' %}
+{% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+    {% set currentDevice = 'M' %}
+{% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
+    {% set currentDevice = 'T' %}
+{% endif %}
+
+{% set categoryAdultId      = adultCategoriesConstants['categoryAdultId'] %}
+{% set escortServicesId     = adultCategoriesConstants['escortServicesId'] %}
+                
+{% block body %}
+<div class="adul-hp">
+    <div class="homepage-hero">
+        <div class="hero-img">
+            {{ include('FaFrontendBundle:Adult:homePageAdultSearch.html.twig', {'form' : topSearchForm}) }}
+            <div class="parallax-window" id="header_image_div"></div>
+        </div>
+    </div>
+
+    <div id="adult_search_form" style="display: none">
+        {{ include('FaFrontendBundle:Adult:homePageAdultSearchForm.html.twig') }}       
+    </div>
+    
+    <div class="what-u-discover">
+        <div class="row">
+            <div class="columns">
+            	<div class="browse-by-category large-19 discover-adult-categories ">Browse by category</div>
+                {% cache 'home|page|'~locationId~'front/adult_home_page_discover' 1800 %}
+                    <div class="discover-categories large-20 discover-adult-categories text-center">
+                        {% for adultCategory in adultCategories %}
+                            <a href="{{ adultCategory['url'] }}" class="{{ adultCategory['class'] }} ga-ahpDiscover">{{adultCategory['name']|trans({}, 'frontend-homepage')}}</a>
+                        {% endfor %}
+                     </div>
+                {% endcache %}
+            </div>
+        </div>
+    </div>
+
+    <div class="homepage-row">
+        <div class="row">
+            <div class="columns">
+                <div class="homepage-title">{{'Popular searches'|trans({}, 'frontend-homepage')}}</div>
+                {{ include('FaFrontendBundle:Adult:homePopularSearches.html.twig', {'divId': 'recommended-item-slider', 'ads': ''}) }}
+            </div>
+        </div>
+    </div>
+    
+    <div class="homepage-row">
+        <div class="row">
+            <div class="columns">
+                <div class="homepage-title">{{'Latest ads'|trans({}, 'frontend-homepage')}}</div>
+            </div>
+	        <div class="medium-24 large-15 columns">
+                {{ include('FaFrontendBundle:Adult:homePageLatestAdsNew.html.twig', {'divId': 'featured-top-item-slider', 'ads': ''}) }}
+            </div>
+            <div class="medium-24 large-9 columns latest-ad-r-block">
+	        	<div class="mb20 square-block-img ga-ahpBlockAResults">
+	        		{% if mobileDetectManager.isMobile() %}
+                        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK_MOBILE') %}
+                        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                    {% else %}
+                        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK') %}
+                        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
+                    {% endif %}
+	        	</div>
+	        	<div class="mt0 square-block-img ga-ahpBlockBResults">
+	        	{% if mobileDetectManager.isMobile() %}
+                    {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK_MOBILE_2') %}
+                    {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                {% else %}
+                    {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK_2') %}
+                    {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
+                {% endif %}
+	        	</div>
+	        </div>
+        </div>
+    </div>
+    
+	{% if businessExposureUsersDetails|length %}
+    <div class="homepage-row">
+        <div class="row">
+            <div class="columns">
+                <div class="homepage-title">{{'Featured advertisers'|trans({}, 'frontend-homepage')}}</div>
+            </div>
+            <div class="columns">
+                {{ include('FaFrontendBundle:Adult:homePageFeaturedAdvertisersNew.html.twig') }}
+            </div>
+        </div>
+    </div>
+	{% endif %}
+	
+    <div class="homepage-row">
+        <div class="row">
+            <div class="columns">
+                <div class="homepage-title">{{'Browse adverts in popular locations'|trans({}, 'frontend-homepage')}}</div>
+                {{ include('FaFrontendBundle:Adult:showAdultHomePageLocationBlocksNew.html.twig', {'blocks': locationBlocks}) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block scriptbottom %}
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+    {% javascripts filter='uglifyjs2' output='bundles/js/compiled/home.js'
+        'bundles/facore/js/owl.carousel.min.js'
+        'bundles/fafrontend/js/parallax.min.js'
+    %}
+    <script defer src="{{ static_asset_url(asset_url) }}"></script>
+    {% endjavascripts %}
+
+    {% if mobileDetectManager.is('IE') %}
+        {% javascripts filter='uglifyjs2' output='bundles/js/compiled/parallaxFix.js'
+            'bundles/fafrontend/js/scroll.js'
+            'bundles/fafrontend/js/TweenMax.min.js'
+        %}
+        <script src="{{ static_asset_url(asset_url) }}"></script>
+        {% endjavascripts %}
+
+        <script language="javascript" type="text/javascript">
+            $(function(){
+                var $window = $(window);
+                var scrollTime = 1.2;
+                var scrollDistance = 250;
+                $window.on("mousewheel DOMMouseScroll", function(event){
+                    event.preventDefault();
+                    var delta = event.originalEvent.wheelDelta/120 || -event.originalEvent.detail/3;
+                    var scrollTop = $window.scrollTop();
+                    var finalScroll = scrollTop - parseInt(delta*scrollDistance);
+                    TweenMax.to($window, scrollTime, {
+                        scrollTo : { y: finalScroll, autoKill:true },
+                        ease: Power1.easeOut,
+                        overwrite: 1
+                    });
+                });
+            });
+        </script>
+    {% endif %}
+
+    <script language="javascript" type="text/javascript">
+        //<![CDATA[
+        var expand = false;
+        $(".m-pop-click").on('click',function(){
+           //console.log('test');
+             //display hidden items
+             if(!expand ){
+               $("#popular-dropdown").removeClass('m-pop-1');
+               $("#popular-dropdown").addClass('m-pop-2');
+               $(".adult-down-arrow").hide();
+               $(".adult-up-arrow").show();
+               expand = true;
+           }else{
+               $("#popular-dropdown").addClass('m-pop-1');
+               $("#popular-dropdown").removeClass('m-pop-2');
+               $(".adult-down-arrow").show();
+               $(".adult-up-arrow").hide();
+               expand = false
+           }
+       });
+        
+        var headerParallax;
+        $(document).ready(function() {
+            $('div.homepage-row:even').addClass('white-bg');
+
+            setDefaultLocatonFromCookie();
+            $('#fa_top_search_item__distance').val(5);
+            $('#fa_top_search_item__category_id').val({{ categoryAdultId }});
+            $('.select-control').select2({ minimumResultsForSearch: -1 });
+
+            $("#featured_advertisers_slider").owlCarousel({
+            	items : 4,
+                itemsCustom:[[320, 2], [568, 3], [768, 3], [1024, 4]],
+                navigation: true,
+                pagination:false,
+                responsiveRefreshRate : 100,
+                navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
+                lazyLoad: true,
+                scrollPerPage: true,
+            });
+
+            $("#featured-top-item-slider").owlCarousel({
+            	items : 3,
+                itemsCustom:[[320, 2], [568, 3], [641, 2], [760, 3]],
+                navigation: true,
+                pagination:false,
+                responsiveRefreshRate : 100,
+                navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
+                lazyLoad: true,
+                scrollPerPage: true
+            });
+
+            $("#recently-viwed-item-slider").owlCarousel({
+                items : 6,
+                itemsCustom:[[320, 1], [568, 3], [768, 4], [1024, 5], [1151, 6]],
+                navigation: true,
+                pagination:false,
+                responsiveRefreshRate : 100,
+                navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
+                lazyLoad: true,
+                scrollPerPage: true,
+            });
+
+            if ($("#popular_shops_slider").length) {
+                $("#popular_shops_slider").owlCarousel({
+                    items : 4,
+                    itemsCustom:[[320, 1], [568, 2], [768, 3], [1024, 4]],
+                    navigation: true,
+                    pagination:false,
+                    responsiveRefreshRate : 100,
+                    navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
+                    lazyLoad: true,
+                    scrollPerPage: true,
+                });
+            }
+
+            $(document).foundation({
+                accordion: {
+                    multi_expand: true,
+                    callback : function (accordion) {
+                        accordionCallback(accordion);
+                    }
+                }
+            });
+
+            $('#adul-hp-adv-srch').click(function(){
+            	var adulSrchCat = $('#fa_adult_home_page_search_item__category_id option:selected').html();
+            	var adulSrchDist = $('#fa_adult_home_page_search_item__distance option:selected').html();
+            	var adulSrchCity = $('#fa_adult_home_page_search_item__location_autocomplete').val();
+
+            	var opted_value = '';
+            	if ($('#fa_adult_home_page_search_item_adult__independent_or_agency_id_0').parent('span').hasClass('checked')) {
+            		opted_value += $('#fa_adult_home_page_search_item_adult__independent_or_agency_id_0').val();
+            	}
+            	
+            	if ($('#fa_adult_home_page_search_item_adult__independent_or_agency_id_1').parent('span').hasClass('checked')) {
+            		if(opted_value!='') { opted_value = opted_value+'__'; }
+            		opted_value += $('#fa_adult_home_page_search_item_adult__independent_or_agency_id_1').val();
+            	}
+            	$('#fa_adult_home_page_search_item_adult__independent_or_agency_id').val(opted_value);
+            	$("form[name='fa_adult_home_page_search']").submit();
+            	
+            	window.dataLayer = window.dataLayer || []
+            	dataLayer.push({
+            	'event' : 'ahp-search',
+            	'eventCategory':  'Site Search',
+            	'eventAction': 'Adult Homepage Advanced',
+            	'eventLabel': adulSrchCat+' : '+adulSrchDist+' : '+adulSrchCity
+            	});
+         	});	
+
+            $('#adul-top-srch-btn').click(function() {
+            	window.dataLayer = window.dataLayer || []
+                dataLayer.push({      
+                'event' : 'ahp-search',
+                'eventCategory':  'Site Search',     
+                'eventAction': 'Adult Homepage Basic',
+                'eventLabel': $("#fa_top_search_keywords").val()
+                }); 
+            });
+
+            $('#top_search_location_homepage_ok').click(function() {
+            	$("form[name='fa_top_search']").submit();
+            });
+
+            {% if currentDevice == 'D' %}
+                var loc_first_accordion = $('#list_home_location_box').find('.accordion-navigation:first');
+                $(loc_first_accordion).addClass('active');
+                $(loc_first_accordion).find('i').removeClass('fi-plus');
+                $(loc_first_accordion).find('i').addClass('fi-minus');
+                $(loc_first_accordion).find('div.content').addClass('active');
+            {% endif %}
+            
+        });
+
+        $( window ).scroll(function() {
+            if ($("#sticky_nav").hasClass('fixed')) {
+                $("#sticky_nav_top").addClass('fixed','top-bar-shadow');
+            } else {
+                $("#sticky_nav_top").removeClass('fixed','top-bar-shadow');
+            }
+        });
+
+        function accordionCallback(accordion) {
+            $(accordion).siblings('a').find('i').toggleClass("fi-plus fi-minus");
+            $(accordion).find('select.fa-select').selectmenu().selectmenu('refresh',true);
+        }
+        //]]>
+        function showHideAdvanceSearch() {
+            var x = $("#adult_search_form");
+            if (x.is(":visible")) {
+                x.hide();
+            } else {
+                x.show();
+                $('html, body').animate({
+                   	scrollTop: $('#adult_search_form').offset().top                 
+                }, 1000);
+            }
+        }
+        var selectedCategory = $("#fa_adult_home_page_search_item__category_id");
+        selectedCategory.change(function(){
+            if($(this).val() == {{ escortServicesId }}){
+                $("#more_options").css("display", "block");
+             }
+            else {
+                $("#more_options").css("display", "none");
+            }
+        });
+        function setDistance() {
+            var catId = selectedCategory.val();
+            var searchLocation = $('#fa_adult_home_page_search_item__location').val();
+            searchLocation = (searchLocation)?searchLocation:2;
+            $.ajax({
+                type: "post",
+                dataType: "json",
+                url: "{{ path('fa_frontend_ajax_user_location') }}",
+                data: {'location': searchLocation, 'catId' : catId},
+                success: function(data) {
+                    if (!$.isEmptyObject(data)) {
+                        $('#distance_slider').val(data.default_distance);
+                        $('#fa_adult_home_page_search_item__distance').val(data.default_distance);
+                        setAndMoveSliderCaption('distance_slider', 'lower', 'distance', false);
+                    }
+                }
+            });
+        }
+        selectedCategory.change(function() {
+            setDistance();
+        });
+        $('#fa_adult_home_page_search_item__location_homepage_ok').click(function(e) {
+            setDistance();
+        });
+
+        $('#fa_adult_home_page_search_item__location_autocomplete').keypress(function(event){
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if(keycode == '13'){
+            event.preventDefault();
+            $('#fa_adult_home_page_search_item__location_homepage_ok').click();
+        }
+
+    });
+    function setDefaultLocatonFromCookie()
+    {
+        if (checkCookie('location')) {
+            var locationCookie = $.parseJSON(decodeURIComponent(getCookie('location')));
+            $('#fa_adult_home_page_search_item__location').val(locationCookie.location);
+            $('#fa_adult_home_page_search_item__location_autocomplete').val(locationCookie.location_text);
+        }
+    }
+        $(document).ready(function(){
+            var selectedCategory = $("#fa_adult_home_page_search_item__category_id");
+            if(selectedCategory.val() == {{ escortServicesId }}){
+                $("#more_options").css("display", "block");
+            }
+            else {
+                $("#more_options").css("display", "none");
+            }
+        });
+    </script>
+{% endblock %}
+{% block dimension2 %}
+    <script language="javascript" type="text/javascript">
+        //<![CDATA[
+        {% if app.user.getId() is not defined or app.user.getId() is null %}
+            ga('set', 'dimension9', 'not logged in');
+        {% else %}
+            ga('set', 'dimension9', 'logged in');
+        {% endif %}
+
+            ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Homepage'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %}});
+        //]]>
+    </script>
+{% endblock %}
