@@ -500,12 +500,6 @@ button.signup-fb-btn.expand {
 }
 
 /* remove arrow for adul */
-.top-bar-section .real-desktop li:last-child .main_category{
-    padding-right: 15px !important;
-}
-.top-bar-section .real-desktop li:last-child a::after {
-    content: none !important;
-}
 .search-filters {
     border: 0px solid $form-border-color !important;
 }
