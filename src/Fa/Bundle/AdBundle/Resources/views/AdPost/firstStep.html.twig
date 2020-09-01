@@ -221,6 +221,7 @@
                }
            } else {
                $("#category_choices_div").prependTo("#main_div");
+               $('#category_choice_div_selected_' + (nextLevel-1)).show();
            }
            $('#category_choice_div_selected_' + nextLevel).hide();
            resetCategoryAutocompleteField();
@@ -551,7 +552,7 @@
                  }
                  else {
                      if($('#fa_paa_category_select_category_1').val() == ''){
-                         document.forms['fa_paa_category_select'].submit();
+                         // document.forms['fa_paa_category_select'].submit();
                      }
                  }
             {% endif %}
