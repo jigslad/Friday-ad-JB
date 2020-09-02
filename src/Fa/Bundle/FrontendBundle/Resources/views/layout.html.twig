@@ -183,19 +183,19 @@
     {% if (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration',4: 'show_draft_ad',5: 'ad_package_purchase',6: 'show_cart',7: 'cybersource_checkout'}) %}
         <style>.nav-bar .top-bar-section, #top_search, #field_arrow, .nav-bg .search-icon a { display:none !important; }</style>
     {% endif %}
+
+    <link rel="stylesheet" href="{{ asset('build/css/fad-custome-1.css') }}">
+    <link rel="stylesheet" href="{{ asset('build/css/fad-custome-2.css') }}">
+    <link rel="stylesheet" href="{{ asset('build/css/fad-custome-3.css') }}">
+    <link rel="stylesheet" href="{{ asset('build/css/fad-custome-4.css') }}">
     
 	{% if showAdultPages == 1 %}
         <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
 		<link rel="stylesheet" href="{{ asset('/bundles/css/adulapp.css') }}"/>
     	{{ include('FaFrontendBundle:Adult:adul-imgs.html.twig') }}
 	{% else %}
-	    <link rel="stylesheet" href="{{ asset('/bundles/css/app.css') }}"/>
-    	<link rel="stylesheet" href="{{ asset('build/css/site.css') }}">
-    	<link rel="stylesheet" href="{{ asset('build/css/sitenew.css') }}">
-    	<link rel="stylesheet" href="{{ asset('build/css/fad-custome-1.css') }}">
-    	<link rel="stylesheet" href="{{ asset('build/css/fad-custome-2.css') }}">
-    	<link rel="stylesheet" href="{{ asset('build/css/fad-custome-3.css') }}">
-    	<link rel="stylesheet" href="{{ asset('build/css/fad-custome-4.css') }}">
+        <link rel="stylesheet" href="{{ asset('build/css/site.css') }}">
+        <link rel="stylesheet" href="{{ asset('build/css/sitenew.css') }}">
     	{{ include('FaFrontendBundle::site-imgs.html.twig') }}
 	{% endif %}
 
