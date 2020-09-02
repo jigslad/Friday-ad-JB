@@ -852,3 +852,10 @@ footer a:hover, .footer-head:hover, .pkg-includes a {
   color: #f74d4d;
   line-height: 15px;
 }
+.top-links .f-dropdown {
+  z-index: 1006 !important;
+}
+.home-slider-content .top-msg .alert-box {
+  z-index: 1005 !important;
+}
+.cover-img-box .photo-icon { width:170px !important; }
