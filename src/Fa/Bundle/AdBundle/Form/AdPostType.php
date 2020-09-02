@@ -686,6 +686,7 @@ class AdPostType extends AbstractType
                 'attr' => array(
                     'class' => 'fdatepicker',
                     'autocomplete' => 'off',
+                    'hide_field'=>$paaFieldRule['hide_field']
                 )
             );
 
