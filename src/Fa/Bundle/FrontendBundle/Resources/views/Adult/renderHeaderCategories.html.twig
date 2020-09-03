@@ -165,7 +165,7 @@
     {% if headerCategories|length %}
     {# {% cache 'header|menu|'~location_id~'front/header_menu_mobile' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0) 86400 %} #}
     <dd class="accordion-navigation">
-        <a href="#cat-mob-menu ga-ahpCatDropdown">MENU</a>
+        <a href="#cat-mob-menu" class="ga-ahpCatDropdown">MENU</a>
         <div id="cat-mob-menu" class="content active">
             <ul class="show-for-small-only">               
                 {% for categoryId, categoryArray in headerCategories %}
