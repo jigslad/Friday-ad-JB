@@ -6345,3 +6345,10 @@ footer a:hover,
 #listingDiv .alert-box.info {
     margin-top: 10px !important;
 }
+.top-links .f-dropdown {
+    z-index: 1006 !important;
+}
+.home-slider-content .top-msg .alert-box {
+    z-index: 1005 !important;
+}
+.cover-img-box .photo-icon { width:170px !important; }

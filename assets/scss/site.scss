@@ -842,3 +842,10 @@ footer a:hover, .footer-head:hover, .pkg-includes a {
 .top-bar-section .accordion dd > a, .top-bar-section .accordion dd > a:hover {
 	border-bottom: 1px solid $common-text-color !important;
 }
+.top-links .f-dropdown {
+  z-index: 1006 !important;
+}
+.home-slider-content .top-msg .alert-box {
+  z-index: 1005 !important;
+}
+.cover-img-box .photo-icon { width:170px !important; }
