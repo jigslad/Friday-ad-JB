@@ -100,8 +100,11 @@ class MailManager
         $this->message = \Swift_Message::newInstance();
         $sendMailFlag = $this->container->hasParameter('fa.send.other.mails') ? $this->container->getParameter('fa.send.other.mails') : false;
         $defaultBcc =  $this->getEmailTemplate($emailIdentifier)->getBccEmails();
-        $defaultBcc = explode(',',$defaultBcc);
-        $bcc = array_merge($bcc,$defaultBcc);
+        $bcc = array();
+        if($defaultBcc) {
+            $defaultBcc = explode(',', $defaultBcc);
+            $bcc = array_merge($bcc, $defaultBcc);
+        }
         if ($to) {
             try {
                 $trackId = $this->historyEntityManager->getRepository('FaReportBundle:AutomatedEmailReportLog')->updateEmailLog($emailIdentifier, $to);
@@ -114,7 +117,10 @@ class MailManager
                 $this->setTo($to);
                 $this->setFrom($from);
                 $this->setCc($cc);
-                $this->setBcc($bcc);
+                if(!empty($bcc)) {
+                    $this->setBcc($bcc);
+                }
+
                 $this->setSender($sender);
                 $this->setReplyTo($replyTo);
                 $this->setPriority($priority);
