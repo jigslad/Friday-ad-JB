@@ -299,11 +299,13 @@
             });
 
             {% if currentDevice == 'D' %}
-                var loc_first_accordion = $('#list_home_location_box').find('.accordion-navigation:first');
-                $(loc_first_accordion).addClass('active');
-                $(loc_first_accordion).find('i').removeClass('fi-plus');
-                $(loc_first_accordion).find('i').addClass('fi-minus');
-                $(loc_first_accordion).find('div.content').addClass('active');
+                if(!window.matchMedia("(max-width: 767px)").matches) {
+                    var loc_first_accordion = $('#list_home_location_box').find('.accordion-navigation:first');
+                    $(loc_first_accordion).addClass('active');
+                    $(loc_first_accordion).find('i').removeClass('fi-plus');
+                    $(loc_first_accordion).find('i').addClass('fi-minus');
+                    $(loc_first_accordion).find('div.content').addClass('active');
+                }
             {% endif %}
             
         });
