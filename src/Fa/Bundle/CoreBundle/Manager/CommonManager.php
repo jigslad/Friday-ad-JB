@@ -1242,7 +1242,7 @@ class CommonManager
      */
     public static function sendErrorMail($container, $subject, $exceptionMessage, $stackTrace)
     {
-        $transport = \Swift_SmtpTransport::newInstance("192.168.206.2", 25);
+        $transport = \Swift_SmtpTransport::newInstance("172.30.3.79", 25);
         $mailer = \Swift_Mailer::newInstance($transport);
         $message = \Swift_Message::newInstance()
         ->setSubject($subject)
