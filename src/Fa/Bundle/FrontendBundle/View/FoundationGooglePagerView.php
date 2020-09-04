@@ -122,7 +122,7 @@ class FoundationGooglePagerView implements ViewInterface
      */
     protected function getDefaultProximity()
     {
-        return 4;
+        return 9;
     }
 
     /**
