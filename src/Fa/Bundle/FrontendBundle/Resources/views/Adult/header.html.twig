@@ -92,7 +92,7 @@
                     <ul class="title-area">
                         <li class="name">
                         <h1 class="mob-logo-h1">
-                             <a href="{{ path('fa_adult_homepage') }}" class="adul-logo"><img src="{{ asset_url('fafrontend/images/Fad-Adult-logo.svg') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" /></a>
+                             <a href="{{ path('fa_new_adult_homepage') }}" class="adul-logo"><img src="{{ asset_url('fafrontend/images/Fad-Adult-logo.svg') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" /></a>
                         </h1>
                         </li>
                         <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
@@ -163,7 +163,7 @@
     </div>
 </div>
     {% if status_code == 200 %}
-     {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'cybersource_checkout', 3: 'fa_adult_homepage'} %}
+     {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'cybersource_checkout', 3: 'fa_adult_homepage', 4: 'fa_new_adult_homepage'} %}
             {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {} } )) }}
         {% endif %} 
     {% endif %} 

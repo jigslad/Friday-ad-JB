@@ -85,21 +85,21 @@ class AdEditForSaleType extends AdEditType
                 'paypal_email',
                 EmailType::class,
                 array(
-                    'label' => 'Paypal email address',
+                    'label' => 'PayPal email address',
                     'mapped' => false
                 )
             )->add(
                 'paypal_first_name',
                 TextType::class,
                 array(
-                    'label' => 'Paypal first name',
+                    'label' => 'PayPal first name',
                     'mapped' => false
                 )
             )->add(
                 'paypal_last_name',
                 TextType::class,
                 array(
-                    'label' => 'Paypal last name',
+                    'label' => 'PayPal last name',
                     'mapped' => false
                 )
             );
@@ -286,15 +286,15 @@ class AdEditForSaleType extends AdEditType
 
             if (in_array($paymentMethodId, array(PaymentRepository::PAYMENT_METHOD_PAYPAL_ID, PaymentRepository::PAYMENT_METHOD_PAYPAL_OR_CASH_ID))) {
                 if (!$paypalEmail || !$paypalFirstName || !$paypalFirstName) {
-                    $form->get('paypal_email')->addError(new FormError('Paypal account is not verified.'));
-                    $form->get('paypal_first_name')->addError(new FormError("Paypal account is not verified."));
-                    $form->get('paypal_last_name')->addError(new FormError("Paypal account is not verified."));
+                    $form->get('paypal_email')->addError(new FormError('PayPal account is not verified.'));
+                    $form->get('paypal_first_name')->addError(new FormError("PayPal account is not verified."));
+                    $form->get('paypal_last_name')->addError(new FormError("PayPal account is not verified."));
                 } elseif ($paypalEmail && $paypalFirstName && $paypalLastName) {
                     $isPaypalVerifiedEmail = $this->container->get('fa.paypal.account.verification.manager')->verifyPaypalAccountByEmail($paypalEmail, 'NAME', $paypalFirstName, $paypalLastName);
                     if (!$isPaypalVerifiedEmail) {
-                        $form->get('paypal_email')->addError(new FormError('Paypal account is not verified.'));
-                        $form->get('paypal_first_name')->addError(new FormError("Paypal account is not verified."));
-                        $form->get('paypal_last_name')->addError(new FormError("Paypal account is not verified."));
+                        $form->get('paypal_email')->addError(new FormError('PayPal account is not verified.'));
+                        $form->get('paypal_first_name')->addError(new FormError("PayPal account is not verified."));
+                        $form->get('paypal_last_name')->addError(new FormError("PayPal account is not verified."));
                     }
                 }
             }

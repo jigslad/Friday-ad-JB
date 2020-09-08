@@ -8,6 +8,7 @@
 {{ include('FaUserBundle:HalfAccount:halfAccountJs.html.twig') }}
 <script language="javascript" type="text/javascript">
 //<![CDATA[
+var callFromGlobal = '';
     $(window).on('load', function() {
         var callFromGlobal = '';
 	    var isDragging = false;
@@ -390,7 +391,6 @@
               'eventAction': eventAction ,
               'eventLabel': catString
           });
-          ga('send', 'event', 'Click Ad Position', eventAction, catString);
       }
     }
 //]]>
