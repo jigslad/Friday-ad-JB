@@ -849,6 +849,16 @@ footer a:hover, .footer-head:hover, .pkg-includes a {
 .top-bar-section .accordion dd > a, .top-bar-section .accordion dd > a:hover {
 	border-bottom: 1px solid $common-text-color !important;
 }
+.error {
+  font-weight: normal;
+  background: transparent;
+  margin-top: 10px;
+  font-size: 12px;
+  font-style: normal;
+  padding-left: 0;
+  color: #f74d4d;
+  line-height: 15px;
+}
 .tickmark-icon {
   display: inline-block;
   width: 26px;
