@@ -1750,21 +1750,28 @@
     {% endif %}
 
     {# Location @Jigar Lad #}
-    {% set locationReposetry = fetch_repository('FaEntityBundle:Location') %}
+    {% set locationRepository = fetch_repository('FaEntityBundle:Location') %}
     {% if adDetail.a_l_main_town_id_i is defined %}
-        {% set Country = locationReposetry.getCountyByTownId(adDetail.a_l_main_town_id_i)%}
-        {% set Town = locationReposetry.find(adDetail.a_l_main_town_id_i)%}
-        {% set Town = Town.name %}
+        {% set locDet = locationRepository.find(adDetail.a_l_main_town_id_i)%}
+        {% set town = locDet.name %}
+        {% set lvl = locDet.lvl %}
+        {% set county = locationRepository.getCountyByTownId(adDetail.a_l_main_town_id_i)%}
+        {% set locationGroupRepository = fetch_repository('FaEntityBundle:LocationGroup') %}
+        {% set locationGroup = locationGroupRepository.getLocationGroupByLocation(adDetail.a_l_main_town_id_i) %}
     {% else %}
-        {% set Country = 'UK' %}
-        {% set Town = '' %}
+        {% set town = 'null' %}
+        {% set lvl = 'null' %}
+        {% set county = 'null' %}
+        {% set locationGroup = '' %}
     {% endif %}
     <script>
         {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(adCategoryId, false, fetch_container_instance()) %}
 
         {% set dimension6 = '' %}
+        {% set catArr =  {} %}
         {% if categoryPath|length %}
         {% set dimension6 = categoryPath|join(':') %}
+        {% set catArr = dimension6|split(':')  %}
         {% endif %}
 
         {# get date and create as new #}
@@ -1790,6 +1797,19 @@
         {% set _logged_in = 'false' %}
         {% endif %}
 
+        {% set userTypePubAds = 'Others' %}
+        {% if adDetail['user']['role_id'] is defined %}
+            {% set userTypePubAds = 'Private' %}
+            {% if (adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
+                {% set userTypePubAds = 'Dealer' %}
+                {% if adDetail['user']['business_category_id'] is defined and adDetail['user']['business_category_id'] is not null %}
+                    {% if adDetail['user']['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID')}  %}
+                        {% set userTypePubAds = 'Shop' %}
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+
         /* ----- GA Enquiry method ----- */
         {% set contactMethods = '' %}
         {% if adDetail['user'] is defined and adDetail['user']['contact_through_email'] == 1 %}
@@ -1805,13 +1825,35 @@
         $( document ).ready(function() {
             googletag.cmd.push(function() {
                 googletag.pubads().setTargeting('page_type', 'Ad details');
+                googletag.pubads().setTargeting('user_type', '{{ userTypePubAds }}');
+
+                {% if catArr is defined %}
+                {% if catArr[0] is defined %}
+                googletag.pubads().setTargeting('category', '{{ catArr[0] }}');
+                {% endif %}
+                {% if catArr[1] is defined %}
+                googletag.pubads().setTargeting('class', '{{ catArr[1] }}');
+                {% endif %}
+                {% if catArr[2] is defined %}
+                googletag.pubads().setTargeting('sub_class', '{{ catArr[2] }}');
+                {% endif %}
+                {% if catArr[3] is defined %}
+                googletag.pubads().setTargeting('sub_sub_class', '{{ catArr[3] }}');
+                {% endif %}
+                {% endif %}
+
                 googletag.pubads().setTargeting('adBlocker', false);
                 googletag.pubads().setTargeting('user_logged', {{ _logged_in }});
-                googletag.pubads().setTargeting('seller_name', '{{ businessname }}');
-                googletag.pubads().setTargeting('seller_type', {% if is_business_seller %} 'trade' {% else %} 'private' {% endif %});
-                googletag.pubads().setTargeting('ad_category', '{{ dimension6 }}');
+
                 googletag.pubads().setTargeting('ad_id', '{{ adId }}');
-                googletag.pubads().setTargeting('ad_location', '{{ adLocationName }}');
+
+                googletag.pubads().setTargeting('town', '{{ town }}');
+                googletag.pubads().setTargeting('county', '{{ county }}');
+                googletag.pubads().setTargeting('country', 'UK');
+                googletag.pubads().setTargeting('edition_area', "{{ (locationGroup is defined and locationGroup.name is defined)?'Print':'Non Print' }}");
+
+
+                googletag.pubads().setTargeting('ad_location', '{{ town }}');
                 googletag.pubads().setTargeting('ad_published', '{{attribute(adDetail, constant(solrMapping ~ 'PUBLISHED_AT'))|time_ago_in_words}}');
                 googletag.pubads().setTargeting('ad_price', '{{ attribute(adDetail, constant(solrMapping ~ 'PRICE')) }}');
                 googletag.pubads().setTargeting('seller_contact_methods', '{{ contactMethods }}');
@@ -1826,9 +1868,9 @@
                     "subSubSubCategory": "{{ (categoryArray.3 is defined ? categoryArray.3 : '')|raw }}",
                     "id": '{{ adId }}',
                     "photos": '{{ adDetail.a_total_images_i }}',
-                    "county": "{{ Country|raw }}",
+                    "county": "{{ county|raw }}",
                     "locationGroup": "{{ (locationGroup.name is defined ? locationGroup.name : locationGroup)|raw}}",
-                    "town": "{{ Town|raw }}",
+                    "town": "{{ town }}",
                     "video": {{ youtubeVideoUrl is not  null ? 'true' : 'false' }},
                     "paypalEnabled": {{ showBuyNowWithPaypal ? 'true' : 'false'}},
                     "publishDate": publishedDate,

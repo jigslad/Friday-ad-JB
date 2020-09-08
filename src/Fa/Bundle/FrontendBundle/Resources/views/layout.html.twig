@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,target-densityDpi=medium-dpi" />
 
-	{% set blockPageTitle = block('page_title') is defined ? block('page_title')|replace({' in UK': ''})|trim : false %}
+	{% set blockPageTitle = block('page_title') is defined ? block('page_title')|replace({' in UK': ''})|trim : ((otherblockPageTitle is defined)?otherblockPageTitle:false) %}
     {% set blockMetaRobots = block('meta_robots') is defined ? block('meta_robots')|trim : false %}
     {% set blockMetaDescription = block('meta_description') is defined ? block('meta_description')|replace({' in UK': ''})|trim : false %}
     {% set blockMetaKeywords = block('meta_keywords') is defined ? block('meta_keywords')|trim : false %}
@@ -212,6 +212,11 @@
             	ga('set', 'dimension9', 'logged in');
             {% endif %}
             ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Peripheral_Content'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %}});
+
+            {% set _logged_in = 'true' %}
+            {% if app.user.getId() is not defined or app.user.getId() is null %}
+                {% set _logged_in = 'false' %}
+            {% endif %}
 
             googletag.cmd.push(function() {
                 googletag.pubads().setTargeting('page_type', '{{ blockPageTitle }}');
