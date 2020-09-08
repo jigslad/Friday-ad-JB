@@ -548,11 +548,13 @@
             {% else %}
                  $('#fa_paa_category_select_category_id').val(category_id);
                  if($('#fa_paa_category_select_category_id_autocomplete').val() == '')  {
-                     // document.forms['fa_paa_category_select'].submit();
+                     $('#category_choice_div_selected_2').show();
+                     document.forms['fa_paa_category_select'].submit();
                  }
                  else {
                      if($('#fa_paa_category_select_category_1').val() == ''){
-                         // document.forms['fa_paa_category_select'].submit();
+                         $('#category_choice_div_selected_2').show();
+                         document.forms['fa_paa_category_select'].submit();
                      }
                  }
             {% endif %}
