@@ -33,6 +33,7 @@
     //<![CDATA[
         blockPage();
         $(document).ready(function(){
+            document.cookie = "SameSite=Lax;path=/";
             $('#cybersource_3d_secure_form').submit();
         });
         function resizeIframe(obj) {
