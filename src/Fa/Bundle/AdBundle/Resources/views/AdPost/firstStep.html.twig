@@ -428,6 +428,7 @@
 
                         if (selectCat !== undefined && selectCat != '') {
                           $(category_selector).val(selectCat);
+                          $('#category_choice_div_selected_' + (level)).show();
                         }
                     } else {
                         lastLevel = parseInt(level) - 1;
