@@ -264,6 +264,7 @@ $(document).ready(function(){
     	
         if ($(this).val().length < 1) {
             $("{{ field }}"+'_close').hide();
+            $('#category_id_autocomplete_error').hide();
             $("{{ field }}").val("");
             
             {% if child_field is defined %}
@@ -281,6 +282,7 @@ $(document).ready(function(){
     $("{{ field }}"+'_autocomplete').blur(function() {
         if ($("{{ field }}"+'_autocomplete').val().length == 0) {
             $("{{ field }}"+'_close').hide();
+            $('#category_id_autocomplete_error').hide();
         } else if($("{{ field }}"+'_autocomplete').val().length > 4) {
         	 {% if 'location' in field and 'paa' in field %}
 				//check location is related to area;
@@ -311,6 +313,7 @@ $(document).ready(function(){
     
     if ($("{{ field }}"+'_autocomplete').length > 0 && $("{{ field }}"+'_autocomplete').val().length < 1) {
         $("{{ field }}"+'_close').hide();
+        $('#category_id_autocomplete_error').hide();
     } else {
         $("{{ field }}"+'_close').show();
     }
