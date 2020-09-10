@@ -3374,3 +3374,11 @@ ul.select2-choices:after, .select2-choice:after {
 #sticky_nav_top .nav-bg {
   z-index: 999;
 }
+.tickmark-icon {
+  position: absolute !important;
+  right: -30px !important;
+  top: 7px !important;
+}
+.category_choice_div {
+  position: relative;
+}

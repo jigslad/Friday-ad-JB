@@ -33,19 +33,21 @@ $(function() {
                 data: { townId: townId, page_limit: 10, {% if dimension_field is defined %} cd_id: $('{{ dimension_field }}').val(),  {% endif %}},
                 {% endif %}
                 success: function(data) {
-                    var result = $.map(data['results'], function(item) {
-                        return {
-                            label: item.text,
-                            id: item.id,
-                            text2: item.text2 ? item.text2 : '',
-                            index: item.index,
-                            area_id: item.area_id ? item.area_id : '',
-                            locationBy: item.locationBy ? item.locationBy : '',
-                           	latlong: item.latlong ? item.latlong : '',
-                        };
-                    });
-                    cache[ term ] = result;
-                    response(result);
+                    if(jQuery.type(data) == 'object') {
+                        var result = $.map(data['results'], function (item) {
+                            return {
+                                label: item.text,
+                                id: item.id,
+                                text2: item.text2 ? item.text2 : '',
+                                index: item.index,
+                                area_id: item.area_id ? item.area_id : '',
+                                locationBy: item.locationBy ? item.locationBy : '',
+                                latlong: item.latlong ? item.latlong : '',
+                            };
+                        });
+                        cache[term] = result;
+                        response(result);
+                    }
                 }
             });
         },
@@ -168,7 +170,7 @@ $(function() {
                 bindShowMapOnChangeLocationEvent();
             {% endif %}
             {% if 'category_id' in field and not mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
-                onSelectAutoSuggestCategory();
+                // onSelectAutoSuggestCategory();
             {% endif %}
         },
         close: function( event, ui ) { 
