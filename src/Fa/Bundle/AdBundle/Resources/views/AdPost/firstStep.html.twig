@@ -8,6 +8,10 @@
     {{ 'What are you advertising'|trans({}, 'frontend-paa-first-step') }}
 {% endblock %}
 
+{% block meta_description %}
+    {{ 'Place an ad listing on Friday-Ad. It is the fun and free way to sell your things, no fees, no catches. Get your items seen online instantly in a few clicks!'|trans({}, 'frontend-paa-first-step') }}
+{% endblock %}
+
 {% block canonical_url %}
  {{ app.request.uri|replace({('?'~app.request.queryString) : ''}) }}
 {% endblock %}
@@ -27,7 +31,8 @@
 
 {% if showRegNoFieldsFlag %}
     {% set regNoDetailsOrderedFields = {13 : 'colour_id_autocomplete', 0 : 'colour_id', 1 : 'body_type_id', 2 : 'reg_year', 3 : 'fuel_type_id', 4 : 'transmission_id', 5 : 'engine_size', 6 : 'no_of_doors', 7 : 'no_of_seats', 8: 'fuel_economy', 9 : '062mph', 10 : 'top_speed', 11 : 'ncap_rating', 12 : 'co2_emissions', '14': 'colour_id_dimension_id'} %}
-    {% set regNoDetailsHiddenFields = {0: 'fuel_economy', 1 : '062mph', 2 : 'top_speed', 3 : 'ncap_rating', 4 : 'co2_emissions', 5: 'colour_id_dimension_id', 6: 'first_step_ordered_fields'} %}
+    {# {% set regNoDetailsHiddenFields = {0: 'fuel_economy', 1 : '062mph', 2 : 'top_speed', 3 : 'ncap_rating', 4 : 'co2_emissions', 5: 'colour_id_dimension_id', 6: 'first_step_ordered_fields'} %} #}
+    {% set regNoDetailsHiddenFields = {0: 'colour_id_dimension_id', 1: 'first_step_ordered_fields'} %}
 {% endif %}
 
 {% block body %}
@@ -40,10 +45,10 @@
                 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
                 {{ form_errors(form) }}
                 <div class="big-wrapper">
-                    <h2 class="text-center" id="choose_cat_msg">{{ 'choose from all categories'|trans({}, 'frontend-paa-first-step') }}</h2>
+                    <h2 class="text-center" id="choose_cat_msg">choose from all categories</h2>
                     <h3 class="text-center mt10" id="redirect_msg" style="display:none">{{ 'please wait…'|trans({}, 'frontend-paa-first-step') }}</h3>
                 </div>
-                <div class="big-wrapper">
+                <div class="choose-list">
                     <div class="choose-all-categories">
                         {% set categories = fetch_repository('FaEntityBundle:Category').getCategoryByLevelArray(1, fetch_container_instance()) %}
                         {% for categoryId, categoryName in categories %}
@@ -227,8 +232,15 @@
              if ($("#fa_paa_category_select_has_reg_no > .checked >").val() == '0') {
                eventLabel = eventLabel + ' - No';
              }
+                window.dataLayer = window.dataLayer || []
+                dataLayer.push({
 
-             ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
+                   'event' : 'PAA Category Selection',
+                   'eventCategory':  'PAA - Step 1',
+                   'eventAction': 'Category icon click',
+                   'eventLabel': eventLabel
+                });
+                ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
            }
            //GA Analytics code end
         });
@@ -259,7 +271,13 @@
               if ($("#fa_paa_category_select_has_reg_no > .checked >").val() == '0') {
                 eventLabel = eventLabel + ' - No';
               }
-
+                window.dataLayer = window.dataLayer || []
+                dataLayer.push({
+                    'event' : 'PAA Next Step',
+                    'eventCategory':  'Next Step',
+                    'eventAction': '',
+                    'eventLabel': category_id
+                });
               ga('send', 'event', 'PAA - Step 1', 'Category icon Next step', eventLabel);
             }
             //GA Analytics code end
@@ -315,6 +333,14 @@
                    regLookupResult = ' - Lookup unsuccessful || '+regNo;
                  }
                  var eventLabel = categoryPath + regLookupResult;
+                 window.dataLayer = window.dataLayer || []
+                 dataLayer.push({
+
+                     'event' : 'PAA Category Selection',
+                     'eventCategory':  'PAA - Step 1',
+                     'eventAction': 'Category icon click',
+                     'eventLabel': eventLabel
+                 });
                  ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
                  //GA Analytics code end
              });
@@ -440,7 +466,15 @@
            		incrscroll = 80;
            	} else if(winwidth>=400 && winwidth<=500) {
            		incrscroll = 40;
-           	} 
+           	}
+            window.dataLayer = window.dataLayer || []
+            dataLayer.push({
+
+                'event' : 'PAA Category Selection',
+                'eventCategory':  'PAA - Step 1',
+                'eventAction': 'Category icon click',
+                'eventLabel': eventLabel
+            });
             ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
             //GA Analytics code end
             
@@ -529,6 +563,7 @@
     function setStepSessionData(adId)
     {
       var url = Routing.generate('ad_post_set_step_session_data', { 'adId': adId});
+      url = url.replace(':https','');
       location.href = url;
     }
 

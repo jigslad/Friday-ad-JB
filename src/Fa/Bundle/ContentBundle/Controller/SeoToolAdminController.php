@@ -119,7 +119,7 @@ class SeoToolAdminController extends CrudController implements ResourceAuthoriza
         $csvColumnsArray = array();
         if ($request->ismethod('post')) {
             $errorMsg         = '';
-            $webPath          = $this->container->get('kernel')->getRootDir().'/../web';
+            $webPath          = $this->container->get('kernel')->getRootDir().'/../data';
             $objUploadedFile  = $request->files->get('objCSVFileTopLink');
             if (!$objUploadedFile) {
                 $objUploadedFile  = $request->files->get('objCSVFilePopularSearch');

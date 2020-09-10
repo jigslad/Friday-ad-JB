@@ -101,6 +101,12 @@ class ManageMyAdController extends CoreController
             'boostRenewDate'  => $getBoostDetails['boostRenewDate'],
             'userBusinessCategory' => $getBoostDetails['userBusinessCategory'],
         );
+        if ($request->get('limit')) {
+            $category = $this->getRepository('FaEntityBundle:Category')->find($request->get('category'));
+            $Link= "<a onclick=convertUserToBusiness(".$this->getUser()->getId().",".$request->get('category').") >Become a business advertiser </a>";
+            $flash_message = "As a private user, you can only have up to ".$request->get('limit')." ads live in the ".$category->getName()." category at any time. If you wish to place your latest ad live for free, you must remove an existing live ad. Alternatively, ".$Link." to place unlimited ads.";
+            $this->addFlash('notice',$flash_message);
+        }
 
         $showCompetitionPopup = false;
 
@@ -146,7 +152,7 @@ class ManageMyAdController extends CoreController
             if ($getCurrentActivePackage) {
                 if ($getCurrentActivePackage->getPackage() && $getCurrentActivePackage->getPackage()->getPrice() >0) {
                     $isBoostEnabled = $getCurrentActivePackage->getPackage()->getBoostAdEnabled();
-                    $boostMaxPerMonth = ($getCurrentActivePackage->getBoostOveride())?$getCurrentActivePackage->getBoostOveride():$getCurrentActivePackage->getPackage()->getMonthlyBoostCount();
+                    $boostMaxPerMonth = ($loggedinUser->getBoostOveride()!='' && $loggedinUser->getIsResetBoostCount()==1)?$loggedinUser->getBoostOveride():(($getCurrentActivePackage->getBoostOveride())?$getCurrentActivePackage->getBoostOveride():$getCurrentActivePackage->getPackage()->getMonthlyBoostCount());
                     $boostAdRemaining = $boostMaxPerMonth;
                     $getExpiryAtDate =  $getCurrentActivePackage->getExpiresAt();
                     $getCreateOrUpdateDate = ($getCurrentActivePackage->getUpdatedAt() > $getCurrentActivePackage->getCreatedAt())?$getCurrentActivePackage->getUpdatedAt():$getCurrentActivePackage->getCreatedAt();

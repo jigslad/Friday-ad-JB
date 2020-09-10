@@ -70,11 +70,18 @@ class AdController extends CoreController
         }
 
         $adDetail = $this->getRepository('FaAdBundle:Ad')->getAdDetailArray($adId, $this->container);
+        
+        $paaFieldArray = array();
+        $paaFieldRules = $this->getRepository('FaAdBundle:PaaFieldRule')->getPaaFieldRulesArrayByCategoryAncestor($adDetail['category_id']);
+        foreach ($paaFieldRules as $paaFieldRule) {
+            $paaFieldArray[] = $paaFieldRule['paa_field']['field'];
+        }
 
         $parameters = array(
             'ad' => $ad,
             'adDetail' => $adDetail,
             'location_id' => $locationDetails['location'],
+            'paaFieldArray' => $paaFieldArray,
         );
 
         if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
@@ -312,7 +319,7 @@ class AdController extends CoreController
         if ($cookieLocation && $cookieLocation != CommonManager::COOKIE_DELETED) {
             $cookieLocation = get_object_vars(json_decode($cookieLocation));
             if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
-                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
+                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].','.$cookieLocation['longitude']);
                 $solrSearchManager->setGeoDistQuery($geoDistParams);
             }
         }
@@ -339,6 +346,12 @@ class AdController extends CoreController
         $similarAds       = $this->getRepository('FaAdBundle:Ad')->getPaaSimilarAdverts($this->container, $adCategoryId, $adTitle, 1, 12, 0, 'geodist', ' AND -id:'.$adId);
         $adRootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($adCategoryId, $this->container);
 
+        $paaFieldArray = array();
+        $paaFieldRules = $this->getRepository('FaAdBundle:PaaFieldRule')->getPaaFieldRulesArrayByCategoryAncestor($adCategoryId,$this->container,'edit');
+        foreach ($paaFieldRules as $paaFieldRule) {
+            $paaFieldArray[] = $paaFieldRule['paa_field']['field'];
+        }
+            
         //remove script tag from description
         if (isset($adDetail[0][AdSolrFieldMapping::DESCRIPTION])) {
             $adDetail[0][AdSolrFieldMapping::DESCRIPTION] = preg_replace('#<a.*?>([^>]*)</a>#i', '$1', $adDetail[0][AdSolrFieldMapping::DESCRIPTION]);
@@ -346,8 +359,8 @@ class AdController extends CoreController
         }
         //remove phone or email from title
         if (isset($adDetail[0][AdSolrFieldMapping::TITLE])) {
-            $adDetail[0][AdSolrFieldMapping::TITLE] = CommonManager::hideOrRemovePhoneNumber($adDetail[0][AdSolrFieldMapping::TITLE], 'remove');
-            $adDetail[0][AdSolrFieldMapping::TITLE] = CommonManager::hideOrRemoveEmail($adId, $adDetail[0][AdSolrFieldMapping::TITLE], 'remove');
+            $adDetail[0][AdSolrFieldMapping::TITLE] = CommonManager::hideOrRemovePhoneNumber($adDetail[0][AdSolrFieldMapping::TITLE], 'remove','');
+            $adDetail[0][AdSolrFieldMapping::TITLE] = CommonManager::hideOrRemoveEmail($adId, $adDetail[0][AdSolrFieldMapping::TITLE], 'remove','');
         }
 
         //get location from cookie.
@@ -372,6 +385,7 @@ class AdController extends CoreController
             'similarAds' => $similarAds,
             'successPaymentModalbox' => $successPaymentModalbox,
             'paymentTransactionJs'	 => $transactionJsArr,
+            'paaFieldArray' => $paaFieldArray,
         );
 
         if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
@@ -433,10 +447,9 @@ class AdController extends CoreController
             $parameters['relatedBusinessesHeading'] = $relatedBusinessesHeading;
         }
 
-        $recommendedSlotArray = $this->getRepository('FaEntityBundle:CategoryRecommendedSlot')->getAdDetailCategoryRecommendedSlotArrayByCategoryId($adCategoryId, $this->container);
-        //print_r($recommendedSlotArray);exit;
+        $recommendedSlotArray = $this->getRepository('FaEntityBundle:CategoryRecommendedSlot')->getCategoryRecommendedSlotArrayByCategoryId($adCategoryId, $this->container);
         $parameters['recommendedSlotArray'] = $recommendedSlotArray;
-
+        
         return $this->render('FaAdBundle:Ad:showAd.html.twig', $parameters, $objResponse);
     }
 
@@ -656,7 +669,7 @@ class AdController extends CoreController
                     $this->get('fa.solrsearch.manager')->init('ad', '', $data);
                     if (!empty($cookieLocation)) {
                         if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
-                            $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
+                            $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].','.$cookieLocation['longitude']);
                             $this->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
                         }
                     }

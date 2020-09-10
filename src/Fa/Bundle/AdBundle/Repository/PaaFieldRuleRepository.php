@@ -59,7 +59,8 @@ class PaaFieldRuleRepository extends EntityRepository
         $queryBuilder = $this->getBaseQueryBuilder()
                         ->select(self::ALIAS, PaaFieldRepository::ALIAS)
                         ->leftJoin(self::ALIAS.'.paa_field', PaaFieldRepository::ALIAS)
-                        ->where(self::ALIAS.'.category = '.$categoryId);
+                        ->where(self::ALIAS.'.category = '.$categoryId)
+                        ->andWhere(self::ALIAS.'.status = 1');
 
         if ($ordBy == 'both' || $ordBy == 'bothWithNullLast') {
             $queryBuilder->addOrderBy(self::ALIAS.'.step', 'asc')
@@ -236,7 +237,11 @@ class PaaFieldRuleRepository extends EntityRepository
 
         $queryBuilder = $this->getPaaFieldRulesQueryBuilderByCategoryId($categoryId, $ordBy);
         if ($step) {
-            $queryBuilder->andWhere(self::ALIAS.'.step = :step')->setParameter('step', $step);
+            if($step=='admin' || $step=='edit') {
+                $queryBuilder->andWhere(self::ALIAS.'.step is not null');
+            } else {                    
+                $queryBuilder->andWhere(self::ALIAS.'.step = :step')->setParameter('step', $step);
+            }
         }
 
         $paaFieldRules = $queryBuilder->getQuery()->getArrayResult();

@@ -14,7 +14,7 @@
     <div class="adult-landing">
         <div class="row">
             <div class="columns">
-                <h3 class="homepage-title">{{ 'Find a service'|trans({}, 'frontend-landing-page') }}</h3>
+                <div class="homepage-title">{{ 'Find a service'|trans({}, 'frontend-landing-page') }}</div>
                 <label>{{ 'Select category'|trans({}, 'frontend-landing-page') }}</label>
                 <div id="adult-categories" class="row popular-items ">
                     {% for adultSubCategoryId, adultSubCategoryName in adultSubCategories %}
@@ -26,11 +26,13 @@
                                         <div class="overlay"></div>
                                         <div class="popular-graphic">
                                             {% if imageInfo.overlay_file_name is defined %}
-                                                <img alt="{{ adultSubCategoryName }}" src="{{ shared_url(imageInfo.overlay_file_name) }}">
+                                                {% set imageOverlayUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.overlay_file_name]) %}
+                                                <img alt="{{ adultSubCategoryName }}" src="{{ imageOverlayUrl }}">
                                             {% endif %}
                                         </div>
                                         {% if imageInfo.file_name is defined %}
-                                            <img alt="{{ adultSubCategoryName }}" src="{{ shared_url(imageInfo.file_name) }}">
+                                        	{% set imageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.file_name]) %}
+                                            <img alt="{{ adultSubCategoryName }}" src="{{ imageUrl }}">
                                         {% endif %}
                                     </div>
                                 </div>

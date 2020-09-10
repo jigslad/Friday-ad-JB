@@ -135,6 +135,13 @@ class CategoryRecommendedSlot
      * @ORM\Column(name="mobile_title", type="string", length=255, nullable=false)
      */
     private $mobile_title;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="show_sponsored_lbl", type="boolean", nullable=true, options={"default" = 0})
+     */
+    private $show_sponsored_lbl = false;
 
     /**
      * Constructor.
@@ -525,5 +532,29 @@ class CategoryRecommendedSlot
     public function getMobileTitle()
     {
         return $this->mobile_title;
+    }
+    
+    /**
+     * Set show_sponsored_lbl
+     *
+     * @param boolean $show_sponsored_lbl
+     * @return CategoryRecommendedSlot
+     */
+    
+    public function setShowSponsoredLbl($show_sponsored_lbl)
+    {
+        $this->show_sponsored_lbl = $show_sponsored_lbl;
+        
+        return $this;
+    }
+    
+    /**
+     * Get show_sponsored_lbl.
+     *
+     * @return boolean
+     */
+    public function getShowSponsoredLbl()
+    {
+        return $this->show_sponsored_lbl;
     }
 }

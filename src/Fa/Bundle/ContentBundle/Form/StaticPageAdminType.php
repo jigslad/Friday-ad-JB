@@ -79,6 +79,7 @@ class StaticPageAdminType extends AbstractType
             ->add('no_index', CheckboxType::class, array('label' => 'No Index', 'required' => false))
             ->add('no_follow', CheckboxType::class, array('label' => 'No Follow', 'required' => false))
             ->add('include_in_footer', CheckboxType::class, array('label' => 'Include link in footer', 'required' => false))
+            ->add('include_in_mobile_footer', CheckboxType::class, array('label' => 'Include link in mobile footer', 'required' => false))
             ->add('canonical_url', TextType::class, array('required' => false))
             ->add('canonical_url_status', CheckboxType::class, array('label' => 'Enable canonical url?', 'required' => false))
             ->add(

@@ -1,0 +1,134 @@
+{{ include('FaUserBundle:Newsletter:footerNewsletter-css.html.twig') }}
+<div class="mb20">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'fa_user_newsletter'}}) }}
+                <div class="mb20 newsletter-head"><span class="newsletter-icon list-icons" style=""></span><label class="footer-head">Subscribe to our <br> newsletter</label></div>
+                <div class="search-box-col">
+                   <div class="clearfix">
+                       <div class="newsletter-search-box">
+                            {{ form_widget(form.email,  { 'attr': {'class': 'newsletter-email-txt', "autocomplete": "off"} }) }}
+                       </div>
+                    </div>
+                    {{ form_errors(form) }}
+                    <div class="label-inline white-checkbox mt0 mb0" style="display: inline-flex;">
+                        <span class="custom-checkbox">
+                            {{ form_widget(form.email_alert) }}
+                        </span>
+                        {{ form_label(form.email_alert,'', {'label_attr': {'class': 'footer-subscribe-label'}}) }}
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="label-inline white-checkbox mt0 mb0 third-party-email-subscription" style="display: inline-flex;">
+                        <span class="custom-checkbox">
+                            {{ form_widget(form.third_party_email_alert) }}
+                        </span>
+                        {{ form_label(form.third_party_email_alert,'', {'label_attr': {'class': 'footer-subscribe-label'}}) }}
+                    </div>
+                    <div class="clearfix">
+                       <div class="" style="display: inline-flex;">
+                            {{ form_widget(form.save) }}
+                        </div>
+                    </div>
+                    <div class="clearfix">
+                       <div class="footer-newsletter-info-box">
+                            <p>You can easily tailor or unsubscribe from our newsletters at any time by clicking on the links at the bottom of each of our emails. You can also update your preferences and personal information at any time.</p>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            {{ form_end(form) }}
+        </div>
+        
+{% block scriptbottom %}  
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    /*$(document).ready(function(){
+    	$('#fa_user_newsletter_third_party_email_alert').prop('disabled', true);
+    });
+    $('#fa_user_newsletter_email_alert').on('click', function(){
+		if($(this). prop("checked") == true) {
+				$('#fa_user_newsletter_third_party_email_alert').prop('disabled', false);
+				$('#fa_user_newsletter_third_party_email_alert').css('cursor', 'pointer');
+			}
+    	});*/   	
+
+    	$("#fa_user_newsletter_third_party_email_alert").parent('span').on('click', function (e) {
+    		if (!$('#fa_user_newsletter_third_party_email_alert').parent('span').hasClass('checked')) {
+    		    $('#fa_user_newsletter_third_party_email_alert').attr('checked', true);
+    		} else {
+    		    $('#fa_user_newsletter_third_party_email_alert').attr('checked', false);
+    		}
+
+    		if ($('#fa_user_newsletter_third_party_email_alert').attr('checked')) {
+    		    $('#fa_user_newsletter_email_alert').attr('checked', $('#fa_user_newsletter_third_party_email_alert').attr('checked'));
+    		    $('#fa_user_newsletter_email_alert').parent('span').addClass('checked');
+    		}
+    	});
+
+    	$("#fa_user_newsletter_email_alert").parent('span').on('click', function (e) {
+    		if (!$('#fa_user_newsletter_email_alert').parent('span').hasClass('checked')) {
+    			$('#fa_user_newsletter_email_alert').attr('checked', true);
+    		} else {
+    			$('#fa_user_newsletter_email_alert').attr('checked', false);
+    		}
+    		if (!$('#fa_user_newsletter_email_alert').attr('checked')) {
+    		    $('#fa_user_newsletter_third_party_email_alert').attr('checked', false);
+    		    $('#fa_user_newsletter_third_party_email_alert').parent('span').removeClass('checked');
+    		} 
+    	});
+
+    	$("#fa_user_newsletter_third_party_email_alert").parent('span').on('change', function (e) {
+    		if ($('#fa_user_newsletter_third_party_email_alert').parent('span').hasClass('checked')) {
+    		    $('#fa_user_newsletter_third_party_email_alert').attr('checked', true);
+    		} else {
+    		    $('#fa_user_newsletter_third_party_email_alert').attr('checked', false);
+    		}
+
+    		if ($('#fa_user_newsletter_third_party_email_alert').attr('checked')) {
+    		    $('#fa_user_newsletter_email_alert').attr('checked', $('#fa_user_newsletter_third_party_email_alert').attr('checked'));
+    		    $('#fa_user_newsletter_email_alert').parent('span').addClass('checked');
+    		}
+    	});
+
+    	$("#fa_user_newsletter_email_alert").parent('span').on('change', function (e) {
+    		if ($('#fa_user_newsletter_email_alert').parent('span').hasClass('checked')) {
+    			$('#fa_user_newsletter_email_alert').attr('checked', true);
+    		} else {
+    			$('#fa_user_newsletter_email_alert').attr('checked', false);
+    		}
+    		if (!$('#fa_user_newsletter_email_alert').attr('checked')) {
+    		    $('#fa_user_newsletter_third_party_email_alert').attr('checked', false);
+    		    $('#fa_user_newsletter_third_party_email_alert').parent('span').removeClass('checked');
+    		} 
+    	});
+	   
+    $("#fa_user_newsletter").submit(function(event) {
+    	// Stop form from submitting normally
+        event.preventDefault();
+    	$.ajax({
+            type: "POST",
+            url: "{{path('user_newsletter_ajax')}}",
+            data: new FormData(this),
+            contentType: false,
+            processData:false,
+        })
+        .done(function(response) {
+            if (response.success.length && response.user_id) {
+                $("#fa_user_newsletter_email").val("");
+                $('#createNewsletterBlockError').remove();
+                $('<div data-alert="" class="alert-box success radius outside-tricky"><span class="alert-icon">&nbsp;</span>Thank you for subscribing with us.</div>').insertAfter('.newsletter-search-box').delay(3000).fadeOut();
+                $(".search-box-col span").removeClass("checked");
+                $("#fa_user_newsletter_email_alert").attr('checked', false);
+                $("#fa_user_newsletter_third_party_email_alert").attr('checked', false);
+                $("#fa_user_newsletter_email").removeClass("error");
+            } else {
+                $('#createNewsletterBlockError').remove();
+                if (response.errorMessage.length) {
+                    $("#fa_user_newsletter_email").addClass("error");
+                    $('<div data-alert="" class="alert-box warning radius outside-tricky" style="padding: 21px 48px !important;"><span class="alert-icon">&nbsp;</span>'+response.errorMessage+'</div>').insertAfter('.newsletter-search-box').delay(3000).fadeOut();
+                }
+            }
+        });
+    });
+
+//]]>
+</script>
+{% endblock %}

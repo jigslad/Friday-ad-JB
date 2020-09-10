@@ -57,7 +57,7 @@
                 <ul id="profile_image_upload" data-dropdown-content class="f-dropdown" aria-hidden="true">
                     <li><a href="javascript:void(0)" class="pickProfileFile needsclick" id="pickProfileFile">{{'Upload profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
                     <li><a href="javascript:getProfileBigImage('{{ path(getProfileBigImageRoute, {'userId': app.user.getId(), 'isCompany': isCompany}) }}')">{{'Edit profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
-                    <li><a href="javascript:deleteImage('{{ path(deleteRoute, {'userId': app.user.getId(), 'isCompany': isCompany}) }}')">{{'Remove'|trans({}, 'frontend-my-profile')}}</a></li>
+                    <li><a href="javascript:deleteProfileImage('{{ path(deleteRoute, {'userId': app.user.getId(), 'isCompany': isCompany}) }}')">{{'Remove'|trans({}, 'frontend-my-profile')}}</a></li>
                 </ul>
             </div>
             <div class="profile-box" id="profile_change_btn_without_opt" {% if hasUserLogo|length %}style="display:none;"{% endif %}>
@@ -191,7 +191,7 @@
         
         {% if adCompanyInfo['website_link'] is defined %}
 		{% set websiteLabel = 'Visit Website'|trans({}, 'frontend-show-ad') %}		
-		<a rel="nofollow" onclick="openUserWebsite('{{(adDetail['ad_id'] is defined ? adDetail['ad_id'] : adDetail['id'])}}', '{{ companyWebSite }}','{{businessName}}')" href="javascript:void(0);" class="website-btn-1 button expand"><span class="website-icon"></span>{{ websiteLabel }}</a>
+		<a rel="nofollow" onclick="openUserWebsite('{{(adDetail['ad_id'] is defined ? adDetail['ad_id'] : adDetail['id'])}}', '{{ companyWebSite }}','{{businessName}}')" href="javascript:void(0);" class="website-btn-1 button expand ga-visitWebsiteAd"><span class="website-icon ga-visitWebsiteAd"></span>{{ websiteLabel }}</a>
 	    {% endif %}
 
         {% set otherItemLabel = "See seller's other items"|trans({}, 'frontend-show-ad') %}

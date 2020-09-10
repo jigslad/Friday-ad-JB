@@ -11,6 +11,7 @@
 
 namespace Fa\Bundle\AdBundle\Repository;
 
+use SimpleXMLElement;
 use Doctrine\ORM\EntityRepository;
 use Fa\Bundle\UserBundle\Repository\UserRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
@@ -1179,11 +1180,11 @@ class AdRepository extends EntityRepository
             if ($cookieLocation && $cookieLocation != CommonManager::COOKIE_DELETED) {
                 $cookieLocation = get_object_vars(json_decode($cookieLocation));
                 if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
-                    $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
+                    $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].','.$cookieLocation['longitude']);
 
                     // Sort by nearest first if location is set
                     if ($sortBy && $sortBy == 'geodist') {
-                        $data['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
+                        //$data['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
                     }
                 }
             }
@@ -1270,7 +1271,19 @@ class AdRepository extends EntityRepository
         $adDetailFields['qty']                                 = 'Quantity';
 
         //get category wise sorting parameters.
-        $paaFields = $this->_em->getRepository('FaAdBundle:PaaField')->getDimensionPaaFieldsWithLabel($categoryId, $container);
+        $paaFieldRuleFields = $paaFieldsOrg = array();
+        $paaFieldRules = array();
+        $paaFieldsOrg = $this->_em->getRepository('FaAdBundle:PaaField')->getDimensionPaaFieldsWithLabel($categoryId, $container);
+        $paaFieldRules = $this->_em->getRepository('FaAdBundle:PaaFieldRule')->getPaaFieldRulesArrayByCategoryAncestor($categoryId, $container, 'edit', 'both');
+        
+        if(!empty($paaFieldRules)) {
+            foreach($paaFieldRules as $paaFieldRule) {
+                $paaFieldRuleFields[$paaFieldRule['paa_field']['field']] = $paaFieldRule['paa_field']['label'];
+            }
+        }
+        if(!empty($paaFieldRuleFields)) {
+            $paaFields = array_intersect($paaFieldsOrg, $paaFieldRuleFields);
+        }
 
         //add auto suggest fields.
         $autoSuggestFields = $this->getAutoSuggestFields();
@@ -1583,7 +1596,8 @@ class AdRepository extends EntityRepository
                         $adDetailAndDimensionFields[$key][$adDetailFieldLabel] = $fieldValue.$unit;
                     }
                 }
-            } elseif (array_key_exists($adDetailField, $metaDataValues) && $adDetailField != 'RATES_ID') {
+            }
+            elseif (array_key_exists($adDetailField, $metaDataValues) && $adDetailField != 'RATES_ID') {
                 if ($repositoryName) {
                     $fieldValues = explode(',', $metaDataValues[$adDetailField]);
                     if (count($fieldValues) > 1) {
@@ -1639,7 +1653,19 @@ class AdRepository extends EntityRepository
                 }
             }
         }
-
+        if(isset($adDetailAndDimensionFields['detail']['Ethnicity '])){
+            $link = new SimpleXMLElement($adDetailAndDimensionFields['detail']['Category']);
+            $nlink = $link['href'].$adDetailAndDimensionFields['detail']['Ethnicity '].'/';
+            $nlink = explode('/',$nlink);
+            if($nlink[1] === 'app_dev.php'){
+                $nlink[2] = 'uk';
+            }
+            else {
+                $nlink[1] = 'uk';
+            }
+            $nlink = implode('/',$nlink);
+            $adDetailAndDimensionFields['detail']['Ethnicity '] = '<a href="'.$nlink.'">'.$adDetailAndDimensionFields['detail']['Ethnicity '].'</a>';
+        }
         return $adDetailAndDimensionFields;
     }
 
@@ -4133,6 +4159,26 @@ class AdRepository extends EntityRepository
 
         $container->get('fa.mail.manager')->send($user->getEmail(), 'ad_expires_tomorrow', $parameters, CommonManager::getCurrentCulture($container));
     }
+    
+    public function sendExpireTomorrowFreeAlertEmail($ad, $container)
+    {
+        $user        = $ad->getUser();
+        $entityCache = $container->get('fa.entity.cache.manager');
+        $editAdURL   = $container->get('router')->generate('fa_frontend_homepage', array(), true);
+        
+        $parameters = array(
+            'user_first_name'          => $user->getFirstName(),
+            'user_last_name'           => $user->getLastName(),
+            'text_ad_title'            => $ad->getTitle(),
+            'text_ad_category'         => $entityCache->getEntityNameById('FaEntityBundle:Category', $ad->getCategory()->getId()),
+            'text_ad_description'      => $ad->getDescription(),
+            'url_ad_main_photo'        => $this->getMainImageThumbUrlFromAd($ad, $container),
+            'url_ad_mark_sold'         => $container->get('router')->generate('manage_my_ads_mark_as_sold', array('adId' => $ad->getId()), true),
+            'url_ad_upsell'            => $container->get('router')->generate('ad_promote', array('type' => 'all', 'adId' => $ad->getId()), true),
+        );
+        
+        $container->get('fa.mail.manager')->send($user->getEmail(), 'ad_expires_tomorrow_free', $parameters, CommonManager::getCurrentCulture($container));
+    }
 
     /**
      *  Send ad expiration alert before one day user wise.
@@ -4174,6 +4220,42 @@ class AdRepository extends EntityRepository
 
             $container->get('fa.mail.manager')->send($user->getEmail(), 'ad_expires_tomorrow', $parameters, CommonManager::getCurrentCulture($container));
             $this->_em->getRepository('FaEmailBundle:EmailQueue')->removeFromEmailQueue('ad_expires_tomorrow', $user, $emailQueueIds);
+        }
+    }
+    
+    public function sendExpireTomorrowFreeAlertEmailByUser($user, $container)
+    {
+        $entityCache = $container->get('fa.entity.cache.manager');
+        $ads = array();
+        $emailQueueIds = array();
+        $emailQueues = $this->_em->getRepository('FaEmailBundle:EmailQueue')->findBy(array('user' => $user->getId(), 'identifier' => 'ad_expires_tomorrow_free', 'status' => 1));
+        foreach ($emailQueues as $emailQueue) {
+            $emailQueueIds[] = $emailQueue->getId();
+            $ad = $emailQueue->getAd();
+            $ads[] = array(
+                'text_ad_title'            => $ad->getTitle(),
+                'text_ad_category'         => $entityCache->getEntityNameById('FaEntityBundle:Category', $ad->getCategory()->getId()),
+                'text_ad_description'      => $ad->getDescription(),
+                'url_ad_main_photo'        => $this->getMainImageThumbUrlFromAd($ad, $container),
+                'url_ad_mark_sold'         => $container->get('router')->generate('manage_my_ads_mark_as_sold', array('adId' => $ad->getId()), true),
+                'url_ad_upsell'            => $container->get('router')->generate('ad_promote', array('type' => 'all', 'adId' => $ad->getId()), true),
+                'url_ad_view'               => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $ad->getId()), true),
+                'url_ad_preview'            => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $ad->getId()), true),
+                
+            );
+            //send push notifications
+            CommonManager::sendPushNotificationMessage('Your ad expires tomorrow. Repost it today!', 'Expires-tomorrow', $container->get('router')->generate('ad_promote', array('type' => 'renew', 'adId' => $ad->getId()), true), $user, $container);
+        }
+        if (!empty($ads)) {
+            $parameters = array(
+                'user_first_name'          => $user->getFirstName(),
+                'user_last_name'           => $user->getLastName(),
+                'ads' => $ads,
+                'total_ads' => (count($ads) - 1),
+            );
+            
+            $container->get('fa.mail.manager')->send($user->getEmail(), 'ad_expires_tomorrow_free', $parameters, CommonManager::getCurrentCulture($container));
+            $this->_em->getRepository('FaEmailBundle:EmailQueue')->removeFromEmailQueue('ad_expires_tomorrow_free', $user, $emailQueueIds);
         }
     }
 
@@ -4326,14 +4408,19 @@ class AdRepository extends EntityRepository
             $privateUserAdPostLimitRules = $this->_em->getRepository('FaCoreBundle:ConfigRule')->getPrivateUserAdPostLimit($categoryId, $container);
             $privateUserAdParams['adCategoryId'] = $categoryId;
             $privateUserAdParams['privateUserAdPostLimitRules'] = $privateUserAdPostLimitRules;
+            $subCategory = $this->_em->getRepository('FaEntityBundle:Category')->getCategoryArraySimpleById($privateUserAdPostLimitRules['configRuleCategoryId']);
+            array_push($subCategory,$privateUserAdPostLimitRules['configRuleCategoryId']);
+            $freePackage = $this->_em->getRepository('FaPromotionBundle:package')->getAllFreePacckage();
 
             $query = $this->createQueryBuilder(self::ALIAS)
             ->select('COUNT(DISTINCT '.self::ALIAS.'.id) as ad_cnt')
-            ->innerJoin(self::ALIAS.'.user', UserRepository::ALIAS, 'WITH', self::ALIAS.'.user = '.UserRepository::ALIAS.'.id')
             ->andWhere(self::ALIAS.'.status IN (:adStatus)')
             ->setParameter('adStatus', array(BaseEntityRepository::AD_STATUS_LIVE_ID, BaseEntityRepository::AD_STATUS_IN_MODERATION_ID))
-            ->andWhere($this->getRepositoryAlias().'.user = :userId')
+            ->andWhere(self::ALIAS.'.user = :userId')
             ->setParameter('userId', $userId)
+            ->leftJoin('FaAdBundle:AdUserPackage', AdUserPackageRepository::ALIAS, 'WITH', self::ALIAS.'.id ='.AdUserPackageRepository::ALIAS.'.ad_id')
+            ->andWhere(AdUserPackageRepository::ALIAS.'.package IN (:free_ad_package)')
+            ->setParameter('free_ad_package', $freePackage)
             ->setMaxResults(1);
 
             if (isset($privateUserAdPostLimitRules['configRuleCategoryId']) && $privateUserAdPostLimitRules['configRuleCategoryId']) {
@@ -4341,7 +4428,6 @@ class AdRepository extends EntityRepository
                 $query->andWhere($this->getRepositoryAlias().'.category IN (:adCategories)')
                     ->setParameter('adCategories', $adCategories);
             }
-
             $totalAds = 0;
             $userAd = $query->getQuery()->getOneOrNullResult();
             $totalAds += $userAd['ad_cnt'];
@@ -4713,5 +4799,60 @@ class AdRepository extends EntityRepository
         }
        
         return $arrResources;
+    }
+    
+    /** getRecentAdByCategory
+     *  find one last created ad by category from history
+     * @param $category
+     * @return mixed
+     */
+    private function getRecentAdByCategory($category, $searchParams){
+        $townId= $adId = null;
+        $townIds = isset($searchParams['item__location'])?$searchParams['item__location']:null;
+        if($townIds && $townIds!=2) {
+            $explodetownIds = explode(',',$townIds);
+            $townId = $explodetownIds[0];
+        }
+
+        $dayBeforeStartDate = CommonManager::getTimeStampFromStartDate(date('Y-m-d', strtotime('-1 day')));
+
+        $query = $this->createQueryBuilder(self::ALIAS)
+        ->select(self::ALIAS.'.id')
+        ->andWhere(self::ALIAS.'.category IN (:catId)')
+        ->setParameter('catId', $category)
+        ->andWhere('IDENTITY('.self::ALIAS.'.status) ='.BaseEntityRepository::AD_STATUS_LIVE_ID)
+        ->andWhere('(' . self::ALIAS . '.created_at <= ' . $dayBeforeStartDate . ' AND '. self::ALIAS . '.updated_at <= ' . $dayBeforeStartDate . ')')
+        ->andWhere(self::ALIAS.'.is_blocked_ad=0');
+
+        if ($townId) {
+            $location = $this->_em->getRepository('FaEntityBundle:Location')->find($townId); 
+            if (!empty($location)) {
+                $query->leftJoin(self::ALIAS.'.ad_locations', AdLocationRepository::ALIAS);
+                $query->leftJoin(AdLocationRepository::ALIAS.'.location_town', LocationRepository::ALIAS);
+                $query->andWhere('IDENTITY('.AdLocationRepository::ALIAS.'.location_town) IS NOT NULL');
+                $query->andWhere(AdLocationRepository::ALIAS.'.location_town in ('.$townId.')'); 
+            }
+        }
+        $query->orderBy(self::ALIAS.'.id', 'DESC');
+        $query->groupBy(self::ALIAS.'.category');
+        $adList = $query->getQuery()->getArrayResult();
+
+        $adIds = [];
+        if (!empty($adList)) {
+            foreach($adList as $ad) {
+                $adIds[] = $ad['id'];
+            }
+        }
+        return $adIds;
+    }
+    
+    /** getRecentAdByCategoryArray
+     * find one last created ad by category list from history
+     * @param $categoryList
+     * @return array
+     */
+    public function getRecentAdByCategoryArray($categoryList, $searchParams){
+        
+        return $this->getRecentAdByCategory($categoryList, $searchParams);
     }
 }

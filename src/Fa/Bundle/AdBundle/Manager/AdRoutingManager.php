@@ -198,7 +198,9 @@ class AdRoutingManager
 
         //$category = $this->em->getRepository('FaEntityBundle:Category')->getCategoryArrayById($search_params['item__category_id'], $this->container);
         $categoryId   = (isset($search_params['item__category_id']) ? $search_params['item__category_id'] : null);
-
+        if($categoryId == CategoryRepository::ADULT_ID) {
+            $categoryId = CategoryRepository::ESCORT_SERVICES_ID;
+        }
         $parentId = null;
         if (isset($categories[0])) {
             $parentId = $categories[0];
@@ -403,6 +405,23 @@ class AdRoutingManager
             ), true).'?'.rawurldecode($query);
         }
         return rtrim($url, '?');
+    }
+
+    /**
+     * get category url based on search parameters
+     *
+     * @param string $locationId
+     * @param string $categoryId
+     *
+     * @return string
+     */
+    public function getCategoryUrlById($locationId, $categoryId)
+    {
+        $location = $this->em->getRepository('FaEntityBundle:Location')->getSlugById($locationId, $this->container);
+        return $this->router->generate('listing_page', array(
+            'location' => $location,
+            'page_string' => $this->em->getRepository('FaEntityBundle:Category')->find($categoryId)->getFullSlug()
+        ), true);
     }
 
     /**
@@ -963,5 +982,10 @@ class AdRoutingManager
         } else {
             return null;
         }
+    }
+
+    public function getAdultHomePageUrl()
+    {
+        return $this->router->generate('fa_adult_homepage',array(), true);
     }
 }

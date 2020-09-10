@@ -110,8 +110,8 @@
                             {% endif %}
                         </div>
                         <div id="business_about_us_div">
-                             {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [userDetail['about_us'], 'hide']) %}
-                             {% set adDescWithReplacedPhoneAndEmail = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [userDetail['id'], adDescWithReplacedPhone, 'hide']) %}
+                             {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [userDetail['about_us'], 'hide','Profile']) %}
+                             {% set adDescWithReplacedPhoneAndEmail = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [userDetail['id'], adDescWithReplacedPhone, 'hide','Profile']) %}
                              {{ adDescWithReplacedPhoneAndEmail|raw }}
                         </div>
                     </div>
@@ -150,7 +150,7 @@
                 {% if userDetail['website_link'] is defined  and userDetail['website_link']|length %}
                     {% set websiteLabel = 'Visit website'|trans({}, 'frontend-profile-page') %}  
                     {% set profileWebSite = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'addHttpToUrl', [userDetail['website_link']]) %}    
-                    <a rel="nofollow" onclick="openUserWebsite('{{(userDetail['id'] ? userDetail['id'] : '-')}}', '{{ profileWebSite }}', '{{ userName }}')" href="javascript:void(0);" class="website-btn-1 button expand"><span class="website-icon"></span>{{ websiteLabel }}</a>
+                    <a rel="nofollow" onclick="openUserWebsite('{{(userDetail['id'] ? userDetail['id'] : '-')}}', '{{ profileWebSite }}', '{{ userName }}')" href="javascript:void(0);" class="website-btn-1 ga-visitWebsiteBusiness button expand"><span class="website-icon ga-visitWebsiteBusiness"></span>{{ websiteLabel }}</a>
                 {% endif %} 
 
 
@@ -194,8 +194,8 @@
                             {% endif %}
                         </div>
                         <div id="business_about_us_div">
-                             {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [userDetail['about_us'], 'hide']) %}
-                             {% set adDescWithReplacedPhoneAndEmail = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [userDetail['id'], adDescWithReplacedPhone, 'hide']) %}
+                             {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [userDetail['about_us'], 'hide','Profile']) %}
+                             {% set adDescWithReplacedPhoneAndEmail = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [userDetail['id'], adDescWithReplacedPhone, 'hide','Profile']) %}
                              {{ adDescWithReplacedPhoneAndEmail|raw }}
                         </div>
                     </div>
@@ -251,7 +251,7 @@
                 <div class="text-center">{{'Or choose from the options below'|trans({}, 'frontend-my-profile')}}</div>
                 <ul class="cover-img-thumbs clearfix">
                     {% for userSiteBannerOtherImage in userSiteBannerOtherImages%}
-                        <li><a href="javascript:void(0);" onclick="return changeBanner('{{ userSiteBannerOtherImage.getId() }}');"><img src="{{ shared_url(userSiteBannerOtherImage.getPath()~'/'~userSiteBannerOtherImage.getFilename()|replace({'.png':''})~'_68x55.jpg') }}" alt="" /></a></li>
+                        <li><a href="javascript:void(0);" onclick="return changeBanner('{{ userSiteBannerOtherImage.getId() }}');"><img src="{{ image_url(userSiteBannerOtherImage.getPath()~'/'~userSiteBannerOtherImage.getFilename()|replace({'.png':''})~'_68x55.jpg') }}" alt="" /></a></li>
                     {% endfor %}
                 </ul>
             </div>

@@ -8,11 +8,12 @@
 {{ include('FaUserBundle:HalfAccount:halfAccountJs.html.twig') }}
 <script language="javascript" type="text/javascript">
 //<![CDATA[
+var callFromGlobal = '';
     $(window).on('load', function() {
-    var callFromGlobal = '';
-	var isDragging = false;
+        var callFromGlobal = '';
+	    var isDragging = false;
 	
-    $("img.lazy").lazyload();
+        $("img.lazy").lazyload();
         {% if app.user and app.request.cookies.has('save_search_agent_flag') and app.request.cookies.get('save_search_agent_flag') and app.request.cookies.get('save_search_agent_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') %}
             saveSearchAgent();
         {% endif %}
@@ -32,45 +33,45 @@
         {% endif %} 
 
         {% if (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) %}
-        var busShopUserItemSlider = $("#busshop-user-item-slider_5, #busshop-user-item-slider_15, #busshop-user-single-item-slider");
-        busShopUserItemSlider.owlCarousel({
-        	items:1,
-        	loop:true,
-        	autoplay:true,
-            autoplayTimeout:6000,
-            autoplayHoverPause:true,
-        	slideBy: 1,
-        	autoplaySpeed: 3000,
-        	rewind: false,
-        	nav: true,
-        	dots:false,
-        	mouseDrag: true,
-        	touchDrag: true,
-            responsiveRefreshRate : 3000,
-            navText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
-            lazyLoad: true,
-        });
+            var busShopUserItemSlider = $("#busshop-user-item-slider_5, #busshop-user-item-slider_15, #busshop-user-single-item-slider");
+            busShopUserItemSlider.owlCarousel({
+                items:1,
+                loop:true,
+                autoplay:true,
+                autoplayTimeout:6000,
+                autoplayHoverPause:true,
+                slideBy: 1,
+                autoplaySpeed: 3000,
+                rewind: false,
+                nav: true,
+                dots:false,
+                mouseDrag: true,
+                touchDrag: true,
+                responsiveRefreshRate : 3000,
+                navText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
+                lazyLoad: true,
+            });
 
-        $('.businessExposureCarousel .owl-item, .businessExposureCarousel .owl-prev, .businessExposureCarousel .owl-next').on('click', function () {				          
-	  		var elemid = $(this).closest('.bus-shop-user-item-slider').attr('id');	        
-            $('#'+elemid).closest('.owl-carousel').trigger('stop.owl.autoplay');
-        });
-        $( ".businessExposureCarousel .owl-item" ).mousedown(function( event ) {
-        	var elemid = $(this).closest('.bus-shop-user-item-slider').attr('id');	        
-            $('#'+elemid).closest('.owl-carousel').trigger('stop.owl.autoplay');
-        });
+            $('.businessExposureCarousel .owl-item, .businessExposureCarousel .owl-prev, .businessExposureCarousel .owl-next').on('click', function () {
+                var elemid = $(this).closest('.bus-shop-user-item-slider').attr('id');
+                $('#'+elemid).closest('.owl-carousel').trigger('stop.owl.autoplay');
+            });
+            $( ".businessExposureCarousel .owl-item" ).mousedown(function( event ) {
+                var elemid = $(this).closest('.bus-shop-user-item-slider').attr('id');
+                $('#'+elemid).closest('.owl-carousel').trigger('stop.owl.autoplay');
+            });
         
-    {% endif %}        
+        {% endif %}
+    });
 
-        $( window ).scroll(function() {
-            if ($("#sticky_nav").hasClass('fixed')) {
-                $("#sticky_nav_top").addClass('fixed');
-                $("#sticky_nav_top").addClass('top-bar-shadow');
-            } else {
-                $("#sticky_nav_top").removeClass('fixed');
-                $("#sticky_nav_top").removeClass('top-bar-shadow');
-            }
-        });
+    $( window ).scroll(function() {
+        if ($("#sticky_nav").hasClass('fixed')) {
+            $("#sticky_nav_top").addClass('fixed');
+            $("#sticky_nav_top").addClass('top-bar-shadow');
+        } else {
+            $("#sticky_nav_top").removeClass('fixed');
+            $("#sticky_nav_top").removeClass('top-bar-shadow');
+        }
     });
 
     $(window).load(function(){
@@ -127,6 +128,7 @@
     function addToFavorite(id)
     {
         var route = Routing.generate('ad_add_to_favorite', { 'adId': id });
+        route = route.replace(':https','');
         $.ajax({
             type: "POST",
             url : route,
@@ -149,6 +151,7 @@
     function removeFromFavorite(id)
     {
         var route = Routing.generate('ad_remove_from_favorite', { 'adId': id });
+        route = route.replace(':https','');
         $.ajax({
             type: "POST",
             url : route,
@@ -167,7 +170,20 @@
 
     function saveSearchAgent(userId, callFrom)
     {
-    	callFromGlobal = callFrom;
+    	var gtmLabel = 'Top Button';
+        if (callFrom != '' && callFrom == 'ListingBottom') {
+            gtmLabel = 'Bottom Button';
+        }
+        var callFromGlobal = callFrom;
+        let SearchAlert= '{{ app.request.get('cat_full_slug') }}'+' - '+'{{ app.request.get('location') }}'+' - '+gtmLabel;
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+
+            'event' : 'Options',
+            'eventCategory':  'Search Results',
+            'eventAction': 'Search Alert',
+            'eventLabel': SearchAlert
+        });
     	hideAlertMessage();
         blockPage();
         {% set searchResultVariables = get_variables('searchResult') %}
@@ -304,6 +320,7 @@
     {
     	if (savedSearchIdToRemove != '') {
         	var route = Routing.generate('delete_search_agent', { 'userSearchAgentId': savedSearchIdToRemove });
+        	route = route.replace(':https','');
         	blockPage();
             $.ajax({
                 type: "POST",
@@ -367,7 +384,13 @@
             asPosStr = '6+';
           } 
           var eventAction = 'Click pos. '+asPosStr;
-          ga('send', 'event', 'Click Ad Position', eventAction, catString);
+          window.dataLayer = window.dataLayer || []
+          dataLayer.push({
+              'event' : 'Position',
+              'eventCategory':  'Click Ad Position',
+              'eventAction': eventAction ,
+              'eventLabel': catString
+          });
       }
     }
 //]]>

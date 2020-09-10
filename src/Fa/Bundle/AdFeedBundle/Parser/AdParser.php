@@ -621,7 +621,7 @@ abstract class AdParser
 
         $adMain->setTransId($this->advert['unique_id']);
         $this->em->persist($adMain);
-        $this->em->flush();
+        $this->em->flush($adMain);
         return $adMain;
     }
 
@@ -941,13 +941,20 @@ abstract class AdParser
                 $image->setAws(0);
                 $this->em->persist($image);
 
-                $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, 75, 'ImageMagickManager');
-                $origImage->loadFile($filePath);
-                $origImage->save($imagePath.'/'.$ad->getId().'_'.$hash.'.jpg', 'image/jpeg');
+                //$origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, 75, 'ImageMagickManager');
+                //$origImage->loadFile($filePath);
+                //$origImage->save($imagePath.'/'.$ad->getId().'_'.$hash.'.jpg', 'image/jpeg');
+                exec('convert -flatten '.escapeshellarg($filePath).' '.$imagePath.'/'.$ad->getId().'_'.$hash.'.jpg');
 
                 $adImageManager = new AdImageManager($this->container, $ad->getId(), $hash, $imagePath);
                 $adImageManager->createThumbnail();
                 $adImageManager->createCropedThumbnail();
+                
+                $adImgPath = $imagePath.'/'.$ad->getId().'_'.$hash.'.jpg';
+                if (file_exists($adImgPath)) {
+                    $adImageManager->uploadImagesToS3($image);
+                    unlink($filePath);
+                } 
 
                 $i++;
             }
@@ -1033,7 +1040,7 @@ abstract class AdParser
             $this->setRejectedReason('Unique ID not found');
         }
 
-        if ($adArray['AdvertType'] == 'MotorhomeAdvert' || $adArray['AdvertType'] == 'ClickEditVehicleAdvert' || $adArray['AdvertType'] == 'JobAdvert') {
+        if ($adArray['AdvertType'] == 'MotorhomeAdvert' || $adArray['AdvertType'] == 'VehicleAdvert' || $adArray['AdvertType'] == 'ClickEditVehicleAdvert' || $adArray['AdvertType'] == 'JobAdvert') {
             $locationArray = array();
             if ($adArray['Advertiser']['Postcode']) {
                 $locationArray = $this->em->getRepository('FaEntityBundle:Postcode')->getPostCodInfoArrayByLocation($adArray['Advertiser']['Postcode'], $this->container, true);

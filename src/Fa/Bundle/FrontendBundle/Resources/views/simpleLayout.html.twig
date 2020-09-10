@@ -17,7 +17,7 @@
     {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
     {% set showTiLogo = false %}
     {# {% if (app.user and app.user.getUserMasterSite()|lower == 'ti') or (not app.user and app.request.get('ti_url')) or (not app.user and app.request.cookies.has('ti_url')) %} #}
-    {% if (not app.user and app.request.get('ti_url')) or (not app.user and app.request.cookies.has('new_ti_url')) %}
+    {% if app.request.get('ti_url') or app.request.cookies.has('new_ti_url') %}
         {% set showTiLogo = true %}
     {% endif %}
     
@@ -42,10 +42,22 @@
     {% endif %}
     
     {{ include('FaFrontendBundle::scriptTop.html.twig') }}
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900,Poppins-SemiBold&display=swap" rel="stylesheet">
     {% block scripttop %}{% endblock %}
-    {{ include('FaFrontendBundle::fa-main-css.html.twig') }}
+    {#
+        main-css.css - Common CSS - taken from src/Fa/Bundle/FrontendBundle/Resources/views/main-css.html.twig - moved from src/Fa/Bundle/FrontendBundle/Resources/views/scriptTop.html.twig
+        main.css - Common CSS - taken from src/Fa/Bundle/FrontendBundle/Resources/views/fa-main-css-new.html.twig
+        simple-layout.css - taken from src/Fa/Bundle/FrontendBundle/Resources/views/new-fa-main-css.html.twig
+    #}
+    {% stylesheets filter='uglifycss' output='bundles/css/compiled/fa-main-simple-layout.css'
+        'bundles/fafrontend/css/main-css.css'
+        'bundles/fafrontend/css/main.css'
+        'bundles/fafrontend/css/simple-layout.css'
+    %}
+        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
+    {% endstylesheets %}
 
-    {#{% stylesheets filter='uglifycss' output='bundles/css/compiled/simpleLayout.css'
+    {# {% stylesheets filter='uglifycss' output='bundles/css/compiled/simpleLayout.css'
         'bundles/fafrontend/css/style.css'
         'bundles/fafrontend/css/responsive.css'
           %}
@@ -81,7 +93,9 @@
         {% endif %}
     {% endif %}
     
-    <!-- FB pixel code snippet -->
+   
+
+ <!-- FB pixel code snippet -->
     {{ include('FaFrontendBundle::fbPixelCodeSnippet.html.twig') }}
 </head>
 <body>

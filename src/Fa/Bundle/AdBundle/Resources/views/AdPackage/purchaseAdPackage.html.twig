@@ -93,6 +93,7 @@
                     {% endif %}
                     {% if packages|length %}
                         <div class="row fa-equalizer" id="package_equalizer">
+                        <div style="margin: 0px auto !important; height: 776px;" class="{% if packages|length ==3 %} large-18 {% elseif packages|length ==2 %} large-12 {% elseif packages|length ==1 %} large-6 {% else %} large-24 {% endif %}">
                             {% for package in packages %}
                                 {% set packageValues = array_unserialize(package.getPackage().getValue()) %}
                                 {% set packageActualPrice = 0 %}
@@ -131,9 +132,8 @@
                                     {% set packagePrice = format_currency(packageActualPrice) %}
                                 {% else %}
                                     {% set packagePrice = 'Free'|trans({}, 'frontend-ad-package')%}
-                                {% endif %}
-
-                                <div class="{% if packages|length == 3 %}large-8{% elseif packages|length == 2 %}large-12{% else %}large-6{% endif%} columns">
+                                {% endif %}								
+                                <div class="pkg-columns {% if packages|length ==3 %} large-8 {% elseif packages|length ==2 %} large-12 {% elseif packages|length ==1 %} large-24 {% else %} large-6  {% endif %} columns">
                                     <div class="paa-pkg-bg">
                                         <span class="pkg-selection" id="package_selection_{{package.getPackage().getId()}}">Select Package</span>
                                         {% set pkgBoxColorClass = 'pkg-green-head' %}
@@ -144,7 +144,7 @@
                                         {% endif %}
                                         {% if packageActualPrice == 0 %}
                                             {% set pkgBoxColorClass = 'pkg-grey-head' %}
-                                            {% set pkgButtonColorClass = 'primary-btn-grey' %}
+                                            {% set pkgButtonColorClass = 'primary-btn-grey thin-button' %}
                                         {% endif %}
                                         <div class="pkg-title {{ pkgBoxColorClass}}">{{package.getPackage().getLabel()}}</div>
                                         <div id="active_package_{{package.getPackage().getId()}}">
@@ -222,7 +222,7 @@
                                                     {% endif %}
                                                 </div>
                                                 {% set userCreditId = fetch_repository('FaPromotionBundle:Package').isPackageValidForCredit(package.getPackage(), userActiveCredits, activeShopPackageDetail) %}
-                                                <button type="button" class="{% if pkgButtonColorClass is defined and pkgButtonColorClass != '' %}{{pkgButtonColorClass}}{% else %}primary-btn-2{% endif %} expand{% if not userCreditId or (userCreditId and package.getPackage().getPrice() <= 0) %} free-button-spacing{% endif %} choose_btn" onclick="return selectPackage({{package.getPackage().getId()}}, '{{ package.getPackage().getPrice() }}');" onmouseover="$('#package_selection_{{package.getPackage().getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getPackage().getId()}}').attr('style', '');">
+                                                <button type="button" class="{% if pkgButtonColorClass is defined and pkgButtonColorClass != '' %}{{pkgButtonColorClass}}{% else %}primary-btn-2{% endif %} expand{% if not userCreditId or (userCreditId and package.getPackage().getPrice() <= 0) %} free-button-spacing{% endif %} choose_btn thin-btn" onclick="return selectPackage({{package.getPackage().getId()}}, '{{ package.getPackage().getPrice() }}');" onmouseover="$('#package_selection_{{package.getPackage().getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getPackage().getId()}}').attr('style', '');">
                                                 {% if package.getPackage().getPrice() > 0 and userCreditId %}
                                                     {{'Pay for advert'|trans({}, 'frontend-ad-package')}}
                                                 {% else %}
@@ -237,7 +237,7 @@
                                                 </button>
                                                 {% if package.getPackage().getPrice() > 0 and userCreditId %}
                                                     {% set creditName = fetch_repository('FaUserBundle:UserCredit').getCreditPackageName(package.getPackage().getPackageSrNo()) %}
-                                                    <button type="button" class="primary-btn-1 expand credit_btn" onclick="return confirmCreditBox({{package.getPackage().getId()}}, {{package.getPackage().getPackageSrNo()}}, {{ (packageSrNoCredits[package.getPackage().getPackageSrNo()] is defined ? packageSrNoCredits[package.getPackage().getPackageSrNo()] : 0) }}, {{userCreditId}}, '{{ creditName }}', '{{ package.getPackage().getPrice() }}')" onmouseover="$('#package_selection_{{package.getPackage().getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getPackage().getId()}}').attr('style', '');">
+                                                    <button type="button" class="primary-btn-1 thin-btn expand credit_btn" onclick="return confirmCreditBox({{package.getPackage().getId()}}, {{package.getPackage().getPackageSrNo()}}, {{ (packageSrNoCredits[package.getPackage().getPackageSrNo()] is defined ? packageSrNoCredits[package.getPackage().getPackageSrNo()] : 0) }}, {{userCreditId}}, '{{ creditName }}', '{{ package.getPackage().getPrice() }}')" onmouseover="$('#package_selection_{{package.getPackage().getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getPackage().getId()}}').attr('style', '');">
                                                         <span>{{'Use credit'|trans({}, 'frontend-ad-package')}}</span>
                                                     </button>
                                                 {% endif %}
@@ -253,8 +253,9 @@
                                             </ul>
                                         </div>
                                     </div>
-                                </div>
+                                </div>                               
                             {% endfor %}
+                            </div>
                         </div>
                         <div class="avail-payment-box">
                             <div class="text-center p-b-20">Pay on the next page with...</div>
@@ -480,6 +481,7 @@
         var submitForm = true;
         var printEditionLimit = $('#package_print_edition_limit_'+packageId).val();
         blockPage();
+        $('input[name=package_id]').val(packageId);
         $('input[name=package_id][value='+packageId+']').trigger('click');
         $('#package_print_editions_'+packageId).show();
         if (printEditionLimit == 1) {

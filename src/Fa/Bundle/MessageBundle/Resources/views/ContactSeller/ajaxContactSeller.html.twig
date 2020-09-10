@@ -67,7 +67,7 @@
                     {% if mobileDetectManager.isMobile() or mobileDetectManager.isTablet() %}
                         </a>
                     {% endif %}
-                </h1><a class="button xs-btn-1" id="btn_reveal" href="javascript:toggleContactNumber();"><span class="btn-white-arrow"></span>{{'Reveal'|trans({}, 'frontend-contact-seller')}}</a>
+                </h1><a class="button xs-btn-1 ga-callNowBusiness" id="btn_reveal" href="javascript:toggleContactNumber();"><span class="btn-white-arrow ga-callNowBusiness"></span>{{'Reveal'|trans({}, 'frontend-contact-seller')}}</a>
             </div>
         {% else %}
             {% if adPhoneNumber and (adUser and adUser.getContactThroughPhone() or adUser is null) %}
@@ -82,7 +82,7 @@
                         {% if mobileDetectManager.isMobile() or mobileDetectManager.isTablet() %}
                             </a>
                         {% endif %}
-                    </h1><a class="button xs-btn-1" id="btn_reveal" href="javascript:toggleContactNumber();"><span class="btn-white-arrow"></span>{{'Reveal'|trans({}, 'frontend-contact-seller')}}</a>
+                    </h1><a class="button xs-btn-1 ga-callNowAd" id="btn_reveal" href="javascript:toggleContactNumber();"><span class="btn-white-arrow ga-callNowAd"></span>{{'Reveal'|trans({}, 'frontend-contact-seller')}}</a>
                     {% if ad.getPrivacyNumber() %}
                         <div class="text-center">{{'This is a privacy number.'|trans({}, 'frontend-contact-seller')}} <a href="javascript:void(0)" data-reveal-id="privacyNumberModal">{{'Find out more'|trans({}, 'frontend-contact-seller')}}</a></div>
                     {% endif %}
@@ -143,13 +143,13 @@
                     {{ form_widget(form.email_alert, {'attr':{'tabindex': 5}}) }}
                     {{ form_label(form.email_alert) }}
                 </li>
-                <li id="form_contact_seller_third_partyemail_alert" style="display:{{thirdpartyEmailAlertStyle}}">
+                <li id="form_contact_seller_third_party_email_alert" style="display:{{thirdpartyEmailAlertStyle}}">
                     {{ form_widget(form.third_party_email_alert, {'attr':{'tabindex': 6}}) }}
                     {{ form_label(form.third_party_email_alert) }}
                 </li>
             </ul>
 
-            {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 button expand','tabindex': 7}}) }}
+            {{ form_widget(form.save, {'attr': {'class':'ga-sendEmailAdDetails secondary-btn-1 button expand','tabindex': 7}}) }}
         {% else %}
             {% for fieldName, fieldValue in form.children %}
                 {% do attribute(form, fieldName).setRendered %}
@@ -163,6 +163,10 @@
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     $(document).ready(function(){
+        if(getCookie('contactAdMessageBeforeLogin-{{ ad.id }}') !== ""){
+            $("#fa_message_contact_seller_text_message").val(decodeURIComponent(getCookie('contactAdMessageBeforeLogin-{{ ad.id }}')));
+            setCookie('contactAdMessageBeforeLogin-{{ ad.id }}','',0);
+        }
         bindFormErrorEvents();
         bindCustomRadioEvent();
         bindCustomCheckboxEvent();
@@ -191,6 +195,11 @@
             unblockElement('#contactSellerModal');
         })
         .done(function(response) {
+            if(response.redirectToUrl){
+                setCookie('contactAdMessageBeforeLogin-{{ ad.id }}',$("#fa_message_contact_seller_text_message").val(),1);
+                // auto redirect to login without error message
+                location.replace(response.redirectToUrl);
+            }
             if (response.htmlContent.length) {
                 $('#contactSellerModal').html(response.htmlContent);
                 $('#deadlockRetry').val(response.deadlockRetry);
@@ -224,8 +233,8 @@
 
 
     // add multiple select / deselect functionality
-    $("#fa_message_contact_seller_third_party_email_alert").change(function () {
-    	if ($('#fa_message_contact_seller_third_party_email_alert').parent().hasClass('checked')) {
+    $("#fa_message_contact_seller_third_party_email_alert").parent('span').on('click', function (e) {
+    	if ($('#fa_message_contact_seller_third_party_email_alert').parent('span').hasClass('checked')) {
             $('#fa_message_contact_seller_third_party_email_alert').attr('checked', true);
         } else {
             $('#fa_message_contact_seller_third_party_email_alert').attr('checked', false);
@@ -233,34 +242,34 @@
         
         if ($('#fa_message_contact_seller_third_party_email_alert').attr('checked')) {
             $('#fa_message_contact_seller_email_alert').attr('checked', $('#fa_message_contact_seller_third_party_email_alert').attr('checked'));
-        	$('#fa_message_contact_seller_email_alert').parent().addClass('checked');
+        	$('#fa_message_contact_seller_email_alert').parent('span').addClass('checked');
         }
     });
 
-    $("#fa_message_contact_seller_email_alert").change(function(){
-        if ($('#fa_message_contact_seller_email_alert').parent().hasClass('checked')) {
+    $("#fa_message_contact_seller_email_alert").parent('span').on('click', function (e) {
+        if ($('#fa_message_contact_seller_email_alert').parent('span').hasClass('checked')) {
         	$('#fa_message_contact_seller_email_alert').attr('checked', true);
         } else {
         	$('#fa_message_contact_seller_email_alert').attr('checked', false);
         }
     	if (!$('#fa_message_contact_seller_email_alert').attr('checked')) {
     		$('#fa_message_contact_seller_third_party_email_alert').attr('checked', false);
-            $('#fa_message_contact_seller_third_party_email_alert').parent().removeClass('checked');
+            $('#fa_message_contact_seller_third_party_email_alert').parent('span').removeClass('checked');
         } 
     });
     
     function tickUntickEmailAndThirdPartyAlertCheckbox()
     {
         if ($('#fa_message_contact_seller_third_party_email_alert').attr('checked') && !$('#fa_message_contact_seller_email_alert').attr('checked')) {
-        	$('#fa_message_contact_seller_email_alert').parent().removeClass('checked');
-            $('#fa_message_contact_seller_email_alert').attr('checked', false);
+        	$('#fa_message_contact_seller_email_alert').parent('span').addClass('checked');
+            $('#fa_message_contact_seller_email_alert').attr('checked', true);
         }
     }
     function showorhideEmailAndThirdPartyAlertOption() {
-        if ($('#form_contact_seller_third_partyemail_alert span').hasClass('checked')) {
-            $('#form_contact_seller_third_partyemail_alert').hide();
+        if ($('#form_contact_seller_third_party_email_alert span').hasClass('checked')) {
+            $('#form_contact_seller_third_party_email_alert').hide();
         } else {
-            $('#form_contact_seller_third_partyemail_alert').show();
+            $('#form_contact_seller_third_party_email_alert').show();
         }
         if ($('#form_contact_seller_email_alert span').hasClass('checked')) {
             $('#form_contact_seller_email_alert').hide();
@@ -314,17 +323,17 @@
             .done(function(response) {
                 resetEmailalertFlag = false;
                 if (response.isEmailAlertEnabled) {
-                    $('#fa_message_contact_seller_email_alert').parent().addClass('checked');
+                    $('#fa_message_contact_seller_email_alert').parent('span').addClass('checked');
                     $('#fa_message_contact_seller_email_alert').attr('checked', true);
                 } else if (!response.isEmailAlertEnabled) {
-                    $('#fa_message_contact_seller_email_alert').parent().removeClass('checked');
+                    $('#fa_message_contact_seller_email_alert').parent('span').removeClass('checked');
                     $('#fa_message_contact_seller_email_alert').attr('checked', false);
                 }
                 if (response.isThirdPartyEmailAlertEnabled) {
-                    $('#fa_message_contact_seller_third_party_email_alert').parent().addClass('checked');
+                    $('#fa_message_contact_seller_third_party_email_alert').parent('span').addClass('checked');
                     $('#fa_message_contact_seller_third_party_email_alert').attr('checked', true);
                 } else if (!response.isThirdPartyEmailAlertEnabled) {
-                    $('#fa_message_contact_seller_third_party_email_alert').parent().removeClass('checked');
+                    $('#fa_message_contact_seller_third_party_email_alert').parent('span').removeClass('checked');
                     $('#fa_message_contact_seller_third_party_email_alert').attr('checked', false);
                 }
             });

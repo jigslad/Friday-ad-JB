@@ -436,6 +436,20 @@ class AdImageController extends CoreController
             $adImgObj->setAws(0);
             $this->getEntityManager()->persist($adImgObj);
             $this->getEntityManager()->flush();
+            
+            $fileExistsInAws = 0;
+            if($adImgObj->getAws() == 1) {
+                if (!file_exists($imagePath)) {
+                    mkdir($imagePath, 0777, true);
+                }
+                
+                $awsImagePath = $this->container->getParameter('fa.static.aws.url').DIRECTORY_SEPARATOR.$imagePath;
+               
+                $awsurl = $awsImagePath.DIRECTORY_SEPARATOR.$adId.'_'.$oldHash.'.jpg';
+                $localimg = $orgImagePath.DIRECTORY_SEPARATOR.$adId.'_'.$oldHash.'.jpg';
+                file_put_contents($localimg, file_get_contents($awsurl));
+                $fileExistsInAws = 1;
+            } 
 
             //rename org image.
             rename($OldOrgimage, $imagePath.DIRECTORY_SEPARATOR.$adId.'_'.$newHash.'_org.jpg');
@@ -447,7 +461,7 @@ class AdImageController extends CoreController
 
             $adImageManager = new AdImageManager($this->container, $adId, $newHash, $imagePath);
             //create thumbnails
-            $adImageManager->createThumbnail();
+            $adImageManager->createThumbnail(false);
             //create cope thumbnails
             $adImageManager->createCropedThumbnail();
 
@@ -463,7 +477,9 @@ class AdImageController extends CoreController
 
             if (!$adImgObj) {
                 $error = $this->get('translator')->trans('Problem in croping photo.');
-            } else {
+            } else {                
+                $adImageManager->uploadImagesToS3($adImgObj);
+                $this->getRepository('FaAdBundle:AdImage')->updateImageToSolr($ad, $this->container);
                 $successMsg = $this->get('translator')->trans('Photo has been edited successfully.');
             }
 

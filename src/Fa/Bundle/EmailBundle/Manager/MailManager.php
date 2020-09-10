@@ -11,6 +11,7 @@
 
 namespace Fa\Bundle\EmailBundle\Manager;
 
+use Fa\Bundle\EmailBundle\Entity\EmailTemplate;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\CoreBundle\Twig\CoreExtension;
@@ -98,7 +99,9 @@ class MailManager
     {
         $this->message = \Swift_Message::newInstance();
         $sendMailFlag = $this->container->hasParameter('fa.send.other.mails') ? $this->container->getParameter('fa.send.other.mails') : false;
-
+        $defaultBcc =  $this->getEmailTemplate($emailIdentifier)->getBccEmails();
+        $defaultBcc = explode(',',$defaultBcc);
+        $bcc = array_merge($bcc,$defaultBcc);
         if ($to) {
             try {
                 $trackId = $this->historyEntityManager->getRepository('FaReportBundle:AutomatedEmailReportLog')->updateEmailLog($emailIdentifier, $to);
@@ -308,7 +311,7 @@ class MailManager
 
             //ex-TI user checking
             $coreExtObj = new CoreExtension($this->container);
-            $mailVars['site_logo_url'] = 'http:'.$coreExtObj->asset_url('fafrontend/images/fad-logo.png');
+            $mailVars['site_logo_url'] = 'http:'.$coreExtObj->asset_url('fafrontend/images/fad-logo-new.svg');
             $userObj = $this->em->getRepository('FaUserBundle:User')->findOneBy(array('email' => $to));
 
             $emailTemplateLayoutHtml = '';

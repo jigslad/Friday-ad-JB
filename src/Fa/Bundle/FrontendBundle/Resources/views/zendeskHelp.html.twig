@@ -8,19 +8,38 @@
   			<img src="https://theme.zdassets.com/theme_assets/2200685/7900b669e336b6c5ae3928aa5f03967d3d715f62.svg" />
   			Close
   		</a>
-  	</div> 
-	<iframe class="chcw_content" src="{{'/zendeskhelp.php?url='~url }}"></iframe>
+  	</div>
+	<iframe class="chcw_content" src=""></iframe>
 </div>
+
+<script type="text/javascript">
+	var help_link = "{{'/zendeskhelp.php?url='~url }}";
+	$(function(){
+		$('.custom_hc_widget_trigger').click(function(){
+			$('.chcw_content').attr('src',help_link);
+		});
+	});
+</script>
+
 <script language="javascript" type="text/javascript">
 	window.FCSP = '33f6a5cd6543e26d4aa9b6382adf4874';
 </script>
+
 <script src="https://chat-assets.frontapp.com/v1/chat.bundle.js"></script>
 <script language="javascript" type="text/javascript">
     FrontChat('init', {
       useDefaultLauncher: false,
-      userHash: '633f17171b8625504c46af1db007739a'
+      //userHash: '633f17171b8625504c46af1db007739a'
     });
     function runfrontchatfun() {
+		window.dataLayer = window.dataLayer || []
+		dataLayer.push({
+
+			'event' : 'Help Widget',
+			'eventCategory':  'help widget',
+			'eventAction': 'Contact',
+			'eventLabel': null
+		});
     	ga('send', 'event', 'help widget', 'contact');
 		FrontChat('show');
     }
@@ -30,6 +49,14 @@
 $(document).ready(function() {
   $(".custom_hc_widget_trigger").click(function(event){
     event.preventDefault();
+	  window.dataLayer = window.dataLayer || []
+	  dataLayer.push({
+
+		  'event' : 'Help Widget',
+		  'eventCategory':  'help widget',
+		  'eventAction': 'Open',
+		  'eventLabel': null
+	  });
     ga('send', 'event', 'help widget', 'open');
     $(this).hide();
     $(".custom_hc_widget").addClass('expanded');
@@ -38,6 +65,13 @@ $(document).ready(function() {
   
   $(".custom_hc_widget_close_trigger").click(function(event){
     event.preventDefault();
+	  window.dataLayer = window.dataLayer || []
+	  dataLayer.push({
+		  'event' : 'Help Widget',
+		  'eventCategory':  'help widget',
+		  'eventAction': 'Close',
+		  'eventLabel': null
+	  });
     ga('send', 'event', 'help widget', 'close');
     $(".custom_hc_widget").removeClass('expanded');
     $("body").removeClass('noscroll');

@@ -36,7 +36,8 @@
     {% set secondLevelCategoryId = attribute(adDetail, 'a_parent_category_lvl_2_id_i') %}
 {% endif %}
 {% set youtubeVideoUrl = null %}
-{% if attribute(adDetail, constant(solrMapping ~ 'YOUTUBE_VIDEO_URL')) is defined and attribute(adDetail, constant(solrMapping ~ 'YOUTUBE_VIDEO_URL'))|length %}
+
+{% if 'youtube_video_url' in paaFieldArray and attribute(adDetail, constant(solrMapping ~ 'YOUTUBE_VIDEO_URL')) is defined and attribute(adDetail, constant(solrMapping ~ 'YOUTUBE_VIDEO_URL'))|length %}
     {% set youtubeVideoUrl = attribute(adDetail, constant(solrMapping ~ 'YOUTUBE_VIDEO_URL')) %}
 {% endif %}
 
@@ -115,7 +116,12 @@
             {% endif %}
 
             {% if attribute(adDetail, constant(solrMapping ~ 'IMAGE_NAME'))[index] is defined %}
-                {% set image_name = attribute(adDetail, constant(solrMapping ~ 'IMAGE_NAME'))[index] %}
+                {% if  attribute(adDetail, constant(solrMapping ~ 'IMAGE_NAME'))[index] == attribute(adDetail, constant(solrMapping ~ 'HASH'))[index] %}
+                       {% set image_name = null %}
+                {% else %}
+                    {% set image_name = attribute(adDetail, constant(solrMapping ~ 'IMAGE_NAME'))[index] %}
+               {% endif %}
+            
             {% endif %}
 
             {% set adImages = adImages|merge([{'path': path, 'hash': attribute(adDetail, constant(solrMapping ~ 'HASH'))[index], 'ord': attribute(adDetail, constant(solrMapping ~ 'ORD'))[index], 'aws' : aws, 'image_name': image_name }]) %}
@@ -211,7 +217,13 @@
         {{ set_variables('profileImageUploadStylesheets', {'loaded':'true'}) }}
         {{ block('imageUploadStylesheets') }}
     {% endif %}
-    <link href="{{ asset_url('faad/css/zutoLoanCalc.css') }}" rel="stylesheet">
+    <link href="/bundles/faad/css/zutoLoanCalc.css" rel="stylesheet">
+    {# CSS for ad details - taken from src/Fa/Bundle/AdBundle/Resources/views/Ad/showAd-css.html.twig #}
+    {% stylesheets filter='uglifycss' output='bundles/css/compiled/show-ad.css'
+        'bundles/fafrontend/css/show-ad.css'
+    %}
+        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
+    {% endstylesheets %}
 {% endblock %}
 
 {% block meta_robots %}
@@ -253,10 +265,10 @@
 {% endif %}
 
 {% block breadcrumb_script %}
-{% if location_id and location_slug and location_id is not null and location_slug is not null and location_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID') %} 
-    {% set HomePagePath = container.getParameter('base_url')~path('location_home_page', {'location': location_slug}) %} 
+{% if location_id and location_slug and location_id is not null and location_slug is not null and location_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID') %}
+    {% set HomePagePath = container.getParameter('base_url')~path('location_home_page', {'location': location_slug}) %}
 {% else %}
-    {% set HomePagePath = container.getParameter('base_url')~ path('fa_frontend_homepage') %} 
+    {% set HomePagePath = container.getParameter('base_url')~ path('fa_frontend_homepage') %}
 {% endif %}
 <script type="application/ld+json">
 	{
@@ -280,10 +292,10 @@
     		"position": {{breadcrumbCatCnt}},
     		"name": "{{categoryName}}",
     		"item": "{{catListUrl}}"
-  		}{% if breadcrumbCatCnt <= categoryPath|length %},{% endif %}    
+  		}{% if breadcrumbCatCnt <= categoryPath|length %},{% endif %}
 		{% set breadcrumbCatCnt = breadcrumbCatCnt + 1 %}
     {% endfor %}
-    
+
 {% endif %}
  ]
 	}
@@ -340,31 +352,10 @@
             {% endif %}
         {% endif %}
     {% endif %}
-{% endif %}          
+{% endif %}
 
 {% block body %}
-<style>
-.get_online_decision .apply-new-left img.logo_img { height:60px !important; }
-.details-img-icons { right: 1px !important; bottom: 0px !important;}
-.vif-overlay { bottom: 0px !important;z-index:1 }
-.sticky-finance-btn { bottom: 0px !important;}
-#big-image-slider .owl-item .item { position:relative; }
-.photos-block { position:relative; }
-.finance-btn { bottom:30px; z-index:2 !important }
-@media only screen and (min-width: 641px) and (max-width: 759px){	
-	.finance-btn:before { background:transparent !important;right: -14px !important; }
-	
-	.finance-btn {
-	    position: absolute;
-	    background:transparent !important;
-	    color: #9bcc21 !important;
-	}
-}
-
-@media only screen and (min-width:320px) and (max-width:640px) {
-	.get_online_decision .mobile-logo-button img.logo_img { height:48px !important; }
-}
-</style>
+{{ include('FaAdBundle:Ad:showAd-css.html.twig') }}
 
 {% set imageZoomeZoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_IN_IMAGE_ZOOM') %}
 {% set imageZoomBannerExist = false %}
@@ -375,9 +366,16 @@
 {% if attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
     {% set orgAdDesc = attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) %}
 {% endif %}
+
 {% if recommendedSlotArray is defined and recommendedSlotArray|length %}
-    {{ include('FaAdBundle:AdList:recommended_slot_css.html.twig') }}
+    {# CSS for recommended slots - taken from src/Fa/Bundle/AdBundle/Resources/views/AdList/recommended_slot_css.html.twig #}
+    {% stylesheets filter='uglifycss' output='bundles/css/compiled/recommended-slots.css'
+        'bundles/fafrontend/css/recommended-slots.css'
+    %}
+        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
+    {% endstylesheets %}
 {% endif %}
+
 {% if currentDevice == 'D' or currentDevice == 'T' %}
     <div class="details-top-banner" id="sticky_item_information_id" style="display:none">
         <div class="row">
@@ -425,7 +423,7 @@
                         {% if not isSoldExpiredAdFlag and ((adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) or (adDetail['user'] is defined and showBuyNowWithPaypal)) %}
                             <div class="clearfix {% if ((adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined)) and (adDetail['user'] is defined and showBuyNowWithPaypal) or (isOneclickenqbutton == true) %}double-buttons{% endif %}">
                                 {% if (adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) %}
-                                    <a href="javascript:void(0);" onclick="return contactSeller('{{ adId }}', 'Contact Seller button');" id="fixed_contact_button_anchor" class="primary-btn-1 button cont-seller-btn{% if (isOneclickenqbutton == false) %} expand{% endif %}">
+                                    <a href="javascript:void(0);" onclick="return contactSeller('{{ adId }}', 'Contact Seller button','Sticky');" id="fixed_contact_button_anchor" class="primary-btn-1 button cont-seller-btn{% if (isOneclickenqbutton == false) %} expand{% endif %}">
                                         <span class="btn-txt">
                                             {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
                                                 {{'Apply'|trans({}, 'frontend-show-ad')}}
@@ -443,7 +441,7 @@
                                     </a>
                                 {% endif %}
                                 {% if adDetail['user'] is defined and showBuyNowWithPaypal %}
-                                        <a href="{{ path('buy_now', {'adId': adId}) }}" class="primary-btn-1 button expand paypal-btn"><span class="btn-txt">{{'Buy now'|trans({}, 'frontend-show-ad')}}</span><span class="paypal-icon">paypal</span></a>
+                                        <a href="{{ path('buy_now', {'adId': adId}) }}" class="primary-btn-1 button expand paypal-btn ga-payPaypal"><span class="btn-txt">{{'Buy now'|trans({}, 'frontend-show-ad')}}</span><span class="paypal-icon ga-payPaypal">paypal</span></a>
                                 {% endif %}
 
                                 {% if (isOneclickenqbutton == true) %}
@@ -582,8 +580,8 @@
                                             {% else %}
                                         		<b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b>
                                     	    {% endif %}
-                                        {% else %}
-                                            <b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b>
+                                    	    {# {% else %}
+                                            <b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b> #}
                                         {% endif %}
                                     </div>
                                 </div>
@@ -662,9 +660,9 @@
                                 {% else %}
                                     {% set optHideOrRemove = 'hide' %}
                                 {% endif %}
-                                {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [orgAdDesc, optHideOrRemove]) %}
+                                {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [orgAdDesc, optHideOrRemove,'AdDetails']) %}
                                 {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), adDescWithReplacedPhone) %}
-                                {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [adId, adDescWithReplacedPhone, optHideOrRemove])) %}
+                                {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [adId, adDescWithReplacedPhone, optHideOrRemove,'AdDetails'])) %}
                             {% endif %}
 
                             {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
@@ -703,9 +701,9 @@
                             {{ include('FaAdBundle:Ad:showMapImages.html.twig', { 'googlemap_location_html': block('googlemap_location_html'), 'image_slider_html': block('image_slider_html'), 'allowAdEdit': allowAdEdit, 'imageZoomBannerExist': imageZoomBannerExist }) }}
 
                             {% if attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
-                                {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [orgAdDesc, optHideOrRemove]) %}
+                                {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [orgAdDesc, optHideOrRemove,'AdDetails']) %}
                                 {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), adDescWithReplacedPhone) %}
-                                {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [adId, adDescWithReplacedPhone, optHideOrRemove])) %}
+                                {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [adId, adDescWithReplacedPhone, optHideOrRemove,'AdDetails'])) %}
                             {% endif %}
 
                             {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
@@ -758,7 +756,9 @@
                                 {% set otherFeatureIds = adMotorRepository.getOtherFeature(featureIds) %}
                                 {{ include('FaAdBundle:Ad:AdMotorDetailTabs.html.twig') }}
                                 <br>
-                                {{ include('FaAdBundle:Ad:zutoLoanCalc.html.twig') }}
+                                {% if secondLevelCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CARS_ID')} %}
+                                    {{ include('FaAdBundle:Ad:zutoLoanCalc.html.twig') }}
+                                {% endif %}
 
                             {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') %}
                                 {% set adPropertyDetail = {} %}
@@ -848,7 +848,7 @@
 
                         {% if (adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) %}
                             <div class="{{ contactBtnWidthClass }} columns">
-                                <a href="javascript:void(0);" id="contact_seller_btn_mob" onclick="return contactSeller('{{ adId }}', 'Contact Seller button');" class="primary-btn-1 button expand">
+                                <a href="javascript:void(0);" id="contact_seller_btn_mob" onclick="return contactSeller('{{ adId }}', 'Contact Seller button','Sticky');" class="primary-btn-1 button expand">
                                     {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
                                         {{'Apply'|trans({}, 'frontend-show-ad')}}
                                     {% else %}
@@ -1025,7 +1025,7 @@
             reportAd({{app.request.get('id')}});
         {% endif %}
         {% if app.user and app.request.cookies.has('contact_seller_flag') and app.request.cookies.get('contact_seller_flag') and app.request.cookies.get('contact_seller_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') and app.request.get('id') %}
-            contactSeller({{app.request.get('id')}}, 'Contact Seller button');
+            contactSeller({{app.request.get('id')}}, 'Contact Seller button', 'Sticky');
         {% endif %}
         {% if app.user and app.request.cookies.has('save_search_agent_flag') and app.request.cookies.get('save_search_agent_flag') and app.request.cookies.get('save_search_agent_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') %}
             createAlert({{app.request.get('id')}});
@@ -1140,6 +1140,7 @@
         {% endif %}
         $("<div class='row text-center' id='ajax_img_loading'><img src=\"{{ asset_url('facore/images/ajax_loader.gif') }}\"> {{ 'Please wait... '|trans({}, 'frontend-show-ad') }}</div>").insertBefore('#adDetailMainTabs');
         var route = Routing.generate('item_add_to_remote', { 'adId': id });
+        route = route.replace(':https','');
         $.ajax({
             async: false,
             type: "POST",
@@ -1167,6 +1168,7 @@
     function addToFavorite(id)
     {
         var route = Routing.generate('ad_add_to_favorite', { 'adId': id });
+        route = route.replace(':https','');
         $.ajax({
             type: "POST",
             url : route,
@@ -1189,6 +1191,7 @@
     function removeFromFavorite(id)
     {
         var route = Routing.generate('ad_remove_from_favorite', { 'adId': id });
+        route = route.replace(':https','');
         $.ajax({
             type: "POST",
             url : route,
@@ -1208,6 +1211,7 @@
     function postSimilarAd(id)
     {
         var route = Routing.generate('ad_post_similar_ad', { 'adId': id });
+        route = route.replace(':https','');
         $.ajax({
             async: false,
             type: "POST",
@@ -1225,14 +1229,27 @@
         });
     }
 
-    function contactSeller(id, callFrom)
+    function contactSeller(id, callFrom,type)
     {
+        if(type != 'Email') {
+            window.dataLayer = window.dataLayer || []
+            dataLayer.push({
+
+                'event': 'Ad Action',
+                'eventCategory': 'CTA',
+                'eventAction': 'Contact Seller button',
+                'eventLabel': type + ' - ' + id + ' {{ catText }}'
+            });
+        }
         ga('send', 'event', 'CTA', callFrom, '{{ adId }}{{ catText }}');
         {% if adImages|length %}
+        if($.fancybox){
             $.fancybox.close();
+        }
         {% endif %}
         blockPage();
         var route = Routing.generate('contact_seller', { 'adId': id });
+        route = route.replace(':https','');
         $.ajax({
             type: "GET",
             url : route,
@@ -1368,6 +1385,7 @@
         {
             blockPage();
             var route = Routing.generate('ajax_buy_now', { 'adId': id });
+            route = route.replace(':https','');
             $.ajax({
                 type: "POST",
                 url : route,
@@ -1514,6 +1532,28 @@
     function socialShare(adId, windowUrl, windowTitle, windowWidth, windowHeight)
     {
         openWindow(windowUrl, windowTitle, windowWidth, windowHeight);
+        let eventAction;
+        if (windowTitle == 'fb-share') {
+            eventAction = 'Facebook';
+        } else if (windowTitle == 'twitter-share') {
+            eventAction = 'Twitter';
+        } else if (windowTitle == 'google-plush-share') {
+            eventAction = 'GooglePlus';
+        } else if (windowTitle == 'pinterest-share') {
+            eventAction = 'Pinterest';
+        } else if (windowTitle == 'email-share') {
+            eventAction = 'Email';
+        }else {
+            eventAction = windowTitle;
+        }
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+
+            'event' : 'Options',
+            'eventCategory':  'Options',
+            'eventAction': eventAction,
+            'eventLabel': adId
+        });
         adEnquiryIncrement('social_share', adId);
         if (windowTitle == 'fb-share') {
             OneSignal.push(["sendTags", {'Facebook': 'share'}]);
@@ -1583,8 +1623,16 @@
         ga('send', 'event', 'Options', 'Copy dealer name - Ad detail', businessName);
     }
 
-    function gaSendForRecommendedSlot(url, domain, title) 
+    function gaSendForRecommendedSlot(url, domain, title)
     {
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+
+            'event' : 'Options',
+            'eventCategory':  'Ad Details',
+            'eventAction': 'Sponsored Ad',
+            'eventLabel': '{{ app.request.get('category_string') }} - '+domain+' - '+title
+        });
         ga('send', 'event', 'Ad details', 'Recommended external ads', '{{ catText|trim('-') }}-'+domain+'-'+title);
         window.open(url, '_blank');
     }
@@ -1593,6 +1641,7 @@
     	blockPage();
     	ga('send', 'event', 'Ad details', 'upgrade now', '{{ adId }}{{ catText }}');
         var route = Routing.generate('upgrade_to_next_ad', { 'adId': id, 'rootCategoryId': rootCategoryId});
+        route = route.replace(':https','');
         $.ajax({
             type: "GET",
             url : route,
@@ -1608,7 +1657,9 @@
     }
 
     $(document).ready(function(){
-
+        if(getCookie('contactAdMessageBeforeLogin-{{ adId }}') !== ""){
+            contactSeller('{{ adId }}', 'Auto Contact Seller','Auto');
+        }
         function zutoLoanCalcGA(action, flagView){
             if (!flagView) {
                 // ga('send', 'event', 'Zuto car finance', action, '[&amp;#163;' + $('#loan_amount').val() + '|' + $('#loan_period').val() + ']'); // todo add if GTM is not added later
@@ -1651,7 +1702,107 @@
 
 //]]>
 </script>
+    <!-- Google TAG Manager Start -->
+    {# Ad Package @Jigar Lad #}
+    {% set adPackage = 0 %}
+    {% set adUserPackageRepository = fetch_repository('FaAdBundle:AdUserPackage') %}
+    {% set adUserPackage = adUserPackageRepository.getAdPackageArrayByAdId(adDetail.id) %}
+    {% for ad in adUserPackage %}
+        {% set adPackage = ad.package_id %}
+    {% endfor %}
+
+    {# Location Group @Jigar Lad #}
+    {% set locationGroupReposetry = fetch_repository('FaEntityBundle:LocationGroup') %}
+    {% set locationGroup = locationGroupReposetry.getLocationGroupNameByAdID(adId)%}
+
+    {# Category @Jigar Lad #}
+    {% set bannerCategoryPath = categoryRepository.getCategoryPathArrayById(adCategoryId, false, container) %}
+    {% set categoryArray = [] %}
+    {% for category in bannerCategoryPath %}
+        {% set categoryArray = categoryArray|merge([category]) %}
+    {% endfor %}
+
+    {# Response Type @Jigar Lad #}
+    {% if adDetail.user is defined %}
+        {% if adDetail.user.contact_through_phone == 'true' and adDetail.user.contact_through_email == 'true' %}
+            {% set responseType = 'both' %}
+        {% elseif adDetail.user.contact_through_phone == 'true' %}
+            {% set responseType = 'phone' %}
+        {% elseif adDetail.user.contact_through_email == 'true' %}
+            {% set responseType = 'email' %}
+        {% else %}
+            {% set responseType = 'node' %}
+        {% endif %}
+    {% else %}
+        {% if adDetail.a_user_phone_number_s is defined %}
+            {% set responseType = 'phone' %}
+        {% else %}
+            {% set responseType = 'none' %}
+        {% endif %}
+    {% endif %}
+    {% if userTypeText == 'Business ad' %}
+        {% set businessname = adDetail.a_s_business_name_s is defined ? adDetail.a_s_business_name_s : (adDetail.user.user_name is defined ? adDetail.user.user_name : 'Business advertiser' ) %}
+    {% else %}
+        {% set businessname = 'Private seller' %}
+    {% endif %}
+
+    {# Location @Jigar Lad #}
+    {% set locationReposetry = fetch_repository('FaEntityBundle:Location') %}
+    {% if adDetail.a_l_main_town_id_i is defined %}
+        {% set Country = locationReposetry.getCountyByTownId(adDetail.a_l_main_town_id_i)%}
+        {% set Town = locationReposetry.find(adDetail.a_l_main_town_id_i)%}
+        {% set Town = Town.name %}
+    {% else %}
+        {% set Country = 'UK' %}
+        {% set Town = '' %}
+    {% endif %}
+    <script>
+        {# get date and create as new #}
+        {% if adDetail.a_published_at_i is defined %}
+            var tempPublishedDate = new Date(1000*{{ adDetail.a_published_at_i }});
+            var publishedDate = tempPublishedDate.getFullYear() + "/" + (tempPublishedDate.getMonth() + 1) + "/" + tempPublishedDate.getDate();
+        {% else %}
+            var publishedDate = null;
+        {% endif %}
+        {% if adDetail.a_published_at_i is defined %}
+            var tempExpiredDate = new Date(1000*{{ adDetail.a_expires_at_i }});
+            var expiredDate =tempExpiredDate.getFullYear()  + "/" + (tempExpiredDate.getMonth() + 1) + "/" + tempExpiredDate.getDate();
+        {% else %}
+            var expiredDate = null;
+        {% endif %}
+        $( document ).ready(function() {
+            window.dataLayer = window.dataLayer || [];
+            dataLayer.push({
+                "adDetails":{
+                    "category": "{{ (categoryArray.0 is defined ? categoryArray.0 : '')|raw }}",
+                    "subCategory": "{{ (categoryArray.1 is defined ? categoryArray.1 : '')|raw }}",
+                    "subSubCategory": "{{ (categoryArray.2 is defined ? categoryArray.2 : '')|raw }}",
+                    "subSubSubCategory": "{{ (categoryArray.3 is defined ? categoryArray.3 : '')|raw }}",
+                    "id": '{{ adId }}',
+                    "photos": '{{ adDetail.a_total_images_i }}',
+                    "county": "{{ Country|raw }}",
+                    "locationGroup": "{{ (locationGroup.name is defined ? locationGroup.name : locationGroup)|raw}}",
+                    "town": "{{ Town|raw }}",
+                    "video": {{ youtubeVideoUrl is not  null ? 'true' : 'false' }},
+                    "paypalEnabled": {{ showBuyNowWithPaypal ? 'true' : 'false'}},
+                    "publishDate": publishedDate,
+                    "expiryDate": expiredDate,
+                    "price": '{{ adDetail.a_price_d is defined ? adDetail.a_price_d : 0 }}',
+                    "package": "{{ adPackage }}",
+                    "businessName": "{{ businessname }}",
+                    "businessType": "{{ userTypeText == 'Business ad' ? 'Business': 'Private' }}" ,
+                    "responseType": "{{ responseType }}" ,
+                    "logo": {{ (adDetail.user.company_logo is defined) and (adDetail.user.company_logo is not null)  ? 'true' : 'false' }}
+                },
+            });
+            var pageObj = window.dataLayer.find(o => o['page']);
+            pageObj.page.adOwner = {{ allowAdEdit ? 'true' : 'false' }};
+        });
+
+    </script>
+    <!-- Google TAG Manager End -->
 {% endblock %}
+
 
 {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(adCategoryId, false, fetch_container_instance()) %}
 {% if (adDetail['user']['role_id'] is defined and adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or adDetail['user']['role_id'] is defined and adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}

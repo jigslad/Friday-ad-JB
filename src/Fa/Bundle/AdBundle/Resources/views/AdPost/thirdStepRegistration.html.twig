@@ -18,9 +18,7 @@
 {% endblock %}
 
 {% block body %}
-<style>
-.buyer-contact .label-inline label { margin-right:0px !important; }
-</style>
+    {{ include('FaAdBundle:AdPost:thirdStepRegistration-css.html.twig') }}
     <div class="posting-bg">
         <div class="fad-sign-bdr">&nbsp;</div>
         <div class="row paa-main">
@@ -153,6 +151,13 @@
 //<![CDATA[
     $(document).ready(function(){
         {% if (gaStr is defined and gaStr != '') %}
+            window.dataLayer = window.dataLayer || []
+            dataLayer.push({
+                'event' : 'Form Error PAA',
+                'eventCategory':  'PAA - Step 3b',
+                'eventAction': 'Form error',
+                'eventLabel': '{{gaStr}}'
+            });
            ga('send', 'event', 'PAA - Step 3b', 'Form error', '{{gaStr}}');
         {% else %}
            ga('send', 'event', 'PAA - Step 3', 'Next step', 'registration');
@@ -281,8 +286,8 @@
     }
 
     // add multiple select / deselect functionality
-    $("#fa_paa_registration_is_third_party_email_alert_enabled").change(function () {
-        if ($('#fa_paa_registration_is_third_party_email_alert_enabled').parent().hasClass('checked')) {
+    $("#fa_paa_registration_is_third_party_email_alert_enabled").parent('span').on('click', function (e) {
+        if (!$('#fa_paa_registration_is_third_party_email_alert_enabled').parent('span').hasClass('checked')) {
             $('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked', true);
         } else {
             $('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked', false);
@@ -290,26 +295,51 @@
         
         if ($('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked')) {
         	$('#fa_paa_registration_is_email_alert_enabled').attr('checked', $('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked'));
-            $('#fa_paa_registration_is_email_alert_enabled').parent().addClass('checked');
+            $('#fa_paa_registration_is_email_alert_enabled').parent('span').addClass('checked');
         }
     });
 
-    $("#fa_paa_registration_is_email_alert_enabled").change(function(){
-        if ($('#fa_paa_registration_is_email_alert_enabled').parent().hasClass('checked')) {
+    $("#fa_paa_registration_is_email_alert_enabled").parent('span').on('click', function (e) {
+        if (!$('#fa_paa_registration_is_email_alert_enabled').parent('span').hasClass('checked')) {
             $('#fa_paa_registration_is_email_alert_enabled').attr('checked', true);
         } else {
             $('#fa_paa_registration_is_email_alert_enabled').attr('checked', false);
         }
         if (!$('#fa_paa_registration_is_email_alert_enabled').attr('checked')) {
             $('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked', false);
-            $('#fa_paa_registration_is_third_party_email_alert_enabled').parent().removeClass('checked');
+            $('#fa_paa_registration_is_third_party_email_alert_enabled').parent('span').removeClass('checked');
+        } 
+    });
+
+    $("#fa_paa_registration_is_third_party_email_alert_enabled").parent('span').on('change', function (e) {
+        if ($('#fa_paa_registration_is_third_party_email_alert_enabled').parent('span').hasClass('checked')) {
+            $('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked', true);
+        } else {
+            $('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked', false);
+        }
+        
+        if ($('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked')) {
+        	$('#fa_paa_registration_is_email_alert_enabled').attr('checked', $('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked'));
+            $('#fa_paa_registration_is_email_alert_enabled').parent('span').addClass('checked');
+        }
+    });
+ 
+    $("#fa_paa_registration_is_email_alert_enabled").parent('span').on('change', function (e) {
+        if ($('#fa_paa_registration_is_email_alert_enabled').parent('span').hasClass('checked')) {
+            $('#fa_paa_registration_is_email_alert_enabled').attr('checked', true);
+        } else {
+            $('#fa_paa_registration_is_email_alert_enabled').attr('checked', false);
+        }
+        if (!$('#fa_paa_registration_is_email_alert_enabled').attr('checked')) {
+            $('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked', false);
+            $('#fa_paa_registration_is_third_party_email_alert_enabled').parent('span').removeClass('checked');
         } 
     });
     
     function tickUntickEmailAndThirdPartyAlertCheckbox()
     {
         if ($('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked') && !$('#fa_paa_registration_is_email_alert_enabled').attr('checked')) {
-            $('#fa_paa_registration_is_email_alert_enabled').parent().removeClass('checked');
+            $('#fa_paa_registration_is_email_alert_enabled').parent('span').removeClass('checked');
             $('#fa_paa_registration_is_email_alert_enabled').attr('checked', false);
         }
     }

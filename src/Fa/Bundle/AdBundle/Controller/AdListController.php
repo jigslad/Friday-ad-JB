@@ -83,6 +83,8 @@ class AdListController extends CoreController
 
         if ($request->get('isHomeSearch')) {
             return $this->render('FaFrontendBundle:Default:homePageSearch.html.twig', $parameters);
+        } elseif ($request->get('isAdultHomeSearch')) {
+            return $this->render('FaFrontendBundle:Adult:homePageAdultSearch.html.twig', $parameters);
         } elseif ($request->get('isErrorSearch')) {
             return $this->render('FaFrontendBundle:Default:errorPageSearch.html.twig', $parameters);
         } else {
@@ -334,7 +336,7 @@ class AdListController extends CoreController
         $geoDistParams = array();
         if ($mapFlag) {
             if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['latitude']) && isset($cookieLocationDetails['longitude'])) {
-                $data['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
+                //$data['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
             }
         }
 
@@ -428,7 +430,7 @@ class AdListController extends CoreController
         
         if (!$mapFlag && $setDefUKLoc==0 && $isBusinessPage==0) {
             if (isset($otherMatchingData['search']['item__distance'])) {
-                $otherMatchingData['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
+                //$otherMatchingData['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
             }
             $this->get('fa.solrsearch.manager')->init('ad', $keywords, $otherMatchingData, 1, 1, 0, true);
             
@@ -522,7 +524,7 @@ class AdListController extends CoreController
             }
         }
         // set search params in cookie.
-        $this->setSearchParamsCookie($data);
+        $this->setSearchParamsCookie($data,$request);
         //Get Recommmended Slots
         $getRecommendedSlots = array();
         $getRecommendedSlots = $this->getRecommendedSlot($data, $keywords, $page, $mapFlag, $request, $rootCategoryId);
@@ -538,7 +540,7 @@ class AdListController extends CoreController
         $recommendedSlotArr = array();
         $recommendedSlotOrder = array();
         if (!empty($getRecommendedSrchSlots)) {
-            for ($arj=1;$arj<=6;$arj++) {
+            for ($arj=1;$arj<=8;$arj++) {
                 if (isset($getRecommendedSrchSlots[$arj])) {
                     $recommendedSlotArr[$arj] = $getRecommendedSrchSlots[$arj][0];
                     $recommendedSlotOrder[$arj] = $getRecommendedSrchSlots[$arj][0]['creative_ord'];
@@ -590,7 +592,7 @@ class AdListController extends CoreController
                             $fourLocWithDistanceData['query_filters']['item']['location'] = $fourLocationsDetail['town_id'];
                         }
                     }
-                    $fourLocWithDistanceData['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
+                    //$fourLocWithDistanceData['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
                     $this->get('fa.solrsearch.manager')->init('ad', $keywords, $fourLocWithDistanceData);
                     $fourLocWithDistanceSolrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
                     $fourLocWithDistanceResultCount = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($fourLocWithDistanceSolrResponse);
@@ -903,8 +905,9 @@ class AdListController extends CoreController
      *
      * @param array $data Search parameters
      */
-    private function setSearchParamsCookie($data)
+    private function setSearchParamsCookie($data,$request)
     {
+        $currentRoute = $request->get('_route');
         if ((isset($data['search']) && count($data['search'])) || (isset($data['query_filters']) && count($data['query_filters']))) {
             if (isset($data['search']['item__category_id']) || isset($data['search']['keywords'])) {
                 $rootCategoryId = null;
@@ -917,7 +920,7 @@ class AdListController extends CoreController
                     $searchParams['keywords'] = $data['search']['keywords'];
                 }
 
-                if (!isset($data['search']['item__category_id']) || (isset($data['search']['item__category_id']) && $rootCategoryId != CategoryRepository::ADULT_ID)) {
+                if (!isset($data['search']['item__category_id']) || (isset($data['search']['item__category_id']) && $rootCategoryId == CategoryRepository::ADULT_ID && $currentRoute == 'fa_adult_homepage')) {
                     $response = new Response();
                     $response->headers->setCookie(new Cookie('home_page_search_params', serialize($searchParams), time() + (365*24*60*60*1000), '/', null, false, false));
                     $response->sendHeaders();
@@ -1130,7 +1133,7 @@ class AdListController extends CoreController
 
             if (isset($data['search']['item__location']) && $data['search']['item__location'] != LocationRepository::COUNTY_ID && (!isset($data['search']['item__distance']) || (isset($data['search']['item__distance']) && $data['search']['item__distance'] >= 0 && $data['search']['item__distance'] <= CategoryRepository::MAX_DISTANCE))) {
                 if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['latitude']) && isset($cookieLocationDetails['longitude'])) {
-                    $data['query_sorter']['item']['geodist'] = 'asc';
+                    //$data['query_sorter']['item']['geodist'] = 'asc';
                 }
             }
 
@@ -1202,7 +1205,7 @@ class AdListController extends CoreController
         }
         //$data['query_filters']['item']['is_blocked_ad'] = 0;
         // remove adult results when there is no category selected
-        if (!isset($data['search']['item__category_id']) && !in_array($currentRoute, array('show_business_user_ads', 'show_business_user_ads_page', 'show_business_user_ads_location'))) {
+        if (!isset($data['search']['item__category_id']) && !in_array($currentRoute, array('show_business_user_ads', 'show_business_user_ads_page', 'show_business_user_ads_location','fa_adult_homepage'))) {
             $data['static_filters'] = ' AND -'.AdSolrFieldMapping::ROOT_CATEGORY_ID.':'.CategoryRepository::ADULT_ID;
         }
 
@@ -1464,7 +1467,7 @@ class AdListController extends CoreController
             );
         } else {
             if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
-                $data['query_sorter']['item']['geodist'] = 'asc';
+                //$data['query_sorter']['item']['geodist'] = 'asc';
             }
 
             // for jobs and property and all their children categories need to show county seo box.
@@ -1489,7 +1492,7 @@ class AdListController extends CoreController
         $this->get('fa.solrsearch.manager')->init('ad', '', $data);
         if (!empty($cookieLocation)) {
             if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
-                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
+                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].','.$cookieLocation['longitude']);
                 $this->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
             }
         }
@@ -2005,7 +2008,11 @@ class AdListController extends CoreController
         
         if (!empty($cookieLocation)) {
             if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
-                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
+                if (isset($searchParams['search']['item__location']) && $searchParams['search']['item__location']) {
+                    $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'] . ',' . $cookieLocation['longitude'], 'd' => 30);
+                } else {
+                    $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].','.$cookieLocation['longitude']);
+                }
                 $this->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
             }
         }
@@ -2157,7 +2164,7 @@ class AdListController extends CoreController
             if(isset($searchParams['query_filters']['item']['distance'])) {
                 $data['query_filters']['item']['distance']=200;
                 $data['query_filters']['item']['location']= $searchParams['search']['item__location'].'|200';
-                $data['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
+                //$data['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
             } else {
                 $data['query_sorter']['item']['weekly_refresh_published_at'] = array('sort_ord' => 'desc', 'field_ord' => 1);
             } 
@@ -2209,15 +2216,15 @@ class AdListController extends CoreController
         if ($topBusiness) {
             $businessExposureTopUser = $this->getRepository('FaUserBundle:User')->getTopbusinessUserDetailForAdList($topBusiness, $this->container);           
             //$businessExposureTopUserAds = $this->getProfileExposureUserAds($businessExposureTopUser[0]['user_id'], $data);
-            //if(!empty($businessExposureTopUserAds)) {
+            if(!empty($businessExposureTopUserAds) && isset($businessExposureTopUser[0]['user_id'])) {
                 $businessTopExposureUserDetails[] = array(
                     //'businessExposureUserAds' => $businessExposureTopUserAds,
                     'businessUserId'          => $businessExposureTopUser[0]['user_id'],
                     'businessUserDetail'      => $this->getRepository('FaUserBundle:User')->getProfileExposureUserDetailForAdList($businessExposureTopUser[0]['user_id'], $this->container),
                 );
-           // }
+            }
             $parameters['businessTopExposureUsersDetailsWithoutAd'] = $businessTopExposureUserDetails;
-            $viewedBusinessExposureUserIds[] = !empty($businessExposureTopUser) ? $businessExposureTopUser[0]['user_id']:'';
+            $viewedBusinessExposureUserIds[] = (!empty($businessExposureTopUser) && isset($businessExposureTopUser[0]['user_id'])) ? $businessExposureTopUser[0]['user_id']:'';            
         }
        
         $businessExposureUsers = $businessExposureUsersWithoutAd = array();

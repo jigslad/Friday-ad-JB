@@ -510,6 +510,7 @@ class AdPostController extends ThirdPartyLoginController
         $businessUserLogo = CommonManager::getUserLogo($this->container, '', null, null, null, true, true, null, null);
         $userLogoTmpPath  = $this->container->get('kernel')->getRootDir().'/../web/uploads/tmp';
         $gaStr            = '';
+        $user            = null;
 
         if ($response !== false) {
             return $response;
@@ -522,7 +523,22 @@ class AdPostController extends ThirdPartyLoginController
 
         if ('POST' === $request->getMethod()) {
             $formData = $request->get('fa_paa_registration');
-
+            
+            if(isset($formData['username'])) {
+                $user = $this->getRepository('FaUserBundle:User')->findOneBy(array('username' => $formData['username'], 'is_half_account' => 0));
+                if (!$user) {
+                    $user = $this->getRepository('FaUserBundle:User')->findOneBy(array('email' => $formData['username'], 'is_half_account' => 0));
+                }
+            }
+            
+            if(isset($formData['user_type'])) {
+                if ($formData['user_type'] == 1 && !$user) {
+                    return $this->handleMessage($this->get('translator')->trans('Invalid email/username or password.', array(), 'validators'), 'ad_post_login_step', array(), 'error');
+                } else if ($formData['user_type'] != 1 && $user) {
+                    return $this->handleMessage($this->get('translator')->trans('This email address already has an account - please enter password below and login.', array(), 'validators'), 'ad_post_login_step', array(), 'error');
+                }
+            }
+            
             if ($formData && isset($formData['user_roles']) && ($formData['user_roles'] == 'ROLE_BUSINESS_SELLER' || $formData['user_roles'] == 'ROLE_NETSUITE_SUBSCRIPTION')) {
                 $isCompany = 1;
             }
@@ -1401,8 +1417,10 @@ class AdPostController extends ThirdPartyLoginController
 
         if ($isCompany) {
             $imageObj->setPath($imagePath);
+            $imageType = 'company';
         } else {
             $imageObj->setImage($imagePath);
+            $imageType = 'user';
         }
 
         rename($webPath.'/uploads/tmp/'.$orgImageName.'.jpg', $webPath.DIRECTORY_SEPARATOR.$imagePath.DIRECTORY_SEPARATOR.$userId.'.jpg');
@@ -1410,7 +1428,8 @@ class AdPostController extends ThirdPartyLoginController
         rename($webPath.'/uploads/tmp/'.$orgImageName.'_original.jpg', $webPath.DIRECTORY_SEPARATOR.$imagePath.DIRECTORY_SEPARATOR.$userId.'_original.jpg');
 
         $userImageManager = new UserImageManager($this->container, $userId, $imagePath, $isCompany);
-        $userImageManager->createThumbnail();
+        $userImageManager->createThumbnail();        
+        $userImageManager->uploadImagesToS3($userId,$imageType);
     }
 
     /**

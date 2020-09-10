@@ -823,6 +823,20 @@ class User implements UserInterface, \Serializable
      * @Gedmo\Versioned
      */
     private $old_is_private_phone_number;
+  
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="boost_overide", type="integer", length=10, nullable=true)
+     */
+    private $boost_overide;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_reset_boost_count", type="boolean", nullable=true, options={"default" = 0})
+     */
+    private $is_reset_boost_count = false;
 
     /**
      * Constructor
@@ -2871,6 +2885,39 @@ class User implements UserInterface, \Serializable
     public function setOldIsPrivatePhoneNumber($oldIsPrivatePhoneNumber)
     {
         $this->old_is_private_phone_number = $oldIsPrivatePhoneNumber;
+    }
+
+    /* get is reset boost count or not
+     *
+     * @return boolean
+     */
+    public function getIsResetBoostCount()
+    {
+        return $this->is_reset_boost_count;
+    }
+    
+    /**
+     * set is reset boost count or not
+     *
+     * @param boolean $is_reset_boost_count
+     *
+     * @return \Fa\Bundle\UserBundle\Entity\User
+     */
+    public function setIsResetBoostCount($is_reset_boost_count)
+    {
+        $this->is_reset_boost_count = $is_reset_boost_count;
+        return $this;
+    }
+    
+    /**
+     * Set boost_overide.
+     *
+     * @param integer $boost_overide
+     * @return \Fa\Bundle\UserBundle\Entity\User
+     */
+    public function setBoostOveride($boost_overide)
+    {
+        $this->boost_overide = $boost_overide;
         
         return $this;
     }
@@ -2883,5 +2930,15 @@ class User implements UserInterface, \Serializable
     public function getOldIsPrivatePhoneNumber()
     {
         return $this->old_is_private_phone_number;
+    }
+
+    /**
+     * Get boost_overide.
+     *
+     * @return integer
+     */
+    public function getBoostOveride()
+    {
+        return $this->boost_overide;
     }
 }

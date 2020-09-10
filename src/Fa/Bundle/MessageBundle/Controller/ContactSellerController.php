@@ -22,6 +22,10 @@ use Fa\Bundle\EntityBundle\Repository\LocationRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\UserBundle\Form\UserHalfAccountType;
 use Fa\Bundle\MessageBundle\Form\ContactSellerType;
+use Fa\Bundle\DotMailerBundle\Entity\Dotmailer;
+use Fa\Bundle\DotMailerBundle\Repository\DotmailerRepository;
+use Symfony\Component\Routing\Route;
+
 
 /**
  * This controller is used for resetting user password.
@@ -55,11 +59,11 @@ class ContactSellerController extends CoreController
             if (!$ad || ($ad && $ad->getStatus()->getId() != EntityRepository::AD_STATUS_LIVE_ID)) {
                 $error = $this->get('translator')->trans('Unable to find Live Ad.', array(), 'frontend-search-result');
             } else {
-                $loggedinUser = null;
+                $loggedInUser = null;
                 if ($this->isAuth()) {
                     //check for own ad.
-                    $loggedinUser = $this->getLoggedInUser();
-                    if ($loggedinUser->getId() == $adUserId) {
+                    $loggedInUser = $this->getLoggedInUser();
+                    if ($loggedInUser->getId() == $adUserId) {
                         $error = $this->get('translator')->trans('You can not contact for your own ad.', array(), 'frontend-show-ad');
                         $this->getRepository('FaUserBundle:User')->removeUserCookies();
                     }
@@ -74,36 +78,125 @@ class ContactSellerController extends CoreController
                     if ('POST' === $request->getMethod()) {
                         $form->handleRequest($request);
                         if ($form->isValid()) {
-                            // Create half account in case of user not logged in.
                             if (!$this->isAuth()) {
-                                $halfAccountData = array(
-                                                       'email'      => $form->get('sender_email')->getData(),
-                                                       'first_name' => $form->get('sender_first_name')->getData(),
-                                    '_token'     => $this->get('security.csrf.token_manager')->getToken('fa_user_half_account')->getValue()
+                                $loggedInUser = $this->getRepository('FaUserBundle:User')->findOneBy(array('email' => $form->get('sender_email')->getData()));
+                                if (!$loggedInUser) {
+                                    // Create half account in case of user not logged in.
+                                    $halfAccountData = array(
+                                        'email'      => $form->get('sender_email')->getData(),
+                                        'first_name' => $form->get('sender_first_name')->getData(),
+                                        '_token'     => $this->get('security.csrf.token_manager')->getToken('fa_user_half_account')->getValue()
 //                                     $this->container->get('form.csrf_provider')->generateCsrfToken('fa_user_half_account')
-                                                   );
-
-                                $halfAccountForm = $formManager->createForm(UserHalfAccountType::class, null, array('method' => 'POST'));
-                                $halfAccountForm->submit($halfAccountData);
-
-                                $loggedinUser = $this->getRepository('FaUserBundle:User')->findOneBy(array('email' => $form->get('sender_email')->getData()));
-                                if (!$loggedinUser) {
-                                    $error = $this->get('translator')->trans('Unable to find user.', array(), 'frontend-show-ad');
-                                } elseif ($loggedinUser->getStatus() && $loggedinUser->getStatus()->getId() != EntityRepository::USER_STATUS_ACTIVE_ID) {
+                                    );
+                                    $halfAccountForm = $formManager->createForm(UserHalfAccountType::class, null, array('method' => 'POST'));
+                                    $halfAccountForm->submit($halfAccountData);
+                                    $this->getEntityManager()->flush();sleep(5);
+                                    $loggedInUser = $this->getRepository('FaUserBundle:User')->findOneBy(array('email' => $form->get('sender_email')->getData()));
+                                    if(!$loggedInUser){
+                                        $error = $this->get('translator')->trans('Unable to find user.', array(), 'frontend-show-ad');
+                                    }
+                                }
+                                elseif ($loggedInUser->getStatus() && $loggedInUser->getStatus()->getId() != EntityRepository::USER_STATUS_ACTIVE_ID) {
                                     $error = $this->get('translator')->trans('Your account was blocked.', array(), 'frontend-show-ad');
-                                } elseif ($loggedinUser->getId() == $adUserId) {
+                                }
+                                elseif ($loggedInUser->getId() == $adUserId) {
                                     $error = $this->get('translator')->trans('You can not contact for your own ad.', array(), 'frontend-show-ad');
                                 }
+                                else{
+                                    $this->container->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('Please log in to your account to send the message.', array(), 'frontend-show-ad'));
+                                    $redirectToUrl = $this->generateUrl('login');
+                                    $error = $this->get('translator')->trans('You need to login to send to message to this ad. click <a href="'.$redirectToUrl.'">here</a> to login', array(), 'frontend-show-ad');
+                                }
                             }
-
-                            if ($loggedinUser && !$error) {
+                            if ($loggedInUser && !$error) {
                                 try {
                                     //save information
-                                    $parent  = $this->getRepository('FaMessageBundle:Message')->getLastMessage($adId, $loggedinUser->getId());
-                                    $message = $this->getRepository('FaMessageBundle:Message')->updateContactSellerMessage($message, $parent, $loggedinUser, $ad, $request->getClientIp());
+                                    $parent  = $this->getRepository('FaMessageBundle:Message')->getLastMessage($adId, $loggedInUser->getId());
+                                    $message = $this->getRepository('FaMessageBundle:Message')->updateContactSellerMessage($message, $parent, $loggedInUser, $ad, $request->getClientIp());
                                     $message = $formManager->save($message);
                                     CommonManager::updateCacheCounter($this->container, 'ad_enquiry_email_send_link_'.strtotime(date('Y-m-d')).'_'.$adId);
-
+                                    
+                                    //update email alerts
+                                    if ($form->get('email_alert')->getData()) {
+                                        $loggedInUser->setIsEmailAlertEnabled(1);
+                                    } else {
+                                        $loggedInUser->setIsEmailAlertEnabled(0);
+                                    }
+                                    
+                                    //update third party email alerts
+                                    if ($form->get('third_party_email_alert')->getData()) {
+                                        $loggedInUser->setIsThirdPartyEmailAlertEnabled(1);
+                                    } else {
+                                        $loggedInUser->setIsThirdPartyEmailAlertEnabled(0);
+                                    }
+                                    $this->getEntityManager()->persist($loggedInUser);
+                                    $this->getEntityManager()->flush($loggedInUser);
+                                    
+                                    $newsletterTypeIds = array();
+                                    $userEmail = ($loggedInUser)?$loggedInUser->getEmail():$form->get('sender_email')->getData();
+                                    $dotmailer = $this->getRepository('FaDotMailerBundle:Dotmailer')->findOneBy(array('email' => $userEmail));
+                                    if($dotmailer) {
+                                        if($loggedInUser->getIsThirdPartyEmailAlertEnabled()==1) {
+                                            $newsletterTypeIds[] = 48;
+                                        }
+                                        
+                                        if ($loggedInUser->getIsEmailAlertEnabled()==1 || $loggedInUser->getIsThirdPartyEmailAlertEnabled()==1) {
+                                            $newsletterTypeIds[] = 49;
+                                            
+                                            if ($dotmailer->getDotmailerNewsletterTypeId()) {
+                                                $newsletterTypeIds = array_merge($newsletterTypeIds, $dotmailer->getDotmailerNewsletterTypeId());
+                                                $newsletterTypeIds = array_unique($newsletterTypeIds);
+                                            }
+                                            
+                                            $dotmailer->setDotmailerNewsletterTypeId($newsletterTypeIds);
+                                            
+                                            if (($dotmailer->getIsContactSent() == null) || ($dotmailer->getIsContactSent() !=1))  {
+                                                $dotmailer->setFirstTouchPoint(DotmailerRepository::TOUCH_POINT_ENQUIRY);
+                                                $dotmailer->setIsContactSent(1);
+                                            }
+                                        }
+                                        
+                                        $this->getEntityManager()->persist($dotmailer);
+                                        $this->getEntityManager()->flush($dotmailer);
+                                        
+                                        if ($loggedInUser->getIsEmailAlertEnabled()==1 || $loggedInUser->getIsThirdPartyEmailAlertEnabled()==1) {
+                                            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
+                                        }
+                                    }
+                                    else {
+                                        $dotMailer = new Dotmailer();
+                                        $dotMailer->setDotmailerNewsletterUnsubscribe(0);
+                                        $dotMailer->setEmail($form->get('sender_email')->getData());
+                                        $dotMailer->setGuid(CommonManager::generateGuid($form->get('sender_email')->getData()));
+                                        $dotMailer->setIsSuppressed(0);
+                                        $dotMailer->setIsHalfAccount(1);
+                                        $dotMailer->setCreatedAt(time());
+                                        $dotMailer->setUpdatedAt(time());
+                                        $dotMailer->setOptInType(DotmailerRepository::OPTINTYPE);
+                                        $dotMailer->setFirstName($form->get('sender_first_name')->getData());
+                                        
+                                        if($form->get('third_party_email_alert')->getData()) {
+                                            $newsletterTypeIds[] = 48;
+                                        }
+                                        
+                                        if ($form->get('email_alert')->getData() ==1 || $form->get('third_party_email_alert')->getData() ==1) {
+                                            $newsletterTypeIds[] = 49;
+                                            $dotMailer->setDotmailerNewsletterTypeId($newsletterTypeIds);
+                                            $dotMailer->setFirstTouchPoint(DotmailerRepository::TOUCH_POINT_ENQUIRY);
+                                            $dotMailer->setIsContactSent(1);
+                                        }
+                                        
+                                        $this->getEntityManager()->persist($dotMailer);
+                                        $this->getEntityManager()->flush($dotMailer);
+                                        
+                                        if ($form->get('email_alert')->getData() ==1 || $form->get('third_party_email_alert')->getData() ==1) {
+                                            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotMailer->getId().' >/dev/null &');
+                                        }
+                                        
+                                        
+                                    }
+                                    
+                                     
                                     $objUploader = $form->has('attachment') ? $form->get('attachment')->getData(): false;
                                     if ($objUploader) {
                                         $uploadDetailArray = $this->uploadAttachment($objUploader, $message);
@@ -112,7 +205,8 @@ class ContactSellerController extends CoreController
                                         $message->setAttachmentOrgFileName($objUploader->getClientOriginalName());
                                         $formManager->save($message);
                                     }
-                                } catch (\Exception $e) {
+                                }
+                                catch (\Exception $e) {
                                     $deadlockError = $this->get('translator')->trans('Our system is currently busy, please try again.', array(), 'frontend-show-ad');
                                     if ($deadlockRetry == 3) {
                                         CommonManager::sendErrorMail($this->container, 'Error in contact seller', $e->getMessage(), $e->getTraceAsString());
@@ -124,35 +218,25 @@ class ContactSellerController extends CoreController
                                 // send message into moderation.
                                 try {
                                     $this->getRepository('FaMessageBundle:Message')->sendContactIntoModeration($message, $this->container);
-                                } catch (\Exception $e) {
+                                }
+                                catch (\Exception $e) {
                                     // No need do take any action as we have cron
                                     //  in background to again send the request.
                                 }
 
-                                //update email alerts
-                                if ($form->get('email_alert')->getData()) {
-                                    $loggedinUser->setIsEmailAlertEnabled(1);
-                                } else {
-                                    $loggedinUser->setIsEmailAlertEnabled(0);
-                                }
-
-                                //update third party email alerts
-                                if ($form->get('third_party_email_alert')->getData()) {
-                                    $loggedinUser->setIsThirdPartyEmailAlertEnabled(1);
-                                } else {
-                                    $loggedinUser->setIsThirdPartyEmailAlertEnabled(0);
-                                }
-                                $this->getEntityManager()->persist($loggedinUser);
-                                $this->getEntityManager()->flush($loggedinUser);
+                                $this->getEntityManager()->persist($loggedInUser);
+                                $this->getEntityManager()->flush($loggedInUser);
 
                                 //save search agent.
                                 if ($form->get('search_agent')->getData()) {
-                                    $this->getRepository('FaUserBundle:UserSearchAgent')->saveUserSearch($ad, $loggedinUser, $this->container);
-                                } else {
-                                    $this->getRepository('FaUserBundle:UserSearchAgent')->removeUserSearch($ad, $loggedinUser, $this->container);
+                                    $this->getRepository('FaUserBundle:UserSearchAgent')->saveUserSearch($ad, $loggedInUser, $this->container);
+                                }
+                                else {
+                                    $this->getRepository('FaUserBundle:UserSearchAgent')->removeUserSearch($ad, $loggedInUser, $this->container);
                                 }
                             }
-                        } elseif ($request->isXmlHttpRequest()) {
+                        }
+                        elseif ($request->isXmlHttpRequest()) {
                             $htmlContent = $this->renderView('FaMessageBundle:ContactSeller:ajaxContactSeller.html.twig', array('form' => $form->createView(), 'ad' => $ad, 'rootCategoryId' => $rootCategoryId, 'deadlockRetry' => $deadlockRetry));
                         }
                     } else {
@@ -161,7 +245,6 @@ class ContactSellerController extends CoreController
                     }
                 }
             }
-
             return new JsonResponse(array('error' => $error, 'deadlockError' => $deadlockError, 'redirectToUrl' => $redirectToUrl, 'htmlContent' => $htmlContent, 'deadlockRetry' => $deadlockRetry));
         } else {
             return new Response();

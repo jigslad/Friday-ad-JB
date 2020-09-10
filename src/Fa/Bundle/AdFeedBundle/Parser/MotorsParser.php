@@ -47,6 +47,10 @@ class MotorsParser extends AdParser
         $this->advert['status']    = 'A';
         $this->advert['rejected_reason'] = array();
         $this->advert['affiliate'] = 0;
+        $this->advert['is_trade_ad'] = 1;
+        if (isset($adArray['IsPrivateSeller']) && $adArray['IsPrivateSeller'] != null && $adArray['IsPrivateSeller'] == true) {
+            $this->advert['is_trade_ad'] = 0;
+        }
 
         $configRulePackageId = $this->em->getRepository('FaCoreBundle:ConfigRule')->getClickEditVehicleAdvertsPackageId($this->container);
 

@@ -121,7 +121,7 @@ class CoreController extends Controller
             $queryParams = $request->query->all();
             $queryParamKeys = array_keys($queryParams);
             $loginQueryParams = array();
-            if (count($queryParamKeys)) {
+            if (!empty($queryParamKeys)) {
                 foreach ($queryParamKeys as $queryParamKey) {
                     if (in_array($queryParamKey, array('utm_source', 'utm_medium', 'utm_campaign', 'utm_content'))) {
                         $loginQueryParams[$queryParamKey] = (isset($queryParams[$queryParamKey]) ? $queryParams[$queryParamKey] : null);

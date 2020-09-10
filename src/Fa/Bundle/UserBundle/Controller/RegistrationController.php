@@ -107,6 +107,7 @@ class RegistrationController extends ThirdPartyLoginController
                     }
 
                     // update facebook/google id
+                    $this->makeDotmailerTouchPointEntry($user, 'register_user_info');
                     $user = $this->updateFacebookGoogleId($user, 'register_user_info');
 
                     if ($this->container->get('request_stack')->getCurrentRequest()->cookies->has('frontend_redirect_after_login_path_info') && $this->container->get('request_stack')->getCurrentRequest()->cookies->get('frontend_redirect_after_login_path_info') != CommonManager::COOKIE_DELETED) {
@@ -248,5 +249,11 @@ class RegistrationController extends ThirdPartyLoginController
 
         $userImageManager = new UserImageManager($this->container, $userId, $imagePath, $isCompany);
         $userImageManager->createThumbnail();
+        
+        if($isCompany) {
+            $userImageManager->uploadImagesToS3($userId,'company');
+        } else {
+            $userImageManager->uploadImagesToS3($userId,'user');
+        }
     }
 }
