@@ -262,6 +262,7 @@ $(document).ready(function(){
     	
         if ($(this).val().length < 1) {
             $("{{ field }}"+'_close').hide();
+            $('#category_id_autocomplete_error').hide();
             $("{{ field }}").val("");
             
             {% if child_field is defined %}
@@ -310,6 +311,7 @@ $(document).ready(function(){
     
     if ($("{{ field }}"+'_autocomplete').length > 0 && $("{{ field }}"+'_autocomplete').val().length < 1) {
         $("{{ field }}"+'_close').hide();
+        $('#category_id_autocomplete_error').hide();
     } else {
         $("{{ field }}"+'_close').show();
     }
