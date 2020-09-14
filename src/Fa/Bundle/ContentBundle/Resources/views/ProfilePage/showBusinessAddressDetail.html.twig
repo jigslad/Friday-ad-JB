@@ -21,7 +21,7 @@
         {% if userCompanyInfo['company_address'] is defined %}
             <li class="address">{{ userCompanyInfo['company_address'] }}</li>
         {% endif %}
-        {% if userCompanyInfo['website_link'] is defined  and websiteset is null%}
+        {% if userCompanyInfo['website_link'] is defined %}
             {% set companyWebSite  = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'addHttpToUrl', [userCompanyInfo['website_link']]) %}
             {% set websiteURL      = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'removeHttpsFromUrl', [userCompanyInfo['website_link']]) %}
             {% set websiteURLArray = websiteURL|split('?') %}
