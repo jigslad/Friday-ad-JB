@@ -23,6 +23,12 @@
     <!-- Google TAG Manager -->
     <script>
         let dataLayerPageType = '_503_page';
+
+        googletag.cmd.push(function() {
+            googletag.pubads().setTargeting('page_type', '503_page');
+            googletag.pubads().setTargeting('adBlocker', false);
+            googletag.pubads().setTargeting('user_logged', false);
+        });
     </script>
     <!-- Google TAG Manager -->
 </body>
