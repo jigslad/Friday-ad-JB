@@ -2205,7 +2205,10 @@ input.field-122 {
 }
 
 .f-topbar-fixed .top-links {
-    opacity: 0
+    opacity: 1;
+}
+.f-topbar-fixed{
+    padding-top: 0px !important;
 }
 
 .featured-cat-block {
