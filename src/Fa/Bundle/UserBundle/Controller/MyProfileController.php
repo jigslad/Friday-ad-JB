@@ -333,8 +333,8 @@ class MyProfileController extends CoreController
                         $userSite = $formManager->save($userSite);
                         $userDetail = array();
                         $userDetail['about_us'] = $userSite->getAboutUs();
-                        $adDescWithReplacedPhone = CommonManager::hideOrRemovePhoneNumber($userDetail['about_us'], 'hide');
-                        $adDescWithReplacedPhoneAndEmail = CommonManager::hideOrRemoveEmail($userSite->getId(), $adDescWithReplacedPhone, 'hide');
+                        $adDescWithReplacedPhone = CommonManager::hideOrRemovePhoneNumber($userDetail['about_us'], 'hide','Profile');
+                        $adDescWithReplacedPhoneAndEmail = CommonManager::hideOrRemoveEmail($userSite->getId(), $adDescWithReplacedPhone, 'hide','Profile');
                         $successContent = $adDescWithReplacedPhoneAndEmail;
                     } elseif ($request->isXmlHttpRequest()) {
                         $htmlContent = $this->renderView('FaUserBundle:MyProfile:ajaxEditAboutUs.html.twig', array('form' => $form->createView()));

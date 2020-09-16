@@ -98,7 +98,7 @@ class SeoManager
             $adDetailFields = array_unique($adDetailFields);
         }
 
-        $adSolrObj        = get_object_vars($adSolrObj);
+        $adSolrObj        = is_array($adSolrObj) ? $adSolrObj : get_object_vars($adSolrObj);
         $adCategoryId     = $adSolrObj['a_category_id_i'];
         $adRootCategoryId = $adSolrObj[AdSolrFieldMapping::ROOT_CATEGORY_ID];
         $rootCategoryName = CommonManager::getCategoryClassNameById($adRootCategoryId, true);

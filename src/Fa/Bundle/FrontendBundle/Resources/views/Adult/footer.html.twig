@@ -8,7 +8,11 @@
         </div>
     {% endif %}
     <div class="row">
-        {{ render(controller('FaEntityBundle:Category:renderFooterCategories', {'location': (currentRoute == 'listing_page' ? app.request.get('location') : null), 'searchParams': searchParams})) }}
+        {% if currentRoute == 'fa_new_adult_homepage' %}
+            {{ include('FaEntityBundle:Category:renderFooterCategories.html.twig', footerDetails) }}
+        {% else %}
+            {{ render(controller('FaEntityBundle:Category:renderFooterCategories', {'location': (currentRoute == 'listing_page' ? app.request.get('location') : null), 'searchParams': searchParams})) }}
+        {% endif %}
         <div class="large-6 columns">
         	{% if app.request.attributes.get('_route') != 'my_account_newsletter'  and app.request.attributes.get('_route') != 'newsletter_feedback' and app.request.attributes.get('_route') != 'newsletter_feedback_success' %}
             	<div class="clearfix"></div>
@@ -24,7 +28,11 @@
             <div class="help-links">
                 <h6 class="footer-head">{{ 'Can we help?'|trans({}, 'frontend-footer') }}</h6>
                 <a href="https://blog.friday-ad.co.uk/" target="_blank">{{ 'Blog'|trans({}, 'frontend-footer') }}</a>
-                {{ render(controller('FaContentBundle:StaticPage:renderStaticPageLink', {'currentRoute': currentRoute})) }}
+                {% if currentRoute == 'fa_new_adult_homepage' %}
+                    {{ include('FaContentBundle:StaticPage:renderStaticPageLink.html.twig', footerStaticBlock) }}
+                {% else %}
+                    {{ render(controller('FaContentBundle:StaticPage:renderStaticPageLink', {'currentRoute': currentRoute})) }}
+                {% endif %}
                 <a href="{{ path('show_all_locations') }}">{{ 'Locations'|trans({}, 'frontend-footer') }}</a>
                 <a href="{{ path('testimonials') }}">{{ 'Testimonials'|trans({}, 'frontend-footer') }}</a>
                 {# <a href="https://www.yumpu.com/user/EDITORFAD" target="__blank">{{ 'Read this week\'s Friday-Ad'|trans({}, 'frontend-footer') }}</a> #}
@@ -91,6 +99,18 @@
 {% block scriptbottom %}
 <script language="javascript" type="text/javascript">
 //<![CDATA[
+
+    document.addEventListener('error', function(e) {
+        var target = $(e.target);
+        if (e.target.nodeName == 'IMG' && $(target).hasClass('ndult-company-logo')) {
+            var parent = $(target).closest('.list-img');
+
+            $(parent).html(
+                $('<div>').addClass('profile-placeholder')
+                    .append($(target).attr('src', '{{ asset('bundles/fafrontend/images/user-no-logo.svg') }}'))
+            );
+        }
+    }, true);
 
     $('#manage-my-ad-id').on('click', function() {
         ga('send', 'event', 'Top Widget', 'MMM');
