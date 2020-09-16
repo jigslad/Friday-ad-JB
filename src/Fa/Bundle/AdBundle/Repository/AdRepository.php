@@ -966,6 +966,11 @@ class AdRepository extends EntityRepository
             if (is_array($value)) {
                 $value = (string) json_encode($value);
             }
+
+            if (!is_string($value)) {
+                $value = (string) $value;
+            }
+
             $document->addField($field, $value);
         }
 

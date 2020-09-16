@@ -408,6 +408,14 @@ class AdImageRepository extends EntityRepository
     private function addField($document, $field, $value)
     {
         if ($value !== null) {
+            if (is_array($value)) {
+                $value = (string) json_encode($value);
+            }
+
+            if (!is_string($value)) {
+                $value = (string) $value;
+            }
+
             $document->addField($field, $value);
         }
 
