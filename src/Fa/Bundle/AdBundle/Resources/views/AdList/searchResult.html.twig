@@ -823,7 +823,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
             googletag.pubads().setTargeting('county', '{{ county }}');
 
             googletag.pubads().setTargeting('country', 'UK');
-            googletag.pubads().setTargeting('edition_area', "{{ (locationGroup is defined and locationGroup.name is defined)?'Print - '~locationGroup.name:'Non Print' }}");
+            googletag.pubads().setTargeting('edition_area', "{{ (locationGroup is defined and locationGroup.name is defined)?'Print - '~locationGroup.name|raw:'Non Print' }}");
 
             {% if searchParams.keywords is defined %}
                 googletag.pubads().setTargeting('search_keyword', '{{ searchParams.keywords }}');
