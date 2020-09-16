@@ -794,10 +794,32 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
             {% set rootCategoryId = categoryRepository.getRootCategoryId(searchParams.item__category_id, container) %}
         {% endif %}
 
+        {% set mainCategories = fetch_repository('FaEntityBundle:Category').getCategoryByLevelArray(1, fetch_container_instance()) %}
+        {% set keywordCategories = {} %}
+        {% for categoryId, categoryName in mainCategories %}
+            {% set adCount = 0 %}
+            {% set nestedChildrenCategories = fetch_repository('FaEntityBundle:Category').getNestedLeafChildrenIdsByCategoryId(categoryId, fetch_container_instance()) %}
+            {% for nestedCategoryId in nestedChildrenCategories %}
+                {% if facetResult.a_category_id_i[nestedCategoryId] is defined %}
+                    {% set adCount =  adCount + facetResult.a_category_id_i[nestedCategoryId] %}
+                {% endif %}
+            {% endfor %}
+            {% if adCount > 0 %}
+                {% set keywordCategories = keywordCategories | merge([categoryName]) %}
+            {% endif %}
+        {% endfor %}
+
+        {% set keywordCat = '' %}
+        {% if keywordCategories|length %}
+            {% set keywordCat = keywordCategories|join(',') %}
+        {% endif %}
+
         {% set user_type = 'Others' %}
         {% if searchParams.item__is_trade_ad is defined and searchParams.item__is_trade_ad==1 %}
             {% if rootCategoryId is defined and rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID')} %}
                 {% set user_type = 'Shop' %}
+            {% elseif rootCategoryId is defined and rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID')} %}
+                {% set user_type = 'Recruiter' %}
             {% else %}
                 {% set user_type = 'Dealer' %}
             {% endif %}
@@ -823,7 +845,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                     googletag.pubads().setTargeting('sub_sub_class', '{{ catArr[3] }}');
                 {% endif %}
             {% else %}
-                googletag.pubads().setTargeting('category',['For Sale','Motors','Jobs','Services','Property','Animals','Community']);
+                googletag.pubads().setTargeting('category',[{{ keywordCat }}]);
             {% endif %}
 
             googletag.pubads().setTargeting('town', '{{ town }}');

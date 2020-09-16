@@ -1805,6 +1805,8 @@
                 {% if adDetail['user']['business_category_id'] is defined and adDetail['user']['business_category_id'] is not null %}
                     {% if adDetail['user']['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID')}  %}
                         {% set userTypePubAds = 'Shop' %}
+                    {% elseif adDetail['user']['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID')}  %}
+                        {% set userTypePubAds = 'Recruiter' %}
                     {% endif %}
                 {% endif %}
             {% endif %}
