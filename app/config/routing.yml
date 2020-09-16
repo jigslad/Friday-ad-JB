@@ -200,6 +200,15 @@ fa_new_adult_homepage:
     schemes:  [https]
     defaults: { _controller: FaFrontendBundle:Adult:indexNew }
 
+new_listing_page:
+    path: /ads/{location}/{page_string}/
+    defaults: { _controller: 'FaAdBundle:AdList:searchResultNew'}
+    host: '%fa.main.host%'
+    schemes:  [https]
+    requirements:
+        location: '^(?:(?!admin\/)([A-Za-z0-9_-]+))'
+        page_string: '.+'
+
 listing_page:
     path: /{location}/{page_string}/
     defaults: { _controller: 'FaAdBundle:AdList:searchResult'}

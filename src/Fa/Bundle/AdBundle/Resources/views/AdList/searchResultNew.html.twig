@@ -1,0 +1,187 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% set container = fetch_container_instance() %}
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+
+{% set thisDevice = 'desktop' %}
+{% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+    {% set thisDevice = 'mobile' %}
+{% endif %}
+
+{% set recommendedSlotsCount = recommendedSlotResult|length %}
+{% if (recommendedSlotsCount > 0) and (resultCount > recommendedSlotsLimit|number_format) %}
+    {% set displayRecommendedSlot = 1 %}
+{% else %}
+    {% set displayRecommendedSlot = 0 %}
+{% endif %}
+{# TODO:: Page title and SEO structure to be added#}
+
+{% block breadcrumb_script %}
+    {% set location_id = null %}
+    {% if cookieLocationDetails['location'] is defined %}
+        {% set location_id = cookieLocationDetails['location'] %}
+    {% endif %}
+    {% set locality_id = null %}
+    {% if cookieLocationDetails['locality_id'] is defined %}
+        {% set locality_id = cookieLocationDetails['locality_id'] %}
+    {% endif %}
+
+    {% if location_id and location_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID') %}
+        {% set HomePagePath = container.getParameter('base_url')~path('location_home_page', {'location': app.request.get('location')}) %}
+    {% else %}
+        {% set HomePagePath =  container.getParameter('base_url')~path('fa_frontend_homepage') %}
+    {% endif %}
+
+    {% set locationName = '' %}
+    {% if location_id == 2 %}
+        {% set locationName = 'Homepage' %}
+    {% else %}
+        {% set locationName = app.request.get('location')|capitalize %}
+    {% endif %}
+
+    <script type="application/ld+json">
+	{
+  		"@context": "https://schema.org",
+  		"@type": "BreadcrumbList",
+  		"itemListElement": [{
+    	"@type": "ListItem",
+    	"position": 1,
+    	"name": "{{locationName}}",
+    	"item": "{{HomePagePath}}"
+  	},
+    {% set categoryPath = {} %}
+    {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+        {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(searchParams.item__category_id, false, fetch_container_instance()) %}
+        {% if categoryPath|length > 0 %}
+        {% set breadcrumbCatCnt = 2 %}
+        {% for categoryId, categoryName in categoryPath %}
+        {% set catLinkParam = { 'item__location': location_id, 'item__category_id': categoryId} %}
+        {% set catListUrl = container.getParameter('base_url')~container.get('fa_ad.manager.ad_routing').getListingUrl(catLinkParam) %}
+{
+    	"@type": "ListItem",
+    	"position": {{breadcrumbCatCnt}},
+    	"name": "{{categoryName}}",
+    	"item": "{{catListUrl}}"
+  	}{% if breadcrumbCatCnt <= categoryPath|length %},{% endif %}
+        {% set breadcrumbCatCnt = breadcrumbCatCnt + 1 %}
+        {% endfor %}
+        {% endif %}
+        {% endif %}
+     ]
+	}
+</script>
+{% endblock %}
+
+{% block scripttop %}
+    {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) %}
+        {# CSS for owl carousel - taken from Fa/Bundle/AdBundle/Resources/views/AdList/owl-carousel-2-css.html.twig and inline CSS for listing page #}
+        {% stylesheets filter='uglifycss' output='bundles/css/compiled/search-result.css'
+            'bundles/fafrontend/css/ad-list.css'
+        %}
+            <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
+        {% endstylesheets %}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    {% if displayRecommendedSlot is defined and displayRecommendedSlot==1 %}
+        {# CSS for recommended slots - taken from src/Fa/Bundle/AdBundle/Resources/views/AdList/recommended_slot_css.html.twig #}
+        {% stylesheets filter='uglifycss' output='bundles/css/compiled/recommended-slots.css'
+            'bundles/fafrontend/css/recommended-slots.css'
+        %}
+            <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
+        {% endstylesheets %}
+    {% endif %}
+
+    {{ include('FaAdBundle:AdList:searchResultHeaderNew.html.twig') }}
+    {% set bannerStatus = true %}
+    <div class="banner-wrapper clearfix">
+        <div class="left-banner">
+            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_LEFT') %}
+            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
+        </div>
+        <div class="row relative results-main banner-mid-column">
+            <div class="large-6 columns" id="left_search">
+                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_FILTERBOX') %}
+                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+            </div>
+            <div id="listingDiv" class="large-18 columns">
+                {% set slotallocated = [] %}
+                {% if displayRecommendedSlot==1 and recommendedSlotsCount > 0 and totalAdCount > 0 and (recommendedSlotResult[1] is defined and recommendedSlotResult[1]|length >0) %}
+                    {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 1 }) }}
+                    {% set slotallocated = slotallocated|merge([1]) %}
+                {% endif %}
+                {% set adCount = 0 %}
+                {% for ad in ads %}
+                    {% set adCount = adCount + 1 %}
+                    {{ include('FaAdBundle:AdList:listDetailNew.html.twig') }}
+
+                    {% if thisDevice == 'mobile' %}
+                        {% if (adCount >= 2) %}
+                            {% set bannerStatus = false %}
+                            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_ABOVE_RESULTS') %}
+                            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                        {% endif %}
+                    {% endif %}
+
+                    {% if thisDevice == 'mobile' %}
+                        {% if (adCount == 2 	and resultCount > 2 and bannerStatus) %}
+                            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_ABOVE_RESULTS') %}
+                            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                        {% endif %}
+                    {% endif %}
+
+                    {% if adCount == 5 and resultCount > 5 %}
+                        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_IN_RESULTS_TOP') %}
+                        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                    {% endif %}
+
+                    {% if adCount == 10 and resultCount > 10 %}
+                        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_IN_RESULTS_BOTTOM') %}
+                        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+
+                        {% if thisDevice == 'mobile' %}
+                            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_IN_RESULTS') %}
+                            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+
+                {% if pagination.getNbPages() == pagination.getCurrentPage() %}
+                    {% set toPage = pagination.getNbResults() %}
+                {% else %}
+                    {% set toPage = pagination.getCurrentPage() * pagination.getMaxPerPage() %}
+                {% endif %}
+                {% set fromPage = 0 %}
+                {% if pagination.getNbResults() %}
+                    {% set fromPage = ((pagination.getCurrentPage() - 1) * pagination.getMaxPerPage()) %}
+                {% endif %}
+                {% set totalAdsOnPage = (toPage - fromPage) %}
+
+                <div class="pagination-centered">
+                    {{ include('FaFrontendBundle:Default:googlePager.html.twig', {'pagination': pagination, 'addToEndPage': 1, 'seoPager': true}) }}
+                </div>
+
+                {% if (adCount > 3) %}
+                    {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_RESULTS') %}
+                    {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+
+                    {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_BELOW_RESULTS') %}
+                    {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                {% endif %}
+
+                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_PAGINATION_DESKTOP') %}
+                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+
+                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_PAGINATION_TABLET') %}
+                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+
+                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_PAGINATION_MOBILE') %}
+                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+            </div>
+        </div>
+        <div class="right-banner">
+            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_RIGHT') %}
+            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
+        </div>
+    </div>
+{% endblock %}

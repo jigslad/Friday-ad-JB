@@ -1,0 +1,71 @@
+<div class="listing {% if ad.top_ad %} {{ 'featured' }} {% elseif ad.urgent_ad %} {{ 'urgent' }} {% endif %} {% if ad.boosted_ad %} {{ 'boosted_ad' }} {% endif %}">
+    <a id="listing_{{ ad.ad_id }}" href="{{ ad.ad_url }}"></a>
+    <div class="featured-ribbon">featured</div>
+    <div class="urgent-ribbon">urgent</div>
+    <div class="clearfix">
+        <div class="list-col-1">
+            <div class="list-img">
+                <img alt="{{ ad.img_alt }}" src="{{ ad.ad_img }}" />
+            </div>
+            <div class="clearfix list-mob-icons">
+                <span class="list-img-num">
+                    {{ ad.image_count }}
+                </span>
+                <span id="fav_{{ad.ad_id}}">
+                    {% if adFavouriteIds is defined and ad.ad_id in adFavouriteIds %}
+                        <a href="javascript:void(0)" onclick="return removeFromFavorite('{{ad.ad_id}}');" class="saved-item outside-tricky">FA</a>
+                    {% else %}
+                        <a href="javascript:void(0)" onclick="return addToFavorite('{{ad.ad_id}}');" class="unsaved-item outside-tricky">FA</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+        <div class="list-col-2">
+            <div class="clearfix">
+                <h3 class="hide-for-small-only list-title">
+                    <a href="{{ ad.ad_url }}">{{trim_text(ad.ad_title, 80)|raw}}</a>
+                </h3>
+                <h5 class="show-for-small-only list-title">
+                    <a href="{{ ad.ad_url }}">{{trim_text(ad.ad_title, 80)|raw}}</a>
+                </h5>
+                <div class="list-price">
+                    {{ ad.price }}
+                </div>
+            </div>
+            {% if ad.dimensions|length %}
+                <div class="list-dimensions hide-for-small-only">
+                    {% for adFieldName, adListFieldValue in ad.dimensions %}
+                        {% if adListFieldValue is iterable %}
+                            {% for adListFieldVal in adListFieldValue %}
+                                <span>{{ adListFieldVal }}</span>
+                            {% endfor %}
+                        {% else %}
+                            <span>{{ adListFieldValue }}</span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="list-desc hide-for-small-only">
+                {{trim_text(ad.description, 250)|replace({"\\n": "<br />"})|raw}}
+            </div>
+            <div class="list-distance">
+                <div class="clearfix">
+                    {% if ad.location is defined and not ad.location is null %}
+                        <div class="list-miles">
+                            <b>{{ ad.location }}</b>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="list-hr-ago">
+                {{ ad.last_updated|time_ago_in_words }}
+            </div>
+            {% if ad.affiliate_ad %}
+                <div class="fad-shop-icon hide-for-small-only">AD SHOP</div>
+            {% endif %}
+        </div>
+    </div>
+    {% if ad.affiliate_ad %}
+        <div class="fad-shop-icon show-for-small-only fa-shop-icon-small">AD SHOP</div>
+    {% endif %}
+</div>
