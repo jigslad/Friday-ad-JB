@@ -126,6 +126,58 @@ class AdLocationRepository extends EntityRepository
     }
 
     /**
+     * Returns ad solr document object.
+     *
+     * @param object $ad       Ad object.
+     * @param object $document Solr document object.
+     * @param object $container container
+     *
+     * @return Apache_Solr_Document
+     */
+    public function getSolrDocumentNew($ad, $document = null, $container = null)
+    {
+        if (!$document) {
+            $document = new \SolrInputDocument($ad);
+        }
+
+        $locations = $this->findBy(array('ad' => $ad->getId()));
+        $mainTownId = '';
+        $locationRepository = $this->_em->getRepository('FaEntityBundle:Location');
+        $localityRepository = $this->_em->getRepository('FaEntityBundle:Locality');
+
+        foreach ($locations as $location) {
+            $document = $this->addField($document, 'postcode', $location->getPostcode());
+            $document = $this->addField($document, 'domicile', ($location->getLocationDomicile() ? $locationRepository->getCachedLocationById($container, $location->getLocationDomicile()->getId()) : null));
+            $document = $this->addField($document, 'town', ($location->getLocationTown() ? $locationRepository->getCachedLocationById($container, $location->getLocationTown()->getId()) : null));
+            $document = $this->addField($document, 'latitude', $location->getLatitude());
+            $document = $this->addField($document, 'longitude', $location->getLongitude());
+            $document = $this->addField($document, 'locality', ($location->getLocality() ? $localityRepository->getCachedLocalityById($container, $location->getLocality()->getId()) : null));
+            //for Location Area
+            if ($location->getLocationArea()) {
+                $document = $this->addField($document, 'area', $locationRepository->getCachedLocationById($container, $location->getLocationArea()->getId()));
+                if ($location->getLocationArea()->getIsSpecialArea()) {
+                    $document = $this->addField($document, 'is_special_area_location', '1');
+                } else {
+                    $document = $this->addField($document, 'is_special_area_location', '0');
+                }
+            }
+
+            if (($location->getLatitude() && $location->getLongitude())) {
+                $document = $this->addField($document, 'store', $location->getLatitude().','.$location->getLongitude());
+            }
+
+            /* Issuing with multiple Town record along with same Advert Id bcz of MAIN_TOWN_ID is string type "i" adding condition and make it as string */
+            $mainTownId = ($location->getLocationTown() ? $location->getLocationTown()->getId() : null);
+        }
+
+        if ($mainTownId != '') {
+            $document = $this->addField($document, 'main_town', $locationRepository->getCachedLocationById($container, $mainTownId));
+        }
+
+        return $document;
+    }
+
+    /**
      * Add field to solr document.
      *
      * @param object $document Solr document object.

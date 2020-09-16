@@ -126,6 +126,70 @@ class AdAnimalsRepository extends EntityRepository
     }
 
     /**
+     * @param $ad
+     * @param $container
+     * @return object|\SolrInputDocument
+     */
+    public function getSolrDocumentNew($ad, $container)
+    {
+        $document = new \SolrInputDocument($ad);
+
+        $document = $this->_em->getRepository('FaAdBundle:Ad')->getSolrDocumentNew($ad, $document, $container);
+
+        $categoryId = ($ad->getCategory() ? $ad->getCategory()->getId() : null);
+        // get for sale object
+        $adAnimal = $this->findOneBy(array('ad' => $ad->getId()));
+
+        if ($adAnimal) {
+            $listingDimensions = $this->getAdListingFields();
+            $entityRepository = $this->_em->getRepository('FaEntityBundle:Entity');
+            $adRepository = $this->_em->getRepository('FaAdBundle:Ad');
+
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'breed'), $entityRepository->getCachedEntityById($container, $adAnimal->getBreedId()));
+
+            if ($adAnimal->getGenderId()) {
+                $genderIds = explode(',', $adAnimal->getGenderId());
+
+                $genders = [];
+                foreach ($genderIds as $genderId) {
+                    $genders[] = $entityRepository->getCachedEntityById($container, $genderId);
+                }
+
+                $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'gender'), $genders);
+            }
+
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'colour'), $entityRepository->getCachedEntityById($container, $adAnimal->getColourId()));
+
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'species'), $entityRepository->getCachedEntityById($container, $adAnimal->getSpeciesId()));
+
+            $document = $this->addField($document, 'meta_values', $adAnimal->getMetaData());
+
+            // unserialize meta data
+            $metaData = unserialize($adAnimal->getMetaData());
+
+            if (isset($metaData['age_id'])) {
+                $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'age'), $entityRepository->getCachedEntityById($container, $metaData['age_id']));
+            }
+
+            if (isset($metaData['condition_id'])) {
+                $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'condition'), $entityRepository->getCachedEntityById($container, $metaData['condition_id']));
+            }
+
+            if (isset($metaData['height_id'])) {
+                $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'height'), $entityRepository->getCachedEntityById($container, $metaData['height_id']));
+            }
+        }
+
+        // update keyword search fields.
+        $keywordSearch = $this->_em->getRepository('FaAdBundle:Ad')->getKeywordSearchArray($ad, $categoryId, $adAnimal, $container);
+        if (count($keywordSearch)) {
+            $document = $this->addField($document, 'keyword_search', implode(',', $keywordSearch));
+        }
+
+        return $document;
+    }
+
+    /**
      * Add field to solr document.
      *
      * @param object $document Solr document object.

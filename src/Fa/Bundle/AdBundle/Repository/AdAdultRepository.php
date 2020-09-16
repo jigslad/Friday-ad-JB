@@ -156,6 +156,96 @@ class AdAdultRepository extends EntityRepository
     }
 
     /**
+     * Returns ad solr document object.
+     *
+     * @param object $ad Ad object.
+     * @param object $container
+     *
+     * @return Apache_Solr_Document
+     */
+    public function getSolrDocumentNew($ad, $container)
+    {
+        $document = new \SolrInputDocument($ad);
+
+        $document = $this->_em->getRepository('FaAdBundle:Ad')->getSolrDocumentNew($ad, $document, $container);
+
+        $categoryId = ($ad->getCategory() ? $ad->getCategory()->getId() : null);
+
+        if ($ad->getUser()) {
+            $businessName = ($ad->getUser()->getBusinessName() ? $ad->getUser()->getBusinessName() : null);
+            if ($businessName) {
+                $document = $this->addField($document, 'business_name', $businessName);
+            }
+        }
+
+        // get adult object
+        $adAdult = $this->findOneBy(array('ad' => $ad->getId()));
+
+        $entityRepository = $this->_em->getRepository('FaEntityBundle:Entity');
+        $metaData = ($adAdult && $adAdult->getMetaData() ? unserialize($adAdult->getMetaData()) : null);
+        $adRepository = $this->_em->getRepository('FaAdBundle:Ad');
+        $listingDimensions = $this->getAdListingFields();
+        if ($metaData && count($metaData)) {
+            $document = $this->addField($document, 'meta_values', $adAdult->getMetaData());
+
+            /*  Adding new dimensions in Solr     */
+            if (isset($metaData['my_service_id'])) {
+                $myServicesIds = explode(',', $metaData['my_service_id']);
+                $solrFieldForMap = ($ad->getCategory()->getId() != CategoryRepository::ADULT_CONTACTS_ID?AdAdultSolrFieldMapping::MY_SERVICE_IS_FOR_ID:AdAdultSolrFieldMapping::LOOKING_FOR_ID);
+                if (count($myServicesIds)) {
+                    foreach ($myServicesIds as $serviceId) {
+                        $document = $this->addField($document, $solrFieldForMap, $serviceId);
+                    }
+                }
+            }
+
+            if (isset($metaData['job_type_id']) && $metaData['job_type_id'] != '') {
+                $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'job_type'), $entityRepository->getCachedEntityById($container, $metaData['job_type_id']));
+            }
+            if (isset($metaData['experience_id']) && $metaData['experience_id'] != '') {
+                $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'experience'), $entityRepository->getCachedEntityById($container, $metaData['experience_id']));
+            }
+            if (isset($metaData['ethnicity_id']) && $metaData['ethnicity_id'] != '') {
+                $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'ethnicity'), $entityRepository->getCachedEntityById($container, $metaData['ethnicity_id']));
+            }
+            if (isset($metaData['position_preference_id']) && $metaData['position_preference_id'] != '') {
+                $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'position_preference'), $entityRepository->getCachedEntityById($container, $metaData['position_preference_id']));
+            }
+        }
+
+        // add services.
+        if ($adAdult) {
+            $servicesIds = explode(',', $adAdult->getServicesId());
+            if (count($servicesIds)) {
+                foreach ($servicesIds as $servicesId) {
+                    $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'services'), $entityRepository->getCachedEntityById($container, $servicesId));
+                }
+            }
+
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions,'travel_arrangements'), $entityRepository->getCachedEntityById($container, $adAdult->getTravelArrangementsId()));
+
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'independent_or_agency'), $entityRepository->getCachedEntityById($container, $adAdult->getIndependentOrAgencyId()));
+
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'gender'), $entityRepository->getCachedEntityById($container, $adAdult->getGenderId()));
+        }
+
+        // update keyword search fields.
+        $keywordSearch = $this->_em->getRepository('FaAdBundle:Ad')->getKeywordSearchArray($ad, $categoryId, $adAdult, $container);
+        if (count($keywordSearch)) {
+            $document = $this->addField($document, 'keyword_search', implode(',', $keywordSearch));
+        }
+
+        //for business advertiser only.
+        if ($ad->getIsTradeAd() && $ad->getUser()) {
+            $logoURL = CommonManager::getUserLogoByUserId($container, $ad->getUser()->getId(), false, true);
+        }
+
+        $document = $this->addField($document, 'has_user_logo', ($logoURL ? true : false));
+
+        return $document;
+    }
+
+    /**
      * Add field to solr document.
      *
      * @param object $document Solr document object.

@@ -21,7 +21,7 @@ use Fa\Bundle\PromotionBundle\Repository\UpsellRepository;
  * @copyright 2014 Friday Media Group Ltd
  * @version v1.0
  */
-class AdSolrIndex implements AdSolrFieldMapping
+class AdSolrIndexNew implements AdSolrFieldMapping
 {
     /**
      * Update solr index by add/update ad document to solr.
@@ -102,51 +102,6 @@ class AdSolrIndex implements AdSolrFieldMapping
 
                 return true;
             } catch (\Exception $e) {
-                return false;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Update solr index by add/update ad document to solr.
-     *
-     * @param object $solrClient Solr client.
-     * @param object $ad Ad object.
-     * @param object $container Container
-     * @param boolean $isBatchUpdate Used to identify batch update.
-     *
-     * @return Apache_Solr_Document or boolean
-     */
-    public function updateNew($solrClient, $ad, $container, $isBatchUpdate = false)
-    {
-        $solr = null;
-        if ($solrClient !== false) {
-            $solr = $solrClient->connect();
-        }
-
-        if ($solr && $ad && $ad->getCategory()) {
-            $root = $container->get('doctrine')->getManager()->getRepository('FaEntityBundle:Category')->getRootNodeByCategory($ad->getCategory()->getId());
-
-            try {
-                $repository = $container->get('doctrine')->getManager()->getRepository('FaAdBundle:'.'Ad'.str_replace(' ', '', $root->getName()));
-
-                $document       = $repository->getSolrDocumentNew($ad, $container);
-                if (empty($document)) {
-                    return false;
-                }
-
-                $updateResponse = $solr->addDocument($document);
-
-                if (!$isBatchUpdate) {
-                    $updateResponse = $solr->commit(true);
-                    return $updateResponse;
-                }
-
-                return true;
-            } catch (\Exception $e) {
-                echo $e->getMessage();
                 return false;
             }
         }

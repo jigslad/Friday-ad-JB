@@ -116,6 +116,58 @@ class AdCommunityRepository extends EntityRepository
     }
 
     /**
+     * @param $ad
+     * @param $container
+     * @return \SolrInputDocument
+     */
+    public function getSolrDocumentNew($ad, $container)
+    {
+        $document = new \SolrInputDocument($ad);
+
+        $document = $this->_em->getRepository('FaAdBundle:Ad')->getSolrDocumentNew($ad, $document, $container);
+
+        $categoryId = ($ad->getCategory() ? $ad->getCategory()->getId() : null);
+        // get for sale object
+        $adCommunity = $this->findOneBy(array('ad' => $ad->getId()));
+
+        $listingFields = $this->getAdListingFields();
+        $entityRepository = $this->_em->getRepository('FaEntityBundle:Entity');
+        $adRepository = $this->_em->getRepository('FaAdBundle:Ad');
+
+        if ($adCommunity) {
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingFields, 'experience_level'), $entityRepository->getCachedEntityById($container, $adCommunity->getExperienceLevelId()));
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingFields, 'education_level'), $entityRepository->getCachedEntityById($container, $adCommunity->getEducationLevelId()));
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingFields, 'cuisine_type'), $entityRepository->getCachedEntityById($container, $adCommunity->getCuisineTypeId()));
+
+            $metaData = ($adCommunity->getMetaData() ? unserialize($adCommunity->getMetaData()) : null);
+            if ($metaData && count($metaData)) {
+                $document = $this->addField($document, 'meta_values', $adCommunity->getMetaData());
+
+                $start = (isset($metaData['event_start']) ? $metaData['event_start'] : '').(isset($metaData['event_start_time']) ?' '.$metaData['event_start_time']: '');
+                $end   = (isset($metaData['event_end']) ? $metaData['event_end'] : '').(isset($metaData['event_end_time']) ?' '.$metaData['event_end_time']: '');
+
+                if ($start != '') {
+                    $document = $this->addField($document, $adRepository->getSolrFieldName($listingFields, 'event_start'), strtotime(str_replace('/', '-', $start)));
+                }
+
+                if ($end != '') {
+                    $document = $this->addField($document, $adRepository->getSolrFieldName($listingFields, 'event_end'), strtotime(str_replace('/', '-', $end)));
+                } else {
+                    $document = $this->addField($document, $adRepository->getSolrFieldName($listingFields, 'no_event_end'), 1);
+                }
+            }
+        }
+
+        // update keyword search fields.
+        $keywordSearch = $this->_em->getRepository('FaAdBundle:Ad')->getKeywordSearchArray($ad, $categoryId, $adCommunity, $container);
+        if (count($keywordSearch)) {
+            $document = $this->addField($document, 'keyword_search', implode(',', $keywordSearch));
+        }
+
+        return $document;
+    }
+
+    /**
      * Get ad vertical data array.
      *
      * @param object $adId Ad id.

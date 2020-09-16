@@ -353,6 +353,50 @@ class AdImageRepository extends EntityRepository
     }
 
     /**
+     * Returns ad solr document object.
+     *
+     * @param object  $container  Container
+     * @param object  $ad         Ad object.
+     * @param mixed   $document   Solr document object.
+     * @param integer $imageLimit Image limit.
+     *
+     * @return Apache_Solr_Document
+     */
+    public function getSolrDocumentNew($container, $ad, $document = null, $imageLimit = 0)
+    {
+        /**
+         * @var AdImage[] $images
+         */
+        if (!$document) {
+            $document = new \SolrInputDocument($ad);
+        }
+
+        $images = $this->findBy(array('ad' => $ad->getId(), 'status' => 1), array('ord' => 'ASC'), $imageLimit);
+        $indexableImages = [];
+
+        foreach ($images as $key => $image) {
+            $indexableImages[] = [
+                'small' => CommonManager::getAdImageUrl($container, $ad->getId(), $image->getPath(), $image->getHash(), '300X225', $image->getAws(), ($image->getImageName()=='' ? $image->getHash() : $image->getImageName())),
+                'original' => CommonManager::getAdImageUrl($container, $ad->getId(), $image->getPath(), $image->getHash(), null, $image->getAws(), ($image->getImageName()=='' ? $image->getHash() : $image->getImageName())),
+                'medium' => CommonManager::getAdImageUrl($container, $ad->getId(), $image->getPath(), $image->getHash(), '800X600', $image->getAws(), ($image->getImageName()=='' ? $image->getHash() : $image->getImageName())),
+                'order' => $image->getOrd(),
+                'img_alt' => ''
+            ];
+
+            if ($key == 0) {
+                $this->addField($document, 'thumbnail_url', $indexableImages[0]['small']);
+            }
+            $document = $this->addField($document, 'images', $indexableImages[$key]);
+        }
+
+        // Store total images counter.
+        $document = $this->addField($document, 'image_count', count($images));
+
+
+        return $document;
+    }
+
+    /**
      * Add field to solr document.
      *
      * @param object $document Solr document object.
