@@ -782,9 +782,17 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
         {% set _logged_in = 'false' %}
         {% endif %}
 
+        {% if searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+            {% set rootCategoryId = categoryRepository.getRootCategoryId(searchParams.item__category_id, container) %}
+        {% endif %}
+
         {% set user_type = 'Others' %}
         {% if searchParams.item__is_trade_ad is defined and searchParams.item__is_trade_ad==1 %}
-            {% set user_type = 'Dealer' %}
+            {% if rootCategoryId is defined and rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID')} %}
+                {% set user_type = 'Shop' %}
+            {% else %}
+                {% set user_type = 'Dealer' %}
+            {% endif %}
         {% elseif searchParams.item__is_trade_ad is defined and searchParams.item__is_trade_ad==0 %}
             {% set user_type = 'Private' %}
         {% endif %}
@@ -815,7 +823,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
             googletag.pubads().setTargeting('county', '{{ county }}');
 
             googletag.pubads().setTargeting('country', 'UK');
-            googletag.pubads().setTargeting('edition_area', "{{ (locationGroup is defined and locationGroup.name is defined)?'Print':'Non Print' }}");
+            googletag.pubads().setTargeting('edition_area', "{{ (locationGroup is defined and locationGroup.name is defined)?'Print - '~locationGroup.name:'Non Print' }}");
 
             {% if searchParams.keywords is defined %}
                 googletag.pubads().setTargeting('search_keyword', '{{ searchParams.keywords }}');
