@@ -960,6 +960,9 @@ class AdRepository extends EntityRepository
     private function addField($document, $field, $value)
     {
         if ($value != null) {
+            if (is_array($value)) {
+                $value = (string) json_encode($value);
+            }
             $document->addField($field, $value);
         }
 
