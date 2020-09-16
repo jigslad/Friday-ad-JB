@@ -161,13 +161,15 @@
                     <section class="top-bar-section">
                         <!-- Right Nav Section -->
                        <div class="tablet-menu">
-                            {% if mobileDetectManager.isTablet() %}
-                                {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':1, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'}  ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
-                            {% elseif mobileDetectManager.isMobile() %}
-                                {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':0, 'is_mobile':1, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
-                            {% else %}
-                                {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':0, 'is_mobile':0, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
-                            {% endif %}
+                           {% if currentRoute not in {0: 'ad_post_fourth_step'} %}
+                                {% if mobileDetectManager.isTablet() %}
+                                    {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':1, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'}  ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
+                                {% elseif mobileDetectManager.isMobile() %}
+                                    {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':0, 'is_mobile':1, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
+                                {% else %}
+                                    {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':0, 'is_mobile':0, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
+                                {% endif %}
+                           {% endif %}
                         </div>
                        
                             {% if app.user %}
@@ -204,10 +206,11 @@
                         <ul class="show-for-small-only login-menu">
                             <li><a href="{{ path('location_home_page', {'location': 'contact-us'}) }}" id="mob-contact-header-id">{{'Contact us'|trans({}, 'frontend-top-menu')}}</a></li>
                         </ul>
-                        
+                        {% if currentRoute not in {0: 'ad_post_fourth_step'} %}
                         <ul class="right place-item ga-buttonPAA">
                             <li class="place-item-btn ga-buttonPAA"><a class="ga-buttonPAA" href="{{ path('ad_post_first_step') }}" title="{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}">{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}</a></li>
                         </ul>
+                        {% endif %}
                     </section>
                 </nav>
                 {% if status_code == 200 and currentRoute is defined and currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'listing_page', 3: 'landing_page_category_location', 4: 'landing_page_category'} %}
@@ -229,7 +232,7 @@
 {#    </div>#}
 {#   {% endif %}#}
     {% if status_code == 200 %}
-        {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'cybersource_checkout'} %}
+        {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'cybersource_checkout' ,3: 'ad_post_fourth_step'} %}
             {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {} } )) }}
         {% endif %}
     {% endif %}
