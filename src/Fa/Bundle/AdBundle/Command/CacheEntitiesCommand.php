@@ -3,7 +3,7 @@
 /**
  * This file is part of the fa bundle.
  *
- * @copyright Copyright (c) 2014, FMG
+ * @copyright Copyright (c) 2020, FMG
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,10 +17,10 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * This command is used to add/update/delete solr index for ads.
+ * This command is used to cache DB entities.
  *
- * @author Samir Amrutya <samiram@aspl.in>
- * @copyright 2014 Friday Media Group Ltd
+ * @author Chaitra Bhat <chaitra.bhat@fridaymediagroup.com>
+ * @copyright 2020 Friday Media Group Ltd
  * @version 1.0
  */
 class CacheEntitiesCommand extends ContainerAwareCommand

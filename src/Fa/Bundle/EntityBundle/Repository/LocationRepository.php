@@ -1561,7 +1561,7 @@ class LocationRepository extends BaseEntityRepository
     {
         if (! empty($id)) {
             $locations = CommonManager::getCacheVersion($container, 'location|getAllLocations|en_GB');
-            echo 'location'.PHP_EOL;
+            
             return [
                 'id'            => $id,
                 'name'          => $locations[$id]['name'],

@@ -81,7 +81,7 @@ class RegionRepository extends BaseEntityRepository
     {
         if (! empty($id)) {
             $regions = CommonManager::getCacheVersion($container, 'region|getAllRegions|en_GB');
-            echo 'region'.PHP_EOL;
+
             return [
                 'id'    => $id,
                 'name'  => $regions[$id]['name']

@@ -22,8 +22,8 @@ use Fa\Bundle\AdBundle\Repository\AdLocationRepository;
 /**
  * This command is used to add/update/delete solr index for ads.
  *
- * @author Samir Amrutya <samiram@aspl.in>
- * @copyright 2014 Friday Media Group Ltd
+ * @author Chaitra Bhat <chaitra.bhat@fridaymediagroup.com>
+ * @copyright 2020 Friday Media Group Ltd
  * @version 1.0
  */
 class UpdateAdSolrIndexCommand extends ContainerAwareCommand
