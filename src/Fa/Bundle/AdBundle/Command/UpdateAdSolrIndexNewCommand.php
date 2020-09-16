@@ -22,11 +22,11 @@ use Fa\Bundle\AdBundle\Repository\AdLocationRepository;
 /**
  * This command is used to add/update/delete solr index for ads.
  *
- * @author Chaitra Bhat <chaitra.bhat@fridaymediagroup.com>
- * @copyright 2020 Friday Media Group Ltd
+ * @author Samir Amrutya <samiram@aspl.in>
+ * @copyright 2014 Friday Media Group Ltd
  * @version 1.0
  */
-class UpdateAdSolrIndexCommand extends ContainerAwareCommand
+class UpdateAdSolrIndexNewCommand extends ContainerAwareCommand
 {
     /**
      * Configure.
@@ -34,7 +34,7 @@ class UpdateAdSolrIndexCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-        ->setName('fa:update:ad-solr-index')
+        ->setName('fa:update:ad-solr-index-new')
         ->setDescription("Update solr index for ads.")
         ->addArgument('action', InputArgument::REQUIRED, 'add or update or delete')
         ->addOption('memory_limit', null, InputOption::VALUE_OPTIONAL, 'Memory limit of script execution', null)
@@ -55,12 +55,12 @@ Actions:
 - Can be run to add/update/delete specific ad information to solr index
 
 Command:
- - php app/console fa:update:ad-solr-index --status="A" add
- - php app/console fa:update:ad-solr-index --status="A" --id="xxxx" update
- - php app/console fa:update:ad-solr-index --status="A" --id="xxxx" add
- - php app/console fa:update:ad-solr-index --id="xxxx" delete
-   php app/console fa:update:ad-solr-index --town_id="xxxx" update
-   php app/console fa:update:ad-solr-index --category="For Sale" --status="A" add
+ - php app/console fa:update:ad-solr-index-new --status="A" add
+ - php app/console fa:update:ad-solr-index-new --status="A" --id="xxxx" update
+ - php app/console fa:update:ad-solr-index-new --status="A" --id="xxxx" add
+ - php app/console fa:update:ad-solr-index-new --id="xxxx" delete
+   php app/console fa:update:ad-solr-index-new --town_id="xxxx" update
+   php app/console fa:update:ad-solr-index-new --category="For Sale" --status="A" add
 EOF
         );
     }
@@ -78,7 +78,7 @@ EOF
 
         echo "Command Started At: ".date('Y-m-d H:i:s', time())."\n";
 
-        $solrClient = $this->getContainer()->get('fa.solr.client.ad');
+        $solrClient = $this->getContainer()->get('fa.solr.client.ad.new');
         if (!$solrClient->ping()) {
             $output->writeln('Solr service is not available. Please start it.', true);
             return false;
@@ -86,6 +86,8 @@ EOF
 
         //get arguments passed in command
         $action = $input->getArgument('action');
+
+        exec('nohup'.' '.$this->getContainer()->getParameter('fa.php.path').' '.$this->getContainer()->getParameter('project_path').'/console fa:cache:entities  >/dev/null &');
 
         //get options passed in command
         $ids      = $input->getOption('id');
@@ -226,7 +228,7 @@ EOF
         $adSolrIndex = $this->getContainer()->get('fa.ad.solrindex');
         foreach ($ads as $ad) {
             $idsFound[] = $ad->getId();
-            if ($adSolrIndex->update($solrClient, $ad, $this->getContainer(), true)) {
+            if ($adSolrIndex->updateNew($solrClient, $ad, $this->getContainer(), true)) {
                 $output->writeln('Solr index updated for ad id: '.$ad->getId(), true);
             } else {
                 $output->writeln('Solr index not updated for ad id: '.$ad->getId(), true);
@@ -284,7 +286,7 @@ EOF
             if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
                 $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
             }
-            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:update:ad-solr-index '.$commandOptions.' '.$input->getArgument('action');
+            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:update:ad-solr-index-new '.$commandOptions.' '.$input->getArgument('action');
             $output->writeln($command, true);
             passthru($command, $returnVar);
 

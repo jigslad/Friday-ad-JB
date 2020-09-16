@@ -123,6 +123,62 @@ class AdJobsRepository extends EntityRepository
     }
 
     /**
+     * @param $ad
+     * @param $container
+     * @return object|\SolrInputDocument
+     */
+    public function getSolrDocumentNew($ad, $container)
+    {
+        $document = new \SolrInputDocument($ad);
+
+        $document = $this->_em->getRepository('FaAdBundle:Ad')->getSolrDocumentNew($ad, $document, $container);
+
+        $categoryId = ($ad->getCategory() ? $ad->getCategory()->getId() : null);
+        // get for sale object
+        $adJobs = $this->findOneBy(array('ad' => $ad->getId()));
+
+        if ($adJobs) {
+            $entityRepository = $this->_em->getRepository('FaEntityBundle:Entity');
+            $listingDimensions = $this->getAdListingFields();
+            $document = $this->addField($document, 'meta_values', $adJobs->getMetaData());
+            $adRepository = $this->_em->getRepository('FaAdBundle:Ad');
+
+            // add contract types.
+            $contractTypeIds = explode(',', $adJobs->getContractTypeId());
+            if (count($contractTypeIds)) {
+                foreach ($contractTypeIds as $contractTypeId) {
+                    $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'contract_type'), $entityRepository->getCachedEntityById($container, $contractTypeId));
+                }
+            }
+
+            // add salary band.
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'salary_band'), $entityRepository->getCachedEntityById($container, $adJobs->getSalaryBandId()));
+
+            if ($adJobs->isJobOfWeekAd($container)) {
+                $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'is_job_of_the_week', false), 1);
+            }
+
+            //for business advertiser only.
+            if ($ad->getIsTradeAd() && $ad->getUser()) {
+                $logoURL = CommonManager::getUserLogoByUserId($container, $ad->getUser()->getId(), false, true);
+            }
+
+            //feed ad salary
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'feed_ad_salary', false), $adJobs->getFeedAdSalary());
+
+            $document = $this->addField($document, 'has_user_logo', ($logoURL ? true : false));
+        }
+
+        // update keyword search fields.
+        $keywordSearch = $this->_em->getRepository('FaAdBundle:Ad')->getKeywordSearchArray($ad, $categoryId, $adJobs, $container);
+        if (count($keywordSearch)) {
+            $document = $this->addField($document, 'keyword_search', implode(',', $keywordSearch));
+        }
+
+        return $document;
+    }
+
+    /**
      * Add field to solr document.
      *
      * @param object $document Solr document object.

@@ -214,6 +214,55 @@ class AdForSaleRepository extends EntityRepository
     }
 
     /**
+     * @param $ad
+     * @param $container
+     * @return object|\SolrInputDocument
+     */
+    public function getSolrDocumentNew($ad, $container)
+    {
+        $document = new \SolrInputDocument($ad);
+
+        $document = $this->_em->getRepository('FaAdBundle:Ad')->getSolrDocumentNew($ad, $document, $container);
+
+        $categoryId = ($ad->getCategory() ? $ad->getCategory()->getId() : null);
+        // get for sale object
+        $adForSale = $this->findOneBy(array('ad' => $ad->getId()));
+
+        if ($adForSale) {
+            $listingDimensions = $this->getAdListingFields();
+            $entityRepository = $this->_em->getRepository('FaEntityBundle:Entity');
+            $conditionId   = $adForSale->getConditionId();
+            $brandId       = $adForSale->getBrandId();
+            $adRepository  = $this->_em->getRepository('FaAdBundle:Ad');
+
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'condition'), $entityRepository->getCachedEntityById($container, $conditionId));
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'age_range'), $entityRepository->getCachedEntityById($container, $adForSale->getAgeRangeId()));
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'brand'), $entityRepository->getCachedEntityById($container, $brandId));
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'brand_clothing'), $entityRepository->getCachedEntityById($container, $adForSale->getBrandClothingId()));
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'business_type'), $entityRepository->getCachedEntityById($container, $adForSale->getBusinessTypeId()));
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'colour'), $entityRepository->getCachedEntityById($container, $adForSale->getColourId()));
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'main_colour'), $entityRepository->getCachedEntityById($container, $adForSale->getMainColourId()));
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'size'), $entityRepository->getCachedEntityById($container, $adForSale->getSizeId()));
+            $document = $this->addField($document, 'meta_values', $entityRepository->getCachedEntityById($container, $adForSale->getMetaData()));
+
+            //for business advertiser only.
+            if ($ad->getIsTradeAd() && $ad->getUser()) {
+                $logoURL = CommonManager::getUserLogoByUserId($container, $ad->getUser()->getId(), false, true);
+            }
+
+            $document = $this->addField($document, 'has_logo_url', ($logoURL ? true : false));
+        }
+
+        // update keyword search fields.
+        $keywordSearch = $this->_em->getRepository('FaAdBundle:Ad')->getKeywordSearchArray($ad, $categoryId, $adForSale, $container);
+        if (count($keywordSearch)) {
+            $document = $this->addField($document, 'keyword_search', implode(',', $keywordSearch));
+        }
+
+        return $document;
+    }
+
+    /**
      * Add field to solr document.
      *
      * @param object $document Solr document object.
