@@ -1805,6 +1805,8 @@
                 {% if adDetail['user']['business_category_id'] is defined and adDetail['user']['business_category_id'] is not null %}
                     {% if adDetail['user']['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID')}  %}
                         {% set userTypePubAds = 'Shop' %}
+                    {% elseif adDetail['user']['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID')}  %}
+                        {% set userTypePubAds = 'Recruiter' %}
                     {% endif %}
                 {% endif %}
             {% endif %}
@@ -1850,7 +1852,7 @@
                 googletag.pubads().setTargeting('town', '{{ town }}');
                 googletag.pubads().setTargeting('county', '{{ county }}');
                 googletag.pubads().setTargeting('country', 'UK');
-                googletag.pubads().setTargeting('edition_area', "{{ (locationGroup is defined and locationGroup.name is defined)?'Print':'Non Print' }}");
+                googletag.pubads().setTargeting('edition_area', "{{ ((locationGroup is defined and locationGroup.name is defined)?'Print -'~locationGroup.name:'Non Print')|raw }}");
 
 
                 googletag.pubads().setTargeting('ad_location', '{{ town }}');

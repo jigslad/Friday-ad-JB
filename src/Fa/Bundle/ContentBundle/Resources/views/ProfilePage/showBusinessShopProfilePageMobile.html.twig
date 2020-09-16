@@ -296,6 +296,17 @@
     
     ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Business_Page'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %}});
 
+    {% set _logged_in = 'true' %}
+    {% if app.user.getId() is not defined or app.user.getId() is null %}
+        {% set _logged_in = 'false' %}
+    {% endif %}
+
+    googletag.cmd.push(function() {
+        googletag.pubads().setTargeting('page_type', 'Business_Page');
+        googletag.pubads().setTargeting('adBlocker', false);
+        googletag.pubads().setTargeting('user_logged', {{ _logged_in }});
+    });
+
     function openBusinessWebsite(businessName)
     {
          updateUserSiteViewCounterField('{{userDetail['id']}}', 'profile_page_website_url_click_count', '');
