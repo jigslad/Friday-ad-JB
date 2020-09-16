@@ -1857,7 +1857,7 @@
                 googletag.pubads().setTargeting('town', '{{ town }}');
                 googletag.pubads().setTargeting('county', '{{ county }}');
                 googletag.pubads().setTargeting('country', 'UK');
-                googletag.pubads().setTargeting('edition_area', "{{ (locationGroup is defined and locationGroup.name is defined)?'Print':'Non Print' }}");
+                googletag.pubads().setTargeting('edition_area', "{{ ((locationGroup is defined and locationGroup.name is defined)?'Print -'~locationGroup.name:'Non Print')|raw }}");
 
 
                 googletag.pubads().setTargeting('ad_location', '{{ town }}');

@@ -809,7 +809,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
             {% endif %}
         {% endfor %}
 
-        {% set keywordCat = '' %}
+        {% set keywordCat = null %}
         {% if keywordCategories|length %}
             {% set keywordCat = keywordCategories|join(',') %}
         {% endif %}
@@ -845,7 +845,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                     googletag.pubads().setTargeting('sub_sub_class', '{{ catArr[3] }}');
                 {% endif %}
             {% else %}
-                googletag.pubads().setTargeting('category',[{{ keywordCat }}]);
+                {% if keywordCat is defined and keywordCat is not null %} googletag.pubads().setTargeting('category',[{{ keywordCat }}]); {% endif %}
             {% endif %}
 
             googletag.pubads().setTargeting('town', '{{ town }}');
