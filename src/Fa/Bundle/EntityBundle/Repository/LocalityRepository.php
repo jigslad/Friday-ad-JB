@@ -359,11 +359,11 @@ class LocalityRepository extends BaseEntityRepository
      * @param $id
      * @return array
      */
-    public function getCachedLocality($container, $id)
+    public function getCachedLocalityById($container, $id)
     {
         if (! empty($id)) {
             $localities = CommonManager::getCacheVersion($container, 'locality|getAllLocalities|en_GB');
-echo 'locality'.PHP_EOL;
+
             return [
                 'id'            => $id,
                 'name'          => $localities[$id]['name'],

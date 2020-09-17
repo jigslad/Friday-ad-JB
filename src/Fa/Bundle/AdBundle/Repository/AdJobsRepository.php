@@ -159,6 +159,7 @@ class AdJobsRepository extends EntityRepository
             }
 
             //for business advertiser only.
+            $logoURL = NULL;
             if ($ad->getIsTradeAd() && $ad->getUser()) {
                 $logoURL = CommonManager::getUserLogoByUserId($container, $ad->getUser()->getId(), false, true);
             }
@@ -166,6 +167,7 @@ class AdJobsRepository extends EntityRepository
             //feed ad salary
             $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'feed_ad_salary', false), $adJobs->getFeedAdSalary());
 
+            //for business advertiser only.
             $document = $this->addField($document, 'has_user_logo', ($logoURL ? true : false));
         }
 
