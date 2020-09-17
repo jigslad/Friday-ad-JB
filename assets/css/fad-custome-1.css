@@ -3131,7 +3131,7 @@ li.step-complete .step-text {
 }
 
 .listing h3 {
-    height: 26px
+    height: auto;
 }
 
 .listing h3,
@@ -4313,7 +4313,8 @@ button.signup-google-btn.expand {
 .fa-accordion .accordion .content.active {
     border-radius: 0 0 2px 2px;
     margin: -10px 0 10px;
-    padding: 10px 17px
+    padding: 10px 17px;
+    background: #ffffff;
 }
 
 .link-list {

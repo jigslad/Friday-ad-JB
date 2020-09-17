@@ -153,7 +153,7 @@
         
 
     {{ include('FaFrontendBundle::scriptTop.html.twig', {'showAdultPages': showAdultPages}) }}
-    {% block scripttop %}{% endblock %}    
+    {% block scripttop %}{% endblock %}
     {#
         main-css.css - Common CSS - taken from src/Fa/Bundle/FrontendBundle/Resources/views/main-css.html.twig - moved from src/Fa/Bundle/FrontendBundle/Resources/views/scriptTop.html.twig
         main.css - Common CSS - taken from src/Fa/Bundle/FrontendBundle/Resources/views/fa-main-css-new.html.twig
@@ -188,13 +188,13 @@
     <link rel="stylesheet" href="{{ asset('build/css/fad-custome-2.css') }}">
     <link rel="stylesheet" href="{{ asset('build/css/fad-custome-3.css') }}">
     <link rel="stylesheet" href="{{ asset('build/css/fad-custome-4.css') }}">
-    
+
 	{% if showAdultPages == 1 %}
         <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
 		<link rel="stylesheet" href="{{ asset('/bundles/css/adulapp.css') }}"/>
     	{{ include('FaFrontendBundle:Adult:adul-imgs.html.twig') }}
 	{% else %}
-        <link rel="stylesheet" href="{{ asset('build/css/site.css') }}">
+    	<link rel="stylesheet" href="{{ asset(cached_asset('/build/css/site.css')) }}">
         <link rel="stylesheet" href="{{ asset('build/css/sitenew.css') }}">
     	{{ include('FaFrontendBundle::site-imgs.html.twig') }}
 	{% endif %}
