@@ -38,6 +38,11 @@
 {% endblock %}
 
 {% block scriptbottom %}
+<script>
+    $(document).ready(function() {
+        document.cookie = "SameSite=None;Secure;path=/";
+    });
+</script>
 {% if getTranscationJs is defined and getItemJs is defined %}
     <script>
         {% if ga_transaction is defined and ga_transaction.PAYMENT_ID is defined %}
