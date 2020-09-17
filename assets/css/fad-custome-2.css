@@ -1553,7 +1553,8 @@ input.field-122 {
     text-indent: 100%;
     overflow: hidden;
     white-space: nowrap;
-    margin: 10px 7.5px 0 0
+    margin: 10px 7.5px 0 0;
+    background-size: 100%;
 }
 
 .shop-share a:last-child {
