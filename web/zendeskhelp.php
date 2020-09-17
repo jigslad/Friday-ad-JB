@@ -132,7 +132,15 @@ $(document).ready(function() {
 	} else if(isNaN(searchCount)) {
 		searchCount = 0;
 	}
-	ga('send', 'event', 'help widget', 'search', "'"+searchText+" | "+searchCount+"'");
+    window.dataLayer = window.dataLayer || []
+    dataLayer.push({
+
+        'event' : 'Help Widget',
+        'eventCategory':  'help widget',
+        'eventAction': 'Search',
+        'eventLabel': "'"+searchText+" | "+searchCount+"'"
+    });
+    ga('send', 'event', 'help widget', 'search', "'"+searchText+" | "+searchCount+"'");
 });
 </script>
 <?php } ?>

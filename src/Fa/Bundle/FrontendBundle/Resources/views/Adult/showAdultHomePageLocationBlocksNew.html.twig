@@ -1,0 +1,23 @@
+{% if blocks|length %}
+    <div id="list_home_location_box" class="fa-accordion">
+        <dl class="accordion" data-accordion>
+            {% set panelCnt = 0 %}
+            {% for solrFieldName, block in blocks %}
+                <dd class="accordion-navigation">
+                    <a href="#panelBlock{{panelCnt}}" class="clearfix"><h5 class="left">{{ block['heading'] }}</h5> <i class="fi-plus right"></i></a>
+                    <div id="panelBlock{{panelCnt}}" class="content clearfix">
+                        <ul class="link-list">
+                            <li>
+                                {% set blockfacet = block['facet'] %}
+                                {% for locationId, locationBlock in blockfacet %}
+                                    <a href="{{ locationBlock['search_result_url'] }}">{{ locationBlock['location_name'] }}</a>
+                                {% endfor %}
+                            </li>
+                      </ul>
+                    </div>
+                </dd>
+                {% set panelCnt = panelCnt + 1 %}
+            {% endfor %}
+        </dl>
+    </div>
+{% endif %}
