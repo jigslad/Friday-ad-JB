@@ -8,7 +8,7 @@
 {% endif %}
 
 {% set recommendedSlotsCount = recommendedSlotResult|length %}
-{% if (recommendedSlotsCount > 0) and (resultCount > recommendedSlotsLimit|number_format) %}
+{% if (recommendedSlotsCount > 0) and (resultCount > recommendedSlotLimit|number_format) %}
     {% set displayRecommendedSlot = 1 %}
 {% else %}
     {% set displayRecommendedSlot = 0 %}

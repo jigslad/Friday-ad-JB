@@ -966,7 +966,6 @@ class AdListController extends CoreController
             foreach ($pagination->getCurrentPageResults() as $key => $ad) {
                 $ad = get_object_vars($ad);
 
-                //echo '<pre>';var_dump($ad);exit();
                 $dim_keys = preg_grep('/^dim_list_*/', array_keys($ad));
 
                 $dimensions = [];
@@ -988,7 +987,7 @@ class AdListController extends CoreController
                     'ad_id' => $ad['id'],
                     'ad_title' => $ad['title'],
                     'description' => isset($ad['description']) ? $ad['description'] : '',
-                    'price' => CommonManager::formatCurrency($ad['price'], $this->container),
+                    'price' => empty($ad['price']) ? '' : CommonManager::formatCurrency($ad['price'], $this->container),
                     'ad_img' => isset($ad['thumbnail_url']) ? $ad['thumbnail_url'] : 'fafrontend/images/no-image.svg',
                     'image_count' => isset($ad['image_count']) ? $ad['image_count'] : 0,
                     'img_alt' => '',
