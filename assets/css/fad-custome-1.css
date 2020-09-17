@@ -386,7 +386,7 @@ ul.pagination li button {
 
 .accordion .accordion-navigation>.content.active,
 .accordion dd>.content.active {
-    background: #FFFFFF;
+    background: 0
 }
 
 
