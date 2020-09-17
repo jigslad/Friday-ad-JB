@@ -3048,7 +3048,7 @@ input.field-122 {
 }
 
 .alert-tooltip {
-    background-size: 137px 94px;
+    background-size: 137px 94px!important;
     border-radius: 3px;
     padding: 10px 170px 10px 15px;
     font-size: 13px;
