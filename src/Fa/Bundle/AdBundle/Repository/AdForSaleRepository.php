@@ -246,6 +246,7 @@ class AdForSaleRepository extends EntityRepository
             $document = $this->addField($document, 'meta_values', $entityRepository->getCachedEntityById($container, $adForSale->getMetaData()));
 
             //for business advertiser only.
+            $logoURL = NULL;
             if ($ad->getIsTradeAd() && $ad->getUser()) {
                 $logoURL = CommonManager::getUserLogoByUserId($container, $ad->getUser()->getId(), false, true);
             }

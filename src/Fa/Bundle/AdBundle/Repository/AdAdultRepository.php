@@ -236,6 +236,7 @@ class AdAdultRepository extends EntityRepository
         }
 
         //for business advertiser only.
+        $logoURL = NULL;
         if ($ad->getIsTradeAd() && $ad->getUser()) {
             $logoURL = CommonManager::getUserLogoByUserId($container, $ad->getUser()->getId(), false, true);
         }

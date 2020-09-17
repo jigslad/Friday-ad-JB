@@ -802,13 +802,13 @@ class AdRepository extends EntityRepository
         $document = $this->addField($document, 'published_at', $ad->getPublishedAt());
         $document = $this->addField($document, 'updated_at', $ad->getUpdatedAt());
         $document = $this->addField($document, 'personalized_title', $ad->getPersonalizedTitle());
-        $document = $this->addField($document, 'quantity', $ad->getQty());
-        $document = $this->addField($document, 'quantity_sold', $ad->getQtySold());
+        $document = $this->addField($document, 'qty', $ad->getQty());
+        $document = $this->addField($document, 'qty_sold', $ad->getQtySold());
         $document = $this->addField($document, 'delivery_method_option', $ad->getDeliveryMethodOption() ? [
             'id' => $ad->getDeliveryMethodOption()->getId(),
             'name' => $ad->getDeliveryMethodOption()->getName()] : null);
         $document = $this->addField($document, 'postage_price', $ad->getPostagePrice());
-        $document = $this->addField($document, 'payment_method_option_id', $ad->getPaymentMethodId() ? $ad->getPaymentMethodId() : null);
+        $document = $this->addField($document, 'payment_method_option', $ad->getPaymentMethodId() ? $ad->getPaymentMethodId() : null);
         $document = $this->addField($document, 'youtube_url', $ad->getYoutubeVideoUrl());
 
         if ($ad->getIsNew() != null) {
@@ -881,7 +881,7 @@ class AdRepository extends EntityRepository
         //ad user business category id
         //shop detail.
         if ($ad->getUser() && $ad->getUser()->getBusinessCategoryId()) {
-            $document = $this->addField($document, 'ad_user_business_category_id', $ad->getUser()->getBusinessCategoryId());
+            $document = $this->addField($document, 'ad_user_business_category', $ad->getUser()->getBusinessCategoryId());
         }
 
         //shop detail.
@@ -907,12 +907,12 @@ class AdRepository extends EntityRepository
             if ($hasProfileExposureFlag) {
                 $document = $this->addField($document, 'has_profile_exposure', 1);
                 $document = $this->addField($document, 'profile_exposure_miles', $hasProfileExposureMiles);
-                $document = $this->addField($document, 'shop_package_category_id', $profileExposurePackageCatId);
+                $document = $this->addField($document, 'shop_package_category', $profileExposurePackageCatId);
                 $document = $this->addField($document, 'shop_package_purchased_at', $userPackagePurchasedAt);
             } else {
                 $document = $this->addField($document, 'has_profile_exposure', 0);
                 $document = $this->addField($document, 'profile_exposure_miles', null);
-                $document = $this->addField($document, 'shop_package_category_id', null);
+                $document = $this->addField($document, 'shop_package_category', null);
                 $document = $this->addField($document, 'shop_package_purchased_at', $userPackagePurchasedAt);
             }
         }
