@@ -3131,7 +3131,7 @@ li.step-complete .step-text {
 }
 
 .listing h3 {
-    height: 26px
+    height: auto;
 }
 
 .listing h3,
