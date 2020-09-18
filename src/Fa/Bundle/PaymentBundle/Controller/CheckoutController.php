@@ -44,6 +44,9 @@ class CheckoutController extends CoreController
         $loggedinUser = $this->getLoggedInUser();
         $cart         = $this->getRepository('FaPaymentBundle:Cart')->findOneBy(array('cart_code' => $cartCode, 'status' => 0, 'user' => $loggedinUser->getId()));
 
+        $expire = date('D, d M Y H:i:s', time() + (86400 * 180)); // 3 months from now
+        header("Set-cookie: PHPSESSID=".$request->cookies->get('PHPSESSID')."; expires=".$expire."; path=/; HttpOnly; SameSite=None; Secure");
+
         if (!$cart) {
             $this->container->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('You do not have permission to access this resource.'));
             return new RedirectResponse($this->container->get('router')->generate('fa_frontend_homepage'));
@@ -67,10 +70,6 @@ class CheckoutController extends CoreController
 
         $transcations = $this->getRepository('FaPaymentBundle:Payment')->getTranscationDetailsForGA($cart->getCartCode(), $loggedinUser);
         $redirectUrl  = null;
-
-        $expire = date('D, d M Y H:i:s', time() + (86400 * 180)); // 3 months from now
-        header("Set-cookie: PHPSESSID=".$request->cookies->get('PHPSESSID')."; expires=".$expire."; path=/; HttpOnly; SameSite=None; Secure");
-
 
         if ($this->container->get('session')->has('upgrade_payment_success_redirect_url') || $this->container->get('session')->has('payment_success_redirect_url') || $this->container->get('session')->has('paalite_payment_success_redirect_url')) {
             if (!$this->container->get('session')->has('paalite_payment_success_redirect_url') && $this->container->get('session')->has('upgrade_payment_success_redirect_url') && $this->container->get('session')->get('upgrade_payment_success_redirect_url') != '') {
