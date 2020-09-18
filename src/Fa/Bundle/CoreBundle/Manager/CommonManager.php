@@ -1582,7 +1582,7 @@ class CommonManager
             $imageBaseUrl = $container->getParameter('fa.static.aws.url');
         }
         
-        $imageUrl = $imageBaseUrl.'/'.$newImageUrl;
+        $imageUrl = $imageBaseUrl.'/'.$newImageUrl.'?'.time();
         
         return $imageUrl; 
     }
