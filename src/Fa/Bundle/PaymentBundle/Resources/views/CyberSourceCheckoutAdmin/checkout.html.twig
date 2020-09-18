@@ -134,7 +134,6 @@
         return false;
     });
     $(document).ready(function(){
-        document.cookie = "SameSite=None;Secure;path=/";
         {% if app.request.getMethod() != 'POST' %}
             $("#payment_method_id input:radio[name='fa_payment_cyber_source_checkout[payment_method]']:first").trigger('click');
         {% endif %}
