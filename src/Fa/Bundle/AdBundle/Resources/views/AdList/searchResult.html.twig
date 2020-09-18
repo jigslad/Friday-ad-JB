@@ -214,20 +214,13 @@
 {% endblock %}
 
 {% block scripttop %}
-    {% stylesheets filter="uglifycss" output="bundles/css/compiled/srchlist.css"
-            "build/css/owl-carousel.css"
-            "build/css/featured-ads.css"
-            "build/css/sponsored-slots.css"
-            "build/css/upgrade-featured.css"
-        %}
-    {% endstylesheets %}
-    <link rel="stylesheet" href="{{ asset('/bundles/css/compiled/srchlist.css') }}"/>
-    {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) %}
+        {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) %}
         {# CSS for owl carousel - taken from Fa/Bundle/AdBundle/Resources/views/AdList/owl-carousel-2-css.html.twig and inline CSS for listing page #}
         {% stylesheets filter='uglifycss' output='bundles/css/compiled/search-result.css'
             'bundles/fafrontend/css/ad-list.css'
         %}
             <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
+
         {% endstylesheets %}
     {% endif %}
 {% endblock %}
