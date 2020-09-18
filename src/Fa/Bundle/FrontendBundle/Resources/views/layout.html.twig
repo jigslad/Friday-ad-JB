@@ -159,25 +159,25 @@
         main.css - Common CSS - taken from src/Fa/Bundle/FrontendBundle/Resources/views/fa-main-css-new.html.twig
         covid-edition.css - Covid related CSS - Inline CSS
     #}
-    {% stylesheets filter='uglifycss' output='bundles/css/compiled/fa-main.css'
-        'bundles/fafrontend/css/main-css.css'
-        'bundles/fafrontend/css/main.css'
-        'bundles/fafrontend/css/covid-edition.css'
-    %}
-        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
-    {% endstylesheets %}
+{#    {% stylesheets filter='uglifycss' output='bundles/css/compiled/fa-main.css'#}
+{#        'bundles/fafrontend/css/main-css.css'#}
+{#        'bundles/fafrontend/css/main.css'#}
+{#        'bundles/fafrontend/css/covid-edition.css'#}
+{#    %}#}
+{#        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />#}
+{#    {% endstylesheets %}#}
     
     {% if (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration',4: 'show_draft_ad',5: 'ad_package_purchase',6: 'show_cart',7: 'cybersource_checkout'}) %}
-        <style>.nav-bar .top-bar-section, #top_search, #field_arrow, .nav-bg .search-icon a { display:none !important; }</style>
+{#        <style>.nav-bar .top-bar-section, #top_search, #field_arrow, .nav-bg .search-icon a { display:none !important; }</style>#}
     {% endif %}
     
 	{% if showAdultPages == 1 %}
-	    <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
-	    <link rel="stylesheet" href="{{ asset(cached_asset('/build/css/adulcss.css')) }}">
-    	{{ include('FaFrontendBundle:Adult:adul-imgs.html.twig') }}
+{#	    <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">#}
+{#	    <link rel="stylesheet" href="{{ asset(cached_asset('/build/css/adulcss.css')) }}">#}
+{#    	{{ include('FaFrontendBundle:Adult:adul-imgs.html.twig') }}#}
 	{% else %}
-    	<link rel="stylesheet" href="{{ asset(cached_asset('/build/css/site.css')) }}">
-    	{{ include('FaFrontendBundle::site-imgs.html.twig') }}
+{#    	<link rel="stylesheet" href="{{ asset(cached_asset('/build/css/site.css')) }}">#}
+{#    	{{ include('FaFrontendBundle::site-imgs.html.twig') }}#}
 	{% endif %}
     
     {% block blockGaCode%}
@@ -334,7 +334,7 @@
         {% endif %}
 
         {% if (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration',4: 'show_draft_ad',5: 'ad_package_purchase',6: 'show_cart',7: 'cybersource_checkout'}) %}
-            {{ include('FaFrontendBundle::layout-css.html.twig') }}
+{#            {{ include('FaFrontendBundle::layout-css.html.twig') }}#}
         {% endif %}
         {#{ include('FaFrontendBundle::pushNotificationsJs.html.twig') }#}
 
@@ -388,18 +388,18 @@
         </script>
 
         {% if(showTiPopup) %}
-           <style type="text/css">
-                .transbgtrade .reveal-modal-bg, body.transbgtrade {background: rgba(70,75,83,0.8)!important;}
-                body.transbgtrade { overflow-y:hidden; }
-                .transbgtrade .reveal-modal-bg { overflow-y:hidden !important;}
-                .r-product-modal {border: 0px solid #e3e3e3;box-shadow: none;}
-                .r-product-modal .modal-block {}
-                .r-product-modal .r-logo {margin-top: 3em;margin-bottom: 3em;}
-                .r-product-modal .para {color:#333333;padding: 0 15%;margin-bottom: 15px;font-size: 14px;}
-                .r-product-modal .btn-tellme{background-color: #a8dc28;border-color: #a8dc28;border-radius: 2px;text-align: center;padding: 8px 20px 8px 20px;font-size: 16px; line-height: 18px;}
-                .r-product-modal .btn-tellme a {font-size: 16px;color:#ffffff;font-weight: normal;}
-                .r-product-modal .r-close {background:none;text-indent: 0;z-index: 1;font-size: 2rem;font-weight:400;}
-            </style>
+{#           <style type="text/css">#}
+{#                .transbgtrade .reveal-modal-bg, body.transbgtrade {background: rgba(70,75,83,0.8)!important;}#}
+{#                body.transbgtrade { overflow-y:hidden; }#}
+{#                .transbgtrade .reveal-modal-bg { overflow-y:hidden !important;}#}
+{#                .r-product-modal {border: 0px solid #e3e3e3;box-shadow: none;}#}
+{#                .r-product-modal .modal-block {}#}
+{#                .r-product-modal .r-logo {margin-top: 3em;margin-bottom: 3em;}#}
+{#                .r-product-modal .para {color:#333333;padding: 0 15%;margin-bottom: 15px;font-size: 14px;}#}
+{#                .r-product-modal .btn-tellme{background-color: #a8dc28;border-color: #a8dc28;border-radius: 2px;text-align: center;padding: 8px 20px 8px 20px;font-size: 16px; line-height: 18px;}#}
+{#                .r-product-modal .btn-tellme a {font-size: 16px;color:#ffffff;font-weight: normal;}#}
+{#                .r-product-modal .r-close {background:none;text-indent: 0;z-index: 1;font-size: 2rem;font-weight:400;}#}
+{#            </style>#}
            <div id="tradeitModal" class="reveal-modal tiny r-product-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
                 <div class="modal-block center">
                     <div class="center r-logo"><img src="{{ asset_url('fafrontend/images/fad-ti-logo.png') }}" alt=""></div>
