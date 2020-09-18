@@ -6352,3 +6352,6 @@ footer a:hover,
     z-index: 1005 !important;
 }
 .cover-img-box .photo-icon { width:170px !important; }
+.shop-share a {
+    background-size: 100%!important;
+}
