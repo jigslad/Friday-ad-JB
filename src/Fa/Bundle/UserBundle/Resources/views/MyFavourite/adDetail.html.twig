@@ -27,9 +27,9 @@
             <span class="expired-ribbon">{{ 'Ad Expired'|trans({}, 'frontend-my-favourites') }}</span>
         {% endif %}
         <a class="tricky-link" href="{{adUrl}}">
-        	{% if attribute(adDetail, constant(adDetailSolrMapping ~ 'TITLE')) is defined %}
-               {{trim_text(attribute(adDetail, constant(adDetailSolrMapping ~ 'TITLE')), 65)|raw}}
-            {% endif %}
+{#        	{% if attribute(adDetail, constant(adDetailSolrMapping ~ 'TITLE')) is defined %}#}
+{#               {{trim_text(attribute(adDetail, constant(adDetailSolrMapping ~ 'TITLE')), 65)|raw}}#}
+{#            {% endif %}#}
         </a>
         {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, adDetail, '300X225', 1) %}
         <div class="list-img {% if not imagePath %}similar-placeholder{% endif %}">
