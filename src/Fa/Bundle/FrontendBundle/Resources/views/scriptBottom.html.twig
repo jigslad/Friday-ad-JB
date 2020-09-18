@@ -2,6 +2,15 @@
 {% set container = fetch_container_instance() %}
 <!-- script async src="{{ asset_url('fafrontend/js/banner.js') }}?v=1"></script -->
 <script>var isAdBlocker;isAdBlocker = false;</script>
+<script>
+    $(document).ready(function() {
+        var loc_first_accordion = $('#list_home_location_box').find('.accordion-navigation:first');
+        $(loc_first_accordion).addClass('active');
+        $(loc_first_accordion).find('i').removeClass('fi-plus');
+        $(loc_first_accordion).find('i').addClass('fi-minus');
+        $(loc_first_accordion).find('div.content').addClass('active');
+    });
+</script>
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     $.ajax({
