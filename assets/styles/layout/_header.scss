@@ -174,7 +174,9 @@
         height: 40px;
         margin: auto;
         &.private-user {
-            border-radius: 50%;
+            img{
+                border-radius: 50%;
+            }
         }
         &.business-user {}
     }

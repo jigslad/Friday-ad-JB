@@ -1,16 +1,16 @@
 {% if currentRoute in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote' } %}
-    <style>
-    @media only screen and (min-width: 320px) and (max-width: 640px) {
-    	.top-bar .toggle-topbar.menu-icon {
-    		display:none; !important;
-    	}
-    	.top-bar .toggle-topbar.menu-icon a span, .top-bar .toggle-topbar.menu-icon a:hover span {
-            background: none !important;
-        }
-    }
-    </style>
+{#    <style>#}
+{#    @media only screen and (min-width: 320px) and (max-width: 640px) {#}
+{#    	.top-bar .toggle-topbar.menu-icon {#}
+{#    		display:none; !important;#}
+{#    	}#}
+{#    	.top-bar .toggle-topbar.menu-icon a span, .top-bar .toggle-topbar.menu-icon a:hover span {#}
+{#            background: none !important;#}
+{#        }#}
+{#    }#}
+{#    </style>#}
 {% endif %} 
-<header class="relative">
+<header class="header" id="header" role="banner" aria-label="Site header">
     {% if status_code == 200 %}
         {% if currentRoute == 'ad_detail_page' %}
             {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_ABOVE_HEADER') %}
@@ -24,72 +24,128 @@
             {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
         {% endif %}
     {% endif %}
-    <div class="top-links hide-for-small-only">
+    <div class="top-links top-navigation">
         <div class="row">
-            <div class="columns">
-                {% if app.user %}
-                    {% set messageRepository = fetch_repository('FaMessageBundle:Message') %}
-                    {% set totalUnreadMsg = messageRepository.getMessageCount(app.user.getId(), 'all', fetch_container_instance()) %}
-                    {% set userRole = fetch_repository('FaUserBundle:User').getUserRole(app.user.getId(), container) %}
-                    <ul class="clearfix">
-                        <li>
-                            <a href="{{ path('dashboard_home') }}" class="dropdown bold my-db-desktop">{{ 'My Dashboard'|trans({}, 'frontend-header-usermenu') }}</a>
-                            <a href="javascript:void(0);" class="dropdown bold my-db-tablet needsclick" data-dropdown="db-dropdown-menu" aria-controls="db-dropdown-menu">{{ 'My Dashboard'|trans({}, 'frontend-header-usermenu') }}</a>
-                            <ul id="db-dropdown-menu" data-dropdown-content class="f-dropdown" aria-hidden="true">
-                                <li><a href="{{ path('dashboard_home') }}" class="home-icon">{{ 'Dashboard home'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                                <li><a href="{{ path('user_ad_message_all') }}" class="messages-icon">{{ 'Messages'|trans({}, 'frontend-header-usermenu') }}&nbsp;<span id="total_unread_msg_div" class="show-for-small-only">({{totalUnreadMsg}})</span> </a></li>
-                                <li><a href="{{ path('user_review_list') }}" class="reviews-icon">{{ 'Reviews'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                                <li><a href="{{ path('manage_my_ads_active') }}" id="manage-my-ad-id" class="manage-item-icon">{{'Manage my ads'|trans({}, 'frontend-header-usermenu')}}</a></li>
-                                <li><a href="{{ path('my_profile') }}" class="manage-profile-icon">{{ 'Edit profile'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                                <li><a href="{{ path('my_orders') }}" class="orders-icon">{{ 'Orders'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                                <li><a href="{{ path('my_favourite') }}" class="my-favourites-icon">{{ 'My favourites'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                                <li><a href="{{ path('list_search_agent') }}" id="saved-search-header-id" class="alerts-icon">{{'Alerts and searches'|trans({}, 'frontend-header-usermenu')}}</a></li>
-                                <li><a href="{{ path('my_purchases') }}" id="shop-header-id" class="purchase-icon">{{ 'Purchases'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                                <li><a href="{{ path('my_account') }}" id="account-header-id" class="account-icon">{{ 'Account'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            {% set myProfileUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(app.user.getId()) %}
-                            |<a href="{% if myProfileUrl %}{{ myProfileUrl }}{% else %}javascript:void(0);{% endif %}">
-                                <span class="topbar-user-icon {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}rounded{% endif %}">
-                                    <span id="top_profile_image_div">
-                                        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), app.user.getId(), true, false, app.user.getProfileName() ]) %}
-                                        {{userLogo|replace({'<div': '<span', '</div>':'</span>'})|raw}}
-                                    </span>
-                                </span>
-                                {% if app.user.getFullName() %}
-                                    {{app.user.getFullName()}}
+            <div class="container">
+                <div class="navigation-right">
+                    <ul class="navigation-right__block {{ app.user ? 'logged': 'login' }}">
+                        {% if app.user %}
+                            {% set messageRepository = fetch_repository('FaMessageBundle:Message') %}
+                            {% set totalUnreadMsg = messageRepository.getMessageCount(app.user.getId(), 'all', fetch_container_instance()) %}
+                            {% set userRole = fetch_repository('FaUserBundle:User').getUserRole(app.user.getId(), container) %}
+                            {% set userCart = fetch_repository('FaPaymentBundle:Cart').getUserCart(app.user.getId(), container) %}
+                            {% set userDetail = fetch_repository('FaPaymentBundle:Transaction').getCartDetail(userCart.getId()) %}
+                            <li class="navigation-right__item menu-dropdown">
+                                {% set myProfileUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(app.user.getId()) %}
+                                <a href="{% if myProfileUrl %}{{ myProfileUrl }}{% else %}javascript:void(0);{% endif %}">
+                                    Hello
+                                    {% if app.user.getFullName() %}
+                                        {{app.user.getFullName()}}
+                                    {% else %}
+                                        {{app.user.getUsername()}}
+                                    {% endif %}
+                                </a>
+                                <div class="dropdown-content">
+                                    <div class="dropdown-content__block user-profile">
+                                        <div class="dropdown-content__profile {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}private-user {% else %} business-user {% endif %} ">
+                                            {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), app.user.getId(), true, true, app.user.getProfileName() ]) %}
+{#                                                {{userLogo|replace({'<div': '<span', '</div>':'</span>'})|raw}}#}
+                                            <img src="{{ userLogo }}" alt="{% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}private-user {% else %} business-user {% endif %}">
+                                        </div>
+                                        <h6 class="dropdown-content__user-name">
+                                            Hello
+                                            {% if app.user.getFullName() %}
+                                                {{app.user.getFullName()}}
+                                            {% else %}
+                                                {{app.user.getUsername()}}
+                                            {% endif %}
+                                        </h6>
+                                    </div>
+                                    <div class="dropdown-content__block dashboard">
+                                        <ul>
+                                            <li class="dropdown-content__item">
+                                                <a href="{{ path('dashboard_home') }}" class="dropdown-content__link home-icon">My Dashboard</a>
+                                            </li>
+                                            <li class="dropdown-content__item">
+                                                <a href="{{ path('user_ad_message_all') }}" class="dropdown-content__link messages-icon">Messages</a>
+                                            </li>
+                                            <li class="dropdown-content__item">
+                                                <a href="{{ path('user_review_list') }}" class="dropdown-content__link reviews-icon">Reviews</a>
+                                            </li>
+                                            <li class="dropdown-content__item">
+                                                <a href="#" class="dropdown-content__link account-icon">Preferences</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="dropdown-content__block settings">
+                                        <ul>
+                                            <li class="dropdown-content__item">
+                                                <a href="{{ path('manage_my_ads_active') }}" class="dropdown-content__link manage-item-icon">Manage my ads</a>
+                                            </li>
+                                            <li class="dropdown-content__item">
+                                                <a href="{{ path('my_profile') }}" class="dropdown-content__link manage-profile-icon">Edit profile</a>
+                                            </li>
+                                            <li class="dropdown-content__item">
+                                                <a href="{{ path('my_orders') }}" class="dropdown-content__link orders-icon">Orders
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="dropdown-content__block favourites">
+                                        <ul>
+                                            <li class="dropdown-content__item">
+                                                <a href="{{ path('my_favourite') }}" class="dropdown-content__link my-favourites-icon">Favourites
+                                                </a>
+                                            </li>
+                                            <li class="dropdown-content__item">
+                                                <a href="{{ path('list_search_agent') }}" class="dropdown-content__link alerts-icon">Search alerts</a>
+                                            </li>
+                                            <li class="dropdown-content__item">
+                                                <a href="{{ path('my_purchases') }}" class="dropdown-content__link purchase-icon">Purchases</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="dropdown-content__block logout">
+                                        <ul>
+                                            <li class="dropdown-content__item">
+                                                <a href="{{ path('logout') }}" class="dropdown-content__link" id="logout-header-id">Logout
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="navigation-right__item">
+                                {% if userDetail|length > 0 %}
+                                    {% set userCartUrl = path('show_cart') %}
                                 {% else %}
-                                    {{app.user.getUsername()}}
+                                    {% set userCartUrl = 'javascript:void(0);' %}
                                 {% endif %}
-                            </a>|
-                        </li>
-
-                        {{ render(controller('FaUserBundle:Dashboard:notification', { 'template': 'menu' })) }}
-
-                        <li class="msg-link"><a href="{{ path('user_ad_message_all') }}" id="inbox-header-id" class="ga-widgetMessages">{{'Messages'|trans({}, 'frontend-header-usermenu')}} <span class="ga-widgetMessages">({{totalUnreadMsg}})</span> <span class="unread-msg ga-widgetMessages" id="total_unread_msg_icon_div" {% if totalUnreadMsg == 0 %} style="display:none" {% endif %}>&nbsp;</span></a>|</li>
-                        
-                        {% set userCart = fetch_repository('FaPaymentBundle:Cart').getUserCart(app.user.getId(), container) %}
-                        {% set userDetail = fetch_repository('FaPaymentBundle:Transaction').getCartDetail(userCart.getId()) %}
-                        <li>
-                            {% if userDetail|length > 0 %}
-                              {% set userCartUrl = path('show_cart') %}
-                            {% else %}
-                              {% set userCartUrl = 'javascript:void(0);' %}
-                            {% endif %}
-                            <a href="{{ userCartUrl }}" class="basket-icon"><span>({{ userDetail|length }})</span></a>|
-                        </li>
-                        <li><a href="{{ path('logout') }}" id="logout-header-id">{{'Log Out'|trans({}, 'frontend-header-usermenu')}}</a></li>
-                        <li><a href="{{ path('location_home_page', {'location': 'contact-us'}) }}" id="contact-header-id">{{'Contact us'|trans({}, 'frontend-header-usermenu')}}</a></li>
+                                <a href="{{ userCartUrl }}" class="navigation-right__link basket-icon"></a>
+{#                                    <a href="{{ userCartUrl }}" class="basket-icon"><span>({{ userDetail|length }})</span></a>|#}
+                            </li>
+                            <li class="navigation-right__item">
+                                <a href="{{ path('user_ad_message_all') }}" id="inbox-header-id" class="navigation-right__link message-icon ga-widgetMessages"></a>
+{#                                    <a href="{{ path('user_ad_message_all') }}" id="inbox-header-id" class="ga-widgetMessages">{{'Messages'|trans({}, 'frontend-header-usermenu')}} <span class="ga-widgetMessages">({{totalUnreadMsg}})</span> <span class="unread-msg ga-widgetMessages" id="total_unread_msg_icon_div" {% if totalUnreadMsg == 0 %} style="display:none" {% endif %}>&nbsp;</span></a>|#}
+                            </li>
+                            <li class="navigation-right__item">
+                                <a href="{{ path('location_home_page', {'location': 'contact-us'}) }}" id="contact-header-id" class="navigation-right__link">Contact us</a>
+                            </li>
+                            {# need to disscuss about notification area with lauara and chaira #}
+                            {# {{ render(controller('FaUserBundle:Dashboard:notification', { 'template': 'menu' })) }}#}
+                        {% else %}
+                            <li class="navigation-right__item">
+                                <a href="{{ path('login') }}" id="login-header-id">{{'Log In'|trans({}, 'frontend-header-usermenu')}}</a>
+                            </li>
+                            <li class="navigation-right__item">
+                                <a href="{{ path('fa_user_register') }}" id="register-header-id">{{'Register'|trans({}, 'frontend-header-usermenu')}}</a>
+                            </li>
+                            <li class="navigation-right__item">
+                                    <a href="{{ path('location_home_page', {'location': 'contact-us'}) }}" id="contact-header-id">{{'Contact us'|trans({}, 'frontend-header-usermenu')}}</a>
+                                </li>
+                        {% endif %}
                     </ul>
-                {% else %}
-                    <ul class="clearfix login-reg-flex">
-                        <li><a href="{{ path('login') }}" id="login-header-id">{{'Log In'|trans({}, 'frontend-header-usermenu')}}</a>|</li>
-                        <li><a href="{{ path('fa_user_register') }}" id="register-header-id">{{'Register'|trans({}, 'frontend-header-usermenu')}}</a>|</li>
-                        <li><a href="{{ path('location_home_page', {'location': 'contact-us'}) }}" id="contact-header-id">{{'Contact us'|trans({}, 'frontend-header-usermenu')}}</a></li>
-                    </ul>
-                {% endif %}
-
+                </div>
             </div>
         </div>
     </div>
