@@ -38,12 +38,6 @@
     {% endif %}
 {% endblock %}
 {% block scripttop %}
-{#    #}{# CSS for homepage - taken from src/Fa/Bundle/FrontendBundle/Resources/views/Default/home-css.html.twig #}
-{#    {% stylesheets filter='uglifycss' output='bundles/css/compiled/fa-home.css'#}
-{#        'bundles/fafrontend/css/home.css'#}
-{#    %}#}
-{#        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />#}
-{#    {% endstylesheets %}#}
 {% endblock %}
 
 {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}

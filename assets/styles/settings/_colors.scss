@@ -1,0 +1,77 @@
+/**
+*********************
+* Colors
+********************
+**/
+
+
+/* Brand Colors */
+
+$color--hover:#82C148;
+$color--border: #CBD5D9;
+
+/*Theme color added*/
+
+$color--primary: #c03;
+$color--secondary: #ae0531;
+$color--tertiary: #1d1d1d;
+// Additional brand colors
+$color--table-odd: #ededed;
+$color--table-even: #d2d2d2;
+$color--focus: #00b894;
+$color--tabs-container: #9e9e9e;
+$color--dark-black:#000;
+$color--date-active:#ff8100;
+
+/* Grayscale colors */
+
+$color--white: #fff;
+$color--white-snow: #fafafa;
+$color--white-smoke: #f7f7f7;
+$color--whisper: #eee;
+$color--lightest-grey: #cbcbcb;
+$color--light-grey: #80888e;
+$color--grey: #808080;
+$color--grey-20: #333;
+$color--grey-matterhorn: #505050;
+$color--dark-grey: #141414;
+$color--dark-slate-grey: #252525;
+$color--black: #0f0f0f;
+$color--violet-br: #d94267;
+$color--red-bg: #db0037;
+$color--dark-grey-bg: #5f6a72;
+$color--light-grey: #5f6a72;
+$color--white-smoke: #e1e1e1;
+$color--white-snow: #f3f3f3;
+$color-light-slate-grey: #b8b8b8;
+$color-red-callout-bg: #ae0531;
+$color-red-callout-br: #db4d70;
+$color--dark-slate: #626262;
+$color--placeholder: #525252;
+
+/* Accent colors. Primarily used for buttons */
+
+$color--accent: $color--primary;
+$color--accent-contrast: darken($color--primary, 8);
+$color--selected-text: $color--accent-contrast;
+$color--selected-bg: $color--secondary;
+$color--darkcyan: #007fac;
+$color--cyan: #0077a1;
+$color--light-blue: #ebfaff;
+$color-greytab-background: #6f6f6f;
+$color-light-background: #f8f8f8;
+$color--greytab-btn:#767676;
+
+/** Button & Link colors **/
+
+$color--link: $color--accent;
+$color--link-hover: darken($color--link, 5%);
+$color--menu-link: $color--black;
+
+/* Third party brand colors */
+
+$color--facebook: #03539e;
+$color--twitter: #35ccff;
+$color--linkedin: #217bc1;
+$color--google: #db4a39;
+$color-btn-view-more: #c50738;

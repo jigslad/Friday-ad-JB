@@ -1,0 +1,51 @@
+/* owl slider*/
+
+.services__mobile {
+    .owl-nav {
+        button {
+            position: absolute;
+            top: 50%;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            transition: all 0.3s ease-in-out;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.38) !important;
+            &:focus {
+                outline: none;
+            }
+        }
+        button.owl-prev {
+            left: 0;
+        }
+        button.owl-next {
+            right: 0;
+        }
+    }
+    .owl-dots {
+        text-align: center;
+        padding-top: 0.938rem;
+        button {
+            &.owl-dot {
+                width: 0.938rem;
+                height: 0.938rem;
+                border-radius: 50%;
+                display: inline-block;
+                // border: 1px solid $primaryLight !important;
+                margin: 0 3px;
+                &:focus {
+                    outline: none;
+                }
+            }
+        }
+        button {
+            &.owl-dot {
+                &.active {
+                    // background-color: $primaryLight;
+                }
+            }
+        }
+    }
+}

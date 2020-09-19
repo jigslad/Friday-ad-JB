@@ -1,0 +1,111 @@
+//top Search popup sytle
+.top-search-modal {
+    display: none;
+    &.modal-show {
+        display: block;
+        background: white;
+        // position: absolute;
+        z-index: 99;
+        left: 0;
+        right: 0;
+        width: 100%;
+        min-height: 200px;
+        margin: auto;
+        padding-left: 10px;
+        padding-right: 10px;
+        position: fixed; //only for homepage pupup
+        top: 0; //only for homepage pupup
+        padding-top: 20px; //only for homepage pupup
+        .mega-search {
+            display: block;
+            &__modal-header {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 16px;
+                &--logo {
+                    img {
+                        width: 137px;
+                    }
+                }
+                &--close {
+                    background-image: url('/public/images/close-big.svg');
+                    background-repeat: no-repeat;
+                    background-size: 18px;
+                    background-position-y: 5px;
+                    width: 19px;
+                    /* display: block; */
+                    height: 28px;
+                }
+            }
+            &__location {
+                &--change {
+                    margin-top: 5px;
+                    margin-bottom: 14px;
+                }
+            }
+            &__block {
+                width: auto;
+            }
+            &__input {
+                &--text {
+                    width: 100%;
+                    background: none;
+                    border-radius: 4px 0px 0px 4px;
+                }
+                &--btn {
+                    outline: 0;
+                    background: url('/public/images/search-white.svg') no-repeat center center, linear-gradient(135deg, #A6DB2A 0%, #79D378 100%)!important;
+                    height: 40px;
+                    width: 46px;
+                    text-align: center;
+                    line-height: 40px;
+                    border: 0;
+                    color: #FFF;
+                    -webkit-transition: background-color .4s ease;
+                    transition: background-color .4s ease;
+                    -webkit-border-radius: 0 4px 4px 0;
+                    border-radius: 0 4px 4px 0;
+                    background-size: 19px!important;
+                    background-position-y: 10px;
+                    display: block;
+                    &:hover {
+                        background: url('/public/images/search-white.svg') no-repeat center center, linear-gradient(135deg, #A8DC28 0%, #79D378 100%)!important;
+                    }
+                }
+            }
+            &__select-location {
+                width: 100%;
+                flex-wrap: wrap;
+                justify-content: flex-end;
+                margin: 16px 0 32px;
+                &--text {
+                    width: 100%;
+                    margin-bottom: 16px;
+                }
+                &--ok {
+                    padding: 5px 29px;
+                    font-size: 14px;
+                }
+                &--cancel {
+                    padding: 5px 14px;
+                    margin-right: 16px;
+                    font-size: 14px;
+                    border: 1px solid $color--hover;
+                    border-radius: 4px;
+                }
+            }
+            &__popular {
+                color: #212527;
+                font-family: $font-family-bold;
+                margin-bottom: 20px;
+                span {
+                    color: $color--hover;
+                }
+            }
+        }
+        .close-icon {
+            right: 15px;
+            left: auto;
+        }
+    }
+}

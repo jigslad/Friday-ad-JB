@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="26px" height="26px" viewBox="0 0 26 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Button / Oval / -</title>
+    <defs>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#A8DC28" offset="0%"></stop>
+            <stop stop-color="#79D378" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Button-/-Oval-/--" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g>
+            <circle id="Background" fill="#91D851" cx="13" cy="13" r="13"></circle>
+            <circle id="Border" fill="url(#linearGradient-1)" cx="13" cy="13" r="13"></circle>
+            <rect id="Combined-Shape" fill="#FFFFFF" x="11.5" y="8" width="3" height="10" rx="1"></rect>
+        </g>
+    </g>
+</svg>

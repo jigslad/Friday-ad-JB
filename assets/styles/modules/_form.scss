@@ -1,0 +1,95 @@
+/**
+* Form styling
+**/
+
+.form {
+  position: relative;
+  display: block;
+  overflow: inherit;
+  .form__item {
+    display: block;
+    clear: both;
+    margin-bottom: 1.25rem;
+    label {
+      display: block;
+      margin-bottom: 0.25rem;
+      color: $color--dark-grey;
+      font-weight: $font--bold;
+    }
+  }
+  &.form--inline {
+    display: inline-flex;
+    > .form__item {
+      margin-right: 1rem;
+      margin-bottom: 0;
+    }
+    button,
+    .button {
+      margin-bottom: 0;
+    }
+  }
+}
+.form__input {
+  position: relative;
+  display: inline-flex;
+  justify-content: flex-start;
+  height: 3em;
+  vertical-align: middle;
+  font-size: 1rem;
+  line-height: 1;
+}
+input[type="text"],
+input[type="search"],
+.form__textarea {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  padding: 0.5rem;
+  color: $color--black;
+  border: 2px solid $color--light-grey;
+  background-color: $color--white;
+  box-shadow: none;
+}
+.form__textarea {
+  min-height: rem(120);
+  max-height: rem(600);
+}
+.form__radio,
+.form__checkbox {
+  font-weight: $font--regular !important;
+  input {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    line-height: 1.25;
+  }
+}
+input[type="search"].form__input--search {
+  @include media-breakpoint-up(xl) {
+    max-height: rem(45);
+    padding: 0.5rem 0.5rem 0.5rem 2.25rem;
+    text-align: left;
+    color: $color--black;
+    border: 2px solid $color--white-smoke;
+    background: url("public/images/search-grey.svg") no-repeat 0.5rem center;
+    background-size: 1.2rem;
+    font-size: 1rem;
+    font-size: $font-size--small;
+    font-weight: $font--regular;
+  }
+  width: 100%;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+  text-align: center;
+  color: $color--white;
+  border: transparent;
+  border-radius: 5px;
+  background: transparent;
+  font-size: 1.8rem;
+  font-weight: $font--semibold;
+}
+input[type="search"]::placeholder {
+  @include media-breakpoint-up(xl) {
+    color: $color--light-grey;
+  }
+  color: $color--white;
+}

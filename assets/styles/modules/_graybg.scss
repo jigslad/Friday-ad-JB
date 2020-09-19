@@ -1,0 +1,27 @@
+.reviews {
+    min-height: 120px;
+    background-color: #212527;
+    text-align: center;
+    margin-top: 0;
+    @include media-breakpoint-up(lg) {
+        margin-bottom: 80px;
+    }
+    &__block {
+        padding-top: 25px;
+        @include media-breakpoint-up(md) {
+            padding-top: 50px;
+        }
+        .trustpilot-widget {
+            @include media-breakpoint-down(sm) {
+                position: relative;
+                width: 25%;
+                margin: 0 auto;
+            }
+        }
+        iframe {
+            @include media-breakpoint-down(sm) {
+                height: 100px!important;
+            }
+        }
+    }
+}

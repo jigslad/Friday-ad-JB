@@ -1,0 +1,40 @@
+.fad-social {
+    margin-top: 20px;
+    @include media-breakpoint-up(lg) {
+        margin-top: 50px;
+    }
+    &__title {
+        color: #212527;
+        font-family: $font-family-semi-bold;
+        font-size: 18px;
+        @include media-breakpoint-up(md) {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        @include media-breakpoint-up(lg) {
+            font-family: $font-family-medium;
+            font-size: 36px;
+            margin-bottom: 35px;
+        }
+        font-weight: 500;
+        letter-spacing: 0;
+        line-height: 46px;
+        text-align: center;
+        margin-bottom: 8px;
+    }
+    &__tabs {
+        display: flex;
+        flex-direction: row;
+        justify-content: center
+    }
+    &__nav {
+        display: flex;
+        list-style: none;
+        &--item {
+            width: 140px;
+            height: 40px;
+            .active {}
+            &:hover {}
+        }
+    }
+}

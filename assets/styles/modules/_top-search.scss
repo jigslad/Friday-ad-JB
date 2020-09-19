@@ -1,0 +1,164 @@
+.top-search {
+    display: none;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    padding: 12px 12px;
+    border-top: 1px solid $color--border;
+    border-bottom: 1px solid $color--border;
+    top: 64px;
+    background: white;
+    &__block {
+        display: flex;
+        align-items: center;
+        &.top-search-center {
+            align-items: start;
+        }
+    }
+    &__input {
+        display: flex;
+        &--text {
+            outline: 0;
+            height: 40px;
+            width: 250px;
+            @include media-breakpoint-up(lg) {
+                width: 458px;
+            }
+            line-height: 40px;
+            padding: 10px 7px;
+            color: #212121;
+            border: 1px solid #91D851;
+            -webkit-border-radius: 4px 0 0 4px;
+            border-radius: 4px 0 0 4px;
+            font-size: 13px;
+            margin: 0;
+            &:focus {
+                outline: 0;
+                background-color: #FFF;
+                border: 1px solid #91D851;
+            }
+        }
+        &--btn {
+            outline: 0;
+            background-color: #91D851;
+            background: url('/public/images/search-white.svg') no-repeat center center, linear-gradient(135deg, #A6DB2A 0%, #79D378 100%) !important;
+            height: 40px;
+            width: 42px;
+            text-align: center;
+            line-height: 40px;
+            border: 0;
+            color: #FFF;
+            -webkit-transition: background-color .4s ease;
+            transition: background-color .4s ease;
+            -webkit-border-radius: 0 4px 4px 0;
+            border-radius: 0 4px 4px 0;
+            background-image: url('/public/images/search-white.svg');
+            background-size: 20px;
+            background-position-y: 10px;
+            display: block;
+            &:hover {
+                background: url('/public/images/search-white.svg') no-repeat center center, linear-gradient(135deg, #A8DC28 0%, #79D378 100%) !important;
+            }
+        }
+    }
+    &__location {
+        &--change {
+            font-family: $font-family-semi-bold;
+            color: #212527;
+            line-height: 21px;
+            background-image: url('/public/images/location2.svg');
+            height: 40px;
+            background-position-x: left;
+            background-size: 18px;
+            background-position-y: 11px;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            padding-left: 25px;
+            margin-left: 16px;
+            span {
+                color: $color--hover;
+                padding-left: 6px;
+            }
+            &:hover {
+                color: #212527;
+                span {
+                    color: $color--hover;
+                }
+            }
+        }
+    }
+    &__preferences {
+        margin-left: auto;
+        &--link {
+            background-image: url('/public/images/btn-plus.svg');
+            height: 40px;
+            background-position-x: left;
+            background-size: 18px;
+            background-position-y: 11px;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            padding-left: 25px;
+            &:hover {
+                color: $color--hover;
+            }
+        }
+    }
+    &__select-location {
+        display: none;
+        width: 235px;
+        padding-left: 7px;
+        @include media-breakpoint-up(lg) {
+            width: 350px;
+            padding-left: 20px;
+        }
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 0;
+        position: relative;
+        &--text {
+            width: 250px;
+            outline: 0;
+            height: 40px;
+            line-height: 40px;
+            padding: 10px 10px 10px 32px;
+            color: #212121;
+            border: 1px solid $color--border;
+            -webkit-border-radius: 4px;
+            border-radius: 4px;
+            font-size: 13px;
+            margin: 0 0 10px 0;
+            background-image: url('/public/images/location2.svg');
+            background-repeat: no-repeat;
+            background-position: left 7px center;
+            background-size: 18px;
+            background-position-y: center;
+            &:focus {
+                outline: 0;
+                background-color: #FFF;
+                border: 1px solid #91D851;
+            }
+        }
+        .close-icon {
+            left: 240px;
+        }
+        &--ok {
+            @extend .btn-rounded;
+            background: linear-gradient(135deg, #A8DC28 0%, #79D378 100%);
+            margin-right: 20px;
+            &:hover {
+                background: linear-gradient(135deg, #85B021 0%, #60A85E 100%);
+            }
+        }
+        &--cancel {
+            display: flex;
+            align-items: flex-end;
+            color: $color--hover;
+        }
+    }
+}
+
+.search-toggle {
+    display: block;
+}

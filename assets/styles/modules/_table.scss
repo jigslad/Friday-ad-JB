@@ -1,0 +1,47 @@
+/**
+* Table styling
+*/
+
+table {
+  max-width: 100%;
+  margin-bottom: 1.2rem;
+  margin-bottom: 5rem;
+  table-layout: auto;
+  border: none;
+  background: $color--table-odd;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  display: block;
+  @include media-breakpoint-up(lg) {
+    overflow-x: initial;
+  }
+  thead {
+    color: $color--white;
+    background: $color--darkcyan;
+    th {
+      border-right: 2px solid $color--white;
+      &:last-child {
+        border-right: none;
+      }
+    }
+  }
+  tr th,
+  tr td {
+    @include bp-xs-small {
+      padding: 0.4rem 0.4rem;
+    }
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-right: rem(2) solid $color--white;
+    border-bottom: rem(2) solid $color--white;
+    line-height: 1;
+    &:last-child {
+      border-right: none;
+    }
+  }
+  tr {
+    &:nth-of-type(even) {
+      background: $color--table-even;
+    }
+  }
+}

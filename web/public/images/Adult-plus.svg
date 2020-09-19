@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="26px" height="26px" viewBox="0 0 26 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Button / Oval / + / Adult</title>
+    <defs>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#A75BD8" offset="0%"></stop>
+            <stop stop-color="#C60A84" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Button-/-Oval-/-+-/-Adult" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Button-/-Oval-/-+" transform="translate(-1.000000, 0.000000)">
+            <circle id="Background" fill="url(#linearGradient-1)" cx="14" cy="13" r="13"></circle>
+            <path d="M14.5,8 C15.0522847,8 15.5,8.44771525 15.5,9 L15.5,11.499 L18,11.5 C18.5522847,11.5 19,11.9477153 19,12.5 L19,13.5 C19,14.0522847 18.5522847,14.5 18,14.5 L15.5,14.5 L15.5,17 C15.5,17.5522847 15.0522847,18 14.5,18 L13.5,18 C12.9477153,18 12.5,17.5522847 12.5,17 L12.5,14.5 L10,14.5 C9.44771525,14.5 9,14.0522847 9,13.5 L9,12.5 C9,11.9477153 9.44771525,11.5 10,11.5 L12.5,11.5 L12.5,9 C12.5,8.44771525 12.9477153,8 13.5,8 L14.5,8 Z" id="Combined-Shape" fill="#FFFFFF"></path>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,60 @@
+/*
+//--Hero Banner--//
+*/
+
+.hero-banner {
+    @include media-breakpoint-up(lg) {
+        background-image: url('/public/images/homePage-banner-L.png');
+        background-position: center;
+        min-height: 287px;
+    }
+    @include media-breakpoint-up(md) {
+        background-size: cover;
+        min-height: 287px;
+    }
+    background-image: url('/public/images/homePage-banner-M.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    min-height: 126px;
+    &__block {
+        padding-top: 15px;
+        @include media-breakpoint-up(md) {
+            padding-top: 30px;
+        }
+        @include media-breakpoint-up(lg) {
+            padding-top: 40px;
+        }
+    }
+    &__title {
+        color: #212527;
+        font-family: $font-family-semi-bold;
+        font-size: 18px;
+        @include media-breakpoint-up(md) {
+            font-size: 24px;
+            font-family: $font-family-semi-bold;
+        }
+        @include media-breakpoint-up(lg) {
+            font-family: $font-family-medium;
+            font-size: 36px;
+        }
+        font-weight: 500;
+        letter-spacing: 0;
+        line-height: 46px;
+        margin-bottom: 8px;
+        @include media-breakpoint-up(md) {
+            margin-bottom: 10px;
+        }
+        @include media-breakpoint-up(lg) {
+            margin-bottom: 18px;
+        }
+    }
+    &__content {
+        display: flex;
+        justify-content: center;
+        padding: 1.3rem 0;
+        flex-direction: column;
+        @include media-breakpoint-up(sm) {
+            flex-direction: row;
+        }
+    }
+}

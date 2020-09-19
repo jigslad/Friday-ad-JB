@@ -1,13 +1,6 @@
 {% set container = fetch_container_instance() %}
 {% set adultCategoryId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
 {% set liveCamsUrl = constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') %}
-{#<style>#}
-{##tablet-header-menus { display:none; }#}
-{#@media only screen and (min-width: 760px) and (max-width: 959px)  {#}
-{#	#tablet-header-menus { display:block; }#}
-{#	#desktop-header-menus { display:none; }#}
-{#}#}
-{#</style>#}
 <div id="tablet-header-menus">
 <a href="{{ path('fa_frontend_homepage') }}" class="main_category backtofad">Friday-Ad Homepage</a>
 <a class="tab-cat-link ga-ahpCatDropdown" id="tab_cat_link">Adult Categories</a>

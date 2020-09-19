@@ -1,0 +1,169 @@
+.category-nav {
+    padding-top: 0px;
+    padding-bottom: 22px;
+    @include media-breakpoint-up(md) {
+        padding-top: 15px;
+        padding-bottom: 34px;
+    }
+    @include media-breakpoint-up(lg) {
+        padding-top: 30px;
+        padding-bottom: 44px;
+    }
+    &__block {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        .owl-item {
+            &.active {
+                &:last-child {
+                    .category-nav__item {
+                        &:after {
+                            content: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    &__item {
+        // width: 140px;
+        text-align: center;
+        padding-top: 13px;
+        border-radius: 4px;
+        // position: relative;
+        justify-content: center;
+        display: flex;
+        @include media-breakpoint-up(md) {
+            &:after {
+                height: 65px;
+                width: 1px;
+                background-color: #CBD5D9;
+                position: absolute;
+                content: "";
+                top: 32px;
+                right: 0px;
+            }
+        }
+        a {
+            height: 62px;
+            width: 62px;
+            @include media-breakpoint-up(lg) {
+                height: 92px;
+                width: 92px;
+            }
+            padding-top: 7px;
+            border-radius: 4px;
+            display: block;
+        }
+        &:hover {
+            a {
+                background-color: #82c148;
+                // background: linear-gradient(135deg, #A8DC28 0%, #31C5F2 100%);
+                text-decoration: none;
+            }
+            .services {
+                background-image: url('/public/images/category-navigation/Services-hover.svg');
+            }
+            .forsale {
+                background-image: url('/public/images/category-navigation/For-Sale-hover.svg');
+            }
+            .motors {
+                background-image: url('/public/images/category-navigation/Motors-hover.svg');
+            }
+            .jobs {
+                background-image: url('/public/images/category-navigation/Jobs-hover.svg');
+            }
+            .property {
+                background-image: url('/public/images/category-navigation/Property-hover.svg');
+            }
+            .animals {
+                background-image: url('/public/images/category-navigation/Animals-hover.svg');
+            }
+            .property {
+                background-image: url('/public/images/category-navigation/Property-hover.svg');
+            }
+            .community {
+                background-image: url('/public/images/category-navigation/Whatson-hover.svg');
+            }
+            .adult {
+                background-image: url('/public/images/category-navigation/Adult-white-hover.svg');
+            }
+            .category-nav__item--title {
+                color: #fff;
+            }
+        }
+        &--icon {
+            height: 35px;
+            @include media-breakpoint-up(md) {
+                height: 30px;
+            }
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 28px;
+            @include media-breakpoint-up(lg) {
+                background-size: 40px;
+                height: 50px;
+            }
+            &.services {
+                background-image: url('/public/images/category-navigation/services.svg');
+            }
+            &.forsale {
+                background-image: url('/public/images/category-navigation/forsale.svg');
+            }
+            &.motors {
+                background-image: url('/public/images/category-navigation/Motors.svg');
+            }
+            &.jobs {
+                background-image: url('/public/images/category-navigation/Jobs.svg');
+            }
+            &.property {
+                background-image: url('/public/images/category-navigation/Property.svg');
+            }
+            &.animals {
+                background-image: url('/public/images/category-navigation/Animals.svg');
+            }
+            &.community {
+                background-image: url('/public/images/category-navigation/Whatson.svg');
+            }
+            &.adult {
+                background-image: url('/public/images/category-navigation/Adult-green.svg');
+            }
+        }
+        &--title {
+            font-size: 10px;
+            @include media-breakpoint-up(lg) {
+                font-size: 14px;
+            }
+            font-family: $font-family-semi-bold;
+            color: #313133;
+            line-height: 21px;
+        }
+    }
+    .owl-nav {
+        button {
+            position: absolute;
+            top: 50%;
+            color: #fff;
+            margin: 0;
+            transition: all 0.3s ease-in-out;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.5) !important;
+            height: 100%;
+            width: 40px;
+            &:focus {
+                outline: none;
+            }
+        }
+        button.owl-prev {
+            left: 0;
+            display: none;
+        }
+        button.owl-next {
+            right: 0;
+            img {
+                width: 20px;
+                height: 20px;
+            }
+        }
+    }
+}

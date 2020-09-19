@@ -1,0 +1,20 @@
+/*
+****************************************************************************************************************
+N.B please don't write any styling in this file. This file is used only to import the styles from the framework.
+****************************************************************************************************************
+*/
+
+
+/**
+  Main sass file.
+ */
+
+@import "settings/settings";
+@import "vendor/vendor";
+@import "base/base";
+@import "typography/typography";
+@import "helper/helper";
+@import "components/components";
+@import "modules/modules";
+@import "layout/layout";
+@import "pages/pages";
