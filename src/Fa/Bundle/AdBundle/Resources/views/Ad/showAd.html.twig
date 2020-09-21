@@ -171,7 +171,6 @@
     {% set feedStatusDescription = '<p><b>SOLD! No longer available.</b></p>' ~ attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) %}
     {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), feedStatusDescription) %}
 {% endif %}
-    
 {% block facebook_meta %}
     {% set adUrl = container.get('fa_ad.manager.ad_routing').getDetailUrl(adDetail) %}
     <meta property="og:url" content="{{ adUrl }}" />
@@ -1854,7 +1853,7 @@
 
         $( document ).ready(function() {
             googletag.cmd.push(function() {
-                googletag.pubads().setTargeting('page_type', ['Ad details']).setTargeting('user_type', '{{ userTypePubAds }}').setTargeting('category', '{{ targetCat }}').setTargeting('class', '{{ targetClass }}').setTargeting('sub_class', '{{ targetSubClass }}').setTargeting('sub_sub_class', '{{ targetSubSubClass }}').setTargeting('adBlocker', false).setTargeting('user_logged', {{ _logged_in }}).setTargeting('ad_id', '{{ adId }}').setTargeting('town', '{{ town }}').setTargeting('county', '{{ county }}').setTargeting('country', 'UK').setTargeting('edition_area', "{{ ((locationGroup is defined and locationGroup.name is defined)?'Print -'~locationGroup.name:'Non Print')|raw }}").setTargeting('ad_location', '{{ town }}').setTargeting('ad_published', '{{attribute(adDetail, constant(solrMapping ~ 'PUBLISHED_AT'))|time_ago_in_words}}').setTargeting('seller_contact_methods', '{{ contactMethods }}').setTargeting('ad_price', '{{ targetAdPrice }}');
+                googletag.pubads().setTargeting('page_type', ['Ad details']).setTargeting('user_type', ['{{ userTypePubAds }}']).setTargeting('category', ['{{ targetCat }}']).setTargeting('class', ['{{ targetClass }}']).setTargeting('sub_class', ['{{ targetSubClass }}']).setTargeting('sub_sub_class', ['{{ targetSubSubClass }}']).setTargeting('adBlocker', false).setTargeting('user_logged', {{ _logged_in }}).setTargeting('ad_id', ['{{ adId }}']).setTargeting('town', ['{{ town }}']).setTargeting('county', ['{{ county }}']).setTargeting('country', ['UK']).setTargeting('edition_area', ['{{ ((locationGroup is defined and locationGroup.name is defined)?'Print -'~locationGroup.name:'Non Print')|raw }}']).setTargeting('ad_location', ['{{ town }}']).setTargeting('ad_published', ['{{attribute(adDetail, constant(solrMapping ~ 'PUBLISHED_AT'))|time_ago_in_words}}']).setTargeting('seller_contact_methods', ['{{ contactMethods }}']).setTargeting('ad_price', ['{{ targetAdPrice }}']);
                 googletag.enableServices();
             });
 
