@@ -490,8 +490,6 @@
             {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
             {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_IN_HEADER_TABLET') %}
             {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
-            <div id='dsk-banner-ad-a' class='p-t-20'></div>
-            <div id='mob-banner-ad-a'></div>
         </div>
     </div>
 </div>
@@ -817,7 +815,6 @@
                             {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
                             {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_BELOW_DESCRIPTION_TABLET') %}
                             {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
-                            <div id='dsk-box-ad-c'></div>
                         </div>
                         {{ include('FaAdBundle:Ad:AdDetailRightPanel.html.twig') }}
                     </div>
@@ -1824,41 +1821,36 @@
         {% set contactMethods = contactMethods ~ 'Phone' %}
         {% endif %}
         {% endif %}
+
+        {%  set targetCat = '' %}
+        {%  set targetClass = '' %}
+        {%  set targetSubClass = '' %}
+        {%  set targetSubSubClass = '' %}
+
+        {% if catArr is defined %}
+            {% if catArr[0] is defined %}
+                {%  set targetCat = catArr[0] %}
+            {% endif %}
+            {% if catArr[1] is defined %}
+                {%  set targetClass = catArr[1] %}
+            {% endif %}
+            {% if catArr[2] is defined %}
+                {%  set targetSubClass = catArr[2] %}
+            {% endif %}
+            {% if catArr[3] is defined %}
+                {%  set targetSubSubClass = catArr[3] %}
+            {% endif %}
+        {% endif %}
+
+        {% set targetAdPrice = '' %}
+        {% if attribute(adDetail, constant(solrMapping ~ 'PRICE')) is defined %}
+            {% set targetAdPrice = attribute(adDetail, constant(solrMapping ~ 'PRICE')) %}
+        {% endif %}
+
         $( document ).ready(function() {
             googletag.cmd.push(function() {
-                googletag.pubads().setTargeting('page_type', 'Ad details');
-                googletag.pubads().setTargeting('user_type', '{{ userTypePubAds }}');
-
-                {% if catArr is defined %}
-                {% if catArr[0] is defined %}
-                googletag.pubads().setTargeting('category', '{{ catArr[0] }}');
-                {% endif %}
-                {% if catArr[1] is defined %}
-                googletag.pubads().setTargeting('class', '{{ catArr[1] }}');
-                {% endif %}
-                {% if catArr[2] is defined %}
-                googletag.pubads().setTargeting('sub_class', '{{ catArr[2] }}');
-                {% endif %}
-                {% if catArr[3] is defined %}
-                googletag.pubads().setTargeting('sub_sub_class', '{{ catArr[3] }}');
-                {% endif %}
-                {% endif %}
-
-                googletag.pubads().setTargeting('adBlocker', false);
-                googletag.pubads().setTargeting('user_logged', {{ _logged_in }});
-
-                googletag.pubads().setTargeting('ad_id', '{{ adId }}');
-
-                googletag.pubads().setTargeting('town', '{{ town }}');
-                googletag.pubads().setTargeting('county', '{{ county }}');
-                googletag.pubads().setTargeting('country', 'UK');
-                googletag.pubads().setTargeting('edition_area', "{{ ((locationGroup is defined and locationGroup.name is defined)?'Print -'~locationGroup.name:'Non Print')|raw }}");
-
-
-                googletag.pubads().setTargeting('ad_location', '{{ town }}');
-                googletag.pubads().setTargeting('ad_published', '{{attribute(adDetail, constant(solrMapping ~ 'PUBLISHED_AT'))|time_ago_in_words}}');
-                googletag.pubads().setTargeting('ad_price', '{{ attribute(adDetail, constant(solrMapping ~ 'PRICE')) }}');
-                googletag.pubads().setTargeting('seller_contact_methods', '{{ contactMethods }}');
+                googletag.pubads().setTargeting('page_type', ['Ad details']).setTargeting('user_type', '{{ userTypePubAds }}').setTargeting('category', '{{ targetCat }}').setTargeting('class', '{{ targetClass }}').setTargeting('sub_class', '{{ targetSubClass }}').setTargeting('sub_sub_class', '{{ targetSubSubClass }}').setTargeting('adBlocker', false).setTargeting('user_logged', {{ _logged_in }}).setTargeting('ad_id', '{{ adId }}').setTargeting('town', '{{ town }}').setTargeting('county', '{{ county }}').setTargeting('country', 'UK').setTargeting('edition_area', "{{ ((locationGroup is defined and locationGroup.name is defined)?'Print -'~locationGroup.name:'Non Print')|raw }}").setTargeting('ad_location', '{{ town }}').setTargeting('ad_published', '{{attribute(adDetail, constant(solrMapping ~ 'PUBLISHED_AT'))|time_ago_in_words}}').setTargeting('seller_contact_methods', '{{ contactMethods }}').setTargeting('ad_price', '{{ targetAdPrice }}');
+                googletag.enableServices();
             });
 
             window.dataLayer = window.dataLayer || [];
