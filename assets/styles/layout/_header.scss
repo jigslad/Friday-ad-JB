@@ -62,8 +62,8 @@
                 .navigation-right__item {
                     &:after {
                         height: 11px;
-                        right: -10px;
-                        top: 8px;
+                        right: -13px;
+                        top: 6px;
                     }
                 }
             }
@@ -71,7 +71,7 @@
         &__item {
             margin-right: 24px;
             position: relative;
-            padding-bottom: 3px;
+            padding-bottom: 4px;
             &:after {
                 content: '';
                 position: absolute;
@@ -79,7 +79,7 @@
                 width: 1px;
                 height: 11px;
                 right: -13px;
-                top: 5px;
+                top: 6px;
             }
             &:last-child {
                 margin-right: 16px;
@@ -174,11 +174,15 @@
         height: 40px;
         margin: auto;
         &.private-user {
-            img{
+            img {
                 border-radius: 50%;
             }
         }
-        &.business-user {}
+        &.business-user {
+            img {
+                height: 100%;
+            }
+        }
     }
     &__user-name {
         font-size: 12px;
