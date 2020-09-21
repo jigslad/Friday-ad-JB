@@ -214,20 +214,13 @@
 {% endblock %}
 
 {% block scripttop %}
-    {% stylesheets filter="uglifycss" output="bundles/css/compiled/srchlist.css"
-            "build/css/owl-carousel.css"
-            "build/css/featured-ads.css"
-            "build/css/sponsored-slots.css"
-            "build/css/upgrade-featured.css"
-        %}
-    {% endstylesheets %}
-    <link rel="stylesheet" href="{{ asset('/bundles/css/compiled/srchlist.css') }}"/>
-    {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) %}
+        {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) %}
         {# CSS for owl carousel - taken from Fa/Bundle/AdBundle/Resources/views/AdList/owl-carousel-2-css.html.twig and inline CSS for listing page #}
         {% stylesheets filter='uglifycss' output='bundles/css/compiled/search-result.css'
             'bundles/fafrontend/css/ad-list.css'
         %}
             <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
+
         {% endstylesheets %}
     {% endif %}
 {% endblock %}
@@ -364,7 +357,6 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 
             {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_FILTERBOX') %}
             {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
-            <div id='dsk-box-ad-b'></div>
         </div>
 
         <div id="listingDiv" class="large-18 columns">
@@ -424,7 +416,6 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                 	 	{% set bannerStatus = false %}
 	                	{% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_ABOVE_RESULTS') %}
 	                	{{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
-                         <div id='mob-box-ad-a' class="p-b-20"></div>
 	                  {% endif %}
 	             {% endif %}
                 {% set slotAdCount = 0 %}{% set setExtendedHeading = 0 %}
@@ -506,7 +497,6 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                     	 {% if (adCounter == 2 	and totalAdsOnPage > 2 and bannerStatus) %}
 		                	{% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_ABOVE_RESULTS') %}
 		                	{{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
-                             <div id='mob-box-ad-b' class="p-b-20"></div>
 		                  {% endif %}
 		             {% endif %}
 
@@ -521,7 +511,6 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                     {% if adCounter == 5 and pagination.getNbResults() > 5 %}
                         {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_IN_RESULTS_TOP') %}
                         {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
-                        <div id='dsk-box-ad-c'></div>
                     {% endif %}
 
                     {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
@@ -540,8 +529,6 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                             {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_IN_RESULTS') %}
                             {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
                         {% endif %}
-                        <div id='dsk-box-ad-d'></div>
-                        <div id='mob-box-ad-c' class="p-b-20"></div>
                     {% endif %}
                 {% endfor %}
 
@@ -599,8 +586,6 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 
                 {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_BELOW_RESULTS') %}
                 {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
-                <div id='dsk-box-ad-e'></div>
-                <div id='mob-box-ad-d'></div>
             {% endif %}
 
             {% set locationUK = constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID') %}
@@ -618,7 +603,6 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 
                 {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_PAGINATION_MOBILE') %}
                 {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
-                <div id='dsk-box-ad-f' class="clearfix"></div>
             {% endif %}
 
             {% if searchParams is defined and (searchParams.expired_ads is not defined or (searchParams.expired_ads is defined and searchParams.expired_ads is null)) %}
@@ -724,12 +708,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                     $("#banner_placeholder_2_4").removeClass("fixed-banner");
                 }
             }
-            if (($('.search-filters').offset().top + $('.search-filters').height() - $(window).scrollTop() < -100) && ($('footer').offset().top - $(window).scrollTop() - $('#dsk-box-ad-b').height() > 0)) {
-                $('#dsk-box-ad-b').addClass('fixed-banner');
-                $('#dsk-box-ad-b').css('left', $('#listingDiv').offset().left - $('#dsk-box-ad-b').width());
-            } else {
-                $('#dsk-box-ad-b').removeClass('fixed-banner');
-            }
+
         });
 
         function visitUserProfileOrAd(eventCategory, eventAction, eventLabel) {
@@ -827,42 +806,37 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
             {% set user_type = 'Private' %}
         {% endif %}
 
+        {%  set targetCat = '' %}
+        {%  set targetClass = '' %}
+        {%  set targetSubClass = '' %}
+        {%  set targetSubSubClass = '' %}
+
+        {% if catArr is defined  and catArr[0] is defined %}
+            {% if catArr[0] is defined %}
+                {%  set targetCat = catArr[0] %}
+            {% endif %}
+            {% if catArr[1] is defined %}
+                {%  set targetClass = catArr[1] %}
+            {% endif %}
+            {% if catArr[2] is defined %}
+                {%  set targetSubClass = catArr[2] %}
+            {% endif %}
+            {% if catArr[3] is defined %}
+                {%  set targetSubSubClass = catArr[3] %}
+            {% endif %}
+        {% else %}
+            {% if keywordCat is defined and keywordCat is not null %} {%  set targetCat = keywordCat %}  {% endif %}
+        {% endif %}
+
+        {% set targetKeySrch =  '' %}
+        {% if searchParams.keywords is defined %}
+            {% set targetKeySrch =  searchParams.keywords %}
+            googletag.pubads();
+        {% endif %}
+
         googletag.cmd.push(function() {
-            googletag.pubads().setTargeting('page_type', 'Search Results');
-            googletag.pubads().setTargeting('user_type', {{ user_type }});
-
-            {% if catArr is defined  and catArr[0] is defined %}
-                {% if catArr[0] is defined %}
-                    googletag.pubads().setTargeting('category', '{{ catArr[0] }}');
-                {% endif %}
-                {% if catArr[1] is defined %}
-                    googletag.pubads().setTargeting('class', '{{ catArr[1] }}');
-                {% endif %}
-                {% if catArr[2] is defined %}
-                    googletag.pubads().setTargeting('sub_class', '{{ catArr[2] }}');
-                {% endif %}
-                {% if catArr[3] is defined %}
-                    googletag.pubads().setTargeting('sub_sub_class', '{{ catArr[3] }}');
-                {% endif %}
-            {% else %}
-                {% if keywordCat is defined and keywordCat is not null %} googletag.pubads().setTargeting('category',[{{ keywordCat }}]); {% endif %}
-            {% endif %}
-
-            googletag.pubads().setTargeting('town', '{{ town }}');
-            {% if lvl==4 and town is defined %}
-            googletag.pubads().setTargeting('london_areas', '{{ town }}');
-            {% endif %}
-            googletag.pubads().setTargeting('county', '{{ county }}');
-
-            googletag.pubads().setTargeting('country', 'UK');
-            googletag.pubads().setTargeting('edition_area', "{{ ((locationGroup is defined and locationGroup.name is defined)?'Print - '~locationGroup.name:'Non Print')|raw }}");
-
-            {% if searchParams.keywords is defined %}
-                googletag.pubads().setTargeting('search_keyword', '{{ searchParams.keywords }}');
-            {% endif %}
-            googletag.pubads().setTargeting('adBlocker', false);
-            googletag.pubads().setTargeting('user_logged', {{ _logged_in }});
-
+            googletag.pubads().setTargeting('page_type', 'Search Results').setTargeting('user_type', {{ user_type }}).setTargeting('category', '{{ targetCat }}').setTargeting('class', '{{ targetClass }}').setTargeting('sub_class', '{{ targetSubClass }}').setTargeting('sub_sub_class', '{{ targetSubSubClass }}').setTargeting('town', '{{ town }}').setTargeting('london_areas', '{{ town }}').setTargeting('county', '{{ county }}').setTargeting('country', 'UK').setTargeting('edition_area', "{{ ((locationGroup is defined and locationGroup.name is defined)?'Print - '~locationGroup.name:'Non Print')|raw }}").setTargeting('search_keyword', '{{ targetKeySrch }}').setTargeting('adBlocker', false).setTargeting('user_logged', {{ _logged_in }});
+            googletag.enableServices();
         });
 
         window.dataLayer = window.dataLayer || [];

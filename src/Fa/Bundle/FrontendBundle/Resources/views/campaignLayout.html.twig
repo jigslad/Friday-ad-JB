@@ -77,9 +77,8 @@
 
 
         googletag.cmd.push(function() {
-            googletag.pubads().setTargeting('page_type', 'Peripheral_Content');
-            googletag.pubads().setTargeting('adBlocker', false);
-            googletag.pubads().setTargeting('user_logged', {{ _logged_in }});
+            googletag.pubads().setTargeting('page_type', 'Peripheral_Content').setTargeting('adBlocker', false).setTargeting('user_logged', {{ _logged_in }});
+            googletag.enableServices();
         });
 
             //]]>

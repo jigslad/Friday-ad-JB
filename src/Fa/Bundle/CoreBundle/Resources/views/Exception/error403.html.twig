@@ -24,9 +24,8 @@
     {% endif %}
 
     googletag.cmd.push(function() {
-        googletag.pubads().setTargeting('page_type', '403_page');
-        googletag.pubads().setTargeting('adBlocker', false);
-        googletag.pubads().setTargeting('user_logged', false);
+        googletag.pubads().setTargeting('page_type', '403_page').setTargeting('adBlocker', false).setTargeting('user_logged', false);
+        googletag.enableServices();
     });
     ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  '_403_page'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %}});
 //]]>
