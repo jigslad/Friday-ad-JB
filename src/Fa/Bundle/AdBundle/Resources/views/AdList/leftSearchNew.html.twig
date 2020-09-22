@@ -1,0 +1,138 @@
+<div class="search-filters">
+    <dl class="accordion" data-accordion>
+        {# Category search params - start #}
+        <dd class="accordion-navigation keep-shown">
+            <a href="#panel1a" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Categories'|trans({}, 'frontend-left-search')}}</h5></a>
+            <div class="content active clearfix">
+                {% if leftFilters.parent_category is defined and leftFilters.parent_category != '' %}
+                    <div class="search-cat-parent-list">
+                        <ul>
+                            <li><a data-href="{{ leftFilters.parent_category.getSlug() }}">{{ leftFilters.parent_category.getName() }}</a></li>
+                        </ul>
+                    </div>
+                {% endif %}
+                <div class="search-cat-sub-list">
+                    <ul>
+                        <li><label>{{ leftFilters.current_category }}</label></li>
+                        {% for category in leftFilters.categories %}
+                            <li><a data-href="{{ category.slug }}">{{ category.name }}
+                                    {% if category.count is defined %}
+                                        ({{ category.count }})
+                                    {% else %}
+                                        ({{ 0 }})
+                                    {% endif %}
+                                </a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </dd>
+        {# Category search params - end #}
+
+        {# Static search filters - start #}
+        <dd class="accordion-navigation keep-shown">
+            <a href="#panel2a" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'My budget is from'|trans({}, 'frontend-left-search')}}</h5></a>
+            <div class="content active clearfix">
+                <ul class="budget-box clearfix">
+                    <li class="budget-field">
+                        <span>&pound;</span>
+                        <input type="text" class="form-control white-field" id="fa_left_search_item__price_from" name="fa_left_search[item__price_from]" required="required" >
+                    </li>
+                    <li class="budget-to-caption">to</li>
+                    <li class="budget-field">
+                        <span>&pound;</span>
+                        <input type="text" class="form-control white-field" id="fa_left_search_item__price_to" name="fa_left_search[item__price_to]" required="required">
+                    </li>
+                    <li><button class="budget-go-btn" type="button" onclick="formulate_photo_url();"></button></li>
+                </ul>
+            </div>
+        </dd>
+
+        <dd class="accordion-navigation keep-shown">
+            <a href="#panel1b" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Seller'|trans({}, 'frontend-left-search')}}</h5></a>
+            <div class="content active clearfix">
+                <ul class="seller-link">
+                    {% for user_type in leftFilters.user_types %}
+                        <li><a data-href="{{ user_type.url_param }}" rel="nofollow">{{ user_type.title }} ({{ user_type.count }})</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </dd>
+
+        <dd class="accordion-navigation keep-shown">
+            <div class="content active label-inline">
+                <ul class="white-checkbox search-type crawlable-checkbox">
+                    <li>
+                        <span class="custom-checkbox">
+                            <input type="checkbox" id="fa_left_search_items_with_photo" name="fa_left_search[items_with_photo]" value="1">
+                        </span>
+                        <label class="mb0" for="fa_left_search_items_with_photo">Only ads with photo ({{ leftFilters.ads_with_images }})</label>
+                    </li>
+                </ul>
+            </div>
+        </dd>
+
+        {# <dd class="accordion-navigation keep-shown">
+            <div class="content active label-inline">
+                <ul class="white-checkbox search-type crawlable-checkbox">
+                    <li>
+                        <span class="custom-checkbox">
+                            <input type="checkbox" id="fa_left_search_expired_ads" name="fa_left_search[expired_ads]" value="1">
+                        </span>
+                        <label class="mb0" for="fa_left_search_items_with_photo">Expired ads</label>
+                    </li>
+                </ul>
+            </div>
+        </dd>#}
+        {# Static search filters - end #}
+</dl>
+</div>
+<script>
+    $(document).ready(function() {
+        function formulate_photo_url() {
+            var url = window.href;
+            if ($('#fa_left_search_item__price_from').val()) {
+                var url_string = 'item_price_from=' + $('#fa_left_search_item__price_from').val();
+                if (url.contains('?')) {
+                    url += '&' + url_string;
+                } else {
+                    url += '?' + url_string;
+                }
+            }
+
+            if ($('#fa_left_search_item__price_to').val()) {
+                var url_string = '&item_price_to=' + $('#fa_left_search_item__price_to').val();
+                if (url.contains('?')) {
+                    url += '&' + url_string;
+                } else {
+                    url += '?' + url_string;
+                }
+            }
+
+            window.location.href = url;
+        }
+
+        $('a[data-href]').each(function() {
+            var href = window.location.href;
+            var this_url = $(this).attr('data-href');
+            var url_params = '';
+
+            if (href.indexOf('?') != -1) {
+                var split_params = href.split('?');
+                url_params = split_params[1];
+                href = split_params[0];
+            }
+
+            var index = href.indexOf(this_url);
+            if (index != -1) {
+                href = href.substring(0, (index + this_url.length));
+            } else if (this_url.indexOf('=') != -1) {
+                url_params += this_url;
+            } else {
+                href += this_url + '/';
+            }
+
+            $(this).attr('href', href + '?' + url_params);
+        });
+    });
+</script>

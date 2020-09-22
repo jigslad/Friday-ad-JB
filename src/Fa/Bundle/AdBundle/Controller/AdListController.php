@@ -795,7 +795,7 @@ class AdListController extends CoreController
         }
 
         // Active or expired ads
-        /*if (isset($data['search']['expired_ads']) && $data['search']['expired_ads']) {
+        if (isset($data['search']['expired_ads']) && $data['search']['expired_ads']) {
             $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_EXPIRED_ID;
         } else {
             $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
@@ -804,13 +804,23 @@ class AdListController extends CoreController
         // ads with min 1 photo
         if (isset($data['search']['items_with_photo']) && $data['search']['items_with_photo']) {
             $data['query_filters']['item']['image_count'] = '1|';
-        }*/
+        }
+
+        $data['facet_fields'] = array(
+            'category_ids'      => array('min_count' => 1),
+            'is_trade_ad'       => array('min_count' => 0),
+            'image_count'       => array('min_count' => 1)
+        );
 
         /*$data['facet_fields'] = array(
-            'town_id'           => array('limit' => 5, 'min_count' => 1),
-            'category_ids'      => array('min_count' => 1),
-            'root_category_id'  => array('min_count' => 1),
-            'area_id'		    => array('limit' => 5, 'min_count' => 1)
+            'town_id'           => array('limit' => 5, 'min_count' => 0),
+            'category_ids'      => array('min_count' => 0),
+            'root_category_id'  => array('min_count' => 0),
+            'area_id'		    => array('limit' => 5, 'min_count' => 0)
+        );
+
+        $data['facet_prefix'] = array(
+            'dim_list_' => array('min_count' => 0)
         );*/
 
         // Add dimension filters facets
@@ -867,6 +877,7 @@ class AdListController extends CoreController
         $data       = $this->setDefaultParametersNew($request, $mapFlag, 'finders', array());
 
         $pageString = trim($request->get('page_string'), '/');
+        $location   = $request->get('location');
         $page       = (isset($data['pager']['page']) && $data['pager']['page']) ? $data['pager']['page']: 1;
         if (strpos($pageString, 'page') !== false) {
             $page = explode('page-', $pageString)[1];
@@ -919,16 +930,57 @@ class AdListController extends CoreController
         $adFavouriteIds = $this->getRepository('FaAdBundle:AdFavorite')->getFavoriteAdByUserId($userId, $this->container);
 
         $parameters = [
-            'ads' => array_merge($featuredAds, $ads),
+            'featuredAds' => $featuredAds,
+            'ads' => $ads,
             'resultCount' => $pagination['resultCount'] + count($featuredAds),
             'bannersArray' => $bannersArray,
             'recommendedSlotResult' => $recommendedSlot,
             'recommendedSlotLimit' => $this->getRepository('FaCoreBundle:Config')->getSponsoredLimit(),
             'pagination' => $pagination['pagination'],
-            'adFavouriteIds' => $adFavouriteIds
+            'adFavouriteIds' => $adFavouriteIds,
+            'leftFilters' => $this->getLeftFilters($category, $pagination['facetResult'], $pagination['resultCount'])
          ];
 
         return $this->render('FaAdBundle:AdList:searchResultNew.html.twig', $parameters, null);
+    }
+
+    /**
+     * @param $categoryObj
+     * @param $facetResult
+     * @param $totalAds
+     * @return array
+     */
+    private function getLeftFilters($categoryObj, $facetResult, $totalAds)
+    {
+        // get next level categories
+        $categories = $this->getRepository('FaEntityBundle:Category')->getChildrenById($categoryObj->getId());
+
+        foreach($categories as $key => $category) {
+            if (isset($facetResult['category_ids'][$category['id']])) {
+                $categories[$key]['count'] = $facetResult['category_ids'][$category['id']];
+            }
+        }
+
+        $userTypes = [
+            0 => [
+                'title' => 'Private advertiser',
+                'url_param' => 'is_trade_ad=0',
+                'count' => empty($facetResult['is_trade_ad']) ? 0 : intval($facetResult['is_trade_ad']["false"])
+            ],
+            1 => [
+                'title' => 'Business advertiser',
+                'url_param' => 'is_trade_ad=1',
+                'count' => empty($facetResult['is_trade_ad']) ? 0 : intval($facetResult['is_trade_ad']["true"])
+            ]
+        ];
+
+        return [
+            'categories'        => $categories,
+            'current_category'  => $categoryObj->getName(),
+            'parent_category'   => $categoryObj->getParent()->getId() == 1 ? '' : $categoryObj->getParent(),
+            'user_types'        => $userTypes,
+            'ads_with_images'   => intval($totalAds - $facetResult['image_count']['0'])
+        ];
     }
 
     /**
@@ -943,15 +995,23 @@ class AdListController extends CoreController
      */
     private function getSolrPagination($solrCoreName, $keywords, $data, $page = 1, $recordsPerPage = 30, $staticOffset = 0, $exactMatch = false)
     {
-        $this->get('fa.solrsearch.manager')->init($solrCoreName, $keywords, $data, $page, $recordsPerPage, $staticOffset, $exactMatch);
-        $solrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
+        $solrSearchManager = $this->get('fa.solrsearch.manager');
+
+        $solrSearchManager->init($solrCoreName, $keywords, $data, $page, $recordsPerPage, $staticOffset, $exactMatch);
+        $solrResponse = $solrSearchManager->getSolrResponse();
 
         // fetch result set from solr
-        $result      = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponse);
-        $resultCount = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($solrResponse);
+        $result      = $solrSearchManager->getSolrResponseDocs($solrResponse);
+        $resultCount = $solrSearchManager->getSolrResponseDocsCount($solrResponse);
+        if ($recordsPerPage > 3) {
+            $facetResult = $solrSearchManager->getSolrResponseFacetFields($solrResponse);
+        } else {
+            $facetResult = [];
+        }
 
         $this->get('fa.pagination.manager')->init($result, $page, $recordsPerPage, $resultCount);
-        return ['pagination' => $this->get('fa.pagination.manager')->getSolrPagination(), 'resultCount' => $resultCount];
+
+        return ['pagination' => $this->get('fa.pagination.manager')->getSolrPagination(), 'resultCount' => $resultCount, 'facetResult' => $facetResult];
     }
 
     /**
