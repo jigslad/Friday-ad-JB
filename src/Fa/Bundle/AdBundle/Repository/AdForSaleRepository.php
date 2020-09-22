@@ -243,7 +243,7 @@ class AdForSaleRepository extends EntityRepository
             $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'colour'), $entityRepository->getCachedEntityById($container, $adForSale->getColourId()));
             $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'main_colour'), $entityRepository->getCachedEntityById($container, $adForSale->getMainColourId()));
             $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'size'), $entityRepository->getCachedEntityById($container, $adForSale->getSizeId()));
-            $document = $this->addField($document, 'meta_values', $entityRepository->getCachedEntityById($container, $adForSale->getMetaData()));
+            $document = $this->addField($document, 'meta_values', $adForSale->getMetaData());
 
             //for business advertiser only.
             $logoURL = NULL;
