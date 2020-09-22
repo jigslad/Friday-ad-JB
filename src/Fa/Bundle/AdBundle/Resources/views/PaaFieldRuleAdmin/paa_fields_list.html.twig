@@ -1,11 +1,10 @@
 {% set openField = {} %}
-{% set fieldProperties = {1: 'label', 2: 'status', 3: 'is_required', 4: 'is_recommended', 5: 'help_text', 6: 'default_value', 7: 'min_length', 8: 'max_length', 9: 'step', 10: 'ord', 11: 'error_text',12:'is_added'} %}
+{% set fieldProperties = {1: 'label', 2: 'status', 3: 'is_required', 4: 'is_recommended', 5: 'help_text', 6: 'default_value', 7: 'min_length', 8: 'max_length', 9: 'step', 10: 'ord', 11: 'error_text',12:'is_added',13:'hide_field'} %}
 {% for fieldProperty in fieldProperties %}
     {% if attribute(attribute(form, field), fieldProperty) is defined and attribute(attribute(form, field), fieldProperty).vars.errors|length %}
         {% set openField = openField|merge({(field): true}) %}
     {% endif %}
 {% endfor %}
-    
 <li id="{{ field~'_ord' }}" class="ui-state-default">
     <div class="sortable-title">
       <a href="javascript:void(0);" title="{{ 'Click to view field details.'|trans }}" onclick="return toggleTableTr('paa_field_rule_anchor_{{ field }}', 'paa_field_rule_div_{{ field }}');" id="paa_field_rule_anchor_{{field}}">
@@ -13,42 +12,48 @@
         {{ form_label(attribute(form, field)) }}
       </a>
     </div>
-    
+
     <div {% if openField[field] is not defined %}style="display:none"{% endif %} id="paa_field_rule_div_{{ field }}" class="sortable-content">
         {{ form_label(attribute(form, field).label) }} <span class="required">*</span>
         {{ form_widget(attribute(form, field).label) }}
         {{ form_errors(attribute(form, field).label) }}
-        
+
         {{ form_label(attribute(form, field).placeholder_text) }}
         {{ form_widget(attribute(form, field).placeholder_text) }}
         {{ form_errors(attribute(form, field).placeholder_text) }}
-        
+
         <div class="checkbox-row">
             {{ form_widget(attribute(form, field).status) }}
             {{ form_label(attribute(form, field).status) }}
             {{ form_errors(attribute(form, field).status) }}
         </div>
-        
+
         <div class="checkbox-row">
             {{ form_widget(attribute(form, field).is_required) }}
             {{ form_label(attribute(form, field).is_required) }}
             {{ form_errors(attribute(form, field).is_required) }}
+
+            {#{% if field not in ['youtube_video_url','photo_error'] %}#}
+                {{ form_widget(attribute(form, field).hide_field) }}
+                {{ form_label(attribute(form, field).hide_field) }}
+                {{ form_errors(attribute(form, field).hide_field) }}
+            {#{% endif %}#}
         </div>
-        
+
         <div class="checkbox-row mb10">
             {{ form_widget(attribute(form, field).is_recommended) }}
             {{ form_label(attribute(form, field).is_recommended) }}
             {{ form_errors(attribute(form, field).is_recommended) }}
         </div>
-        
+
         {{ form_label(attribute(form, field).help_text) }}
         {{ form_widget(attribute(form, field).help_text, {'attr': {'class':'form-control', 'autofocus': 'autofocus'}}) }}
         {{ form_errors(attribute(form, field).help_text) }}
-        
+
         {{ form_label(attribute(form, field).error_text) }}
         {{ form_widget(attribute(form, field).error_text, {'attr': {'class':'form-control', 'autofocus': 'autofocus'}}) }}
         {{ form_errors(attribute(form, field).error_text) }}
-        
+
         <div class="row">
             <div class="large-3 columns">
                 {{ form_label(attribute(form, field).default_value) }}
@@ -71,7 +76,7 @@
                 {{ form_errors(attribute(form, field).step) }}
             </div>
         </div>
-        
+
         {{ form_widget(attribute(form, field).ord, {'attr': {'style': 'display:none'} }) }}
         {{ form_errors(attribute(form, field).ord) }}
         {{ form_widget(attribute(form, field).is_added) }}
