@@ -29,6 +29,19 @@
         </dd>
         {# Category search params - end #}
 
+        {# Town left filters #}
+        {% if leftFilters.locationFacets|length %}
+            <div class="towns-list">
+                <label>{{'Nearby towns'|trans({}, 'frontend-left-search')}}:</label>
+                <ul>
+                    {% for location in leftFilters.locationFacets %}
+                        <li><a data-location-href="{{ location.slug }}">{{ location.name }} ({{ location.count }})</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        {# Town left filters - end #}
+
         {# Static search filters - start #}
         <dd class="accordion-navigation keep-shown">
             <a href="#panel2a" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'My budget is from'|trans({}, 'frontend-left-search')}}</h5></a>
@@ -59,6 +72,25 @@
             </div>
         </dd>
 
+        {% if leftFilters.conditions|length %}
+            <dd class="accordion-navigation">
+                <a href="#panel2b" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Condition'|trans({}, 'frontend-left-search')}}</h5></a>
+                <div id="panel2b" class="content active label-inline">
+                    <ul class="white-checkbox search-type crawlable-checkbox">
+                        {% for condition in leftFilters.conditions %}
+                            <li>
+                                <span class="custom-checkbox">
+                                    <input type="checkbox" id="fa_left_search_condition_{{ condition.id }}" name="fa_left_search[condition]">
+                                </span>
+                                <label class="mb0" for="fa_left_search_condition">{{ condition.name }} ({{ condition.count }})</label>
+                                <a data-href="{{ condition.slug }}">{{ condition.name }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </dd>
+        {% endif %}
+
         <dd class="accordion-navigation keep-shown">
             <div class="content active label-inline">
                 <ul class="white-checkbox search-type crawlable-checkbox">
@@ -67,12 +99,13 @@
                             <input type="checkbox" id="fa_left_search_items_with_photo" name="fa_left_search[items_with_photo]" value="1">
                         </span>
                         <label class="mb0" for="fa_left_search_items_with_photo">Only ads with photo ({{ leftFilters.ads_with_images }})</label>
+                        <a data-href="ads_with_images=1">Only ads with photo</a>
                     </li>
                 </ul>
             </div>
         </dd>
 
-        {# <dd class="accordion-navigation keep-shown">
+        <dd class="accordion-navigation keep-shown">
             <div class="content active label-inline">
                 <ul class="white-checkbox search-type crawlable-checkbox">
                     <li>
@@ -80,10 +113,11 @@
                             <input type="checkbox" id="fa_left_search_expired_ads" name="fa_left_search[expired_ads]" value="1">
                         </span>
                         <label class="mb0" for="fa_left_search_items_with_photo">Expired ads</label>
+                        <a data-href="expired_ads=1">Expired ads</a>
                     </li>
                 </ul>
             </div>
-        </dd>#}
+        </dd>
         {# Static search filters - end #}
 </dl>
 </div>
@@ -133,6 +167,13 @@
             }
 
             $(this).attr('href', href + '?' + url_params);
+        });
+
+        $('a[data-location-href]').each(function() {
+            var href = window.location.href;
+
+            var new_url = href.replace('/{{ currentLocation }}/', '/'+$(this).attr('data-location-href')+'/');
+            $(this).attr('href', new_url);
         });
     });
 </script>
