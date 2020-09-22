@@ -1,15 +1,5 @@
 {% if currentRoute in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote' } %}
-{#    <style>#}
-{#    @media only screen and (min-width: 320px) and (max-width: 640px) {#}
-{#    	.top-bar .toggle-topbar.menu-icon {#}
-{#    		display:none; !important;#}
-{#    	}#}
-{#    	.top-bar .toggle-topbar.menu-icon a span, .top-bar .toggle-topbar.menu-icon a:hover span {#}
-{#            background: none !important;#}
-{#        }#}
-{#    }#}
-{#    </style>#}
-{% endif %} 
+{% endif %}
 <header class="header" id="header" role="banner" aria-label="Site header">
     {% if status_code == 200 %}
         {% if currentRoute == 'ad_detail_page' %}
@@ -24,6 +14,7 @@
             {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
         {% endif %}
     {% endif %}
+    <!--Top navigation Starts-->
     <div class="top-links top-navigation">
         <div class="row">
             <div class="container">
@@ -150,52 +141,41 @@
             </div>
         </div>
     </div>
-    {# FFR-4031 starts Here #}
-{#        {% set isSetCovidSession =0 %}#}
-{#        {% set showCovidBanner = 1 %}#}
-{#        {% if app.request.cookies.has('is_over_18') %}#}
-{#            {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null  %}#}
-{#                {% set assignedCategoryId = searchParams.item__category_id %}#}
-{#            {% elseif currentRoute == 'ad_detail_page' and app.request.get('category_string') %}#}
-{#                {% set assignedCategoryId = fetch_repository('FaEntityBundle:Category').getIdBySlug(app.request.get('category_string'), fetch_container_instance()) %}#}
-{#            {% elseif (currentRoute == 'show_business_profile_page' or currentRoute == 'show_business_user_ads') and app.request.get('profileNameSlug') %}#}
-{#                 {% set objUserSite = fetch_repository('FaUserBundle:UserSite').findOneBy({'slug':app.request.get('profileNameSlug')}) %}#}
-{#                 {% set assignedCategoryId = objUserSite.getUser().getBusinessCategoryId() %}#}
-{#            {% elseif (appUserRole is defined and (appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') or appUserRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION'))) %}#}
-{#                {% set assignedCategoryId = app.user.getBusinessCategoryId() %}#}
-{#            {% endif %}#}
-
-{#            {% if assignedCategoryId!=0 %}#}
-{#                {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(assignedCategoryId, false, fetch_container_instance()) %}#}
-{#                {% set catCnt = 0 %}#}
-{#                {% if categoryPath|length %}#}
-{#                    {% for categoryId, categoryName in categoryPath %}#}
-{#                        {% if catCnt == 0 %}#}
-{#                            {% if (categoryId == ADULT_CATEGORY_ID) %}#}
-{#                                {% set showCovidBanner = 0 %}#}
-{#                            {% endif %}#}
-{#                        {% endif %}#}
-{#                        {% set catCnt = catCnt + 1 %}#}
-{#                    {% endfor %}#}
-{#                {% endif %}#}
-{#            {% endif %}#}
-{#        {% endif %}#}
-{#        {% if container.get('session').has('CovidSession') %}#}
-{#            {% set isSetCovidSession = container.get('session').get('CovidSession') %}#}
-{#        {% endif %}#}
-{#        {% if isSetCovidSession==0 and showCovidBanner==1 and currentRoute not in {0: 'fa_frontend_homepage', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote' } %}#}
-{#        <div class="covid-19-block top-border hide-for-small-only">#}
-{#            <div class="row">#}
-{#                <div class="columns text-center">#}
-{#                    <div class="medium-17 large-18 columns align-text"><div class="head">Covid-19. <span class="ask-for-offer-help">Ask for & Offer Help in our <a href="https://www.friday-ad.co.uk/uk/community/coronavirus-support/" class="ga-covid-19-support-link-all-pages">Coronavirus Support section</a></span></div></div>#}
-{#                    <div class="medium-7 large-6 columns mt-space"><a href="https://www.friday-ad.co.uk/paa/first_step?categoryName=Coronavirus%20Support" class="button place-free-ad-btn thin-btn ga-covid-19-paa-link-all-pages">Place Help Ad</a><span class="cross-btn align-text" onclick="setCovidSession()"></span></div>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{#        {% endif %}#}
-   {# FFR-4031 Ends Here #}
+    <!--Top navigation END-->
    {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
-   <div id="sticky_nav_top">
+    <!--Main navigation Starts-->
+    <div class="main-navigation">
+        <div class="row">
+            <div class="container">
+                <div class="main-navigation__block">
+                    <div class="brand">
+                        {# trade it logo  not configerd #}
+                        <a href="{{ path('fa_frontend_homepage') }}" class="logo {% if showTiLogo %}tradeit-logo{% endif %}">
+                            {% if showTiLogo %}
+                                <img src="{{ asset_url('fafrontend/images/fad-ti-logo.png') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" />
+                            {% else %}
+                                <img src="{{ asset_url('fafrontend/images/fad-logo-new.svg') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" />
+                            {% endif %}
+                        </a>
+                    </div>
+                    <nav class="main-menu">
+                        {% if mobileDetectManager.isTablet() %}
+                            {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':1, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'}  ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
+                        {% elseif mobileDetectManager.isMobile() %}
+                            {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':0, 'is_mobile':1, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
+                        {% else %}
+                            {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':0, 'is_mobile':0, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
+                        {% endif %}
+                    </nav>
+                </div>
+                <div class="search-sticky search-sticky-mobile">
+                    <input type="text" class="search-sticky__input" value="" placeholder="What are you lookng for?" id="searchStickyKeey">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Main navigation END-->
+   <div id="sticky_nav_top" style="display: none">
     <div class="nav-bg {% if currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'listing_page', 3: 'landing_page_category_location', 4: 'landing_page_category'} %}homepage-nav{% endif %}">
         <div class="row">
             <div class="columns">
@@ -206,7 +186,13 @@
                     <ul class="title-area">
                         <li class="name">
                         <h1>
-                             <a href="{{ path('fa_frontend_homepage') }}" class="logo {% if showTiLogo %}tradeit-logo{% endif %}">{% if showTiLogo %}<img src="{{ asset_url('fafrontend/images/fad-ti-logo.png') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" />{% else %}<img src="{{ asset_url('fafrontend/images/fad-logo-new.svg') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" />{% endif %}</a>
+                             <a href="{{ path('fa_frontend_homepage') }}" class="logo {% if showTiLogo %}tradeit-logo{% endif %}">
+                                 {% if showTiLogo %}
+                                     <img src="{{ asset_url('fafrontend/images/fad-ti-logo.png') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" />
+                                 {% else %}
+                                     <img src="{{ asset_url('fafrontend/images/fad-logo-new.svg') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" />
+                                 {% endif %}
+                             </a>
                         </h1>
                         </li>
                         <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
@@ -226,7 +212,7 @@
                                 {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':0, 'is_mobile':0, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
                             {% endif %}
                         </div>
-                       
+
                             {% if app.user %}
                              <ul class="show-for-small-only login-menu">
                                 <li>
@@ -243,13 +229,13 @@
                                 {{ render(controller('FaUserBundle:Dashboard:notification', { 'template': 'mobile_menu' })) }}
                                 {% endif %}
                                 <li><a href="{{ path('user_ad_message') }}" id="mob-inbox-header-id" class="ga-widgetMessages">{{'MESSAGES'|trans({}, 'inbox')}}{% if totalUnreadMsg > 0 %}&nbsp;<span class="notification-digit ga-widgetMessages">({{totalUnreadMsg}})</span>{% endif %}</a></li>
-                                
+
                                 {% if userDetail|length > 0 %}
 	                            <li>
                                     <a href="{{ path('show_cart') }}">Cart <span class="notification-digit">({{ userDetail|length }})</span></a>
                                 </li>
                                 {% endif %}
-                                
+
                                 <li><a href="{{ path('logout') }}" id="mob-logout-header-id">{{'Log Out'|trans({}, 'frontend-top-menu')}}</a></li>
                             </ul>
                                 {% else %}
@@ -261,7 +247,7 @@
                         <ul class="show-for-small-only login-menu">
                             <li><a href="{{ path('location_home_page', {'location': 'contact-us'}) }}" id="mob-contact-header-id">{{'Contact us'|trans({}, 'frontend-top-menu')}}</a></li>
                         </ul>
-                        
+
                         <ul class="right place-item ga-buttonPAA">
                             <li class="place-item-btn ga-buttonPAA"><a class="ga-buttonPAA" href="{{ path('ad_post_first_step') }}" title="{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}">{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}</a></li>
                         </ul>
@@ -275,19 +261,61 @@
         <div class="dropdown-bg"></div>
     </div>
 </div>
-{#   {% if isSetCovidSession==0 and showCovidBanner==1 and currentRoute not in {0: 'fa_frontend_homepage', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote' } %}#}
-{#   <div class="covid-19-block top-border show-for-small-only">#}
-{#        <div class="row">#}
-{#            <div class="columns text-left">#}
-{#                <div class="medium-17 large-18 columns align-left"><div class="head">Covid-19. <span class="ask-for-offer-help">Ask for & Offer Help in our <a href="https://www.friday-ad.co.uk/uk/community/coronavirus-support/" class="ga-covid-19-support-link-all-pages">Coronavirus Support section</a></span><span class="cross-btn align-text" onclick="setCovidSession()"></span></div></div>#}
-{#                <div class="medium-7 large-6 columns mt-space"><a href="https://www.friday-ad.co.uk/paa/first_step?categoryName=Coronavirus%20Support" class="button place-free-ad-btn thin-btn ga-covid-19-paa-link-all-pages">Place Help Ad</a></div>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-{#   {% endif %}#}
     {% if status_code == 200 %}
         {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'cybersource_checkout'} %}
             {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {} } )) }}
         {% endif %}
     {% endif %}
 </header>
+<script>
+    // Scroll after style adding
+    $(window).scroll(function() {
+        var scroll = $(window).scrollTop();
+        if (window.matchMedia("(min-width: 768px)").matches) {
+            if (scroll >= 105) {
+                $('.header').addClass('scrolled');
+            } else {
+                $('.header').removeClass('scrolled')
+            }
+        } else {
+            if (scroll >= 150) {
+                $('.header').addClass('scrolled');
+            } else {
+                $('.header').removeClass('scrolled')
+            }
+        }
+    });
+    $('#megaDropdown').click(function(e) {
+        $(this).toggleClass('rotate-icon')
+        $(this).siblings('.nav-dropdown').toggleClass('menu-toggle');
+        e.stopPropagation();
+    });
+    $('#mobileMegaDropdown').click(function(e) {
+        $(this).toggleClass('menu-green-icon')
+        $('.main-navigation__block').toggleClass('pos-static');
+        $('.nav-mobile .nav-dropdown').toggleClass('menu-toggle');
+        e.stopPropagation();
+    });
+
+    $('.accordion-link').click(function(event) {
+        if ($('.menu-accordion').hasClass('show-accordion')) {
+            $('.accordion-link').not($(this)).removeClass('active');
+            $('.nav-dropdown__block').not($(this).next()).slideUp(300);
+        }
+        $(this).toggleClass('active').next().slideToggle(300);
+    });
+    $('.nav-mobile .nav-dropdown__link').click(function(event) {
+        $(this).toggleClass('actived').next().addClass('nav-dropdown-menu-show');
+    });
+    $('.nav-mobile .nav-dropdown__menu--link').click(function(event) {
+        $(this).toggleClass('actived').next().addClass('nav-dropdown-third-show');
+    });
+    $('.goBack').click(function(event) {
+        var level = $(this).attr("level");
+        if (level == 2) {
+            $('.nav-dropdown__menu').removeClass('nav-dropdown-menu-show');
+        } else {
+            $('.nav-dropdown-third').removeClass('nav-dropdown-third-show');
+        }
+    });
+</script>
