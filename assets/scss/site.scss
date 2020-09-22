@@ -864,3 +864,14 @@ footer a:hover, .footer-head:hover, .pkg-includes a {
 .category_choice_div {
   position: relative;
 }
+.paa-next-btn , .paa-next-btn:hover , .paa-next-btn:focus , .paa-next-btn.active{
+  height: 60px !important;
+  padding: 15px 0 !important;
+  font-size: 18px !important;
+  line-height: 27px !important;
+  font-weight: 400 !important;
+  border: 0px !important;
+}
+.paa-next-btn.disabled {
+  background: #eaeff0 !important;
+}
