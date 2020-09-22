@@ -191,7 +191,7 @@ class AdAdultRepository extends EntityRepository
             /*  Adding new dimensions in Solr     */
             if (isset($metaData['my_service_id'])) {
                 $myServicesIds = explode(',', $metaData['my_service_id']);
-                $solrFieldForMap = ($ad->getCategory()->getId() != CategoryRepository::ADULT_CONTACTS_ID?AdAdultSolrFieldMapping::MY_SERVICE_IS_FOR_ID:AdAdultSolrFieldMapping::LOOKING_FOR_ID);
+                $solrFieldForMap = ($ad->getCategory()->getId() != CategoryRepository::ADULT_CONTACTS_ID?'dim_my_field_is_for':'dim_looking_for');
                 if (count($myServicesIds)) {
                     foreach ($myServicesIds as $serviceId) {
                         $document = $this->addField($document, $solrFieldForMap, $serviceId);

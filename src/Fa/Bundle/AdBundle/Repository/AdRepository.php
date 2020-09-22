@@ -806,7 +806,7 @@ class AdRepository extends EntityRepository
             'name' => $ad->getDeliveryMethodOption()->getName()] : null);
         $document = $this->addField($document, 'postage_price', $ad->getPostagePrice());
         $document = $this->addField($document, 'payment_method_option', $ad->getPaymentMethodId() ? $ad->getPaymentMethodId() : null);
-        $document = $this->addField($document, 'youtube_url', $ad->getYoutubeVideoUrl());
+        $document = $this->addField($document, 'youtube_video_url', $ad->getYoutubeVideoUrl());
 
         if ($ad->getIsNew() != null) {
             $document = $this->addField($document, 'is_new', ($ad->getIsNew() ? $ad->getIsNew() : '0'));
@@ -965,7 +965,7 @@ class AdRepository extends EntityRepository
             }
 
             if (!is_string($value)) {
-                $value = (string) $value;
+                $value = strval($value);
             }
 
             $document->addField($field, $value);
