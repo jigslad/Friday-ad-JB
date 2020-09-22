@@ -11,6 +11,7 @@
 
 namespace Fa\Bundle\AdBundle\Controller;
 
+use Fa\Bundle\EntityBundle\Repository\CategoryDimensionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Fa\Bundle\CoreBundle\Controller\CoreController;
@@ -809,19 +810,11 @@ class AdListController extends CoreController
         $data['facet_fields'] = array(
             'category_ids'      => array('min_count' => 1),
             'is_trade_ad'       => array('min_count' => 0),
-            'image_count'       => array('min_count' => 1)
+            'image_count'       => array('min_count' => 1),
+            'dim_condition'     => array('min_count' => 0),
+            'town'              => array('min_count' => 0),
+            'area'              => array('min_count' => 0)
         );
-
-        /*$data['facet_fields'] = array(
-            'town_id'           => array('limit' => 5, 'min_count' => 0),
-            'category_ids'      => array('min_count' => 0),
-            'root_category_id'  => array('min_count' => 0),
-            'area_id'		    => array('limit' => 5, 'min_count' => 0)
-        );
-
-        $data['facet_prefix'] = array(
-            'dim_list_' => array('min_count' => 0)
-        );*/
 
         // Add dimension filters facets
         if (isset($data['search']['item__category_id']) && $data['search']['item__category_id']) {
@@ -938,7 +931,8 @@ class AdListController extends CoreController
             'recommendedSlotLimit' => $this->getRepository('FaCoreBundle:Config')->getSponsoredLimit(),
             'pagination' => $pagination['pagination'],
             'adFavouriteIds' => $adFavouriteIds,
-            'leftFilters' => $this->getLeftFilters($category, $pagination['facetResult'], $pagination['resultCount'])
+            'leftFilters' => $this->getLeftFilters($category, $pagination['facetResult'], $pagination['resultCount']),
+            'currentLocation' => $location
          ];
 
         return $this->render('FaAdBundle:AdList:searchResultNew.html.twig', $parameters, null);
@@ -974,12 +968,40 @@ class AdListController extends CoreController
             ]
         ];
 
+        $dimensionId = $this->getRepository('FaEntityBundle:CategoryDimension')->getDimensionByNameAndCategory($categoryObj->getId(), 'Condition');
+        $conditionObj = $this->getRepository('FaEntityBundle:Entity')->getEntitiesByCategoryDimensionId($dimensionId);
+        $conditions = [];
+        foreach ($conditionObj as $key => $condition) {
+            $conditions[$key]['id'] = $condition->getId();
+            $conditions[$key]['name'] = $condition->getName();
+            $conditions[$key]['slug'] = $condition->getSlug();
+            if (isset($facetResult['dim_condition'][$condition->getId()])) {
+                $conditions[$key]['count'] = $facetResult['dim_condition'][$condition->getId()];
+            } else {
+                $conditions[$key]['count'] = 0;
+            }
+        }
+
+        $locationFacets = [];
+        foreach ($facetResult['town'] as $town => $count) {
+            $town = get_object_vars(json_decode($town));
+
+            $locationFacets[] = array(
+                'id'    => $town['id'],
+                'name'  => $town['name'],
+                'slug'  => $town['slug'],
+                'count' => $count
+            );
+        }
+
         return [
             'categories'        => $categories,
             'current_category'  => $categoryObj->getName(),
             'parent_category'   => $categoryObj->getParent()->getId() == 1 ? '' : $categoryObj->getParent(),
             'user_types'        => $userTypes,
-            'ads_with_images'   => intval($totalAds - $facetResult['image_count']['0'])
+            'ads_with_images'   => intval($totalAds - $facetResult['image_count']['0']),
+            'conditions'        => $conditions,
+            'locationFacets'    => $locationFacets
         ];
     }
 
@@ -1048,7 +1070,7 @@ class AdListController extends CoreController
                     'ad_title' => $ad['title'],
                     'description' => isset($ad['description']) ? $ad['description'] : '',
                     'price' => empty($ad['price']) ? '' : CommonManager::formatCurrency($ad['price'], $this->container),
-                    'ad_img' => isset($ad['thumbnail_url']) ? $ad['thumbnail_url'] : 'fafrontend/images/no-image.svg',
+                    'ad_img' => isset($ad['thumbnail_url']) ? $ad['thumbnail_url'] : 'fafrontend/images/no-image-grey.svg',
                     'image_count' => isset($ad['image_count']) ? $ad['image_count'] : 0,
                     'img_alt' => '',
                     'ad_url' => $ad['ad_detail_url'],
