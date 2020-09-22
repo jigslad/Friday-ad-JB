@@ -821,7 +821,7 @@ class AdRepository extends EntityRepository
 
         // Is top ad
         if ($ad->isTopAd($container)) {
-            $document = $this->addField($document, 'is_top_ad', 1);
+            $document = $this->addField($document, 'is_topad', 1);
         }
 
         // Is highlight ad
@@ -831,7 +831,7 @@ class AdRepository extends EntityRepository
 
         // Is home page featured ad
         if ($ad->isHomeFeaturedAd($container)) {
-            $document = $this->addField($document, 'is_homepage_featured_at', 1);
+            $document = $this->addField($document, 'is_homepage_feature_ad', 1);
         }
 
         if ($ad->getAffiliate()) {
