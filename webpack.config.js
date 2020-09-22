@@ -26,13 +26,10 @@ Encore
     .addStyleEntry('css/site', './assets/scss/site.scss')
     .addStyleEntry('css/adulcss', './assets/scss/adul-css.scss')
     .addStyleEntry('css/sitenew', './assets/css/site.css')
-    .addStyleEntry('css/fad-custome-1', './assets/css/fad-custome-1.css')
-    .addStyleEntry('css/fad-custome-2', './assets/css/fad-custome-2.css')
-    .addStyleEntry('css/fad-custome-3', './assets/css/fad-custome-3.css')
-    .addStyleEntry('css/fad-custome-4', './assets/css/fad-custome-4.css')
-    // .addEntry('app', './assets/js/app.js')
-    //.addEntry('page1', './assets/js/page1.js')
-    //.addEntry('page2', './assets/js/page2.js')
+    .addStyleEntry('css/fad-custome-1', './assets/css/fad-custome-1.scss')
+    .addStyleEntry('css/fad-custome-2', './assets/css/fad-custome-2.scss')
+    .addStyleEntry('css/fad-custome-3', './assets/css/fad-custome-3.scss')
+    .addStyleEntry('css/fad-custome-4', './assets/css/fad-custome-4.scss')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
