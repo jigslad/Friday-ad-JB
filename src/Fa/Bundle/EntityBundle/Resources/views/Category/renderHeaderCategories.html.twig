@@ -179,7 +179,15 @@
                 {% set messageRepository = fetch_repository('FaMessageBundle:Message') %}
                 {% set totalUnreadMsg = messageRepository.getMessageCount(app.user.getId(), 'all', fetch_container_instance()) %}
                 <li class="main-menu__item user-info">
-                    <a href="#" class="main-menu__link accordion-link">Hello Will</a>
+                    <a href="#" class="main-menu__link accordion-link">
+                        Hello
+                        {% if app.user.getFullName() %}
+                            {{app.user.getFullName()}}
+                        {% else %}
+                            {{app.user.getUsername()}}
+                        {% endif %}
+
+                    </a>
 {#                <li><a href="{{ path('my_account') }}" id="account-header-id" class="account-icon">{{ 'Account'|trans({}, 'frontend-header-usermenu') }}</a></li>#}
                     <ul class="nav-dropdown__block">
                         <li class="nav-dropdown__item">
@@ -214,7 +222,7 @@
                             <a href="{{ path('my_purchases') }}" id="shop-header-id" class="nav-dropdown__link purchase-icon">Purchases</a>
                         </li>
                         <li class="nav-dropdown__item logout">
-                            <a href="#" class="nav-dropdown__link" id="logOut">Logout
+                            <a href="{{ path('logout') }}" id="logout-header-id" class="nav-dropdown__link" id="logOut">Logout
                             </a>
                         </li>
                     </ul>
@@ -223,24 +231,24 @@
             <li class="main-menu__item ">
                 <a href="#" class="main-menu__link">Basket</a>
             </li>
-            <li class="main-menu__item ">
-                <a href="#" class="main-menu__link">Log in</a>
-            </li>
-            <li class="main-menu__item ">
-                <a href="#" class="main-menu__link">Register</a>
-            </li>
+            {% if not app.user %}
+                <li class="main-menu__item ">
+                    <a href="{{ path('login') }}" id="login-header-id" class="main-menu__link">Log in</a>
+                </li>
+                <li class="main-menu__item ">
+                    <a href="{{ path('fa_user_register') }}" id="register-header-id" class="main-menu__link">Register</a>
+                </li>
+            {% endif %}
 
             <li class="main-menu__item ">
                 <a href="#" class="main-menu__link">Help center</a>
             </li>
             <li class="main-menu__item">
-                <a href="#" class="main-menu__link">Contact us</a>
+                <a href="{{ path('location_home_page', {'location': 'contact-us'}) }}" id="contact-header-id" class="main-menu__link">Contact us</a>
             </li>
-
-
         </ul>
         <div class="main-menu__item goPaAdBtn">
-            <a href="#!" class="main-menu__link ga-PAAbutton btn-rounded">Place an ad</a>
+            <a href="{{ path('ad_post_first_step') }}" class="main-menu__link ga-PAAbutton btn-rounded">Place an ad</a>
         </div>
     </div>
 </div>
@@ -254,7 +262,10 @@
 
     </li>
     <li class="main-menu__item post-btn" >
-        <a href="#" class="main-menu__link post-icon">
+{#    <li class="place-item-btn ga-buttonPAA">#}
+{#        <a class="ga-buttonPAA" href="" title="{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}">{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}</a>#}
+{#    </li>#}
+        <a href="{{ path('ad_post_first_step') }}" class="main-menu__link post-icon">
             <span>Post</span>
         </a>
     </li>
@@ -295,46 +306,46 @@
                                     {% set categoryArray  = replace_value_in_array(categoryArray, 'children', sortedCategoryArray) %}
                                 {% endif %}
                                 <ul class="nav-dropdown__menu">
-                                    <li class="nav-dropdown__menu--item">
-                                        {% set columns = 3 %}
-                                        {% set ctr = 0 %}
-                                        {% set totalItems = categoryArray['children']|length %}
-                                        {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
-                                            {% set totalItems = totalItems + 1 %}
+                                    {% set columns = 3 %}
+                                    {% set ctr = 0 %}
+                                    {% set totalItems = categoryArray['children']|length %}
+                                    {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+                                        {% set totalItems = totalItems + 1 %}
+                                    {% endif %}
+                                    {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
+                                    {% set extraColumn = (totalItems % columns) %}
+                                    {% set colCounter = {} %}
+                                    {% set staticTxtCnt = 0 %}
+                                    {% for i in 0..columns-1 %}
+                                        {% if loop.index0 < extraColumn %}
+                                            {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
+                                        {% else  %}
+                                            {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
                                         {% endif %}
-                                        {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
-                                        {% set extraColumn = (totalItems % columns) %}
-                                        {% set colCounter = {} %}
-                                        {% set staticTxtCnt = 0 %}
-                                        {% for i in 0..columns-1 %}
-                                            {% if loop.index0 < extraColumn %}
-                                                {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
-                                            {% else  %}
-                                                {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
-                                            {% endif %}
-                                        {% endfor %}
-                                        {% set subCategoryArray = categoryArray['children']|keys %}
-                                        {% for i in 0..columns-1 %}
-                                            {% for k in 0..colCounter[i]-1 %}
-                                                {% if subCategoryArray[ctr] is defined %}
-                                                    {% if categoryArray['children'][subCategoryArray[ctr]]['is_static'] is defined and categoryArray['children'][subCategoryArray[ctr]]['is_static'] %}
-                                                        <a href="{{ categoryArray['children'][subCategoryArray[ctr]]['link_url'] }}" class="nav-dropdown__menu--link">{{ categoryArray['children'][subCategoryArray[ctr]]['link_text'] }}</a>
-                                                    {% else %}
-                                                        {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['children'][subCategoryArray[ctr]]['full_slug']) %}
-                                                        <a href="{{ listurl1 }}" class="nav-dropdown__menu--link">{{categoryArray['children'][subCategoryArray[ctr]]['name']}}</a>
-                                                    {% endif %}
-                                                {% elseif staticTxtCnt == 0 and categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
-                                                    {% if (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox) or (app.request.cookies.has('is_over_18')) %}
-                                                        <a class="nav-dropdown__menu--link" href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" >Hook Ups</a>
-                                                    {% else %}
-                                                        <a class="nav-dropdown__menu--link" href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup(0,'live-cams');" >Hook Ups</a>
-                                                    {% endif %}
-                                                    {% set staticTxtCnt = 1 %}
+                                    {% endfor %}
+                                    {% set subCategoryArray = categoryArray['children']|keys %}
+                                    {% for i in 0..columns-1 %}
+                                        {% for k in 0..colCounter[i]-1 %}
+                                            <li class="nav-dropdown__menu--item">
+                                            {% if subCategoryArray[ctr] is defined %}
+                                                {% if categoryArray['children'][subCategoryArray[ctr]]['is_static'] is defined and categoryArray['children'][subCategoryArray[ctr]]['is_static'] %}
+                                                    <a href="{{ categoryArray['children'][subCategoryArray[ctr]]['link_url'] }}" class="nav-dropdown__menu--link">{{ categoryArray['children'][subCategoryArray[ctr]]['link_text'] }}</a>
+                                                {% else %}
+                                                    {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['children'][subCategoryArray[ctr]]['full_slug']) %}
+                                                    <a href="{{ listurl1 }}" class="nav-dropdown__menu--link">{{categoryArray['children'][subCategoryArray[ctr]]['name']}}</a>
                                                 {% endif %}
-                                                {% set ctr = ctr + 1 %}
-                                            {% endfor %}
+                                            {% elseif staticTxtCnt == 0 and categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+                                                {% if (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox) or (app.request.cookies.has('is_over_18')) %}
+                                                    <a class="nav-dropdown__menu--link" href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" >Hook Ups</a>
+                                                {% else %}
+                                                    <a class="nav-dropdown__menu--link" href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup(0,'live-cams');" >Hook Ups</a>
+                                                {% endif %}
+                                                {% set staticTxtCnt = 1 %}
+                                            {% endif %}
+                                            {% set ctr = ctr + 1 %}
+                                            </li>
                                         {% endfor %}
-                                    </li>
+                                    {% endfor %}
                                 </ul>
                             {% endif %}
                         </li>
@@ -344,7 +355,7 @@
         </div>
     </li>
     <li class="main-menu__item">
-        <a href="#!" class="main-menu__link ga-PAAbutton btn-rounded">Place an ad</a>
+        <a href="{{ path('ad_post_first_step') }}" class="main-menu__link ga-PAAbutton btn-rounded">Place an ad</a>
     </li>
 </ul>
 {#{% endcache %}#}
