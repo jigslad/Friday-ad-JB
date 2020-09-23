@@ -20,7 +20,7 @@
                             {% else %}
                                 {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['full_slug']) %}
                             {% endif %}
-                            <a href="{{ secondLevelLength ? listurl1 : '#' }}" class="nav-dropdown__link {{ categoryArray['class'] is defined ? categoryArray['class'] : "" }} ">
+                            <a {% if not secondLevelLength %} href="{{ listurl1 }}" {% endif %} class="nav-dropdown__link {{ categoryArray['class'] is defined ? categoryArray['class'] : "" }} ">
                                 {{categoryArray['name']}}
                                 {# <span>({{ categoryArray['count'] is defined?categoryArray['count']|number_format:0}} {{'ads'|trans()}})</span>#}
                             </a>
@@ -43,7 +43,7 @@
                                             {% else %}
                                                 {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, secondLevelCategoryArray['full_slug']) %}
                                             {% endif %}
-                                            <a href="{{ listurl1 }}" class="nav-dropdown__menu--link">
+                                            <a  {% if not thirdLevelLength %} href="{{ listurl1 }}" {% endif %} class="{{ thirdLevelLength ? 'nav-dropdown__menu--link' : 'nav-dropdown__link' }}">
                                                 {% if secondLevelCategoryArray['is_static'] is defined and secondLevelCategoryArray['is_static'] %}
                                                     {{secondLevelCategoryArray['link_text']}} {% else %}{{secondLevelCategoryArray['name']}}
                                                 {% endif %}
@@ -67,7 +67,7 @@
                                                         {% endif %}
                                                         <li class="nav-dropdown__menu--item">
                                                             {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, thirdLevelCategoryArray['full_slug']) %}
-                                                            <a href="{{ listurl1 }}" class="nav-dropdown__menu--link">
+                                                            <a {% if not fourthLevelLength %} href="{{ listurl1 }}" {% endif %} class="{{ fourthLevelLength ? 'nav-dropdown__menu--link' : 'nav-dropdown__link' }}">
                                                                 {{thirdLevelCategoryArray['name']}}
                                                             </a>
                                                             {% if fourthLevelLength %}
@@ -85,7 +85,7 @@
                                                                         {% endif %}
                                                                         <li class="nav-dropdown__menu--item">
                                                                             {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, fourthLevelCategoryArray['full_slug']) %}
-                                                                            <a href="{{ listurl1 }}" class="nav-dropdown__menu--link">
+                                                                            <a {{ fifthLevelLength ? '' : 'href="'~listurl1~'"' }} class="{{ fifthLevelLength ? 'nav-dropdown__menu--link' : 'nav-dropdown__link' }}">
                                                                                 {{fourthLevelCategoryArray['name']}}
                                                                             </a>
                                                                             {% if fifthLevelLength %}
@@ -105,7 +105,7 @@
                                                                                         {% endif %}
                                                                                         <li class="nav-dropdown__menu--item">
                                                                                             {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, fifthLevelCategoryArray['full_slug']) %}
-                                                                                            <a href="{{ listurl1 }}" class="nav-dropdown__menu--link">
+                                                                                            <a {% if not sixthLevelLength %} href="{{ listurl1 }}" {% endif %} class="{{ sixthLevelLength ? 'nav-dropdown__menu--link' : 'nav-dropdown__link' }}">
                                                                                                 {{fifthLevelCategoryArray['name']}}
                                                                                             </a>
                                                                                             {% if sixthLevelLength %}
@@ -114,7 +114,7 @@
                                                                                                         <a href="#" class="nav-dropdown__menu--link">Back</a>
                                                                                                     </li>
                                                                                                     <li class="nav-dropdown__menu--item dropdown-title home-icon">
-                                                                                                        <a href="{{ listurl1 }}" class="nav-dropdown__menu--link">
+                                                                                                        <a href="{{ listurl1 }}" class="nav-dropdown__link">
                                                                                                             {{fifthLevelCategoryArray['name']}}
                                                                                                         </a>
                                                                                                     </li>
@@ -144,9 +144,9 @@
                                     {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
                                         <li class="nav-dropdown__menu--item">
                                             {% if thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox %}
-                                                <a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" >Hook Ups</a>
+                                                <a class="nav-dropdown__menu--link" href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" >Hook Ups</a>
                                             {% else %}
-                                                <a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" >Hook Ups</a>
+                                                <a class="nav-dropdown__menu--link" href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" >Hook Ups</a>
                                             {% endif %}
                                         </li>
                                     {% endif %}
@@ -154,7 +154,7 @@
                                         <li class="nav-dropdown__menu--item">
                                             {% set staticPageUrls = fetch_repository('FaContentBundle:SeoTool').getLandingPageStaticPageUrlArray('motors', container, location_id) %}
                                             {% if staticPageUrls['Classic cars'] is defined %}
-                                                <a href="{{ staticPageUrls['Classic cars'] }}">Classic Cars</a>
+                                                <a class="nav-dropdown__menu--link" href="{{ staticPageUrls['Classic cars'] }}">Classic Cars</a>
                                             {% endif %}
                                         </li>
                                     {% endif %}
@@ -162,7 +162,7 @@
                                         <li class="nav-dropdown__menu--item">
                                             {% set freeToCollectorUrl = container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID'), 'item__ad_type_id' : constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_TYPE_FREETOCOLLECTOR_ID'), 'item__location': location}) %}
                                             {% if freeToCollectorUrl %}
-                                                <a href="{{ freeToCollectorUrl }}">Free to Collector</a>
+                                                <a class="nav-dropdown__menu--link" href="{{ freeToCollectorUrl }}">Free to Collector</a>
                                             {% endif %}
                                         </li>
                                     {% endif %}

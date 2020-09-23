@@ -467,6 +467,12 @@
             position: relative;
         }
         &.sub-menu {
+
+            @include media-breakpoint-down(md) {
+                .nav-dropdown__link {
+                    padding-left: 50px;
+                }
+            }
             &:hover {
                 @include media-breakpoint-up(md) {
                     .nav-dropdown__menu {
