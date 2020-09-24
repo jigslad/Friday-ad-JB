@@ -273,3 +273,21 @@
 
 //]]>
 </script>
+<script>
+    var requiredFields = $(':input[required]:visible');
+    requiredFields.keyup(function (){
+        enableDisableNextButton()
+    });
+    $(document).ready(function(){
+        $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
+        enableDisableNextButton()
+    });
+    function enableDisableNextButton(){
+        $('#fa_paa_second_step_{{ categoryName }}_save').removeClass('disabled');
+        requiredFields.each(function( index, element ) {
+            if(!element.value ){
+                $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
+            }
+        });
+    }
+</script>
