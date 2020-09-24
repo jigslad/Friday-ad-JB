@@ -72,6 +72,14 @@
             </div>
         </dd>
 
+        {% if leftFilters.orderedDimensions|length %}
+            {% for dimension_id, entities in leftFilters.orderedDimensions %}
+                <dd class="accordion-navigation">
+                {{ include('FaAdBundle:AdList:leftSearchDimensionFiltersNew.html.twig') }}
+                </dd>
+            {% endfor %}
+        {% endif %}
+
         {% if leftFilters.conditions|length %}
             <dd class="accordion-navigation">
                 <a href="#panel2b" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Condition'|trans({}, 'frontend-left-search')}}</h5></a>
