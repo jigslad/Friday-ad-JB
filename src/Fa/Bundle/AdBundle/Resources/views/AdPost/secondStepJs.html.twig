@@ -274,16 +274,17 @@
 //]]>
 </script>
 <script>
-
     $(document).ready(function(){
-        var requiredFields = $(':input[required]:visible');
+        var requiredFields = $(':input');
         requiredFields.keyup(function (){
             enableDisableNextButton()
         });
         requiredFields.change(function (){
             enableDisableNextButton()
         });
-        $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
+        if (!$('#fa_paa_second_step_{{ categoryName }}_save').hasClass('disabled')) {
+            $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
+        }
         enableDisableNextButton()
         $("form[name='fa_paa_second_step_{{ categoryName }}']").submit(function() {
             if ($('#fa_paa_second_step_{{ categoryName }}_save').hasClass('disabled')) {
@@ -294,9 +295,23 @@
     function enableDisableNextButton(){
         $('#fa_paa_second_step_{{ categoryName }}_save').removeClass('disabled');
         var requiredFieldsUpdated = $(':input[required]:visible');
-        requiredFieldsUpdated.each(function( index, element ) {
-            if(!element.value ){
+        if(!$('#fa_paa_second_step_{{ categoryName }}_description').val()){
+            if (!$('#fa_paa_second_step_{{ categoryName }}_save').hasClass('disabled')) {
                 $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
+            }
+        }
+        if($("#fa_paa_second_step_{{ categoryName }}_price").is(":visible")) {
+            if (!$('#fa_paa_second_step_{{ categoryName }}_price').val()) {
+                if (!$('#fa_paa_second_step_for_sale_save').hasClass('disabled')) {
+                    $('#fa_paa_second_step_for_sale_save').addClass('disabled');
+                }
+            }
+        }
+        requiredFieldsUpdated.each(function( index, element ) {
+            if(!element.value){
+                if (!$('#fa_paa_second_step_{{ categoryName }}_save').hasClass('disabled')) {
+                    $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
+                }
             }
         });
     }
