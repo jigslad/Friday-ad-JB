@@ -20,6 +20,10 @@
 {% endif %}
 <script>
     $(document).ready(function() {
+        var element = document.querySelector('.popular-search--block');
+        if(! (element.offsetHeight < element.scrollHeight) || (element.offsetWidth < element.scrollWidth)){
+            $('#toggleSearch').hide();
+        }
 
         $('#toggleSearch').click(function(e) {
 
