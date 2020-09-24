@@ -1,0 +1,32 @@
+{% set dimension_type = attribute(leftFilters.dimensions, dimension_id).search_type %}
+{% set dimension_name = attribute(leftFilters.dimensions, dimension_id).name %}
+
+{% if dimension_type == 'choice_checkbox' %}
+    <a href="#panel{{ dimension_id }}d" class="clearfix" rel="nofollow" ><h5 class="left">{{ dimension_name|trans({}, 'frontend-left-search')}}</h5></a>
+    <div id="panel{{ dimension_id }}d" class="content active label-inline">
+        <ul class="white-checkbox search-type crawlable-checkbox">
+            {% for id, entity in entities %}
+                <li>
+                    <span class="custom-checkbox">
+                        <input type="checkbox" id="fa_left_search_condition_{{ id }}" name="fa_left_search[{{ dimension_name }}]">
+                    </span>
+                    <label class="mb0" for="fa_left_search_condition">{{ entity.name }} ({{ entity.count }})</label>
+                    <a data-href="{{ entity.slug }}">{{ entity.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% elseif dimension_type == 'choice_link' %}
+    <a href="#panel{{ dimension_id }}d" class="clearfix" rel="nofollow" ><h5 class="left">{{ dimension_name|trans({}, 'frontend-left-search')}}</h5></a>
+    <div id="panel{{ dimension_id }}d" class="content active clearfix">
+        <ul class="seller-link">
+            {% for entity in entities %}
+                <li><a data-href="{{ entity.slug }}" rel="nofollow">{{ entity.name }} ({{ entity.count }})</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% elseif dimension_type == 'date' or dimension_type == 'text' %}
+    <div id="#panel{{ dimension_id }}d" class="content active">
+        <input type="text" class="form-control white-field" id="fa_left_search_{{ dimension_name }}" name="fa_left_search[{{ dimension_name }}]" required="required" >
+    </div>
+{% endif %}
