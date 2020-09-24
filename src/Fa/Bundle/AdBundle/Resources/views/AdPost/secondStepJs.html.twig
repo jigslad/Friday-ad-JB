@@ -282,9 +282,13 @@
         $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
         enableDisableNextButton()
     });
+    requiredFields.change(function (){
+        enableDisableNextButton()
+    });
     function enableDisableNextButton(){
         $('#fa_paa_second_step_{{ categoryName }}_save').removeClass('disabled');
-        requiredFields.each(function( index, element ) {
+        var requiredFieldsupdated = $(':input[required]:visible');
+        requiredFieldsupdated.each(function( index, element ) {
             if(!element.value ){
                 $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
             }

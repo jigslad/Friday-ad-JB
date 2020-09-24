@@ -114,6 +114,7 @@
             $('#paa_password_field_div').show();
             $('#fa_paa_login_save').text("{{'Next step: add more details'|trans({}, 'frontend-paa-login')}}");
         }
+        enableDisableNextButton()
     }
     
     $("#fa_paa_login_show_password").click(function() {
@@ -175,4 +176,26 @@
     });
 //]]>
 </script>
+    <script>
+        var requiredFields = $(':input[required]:visible');
+        requiredFields.keyup(function (){
+            enableDisableNextButton()
+        });
+        requiredFields.change(function (){
+            enableDisableNextButton()
+        });
+        $(document).ready(function(){
+            $('#fa_paa_login_save').addClass('disabled');
+            enableDisableNextButton()
+        });
+        function enableDisableNextButton(){
+            $('#fa_paa_login_save').removeClass('disabled');
+            var requiredFieldsupdated = $(':input[required]:visible');
+            requiredFieldsupdated.each(function( index, element ) {
+                if(!element.value ){
+                    $('#fa_paa_login_save').addClass('disabled');
+                }
+            });
+        }
+    </script>
 {% endblock %}
