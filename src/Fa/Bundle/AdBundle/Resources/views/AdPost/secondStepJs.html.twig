@@ -274,21 +274,27 @@
 //]]>
 </script>
 <script>
-    var requiredFields = $(':input[required]:visible');
-    requiredFields.keyup(function (){
-        enableDisableNextButton()
-    });
+
     $(document).ready(function(){
+        var requiredFields = $(':input[required]:visible');
+        requiredFields.keyup(function (){
+            enableDisableNextButton()
+        });
+        requiredFields.change(function (){
+            enableDisableNextButton()
+        });
         $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
         enableDisableNextButton()
-    });
-    requiredFields.change(function (){
-        enableDisableNextButton()
+        $("form[name='fa_paa_second_step_{{ categoryName }}']").submit(function() {
+            if ($('#fa_paa_second_step_{{ categoryName }}_save').hasClass('disabled')) {
+                return false;
+            }
+        });
     });
     function enableDisableNextButton(){
         $('#fa_paa_second_step_{{ categoryName }}_save').removeClass('disabled');
-        var requiredFieldsupdated = $(':input[required]:visible');
-        requiredFieldsupdated.each(function( index, element ) {
+        var requiredFieldsUpdated = $(':input[required]:visible');
+        requiredFieldsUpdated.each(function( index, element ) {
             if(!element.value ){
                 $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
             }
