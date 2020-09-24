@@ -1,0 +1,175 @@
+{% set container = fetch_container_instance() %}
+{% set seoToolPopularSearchRepository = fetch_repository('FaContentBundle:SeoToolPopularSearch') %}
+{% set popularSearchArray = seoToolPopularSearchRepository.getPopularSearchArrayBySeoToolId(seoFields['seo_tool_id'], container) %}
+{% if popularSearchArray|length %}
+    <div class="popular-search">
+        <ul class="popular-search--block">
+            <li class="popular-search--title">{{'Popular Searches'|trans({}, 'frontend-left--popular-search')}}:</li>
+            <!---loop starts-->
+            {% for popularSearch in popularSearchArray %}
+                <li class="popular-search--item">
+                    <a href="{{ seoToolPopularSearchRepository.getPopularSearchUrl(popularSearch['url'], cookieLocationDetails, mapFlag, container) }}" class="popular-search--link">
+                        {{ popularSearch['title'] }}
+                    </a>
+                </li>
+            {% endfor %}
+            <!---loops end-->
+        </ul>
+        <div class="popular-search--toggle" id="toggleSearch"></div>
+    </div>
+{% endif %}
+<script>
+    $(document).ready(function() {
+        var element = document.querySelector('.popular-search--block');
+        if(! (element.offsetHeight < element.scrollHeight) || (element.offsetWidth < element.scrollWidth)){
+            $('#toggleSearch').hide();
+        }
+
+        $('#toggleSearch').click(function(e) {
+
+            $(this).toggleClass('arrow-rotate-icon');
+            $('.popular-search').toggleClass("toggleSearchShow");
+        });
+    });
+</script>
+<style>
+    .container {
+        max-width: 801px;
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+
+
+    /* Required css starts */
+
+    .popular-search {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        display: flex;
+        height: 74px;
+        margin-bottom: 15px;
+        margin-top: 5px;
+        overflow: hidden;
+        justify-content: space-between;
+    }
+
+    @media only screen and (min-width: 768px) {
+        .popular-search {
+            height: 39px;
+            margin: 0;
+        }
+    }
+
+    @media only screen and (min-width: 1200px) {
+        .popular-search {
+            height: 44px;
+        }
+    }
+
+    .popular-search--block {
+        display: flex;
+        margin: 2px 0 0;
+        flex-direction: row;
+        flex-wrap: wrap;
+        list-style: none;
+        flex: 0 1 748px;
+    }
+
+    .popular-search--block li :nth-child(2) {
+        margin-right: 0;
+    }
+
+    @media only screen and (min-width: 768px) {
+        .popular-search--block li :nth-child(2) {
+            margin-right: 16px;
+        }
+    }
+
+    .popular-search--title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #212527;
+        font-family: poppins-semibold;
+        margin-right: 20px;
+        margin-right: 12px;
+    }
+
+    .popular-search--item {
+        height: 28px;
+        border: 1px solid #82C148;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        margin: 0px 14px 8px 0px;
+        cursor: pointer;
+    }
+
+    @media only screen and (min-width: 768px) {
+        .popular-search--item {
+            margin: 0px 8px 10px 0px;
+        }
+    }
+
+    @media only screen and (min-width: 1200px) {
+        .popular-search--item {
+            margin: 0px 16px 16px 0px;
+        }
+    }
+
+    .popular-search--item:last-child {
+        margin: 0 0 20px 0;
+    }
+
+    .popular-search--link {
+        padding: 0px 4px;
+        color: #82C148;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: 16px;
+        font-family: poppins-semibold;
+    }
+
+    @media only screen and (min-width: 768px) {
+        .popular-search--link {
+            padding: 0 12px;
+        }
+    }
+
+    @media only screen and (min-width: 1200px) {
+        .popular-search--link {
+            padding: 0 17px;
+        }
+    }
+
+    .popular-search--toggle {
+        background-repeat: no-repeat;
+        background-position: top;
+        background-size: 28px;
+        background-image: url('/bundles/faad/images/dark-down-arrow.svg');
+        margin-top: 39px;
+        margin-right: 5px;
+        width: 30px;
+    }
+
+    @media only screen and (min-width: 768px) {
+        .popular-search--toggle {
+            width: 18px;
+            margin-top: 1px;
+            margin-right: 5px;
+        }
+    }
+
+    .popular-search--toggle.arrow-rotate-icon {
+        background-image: url('/bundles/faad/images/dark-up-arrow.svg');
+    }
+
+    .toggleSearchShow {
+        height: auto;
+        overflow: visible;
+        transition: 0.6s ease-in-out;
+    }
+
+
+    /* Required css end */
+</style>
