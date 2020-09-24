@@ -739,6 +739,7 @@ class AdListController extends CoreController
         $this->get('fa.searchfilters.manager')->init($this->getRepository('FaAdBundle:Ad'), $this->getRepositoryTable('FaAdBundle:Ad'), 'finders');
         $data = $this->get('fa.searchfilters.manager')->getFiltersData();
 
+        $data['search']['item__location'] = $request->get('location');
         // add published at as second sort
         if (!$mapFlag) {
             if ($request->get('sort_field') == 'item__weekly_refresh_published_at') {
@@ -808,12 +809,12 @@ class AdListController extends CoreController
         }
 
         $data['facet_fields'] = array(
-            'category_ids'      => array('min_count' => 1),
-            'is_trade_ad'       => array('min_count' => 0),
-            'image_count'       => array('min_count' => 1),
-            'dim_condition'     => array('min_count' => 0),
-            'town'              => array('min_count' => 0),
-            'area'              => array('min_count' => 0)
+            'category_ids'          => array('min_count' => 1),
+            'is_trade_ad'           => array('min_count' => 0),
+            'image_count'           => array('min_count' => 1),
+            'dim_list_condition'    => array('min_count' => 0),
+            'town'                  => array('min_count' => 0),
+            'area'                  => array('min_count' => 0)
         );
 
         // Add dimension filters facets
@@ -889,6 +890,26 @@ class AdListController extends CoreController
         $data['static_filters'] = ' AND category_full_path:"'. $pageString . '"';
         $data['static_filters'] .= ' AND -is_topad:true';
 
+        $category = $this->getRepository('FaEntityBundle:Category')->findOneBy(['full_slug' => $pageString]);
+        $searchableDimensions = $this->getRepository('FaEntityBundle:CategoryDimension')->getSearchableDimesionsArrayByCategoryId($category->getId(), $this->container);
+        $adRepository = $this->getRepository('FaAdBundle:Ad');
+
+        $root = $this->getRepository('FaEntityBundle:Category')->getRootNodeByCategory($category->getId());
+
+        $repository = $this->getRepository('FaAdBundle:'.'Ad'.str_replace(' ', '', $root->getName()));
+        $listingFields = $repository->getAdListingFields();
+        foreach ($searchableDimensions as $key => $dimension) {
+            $solrDimensionFieldName = $adRepository->getSolrFieldName($listingFields, str_replace(' ', '_', strtolower($dimension['name'])));
+            $data['facet_fields'] = array_merge(
+                $data['facet_fields'],
+                [
+                    $solrDimensionFieldName => array('min_count' => 0)
+                ]
+            );
+
+            $searchableDimensions[$key]['solr_field'] = $solrDimensionFieldName;
+        }
+
         $keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: NULL;
         $recordsPerPage = (isset($data['pager']['limit']) && $data['pager']['limit']) ? $data['pager']['limit']: $this->container->getParameter('fa.search.records.per.page');
 
@@ -909,7 +930,6 @@ class AdListController extends CoreController
 
         $bannersArray = $this->getRepository('FaContentBundle:Banner')->getBannersArrayByPage('listing_page', $this->container);
 
-        $category = $this->getRepository('FaEntityBundle:Category')->findOneBy(['full_slug' => $pageString]);
         if (! empty($category)) {
             $data['search']['item__category_id'] = $category->getId();
             $recommendedSlot = $this->getRecommendedSlot($data, $keywords, $page, $mapFlag, $request, $category->getParent()->getId());
@@ -931,7 +951,7 @@ class AdListController extends CoreController
             'recommendedSlotLimit' => $this->getRepository('FaCoreBundle:Config')->getSponsoredLimit(),
             'pagination' => $pagination['pagination'],
             'adFavouriteIds' => $adFavouriteIds,
-            'leftFilters' => $this->getLeftFilters($category, $pagination['facetResult'], $pagination['resultCount']),
+            'leftFilters' => empty($pagination['resultCount']) ? [] : $this->getLeftFilters($category, $pagination['facetResult'], $pagination['resultCount'], $searchableDimensions),
             'currentLocation' => $location
          ];
 
@@ -942,13 +962,15 @@ class AdListController extends CoreController
      * @param $categoryObj
      * @param $facetResult
      * @param $totalAds
+     * @param $dimensions
      * @return array
      */
-    private function getLeftFilters($categoryObj, $facetResult, $totalAds)
+    private function getLeftFilters($categoryObj, $facetResult, $totalAds, $dimensions)
     {
         // get next level categories
-        $categories = $this->getRepository('FaEntityBundle:Category')->getChildrenById($categoryObj->getId());
+        $categoryRepository = $this->getRepository('FaEntityBundle:Category');
 
+        $categories = $categoryRepository->getChildrenById($categoryObj->getId());
         foreach($categories as $key => $category) {
             if (isset($facetResult['category_ids'][$category['id']])) {
                 $categories[$key]['count'] = $facetResult['category_ids'][$category['id']];
@@ -994,6 +1016,26 @@ class AdListController extends CoreController
             );
         }
 
+        $dimensionIds = array_column($dimensions, 'id');
+        $entitiesPerDimension = [];
+        foreach ($dimensionIds as $dimensionId) {
+            $entitiesPerDimension[] = $this->getRepository('FaEntityBundle:Entity')->getEntitiesByCategoryDimensionId($dimensionId);
+        }
+
+        $orderedDimensions = [];
+        foreach ($entitiesPerDimension as $key => $entities) {
+            foreach ($entities as $entity) {
+                $solrFieldName = $dimensions[$entity->getCategoryDimension()->getId()]['solr_field'];
+                $dimensionId = $entity->getCategoryDimension()->getId();
+
+                $orderedDimensions[$dimensionId][$entity->getId()] = array(
+                    'name' => $entity->getName(),
+                    'slug' => $entity->getSlug(),
+                    'count' => intval($facetResult[$solrFieldName][$entity->getId()])
+                );
+            }
+        }
+
         return [
             'categories'        => $categories,
             'current_category'  => $categoryObj->getName(),
@@ -1001,7 +1043,9 @@ class AdListController extends CoreController
             'user_types'        => $userTypes,
             'ads_with_images'   => intval($totalAds - $facetResult['image_count']['0']),
             'conditions'        => $conditions,
-            'locationFacets'    => $locationFacets
+            'locationFacets'    => $locationFacets,
+            'orderedDimensions' => $orderedDimensions,
+            'dimensions'        => $dimensions
         ];
     }
 
