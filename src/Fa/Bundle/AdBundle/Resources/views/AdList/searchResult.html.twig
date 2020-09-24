@@ -359,6 +359,9 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
         </div>
 
         <div id="listingDiv" class="large-18 columns">
+            {% if seoFields|length and seoFields['popular_search'] is defined and seoFields['popular_search'] and seoFields['seo_tool_id'] is defined and seoFields['seo_tool_id'] %}
+                {{ include('FaAdBundle:AdList:popularSearchLinks.html.twig', {'mapFlag': 0}) }}
+            {% endif %}
             {#{% if not mobileDetectManager.isMobile() or not mobileDetectManager.isTablet() %}
                 {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_ABOVE_RESULTS') %}
                 {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
