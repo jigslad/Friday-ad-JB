@@ -349,11 +349,6 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                 {% endif %}
             </div>
 
-            {% if seoFields|length and seoFields['popular_search'] is defined and seoFields['popular_search'] and seoFields['seo_tool_id'] is defined and seoFields['seo_tool_id'] %}
-                {{ include('FaAdBundle:AdList:leftPopularSearchLinks.html.twig', {'mapFlag': 0}) }}
-                <br>
-            {% endif %}
-
             {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_FILTERBOX') %}
             {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
         </div>
