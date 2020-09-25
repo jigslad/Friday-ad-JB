@@ -217,7 +217,7 @@ EOF
         $idsNotFound = array();
         $idsFound    = array();
         $qb          = $this->getAdQueryBuilder($searchParam);
-        $step        = 1000;
+        $step        = 200;
         $offset      = $input->getOption('offset');
 
         $qb->setFirstResult($offset);
@@ -258,7 +258,7 @@ EOF
     protected function updateSolrIndex($solrClient, $searchParam, $input, $output)
     {
         $count     = $this->getAdCount($searchParam);
-        $step      = 1000;
+        $step      = 200;
         $stat_time = time();
 
         $output->writeln('SCRIPT START TIME '.date('d-m-Y H:i:s', $stat_time), true);
