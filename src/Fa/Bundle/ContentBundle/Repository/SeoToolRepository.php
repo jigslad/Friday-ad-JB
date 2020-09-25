@@ -420,6 +420,7 @@ class SeoToolRepository extends EntityRepository
                     foreach ($parentCategories as $parentCategoryId) {
                         if (isset($seoRuleArray[$page.'_'.$parentCategoryId])) {
                             $seoRule = $seoRuleArray[$page.'_'.$parentCategoryId];
+                            $seoRule['popular_search'] = false;
                             break;
                         }
                     }
