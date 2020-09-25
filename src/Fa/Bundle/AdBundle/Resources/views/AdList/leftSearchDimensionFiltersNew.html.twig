@@ -21,7 +21,9 @@
                             <div class="modal-content dimension-modal">
                                 <div class="dimension-content">
                                     <div class="clearfix">
-                                        <ul class="seller-link dimension-list">
+                {% endif %}
+                {% if key >= maxDimensionCount and key is divisible by(4) %}
+                    <ul class="seller-link dimension-list">
                 {% endif %}
                 <li>
                     <span class="custom-checkbox">
@@ -30,8 +32,10 @@
                     <label class="mb0" for="fa_left_search_condition">{{ entity.name }} ({{ entity.count }})</label>
                     <a data-href="{{ entity.slug }}">{{ entity.name }}</a>
                 </li>
+                {% if key >= maxDimensionCount and (key + 1) is divisible by(4) %}
+                    </ul>
+                {% endif %}
                 {% if key > maxDimensionCount and key == (entities|length - 1) %}
-                                        </ul>
                                     </div>
                                 </div>
                             </div>
