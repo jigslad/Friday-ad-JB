@@ -1,3 +1,5 @@
+{% set maxDimensionCount = 12 %}
+
 <div class="search-filters">
     <dl class="accordion" data-accordion>
         {# Category search params - start #}
@@ -13,8 +15,22 @@
                 {% endif %}
                 <div class="search-cat-sub-list">
                     <ul>
+                        {% set key = 0 %}
                         <li><label>{{ leftFilters.current_category }}</label></li>
-                        {% for category in leftFilters.categories %}
+                        {% for key, category in leftFilters.categories %}
+                            {% if key == (maxDimensionCount) %}
+                                </ul>
+                                <a href="javascript:void(0);" rel="nofollow" onclick="$('#categoryLHSFilters').foundation('reveal', 'open');">See more</a>
+                                <div class="reveal-modal" id="categoryLHSFilters" data-reveal>
+                                    <a class="close-reveal-modal">&times;</a>
+                                    <div>
+                                        <h5 class="modal-title">Showing Category</h5>
+                                        <div class="modal-content dimension-modal">
+                                            <div class="dimension-content">
+                                                <div class="clearfix">
+                                                    <ul class="seller-link dimension-list">
+                            {% endif %}
+
                             <li><a data-href="{{ category.slug }}">{{ category.name }}
                                     {% if category.count is defined %}
                                         ({{ category.count }})
@@ -22,8 +38,18 @@
                                         ({{ 0 }})
                                     {% endif %}
                                 </a></li>
+                            {% if key > maxDimensionCount and key == (leftFilters.categories|length  - 1) %}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
                         {% endfor %}
-                    </ul>
+                        {% if key < maxDimensionCount %}
+                            </ul>
+                        {% endif %}
                 </div>
             </div>
         </dd>
@@ -34,8 +60,28 @@
             <div class="towns-list">
                 <label>{{'Nearby towns'|trans({}, 'frontend-left-search')}}:</label>
                 <ul>
-                    {% for location in leftFilters.locationFacets %}
+                    {% for key, location in leftFilters.locationFacets %}
+                        {% if key == (maxDimensionCount) %}
+                            </ul>
+                            <a href="javascript:void(0);" rel="nofollow" onclick="$('#locationLHSFilters').foundation('reveal', 'open');">See more</a>
+                            <div class="reveal-modal" id="locationLHSFilters" data-reveal>
+                                <a class="close-reveal-modal">&times;</a>
+                                <div>
+                                    <h5 class="modal-title">Showing Category</h5>
+                                    <div class="modal-content dimension-modal">
+                                        <div class="dimension-content">
+                                            <div class="clearfix">
+                                                <ul class="seller-link dimension-list">
+                        {% endif %}
                         <li><a data-location-href="{{ location.slug }}">{{ location.name }} ({{ location.count }})</a></li>
+                        {% if key > maxDimensionCount and key == (leftFilters.locationFacets|length - 1) %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
                     {% endfor %}
                 </ul>
             </div>
@@ -78,25 +124,6 @@
                 {{ include('FaAdBundle:AdList:leftSearchDimensionFiltersNew.html.twig') }}
                 </dd>
             {% endfor %}
-        {% endif %}
-
-        {% if leftFilters.conditions|length %}
-            <dd class="accordion-navigation">
-                <a href="#panel2b" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Condition'|trans({}, 'frontend-left-search')}}</h5></a>
-                <div id="panel2b" class="content active label-inline">
-                    <ul class="white-checkbox search-type crawlable-checkbox">
-                        {% for condition in leftFilters.conditions %}
-                            <li>
-                                <span class="custom-checkbox">
-                                    <input type="checkbox" id="fa_left_search_condition_{{ condition.id }}" name="fa_left_search[condition]">
-                                </span>
-                                <label class="mb0" for="fa_left_search_condition">{{ condition.name }} ({{ condition.count }})</label>
-                                <a data-href="{{ condition.slug }}">{{ condition.name }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </dd>
         {% endif %}
 
         <dd class="accordion-navigation keep-shown">

@@ -375,22 +375,25 @@ class AdImageRepository extends EntityRepository
         $indexableImages = [];
 
         foreach ($images as $key => $image) {
-            $indexableImages[] = [
-                'small' => CommonManager::getAdImageUrl($container, $ad->getId(), $image->getPath(), $image->getHash(), '300X225', $image->getAws(), ($image->getImageName()=='' ? $image->getHash() : $image->getImageName())),
-                'original' => CommonManager::getAdImageUrl($container, $ad->getId(), $image->getPath(), $image->getHash(), null, $image->getAws(), ($image->getImageName()=='' ? $image->getHash() : $image->getImageName())),
-                'medium' => CommonManager::getAdImageUrl($container, $ad->getId(), $image->getPath(), $image->getHash(), '800X600', $image->getAws(), ($image->getImageName()=='' ? $image->getHash() : $image->getImageName())),
-                'order' => $image->getOrd(),
-                'img_alt' => ''
-            ];
-
-            if ($key == 0) {
-                $this->addField($document, 'thumbnail_url', $indexableImages[0]['small']);
+            $smallImage = CommonManager::getAdImageUrl($container, $ad->getId(), $image->getPath(), $image->getHash(), '300X225', $image->getAws(), ($image->getImageName()=='' ? $image->getHash() : $image->getImageName()));
+            if ($smallImage != $container->getParameter('fa.static.shared.url').'/bundles/fafrontend/images/no-image-grey.svg') {
+                $indexableImages[] = [
+                    'small' => $smallImage,
+                    'original' => CommonManager::getAdImageUrl($container, $ad->getId(), $image->getPath(), $image->getHash(), null, $image->getAws(), ($image->getImageName() == '' ? $image->getHash() : $image->getImageName())),
+                    'medium' => CommonManager::getAdImageUrl($container, $ad->getId(), $image->getPath(), $image->getHash(), '800X600', $image->getAws(), ($image->getImageName() == '' ? $image->getHash() : $image->getImageName())),
+                    'order' => $image->getOrd(),
+                    'img_alt' => ''
+                ];
+                if ($key == 0) {
+                    $this->addField($document, 'thumbnail_url', $indexableImages[0]['small']);
+                }
+                $document = $this->addField($document, 'images', $indexableImages[$key]);
             }
-            $document = $this->addField($document, 'images', $indexableImages[$key]);
+
         }
 
         // Store total images counter.
-        $document = $this->addField($document, 'image_count', count($images));
+        $document = $this->addField($document, 'image_count', count($indexableImages));
 
 
         return $document;
