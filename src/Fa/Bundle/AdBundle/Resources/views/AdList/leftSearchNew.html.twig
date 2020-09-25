@@ -28,7 +28,9 @@
                                         <div class="modal-content dimension-modal">
                                             <div class="dimension-content">
                                                 <div class="clearfix">
-                                                    <ul class="seller-link dimension-list">
+                            {% endif %}
+                            {% if key >= maxDimensionCount and key is divisible by(4) %}
+                                <ul class="seller-link dimension-list">
                             {% endif %}
 
                             <li><a data-href="{{ category.slug }}">{{ category.name }}
@@ -38,8 +40,10 @@
                                         ({{ 0 }})
                                     {% endif %}
                                 </a></li>
+                            {% if key >= maxDimensionCount and (key + 1) is divisible by(4) %}
+                                </ul>
+                            {% endif %}
                             {% if key > maxDimensionCount and key == (leftFilters.categories|length  - 1) %}
-                                                    </ul>
                                                 </div>
                                             </div>
                                         </div>
@@ -71,11 +75,15 @@
                                     <div class="modal-content dimension-modal">
                                         <div class="dimension-content">
                                             <div class="clearfix">
-                                                <ul class="seller-link dimension-list">
+                        {% endif %}
+                        {% if key >= maxDimensionCount and key is divisible by(4) %}
+                            <ul class="seller-link dimension-list">
                         {% endif %}
                         <li><a data-location-href="{{ location.slug }}">{{ location.name }} ({{ location.count }})</a></li>
+                        {% if key >= maxDimensionCount and (key + 1) is divisible by(4) %}
+                            </ul>
+                        {% endif %}
                         {% if key > maxDimensionCount and key == (leftFilters.locationFacets|length - 1) %}
-                                                </ul>
                                             </div>
                                         </div>
                                     </div>
