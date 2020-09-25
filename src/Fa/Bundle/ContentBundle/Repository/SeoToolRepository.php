@@ -402,9 +402,9 @@ class SeoToolRepository extends EntityRepository
             $cacheKey    = $tableName.'|'.__FUNCTION__.'|'.$categoryId.'_'.$page.'_'.$culture;
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
-//            if ($cachedValue !== false) {
-//                return $cachedValue;
-//            }
+            if ($cachedValue !== false) {
+                return $cachedValue;
+            }
         }
 
         $seoRuleArray = $this->getSeoRulesKeyValueArray($page, $container);
