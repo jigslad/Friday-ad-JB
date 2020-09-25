@@ -402,9 +402,9 @@ class SeoToolRepository extends EntityRepository
             $cacheKey    = $tableName.'|'.__FUNCTION__.'|'.$categoryId.'_'.$page.'_'.$culture;
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
-            if ($cachedValue !== false) {
-                return $cachedValue;
-            }
+//            if ($cachedValue !== false) {
+//                return $cachedValue;
+//            }
         }
 
         $seoRuleArray = $this->getSeoRulesKeyValueArray($page, $container);
@@ -420,6 +420,7 @@ class SeoToolRepository extends EntityRepository
                     foreach ($parentCategories as $parentCategoryId) {
                         if (isset($seoRuleArray[$page.'_'.$parentCategoryId])) {
                             $seoRule = $seoRuleArray[$page.'_'.$parentCategoryId];
+                            $seoRule['popular_search'] = false;
                             break;
                         }
                     }
