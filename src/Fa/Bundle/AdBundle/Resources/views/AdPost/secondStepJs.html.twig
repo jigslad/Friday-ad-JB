@@ -291,6 +291,12 @@
                 return false;
             }
         });
+        {% if categoryName == 'community' %}
+            var adTypes = $('[id^="fa_paa_second_step_{{ categoryName }}_ad_type_id_"]');
+            adTypes.on("input", function(){
+                enableDisableNextButton()
+            });
+        {% endif %}
     });
     function enableDisableNextButton(){
         $('#fa_paa_second_step_{{ categoryName }}_save').removeClass('disabled');
@@ -327,7 +333,6 @@
             var rentTypes = $('[id^="fa_paa_second_step_{{ categoryName }}_rent_per_id_"]');
             var rentTypeSelected = false;
             rentTypes.each(function (index, element){
-                console.log(element.checked);
                 if(element.checked) {
                     rentTypeSelected = true;
                 }
@@ -339,17 +344,30 @@
                 }
             }
         {% endif %}
-        {% if categoryName == 'property' %}
+        {% if categoryName == 'community' %}
+            var adTypes = $('[id^="fa_paa_second_step_{{ categoryName }}_ad_type_id_"]');
+            var adTypeSelected = false;
+            adTypes.each(function (index, element){
+                if(element.checked) {
+                    adTypeSelected = true;
+                }
+            });
 
+            if(!adTypeSelected){
+                if (!$('#fa_paa_second_step_{{ categoryName }}_save').hasClass('disabled')) {
+                    $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
+                   }
+            }
         {% endif %}
         var requiredFieldsUpdated = $(':input[required]:visible');
         requiredFieldsUpdated.each(function( index, element ) {
-            {% if categoryName == 'property' %}
-
-            {% endif %}
-            if(!element.value){
-                if (!$('#fa_paa_second_step_{{ categoryName }}_save').hasClass('disabled')) {
-                    $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
+            var str1 = element.id;
+            var str2 = "fa_paa_second_step_community_ad_type_id_";
+            if(str1.indexOf(str2) == -1) {
+                if (!element.value) {
+                    if (!$('#fa_paa_second_step_{{ categoryName }}_save').hasClass('disabled')) {
+                        $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
+                    }
                 }
             }
         });
