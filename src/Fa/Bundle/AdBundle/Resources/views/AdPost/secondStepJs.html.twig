@@ -294,20 +294,59 @@
     });
     function enableDisableNextButton(){
         $('#fa_paa_second_step_{{ categoryName }}_save').removeClass('disabled');
-        var requiredFieldsUpdated = $(':input[required]:visible');
-        if(!$('#fa_paa_second_step_{{ categoryName }}_description').val()){
-            if (!$('#fa_paa_second_step_{{ categoryName }}_save').hasClass('disabled')) {
-                $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
+        if($('#fa_paa_second_step_{{ categoryName }}_description') .length != 0) {
+            if (!$('#fa_paa_second_step_{{ categoryName }}_description').val()) {
+                if (!$('#fa_paa_second_step_{{ categoryName }}_save').hasClass('disabled')) {
+                    $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
+                }
             }
         }
         if($("#fa_paa_second_step_{{ categoryName }}_price").is(":visible")) {
             if (!$('#fa_paa_second_step_{{ categoryName }}_price').val()) {
-                if (!$('#fa_paa_second_step_for_sale_save').hasClass('disabled')) {
-                    $('#fa_paa_second_step_for_sale_save').addClass('disabled');
+                if (!$('#fa_paa_second_step_{{ categoryName }}_save').hasClass('disabled')) {
+                    $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
                 }
             }
         }
+        {% if categoryName == 'jobs' %}
+            var contractTypes = $('[id^="fa_paa_second_step_{{ categoryName }}_contract_type_id_"]');
+            var contractTypeSelected = false;
+            contractTypes.each(function (index, element){
+                if(element.checked) {
+                    contractTypeSelected = true;
+                }
+            });
+
+            if(!contractTypeSelected){
+                if (!$('#fa_paa_second_step_{{ categoryName }}_save').hasClass('disabled')) {
+                    $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
+                }
+            }
+        {% endif %}
+        {% if categoryName == 'property' %}
+            var rentTypes = $('[id^="fa_paa_second_step_{{ categoryName }}_rent_per_id_"]');
+            var rentTypeSelected = false;
+            rentTypes.each(function (index, element){
+                console.log(element.checked);
+                if(element.checked) {
+                    rentTypeSelected = true;
+                }
+            });
+
+            if(!rentTypeSelected){
+                if (!$('#fa_paa_second_step_{{ categoryName }}_save').hasClass('disabled')) {
+                    $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
+                }
+            }
+        {% endif %}
+        {% if categoryName == 'property' %}
+
+        {% endif %}
+        var requiredFieldsUpdated = $(':input[required]:visible');
         requiredFieldsUpdated.each(function( index, element ) {
+            {% if categoryName == 'property' %}
+
+            {% endif %}
             if(!element.value){
                 if (!$('#fa_paa_second_step_{{ categoryName }}_save').hasClass('disabled')) {
                     $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
