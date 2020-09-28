@@ -29,13 +29,13 @@
                             <li class="navigation-right__item menu-dropdown">
                                 {% set myProfileUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(app.user.getId()) %}
                                 <a class="arrow-icon navigation-right__link" href="{% if myProfileUrl %}{{ myProfileUrl }}{% else %}javascript:void(0);{% endif %}">
-                                    Hello
+                                    Hello,
                                     {% if app.user.getFullName() %}
                                         {{app.user.getFullName()}}
                                     {% else %}
                                         {{app.user.getUsername()}}
                                     {% endif %}
-
+                                    <span class="notify-badge"></span>
                                 </a>
                                 <div class="dropdown-content">
                                     <div class="dropdown-content__block user-profile">
@@ -45,7 +45,7 @@
                                             <img src="{{ userLogo }}" alt="{% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}private-user {% else %} business-user {% endif %}">
                                         </div>
                                         <h6 class="dropdown-content__user-name">
-                                            Hello
+                                            Hello,
                                             {% if app.user.getFullName() %}
                                                 {{app.user.getFullName()}}
                                             {% else %}
@@ -59,7 +59,12 @@
                                                 <a href="{{ path('dashboard_home') }}" class="dropdown-content__link home-icon">My Dashboard</a>
                                             </li>
                                             <li class="dropdown-content__item">
-                                                <a href="{{ path('user_ad_message_all') }}" class="dropdown-content__link messages-icon">Messages</a>
+                                                <a href="{{ path('user_ad_message_all') }}" class="dropdown-content__link messages-icon">
+                                                    Messages
+                                                    {% if totalUnreadMsg != 0 %}
+                                                        <span class="notify-badge"></span>
+                                                    {% endif %}
+                                                </a>
                                             </li>
                                             <li class="dropdown-content__item">
                                                 <a href="{{ path('user_review_list') }}" class="dropdown-content__link reviews-icon">Reviews</a>
@@ -114,11 +119,17 @@
                                 {% else %}
                                     {% set userCartUrl = 'javascript:void(0);' %}
                                 {% endif %}
-                                <a href="{{ userCartUrl }}" class="navigation-right__link basket-icon"></a>
+                                <a href="{{ userCartUrl }}" class="navigation-right__link basket-icon">
+                                    <span class="notify-badge"></span>
+                                </a>
 {#                                    <a href="{{ userCartUrl }}" class="basket-icon"><span>({{ userDetail|length }})</span></a>|#}
                             </li>
                             <li class="navigation-right__item">
-                                <a href="{{ path('user_ad_message_all') }}" id="inbox-header-id" class="navigation-right__link message-icon ga-widgetMessages"></a>
+                                <a href="{{ path('user_ad_message_all') }}" id="inbox-header-id" class="navigation-right__link message-icon ga-widgetMessages">
+                                    {% if totalUnreadMsg != 0 %}
+                                        <span class="notify-badge"></span>
+                                    {% endif %}
+                                </a>
 {#                                    <a href="{{ path('user_ad_message_all') }}" id="inbox-header-id" class="ga-widgetMessages">{{'Messages'|trans({}, 'frontend-header-usermenu')}} <span class="ga-widgetMessages">({{totalUnreadMsg}})</span> <span class="unread-msg ga-widgetMessages" id="total_unread_msg_icon_div" {% if totalUnreadMsg == 0 %} style="display:none" {% endif %}>&nbsp;</span></a>|#}
                             </li>
                             <li class="navigation-right__item">
@@ -285,11 +296,6 @@
                 $('.header').removeClass('scrolled')
             }
         }
-    });
-    $('#megaDropdown').click(function(e) {
-        $(this).toggleClass('rotate-icon')
-        $(this).siblings('.nav-dropdown').toggleClass('menu-toggle');
-        e.stopPropagation();
     });
     $('#mobileMegaDropdown').click(function(e) {
         $(this).toggleClass('menu-green-icon')

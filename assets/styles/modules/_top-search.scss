@@ -6,7 +6,7 @@
     padding: 12px 12px;
     border-top: 1px solid $color--border;
     border-bottom: 1px solid $color--border;
-    top: 64px;
+    top: 60px;
     background: white;
     &__block {
         display: flex;
@@ -17,6 +17,7 @@
     }
     &__input {
         display: flex;
+        position: relative;
         &--text {
             outline: 0;
             height: 40px;
@@ -52,10 +53,11 @@
             transition: background-color .4s ease;
             -webkit-border-radius: 0 4px 4px 0;
             border-radius: 0 4px 4px 0;
-            background-image: url('/public/images/search-white.svg');
+            // background-image: url('/public/images/search-white.svg');
             background-size: 20px;
             background-position-y: 10px;
             display: block;
+            cursor: pointer;
             &:hover {
                 background: url('/public/images/search-white.svg') no-repeat center center, linear-gradient(135deg, #A8DC28 0%, #79D378 100%) !important;
             }
@@ -79,6 +81,7 @@
             span {
                 color: $color--hover;
                 padding-left: 6px;
+                cursor: pointer;
             }
             &:hover {
                 color: #212527;
@@ -100,6 +103,7 @@
             display: flex;
             align-items: center;
             padding-left: 25px;
+            cursor: pointer;
             &:hover {
                 color: $color--hover;
             }
@@ -155,6 +159,7 @@
             display: flex;
             align-items: flex-end;
             color: $color--hover;
+            cursor: pointer;
         }
     }
 }
