@@ -884,10 +884,12 @@ class AdListController extends CoreController
 
         $data       = $this->setDefaultParametersNew($request, $mapFlag, 'finders', $cookieLocationDetails);
 
-        $data['static_filters'] = ' AND -is_topad:true';
+        $category = $this->getRepository('FaEntityBundle:Category')->findOneBy(['id' => $findersSearchParams['item__category_id']]);
+
+        $data['static_filters'] = ' AND category_full_path:"' . $category->getFullSlug() .'"';
+        $data['static_filters'] .= ' AND -is_topad:true';
         $page = $data['pager']['page'];
 
-        $category = $this->getRepository('FaEntityBundle:Category')->findOneBy(['id' => $findersSearchParams['item__category_id']]);
         $searchableDimensions = $this->getRepository('FaEntityBundle:CategoryDimension')->getSearchableDimesionsArrayByCategoryId($category->getId(), $this->container);
         $adRepository = $this->getRepository('FaAdBundle:Ad');
 
@@ -915,7 +917,8 @@ class AdListController extends CoreController
 
         $featuredData    = $this->setDefaultParametersNew($request, $mapFlag, 'finders', array());
 
-        $featuredData['static_filters'] = ' AND is_topad:true';
+        $featuredData['static_filters'] = ' AND category_full_path:"' . $category->getFullSlug() .'"';
+        $featuredData['static_filters'] .= ' AND is_topad:true';
 
         $keywords       = (isset($featuredData['search']['keywords']) && $featuredData['search']['keywords']) ? $featuredData['search']['keywords']: NULL;
         $page           = (isset($featuredData['pager']['page']) && $featuredData['pager']['page']) ? $featuredData['pager']['page']: 1;
