@@ -218,5 +218,9 @@
             var new_url = href.replace('/{{ currentLocation }}/', '/'+$(this).attr('data-location-href')+'/');
             $(this).attr('href', new_url);
         });
+
+        $('.white-checkbox input[type="checkbox"]').on('click', function() {
+            window.location.replace($(this).closest('li').find('a').attr('href'));
+        });
     });
 </script>

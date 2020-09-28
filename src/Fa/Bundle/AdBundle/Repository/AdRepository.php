@@ -12,7 +12,6 @@
 namespace Fa\Bundle\AdBundle\Repository;
 
 use SimpleXMLElement;
-use Gedmo\Sluggable\Util\Urlizer;
 use Doctrine\ORM\EntityRepository;
 use Fa\Bundle\UserBundle\Repository\UserRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
@@ -865,7 +864,6 @@ class AdRepository extends EntityRepository
         // TODO: location details to be fetched for ad
         $categoryString = explode('/', $allParentCategories[0]['full_slug']);
         $categoryString = isset($categoryString[1]) ? $categoryString[1] : $categoryString[0];
-        $document = $this->addField($document, 'ad_detail_url', $container->get('fa_ad.manager.ad_routing')->getAdDetailUrlByDetails($categoryString, 'uk', Urlizer::urlize(CommonManager::trimTextByWords($ad->getTitle(), 7, '')), $ad->getId()));
 
         // Weekly refresh at & created at
         if ($ad->getWeeklyRefreshAt() && $ad->getPublishedAt() && $ad->getWeeklyRefreshAt() > $ad->getPublishedAt()) {
@@ -930,7 +928,7 @@ class AdRepository extends EntityRepository
         $document = $this->_em->getRepository('FaAdBundle:AdImage')->getSolrDocumentNew($container, $ad, $document, $imageLimit);
 
         // Index locations
-        $document = $this->_em->getRepository('FaAdBundle:AdLocation')->getSolrDocumentNew($ad, $document, $container);
+        $document = $this->_em->getRepository('FaAdBundle:AdLocation')->getSolrDocumentNew($ad, $document, $container, $categoryString);
 
         return $document;
     }
