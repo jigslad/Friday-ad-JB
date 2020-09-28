@@ -102,6 +102,10 @@ function updateTinyMiceCharCounter(fieldId)
     //value             = value.replace(/(\r\n|\n|\r)/igm, '');
     value             = decodeHtml(value);
     //value             = value.replace(/\s/g, '');
+    {% if app.request.attributes.get('_route') == 'ad_post_second_step' %}
+        $('#'+fieldId).val(value);
+        enableDisableNextButton()
+    {% endif %}
 
     if (maxlimit) {
         if (value.length > maxlimit) {

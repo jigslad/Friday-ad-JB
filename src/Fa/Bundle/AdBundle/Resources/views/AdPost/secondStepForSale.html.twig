@@ -279,5 +279,55 @@
 
 //]]>
 </script>
+    <script>
+        $(document).ready(function(){
+            var requiredFields = $(':input');
+            requiredFields.keyup(function (){
+                enableDisableNextButton()
+            });
+            requiredFields.change(function (){
+                enableDisableNextButton()
+            });
+            if (!$('#fa_paa_second_step_for_sale_save').hasClass('disabled')) {
+                $('#fa_paa_second_step_for_sale_save').addClass('disabled');
+            }
+            enableDisableNextButton()
+            $("form[name='fa_paa_second_step_for_sale']").submit(function() {
+                if ($('#fa_paa_second_step_for_sale_save').hasClass('disabled')) {
+                    return false;
+                }
+            });
+        });
+        function enableDisableNextButton(){
+            $('#fa_paa_second_step_for_sale_save').removeClass('disabled');
+            var requiredFieldsUpdated = $(':input[required]:visible');
+            if(!$('#fa_paa_second_step_for_sale_description').val()){
+                if (!$('#fa_paa_second_step_for_sale_save').hasClass('disabled')) {
+                    $('#fa_paa_second_step_for_sale_save').addClass('disabled');
+                }
+            }
+            if($("#fa_paa_second_step_for_sale_price").is(":visible")) {
+                if (!$('#fa_paa_second_step_for_sale_price').val()) {
+                    if (!$('#fa_paa_second_step_for_sale_save').hasClass('disabled')) {
+                        $('#fa_paa_second_step_for_sale_save').addClass('disabled');
+                    }
+                }
+            }
+            if($("#fa_paa_second_step_for_sale_price_text").is(":visible")) {
+                if (!$('#fa_paa_second_step_for_sale_price_text').val()) {
+                    if (!$('#fa_paa_second_step_for_sale_save').hasClass('disabled')) {
+                        $('#fa_paa_second_step_for_sale_save').addClass('disabled');
+                    }
+                }
+            }
+            requiredFieldsUpdated.each(function( index, element ) {
+                if(!element.value){
+                    if (!$('#fa_paa_second_step_for_sale_save').hasClass('disabled')) {
+                        $('#fa_paa_second_step_for_sale_save').addClass('disabled');
+                    }
+                }
+            });
+        }
+    </script>
 {{ include('FaContentBundle:Default:tinyMceJs.html.twig', {'plugins' : 'autoresize', 'autoresizeOptions': 'autoresize_bottom_margin: 0, autoresize_min_height: 100, autoresize_max_height: 500,', 'toolbar1' : 'bold italic underline, bullist numlist', 'toolbar2' : 'false', 'menubar' : 'false', 'statusbar': 'true', 'charCounter' : 'true' }) }}
 {% endblock %}
