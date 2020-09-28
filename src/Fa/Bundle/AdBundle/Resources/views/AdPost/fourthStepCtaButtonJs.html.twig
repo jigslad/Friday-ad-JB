@@ -11,14 +11,9 @@
             enableDisableNextButton()
         });
         $('#fa_paa_fourth_step_{{ categoryName }}_location_close').click(function (){
-            enableDisableNextButton()
+            disableNextButton()
         });
-        if (!$('#fa_paa_fourth_step_{{ categoryName }}_save').hasClass('disabled')) {
-            $('#fa_paa_fourth_step_{{ categoryName }}_save').addClass('disabled');
-        }
-        if (!$('#fa_paa_fourth_step_{{ categoryName }}_preview').hasClass('disabled')) {
-            $('#fa_paa_fourth_step_{{ categoryName }}_preview').addClass('disabled');
-        }
+        disableNextButton()
         enableDisableNextButton()
         $("form[name='fa_paa_fourth_step_{{ categoryName }}']").submit(function() {
             if ($('#fa_paa_fourth_step_{{ categoryName }}_save').hasClass('disabled')) {
@@ -32,14 +27,16 @@
         var requiredFieldsUpdated = $(':input[required]:visible');
         requiredFieldsUpdated.each(function( index, element ) {
             if (!element.value) {
-                console.log('empty' + element.id)
-                if (!$('#fa_paa_fourth_step_{{ categoryName }}_save').hasClass('disabled')) {
-                    $('#fa_paa_fourth_step_{{ categoryName }}_save').addClass('disabled');
-                }
-                if (!$('#fa_paa_fourth_step_{{ categoryName }}_preview').hasClass('disabled')) {
-                    $('#fa_paa_fourth_step_{{ categoryName }}_preview').addClass('disabled');
-                }
+                disableNextButton()
             }
         });
+    }
+    function disableNextButton(){
+        if (!$('#fa_paa_fourth_step_{{ categoryName }}_save').hasClass('disabled')) {
+            $('#fa_paa_fourth_step_{{ categoryName }}_save').addClass('disabled');
+        }
+        if (!$('#fa_paa_fourth_step_{{ categoryName }}_preview').hasClass('disabled')) {
+            $('#fa_paa_fourth_step_{{ categoryName }}_preview').addClass('disabled');
+        }
     }
 </script>
