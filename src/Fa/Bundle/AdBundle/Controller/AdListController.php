@@ -812,7 +812,6 @@ class AdListController extends CoreController
             'category_ids'          => array('min_count' => 1),
             'is_trade_ad'           => array('min_count' => 0),
             'image_count'           => array('min_count' => 1),
-            'dim_list_condition'    => array('min_count' => 0),
             'town'                  => array('min_count' => 0),
             'area'                  => array('min_count' => 0)
         );
@@ -839,9 +838,12 @@ class AdListController extends CoreController
      */
     public function searchResultNewAction(Request $request)
     {
-        $mapFlag            = $request->get('map', false);
-        $currentRoute      = $request->get('_route');
-        $requestlocation   = $request->get('location');
+        $mapFlag                = $request->get('map', false);
+        $currentRoute           = $request->get('_route');
+        $requestlocation        = $request->get('location');
+        $findersSearchParams    = $request->get('finders');
+        $cookieLocationDetails  = array();
+
         if (!in_array($currentRoute, array('show_business_user_ads', 'show_business_user_ads_page', 'show_business_user_ads_location'))) {
             if (preg_match("/[A-Z]/", $request->getPathInfo())) {
                 $url = str_replace($request->getPathInfo(), strtolower($request->getPathInfo()), $request->getUri());
@@ -880,28 +882,12 @@ class AdListController extends CoreController
             }
         }
 
-        $data       = $this->setDefaultParametersNew($request, $mapFlag, 'finders', array());
+        $data       = $this->setDefaultParametersNew($request, $mapFlag, 'finders', $cookieLocationDetails);
 
-        $pageString = trim($request->get('page_string'), '/');
-        $page       = (isset($data['pager']['page']) && $data['pager']['page']) ? $data['pager']['page']: 1;
-        if (strpos($pageString, 'page') !== false) {
-            $page = explode('page-', $pageString)[1];
-            $pagePieces = explode('/', $pageString);
+        $data['static_filters'] = ' AND -is_topad:true';
+        $page = $data['pager']['page'];
 
-            $pageString = '';
-            foreach ($pagePieces as $piece) {
-                if (strpos($piece, 'page') === false) {
-                    $pageString .= $piece . '/';
-                }
-            }
-
-            $pageString = trim($pageString, '/');
-        }
-
-        $data['static_filters'] = ' AND category_full_path:"'. $pageString . '"';
-        $data['static_filters'] .= ' AND -is_topad:true';
-
-        $category = $this->getRepository('FaEntityBundle:Category')->findOneBy(['full_slug' => $pageString]);
+        $category = $this->getRepository('FaEntityBundle:Category')->findOneBy(['id' => $findersSearchParams['item__category_id']]);
         $searchableDimensions = $this->getRepository('FaEntityBundle:CategoryDimension')->getSearchableDimesionsArrayByCategoryId($category->getId(), $this->container);
         $adRepository = $this->getRepository('FaAdBundle:Ad');
 
@@ -929,8 +915,7 @@ class AdListController extends CoreController
 
         $featuredData    = $this->setDefaultParametersNew($request, $mapFlag, 'finders', array());
 
-        $featuredData['static_filters'] = ' AND category_full_path:"'. $pageString . '"';
-        $featuredData['static_filters'] .= ' AND is_topad:true';
+        $featuredData['static_filters'] = ' AND is_topad:true';
 
         $keywords       = (isset($featuredData['search']['keywords']) && $featuredData['search']['keywords']) ? $featuredData['search']['keywords']: NULL;
         $page           = (isset($featuredData['pager']['page']) && $featuredData['pager']['page']) ? $featuredData['pager']['page']: 1;
@@ -963,7 +948,8 @@ class AdListController extends CoreController
             'pagination' => $pagination['pagination'],
             'adFavouriteIds' => $adFavouriteIds,
             'leftFilters' => empty($pagination['resultCount']) ? [] : $this->getLeftFilters($category, $pagination['facetResult'], $pagination['resultCount'], $searchableDimensions),
-            'currentLocation' => $requestlocation
+            'currentLocation' => $requestlocation,
+            'searchParams' => $findersSearchParams
          ];
 
         return $this->render('FaAdBundle:AdList:searchResultNew.html.twig', $parameters, null);
