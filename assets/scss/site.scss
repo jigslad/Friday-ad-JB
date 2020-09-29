@@ -604,6 +604,9 @@ footer a:hover, .footer-head:hover, .pkg-includes a {
 	}
 }
 @media only screen and (min-width: 320px) and (max-width: 759px) {
+    li.step-on, li.step-complete {
+      background: none !important;
+    }
 	#home-search .all-cat-select {
 		min-width: 52px !important;
 		width: 52px !important;
