@@ -282,9 +282,7 @@
         requiredFields.change(function (){
             enableDisableNextButton()
         });
-        if (!$('#fa_paa_second_step_{{ categoryName }}_save').hasClass('disabled')) {
-            $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
-        }
+        disableNextButton()
         enableDisableNextButton()
         $("form[name='fa_paa_second_step_{{ categoryName }}']").submit(function() {
             if ($('#fa_paa_second_step_{{ categoryName }}_save').hasClass('disabled')) {
@@ -302,16 +300,12 @@
         $('#fa_paa_second_step_{{ categoryName }}_save').removeClass('disabled');
         if($('#fa_paa_second_step_{{ categoryName }}_description') .length != 0) {
             if (!$('#fa_paa_second_step_{{ categoryName }}_description').val()) {
-                if (!$('#fa_paa_second_step_{{ categoryName }}_save').hasClass('disabled')) {
-                    $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
-                }
+                disableNextButton()
             }
         }
         if($("#fa_paa_second_step_{{ categoryName }}_price").is(":visible")) {
             if (!$('#fa_paa_second_step_{{ categoryName }}_price').val()) {
-                if (!$('#fa_paa_second_step_{{ categoryName }}_save').hasClass('disabled')) {
-                    $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
-                }
+                disableNextButton()
             }
         }
         {% if categoryName == 'jobs' %}
@@ -324,9 +318,7 @@
             });
 
             if(!contractTypeSelected){
-                if (!$('#fa_paa_second_step_{{ categoryName }}_save').hasClass('disabled')) {
-                    $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
-                }
+                disableNextButton()
             }
         {% endif %}
         {% if categoryName == 'property' %}
@@ -339,9 +331,7 @@
             });
 
             if(!rentTypeSelected){
-                if (!$('#fa_paa_second_step_{{ categoryName }}_save').hasClass('disabled')) {
-                    $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
-                }
+                disableNextButton()
             }
         {% endif %}
         {% if categoryName == 'community' %}
@@ -354,9 +344,7 @@
             });
 
             if(!adTypeSelected){
-                if (!$('#fa_paa_second_step_{{ categoryName }}_save').hasClass('disabled')) {
-                    $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
-                   }
+                disableNextButton()
             }
         {% endif %}
         var requiredFieldsUpdated = $(':input[required]:visible');
@@ -365,11 +353,14 @@
             var str2 = "fa_paa_second_step_community_ad_type_id_";
             if(str1.indexOf(str2) == -1) {
                 if (!element.value) {
-                    if (!$('#fa_paa_second_step_{{ categoryName }}_save').hasClass('disabled')) {
-                        $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
-                    }
+                    disableNextButton()
                 }
             }
         });
+    }
+    function disableNextButton(){
+        if (!$('#fa_paa_second_step_{{ categoryName }}_save').hasClass('disabled')) {
+            $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
+        }
     }
 </script>
