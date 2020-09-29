@@ -56,6 +56,14 @@
                             background-position-y: -3px;
                         }
                     }
+                    &:hover {
+                        &:first-child {
+                            .arrow-icon {
+                                background-image: url('/public/images/geen-up.svg');
+                                color: #82c148;
+                            }
+                        }
+                    }
                 }
             }
             &.login {
@@ -300,6 +308,7 @@
             @include media-breakpoint-up(md) {
                 &:first-child {
                     margin-right: 40px;
+                    // display: none;
                 }
                 margin-right: 20px;
                 align-items: baseline;
@@ -322,10 +331,10 @@
                         color: #82c148;
                         text-decoration: none;
                     }
-                    &.rotate-icon {
-                        background-image: url('/public/images/green-down-arrow.svg');
-                        color: #82c148;
-                    }
+                    // &.rotate-icon {
+                    //     background-image: url('/public/images/green-down-arrow.svg');
+                    //     color: #82c148;
+                    // }
                 }
                 .dropdown-icon {
                     display: none;
@@ -368,6 +377,10 @@
                     &:hover {
                         .nav-dropdown {
                             display: block;
+                        }
+                        .dropdown-icon {
+                            background-image: url('/public/images/geen-up.svg');
+                            color: $color--hover;
                         }
                     }
                 }

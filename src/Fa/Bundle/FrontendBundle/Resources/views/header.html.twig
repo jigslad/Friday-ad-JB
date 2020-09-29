@@ -275,7 +275,7 @@
 </div>
     {% if status_code == 200 %}
         {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'cybersource_checkout'} %}
-            {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {} } )) }}
+{#            {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {} } )) }}#}
         {% endif %}
     {% endif %}
 </header>

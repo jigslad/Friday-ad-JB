@@ -32,16 +32,29 @@
             }
             img {
                 border-radius: 4px 4px 0 0;
+                transition: 0.2s;
+                max-height: 226px;
             }
         }
         &:hover {
-            border: 1px solid #82c148;
+            // border: 1px solid #82c148;
+            img {
+                transform: scale(1.1);
+                transition: 0.2s;
+            }
         }
+    }
+    &__img {
+        overflow: hidden;
+        border-radius: 4px 4px 0 0;
     }
     &__content {
         padding: 18px 20px 18px;
         @include media-breakpoint-between(md, lg) {
             padding: 15px 10px 18px;
+        }
+        @include media-breakpoint-up(xl) {
+            padding: 20px 20px 19px;
         }
         &--posted {
             color: #82c148;

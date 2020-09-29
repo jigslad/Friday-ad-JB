@@ -72,7 +72,8 @@
             flex: 0 1 27%;
             @include media-breakpoint-up(lg) {
                 height: 282px;
-                flex: 0 1 26.3%;
+                // flex: 0 1 26.3%;
+                flex: 0 1 30%;
             }
         }
         &:nth-child(2) {
@@ -189,6 +190,7 @@
         margin-bottom: 0;
         line-height: 18px;
         font-family: $font-family-bold;
+        font-weight: normal;
     }
     &__content {
         position: absolute;
@@ -211,10 +213,12 @@
         border-radius: 4px;
         cursor: pointer;
         display: block;
+        background: transparent;
         &:hover {
-            color: #82c148;
-            border: 1px solid #82c148;
+            color: $color--white;
+            border: 1px solid transparent;
             text-decoration: none;
+            background: #212527;
         }
     }
 }

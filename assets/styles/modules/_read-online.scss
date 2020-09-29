@@ -33,6 +33,9 @@
         position: relative;
         list-style: none;
         // margin-bottom: 20px;
+        @include media-breakpoint-up(md) {
+            padding-left: 36px;
+        }
         @include media-breakpoint-down(sm) {
             width: 300px;
             margin: 0 auto 30px;
@@ -45,7 +48,7 @@
             width: 32px;
             left: 25px;
             @include media-breakpoint-up(md) {
-                left: -48px;
+                left: -4px;
             }
             top: -4px;
             background-repeat: no-repeat
@@ -91,11 +94,11 @@
     &__media {
         flex: 0 1 100%;
         @include media-breakpoint-up(md) {
-            flex: 0 1 40%;
-            padding-left: 68px;
+            flex: 0 1 27.15%;
+            margin-left: 55px;
         }
         @include media-breakpoint-up(lg) {
-            flex: 0 1 50%;
+            flex: 0 1 19%;
         }
         figure {
             img {
