@@ -29,8 +29,14 @@
                 disableNextButton()
             }
         }
+        if($('#fa_paa_fourth_step_{{ categoryName }}_species_id') .length != 0) {
+            if (!$('#fa_paa_fourth_step_{{ categoryName }}_species_id').val()) {
+                disableNextButton()
+            }
+        }
         var requiredFieldsUpdated = $(':input[required]:visible');
         requiredFieldsUpdated.each(function( index, element ) {
+            if(element.id != 'fa_paa_fourth_step_{{ categoryName }}_location_autocomplete')
             if (!element.value) {
                 disableNextButton()
             }
