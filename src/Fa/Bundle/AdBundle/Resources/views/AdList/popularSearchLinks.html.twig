@@ -62,8 +62,10 @@
         list-style: none;
         flex: 0 1 776px;
     }
-    .popular-search--block li:nth-child(2) {
-        margin-right: 0;
+    @media only screen and (max-width: 767px) {
+        .popular-search--block li:nth-child(2) {
+            margin-right: 0;
+        }
     }
     @media only screen and (min-width: 768px) {
         .popular-search--block li :nth-child(2) {
