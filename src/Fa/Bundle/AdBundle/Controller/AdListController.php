@@ -739,7 +739,6 @@ class AdListController extends CoreController
         $this->get('fa.searchfilters.manager')->init($this->getRepository('FaAdBundle:Ad'), $this->getRepositoryTable('FaAdBundle:Ad'), 'finders');
         $data = $this->get('fa.searchfilters.manager')->getFiltersData();
 
-        $data['search']['item__location'] = $request->get('location');
         // add published at as second sort
         if (!$mapFlag) {
             if ($request->get('sort_field') == 'item__weekly_refresh_published_at') {
@@ -820,13 +819,39 @@ class AdListController extends CoreController
         if (isset($data['search']['item__location']) && $data['search']['item__location']) {
             $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'.((isset($data['search']['item__distance']) ? $data['search']['item__distance'] : ''));
         }
-        //$data['query_filters']['item']['is_blocked_ad'] = 0;
+        $data['query_filters']['item']['is_blocked_ad'] = 0;
         // remove adult results when there is no category selected
         if (!isset($data['search']['item__category_id']) && !in_array($currentRoute, array('show_business_user_ads', 'show_business_user_ads_page', 'show_business_user_ads_location','fa_adult_homepage'))) {
             $data['static_filters'] = ' AND -category_ids:'.CategoryRepository::ADULT_ID;
         }
 
+        $dataSearch = $data['search'];
+        unset($dataSearch['item__category_id']);
+        unset($dataSearch['item__location']);
+
+        foreach ($dataSearch as $searchKey => $searchItem) {
+            if (! empty($searchItem)) {
+                if ($dimension = $this->getDimensionName($searchKey)) {
+                    $data['query_filters']['item'][$dimension] = $searchItem;
+                }
+            }
+        }
+
         return $data;
+    }
+
+    /**
+     * @param $searchKey
+     * @return bool|mixed
+     */
+    private function getDimensionName($searchKey)
+    {
+        if (strpos($searchKey, '__')) {
+            $key = explode('__', $searchKey);
+            return str_replace('_id', '', $key[1]);
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -886,7 +911,10 @@ class AdListController extends CoreController
 
         $category = $this->getRepository('FaEntityBundle:Category')->findOneBy(['id' => $findersSearchParams['item__category_id']]);
 
-        $data['static_filters'] = ' AND category_full_path:"' . $category->getFullSlug() .'"';
+        if (empty($data['static_filters'])) {
+            $data['static_filters'] = '';
+        }
+        $data['static_filters'] .= ' AND category_full_path:"' . $category->getFullSlug() .'"';
         $data['static_filters'] .= ' AND -is_topad:true';
         $page = $data['pager']['page'];
 
@@ -898,7 +926,7 @@ class AdListController extends CoreController
         $repository = $this->getRepository('FaAdBundle:'.'Ad'.str_replace(' ', '', $root->getName()));
         $listingFields = $repository->getAdListingFields();
         foreach ($searchableDimensions as $key => $dimension) {
-            $solrDimensionFieldName = $adRepository->getSolrFieldName($listingFields, str_replace(' ', '_', strtolower($dimension['name'])));
+            $solrDimensionFieldName = $adRepository->getSolrFieldName($listingFields, str_replace([' ', '.'], ['_', ''], strtolower($dimension['name'])));
             $data['facet_fields'] = array_merge(
                 $data['facet_fields'],
                 [
@@ -909,23 +937,29 @@ class AdListController extends CoreController
             $searchableDimensions[$key]['solr_field'] = $solrDimensionFieldName;
         }
 
+        $data['static_filters'] .= $this->setDimensionParams($data['search'], $listingFields, $adRepository);
+
         $keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: NULL;
         $recordsPerPage = (isset($data['pager']['limit']) && $data['pager']['limit']) ? $data['pager']['limit']: $this->container->getParameter('fa.search.records.per.page');
 
         $pagination = $this->getSolrPagination('ad.new', $keywords, $data, $page, $recordsPerPage, 0, true);
         $ads = $this->formatAds($pagination['pagination']);
 
-        $featuredData    = $this->setDefaultParametersNew($request, $mapFlag, 'finders', array());
+        if ($page == 1) {
+            $featuredData = $this->setDefaultParametersNew($request, $mapFlag, 'finders', array());
 
-        $featuredData['static_filters'] = ' AND category_full_path:"' . $category->getFullSlug() .'"';
-        $featuredData['static_filters'] .= ' AND is_topad:true';
+            $featuredData['static_filters'] = ' AND category_full_path:"' . $category->getFullSlug() . '"';
+            $featuredData['static_filters'] .= ' AND is_topad:true';
 
-        $keywords       = (isset($featuredData['search']['keywords']) && $featuredData['search']['keywords']) ? $featuredData['search']['keywords']: NULL;
-        $page           = (isset($featuredData['pager']['page']) && $featuredData['pager']['page']) ? $featuredData['pager']['page']: 1;
+            $keywords = (isset($featuredData['search']['keywords']) && $featuredData['search']['keywords']) ? $featuredData['search']['keywords'] : NULL;
+            $page = (isset($featuredData['pager']['page']) && $featuredData['pager']['page']) ? $featuredData['pager']['page'] : 1;
 
-        $featuredPagination = $this->getSolrPagination('ad.new', $keywords, $featuredData, $page, 3, 0, true);
+            $featuredPagination = $this->getSolrPagination('ad.new', $keywords, $featuredData, 1, 3, 0, true);
 
-        $featuredAds = $this->formatAds($featuredPagination['pagination']);
+            $featuredAds = $this->formatAds($featuredPagination['pagination']);
+        } else {
+            $featuredAds = [];
+        }
 
         $bannersArray = $this->getRepository('FaContentBundle:Banner')->getBannersArrayByPage('listing_page', $this->container);
 
@@ -956,6 +990,35 @@ class AdListController extends CoreController
          ];
 
         return $this->render('FaAdBundle:AdList:searchResultNew.html.twig', $parameters, null);
+    }
+
+    /**
+     * @param $searchParams
+     * @param $listingFields
+     * @param $adRepository
+     * @return string
+     */
+    private function setDimensionParams($searchParams, $listingFields, $adRepository)
+    {
+        unset($searchParams['item__category_id']);
+        unset($searchParams['item__location']);
+
+        $staticFilters = '';
+        foreach ($searchParams as $searchKey => $searchItem) {
+            if (! empty($searchItem)) {
+                $solrDimensionFieldName = $adRepository->getSolrFieldName($listingFields, $this->getDimensionName($searchKey));
+
+                if (is_array($searchItem)) {
+                    foreach ($searchItem as $eachItem) {
+                        $staticFilters .= ' AND ' . $solrDimensionFieldName . ':"' . $eachItem . '"';
+                    }
+                } else {
+                    $staticFilters .= ' AND ' . $solrDimensionFieldName . ':"' . $searchItem . '"';
+                }
+            }
+        }
+
+        return $staticFilters;
     }
 
     /**
@@ -1114,7 +1177,7 @@ class AdListController extends CoreController
                     'ad_title' => $ad['title'],
                     'description' => isset($ad['description']) ? $ad['description'] : '',
                     'price' => empty($ad['price']) ? '' : CommonManager::formatCurrency($ad['price'], $this->container),
-                    'ad_img' => isset($ad['thumbnail_url']) ? $ad['thumbnail_url'] : 'fafrontend/images/no-image-grey.svg',
+                    'ad_img' => isset($ad['thumbnail_url']) ? $ad['thumbnail_url'] : $this->container->getParameter('fa.static.shared.url').'/bundles/fafrontend/images/no-image-grey.svg',
                     'image_count' => isset($ad['image_count']) ? $ad['image_count'] : 0,
                     'img_alt' => '',
                     'ad_url' => $ad['ad_detail_url'],
