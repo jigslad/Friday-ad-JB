@@ -1,27 +1,75 @@
 {% set maxDimensionCount = 12 %}
 
-<div class="search-filters">
-    <dl class="accordion" data-accordion>
-        {# Category search params - start #}
-        <dd class="accordion-navigation keep-shown">
-            <a href="#panel1a" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Categories'|trans({}, 'frontend-left-search')}}</h5></a>
-            <div class="content active clearfix">
-                {% if leftFilters.parent_category is defined and leftFilters.parent_category != '' %}
-                    <div class="search-cat-parent-list">
+{% if resultCount > 0 %}
+    <div class="search-filters">
+        <dl class="accordion" data-accordion>
+            {# Category search params - start #}
+            <dd class="accordion-navigation keep-shown">
+                <a href="#panel1a" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Categories'|trans({}, 'frontend-left-search')}}</h5></a>
+                <div class="content active clearfix">
+                    {% if leftFilters.parent_category is defined and leftFilters.parent_category != '' %}
+                        <div class="search-cat-parent-list">
+                            <ul>
+                                <li><a data-href="{{ leftFilters.parent_category.getSlug() }}">{{ leftFilters.parent_category.getName() }}</a></li>
+                            </ul>
+                        </div>
+                    {% endif %}
+                    <div class="search-cat-sub-list">
                         <ul>
-                            <li><a data-href="{{ leftFilters.parent_category.getSlug() }}">{{ leftFilters.parent_category.getName() }}</a></li>
-                        </ul>
+                            {% set key = 0 %}
+                            <li><label>{{ leftFilters.current_category }}</label></li>
+                            {% for key, category in leftFilters.categories %}
+                                {% if key == (maxDimensionCount) %}
+                                    </ul>
+                                    <a href="javascript:void(0);" rel="nofollow" onclick="$('#categoryLHSFilters').foundation('reveal', 'open');">See more</a>
+                                    <div class="reveal-modal" id="categoryLHSFilters" data-reveal>
+                                        <a class="close-reveal-modal">&times;</a>
+                                        <div>
+                                            <h5 class="modal-title">Showing Category</h5>
+                                            <div class="modal-content dimension-modal">
+                                                <div class="dimension-content">
+                                                    <div class="clearfix">
+                                {% endif %}
+                                {% if key >= maxDimensionCount and key is divisible by(4) %}
+                                    <ul class="seller-link dimension-list">
+                                {% endif %}
+
+                                <li><a data-href="{{ category.slug }}">{{ category.name }}
+                                        {% if category.count is defined %}
+                                            ({{ category.count }})
+                                        {% else %}
+                                            ({{ 0 }})
+                                        {% endif %}
+                                    </a></li>
+                                {% if key >= maxDimensionCount and (key + 1) is divisible by(4) %}
+                                    </ul>
+                                {% endif %}
+                                {% if key > maxDimensionCount and key == (leftFilters.categories|length  - 1) %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            {% if key < maxDimensionCount %}
+                                </ul>
+                            {% endif %}
                     </div>
-                {% endif %}
-                <div class="search-cat-sub-list">
+                </div>
+            </dd>
+            {# Category search params - end #}
+
+            {# Town left filters #}
+            {% if leftFilters.locationFacets|length %}
+                <div class="towns-list">
+                    <label>{{'Nearby towns'|trans({}, 'frontend-left-search')}}:</label>
                     <ul>
-                        {% set key = 0 %}
-                        <li><label>{{ leftFilters.current_category }}</label></li>
-                        {% for key, category in leftFilters.categories %}
+                        {% for key, location in leftFilters.locationFacets %}
                             {% if key == (maxDimensionCount) %}
                                 </ul>
-                                <a href="javascript:void(0);" rel="nofollow" onclick="$('#categoryLHSFilters').foundation('reveal', 'open');">See more</a>
-                                <div class="reveal-modal" id="categoryLHSFilters" data-reveal>
+                                <a href="javascript:void(0);" rel="nofollow" onclick="$('#locationLHSFilters').foundation('reveal', 'open');">See more</a>
+                                <div class="reveal-modal" id="locationLHSFilters" data-reveal>
                                     <a class="close-reveal-modal">&times;</a>
                                     <div>
                                         <h5 class="modal-title">Showing Category</h5>
@@ -32,18 +80,11 @@
                             {% if key >= maxDimensionCount and key is divisible by(4) %}
                                 <ul class="seller-link dimension-list">
                             {% endif %}
-
-                            <li><a data-href="{{ category.slug }}">{{ category.name }}
-                                    {% if category.count is defined %}
-                                        ({{ category.count }})
-                                    {% else %}
-                                        ({{ 0 }})
-                                    {% endif %}
-                                </a></li>
+                            <li><a data-location-href="{{ location.slug }}">{{ location.name }} ({{ location.count }})</a></li>
                             {% if key >= maxDimensionCount and (key + 1) is divisible by(4) %}
                                 </ul>
                             {% endif %}
-                            {% if key > maxDimensionCount and key == (leftFilters.categories|length  - 1) %}
+                            {% if key > maxDimensionCount and key == (leftFilters.locationFacets|length - 1) %}
                                                 </div>
                                             </div>
                                         </div>
@@ -51,119 +92,80 @@
                                 </div>
                             {% endif %}
                         {% endfor %}
-                        {% if key < maxDimensionCount %}
-                            </ul>
-                        {% endif %}
+                    </ul>
                 </div>
-            </div>
-        </dd>
-        {# Category search params - end #}
+            {% endif %}
+            {# Town left filters - end #}
 
-        {# Town left filters #}
-        {% if leftFilters.locationFacets|length %}
-            <div class="towns-list">
-                <label>{{'Nearby towns'|trans({}, 'frontend-left-search')}}:</label>
-                <ul>
-                    {% for key, location in leftFilters.locationFacets %}
-                        {% if key == (maxDimensionCount) %}
-                            </ul>
-                            <a href="javascript:void(0);" rel="nofollow" onclick="$('#locationLHSFilters').foundation('reveal', 'open');">See more</a>
-                            <div class="reveal-modal" id="locationLHSFilters" data-reveal>
-                                <a class="close-reveal-modal">&times;</a>
-                                <div>
-                                    <h5 class="modal-title">Showing Category</h5>
-                                    <div class="modal-content dimension-modal">
-                                        <div class="dimension-content">
-                                            <div class="clearfix">
-                        {% endif %}
-                        {% if key >= maxDimensionCount and key is divisible by(4) %}
-                            <ul class="seller-link dimension-list">
-                        {% endif %}
-                        <li><a data-location-href="{{ location.slug }}">{{ location.name }} ({{ location.count }})</a></li>
-                        {% if key >= maxDimensionCount and (key + 1) is divisible by(4) %}
-                            </ul>
-                        {% endif %}
-                        {% if key > maxDimensionCount and key == (leftFilters.locationFacets|length - 1) %}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
-        {# Town left filters - end #}
+            {# Static search filters - start #}
+            <dd class="accordion-navigation keep-shown">
+                <a href="#panel2a" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'My budget is from'|trans({}, 'frontend-left-search')}}</h5></a>
+                <div class="content active clearfix">
+                    <ul class="budget-box clearfix">
+                        <li class="budget-field">
+                            <span>&pound;</span>
+                            <input type="text" class="form-control white-field" id="fa_left_search_item__price_from" name="fa_left_search[item__price_from]" required="required" >
+                        </li>
+                        <li class="budget-to-caption">to</li>
+                        <li class="budget-field">
+                            <span>&pound;</span>
+                            <input type="text" class="form-control white-field" id="fa_left_search_item__price_to" name="fa_left_search[item__price_to]" required="required">
+                        </li>
+                        <li><button class="budget-go-btn" type="button" onclick="formulate_photo_url();"></button></li>
+                    </ul>
+                </div>
+            </dd>
 
-        {# Static search filters - start #}
-        <dd class="accordion-navigation keep-shown">
-            <a href="#panel2a" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'My budget is from'|trans({}, 'frontend-left-search')}}</h5></a>
-            <div class="content active clearfix">
-                <ul class="budget-box clearfix">
-                    <li class="budget-field">
-                        <span>&pound;</span>
-                        <input type="text" class="form-control white-field" id="fa_left_search_item__price_from" name="fa_left_search[item__price_from]" required="required" >
-                    </li>
-                    <li class="budget-to-caption">to</li>
-                    <li class="budget-field">
-                        <span>&pound;</span>
-                        <input type="text" class="form-control white-field" id="fa_left_search_item__price_to" name="fa_left_search[item__price_to]" required="required">
-                    </li>
-                    <li><button class="budget-go-btn" type="button" onclick="formulate_photo_url();"></button></li>
-                </ul>
-            </div>
-        </dd>
+            <dd class="accordion-navigation keep-shown">
+                <a href="#panel1b" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Seller'|trans({}, 'frontend-left-search')}}</h5></a>
+                <div class="content active clearfix">
+                    <ul class="seller-link">
+                        {% for user_type in leftFilters.user_types %}
+                            <li><a data-href="{{ user_type.url_param }}" rel="nofollow">{{ user_type.title }} ({{ user_type.count }})</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </dd>
 
-        <dd class="accordion-navigation keep-shown">
-            <a href="#panel1b" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Seller'|trans({}, 'frontend-left-search')}}</h5></a>
-            <div class="content active clearfix">
-                <ul class="seller-link">
-                    {% for user_type in leftFilters.user_types %}
-                        <li><a data-href="{{ user_type.url_param }}" rel="nofollow">{{ user_type.title }} ({{ user_type.count }})</a></li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </dd>
+            {% if leftFilters.orderedDimensions|length %}
+                {% for dimension_id, entities in leftFilters.orderedDimensions %}
+                    <dd class="accordion-navigation">
+                    {{ include('FaAdBundle:AdList:leftSearchDimensionFiltersNew.html.twig') }}
+                    </dd>
+                {% endfor %}
+            {% endif %}
 
-        {% if leftFilters.orderedDimensions|length %}
-            {% for dimension_id, entities in leftFilters.orderedDimensions %}
-                <dd class="accordion-navigation">
-                {{ include('FaAdBundle:AdList:leftSearchDimensionFiltersNew.html.twig') }}
-                </dd>
-            {% endfor %}
-        {% endif %}
+            <dd class="accordion-navigation keep-shown">
+                <div class="content active label-inline">
+                    <ul class="white-checkbox search-type crawlable-checkbox">
+                        <li>
+                            <span class="custom-checkbox">
+                                <input type="checkbox" id="fa_left_search_items_with_photo" name="fa_left_search[items_with_photo]" value="1">
+                            </span>
+                            <label class="mb0" for="fa_left_search_items_with_photo">Only ads with photo ({{ leftFilters.ads_with_images }})</label>
+                            <a data-href="ads_with_images=1">Only ads with photo</a>
+                        </li>
+                    </ul>
+                </div>
+            </dd>
 
-        <dd class="accordion-navigation keep-shown">
-            <div class="content active label-inline">
-                <ul class="white-checkbox search-type crawlable-checkbox">
-                    <li>
-                        <span class="custom-checkbox">
-                            <input type="checkbox" id="fa_left_search_items_with_photo" name="fa_left_search[items_with_photo]" value="1">
-                        </span>
-                        <label class="mb0" for="fa_left_search_items_with_photo">Only ads with photo ({{ leftFilters.ads_with_images }})</label>
-                        <a data-href="ads_with_images=1">Only ads with photo</a>
-                    </li>
-                </ul>
-            </div>
-        </dd>
-
-        <dd class="accordion-navigation keep-shown">
-            <div class="content active label-inline">
-                <ul class="white-checkbox search-type crawlable-checkbox">
-                    <li>
-                        <span class="custom-checkbox">
-                            <input type="checkbox" id="fa_left_search_expired_ads" name="fa_left_search[expired_ads]" value="1">
-                        </span>
-                        <label class="mb0" for="fa_left_search_items_with_photo">Expired ads</label>
-                        <a data-href="expired_ads=1">Expired ads</a>
-                    </li>
-                </ul>
-            </div>
-        </dd>
-        {# Static search filters - end #}
-</dl>
-</div>
+            <dd class="accordion-navigation keep-shown">
+                <div class="content active label-inline">
+                    <ul class="white-checkbox search-type crawlable-checkbox">
+                        <li>
+                            <span class="custom-checkbox">
+                                <input type="checkbox" id="fa_left_search_expired_ads" name="fa_left_search[expired_ads]" value="1">
+                            </span>
+                            <label class="mb0" for="fa_left_search_items_with_photo">Expired ads</label>
+                            <a data-href="expired_ads=1">Expired ads</a>
+                        </li>
+                    </ul>
+                </div>
+            </dd>
+            {# Static search filters - end #}
+    </dl>
+    </div>
+{% endif %}
 <script>
     $(document).ready(function() {
         function formulate_photo_url() {
