@@ -24,6 +24,11 @@
     function enableDisableNextButton(){
         $('#fa_paa_fourth_step_{{ categoryName }}_save').removeClass('disabled');
         $('#fa_paa_fourth_step_{{ categoryName }}_preview').removeClass('disabled');
+        if($('#fa_paa_fourth_step_{{ categoryName }}_gender_id') .length != 0) {
+            if (!$('#fa_paa_fourth_step_{{ categoryName }}_gender_id').val()) {
+                disableNextButton()
+            }
+        }
         var requiredFieldsUpdated = $(':input[required]:visible');
         requiredFieldsUpdated.each(function( index, element ) {
             if (!element.value) {
