@@ -169,6 +169,13 @@ class PaaFieldAdminType extends AbstractType
                 )
             )
             ->add('is_added', HiddenType::class);
+        if(get_class($this->paaFieldRule) != 'Fa\Bundle\AdBundle\Entity\PaaLiteFieldRule') {
+            if (($this->paaField->getField() != 'photo_error') && ($this->paaField->getField() != 'youtube_video_url') && ($this->paaField->getField() != 'location') && ($this->paaField->getField() != 'rates_id')) {
+                $builder->add('hide_field', CheckboxType::class, array('label' => 'Collapse field by default', 'data' => ($this->paaFieldRule && $this->paaFieldRule->getHideField()) ? true : false));
+            } else {
+                $builder->add('hide_field', HiddenType::class, array('label' => false, 'data' => ($this->paaFieldRule && $this->paaFieldRule->getHideField()) ? true : false));
+            }
+        }
 
         // allow admin to set default value
         if ($this->paaField->getCategoryDimensionId() && ($this->paaField->getFieldType() == 'choice_radio' || $this->paaField->getFieldType() == 'choice_single')) {

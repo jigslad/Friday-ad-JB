@@ -166,7 +166,7 @@
                 {% set fieldClass = 'paa-bdr-box-btm-hd' %}
             	 {% if field != 'independent_or_agency_id' %}
             		{% set fieldClass = 'paa-bdr-box-btm-hd' %}
-            	{% endif %} 
+            	{% endif %}
                 <div class="paa-bdr-box {{ fieldClass }} btm-pa-0" id="element_{{ field }}{% if field == 'gender_id' %}_g{% endif %}"> 
                 	{% if (field != 'travel_arrangements_id' and field != 'gender_id' and field != 'ethnicity_id' and field != 'travel_arrangements_id' and field != 'my_service_id')  %}
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
@@ -189,8 +189,10 @@
                 			</div>
                 			{% set cntFld = 1 %}
                 		{% endif %}
-                    	<div class="small-wrapper rm-pad" id="element_toggle_{{ field }}_target" >
-                            <label>{{ attribute(form, field).vars.label }}</label>
+                        {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
+                        {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
+                    	<div class="small-wrapper rm-pad" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+{#                            <label>{{ attribute(form, field).vars.label }}</label>#}
                             {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
                                 <div class="paa-title-ins">
                                     {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
