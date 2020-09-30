@@ -356,7 +356,7 @@ class EntityRepository extends BaseEntityRepository
      */
     public function getEntityByTypeAndMin($type, $min, $id = null)
     {
-        $entity = $this->createQueryBuilder(self::ALIAS)
+        $qb = $this->createQueryBuilder(self::ALIAS)
         ->where(self::ALIAS.'.category_dimension = '.$type)
         ->andWhere(self::ALIAS.'.min = '.$min);
 
@@ -381,7 +381,7 @@ class EntityRepository extends BaseEntityRepository
      */
     public function getEntityByTypeAndMax($type, $max, $id = null)
     {
-        $entity = $this->createQueryBuilder(self::ALIAS)
+        $qb = $this->createQueryBuilder(self::ALIAS)
         ->where(self::ALIAS.'.category_dimension = '.$type)
         ->andWhere(self::ALIAS.'.max = '.$max);
 
