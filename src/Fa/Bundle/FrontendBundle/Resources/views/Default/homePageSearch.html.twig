@@ -1,53 +1,83 @@
 {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'fa_top_search'}}) }}
     {{ form_errors(form) }}
-    <div class="home-slider-content">
+    <div id="home-search" class="mega-search">
         <div class="row">
-            <div class="columns">
-                <div class="relative">
-                    <div class="row top-msg">
-                        <div class="columns">
-                           {{ include('FaCoreBundle::message.html.twig') }}
-                        </div>
+            <div class="container">
+                {{ include('FaCoreBundle::message.html.twig') }}
+    {#            {{ form_widget(attribute(form, 'item__category_id'), {'attr': {'class':'find-all custom_select' }}) }}#}
+                <div class="mega-search__block">
+                    <p class="mega-search__popular">
+                        Popular:
+                        <a href="#" class="mega-search__popular--link">Dog walker,</a>
+                        <a href="#" class="mega-search__popular--link">Plumber,</a>
+                        <a href="#" class="mega-search__popular--link">Personal trainer,</a>
+                        <a href="#" class="mega-search__popular--link">Web design</a>
+                    </p>
+                    <div class="mega-search__input">
+                        {{ form_widget(form.keywords, {'attr': {'class': 'mega-search__input--text', 'placeholder':'What are you looking for?'|trans({}, 'frontend-homepage') }}) }}
+                        <button class="mega-search__input--btn" type="submit"></button>
+                        <div class="close-icon" id="fa_top_search_keywords_close"></div>
+                        <!-- Search dropdown Content starts-->
+                        <ul class="search-dropdown">
+                            <li class="search-dropdown__item">
+                                <a class="search-dropdown__link">Plumber
+                                    <span class="search-dropdown__link--color"></span>
+                                </a>
+                            </li>
+                            <li class="search-dropdown__item">
+                                <a class="search-dropdown__link">Plumber <span class="search-dropdown__link--colored"> plumbers and heating</span>
+                                </a>
+                            </li>
+                            <li class="search-dropdown__item">
+                                <a class="search-dropdown__link">Plumber
+                                    <span class="search-dropdown__link--colored">
+                    plumbers and heating</span>
+                                </a>
+                            </li>
+                            <li class="search-dropdown__item">
+                                <a class="search-dropdown__link">Plumber
+                                </a>
+                            </li>
+                            <li class="search-dropdown__item">
+                                <a class="search-dropdown__link">Plumber
+                                    <span class="search-dropdown__link--colored">
+                    plumbers and heating</span>
+                                </a>
+                            </li>
+                            <li class="search-dropdown__item">
+                                <a class="search-dropdown__link">Plumber
+                                </a>
+                            </li>
+                        </ul>
+
+                        <!---Search dropdown Content end-->
                     </div>
-                    <div class="tagline"><img src="{{ asset_url('fafrontend/images/Tagline.svg') }}" /></div>
-                    <h2 class="tagline-text">{{ 'What are you searching for? Whether it’s a bargain bicycle or an emergency<br /> electrician, there’s all sorts of gems to be discovered. Get browsing today ...'|trans({}, 'frontend-homepage')|raw }}</h2>
-                    <div id="home-search" class="large-14 columns">
-                        <table>
-                            <tr>
-                                <td class="all-cat-select">{{ form_widget(attribute(form, 'item__category_id'), {'attr': {'class':'find-all custom_select' }}) }}</td>
-                                <td class="looking-for relative">
-                                    {{ form_widget(form.keywords, {'attr': {'class': 'white-field mb0', 'placeholder':'Looking for...'|trans({}, 'frontend-homepage') }}) }}
-                                    <a href="javascript:void(0);" rel="nofollow" id="fa_top_search_keywords_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
-                                </td>
-                                <td class="search-btn"><button class="button secondary-btn-1 mb0 expand" type="submit">{{'Search'|trans({}, 'frontend-homepage')}}</button></td>
-                            </tr>
-                        </table>
-                        <div id="header_search_editable_location_reveal_modal" class="reveal-modal tiny" data-reveal>
-                            {{ include('FaCoreBundle:Default:invalidLocationModal.html.twig', {'modalId': 'header_search_editable_location_reveal_modal'}) }}
-                        </div>
-                        <div class="location">
-                            <span class="search-pin"></span>
-                            <span id="in_text_span">{{ 'in'|trans({}, 'frontend-homepage') }}</span> <span id="header_search_editable_location_span">United Kingdom</span>
-                            <a href="javascript:void(0)" rel="nofollow" id="header_search_editable_location_a"> ({{ 'change'|trans({}, 'frontend-homepage') }})</a>
-                            <div id="top_search_location" class="white-autocomplete">
-                                {{ form_widget(form.item__location_autocomplete) }}
-                                <a href="javascript:void(0);" rel="nofollow" id="fa_top_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
-                                <div class="clearfix">
-                                    <button class="button xs-btn-1 expand left" type="button" id="top_search_location_homepage_ok">{{ 'Ok'|trans({}, 'frontend-homepage') }}</button>
-                                    <button class="button xs-btn-1 expand right" type="button" id="top_search_location_cancel">{{ 'Cancel'|trans({}, 'frontend-homepage') }}</button>
-                                </div>
+                    <div class="mega-search__location">
+                        <div class="mega-search__location--change pickLocation" >
+                            <div id="in_text_span">
+                                {{ 'in'|trans({}, 'frontend-homepage') }}
                             </div>
+                            &nbsp;
+                            <div id="header_search_editable_location_span">
+                                United Kingdom
+                            </div>
+                            <span id="header_search_editable_location_a">
+                                ({{ 'change'|trans({}, 'frontend-homepage') }})
+                            </span>
                         </div>
                     </div>
-                    <div class="forsale-phone"></div>
+                    <div class="mega-search__select-location locationView" id="top_search_location">
+                        {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'mega-search__select-location--text banner-search', 'placeholder':'Type postal code or town'|trans({}, 'frontend-homepage') }}) }}
+                        <div class="close-icon closeIcon" id="fa_top_search_item__location_close"></div>
+                        <div class="mega-search__select-location--ok ok-btn" type="button" id="top_search_location_homepage_ok">{{ 'Ok'|trans({}, 'frontend-homepage') }}</div>
+                        <div class="mega-search__select-location--cancel cancel-btn" type="button" id="top_search_location_cancel">{{ 'Cancel'|trans({}, 'frontend-homepage') }}</div>
+{#                        <div id="header_search_editable_location_reveal_modal" class="reveal-modal tiny" data-reveal>#}
+{#                            {{ include('FaCoreBundle:Default:invalidLocationModal.html.twig', {'modalId': 'header_search_editable_location_reveal_modal'}) }}#}
+{#                        </div>#}
+                    </div>
                 </div>
             </div>
         </div>
-        {#<div class="row show-for-small-only text-center">
-            <div class="columns">
-                <a class="primary-btn-1 button" title="{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}" href="{{ path('ad_post_first_step') }}">{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}</a>
-            </div>
-        </div>#}
     </div>
     {% do attribute(form, 'item__price_from').setRendered %}
     {% do attribute(form, 'item__price_to').setRendered %}
