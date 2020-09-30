@@ -132,10 +132,8 @@
 
     function changeLocation() {
         $('#header_search_editable_location_a').click(function(e) {
-            $('#header_search_editable_location_a').hide();
-            $('#header_search_editable_location_span').hide();
-            $('#top_search_location').show();
-            $('#in_text_span').hide();
+            $('#top_search_location').addClass('mega-search-toggle');
+            $('.mega-search__location').hide();
             if ($.trim($('#fa_top_search_item__location_autocomplete').val())) {
                 $('#fa_top_search_item__location_close').show();
                 $('#fa_top_search_item__location_autocomplete').select();
@@ -143,16 +141,14 @@
         });
 
         $('#top_search_location_cancel').click(function(e) {
-            $('#top_search_location').hide();
-            $('#in_text_span').show();
+            $('#top_search_location').removeClass('mega-search-toggle');
             if (!$.trim($('#fa_top_search_item__location_autocomplete').val())) {
                 $('#header_search_editable_location_span').html('United Kingdom');
             }
             else {
                 $("#fa_top_search_item__location_autocomplete").val($('#header_search_editable_location_span').text());
             }
-            $('#header_search_editable_location_a').show();
-            $('#header_search_editable_location_span').show();
+            $('.mega-search__location').show();
             return false;
         });
         
@@ -201,20 +197,16 @@
                      } else {
                          $('#header_search_editable_location_reveal_modal').foundation('reveal', 'open');
                      }
-                     $('#top_search_location').hide();
-                     $('#in_text_span').show();
-                     $('#header_search_editable_location_a').show();
-                     $('#header_search_editable_location_span').show();
+                     $('#top_search_location').removeClass('mega-search-toggle');
+                     $('.mega-search__location').show();
                  }
              });
         } else {
             document.cookie="location=;expires=Wed; 01 Jan 1970; path=/";
             if (id == 'top_search_location_ok') {
                 $('#header_search_editable_location_span').html('United Kingdom');
-                $('#top_search_location').hide();
-                $('#in_text_span').show();
-                $('#header_search_editable_location_a').show();
-                $('#header_search_editable_location_span').show();
+                $('#top_search_location').removeClass('mega-search-toggle');
+                $('.mega-search__location').show();
                 $('#fa_top_search_leafLevelCategoryId').val($('#fa_top_search_tmpLeafLevelCategoryId').val());
                 $('form[name="fa_top_search"]').submit();
             } else if (id == 'top_search_location_homepage_ok') {
@@ -222,10 +214,8 @@
                     window.location = "{{ path('fa_frontend_homepage') }}";
                 }
                 $('#header_search_editable_location_span').html('United Kingdom');
-                $('#top_search_location').hide();
-                $('#in_text_span').show();
-                $('#header_search_editable_location_a').show();
-                $('#header_search_editable_location_span').show();
+                $('#top_search_location').removeClass('mega-search-toggle');
+                $('.mega-search__location').show();
             } else {
                 location.reload();
             }

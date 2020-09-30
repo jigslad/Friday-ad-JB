@@ -49,10 +49,14 @@
 {% endif %}
     
 {% block body %}
-    <div class="{% if currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page'} %}homepage-hero{% endif %}">
-        <div class="hero-img">
-            {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {}, 'isHomeSearch': true } )) }}
-            <div class="parallax-window" id="header_image_div"></div>
+    <div class="hero-banner" id="hero-banner">
+        <div class="row">
+            <div class="columns container">
+                <div class="hero-banner__block">
+                    <h1 class="hero-banner__title">Find my local <span>xxxxxxx</span></h1>
+                </div>
+                {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {}, 'isHomeSearch': true } )) }}
+            </div>
         </div>
     </div>
     {# FFR-4030 starts Here #}
