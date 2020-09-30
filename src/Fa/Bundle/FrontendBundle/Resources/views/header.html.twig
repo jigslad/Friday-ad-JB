@@ -138,8 +138,10 @@
 {#        {% endif %}#}
    {# FFR-4031 Ends Here #}
    {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
-    {% if currentRoute not in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step'} %}
-           <div id="sticky_nav_top">
+    {% if currentRoute in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step'} %}
+
+    {% endif %}
+           <div id="sticky_nav_top" class="{% if currentRoute in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step'} %} show-for-small-only {% endif %}">
             <div class="nav-bg {% if currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'listing_page', 3: 'landing_page_category_location', 4: 'landing_page_category'} %}homepage-nav{% endif %}">
                 <div class="row">
                     <div class="columns">
@@ -222,7 +224,7 @@
                 <div class="dropdown-bg"></div>
             </div>
         </div>
-    {% endif %}
+
 {#   {% if isSetCovidSession==0 and showCovidBanner==1 and currentRoute not in {0: 'fa_frontend_homepage', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote' } %}#}
 {#   <div class="covid-19-block top-border show-for-small-only">#}
 {#        <div class="row">#}
