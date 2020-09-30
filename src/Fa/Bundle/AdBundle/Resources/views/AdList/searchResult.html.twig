@@ -631,29 +631,6 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 {% endif %}
 {% endif %}
 
-{% block dimension2 %}
-<script language="javascript" type="text/javascript">
-//<![CDATA[
-   {% if app.user.getId() is not defined or app.user.getId() is null %}
-        ga('set', 'dimension9', 'not logged in');
-    {% else %}
-        ga('set', 'dimension9', 'logged in');
-    {% endif %}
-
-    ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Search_Results', 'dimension4': '{{ dimension4 }}' {% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %} });
-
-//]]>
-</script>
-{% endblock %}
-
-{% block scriptbottom %}
-    {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) %}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-    {% endif %}
-    {{ include('FaAdBundle:AdList:leftSearchJs.html.twig') }}
-    {{ include('FaAdBundle:AdList:listJs.html.twig') }}
-    {{ include('FaAdBundle:Ad:upgradeJs.html.twig', {'paymentTransactionJs' : paymentTransactionJs }) }}
-
     {% set catSrchText = null %}
     {% if get_variables('SrchCatDetails') is not null and get_variables('SrchCatDetails').catSrchString is defined %}
         {% set catSrchText = get_variables('SrchCatDetails').catSrchString %}
@@ -669,6 +646,119 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
         {% endif %}
     {% endif %}
 
+    {% if cookieLocationDetails.town_id is defined and cookieLocationDetails.town_id is not null %}
+        {# Location and Group @Jigar Lad #}
+        {% set locationRepository = fetch_repository('FaEntityBundle:Location') %}
+        {% set town = locationRepository.find(cookieLocationDetails.town_id)%}
+        {% set county = locationRepository.getCountyByTownId(cookieLocationDetails.town_id)%}
+        {% set locationGroupRepository = fetch_repository('FaEntityBundle:LocationGroup') %}
+        {% set locationGroup = locationGroupRepository.getLocationGroupByLocation(cookieLocationDetails.town_id)%}
+        {% set lvl = cookieLocationDetails.lvl %}
+    {% else %}
+        {% set town = ''%}
+        {% set county = 'UK' %}
+        {% set locationGroup = '' %}
+        {% set lvl = 1 %}
+    {% endif %}
+
+    {% set _logged_in = 'true' %}
+    {% if app.user.getId() is not defined or app.user.getId() is null %}
+        {% set _logged_in = 'false' %}
+    {% endif %}
+
+    {% if searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+        {% set rootCategoryId = categoryRepository.getRootCategoryId(searchParams.item__category_id, container) %}
+    {% endif %}
+
+    {% set mainCategories = fetch_repository('FaEntityBundle:Category').getCategoryByLevelArray(1, fetch_container_instance()) %}
+    {% set keywordCategories = {} %}
+    {% for categoryId, categoryName in mainCategories %}
+        {% set adCount = 0 %}
+        {% set nestedChildrenCategories = fetch_repository('FaEntityBundle:Category').getNestedLeafChildrenIdsByCategoryId(categoryId, fetch_container_instance()) %}
+        {% for nestedCategoryId in nestedChildrenCategories %}
+            {% if facetResult.a_category_id_i[nestedCategoryId] is defined %}
+                {% set adCount =  adCount + facetResult.a_category_id_i[nestedCategoryId] %}
+            {% endif %}
+        {% endfor %}
+        {% if adCount > 0 %}
+            {% set keywordCategories = keywordCategories | merge([categoryName]) %}
+        {% endif %}
+    {% endfor %}
+
+    {% set keywordCat = null %}
+    {% if keywordCategories|length %}
+        {% set keywordCat = keywordCategories|join(',') %}
+    {% endif %}
+
+    {% set user_type = 'Others' %}
+    {% if searchParams.item__is_trade_ad is defined and searchParams.item__is_trade_ad==1 %}
+        {% if rootCategoryId is defined and rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID')} %}
+            {% set user_type = 'Shop' %}
+        {% elseif rootCategoryId is defined and rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID')} %}
+            {% set user_type = 'Recruiter' %}
+        {% else %}
+            {% set user_type = 'Dealer' %}
+        {% endif %}
+    {% elseif searchParams.item__is_trade_ad is defined and searchParams.item__is_trade_ad==0 %}
+        {% set user_type = 'Private' %}
+    {% endif %}
+
+    {%  set targetCat = '' %}
+    {%  set targetClass = '' %}
+    {%  set targetSubClass = '' %}
+    {%  set targetSubSubClass = '' %}
+
+    {% if catArr is defined  and catArr[0] is defined %}
+        {% if catArr[0] is defined %}
+            {%  set targetCat = catArr[0] %}
+        {% endif %}
+        {% if catArr[1] is defined %}
+            {%  set targetClass = catArr[1] %}
+        {% endif %}
+        {% if catArr[2] is defined %}
+            {%  set targetSubClass = catArr[2] %}
+        {% endif %}
+        {% if catArr[3] is defined %}
+            {%  set targetSubSubClass = catArr[3] %}
+        {% endif %}
+    {% else %}
+        {% if keywordCat is defined and keywordCat is not null %} {%  set targetCat = keywordCat %}  {% endif %}
+    {% endif %}
+
+    {% set targetKeySrch =  '' %}
+    {% if searchParams.keywords is defined %}
+        {% set targetKeySrch =  searchParams.keywords %}
+    {% endif %}
+
+{% block dimension2 %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+   {% if app.user.getId() is not defined or app.user.getId() is null %}
+        ga('set', 'dimension9', 'not logged in');
+    {% else %}
+        ga('set', 'dimension9', 'logged in');
+    {% endif %}
+
+    ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Search_Results', 'dimension4': '{{ dimension4 }}' {% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %} });
+
+    $( document ).ready(function() {
+        googletag.cmd.push(function () {
+            googletag.pubads().setTargeting('page_type', ['Search Results']).setTargeting('user_type', ['{{ user_type }}']).setTargeting('category', ['{{ targetCat }}']).setTargeting('class', ['{{ targetClass }}']).setTargeting('sub_class', ['{{ targetSubClass }}']).setTargeting('sub_sub_class', ['{{ targetSubSubClass }}']).setTargeting('town', ['{{ town }}']).setTargeting('london_areas', ['{{ (lvl==4 and town is defined)?town:'' }}']).setTargeting('county', ['{{ county }}']).setTargeting('country', ['UK']).setTargeting('edition_area', ['{{ ((locationGroup is defined and locationGroup.name is defined)?'Print - '~locationGroup.name:'Non Print')|raw }}']).setTargeting('search_keyword', ['{{ targetKeySrch }}']).setTargeting('adBlocker', false).setTargeting('user_logged', {{ _logged_in }});
+            googletag.enableServices();
+        });
+    });
+//]]>
+</script>
+{% endblock %}
+
+{% block scriptbottom %}
+    {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    {% endif %}
+    {{ include('FaAdBundle:AdList:leftSearchJs.html.twig') }}
+    {{ include('FaAdBundle:AdList:listJs.html.twig') }}
+    {{ include('FaAdBundle:Ad:upgradeJs.html.twig', {'paymentTransactionJs' : paymentTransactionJs }) }}
+
     <script language="javascript" type="text/javascript">
         //<![CDATA[
 
@@ -680,7 +770,24 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
             ga('send', 'event', 'Top Widget', 'Unlike');
         });
 
-
+        if (performance.navigation.type == 1) {
+            var searchResultMethod = 'Refresh';
+        } else {
+            {% if (app.request.headers.get('referer') is null) or (app.request.headers.get('referer') == '') %}
+            var searchResultMethod = 'Landed';
+            {% else %}
+            {% set urlEnd = app.request.headers.get('referer')|split('/')|slice(0,-1)|last|split('-') %}
+            {% if ('page' not in urlEnd) and (urlEnd|length > 2) %}
+            var searchResultMethod = 'Ad Details';
+            {% elseif app.request.get('keywords') is defined and app.request.get('keywords') is not null %}
+            var searchResultMethod = 'Site Search';
+            {% elseif app.request.get('cat_full_slug') is defined %}
+            var searchResultMethod = 'Category Click';
+            {% else %}
+            var searchResultMethod = 'Other';
+            {% endif %}
+            {% endif %}
+        }
 
         {% if userLiveBasicAd is defined and userLiveBasicAd and userLiveBasicAd|length %}
         ga('send', 'event', 'Search Results', 'Upgrade', 'View', { nonInteraction: true });
@@ -728,115 +835,6 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 
     <!-- Google TAG Manager Start -->
     {# Location @Jigar Lad #}
-    {% if cookieLocationDetails.town_id is defined and cookieLocationDetails.town_id is not null %}
-        {# Location and Group @Jigar Lad #}
-        {% set locationRepository = fetch_repository('FaEntityBundle:Location') %}
-        {% set town = locationRepository.find(cookieLocationDetails.town_id)%}
-        {% set county = locationRepository.getCountyByTownId(cookieLocationDetails.town_id)%}
-        {% set locationGroupRepository = fetch_repository('FaEntityBundle:LocationGroup') %}
-        {% set locationGroup = locationGroupRepository.getLocationGroupByLocation(cookieLocationDetails.town_id)%}
-        {% set lvl = cookieLocationDetails.lvl %}
-    {% else %}
-        {% set town = ''%}
-        {% set county = 'UK' %}
-        {% set locationGroup = '' %}
-        {% set lvl = 1 %}
-    {% endif %}
-
-
-        if (performance.navigation.type == 1) {
-            var searchResultMethod = 'Refresh';
-        } else {
-            {% if (app.request.headers.get('referer') is null) or (app.request.headers.get('referer') == '') %}
-                var searchResultMethod = 'Landed';
-            {% else %}
-                {% set urlEnd = app.request.headers.get('referer')|split('/')|slice(0,-1)|last|split('-') %}
-                {% if ('page' not in urlEnd) and (urlEnd|length > 2) %}
-                    var searchResultMethod = 'Ad Details';
-                {% elseif app.request.get('keywords') is defined and app.request.get('keywords') is not null %}
-                    var searchResultMethod = 'Site Search';
-                {% elseif app.request.get('cat_full_slug') is defined %}
-                    var searchResultMethod = 'Category Click';
-                {% else %}
-                    var searchResultMethod = 'Other';
-                {% endif %}
-            {% endif %}
-        }
-
-        {% set _logged_in = 'true' %}
-        {% if app.user.getId() is not defined or app.user.getId() is null %}
-        {% set _logged_in = 'false' %}
-        {% endif %}
-
-        {% if searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
-            {% set rootCategoryId = categoryRepository.getRootCategoryId(searchParams.item__category_id, container) %}
-        {% endif %}
-
-        {% set mainCategories = fetch_repository('FaEntityBundle:Category').getCategoryByLevelArray(1, fetch_container_instance()) %}
-        {% set keywordCategories = {} %}
-        {% for categoryId, categoryName in mainCategories %}
-            {% set adCount = 0 %}
-            {% set nestedChildrenCategories = fetch_repository('FaEntityBundle:Category').getNestedLeafChildrenIdsByCategoryId(categoryId, fetch_container_instance()) %}
-            {% for nestedCategoryId in nestedChildrenCategories %}
-                {% if facetResult.a_category_id_i[nestedCategoryId] is defined %}
-                    {% set adCount =  adCount + facetResult.a_category_id_i[nestedCategoryId] %}
-                {% endif %}
-            {% endfor %}
-            {% if adCount > 0 %}
-                {% set keywordCategories = keywordCategories | merge([categoryName]) %}
-            {% endif %}
-        {% endfor %}
-
-        {% set keywordCat = null %}
-        {% if keywordCategories|length %}
-            {% set keywordCat = keywordCategories|join(',') %}
-        {% endif %}
-
-        {% set user_type = 'Others' %}
-        {% if searchParams.item__is_trade_ad is defined and searchParams.item__is_trade_ad==1 %}
-            {% if rootCategoryId is defined and rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID')} %}
-                {% set user_type = 'Shop' %}
-            {% elseif rootCategoryId is defined and rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID')} %}
-                {% set user_type = 'Recruiter' %}
-            {% else %}
-                {% set user_type = 'Dealer' %}
-            {% endif %}
-        {% elseif searchParams.item__is_trade_ad is defined and searchParams.item__is_trade_ad==0 %}
-            {% set user_type = 'Private' %}
-        {% endif %}
-
-        {%  set targetCat = '' %}
-        {%  set targetClass = '' %}
-        {%  set targetSubClass = '' %}
-        {%  set targetSubSubClass = '' %}
-
-        {% if catArr is defined  and catArr[0] is defined %}
-            {% if catArr[0] is defined %}
-                {%  set targetCat = catArr[0] %}
-            {% endif %}
-            {% if catArr[1] is defined %}
-                {%  set targetClass = catArr[1] %}
-            {% endif %}
-            {% if catArr[2] is defined %}
-                {%  set targetSubClass = catArr[2] %}
-            {% endif %}
-            {% if catArr[3] is defined %}
-                {%  set targetSubSubClass = catArr[3] %}
-            {% endif %}
-        {% else %}
-            {% if keywordCat is defined and keywordCat is not null %} {%  set targetCat = keywordCat %}  {% endif %}
-        {% endif %}
-
-        {% set targetKeySrch =  '' %}
-        {% if searchParams.keywords is defined %}
-            {% set targetKeySrch =  searchParams.keywords %}
-        {% endif %}
-
-        googletag.cmd.push(function() {
-            googletag.pubads().setTargeting('page_type', ['Search Results']).setTargeting('user_type', ['{{ user_type }}']).setTargeting('category', ['{{ targetCat }}']).setTargeting('class', ['{{ targetClass }}']).setTargeting('sub_class', ['{{ targetSubClass }}']).setTargeting('sub_sub_class', ['{{ targetSubSubClass }}']).setTargeting('town', ['{{ town }}']).setTargeting('london_areas', ['{{ (lvl==4 and town is defined)?town:'' }}']).setTargeting('county', ['{{ county }}']).setTargeting('country', ['UK']).setTargeting('edition_area', ['{{ ((locationGroup is defined and locationGroup.name is defined)?'Print - '~locationGroup.name:'Non Print')|raw }}']).setTargeting('search_keyword', ['{{ targetKeySrch }}']).setTargeting('adBlocker', false).setTargeting('user_logged', {{ _logged_in }});
-            googletag.enableServices();
-        });
-
         window.dataLayer = window.dataLayer || [];
         dataLayer.push({
             "searchResults":{
