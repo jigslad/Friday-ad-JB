@@ -169,9 +169,9 @@
 <script>
     $(document).ready(function() {
         function formulate_photo_url() {
-            var url = window.href;
+            let url = window.href;
             if ($('#fa_left_search_item__price_from').val()) {
-                var url_string = 'item_price_from=' + $('#fa_left_search_item__price_from').val();
+                let url_string = 'item_price_from=' + $('#fa_left_search_item__price_from').val();
                 if (url.contains('?')) {
                     url += '&' + url_string;
                 } else {
@@ -180,7 +180,7 @@
             }
 
             if ($('#fa_left_search_item__price_to').val()) {
-                var url_string = '&item_price_to=' + $('#fa_left_search_item__price_to').val();
+                let url_string = '&item_price_to=' + $('#fa_left_search_item__price_to').val();
                 if (url.contains('?')) {
                     url += '&' + url_string;
                 } else {
@@ -192,17 +192,22 @@
         }
 
         $('a[data-href]').each(function() {
-            var href = window.location.href;
-            var this_url = $(this).attr('data-href');
-            var url_params = '';
+            let href = window.location.href;
+            let this_url = $(this).attr('data-href');
+            if (href.indexOf('#')) {
+                let _var = href.split('#');
+                href = _var[0];
+            }
+
+            let url_params = '?';
 
             if (href.indexOf('?') != -1) {
-                var split_params = href.split('?');
-                url_params = split_params[1];
+                let split_params = href.split('?');
+                url_params += split_params[1];
                 href = split_params[0];
             }
 
-            var index = href.indexOf(this_url);
+            let index = href.indexOf(this_url);
             if (index != -1) {
                 href = href.substring(0, (index + this_url.length));
             } else if (this_url.indexOf('=') != -1) {
@@ -211,13 +216,13 @@
                 href += this_url + '/';
             }
 
-            $(this).attr('href', href + '?' + url_params);
+            $(this).attr('href', href + url_params);
         });
 
         $('a[data-location-href]').each(function() {
-            var href = window.location.href;
+            let href = window.location.href;
 
-            var new_url = href.replace('/{{ currentLocation }}/', '/'+$(this).attr('data-location-href')+'/');
+            let new_url = href.replace('/{{ currentLocation }}/', '/'+$(this).attr('data-location-href')+'/');
             $(this).attr('href', new_url);
         });
 

@@ -767,7 +767,7 @@ class AdListController extends CoreController
                 $data['query_sorter']['item']['created_at'] = array('sort_ord' => 'desc', 'field_ord' => 1);
                 $data['query_sorter']['item']['weekly_refresh_published_at'] = array('sort_ord' => 'desc', 'field_ord' => 2);
             }
-            /*$data['query_sorter']['item']['is_top_ad'] = array('sort_ord' => 'desc', 'field_ord' => 3);*/
+            $data['query_sorter']['item']['is_top_ad'] = array('sort_ord' => 'desc', 'field_ord' => 3);
         }
 
         //set default sorting for map
@@ -1010,10 +1010,10 @@ class AdListController extends CoreController
 
                 if (is_array($searchItem)) {
                     foreach ($searchItem as $eachItem) {
-                        $staticFilters .= ' AND ' . $solrDimensionFieldName . ':"' . $eachItem . '"';
+                        $staticFilters .= ' AND ' . $solrDimensionFieldName . ':*' . $eachItem . '*';
                     }
                 } else {
-                    $staticFilters .= ' AND ' . $solrDimensionFieldName . ':"' . $searchItem . '"';
+                    $staticFilters .= ' AND ' . $solrDimensionFieldName . ':*' . $searchItem . '*';
                 }
             }
         }
@@ -1053,20 +1053,6 @@ class AdListController extends CoreController
             ]
         ];
 
-        $dimensionId = $this->getRepository('FaEntityBundle:CategoryDimension')->getDimensionByNameAndCategory($categoryObj->getId(), 'Condition');
-        $conditionObj = $this->getRepository('FaEntityBundle:Entity')->getEntitiesByCategoryDimensionId($dimensionId);
-        $conditions = [];
-        foreach ($conditionObj as $key => $condition) {
-            $conditions[$key]['id'] = $condition->getId();
-            $conditions[$key]['name'] = $condition->getName();
-            $conditions[$key]['slug'] = $condition->getSlug();
-            if (isset($facetResult['dim_condition'][$condition->getId()])) {
-                $conditions[$key]['count'] = $facetResult['dim_condition'][$condition->getId()];
-            } else {
-                $conditions[$key]['count'] = 0;
-            }
-        }
-
         $locationFacets = [];
         foreach ($facetResult['town'] as $town => $count) {
             $town = get_object_vars(json_decode($town));
@@ -1079,22 +1065,18 @@ class AdListController extends CoreController
             );
         }
 
-        $dimensionIds = array_column($dimensions, 'id');
-        $entitiesPerDimension = [];
-        foreach ($dimensionIds as $dimensionId) {
-            $entitiesPerDimension[] = $this->getRepository('FaEntityBundle:Entity')->getEntitiesByCategoryDimensionId($dimensionId);
-        }
-
         $orderedDimensions = [];
-        foreach ($entitiesPerDimension as $key => $entities) {
-            foreach ($entities as $entity) {
-                $solrFieldName = $dimensions[$entity->getCategoryDimension()->getId()]['solr_field'];
-                $dimensionId = $entity->getCategoryDimension()->getId();
+        foreach ($dimensions as $dimension) {
+            $solrFieldName = $dimensions[$dimension['id']]['solr_field'];
+            $facetArraySet = $facetResult[$solrFieldName];
 
-                $orderedDimensions[$dimensionId][$entity->getId()] = array(
-                    'name' => $entity->getName(),
-                    'slug' => $entity->getSlug(),
-                    'count' => intval($facetResult[$solrFieldName][$entity->getId()])
+            foreach ($facetArraySet as $jsonValue => $facetCount) {
+                $entityValue = get_object_vars(json_decode($jsonValue));
+
+                $orderedDimensions[$dimension['id']][$entityValue['id']] = array(
+                    'name' => $entityValue['name'],
+                    'slug' => $entityValue['slug'],
+                    'count' => $facetCount
                 );
             }
         }
@@ -1105,7 +1087,6 @@ class AdListController extends CoreController
             'parent_category'   => $categoryObj->getParent()->getId() == 1 ? '' : $categoryObj->getParent(),
             'user_types'        => $userTypes,
             'ads_with_images'   => intval($totalAds - $facetResult['image_count']['0']),
-            'conditions'        => $conditions,
             'locationFacets'    => $locationFacets,
             'orderedDimensions' => $orderedDimensions,
             'dimensions'        => $dimensions
@@ -1160,8 +1141,12 @@ class AdListController extends CoreController
                 $dimensions = [];
                 if (count($dim_keys)) {
                     foreach ($dim_keys as $dim_key) {
-                        $dim_field = json_decode($ad[$dim_key]);
-                        $dimensions = array_merge($dimensions, [$dim_field['category_dimension_name'] => $dim_field['name'] . '|' . $dim_field['slug'] . ($dim_field['listing_class'] ? '|' . $dim_field['listing_class'] : '')]);
+                        $dim_field = get_object_vars(json_decode($ad[$dim_key][0]));
+                        $dimensions[] = array(
+                            'name' => $dim_field['name'],
+                            'listing_class' => $dim_field['listing_class']
+                        );
+
                     }
                 }
 
