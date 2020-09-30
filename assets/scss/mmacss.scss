@@ -318,4 +318,8 @@ ul.toplistWithBullets li.boostBtn::before { list-style: none;content: "";font-si
     .created-box { margin-top: 8px; }
     .mma-pkg-title { font-style: italic;position: relative !important;width: 100%;right: 0 !important;bottom: 8px !important;height: 40px !important;overflow: hidden !important; }
 }
-
+@media only screen and (min-width: 760px) and (max-width: 959px) {
+    #featuredTopUpsellModal {
+        width: 85% !important;
+    }
+}
