@@ -1141,8 +1141,12 @@ class AdListController extends CoreController
                 $dimensions = [];
                 if (count($dim_keys)) {
                     foreach ($dim_keys as $dim_key) {
-                        $dim_field = json_decode($ad[$dim_key]);
-                        $dimensions = array_merge($dimensions, [$dim_field['category_dimension_name'] => $dim_field['name'] . '|' . $dim_field['slug'] . ($dim_field['listing_class'] ? '|' . $dim_field['listing_class'] : '')]);
+                        $dim_field = get_object_vars(json_decode($ad[$dim_key][0]));
+                        $dimensions[] = array(
+                            'name' => $dim_field['name'],
+                            'listing_class' => $dim_field['listing_class']
+                        );
+
                     }
                 }
 

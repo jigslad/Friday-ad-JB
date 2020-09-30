@@ -35,12 +35,12 @@
             {% if ad.dimensions|length %}
                 <div class="list-dimensions hide-for-small-only">
                     {% for adFieldName, adListFieldValue in ad.dimensions %}
-                        {% if adListFieldValue is iterable %}
-                            {% for adListFieldVal in adListFieldValue %}
-                                <span>{{ adListFieldVal }}</span>
-                            {% endfor %}
+                        {% if adListFieldValue.name is defined %}
+                            <span class="{{ adListFieldValue.listing_class }}">{{ adListFieldValue.name }}</span>
                         {% else %}
-                            <span>{{ adListFieldValue }}</span>
+                            {% for adListFieldVal in adListFieldValue %}
+                                <span class="{{ adListFieldVal.listing_class }}">{{ adListFieldVal.name }}</span>
+                            {% endfor %}
                         {% endif %}
                     {% endfor %}
                 </div>
