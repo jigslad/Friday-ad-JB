@@ -4,7 +4,6 @@
         <div class="row">
             <div class="container">
                 {{ include('FaCoreBundle::message.html.twig') }}
-    {#            {{ form_widget(attribute(form, 'item__category_id'), {'attr': {'class':'find-all custom_select' }}) }}#}
                 <div class="mega-search__block">
                     <p class="mega-search__popular">
                         Popular:
@@ -79,6 +78,7 @@
             </div>
         </div>
     </div>
+    {% do attribute(form, 'item__category_id').setRendered %}
     {% do attribute(form, 'item__price_from').setRendered %}
     {% do attribute(form, 'item__price_to').setRendered %}
     {% do attribute(form, 'item__distance').setRendered %}
