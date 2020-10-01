@@ -1079,7 +1079,7 @@ class AdListController extends CoreController
             $facetArraySet = $facetResult[$solrFieldName];
 
             $selected = '';
-            $paramname = $dimensions[$dimension['id']]['name'];
+            $paramname = strtolower($dimensions[$dimension['id']]['name']);
             if (isset($params[$paramname])) {
                 $selected = $params[$paramname];
             }
