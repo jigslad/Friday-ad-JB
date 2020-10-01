@@ -19,6 +19,9 @@
             if ($('#fa_paa_fourth_step_{{ categoryName }}_save').hasClass('disabled')) {
                 return false;
             }
+            if ($('#fa_paa_fourth_step_{{ categoryName }}_preview').hasClass('disabled')) {
+                return false;
+            }
         });
     });
     function enableDisableNextButton(){

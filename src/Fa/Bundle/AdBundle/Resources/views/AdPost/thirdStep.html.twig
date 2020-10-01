@@ -177,16 +177,21 @@
 //]]>
 </script>
     <script>
-        var requiredFields = $(':input[required]:visible');
-        requiredFields.keyup(function (){
-            enableDisableNextButton()
-        });
-        requiredFields.change(function (){
-            enableDisableNextButton()
-        });
         $(document).ready(function(){
             $('#fa_paa_login_save').addClass('disabled');
             enableDisableNextButton()
+            var requiredFields = $(':input[required]:visible');
+            requiredFields.keyup(function (){
+                enableDisableNextButton()
+            });
+            requiredFields.change(function (){
+                enableDisableNextButton()
+            });
+            $("form[name='fa_paa_login']").submit(function() {
+                if ($('#fa_paa_login_save').hasClass('disabled')) {
+                    return false;
+                }
+            });
         });
         function enableDisableNextButton(){
             $('#fa_paa_login_save').removeClass('disabled');

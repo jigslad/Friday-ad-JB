@@ -28,7 +28,9 @@
 {% endif %}
 <div id="left-column" class="large-6 columns" data-equalizer-watch>
     <div class="step-instruction hide-for-small-only">
-        <div class="friday-ad-sign"></div>
+        <a href="{{ path('fa_frontend_homepage') }}">
+            <div class="friday-ad-sign"></div>
+        </a>
         <h3 id="paa_steps_title">
         {% if rootCategoryId == forSaleCategoryId %}
             {{ 'Sell your items on Friday-Ad'|trans({}, 'frontend-paa') }}
