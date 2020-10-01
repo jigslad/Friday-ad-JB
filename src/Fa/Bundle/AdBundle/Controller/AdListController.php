@@ -984,7 +984,7 @@ class AdListController extends CoreController
             'recommendedSlotLimit' => $this->getRepository('FaCoreBundle:Config')->getSponsoredLimit(),
             'pagination' => $pagination['pagination'],
             'adFavouriteIds' => $adFavouriteIds,
-            'leftFilters' => empty($pagination['resultCount']) ? [] : $this->getLeftFilters($category, $pagination['facetResult'], $pagination['resultCount'], $searchableDimensions),
+            'leftFilters' => empty($pagination['resultCount']) ? [] : $this->getLeftFilters($category, $pagination['facetResult'], $pagination['resultCount'], $searchableDimensions, $findersSearchParams),
             'currentLocation' => $requestlocation,
             'searchParams' => $findersSearchParams
          ];
@@ -1026,10 +1026,16 @@ class AdListController extends CoreController
      * @param $facetResult
      * @param $totalAds
      * @param $dimensions
+     * @param $searchParams
      * @return array
      */
-    private function getLeftFilters($categoryObj, $facetResult, $totalAds, $dimensions)
+    private function getLeftFilters($categoryObj, $facetResult, $totalAds, $dimensions, $searchParams)
     {
+        $params = [];
+        foreach ($searchParams as $dimensionSlug => $searchParam) {
+            $params[$this->getDimensionName($dimensionSlug)] = $searchParam;
+        }
+
         // get next level categories
         $categoryRepository = $this->getRepository('FaEntityBundle:Category');
 
@@ -1044,12 +1050,14 @@ class AdListController extends CoreController
             0 => [
                 'title' => 'Private advertiser',
                 'url_param' => 'is_trade_ad=0',
-                'count' => empty($facetResult['is_trade_ad']) ? 0 : intval($facetResult['is_trade_ad']["false"])
+                'count' => empty($facetResult['is_trade_ad']) ? 0 : intval($facetResult['is_trade_ad']["false"]),
+                'selected' => isset($params['is_trade_ad'][0]) ? true : false
             ],
             1 => [
                 'title' => 'Business advertiser',
                 'url_param' => 'is_trade_ad=1',
-                'count' => empty($facetResult['is_trade_ad']) ? 0 : intval($facetResult['is_trade_ad']["true"])
+                'count' => empty($facetResult['is_trade_ad']) ? 0 : intval($facetResult['is_trade_ad']["true"]),
+                'selected' => isset($params['is_trade_ad'][1]) ? true : false
             ]
         ];
 
@@ -1070,13 +1078,20 @@ class AdListController extends CoreController
             $solrFieldName = $dimensions[$dimension['id']]['solr_field'];
             $facetArraySet = $facetResult[$solrFieldName];
 
+            $selected = '';
+            $paramname = $dimensions[$dimension['id']]['name'];
+            if (isset($params[$paramname])) {
+                $selected = $params[$paramname];
+            }
+
             foreach ($facetArraySet as $jsonValue => $facetCount) {
                 $entityValue = get_object_vars(json_decode($jsonValue));
 
                 $orderedDimensions[$dimension['id']][$entityValue['id']] = array(
                     'name' => $entityValue['name'],
                     'slug' => $entityValue['slug'],
-                    'count' => $facetCount
+                    'count' => $facetCount,
+                    'selected' => isset($selected) && $selected == $entityValue['id'] ? true : false
                 );
             }
         }

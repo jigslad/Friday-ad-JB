@@ -6,7 +6,7 @@
         <h5 class="left">{{ dimension_name|trans({}, 'frontend-left-search')}}</h5>
         <i class="right fi-plus"></i>
     </a>
-    <div id="panel{{ dimension_id }}d" class="content label-inline">
+    <div id="panel{{ dimension_id }}d" class="accordion_panel content label-inline">
         <ul class="white-checkbox search-type crawlable-checkbox">
             {% set key = 0 %}
             {% for id, entity in entities %}
@@ -26,8 +26,8 @@
                     <ul class="seller-link dimension-list">
                 {% endif %}
                 <li>
-                    <span class="custom-checkbox">
-                        <input type="checkbox" id="fa_left_search_condition_{{ id }}" name="fa_left_search[{{ dimension_name }}]">
+                    <span class="custom-checkbox {% if entity.selected is defined and entity.selected == true %} checked {% endif %}">
+                        <input type="checkbox" {% if entity.selected is defined and entity.selected == true %} checked="checked" {% endif %} id="fa_left_search_condition_{{ id }}" name="fa_left_search[{{ dimension_name }}]">
                     </span>
                     <label class="mb0" for="fa_left_search_condition">{{ entity.name }} ({{ entity.count }})</label>
                     <a data-href="{{ entity.slug }}">{{ entity.name }}</a>
@@ -54,7 +54,7 @@
         <h5 class="left">{{ dimension_name|trans({}, 'frontend-left-search')}}</h5>
         <i class="right fi-plus"></i>
     </a>
-    <div id="panel{{ dimension_id }}d" class="content clearfix">
+    <div id="panel{{ dimension_id }}d" class="accordion_panel content clearfix">
         <ul class="seller-link">
            {% set key = 0 %}
             {% for id, entity in entities %}
@@ -72,7 +72,7 @@
                                     {% if key >= maxDimensionCount and key is divisible by(4) %}
                                         <ul class="seller-link dimension-list">
                                     {% endif %}
-                                <li><a class="{{ key }}" data-href="{{ entity.slug }}">{{ entity.name }} ({{ entity.count }})</a></li>
+                                <li><a {% if entity.selected is defined and entity.selected == true %} class="bold" {% endif %} data-href="{{ entity.slug }}">{{ entity.name }} ({{ entity.count }})</a></li>
                                     {% if key >= maxDimensionCount and (key + 1) is divisible by(4) %}
                                         </ul>
                                     {% endif %}
