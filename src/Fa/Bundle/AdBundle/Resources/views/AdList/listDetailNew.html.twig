@@ -1,3 +1,7 @@
+{% set aff_desc_cls = null %}
+{% if ad.aff_icon_cls is not null %}
+    {% set aff_desc_cls = ' list-desc-short' %}
+{% endif %}
 <div class="listing {% if ad.top_ad %} {{ 'featured' }} {% elseif ad.urgent_ad %} {{ 'urgent' }} {% endif %} {% if ad.boosted_ad %} {{ 'boosted_ad' }} {% endif %}">
     <a id="listing_{{ ad.ad_id }}" href="{{ ad.ad_url }}"></a>
     <div class="featured-ribbon">featured</div>
@@ -45,9 +49,14 @@
                     {% endfor %}
                 </div>
             {% endif %}
-            <div class="list-desc hide-for-small-only">
+            <div class="list-desc {{aff_desc_cls}} hide-for-small-only">
                 {{trim_text(ad.description, 250)|replace({"\\n": "<br />"})|raw}}
             </div>
+            {% if fromSimilarAdverts is not defined and ad.aff_icon_cls is not null %}
+                <div class="ext-link">
+                    <span class="{{ad.aff_icon_cls}}"></span>
+                </div>
+            {% endif %}
             <div class="list-distance">
                 <div class="clearfix">
                     {% if ad.location is defined and not ad.location is null %}
