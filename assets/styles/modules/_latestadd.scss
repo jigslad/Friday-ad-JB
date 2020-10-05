@@ -2,6 +2,9 @@
 .latest-ads {
     margin-top: 25px;
     @include media-breakpoint-up(md) {
+        margin-top: 33px;
+    }
+    @include media-breakpoint-up(xl) {
         margin-top: 40px;
     }
     .latest-ads-tabs {
@@ -39,6 +42,9 @@
         text-align: center;
         margin-bottom: 8px;
         @include media-breakpoint-up(md) {
+            margin-bottom: 22px;
+        }
+        @include media-breakpoint-up(xl) {
             margin-bottom: 33px;
         }
     }
@@ -112,7 +118,6 @@
                 font-size: 13px;
             }
             font-size: 14px;
-            font-weight: 600;
             letter-spacing: 0;
             line-height: 21px;
             width: 98px;

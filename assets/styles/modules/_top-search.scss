@@ -151,6 +151,7 @@
             @extend .btn-rounded;
             background: linear-gradient(135deg, #A8DC28 0%, #79D378 100%);
             margin-right: 20px;
+            font-size: 16px;
             &:hover {
                 background: linear-gradient(135deg, #85B021 0%, #60A85E 100%);
             }

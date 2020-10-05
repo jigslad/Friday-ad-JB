@@ -33,7 +33,13 @@
             img {
                 border-radius: 4px 4px 0 0;
                 transition: 0.2s;
-                max-height: 226px;
+                @include media-breakpoint-up(md) {
+                    max-height: 130px;
+                    object-fit: cover;
+                }
+                @include media-breakpoint-up(xl) {
+                    max-height: 226px;
+                }
             }
         }
         &:hover {

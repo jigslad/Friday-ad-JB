@@ -5,8 +5,12 @@
     padding-top: 20px;
     @include media-breakpoint-up(md) {
         background: #EAEFF0;
-        padding-bottom: 64px;
+        padding-bottom: 49px;
+        padding-top: 21px;
+    }
+    @include media-breakpoint-up(xl) {
         padding-top: 38px;
+        padding-bottom: 64px;
     }
     &__wrapper {
         display: -ms-flexbox;
@@ -36,6 +40,9 @@
         text-align: center;
         margin-bottom: 8px;
         @include media-breakpoint-up(md) {
+            margin-bottom: 29px;
+        }
+        @include media-breakpoint-up(xl) {
             margin-bottom: 48px;
         }
     }
@@ -53,6 +60,14 @@
         img {
             height: 100%;
             overflow: hidden;
+            object-fit: cover;
+            width: 100%;
+        }
+        &--link {
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+            display: block;
         }
         &:first-child {
             .overlay {
@@ -81,7 +96,7 @@
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
-            flex: 0 1 20.5%;
+            flex: 0 1 21%;
             overflow: visible;
             .fad-services__block--inner {
                 height: 91px;

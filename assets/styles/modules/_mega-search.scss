@@ -5,18 +5,22 @@
                 }
                 &__popular {
                     margin-bottom: 1px;
-                    color: $color--white;
+                    color: #212527;
                     @include media-breakpoint-up(lg) {
                         margin-bottom: 8px;
-                        color: #212527;
+                    }
+                    &--link {
+                        color: $color--hover;
+                        font-family: $font-family-bold;
                     }
                 }
                 &__block {
-                    width: 458px;
+                    width: 474px;
+                    background-color: rgba(255, 255, 255, 0.45);
+                    padding: 8px 15px 8px;
+                    border-radius: 3px;
                     @include media-breakpoint-up(lg) {
-                        background-color: rgba(255, 255, 255, 0.45);
                         padding: 10px 15px;
-                        border-radius: 3px;
                         width: 490px;
                     }
                 }
@@ -28,7 +32,10 @@
                         height: 40px;
                         width: 458px;
                         line-height: 40px;
-                        padding: 10px 10px;
+                        padding: 10px 8px;
+                        @include media-breakpoint-up(md) {
+                            padding: 10px 10px;
+                        }
                         color: #212121;
                         border: 1px solid $color--border;
                         -webkit-border-radius: 4px;
@@ -50,8 +57,7 @@
                     }
                     &--btn {
                         outline: 0;
-                        background-color: #91D851;
-                        background: url('/public/images/search-white.svg') no-repeat center center, linear-gradient(135deg, #A6DB2A 0%, #79D378 100%) !important;
+                        background: url('/public/images/search-white.svg') no-repeat center center, linear-gradient(135deg, #A8DC28 0%, #79D378 100%);
                         height: 40px;
                         width: 42px;
                         text-align: center;
@@ -61,7 +67,6 @@
                         transition: background-color .4s ease;
                         border-radius: 0 4px 4px 0;
                         background-size: 20px;
-                        background-position-y: 10px;
                         display: block;
                         @include media-breakpoint-up(md) {
                             cursor: pointer;
@@ -77,7 +82,9 @@
                 }
                 &__location {
                     &--change {
-                        font-family: $font-family-semi-bold;
+                        @include media-breakpoint-up(md) {
+                            font-family: $font-family-semi-bold;
+                        }
                         color: #212527;
                         line-height: 21px;
                         background-image: url('/public/images/location2.svg');
@@ -144,6 +151,8 @@
                         @extend .btn-rounded;
                         background: linear-gradient(135deg, #A8DC28 0%, #79D378 100%);
                         font-family: $font-family-semi-bold;
+                        font-size: 16px;
+                        padding: 10px 39px;
                         &:hover {
                             background: linear-gradient(135deg, #85B021 0%, #60A85E 100%);
                         }

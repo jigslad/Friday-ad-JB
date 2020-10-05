@@ -59,8 +59,18 @@
                     &:hover {
                         &:first-child {
                             .arrow-icon {
-                                background-image: url('/public/images/geen-up.svg');
-                                color: #82c148;
+                                color: #212527;
+                                @include media-breakpoint-up(xl) {
+                                    background-image: url('/public/images/geen-up.svg');
+                                    color: #82c148;
+                                }
+                                &.rotate-icon {
+                                    @include media-breakpoint-between(md,
+                                    lg) {
+                                        background-image: url('/public/images/geen-up.svg');
+                                        color: #82c148;
+                                    }
+                                }
                             }
                         }
                     }
@@ -133,11 +143,17 @@
 }
 
 .menu-dropdown {
-    &:hover {
-        .dropdown-content {
-            display: block;
-            transform: translateY(5px);
+    @include media-breakpoint-up(xl) {
+        &:hover {
+            .dropdown-content {
+                display: block;
+                transform: translateY(5px);
+            }
         }
+    }
+    .dropdown-content-toggle {
+        display: block;
+        transform: translateY(5px);
     }
 }
 
@@ -202,6 +218,7 @@
         font-size: 12px;
         font-family: $font-family-bold;
         margin: 12px 0 18px;
+        font-weight: normal;
     }
     &__item {}
     &__link {
@@ -308,7 +325,7 @@
             @include media-breakpoint-up(md) {
                 &:first-child {
                     margin-right: 40px;
-                    // display: none;
+                    //display: none;
                 }
                 margin-right: 20px;
                 align-items: baseline;
@@ -328,7 +345,7 @@
                         padding-right: 26px;
                     }
                     &:hover {
-                        color: #82c148;
+                        color: #212527;
                         text-decoration: none;
                     }
                     // &.rotate-icon {
@@ -344,7 +361,7 @@
                         background-repeat: no-repeat;
                         background-position-x: right;
                         background-size: 24px;
-                        background-position-y: 0px;
+                        background-position-y: -2px;
                         color: #212527;
                     }
                     // &:focus {
@@ -362,6 +379,7 @@
                     background-position-y: 0px;
                     &.menu-green-icon {
                         background-image: url('/public/images/menu-icon-green.svg');
+                        color: #82c148;
                     }
                     position: relative;
                     .notify-badge {
@@ -374,11 +392,19 @@
                     display: flex;
                     height: 50px;
                     padding-top: 7px;
-                    &:hover {
-                        .nav-dropdown {
+                }
+                &:hover {
+                    .nav-dropdown {
+                        @include media-breakpoint-up(xl) {
                             display: block;
                         }
-                        .dropdown-icon {
+                    }
+                    .dropdown-icon {
+                        @include media-breakpoint-up(xl) {
+                            background-image: url('/public/images/geen-up.svg');
+                            color: $color--hover;
+                        }
+                        &.cat-rotate-icon {
                             background-image: url('/public/images/geen-up.svg');
                             color: $color--hover;
                         }
@@ -395,6 +421,9 @@
                     background-position-x: center;
                     background-size: 24px;
                     background-position-y: 0px;
+                    &:hover {
+                        color: #212527;
+                    }
                 }
             }
         }
@@ -520,7 +549,9 @@
                 font-size: 14px;
             }
             &:hover {
-                color: #82c148;
+                @include media-breakpoint-up(md) {
+                    color: #82c148;
+                }
                 text-decoration: none;
             }
         }
@@ -783,6 +814,9 @@
                         top: -17px;
                         right: -5px;
                     }
+                }
+                &:hover {
+                    color: #212527;
                 }
             }
             &.active {
