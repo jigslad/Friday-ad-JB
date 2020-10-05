@@ -42,7 +42,7 @@
                                         <div class="dropdown-content__profile {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}private-user {% else %} business-user {% endif %} ">
                                             {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), app.user.getId(), true, true, app.user.getProfileName() ]) %}
 {#                                                {{userLogo|replace({'<div': '<span', '</div>':'</span>'})|raw}}#}
-                                            <img src="{{ userLogo }}" alt="{% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}private-user {% else %} business-user {% endif %}">
+                                            <img src="{{ userLogo ? userLogo : '/public/images/Image-Avatar-null.png' }}" alt="{% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}private-user {% else %} business-user {% endif %}">
                                         </div>
                                         <h6 class="dropdown-content__user-name">
                                             Hello,
