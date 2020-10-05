@@ -101,12 +101,22 @@
         </div>
         <div class="row relative results-main banner-mid-column">
             <div class="large-6 columns" id="left_search">
+                {% if isShopPage is not defined %}
+                    {{ include('FaAdBundle:AdList:saveSearch.html.twig') }}
+                {% endif %}
                 {{ include('FaAdBundle:AdList:leftSearchNew.html.twig') }}
 
                 {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_FILTERBOX') %}
                 {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
             </div>
             <div id="listingDiv" class="large-18 columns">
+
+                {% if resultCount > 0 %}
+                    {% if isShopPage is not defined %}
+                        {{ include('FaAdBundle:AdList:saveSearch.html.twig') }}
+                    {% endif %}
+                {% endif %}
+
                 {% set slotallocated = [] %}
                 {% if displayRecommendedSlot==1 and recommendedSlotsCount > 0 and resultCount > 0 and (recommendedSlotResult[1] is defined and recommendedSlotResult[1]|length >0) %}
                     {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 1 }) }}
@@ -164,6 +174,10 @@
                 {% endif %}
                 {% set totalAdsOnPage = (toPage - fromPage) %}
 
+                <span id="createAlertBlockSpan">
+                    {{ include('FaAdBundle:AdList:createAlertBlock.html.twig', {'form':createAlertBlock.form}) }}
+                </span>
+
                 <div class="pagination-centered">
                     {{ include('FaFrontendBundle:Default:googlePager.html.twig', {'pagination': pagination, 'addToEndPage': 1, 'seoPager': true}) }}
                 </div>
@@ -191,4 +205,132 @@
             {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
         </div>
     </div>
+{% endblock %}
+
+{% block scriptbottom %}
+    {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    {% endif %}
+    {{ include('FaAdBundle:AdList:leftSearchJs.html.twig') }}
+    {{ include('FaAdBundle:AdList:listJs.html.twig') }}
+    {#{{ include('FaAdBundle:Ad:upgradeJs.html.twig', {'paymentTransactionJs' : paymentTransactionJs }) }}#}
+
+    {% set catSrchText = null %}
+    {% if get_variables('SrchCatDetails') is not null and get_variables('SrchCatDetails').catSrchString is defined %}
+        {% set catSrchText = get_variables('SrchCatDetails').catSrchString %}
+    {% endif %}
+    <script language="javascript" type="text/javascript">
+        //<![CDATA[
+
+        $(document).on("click", '.unsaved-item', function(event) {
+            ga('send', 'event', 'Top Widget', 'Like');
+        });
+
+        $(document).on("click", '.saved-item', function(event) {
+            ga('send', 'event', 'Top Widget', 'Unlike');
+        });
+
+
+
+        {% if userLiveBasicAd is defined and userLiveBasicAd and userLiveBasicAd|length %}
+        ga('send', 'event', 'Search Results', 'Upgrade', 'View', { nonInteraction: true });
+        {% endif %}
+
+        {% if successPaymentModalbox is defined and successPaymentModalbox %}
+        $('#upgradeSuccessPaymentModal').foundation('reveal', 'open');
+        {% endif %}
+
+        $(window).scroll(function () {
+            if ($("#banner_placeholder_2_4").length) {
+                var rightBannerOffset = $(".right-banner").offset().top;
+                var rightBannerPos = rightBannerOffset - $(window).scrollTop();
+
+                if (rightBannerPos < 0) {
+                    $("#banner_placeholder_2_4").addClass("fixed-banner");
+                } else if (rightBannerPos > 0) {
+                    $("#banner_placeholder_2_4").removeClass("fixed-banner");
+                }
+
+                var footerOffset = $("#footer_tag").offset().top;
+                var footerPos = footerOffset - $(window).scrollTop();
+
+                if (parseInt(footerPos) <= 630) {
+                    $("#banner_placeholder_2_4").removeClass("fixed-banner");
+                }
+            }
+        });
+
+        function visitUserProfileOrAd(eventCategory, eventAction, eventLabel) {
+            window.dataLayer = window.dataLayer || []
+            dataLayer.push({
+                'event' : 'Position',
+                'eventCategory':  eventCategory,
+                'eventAction': eventAction,
+                'eventLabel': eventLabel
+            });
+            ga('send', 'event', eventCategory, eventAction, eventLabel);
+        }
+
+        function gaSendForRecommendedSlotSearch(url, domain, title,slotindex,creativeOrd) {
+            ga('send', 'event', 'Search List Page', 'Recommended external ads', 'Slot'+slotindex + "-Creative"+ creativeOrd +"-{{ catSrchText|trim('-') }}-" + domain + "-" + title);
+            window.open(url, '_blank');
+        }
+
+        //]]>
+    </script>
+    <!-- Google TAG Manager Start -->
+    {# Location @Jigar Lad #}
+    {% if cookieLocationDetails.town_id is defined and cookieLocationDetails.town_id is not null %}
+        {# Location and Group @Jigar Lad #}
+        {% set locationReposetry = fetch_repository('FaEntityBundle:Location') %}
+        {% set town = locationReposetry.find(cookieLocationDetails.town_id)%}
+        {% set country = locationReposetry.getCountyByTownId(cookieLocationDetails.town_id)%}
+        {% set locationGroupReposetry = fetch_repository('FaEntityBundle:LocationGroup') %}
+        {% set locationGroup = locationGroupReposetry.getLocationGroupByLocation(cookieLocationDetails.town_id)%}
+    {% else %}
+        {% set town = ''%}
+        {% set country = 'UK' %}
+        {% set locationGroup = '' %}
+    {% endif %}
+
+    <script>
+        if (performance.navigation.type == 1) {
+            var searchResultMethod = 'Refresh';
+        } else {
+            {% if (app.request.headers.get('referer') is null) or (app.request.headers.get('referer') == '') %}
+            var searchResultMethod = 'Landed';
+            {% else %}
+            {% set urlEnd = app.request.headers.get('referer')|split('/')|slice(0,-1)|last|split('-') %}
+            {% if ('page' not in urlEnd) and (urlEnd|length > 2) %}
+            var searchResultMethod = 'Ad Details';
+            {% elseif app.request.get('keywords') is defined and app.request.get('keywords') is not null %}
+            var searchResultMethod = 'Site Search';
+            {% elseif app.request.get('cat_full_slug') is defined %}
+            var searchResultMethod = 'Category Click';
+            {% else %}
+            var searchResultMethod = 'Other';
+            {% endif %}
+            {% endif %}
+        }
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({
+            "searchResults":{
+                "county": '{{ country }}',
+                "town": "{{ (cookieLocationDetails.town  is defined ? cookieLocationDetails.town : '')|raw }}",
+                "locationGroup": "{{ (locationGroup.name is defined ? locationGroup.name : locationGroup)|raw }}",
+                "searchKeyword": '{{ app.request.get('keywords')|raw }}',
+                "searchResultMethod": searchResultMethod, //described below
+                "noOfResults": {{resultCount}},
+                "radius": '{{ searchParams.item__distance is defined ? searchParams.item__distance : 'default' }}',
+                "popularSearch": {{ seoFields.popular_search is defined ? 'true' : 'false' }}
+            }
+        });
+    </script>
+    <!-- Google TAG Manager End -->
+{% endblock %}
+
+{% block pushNotification %}
+    {% if paymentTransactionJs['ga_transaction'] is defined and paymentTransactionJs['ga_transaction'].PAYMENT_ID is defined %}
+        OneSignal.push(["sendTags", {'PAA_process': 'ad_placed'}]);
+    {% endif %}
 {% endblock %}

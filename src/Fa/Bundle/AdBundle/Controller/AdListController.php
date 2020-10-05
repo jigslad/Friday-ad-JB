@@ -989,6 +989,39 @@ class AdListController extends CoreController
             'searchParams' => $findersSearchParams
          ];
 
+        if ($pagination['resultCount'] && !in_array($currentRoute, array('show_business_user_ads', 'show_business_user_ads_location', 'show_business_user_ads_page'))) {
+            // profile categories other than Services & Adults
+            if (!in_array($root->getId(), array(CategoryRepository::ADULT_ID, CategoryRepository::SERVICES_ID))) {
+                $shopParameters = $this->getShopUserBySearchCriteria($data, $request);
+                if (!empty($shopParameters)) {
+                    $parameters = $parameters + $shopParameters;
+                }
+            }
+            // profile categories Services & Adults
+            if ($root) {
+                if (in_array($root->getId(), array(CategoryRepository::ADULT_ID, CategoryRepository::SERVICES_ID))) {
+                    $shopBusinessParameters = $this->getBusinessUserBySearchCriteria($data, $request);
+                    if (!empty($shopBusinessParameters)) {
+                        $parameters = $parameters + $shopBusinessParameters;
+                    }
+                }
+            }
+        }
+
+        $formManager = $this->get('fa.formmanager');
+        $form        = $formManager->createForm(UserHalfAccountEmailOnlyType::class, null, array('method' => 'POST'));
+
+        if ($request->isXmlHttpRequest() && 'POST' === $request->getMethod() && $request->get('is_form_load', null) == null) {
+            if ($formManager->isValid($form)) {
+                $user = $this->getRepository('FaUserBundle:User')->findOneBy(array('email' => $form->get('email')->getData()));
+                return new JsonResponse(array('success' => '1', 'user_id' => $user->getId()));
+            } else {
+                return new JsonResponse(array('success' => '', 'user_id' => '', 'errorMessage' => 'Please enter valid email address.'));
+            }
+        }
+
+        $parameters['createAlertBlock'] = array('form' => $form->createView());
+
         return $this->render('FaAdBundle:AdList:searchResultNew.html.twig', $parameters, null);
     }
 
