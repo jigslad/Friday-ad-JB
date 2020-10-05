@@ -326,6 +326,7 @@
         }
     });
     if (window.matchMedia("(min-width:768px) and (max-width: 1199px)").matches) {
+        $('#menuDropdown').removeAttr("href");
         //Tablet Category navigation click
         $('#megaDropdown').click(function(e) {
             $(this).toggleClass('cat-rotate-icon')
