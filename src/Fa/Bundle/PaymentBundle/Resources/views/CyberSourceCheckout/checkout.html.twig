@@ -233,6 +233,9 @@
             requiredFields.change(function (){
                 enableDisableNextButton()
             });
+            requiredFields.on('input',function (){
+                enableDisableNextButton()
+            });
             $("form[name='fa_payment_cyber_source_checkout']").submit(function() {
                 if ($('#fa_payment_cyber_source_checkout_save').hasClass('disabled')) {
                     return false;
@@ -241,10 +244,7 @@
         });
         function enableDisableNextButton(){
             var checkoutNotRequred = [
-                "fa_payment_cyber_source_checkout_street_address",
-                "fa_payment_cyber_source_checkout_zip",
                 "fa_payment_cyber_source_checkout_street_address_2",
-                "fa_payment_cyber_source_checkout_town",
             ];
             $('#fa_payment_cyber_source_checkout_save').removeClass('disabled');
             var requiredFieldsupdated = $(':input[required]:visible');
