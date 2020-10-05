@@ -28,7 +28,7 @@
                             {% set userDetail = fetch_repository('FaPaymentBundle:Transaction').getCartDetail(userCart.getId()) %}
                             <li class="navigation-right__item menu-dropdown">
                                 {% set myProfileUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(app.user.getId()) %}
-                                <a class="arrow-icon navigation-right__link" href="{% if myProfileUrl %}{{ myProfileUrl }}{% else %}javascript:void(0);{% endif %}">
+                                <a id="menuDropdown" class="arrow-icon navigation-right__link" href="{% if myProfileUrl %}{{ myProfileUrl }}{% else %}javascript:void(0);{% endif %}">
                                     Hello,
                                     {% if app.user.getFullName() %}
                                         {{app.user.getFullName()}}
@@ -325,4 +325,36 @@
             $('.nav-dropdown-third').removeClass('nav-dropdown-third-show');
         }
     });
+    if (window.matchMedia("(min-width:768px) and (max-width: 1199px)").matches) {
+        //Tablet Category navigation click
+        $('#megaDropdown').click(function(e) {
+            $(this).toggleClass('cat-rotate-icon')
+            $(this).siblings('.nav-dropdown').toggleClass('menu-toggle');
+            e.stopPropagation();
+        });
+        //Tablet top navigation click
+        $('#menuDropdown').click(function(e) {
+            if ($(".nav-dropdown").hasClass('menu-toggle')) {
+                $(".nav-dropdown").removeClass("menu-toggle");
+                $("#megaDropdown").removeClass('cat-rotate-icon')
+            }
+            $('#menuDropdown').toggleClass('rotate-icon')
+            $('.dropdown-content').toggleClass('dropdown-content-toggle');
+            e.stopPropagation();
+        });
+        //Tablet body click
+        $(document).on("click", function(event) {
+            var $triggerDropdown = $(".dropdown-content");
+            console.log($triggerDropdown.has(event.target).length);
+            if ($triggerDropdown !== event.target && !$triggerDropdown.has(event.target).length) {
+                $(".dropdown-content").removeClass("dropdown-content-toggle");
+                $("#menuDropdown").removeClass('rotate-icon')
+            }
+            var $trigger = $(".nav-dropdown");
+            if ($trigger !== event.target && !$trigger.has(event.target).length) {
+                $(".nav-dropdown").removeClass("menu-toggle");
+                $("#megaDropdown").removeClass('cat-rotate-icon')
+            }
+        });
+    }
 </script>
