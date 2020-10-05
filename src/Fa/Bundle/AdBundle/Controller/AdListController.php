@@ -1220,7 +1220,8 @@ class AdListController extends CoreController
                     'boosted_ad' => empty($ad['is_boosted_ad']) ? false : true,
                     'affiliate_ad' => empty($ad['is_affiliate']) ? false : true,
                     'location' => $town,
-                    'last_updated' => $ad['updated_at']
+                    'last_updated' => $ad['updated_at'],
+                    'aff_icon_cls' => CommonManager::getAffiliateClass($ad['ad_source'])
                 ];
 
             }
