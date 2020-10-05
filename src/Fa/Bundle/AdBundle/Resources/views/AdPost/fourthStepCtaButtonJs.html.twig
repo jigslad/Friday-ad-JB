@@ -13,6 +13,9 @@
         $('#fa_paa_fourth_step_{{ categoryName }}_location_close').click(function (){
             disableNextButton()
         });
+        $('#fa_paa_fourth_step_{{ categoryName }}_area_close').click(function (){
+            disableNextButton()
+        });
         disableNextButton()
         enableDisableNextButton()
         $("form[name='fa_paa_fourth_step_{{ categoryName }}']").submit(function() {
@@ -39,7 +42,7 @@
         }
         var requiredFieldsUpdated = $(':input[required]:visible');
         requiredFieldsUpdated.each(function( index, element ) {
-            if(element.id != 'fa_paa_fourth_step_{{ categoryName }}_location_autocomplete')
+            {#if(element.id != 'fa_paa_fourth_step_{{ categoryName }}_location_autocomplete')#}
             if (!element.value) {
                 disableNextButton()
             }
