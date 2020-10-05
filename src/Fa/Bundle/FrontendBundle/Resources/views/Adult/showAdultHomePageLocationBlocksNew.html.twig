@@ -8,10 +8,14 @@
                     <div id="panelBlock{{panelCnt}}" class="content clearfix">
                         <ul class="link-list">
                             <li>
-                                {% set blockfacet = block['facet'] %}
-                                {% for locationId, locationBlock in blockfacet %}
-                                    <a href="{{ locationBlock['search_result_url'] }}">{{ locationBlock['location_name'] }}</a>
-                                {% endfor %}
+                                <div class="row">
+                                    <div class="column large-6">
+                                        {% set blockfacet = block['facet'] %}
+                                        {% for locationId, locationBlock in blockfacet %}
+                                            <a href="{{ locationBlock['search_result_url'] }}">{{ locationBlock['location_name'] }}</a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
                             </li>
                       </ul>
                     </div>
