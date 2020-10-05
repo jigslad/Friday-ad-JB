@@ -211,13 +211,64 @@
         } else {
             $('#card_detail').hide();
             clearForm('#card_detail');
+            $('.fa-select-white').selectmenu().selectmenu('refresh',true);
             $('.expiry-date').nextAll('small.error').first().remove();
             $('.expiry-date').nextAll('small.error').first().remove();
             $('#pay_now_btn').addClass('checkout')
         }
         $('#pay_now_btn').show();
         bindFormErrorEvents();
+        enableDisableNextButton();
     }
     //]]>
+    </script>
+    <script>
+        $(document).ready(function(){
+            checkAndDisableButton()
+            enableDisableNextButton()
+            var requiredFields = $(':input');
+            requiredFields.keyup(function (){
+                enableDisableNextButton()
+            });
+            requiredFields.change(function (){
+                enableDisableNextButton()
+            });
+            $("form[name='fa_payment_cyber_source_checkout']").submit(function() {
+                if ($('#fa_payment_cyber_source_checkout_save').hasClass('disabled')) {
+                    return false;
+                }
+            });
+        });
+        function enableDisableNextButton(){
+            var checkoutNotRequred = [
+                "fa_payment_cyber_source_checkout_street_address",
+                "fa_payment_cyber_source_checkout_zip",
+                "fa_payment_cyber_source_checkout_street_address_2",
+                "fa_payment_cyber_source_checkout_town",
+            ];
+            $('#fa_payment_cyber_source_checkout_save').removeClass('disabled');
+            var requiredFieldsupdated = $(':input[required]:visible');
+            if($("input[name='fa_payment_cyber_source_checkout[payment_method]']:checked").val() == 0) {
+                if (!$('#fa_payment_cyber_source_checkout_card_expity_year').val()) {
+                    checkAndDisableButton()
+                }
+                if (!$('#fa_payment_cyber_source_checkout_card_expity_month').val()) {
+                    checkAndDisableButton()
+                }
+            }
+            requiredFieldsupdated.each(function( index, element ) {
+                var arrayContainsId = (checkoutNotRequred.indexOf(element.id) > -1);
+                if(!arrayContainsId) {
+                    if (!element.value) {
+                        checkAndDisableButton()
+                    }
+                }
+            });
+        }
+        function checkAndDisableButton(){
+            if (!$('#fa_payment_cyber_source_checkout_save').hasClass('disabled')) {
+                $('#fa_payment_cyber_source_checkout_save').addClass('disabled');
+            }
+        }
     </script>
 {% endblock %}
