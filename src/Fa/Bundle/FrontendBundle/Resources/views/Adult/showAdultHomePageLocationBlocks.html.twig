@@ -21,37 +21,33 @@
                         <div id="panelBlock{{panelCnt}}" class="content clearfix{% if (currentDevice == 'D' and panelCnt == 0) %} active{% endif %}">
                             <ul class="link-list">
                                 <li>
-                                    <div class="row">
-                                        <div class="large-6 column">
-                                            {% set facetIdArray = block['facet']|keys %}
-                                            {% if currentDevice == 'T'%}
-                                                {% set columns = 5 %}
-                                            {% else %}
-                                                {% set columns = 6 %}
+                                    {% set facetIdArray = block['facet']|keys %}
+                                    {% if currentDevice == 'T'%}
+                                        {% set columns = 5 %}
+                                    {% else %}
+                                        {% set columns = 6 %}
+                                    {% endif %}
+                                    {% set ctr = 0 %}
+                                    {% set totalItems = facetIdArray|length %}
+                                    {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
+                                    {% set extraColumn = (totalItems % columns) %}
+                                    {% set colCounter = {} %}
+                                    {% for i in 0..columns-1 %}
+                                        {% if loop.index0 < extraColumn %}
+                                            {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
+                                        {% else  %}
+                                            {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% for i in 0..totalItems-1 %}                                               
+                                            {% if facetIdArray[ctr] is defined %}
+                                                {% set facetId = facetIdArray[ctr] %}
+                                                {% set searchResultUrl = container.get('fa_ad.manager.ad_routing').getCustomListingUrl({ (block['search_field_name']): facetId},'adult-services/escorts') %}
+                                                {# {% set searchResultUrl =  path('location_home_page', {'location': entityCacheManager.getEntitySlugById('FaEntityBundle:Location', facetId)}) %} #}
+                                                <a href="{{ searchResultUrl }}">{{ entityCacheManager.getEntityNameById(block['repository'], facetId) }} {# ({{ block['facet'][facetId] }}) #}</a>
                                             {% endif %}
-                                            {% set ctr = 0 %}
-                                            {% set totalItems = facetIdArray|length %}
-                                            {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
-                                            {% set extraColumn = (totalItems % columns) %}
-                                            {% set colCounter = {} %}
-                                            {% for i in 0..columns-1 %}
-                                                {% if loop.index0 < extraColumn %}
-                                                    {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
-                                                {% else  %}
-                                                    {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
-                                                {% endif %}
-                                            {% endfor %}
-                                            {% for i in 0..totalItems-1 %}
-                                                {% if facetIdArray[ctr] is defined %}
-                                                    {% set facetId = facetIdArray[ctr] %}
-                                                    {% set searchResultUrl = container.get('fa_ad.manager.ad_routing').getCustomListingUrl({ (block['search_field_name']): facetId},'adult-services/escorts') %}
-                                                    {# {% set searchResultUrl =  path('location_home_page', {'location': entityCacheManager.getEntitySlugById('FaEntityBundle:Location', facetId)}) %} #}
-                                                    <a href="{{ searchResultUrl }}">{{ entityCacheManager.getEntityNameById(block['repository'], facetId) }} {# ({{ block['facet'][facetId] }}) #}</a>
-                                                {% endif %}
-                                                {% set ctr = ctr + 1 %}
-                                            {% endfor %}
-                                        </div>
-                                    </div>
+                                            {% set ctr = ctr + 1 %}                                               
+                                    {% endfor %}
                                 </li>
                           </ul>
                         </div>
