@@ -13,7 +13,93 @@
 {% else %}
     {% set displayRecommendedSlot = 0 %}
 {% endif %}
-{# TODO:: Page title and SEO structure to be added#}
+
+{% block meta_robots %}
+    {% set metaRobotsArray = {} %}
+    {% if not pagination.getNbResults() %}
+        noindex, follow
+        {% set metaRobotsArray = {0: 'noindex', 1: 'follow'} %}
+    {% elseif 'motors/cars-under-1000' in app.request.uri or 'motors/cars-under-500' in app.request.uri  or 'motors/left-hand-drive-cars/' in app.request.uri %}
+        index, follow
+        {% set metaRobotsArray = {0: 'index', 1: 'follow'} %}
+    {% elseif isClassicCarPage is defined and isClassicCarPage==1 %}
+        index, follow
+        {% set metaRobotsArray = {0: 'index', 1: 'follow'} %}
+    {% elseif 'item__distance=0' in app.request.queryString %}
+        noindex, follow
+        {% set metaRobotsArray = {0: 'noindex', 1: 'follow'} %}
+    {% elseif selCatNoIndex==1 or selCatNoFollow==1 %}
+        {{selNoIndex}}, {{ selNoFollow }}
+        {% set metaRobotsArray = {0: selNoIndex, 1: selNoFollow} %}
+    {% elseif 'item__distance=0' not in app.request.queryString %}
+        {% if customized_url|length %}
+            {% if seoFields.meta_robots is defined %}
+                {{seoFields.meta_robots}}
+                {% set metaRobotsArray = seoFields.meta_robots|split(', ') %}
+            {% else %}
+                index, follow
+                {% set metaRobotsArray = {0: 'index', 1: 'follow'} %}
+            {% endif %}
+        {% else %}
+            {% if isUrlIndexable == false %}
+                noindex, follow
+                {% set metaRobotsArray = {0: 'noindex', 1: 'follow'} %}
+            {% else %}
+                {% if seoFields.meta_robots is defined %}
+                    {{seoFields.meta_robots}}
+                    {% set metaRobotsArray = seoFields.meta_robots|split(', ') %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% endif %}
+    {{ set_variables('metaRobots', {'metaRobotsArray': metaRobotsArray}) }}
+{% endblock %}
+
+{% block page_title %}
+    {% if seoFields.page_title is defined %}
+        {{ seoManager.parseSeoStringForAdList(seoFields.page_title, searchParams, cookieLocationDetails) }}
+    {% elseif app.request.queryString %}
+        {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+            {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id)}} | Friday-Ad
+        {% else %}
+            Friday-Ad
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block meta_description %}
+    {% if seoFields.meta_description is defined %}
+        {{ seoManager.parseSeoStringForAdList(seoFields.meta_description, searchParams, cookieLocationDetails) }}
+    {% elseif app.request.queryString %}
+        {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+            {{'%resultCount% results in %category%'|trans({'%resultCount%': resultCount, '%category%': fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id)}, 'frontend-search-result')}}
+        {% else %}
+            {{'%resultCount% results'|trans({'%resultCount%': resultCount}, 'frontend-search-result')}}
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block meta_keywords %}
+    {% if seoFields.meta_keywords is defined %}
+        {{ seoManager.parseSeoStringForAdList(seoFields.meta_keywords, searchParams, cookieLocationDetails) }}
+    {% elseif app.request.queryString %}
+        no-keywords
+    {% endif %}
+{% endblock %}
+
+{% block canonical_url %}
+    {% set metaRobotsArray = get_variables('metaRobots').metaRobotsArray %}
+    {% if not metaRobotsArray|length or (metaRobotsArray|length and metaRobotsArray[0] is defined and metaRobotsArray[0] != 'noindex') or (metaRobotsArray|length and metaRobotsArray[0] is defined and metaRobotsArray[0] == 'index' and metaRobotsArray[1] is defined and metaRobotsArray[1] != 'nofollow') %}
+        {% if seoFields.canonical_url is defined %}
+            {% set seoCanonicalUrl = replace_case_insensitive('{Location}', app.request.get('location'), seoFields.canonical_url) %}
+            {{ seoManager.parseSeoStringForAdList(seoCanonicalUrl, searchParams, cookieLocationDetails,true) }}
+        {% else %}
+            {{ app.request.uri|replace({('?'~app.request.queryString) : ''})}}
+        {% endif %}
+    {% else %}
+        {{ app.request.uri|replace({('?'~app.request.queryString) : ''})}}
+    {% endif %}
+{% endblock %}
 
 {% block breadcrumb_script %}
     {% set location_id = null %}
@@ -212,7 +298,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     {% endif %}
     {{ include('FaAdBundle:AdList:leftSearchJs.html.twig') }}
-    {{ include('FaAdBundle:AdList:listJs.html.twig') }}
+    {{ include('FaAdBundle:AdList:listJsNew.html.twig', {'searchParams' : searchParams}) }}
     {#{{ include('FaAdBundle:Ad:upgradeJs.html.twig', {'paymentTransactionJs' : paymentTransactionJs }) }}#}
 
     {% set catSrchText = null %}

@@ -233,6 +233,10 @@
             window.location.replace($(this).closest('li').find('a').attr('href'));
         });
 
+        $('.white-checkbox label').on('click', function() {
+            window.location.replace($(this).closest('li').find('a').attr('href'));
+        });
+
         $('.accordion_panel').each(function() {
             if ($(this).find('a.bold').length || $(this).find('span.checked').length) {
                 $(this).addClass('active');

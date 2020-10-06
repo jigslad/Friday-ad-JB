@@ -11,6 +11,7 @@
 
 namespace Fa\Bundle\AdBundle\Controller;
 
+use Fa\Bundle\ContentBundle\Repository\SeoToolRepository;
 use Fa\Bundle\EntityBundle\Repository\CategoryDimensionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -767,7 +768,7 @@ class AdListController extends CoreController
                 $data['query_sorter']['item']['created_at'] = array('sort_ord' => 'desc', 'field_ord' => 1);
                 $data['query_sorter']['item']['weekly_refresh_published_at'] = array('sort_ord' => 'desc', 'field_ord' => 2);
             }
-            $data['query_sorter']['item']['is_top_ad'] = array('sort_ord' => 'desc', 'field_ord' => 3);
+            $data['query_sorter']['item']['is_topad'] = array('sort_ord' => 'desc', 'field_ord' => 3);
         }
 
         //set default sorting for map
@@ -937,7 +938,7 @@ class AdListController extends CoreController
             $searchableDimensions[$key]['solr_field'] = $solrDimensionFieldName;
         }
 
-        $data['static_filters'] .= $this->setDimensionParams($data['search'], $listingFields, $adRepository);
+        $data['static_filters'] .= $static_filters = $this->setDimensionParams($data['search'], $listingFields, $adRepository);
 
         $keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: NULL;
         $recordsPerPage = (isset($data['pager']['limit']) && $data['pager']['limit']) ? $data['pager']['limit']: $this->container->getParameter('fa.search.records.per.page');
@@ -950,6 +951,7 @@ class AdListController extends CoreController
 
             $featuredData['static_filters'] = ' AND category_full_path:"' . $category->getFullSlug() . '"';
             $featuredData['static_filters'] .= ' AND is_topad:true';
+            $featuredData['static_filters'] .= $static_filters;
 
             $keywords = (isset($featuredData['search']['keywords']) && $featuredData['search']['keywords']) ? $featuredData['search']['keywords'] : NULL;
             $page = (isset($featuredData['pager']['page']) && $featuredData['pager']['page']) ? $featuredData['pager']['page'] : 1;
@@ -970,8 +972,10 @@ class AdListController extends CoreController
             $recommendedSlot = NULL;
         }
 
-        if (! ($userId = $this->getLoggedInUser())) {
+        if (! ($user = $this->getLoggedInUser())) {
             $userId = $request->getSession()->getId();
+        } else {
+            $userId = $user->getId(); 
         }
         $adFavouriteIds = $this->getRepository('FaAdBundle:AdFavorite')->getFavoriteAdByUserId($userId, $this->container);
 
@@ -988,6 +992,86 @@ class AdListController extends CoreController
             'currentLocation' => $requestlocation,
             'searchParams' => $findersSearchParams
          ];
+
+        if (isset($findersSearchParams['item__category_id'])) {
+            $parameters['selCatDet'] = $this->getRepository('FaEntityBundle:Category')->getCategoryArrayById($findersSearchParams['item__category_id']);
+            if (isset($parameters['selCatDet'])) {
+                $parameters['selCatName'] = $parameters['selCatDet']['name'];
+                $parameters['selCatSlug'] = $parameters['selCatDet']['slug'];
+                $parameters['selCatNoIndex'] = $parameters['selCatDet']['no_index'];
+                $parameters['selCatNoFollow'] = $parameters['selCatDet']['no_follow'];
+                $parameters['selNoIndex'] = $parameters['selCatNoIndex'] == 1 ? 'noindex' : 'index';
+                $parameters['selNoFollow'] = $parameters['selCatNoFollow'] == 1 ? 'nofollow' : 'follow';
+
+                $parameters['customized_url'] = $request->get('customized_page');
+                if (empty($parameters['customized_url'])) {
+                    $targetUrl = $findersSearchParams['item__category_id'];
+                } else {
+                    $targetUrl = $parameters['customized_url']['target_url'];
+                }
+
+                $seoToolRepository = $this->getRepository('FaContentBundle:SeoTool');
+                $parameters['seoPageRule'] = $seoToolRepository->getSeoPageRuleDetailForListResult(SeoToolRepository::ADVERT_LIST_PAGE, $targetUrl, $this->container);
+
+                if (empty($parameters['seoPageRule'])) {
+                    $parameters['seoPageRule'] = $seoToolRepository->getSeoPageRuleDetailForListResult(SeoToolRepository::ADVERT_LIST_PAGE, null, $this->container);
+                }
+
+                $pageUrl = $this->getPageUrl($request);
+                $findersSearchParams = $request->get('finders');
+                if (isset($findersSearchParams['advertgone'])) {
+                    unset($findersSearchParams['advertgone']);
+                }
+                $objSeoToolOverride = null;
+                if ($pageUrl) {
+                    $objSeoToolOverride = $this->getRepository('FaContentBundle:SeoToolOverride')->findSeoRuleByPageUrl($pageUrl, $findersSearchParams, $this->container);
+                }
+
+                //get SEO Source URL for classic-car
+                if (strpos($pageUrl, 'motors/classic-cars') !== false && !$request->query->has('item_motors__reg_year')) {
+                    $getClassicCarRegYear = $this->getRepository('FaContentBundle:SeoTool')->findSeoSourceUrlMotorRegYear('motors/classic-cars/');
+                    if (!empty($getClassicCarRegYear)) {
+                        $findersSearchParams['item_motors__reg_year'] = $getClassicCarRegYear;
+                    }
+                }
+
+                $isClassicCarPage = 0;
+                if (strpos($pageUrl, 'motors/cars') !== false && isset($findersSearchParams['item_motors__reg_year'])) {
+                    $allUnder25Yrs = 1;
+                    $get25ysrOlder = date('Y') - 24;
+
+                    foreach ($findersSearchParams['item_motors__reg_year'] as $srchRegYr) {
+                        if ($srchRegYr > $get25ysrOlder) {
+                            $allUnder25Yrs = 0;
+                            break;
+                        }
+                    }
+
+                    if ($allUnder25Yrs==1) {
+                        $isClassicCarPage = 1;
+                    }
+                }
+
+                if ($objSeoToolOverride) {
+                    if ($isClassicCarPage) {
+                        $selCatName = $parameters['selCatName'] != 'Cars' ? $parameters['selCatName'] : '';
+                        $parameters['seoPageRule'] += ['h1_tag' => str_replace('Manufacturer', $selCatName, $objSeoToolOverride->getH1Tag()), 'page_title' => str_replace('Manufacturer', $selCatName, $objSeoToolOverride->getPageTitle()), 'meta_description'=> str_replace('Manufacturer', $selCatName, $objSeoToolOverride->getMetaDescription()), 'no_index'=> str_replace('Manufacturer', $selCatName, $objSeoToolOverride->getNoIndex()), 'no_follow'=> str_replace('Manufacturer', $selCatName, $objSeoToolOverride->getNoFollow()), 'canonical_url'=> str_replace('Manufacturer', $selCatName, $objSeoToolOverride->getCanonicalUrl())];
+                    } else {
+                        $parameters['seoPageRule'] += ['h1_tag' => $objSeoToolOverride->getH1Tag(), 'page_title' => $objSeoToolOverride->getPageTitle(), 'meta_description'=> $objSeoToolOverride->getMetaDescription(), 'no_index'=> $objSeoToolOverride->getNoIndex(), 'no_follow'=> $objSeoToolOverride->getNoFollow(), 'canonical_url'=> $objSeoToolOverride->getCanonicalUrl()];
+                    }
+                }
+
+                if ($parameters['seoPageRule']) {
+                    $parameters['seoFields'] = CommonManager::getSeoFields([$parameters['seoPageRule']]);
+                }
+
+                if ($request->get('queryString') or strpos($request->get('uri'), '/search')) {
+                    $parameters['isUrlIndexable'] = false;
+                } else {
+                    $parameters['isUrlIndexable'] = $this->getRepository('FaEntityBundle:CategoryDimension')->isUrlIndexableBySearchParams($findersSearchParams, $this->container);
+                }
+            }
+        }
 
         if ($pagination['resultCount'] && !in_array($currentRoute, array('show_business_user_ads', 'show_business_user_ads_location', 'show_business_user_ads_page'))) {
             // profile categories other than Services & Adults
@@ -1033,8 +1117,11 @@ class AdListController extends CoreController
      */
     private function setDimensionParams($searchParams, $listingFields, $adRepository)
     {
+        array_shift($searchParams);
         unset($searchParams['item__category_id']);
         unset($searchParams['item__location']);
+        if (isset($searchParams['sort_ord'])) unset($searchParams['sort_ord']);
+        if (isset($searchParams['sort_field'])) unset($searchParams['sort_field']);
 
         $staticFilters = '';
         foreach ($searchParams as $searchKey => $searchItem) {
@@ -1192,7 +1279,7 @@ class AdListController extends CoreController
                         $dim_field = get_object_vars(json_decode($ad[$dim_key][0]));
                         $dimensions[] = array(
                             'name' => $dim_field['name'],
-                            'listing_class' => $dim_field['listing_class']
+                            'listing_class' => empty($dim_field['listing_class']) ? '' : $dim_field['listing_class']
                         );
 
                     }
