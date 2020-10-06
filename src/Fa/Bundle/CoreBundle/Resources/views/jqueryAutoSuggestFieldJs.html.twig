@@ -124,6 +124,7 @@ $(function() {
                 {% endif %}
             {% endif %}
             $("{{ field }}"+'_close').show();
+            $("#searchGo").show();
         },
         open: function( event, ui ) {
             $('.ui-autocomplete').css('width', $("{{ field }}"+'_autocomplete').outerWidth()+'px');
@@ -136,6 +137,7 @@ $(function() {
             $("{{ field }}").val($("{{ field }}"+'_autocomplete').val());
             if ($("{{ field }}"+'_autocomplete').val().length > 0) {
                 $("{{ field }}"+'_close').show();
+                $("#searchGo").show();
             }
 
             {% if 'location' in field %}
@@ -192,6 +194,7 @@ $(function() {
                 $("{{ field }}").val(ui.item.id);
             {% endif %}
             $("{{ field }}"+'_close').show();
+            $("#searchGo").show();
         }
     }).focus(function() {
         {% if 'event_start_time' in field or 'event_end_time' in field %}
@@ -221,6 +224,7 @@ $(document).ready(function(){
         $("#fa_top_search_item__area").val('');
         $("#fa_left_search_item__area").val('');
         $(this).hide();
+        $("#searchGo").hide();
         {% if 'make_id' in field %}
             loadModelsByMakeId();
         {% endif %}
@@ -254,12 +258,14 @@ $(document).ready(function(){
     	
         if ($(this).val().length < 1) {
             $("{{ field }}"+'_close').hide();
+            $("#searchGo").hide();
             $("{{ field }}").val("");
             
             {% if child_field is defined %}
                 $("{{ child_field }}").val('');
                 $("{{ child_field~'_autocomplete' }}").val('');
                 $("{{ child_field }}"+'_close').hide();
+                $("#searchGo").hide();
             {% endif %}
         }
     });
@@ -271,6 +277,7 @@ $(document).ready(function(){
     $("{{ field }}"+'_autocomplete').blur(function() {
         if ($("{{ field }}"+'_autocomplete').val().length == 0) {
             $("{{ field }}"+'_close').hide();
+            $("#searchGo").hide();
         } else if($("{{ field }}"+'_autocomplete').val().length > 4) {
         	 {% if 'location' in field and 'paa' in field %}
 				//check location is related to area;
@@ -301,8 +308,10 @@ $(document).ready(function(){
     
     if ($("{{ field }}"+'_autocomplete').length > 0 && $("{{ field }}"+'_autocomplete').val().length < 1) {
         $("{{ field }}"+'_close').hide();
+        $("#searchGo").hide();
     } else {
         $("{{ field }}"+'_close').show();
+        $("#searchGo").show();
     }
 });
 

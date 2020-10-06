@@ -14,7 +14,7 @@
                     </p>
                     <div class="mega-search__input">
                         {{ form_widget(form.keywords, {'attr': {'class': 'mega-search__input--text', 'placeholder':'What are you looking for?'|trans({}, 'frontend-homepage') }}) }}
-                        <button class="mega-search__input--btn" type="submit"></button>
+                        <button class="mega-search__input--btn" id="searchGo" type="submit"></button>
                         <div class="close-icon" id="fa_top_search_keywords_close"></div>
                         <!-- Search dropdown Content starts-->
                         <ul class="search-dropdown">
@@ -83,3 +83,6 @@
     {% do attribute(form, 'item__price_to').setRendered %}
     {% do attribute(form, 'item__distance').setRendered %}
 {{ form_end(form) }}
+<script>
+    $("#searchGo").hide();
+</script>

@@ -34,6 +34,7 @@ $(function() {
         },
         select: function( event, ui ) {
             $("{{ field }}"+'_close').show();
+            $("#searchGo").show();
             var keywordCategoryText = '';
             var keywordCategoryId = ui.item.id.split('--');
             var keywordCategoryTextRes = ui.item.label.split('<span>');
@@ -69,6 +70,7 @@ $(function() {
         search: function( event, ui ) {
             if ($("{{ field }}").val().length > 0) {
                 $("{{ field }}"+'_close').show();
+                $("#searchGo").show();
             }
         },
         focus: function( event, ui ) {
@@ -81,6 +83,7 @@ $(function() {
             }
 
             $("{{ field }}"+'_close').show();
+            $("#searchGo").show();
             return false;
         },
         change: function( event, ui ) {
@@ -115,6 +118,7 @@ $(document).ready(function(){
     $("{{ field }}").keyup(function() {
         if ($(this).val().length < 1) {
             $("{{ field }}"+'_close').hide();
+            $("#searchGo").hide();
         }
     });
 
@@ -125,13 +129,16 @@ $(document).ready(function(){
     $("{{ field }}").blur(function() {
         if ($("{{ field }}").val().length == 0) {
             $("{{ field }}"+'_close').hide();
+            $("#searchGo").hide();
         }
     });
 
     if ($("{{ field }}").length > 0 && $("{{ field }}").val().length < 1) {
         $("{{ field }}"+'_close').hide();
+        $("#searchGo").hide();
     } else {
         $("{{ field }}"+'_close').show();
+        $("#searchGo").show();
     }
 });
 //]]>
