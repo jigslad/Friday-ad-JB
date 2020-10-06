@@ -823,16 +823,33 @@ class SolrSearchManager
     protected function addSorter($sort = array())
     {
         if (count($sort)) {
-            foreach (array_keys($sort) as $service) {
-                $sort[$service] = array_filter($sort[$service]);
-                if (count($sort[$service])) {
-                    $serviceName = 'fa.'.str_replace('item', 'ad', $service).'.solrsearch';
-                    if ($this->container->has($serviceName)) {
-                        $serviceObj  = $this->container->get($serviceName);
+            if ($this->solrCoreName == 'ad.new') {
+                $serviceName = 'fa.ad.solrsearch';
+                if ($this->container->has($serviceName)) {
+                    $serviceObj = $this->container->get($serviceName);
+                    $serviceObj->init($this->solrCoreName);
 
-                        $serviceObj->init($this->solrCoreName);
-                        $serviceObj->addSorter($sort[$service]);
-                        $this->setSortBy($serviceObj->getSortBy());
+                    foreach ($sort['item'] as $sortField => $sortOrder) {
+                        $sorter = $sort['item'][$sortField];
+                        if (! is_array($sorter)) {
+                            $sorter = ['sort_ord' => $sorter];
+                        }
+                        $serviceObj->addSorter();
+                        $this->setSortBy([$sortField => $sorter]);
+                    }
+                }
+            } else {
+                foreach (array_keys($sort) as $service) {
+                    $sort[$service] = array_filter($sort[$service]);
+                    if (count($sort[$service])) {
+                        $serviceName = 'fa.' . str_replace('item', 'ad', $service) . '.solrsearch';
+                        if ($this->container->has($serviceName)) {
+                            $serviceObj = $this->container->get($serviceName);
+
+                            $serviceObj->init($this->solrCoreName);
+                            $serviceObj->addSorter($sort[$service]);
+                            $this->setSortBy($serviceObj->getSortBy());
+                        }
                     }
                 }
             }

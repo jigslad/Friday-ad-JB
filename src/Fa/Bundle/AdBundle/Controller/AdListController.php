@@ -767,7 +767,7 @@ class AdListController extends CoreController
                 $data['query_sorter']['item']['created_at'] = array('sort_ord' => 'desc', 'field_ord' => 1);
                 $data['query_sorter']['item']['weekly_refresh_published_at'] = array('sort_ord' => 'desc', 'field_ord' => 2);
             }
-            $data['query_sorter']['item']['is_top_ad'] = array('sort_ord' => 'desc', 'field_ord' => 3);
+            $data['query_sorter']['item']['is_topad'] = array('sort_ord' => 'desc', 'field_ord' => 3);
         }
 
         //set default sorting for map
@@ -937,7 +937,7 @@ class AdListController extends CoreController
             $searchableDimensions[$key]['solr_field'] = $solrDimensionFieldName;
         }
 
-        $data['static_filters'] .= $this->setDimensionParams($data['search'], $listingFields, $adRepository);
+        $data['static_filters'] .= $static_filters = $this->setDimensionParams($data['search'], $listingFields, $adRepository);
 
         $keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: NULL;
         $recordsPerPage = (isset($data['pager']['limit']) && $data['pager']['limit']) ? $data['pager']['limit']: $this->container->getParameter('fa.search.records.per.page');
@@ -950,6 +950,7 @@ class AdListController extends CoreController
 
             $featuredData['static_filters'] = ' AND category_full_path:"' . $category->getFullSlug() . '"';
             $featuredData['static_filters'] .= ' AND is_topad:true';
+            $featuredData['static_filters'] .= $static_filters;
 
             $keywords = (isset($featuredData['search']['keywords']) && $featuredData['search']['keywords']) ? $featuredData['search']['keywords'] : NULL;
             $page = (isset($featuredData['pager']['page']) && $featuredData['pager']['page']) ? $featuredData['pager']['page'] : 1;
@@ -1033,8 +1034,11 @@ class AdListController extends CoreController
      */
     private function setDimensionParams($searchParams, $listingFields, $adRepository)
     {
+        array_shift($searchParams);
         unset($searchParams['item__category_id']);
         unset($searchParams['item__location']);
+        if (isset($searchParams['sort_ord'])) unset($searchParams['sort_ord']);
+        if (isset($searchParams['sort_field'])) unset($searchParams['sort_field']);
 
         $staticFilters = '';
         foreach ($searchParams as $searchKey => $searchItem) {
