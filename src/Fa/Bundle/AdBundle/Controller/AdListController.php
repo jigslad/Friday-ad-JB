@@ -971,8 +971,10 @@ class AdListController extends CoreController
             $recommendedSlot = NULL;
         }
 
-        if (! ($userId = $this->getLoggedInUser())) {
+        if (! ($user = $this->getLoggedInUser())) {
             $userId = $request->getSession()->getId();
+        } else {
+            $userId = $user->getId(); 
         }
         $adFavouriteIds = $this->getRepository('FaAdBundle:AdFavorite')->getFavoriteAdByUserId($userId, $this->container);
 
