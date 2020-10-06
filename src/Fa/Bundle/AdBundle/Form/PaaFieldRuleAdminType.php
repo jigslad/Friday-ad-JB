@@ -236,6 +236,7 @@ class PaaFieldRuleAdminType extends AbstractType
                 $paaFieldRule->setMinValue($fieldRule['min_value']);
                 $paaFieldRule->setMaxValue($fieldRule['max_value']);
                 $paaFieldRule->setStep($fieldRule['step']);
+                $paaFieldRule->setHideField($fieldRule['hide_field']);
                 $paaFieldRule->setCategory($category);
                 $paaFieldRule->setPaaField($paaField);
                 if ($field == 'photo_error') {
@@ -273,6 +274,7 @@ class PaaFieldRuleAdminType extends AbstractType
                 $paaFieldRule->setMinValue($fieldRule['min_value']);
                 $paaFieldRule->setMaxValue($fieldRule['max_value']);
                 $paaFieldRule->setStep($fieldRule['step']);
+                $paaFieldRule->setHideField($fieldRule['hide_field']);
                 $this->em->persist($paaFieldRule);
                 $this->em->flush();
             }
