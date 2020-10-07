@@ -454,7 +454,7 @@ class BannerManager
         $currentRoute      = $this->container->get('request_stack')->getCurrentRequest()->get('_route');
         $params             = $this->container->get('request_stack')->getCurrentRequest()->get('finders');
         $entityCacheManager = $this->container->get('fa.entity.cache.manager');
-        $staticBlockVariables    = array('{page_type}', '{user_type}', '{user_location}','{town}', '{county}', '{edition_area}', '{london_areas}', '{target_id}', '{ad_published}', '{ad_location}', '{seller_contact_methods}', '{ad_price}', '{ad_id}', '{user_logged}', '{search_keyword}', '{width}', '{height}', '{hashed_email}','{category}', '{class}', '{sub_class}', '{sub_sub_class}');
+        $staticBlockVariables    = array('{page_type}', '{user_type}', '{user_location}','{town}', '{county}', '{country}', '{edition_area}', '{london_areas}', '{target_id}', '{ad_published}', '{ad_location}', '{seller_contact_methods}', '{ad_price}', '{ad_id}', '{user_logged}', '{search_keyword}', '{width}', '{height}', '{hashed_email}','{category}', '{class}', '{sub_class}', '{sub_sub_class}');
 
         if ($extraParams && isset($extraParams['cookieValues'])) {
             $locationArray = json_decode($extraParams['cookieValues'], true);
@@ -466,7 +466,7 @@ class BannerManager
 
         preg_match_all('/\{.*?\}/', $staticBlockCodeString, $staticBlockVariables);
         $categoryPath = $locDet = array(); $rootCategoryId = $town = $townLvl = $county = $printEditionName = '';
-        $contactMethod = $srchKeyword = $adDet_adId = '';
+        $contactMethod = $srchKeyword = $adDet_adId = $selcountry = $adlocation = '';
 
 
         if ($currentRoute && $currentRoute ==  'ad_detail_page') {
@@ -474,11 +474,13 @@ class BannerManager
                 if (isset($extraParams['ad'])) {
                     $adDet_adId = $extraParams['ad']['id'];
                     $categoryPath = $this->em->getRepository('FaEntityBundle:Category')->getCategoryPathDetailArrayById($extraParams['ad']['a_category_id_i'], false, $this->container);
+                    $selcountry = 'UK';
                     if(isset($extraParams['ad']['a_l_town_id_txt'][0])) {
                         $locDet = $this->em->getRepository('FaEntityBundle:Location')->find($extraParams['ad']['a_l_town_id_txt'][0]);
                         if(!empty($locDet)) {
                             $town = $locDet->getName();
                             $townLvl = $locDet->getLvl();
+                            $adlocation = $locDet->getName();
                         }
                         $county = $this->em->getRepository('FaEntityBundle:Location')->getCountyByTownId($extraParams['ad']['a_l_town_id_txt'][0]);
                         $printEditionName = $this->em->getRepository('FaAdBundle:PrintEdition')->getPrintEditionColumnByTownId($extraParams['ad']['a_l_town_id_txt'][0], $this->container);
@@ -504,6 +506,7 @@ class BannerManager
                     $county = $this->em->getRepository('FaEntityBundle:Location')->getCountyByTownId($locationArray['town_id']);
                     $printEditionName = $this->em->getRepository('FaAdBundle:PrintEdition')->getPrintEditionColumnByTownId($locationArray['town_id'], $this->container);
                     $townLvl = $locationArray['lvl'];
+                    $selcountry = 'UK';
                 }
             }
             if ($params && isset($params['keywords'])) {
@@ -601,14 +604,18 @@ class BannerManager
                     } else {
                         $staticBlockCodeString = str_replace(".setTargeting('sub_sub_class',['{sub_sub_class}'])", '', $staticBlockCodeString);
                     }
-                 } elseif ($staticBlockVariable == '{user_location}' || $staticBlockVariable == '{town}') {
+                 } elseif ($staticBlockVariable == '{user_location}' || $staticBlockVariable == '{town}' || $staticBlockVariable == '{ad_location}') {
                     if ($town) {
                         $staticBlockCodeString = str_replace($staticBlockVariable, $town, $staticBlockCodeString);
+                    } elseif ($adlocation) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, $adlocation, $staticBlockCodeString);
                     } else {
                         if ($staticBlockVariable == '{user_location}') {
                             $staticBlockCodeString = str_replace(".setTargeting('user_location', ['{user_location}'])", '', $staticBlockCodeString);
                         } elseif ($staticBlockVariable == '{town}') {
                             $staticBlockCodeString = str_replace(".setTargeting('town', ['{town}'])", '', $staticBlockCodeString);
+                        } elseif ($staticBlockVariable == '{ad_location}') {
+                            $staticBlockCodeString = str_replace(".setTargeting('ad_location', ['{ad_location}'])", '', $staticBlockCodeString);
                         }
                     }
                 } elseif ($staticBlockVariable == '{london_areas}') {
@@ -622,6 +629,12 @@ class BannerManager
                         $staticBlockCodeString = str_replace($staticBlockVariable, $county, $staticBlockCodeString);
                     } else {
                         $staticBlockCodeString = str_replace(".setTargeting('county', ['{county}'])", '', $staticBlockCodeString);
+                    }
+                } elseif ($staticBlockVariable == '{country}') {
+                    if($selcountry) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, $selcountry, $staticBlockCodeString);
+                    } else {
+                        $staticBlockCodeString = str_replace(".setTargeting('country', ['{country}'])", '', $staticBlockCodeString);
                     }
                 } elseif ($staticBlockVariable == '{edition_area}') {
                     if($currentRoute && ($currentRoute ==  'ad_detail_page' || $currentRoute ==  'listing_page'|| $currentRoute ==  'motor_listing_page')) {
