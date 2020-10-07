@@ -103,17 +103,6 @@
     	ga('set', 'dimension9', 'logged in');
     {% endif %}
     ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Login_Or_Register'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %}});
-
-    {% set _logged_in = 'true' %}
-    {% if app.user.getId() is not defined or app.user.getId() is null %}
-        {% set _logged_in = 'false' %}
-    {% endif %}
-
-
-    googletag.cmd.push(function() {
-        googletag.pubads().setTargeting('page_type', 'Login_Or_Register').setTargeting('adBlocker', false).setTargeting('user_logged', {{ _logged_in }});
-        googletag.enableServices();
-    });
     //]]>
 </script>
 {% endblock %}
