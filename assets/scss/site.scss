@@ -906,6 +906,11 @@ footer a:hover, .footer-head:hover, .pkg-includes a {
 .paa-next-btn.disabled {
   background: #eaeff0 !important;
 }
+.paa-preview-btn.disabled , .paa-preview-btn.disabled:hover , .paa-preview-btn.disabled:focus {
+  border: 1px solid #EAEFF0 !important;
+  color: #EAEFF0 !important;
+  background: transparent !important;
+}
 .step-instruction h3 {
   color: #eaeff0 !important;
   margin-bottom: 18px;
