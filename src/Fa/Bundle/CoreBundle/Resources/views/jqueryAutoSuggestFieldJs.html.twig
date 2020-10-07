@@ -5,6 +5,7 @@ $(function() {
     var cache = {};
     var townId = null;
     $("{{ field }}"+'_autocomplete').autocomplete({
+        appendTo:'{{ field }}_list',
         minLength: 2,
         source: function( request, response ) {
             var term = request.term;
@@ -124,20 +125,20 @@ $(function() {
                 {% endif %}
             {% endif %}
             $("{{ field }}"+'_close').show();
-            $("#searchGo").show();
+            $("{{ field }}"+'_searchGo').show();
         },
         open: function( event, ui ) {
-            $('.ui-autocomplete').css('width', $("{{ field }}"+'_autocomplete').outerWidth()+'px');
-            
             {% if dropdownCssClass is defined %}
-                $('.ui-autocomplete').addClass("{{ dropdownCssClass }}");
+                $("{{ field }}_list ul").addClass("{{ dropdownCssClass }}");
+                $('.ui-autocomplete').removeAttr("style");
+                $('.ui-autocomplete').show();
             {% endif %}
         },
         search: function( event, ui ) {
             $("{{ field }}").val($("{{ field }}"+'_autocomplete').val());
             if ($("{{ field }}"+'_autocomplete').val().length > 0) {
                 $("{{ field }}"+'_close').show();
-                $("#searchGo").show();
+                $("{{ field }}"+'_searchGo').show();
             }
 
             {% if 'location' in field %}
@@ -194,7 +195,7 @@ $(function() {
                 $("{{ field }}").val(ui.item.id);
             {% endif %}
             $("{{ field }}"+'_close').show();
-            $("#searchGo").show();
+            $("{{ field }}"+'_searchGo').show();
         }
     }).focus(function() {
         {% if 'event_start_time' in field or 'event_end_time' in field %}
@@ -208,8 +209,7 @@ $(function() {
          if (item.text2) {
             label = label + '<div> in <span>'+ item.text2 +'</span> </div>';
          }
-
-         return $("<li data-custom-text='location_"+locationBy+"_text' >").append(label).appendTo( ul );
+         return $("<li class='location-dropdown__item' data-custom-text='location_"+locationBy+"_text' >").append(label).appendTo( ul );
     };
 });
 
@@ -224,7 +224,7 @@ $(document).ready(function(){
         $("#fa_top_search_item__area").val('');
         $("#fa_left_search_item__area").val('');
         $(this).hide();
-        $("#searchGo").hide();
+        $("{{ field }}"+'_searchGo').hide();
         {% if 'make_id' in field %}
             loadModelsByMakeId();
         {% endif %}
@@ -258,14 +258,14 @@ $(document).ready(function(){
     	
         if ($(this).val().length < 1) {
             $("{{ field }}"+'_close').hide();
-            $("#searchGo").hide();
+            $("{{ field }}"+'_searchGo').hide();
             $("{{ field }}").val("");
             
             {% if child_field is defined %}
                 $("{{ child_field }}").val('');
                 $("{{ child_field~'_autocomplete' }}").val('');
                 $("{{ child_field }}"+'_close').hide();
-                $("#searchGo").hide();
+                $("{{ field }}"+'_searchGo').hide();
             {% endif %}
         }
     });
@@ -277,7 +277,7 @@ $(document).ready(function(){
     $("{{ field }}"+'_autocomplete').blur(function() {
         if ($("{{ field }}"+'_autocomplete').val().length == 0) {
             $("{{ field }}"+'_close').hide();
-            $("#searchGo").hide();
+            $("{{ field }}"+'_searchGo').hide();
         } else if($("{{ field }}"+'_autocomplete').val().length > 4) {
         	 {% if 'location' in field and 'paa' in field %}
 				//check location is related to area;
@@ -308,10 +308,10 @@ $(document).ready(function(){
     
     if ($("{{ field }}"+'_autocomplete').length > 0 && $("{{ field }}"+'_autocomplete').val().length < 1) {
         $("{{ field }}"+'_close').hide();
-        $("#searchGo").hide();
+        $("{{ field }}"+'_searchGo').hide();
     } else {
         $("{{ field }}"+'_close').show();
-        $("#searchGo").show();
+        $("{{ field }}"+'_searchGo').show();
     }
 });
 

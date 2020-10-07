@@ -14,7 +14,7 @@
                     </p>
                     <div class="mega-search__input">
                         {{ form_widget(form.keywords, {'attr': {'class': 'mega-search__input--text', 'placeholder':'What are you looking for?' }}) }}
-                        <button class="mega-search__input--btn" id="searchGo" type="submit"></button>
+                        <button class="mega-search__input--btn" id="fa_top_search_keywords_searchGo" type="submit"></button>
                         <div class="close-icon" id="fa_top_search_keywords_close"></div>
                         <!-- Search dropdown Content starts-->
                         <div id="fa_top_search_keywords_list"></div>
@@ -37,6 +37,7 @@
                     <div class="mega-search__select-location locationView" id="top_search_location">
                         {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'mega-search__select-location--text banner-search', 'placeholder':'Type postal code or town'|trans({}, 'frontend-homepage') }}) }}
                         <div class="close-icon closeIcon" id="fa_top_search_item__location_close"></div>
+                        <div id="fa_top_search_item__location_list"></div>
                         <div class="mega-search__select-location--ok ok-btn" type="button" id="top_search_location_homepage_ok">{{ 'Ok'|trans({}, 'frontend-homepage') }}</div>
                         <div class="mega-search__select-location--cancel cancel-btn" type="button" id="top_search_location_cancel">{{ 'Cancel'|trans({}, 'frontend-homepage') }}</div>
 {#                        <div id="header_search_editable_location_reveal_modal" class="reveal-modal tiny" data-reveal>#}
@@ -53,5 +54,5 @@
     {% do attribute(form, 'item__distance').setRendered %}
 {{ form_end(form) }}
 <script>
-    $("#searchGo").hide();
+    $("#fa_top_search_keywords_searchGo").hide();
 </script>

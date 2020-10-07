@@ -35,7 +35,7 @@ $(function() {
         },
         select: function( event, ui ) {
             $("{{ field }}"+'_close').show();
-            $("#searchGo").show();
+            $("{{ field }}"+'_searchGo').show();
             var keywordCategoryText = '';
             var keywordCategoryId = ui.item.id.split('--');
             var keywordCategoryTextRes = ui.item.label.split('<span>');
@@ -64,7 +64,7 @@ $(function() {
         },
         open: function( event, ui ) {
             {% if dropdownCssClass is defined %}
-                $('.ui-autocomplete').addClass("{{ dropdownCssClass }}");
+                $("{{ field }}_list ul").addClass("{{ dropdownCssClass }}");
                 $('.ui-autocomplete').removeAttr("style");
                 $('.ui-autocomplete').show();
             {% endif %}
@@ -72,10 +72,11 @@ $(function() {
         search: function( event, ui ) {
             if ($("{{ field }}").val().length > 0) {
                 $("{{ field }}"+'_close').show();
-                $("#searchGo").show();
+                $("{{ field }}"+'_searchGo').show();
             }
         },
         focus: function( event, ui ) {
+            console.log(ui)
             var keywordCategoryId = ui.item.id.split('--');
             if (keywordCategoryId.length > 1) {
                 $("{{ field }}").val(keywordCategoryId[0]);
@@ -85,7 +86,7 @@ $(function() {
             }
 
             $("{{ field }}"+'_close').show();
-            $("#searchGo").show();
+            $("{{ field }}"+'_searchGo').show();
             return false;
         },
         change: function( event, ui ) {
@@ -120,7 +121,7 @@ $(document).ready(function(){
     $("{{ field }}").keyup(function() {
         if ($(this).val().length < 1) {
             $("{{ field }}"+'_close').hide();
-            $("#searchGo").hide();
+            $("{{ field }}"+'_searchGo').hide();
         }
     });
 
@@ -131,16 +132,16 @@ $(document).ready(function(){
     $("{{ field }}").blur(function() {
         if ($("{{ field }}").val().length == 0) {
             $("{{ field }}"+'_close').hide();
-            $("#searchGo").hide();
+            $("{{ field }}"+'_searchGo').hide();
         }
     });
 
     if ($("{{ field }}").length > 0 && $("{{ field }}").val().length < 1) {
         $("{{ field }}"+'_close').hide();
-        $("#searchGo").hide();
+        $("{{ field }}"+'_searchGo').hide();
     } else {
         $("{{ field }}"+'_close').show();
-        $("#searchGo").show();
+        $("{{ field }}"+'_searchGo').show();
     }
 });
 //]]>
