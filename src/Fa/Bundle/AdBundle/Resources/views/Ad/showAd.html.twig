@@ -1922,12 +1922,6 @@
     {% else %}
         ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Ad_Details', 'dimension3': '{{ adDetail['user']['user_name'] }}', 'dimension4': '{{ dimension4 }}', 'dimension5' : '{{dimension5}}'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %} });
     {% endif %}
-    $( document ).ready(function() {
-        googletag.cmd.push(function () {
-            googletag.pubads().setTargeting('page_type', ['Ad details']).setTargeting('user_type', ['{{ userTypePubAds }}']).setTargeting('category', ['{{ targetCat }}']).setTargeting('class', ['{{ targetClass }}']).setTargeting('sub_class', ['{{ targetSubClass }}']).setTargeting('sub_sub_class', ['{{ targetSubSubClass }}']).setTargeting('adBlocker', false).setTargeting('user_logged', {{ _logged_in }}).setTargeting('ad_id', ['{{ adId }}']).setTargeting('town', ['{{ town }}']).setTargeting('county', ['{{ county }}']).setTargeting('country', ['UK']).setTargeting('edition_area', ['{{ ((locationGroup is defined and locationGroup.name is defined)?'Print -'~locationGroup.name:'Non Print')|raw }}']).setTargeting('ad_location', ['{{ town }}']).setTargeting('ad_published', ['{{ attribute(adDetail, constant(solrMapping ~ 'PUBLISHED_AT'))|time_ago_in_words }}']).setTargeting('seller_contact_methods', ['{{ contactMethods }}']).setTargeting('ad_price', ['{{ targetAdPrice }}']);
-            googletag.enableServices();
-        });
-    });
 //]]>
 </script>
 {% endblock %}

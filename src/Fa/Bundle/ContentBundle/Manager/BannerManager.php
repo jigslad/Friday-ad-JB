@@ -442,6 +442,262 @@ class BannerManager
     }
 
     /**
+     * Parse static block seo string.
+     *
+     * @param string $staticBlockCodeString Seo string.
+     * @param array $extraParams.
+     *
+     * @return string
+     */
+    public function parseStaticBlockGTMCode($staticBlockCodeString, $extraParams)
+    {
+        $currentRoute      = $this->container->get('request_stack')->getCurrentRequest()->get('_route');
+        $params             = $this->container->get('request_stack')->getCurrentRequest()->get('finders');
+        $entityCacheManager = $this->container->get('fa.entity.cache.manager');
+        $staticBlockVariables    = array('{page_type}', '{user_type}', '{user_location}','{town}', '{county}', '{edition_area}', '{london_areas}', '{target_id}', '{ad_published}', '{ad_location}', '{seller_contact_methods}', '{ad_price}', '{ad_id}', '{user_logged}', '{search_keyword}', '{width}', '{height}', '{hashed_email}','{category}', '{class}', '{sub_class}', '{sub_sub_class}');
+
+        if ($extraParams && isset($extraParams['cookieValues'])) {
+            $locationArray = json_decode($extraParams['cookieValues'], true);
+        } elseif ($params && isset($params['item__location'])) {
+            $locationArray = $this->em->getRepository('FaEntityBundle:Location')->getCookieValue($params['item__location'], $this->container);
+        } else {
+            $locationArray = json_decode($this->container->get('request_stack')->getCurrentRequest()->cookies->get('location'), true);
+        }
+
+        preg_match_all('/\{.*?\}/', $staticBlockCodeString, $staticBlockVariables);
+        $categoryPath = $locDet = array(); $rootCategoryId = $town = $townLvl = $county = $printEditionName = '';
+        $contactMethod = $srchKeyword = $adDet_adId = '';
+
+
+        if ($currentRoute && $currentRoute ==  'ad_detail_page') {
+            if ($extraParams && count($extraParams) > 0 && isset($extraParams['ad'])) {
+                if (isset($extraParams['ad'])) {
+                    $adDet_adId = $extraParams['ad']['id'];
+                    $categoryPath = $this->em->getRepository('FaEntityBundle:Category')->getCategoryPathDetailArrayById($extraParams['ad']['a_category_id_i'], false, $this->container);
+                    if(isset($extraParams['ad']['a_l_town_id_txt'][0])) {
+                        $locDet = $this->em->getRepository('FaEntityBundle:Location')->find($extraParams['ad']['a_l_town_id_txt'][0]);
+                        if(!empty($locDet)) {
+                            $town = $locDet->getName();
+                            $townLvl = $locDet->getLvl();
+                        }
+                        $county = $this->em->getRepository('FaEntityBundle:Location')->getCountyByTownId($extraParams['ad']['a_l_town_id_txt'][0]);
+                        $printEditionName = $this->em->getRepository('FaAdBundle:PrintEdition')->getPrintEditionColumnByTownId($extraParams['ad']['a_l_town_id_txt'][0], $this->container);
+                    }
+                    if(isset($extraParams['ad']['user'])) {
+                        if($extraParams['ad']['user']['contact_through_email'] == 1) { $contactMethod = $contactMethod.'Email'; }
+                        if($extraParams['ad']['user']['contact_through_phone'] == 1) {
+                            if($contactMethod!='') { $contactMethod = $contactMethod.'|Phone'; }
+                            else { $contactMethod = $contactMethod.'Phone'; }
+                        }
+                    }
+                }
+            }
+        } elseif ($currentRoute && ($currentRoute ==  'listing_page'|| $currentRoute ==  'motor_listing_page')) {
+            if ($params && isset($params['item__category_id'])) {
+                $categoryPath = $this->em->getRepository('FaEntityBundle:Category')->getCategoryPathDetailArrayById($params['item__category_id'], false, $this->container);
+                $rootCategoryId = $this->em->getRepository('FaEntityBundle:Category')->getRootCategoryId($params['item__category_id'], $this->container);
+            }
+            if ($params && isset($params['item__location'])) {
+                $locationArray = $this->em->getRepository('FaEntityBundle:Location')->getCookieValue($params['item__location'], $this->container);
+                if(!empty($locationArray)) {
+                    $town = $this->em->getRepository('FaEntityBundle:Location')->find($locationArray['town_id']);
+                    $county = $this->em->getRepository('FaEntityBundle:Location')->getCountyByTownId($locationArray['town_id']);
+                    $printEditionName = $this->em->getRepository('FaAdBundle:PrintEdition')->getPrintEditionColumnByTownId($locationArray['town_id'], $this->container);
+                    $townLvl = $locationArray['lvl'];
+                }
+            }
+            if ($params && isset($params['keywords'])) {
+                $srchKeyword = $params['keywords'];
+            }
+        }
+
+        // replace variable values.
+        if (!empty($staticBlockVariables)) {
+            foreach ($staticBlockVariables[0] as $staticBlockVariable) {
+
+                if ($staticBlockVariable == '{page_type}') {
+                    if ($currentRoute && ($currentRoute ==  'location_home_page')) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, 'Homepage', $staticBlockCodeString);
+                    } elseif ($currentRoute && ($currentRoute ==  'login' || $currentRoute ==  'fa_user_register')) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, 'Login_Or_Register', $staticBlockCodeString);
+                    } elseif ($currentRoute && ($currentRoute ==  'ad_detail_page')) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, 'Ad details', $staticBlockCodeString);
+                    } elseif ($currentRoute && ($currentRoute ==  'listing_page'|| $currentRoute ==  'motor_listing_page')) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, 'Search Results', $staticBlockCodeString);
+                    } elseif ($currentRoute && ($currentRoute == 'landing_page_category' || $currentRoute == 'landing_page_category_location')) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, 'Landing page', $staticBlockCodeString);
+                    } else {
+                        if ($currentRoute=='' || $currentRoute=='fa_frontend_homepage') {
+                            $staticBlockCodeString = str_replace($staticBlockVariable, 'Homepage', $staticBlockCodeString);
+                        } else {
+                            $staticBlockCodeString = str_replace($staticBlockVariable, 'Peripheral_Content', $staticBlockCodeString);
+                        }
+                    }
+                } elseif ($staticBlockVariable == '{user_logged}') {
+                    $objUser = CommonManager::getLoggedInUser($this->container);
+                    if($objUser) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, 'true', $staticBlockCodeString);
+                    } else {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, 'false', $staticBlockCodeString);
+                    }
+                } elseif ($staticBlockVariable == '{user_type}') {
+                    if (strstr($staticBlockVariable, '{user_type}')) {
+                        $staticBlockVariable = '{user_type}';
+                    }
+                    $userType = '';
+                    if ($currentRoute && ($currentRoute ==  'listing_page'|| $currentRoute ==  'motor_listing_page')) {
+                        $userType = 'Others';
+                        if ($params && isset($params['item__is_trade_ad'])) {
+                            $userType = 'Private';
+                            if ($params['item__is_trade_ad']==1) {
+                                $userType = 'Dealer';
+                                if($rootCategoryId==CategoryRepository::FOR_SALE_ID) { $userType = 'Shop'; }
+                                elseif($rootCategoryId==CategoryRepository::JOBS_ID) { $userType = 'Recruiter'; }
+                            }
+                        }
+                    } elseif ($currentRoute && ($currentRoute ==  'ad_detail_page')) {
+                        $userType = 'Others';
+                        if ($extraParams && count($extraParams) > 0 && isset($extraParams['ad'])) {
+                            if (isset($extraParams['user']) && isset($extraParams['user']['role_id'])) {
+                                $userType = 'Private';
+                                if($extraParams['user']['role_id']== RoleRepository::ROLE_BUSINESS_SELLER_ID || $extraParams['user']['role_id']== RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
+                                    $userType = 'Dealer';
+                                    if($extraParams['user']['business_category_id']==CategoryRepository::FOR_SALE_ID) { $userType = 'Shop'; }
+                                    elseif($extraParams['user']['business_category_id']==CategoryRepository::JOBS_ID) { $userType = 'Recruiter'; }
+                                }
+                            }
+                        }
+                    }
+                    if($userType) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, $userType, $staticBlockCodeString);
+                    } else {
+                        $staticBlockCodeString = str_replace(".setTargeting('user_type', ['{user_type}'])", '', $staticBlockCodeString);
+                    }
+                } elseif ($staticBlockVariable == '{category}') {
+                    if ($categoryPath && isset($categoryPath[0]) && $categoryPath[0]['slug'] != '') {
+                        $categorySlug = $categoryPath[0]['slug'];
+                        $staticBlockCodeString = str_replace($staticBlockVariable, $categorySlug, $staticBlockCodeString);
+                    } else {
+                        $staticBlockCodeString = str_replace(".setTargeting('category',['{category}'])", '', $staticBlockCodeString);
+                    }
+                } elseif ($staticBlockVariable == '{class}') {
+                    if ($categoryPath && isset($categoryPath[1]) &&  $categoryPath[1]['slug']!='') {
+                        $categorySlug = $categoryPath[1]['slug'];
+                        $staticBlockCodeString = str_replace($staticBlockVariable, $categorySlug, $staticBlockCodeString);
+                    } else {
+                        $staticBlockCodeString = str_replace(".setTargeting('class',['{class}'])", '', $staticBlockCodeString);
+                    }
+                } elseif ($staticBlockVariable == '{sub_class}') {
+                    if ($categoryPath && isset($categoryPath[2]) &&  $categoryPath[2]['slug']!='') {
+                        $categorySlug = $categoryPath[2]['slug'];
+                        $staticBlockCodeString = str_replace($staticBlockVariable, $categorySlug, $staticBlockCodeString);
+                    } else {
+                        $staticBlockCodeString = str_replace(".setTargeting('sub_class',['{sub_class}'])", '', $staticBlockCodeString);
+                    }
+                } elseif ($staticBlockVariable == '{sub_sub_class}') {
+                    if ($categoryPath && isset($categoryPath[3]) &&  $categoryPath[3]['slug']!='') {
+                        $categorySlug = $categoryPath[3]['slug'];
+                        $staticBlockCodeString = str_replace($staticBlockVariable, $categorySlug, $staticBlockCodeString);
+                    } else {
+                        $staticBlockCodeString = str_replace(".setTargeting('sub_sub_class',['{sub_sub_class}'])", '', $staticBlockCodeString);
+                    }
+                 } elseif ($staticBlockVariable == '{user_location}' || $staticBlockVariable == '{town}') {
+                    if ($town) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, $town, $staticBlockCodeString);
+                    } else {
+                        if ($staticBlockVariable == '{user_location}') {
+                            $staticBlockCodeString = str_replace(".setTargeting('user_location', ['{user_location}'])", '', $staticBlockCodeString);
+                        } elseif ($staticBlockVariable == '{town}') {
+                            $staticBlockCodeString = str_replace(".setTargeting('town', ['{town}'])", '', $staticBlockCodeString);
+                        }
+                    }
+                } elseif ($staticBlockVariable == '{london_areas}') {
+                    if($townLvl==4) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, $town, $staticBlockCodeString);
+                    } else {
+                        $staticBlockCodeString = str_replace(".setTargeting('london_areas', ['{london_areas}'])", '', $staticBlockCodeString);
+                    }
+                } elseif ($staticBlockVariable == '{county}') {
+                    if($county) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, $county, $staticBlockCodeString);
+                    } else {
+                        $staticBlockCodeString = str_replace(".setTargeting('county', ['{county}'])", '', $staticBlockCodeString);
+                    }
+                } elseif ($staticBlockVariable == '{edition_area}') {
+                    if($currentRoute && ($currentRoute ==  'ad_detail_page' || $currentRoute ==  'listing_page'|| $currentRoute ==  'motor_listing_page')) {
+                        if($printEditionName) {
+                            $staticBlockCodeString = str_replace($staticBlockVariable, $printEditionName.' - Print', $staticBlockCodeString);
+                        } else {
+                            $staticBlockCodeString = str_replace($staticBlockVariable, 'Non Print', $staticBlockCodeString);
+                        }
+                    } else {
+                        $staticBlockCodeString = str_replace(".setTargeting('edition_area', ['{edition_area}'])", '', $staticBlockCodeString);
+                    }
+                } elseif ($staticBlockVariable == '{target_id}') {
+                    if ($extraParams && isset($extraParams['target_id'])) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, $extraParams['target_id'], $staticBlockCodeString);
+                    } else {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, '', $staticBlockCodeString);
+                    }
+                } elseif ($staticBlockVariable == '{ad_published}') {
+                    if ($extraParams && isset($extraParams['a_published_at_i']) && $currentRoute && $currentRoute ==  'ad_detail_page') {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, $extraParams['a_published_at_i'], $staticBlockCodeString);
+                    } else {
+                        $staticBlockCodeString = str_replace(".setTargeting('ad_published', ['{ad_published}'])", '', $staticBlockCodeString);
+                    }
+                } elseif ($staticBlockVariable == '{ad_price}') {
+                    if ($extraParams && isset($extraParams['a_price_d']) && $currentRoute && $currentRoute ==  'ad_detail_page') {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, $extraParams['a_price_d'], $staticBlockCodeString);
+                    } else {
+                        $staticBlockCodeString = str_replace(".setTargeting('ad_price', ['{ad_price}'])", '', $staticBlockCodeString);
+                    }
+                } elseif ($staticBlockVariable == '{seller_contact_methods}') {
+                    if ($contactMethod) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, $contactMethod, $staticBlockCodeString);
+                    } else {
+                        $staticBlockCodeString = str_replace(".setTargeting('seller_contact_methods', ['{seller_contact_methods}'])", '', $staticBlockCodeString);
+                    }
+                } elseif ($staticBlockVariable == '{search_keyword}') {
+                    if ($srchKeyword) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, $srchKeyword, $staticBlockCodeString);
+                    } else {
+                        $staticBlockCodeString = str_replace(".setTargeting('search_keyword', ['{search_keyword}'])", '', $staticBlockCodeString);
+                    }
+                } elseif ($staticBlockVariable == '{ad_id}') {
+                    if ($adDet_adId) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, $adDet_adId, $staticBlockCodeString);
+                    } else {
+                        $staticBlockCodeString = str_replace(".setTargeting('ad_id',['{ad_id}'])", '', $staticBlockCodeString);
+                    }
+                } elseif ($staticBlockVariable == '{width}') {
+                    if ($extraParams && isset($extraParams['max_width']) && $extraParams['max_width'] != null) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, $extraParams['max_width'], $staticBlockCodeString);
+                    } else {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, '', $staticBlockCodeString);
+                    }
+                } elseif ($staticBlockVariable == '{height}') {
+                    if ($extraParams && isset($extraParams['max_height']) && $extraParams['max_height'] != null) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, $extraParams['max_height'], $staticBlockCodeString);
+                    } else {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, '', $staticBlockCodeString);
+                    }
+                } elseif ($staticBlockVariable == '{hashed_email}') {
+                    $objUser = CommonManager::getLoggedInUser($this->container);
+                    if ($objUser) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, sha1($objUser->getEmail()), $staticBlockCodeString);
+                    } else {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, '', $staticBlockCodeString);
+                    }
+                }
+            }
+        }
+
+        $staticBlockCodeString = trim($staticBlockCodeString);
+
+        return $staticBlockCodeString;
+    }
+
+    /**
      * Get user types.
      *
      * @return array

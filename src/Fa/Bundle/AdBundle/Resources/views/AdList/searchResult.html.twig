@@ -738,13 +738,6 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
     {% endif %}
 
     ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Search_Results', 'dimension4': '{{ dimension4 }}' {% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %} });
-
-    $( document ).ready(function() {
-        googletag.cmd.push(function () {
-            googletag.pubads().setTargeting('page_type', ['Search Results']).setTargeting('user_type', ['{{ user_type }}']).setTargeting('category', ['{{ targetCat }}']).setTargeting('class', ['{{ targetClass }}']).setTargeting('sub_class', ['{{ targetSubClass }}']).setTargeting('sub_sub_class', ['{{ targetSubSubClass }}']).setTargeting('town', ['{{ town }}']).setTargeting('london_areas', ['{{ (lvl==4 and town is defined)?town:'' }}']).setTargeting('county', ['{{ county }}']).setTargeting('country', ['UK']).setTargeting('edition_area', ['{{ ((locationGroup is defined and locationGroup.name is defined)?'Print - '~locationGroup.name:'Non Print')|raw }}']).setTargeting('search_keyword', ['{{ targetKeySrch }}']).setTargeting('adBlocker', false).setTargeting('user_logged', {{ _logged_in }});
-            googletag.enableServices();
-        });
-    });
 //]]>
 </script>
 {% endblock %}

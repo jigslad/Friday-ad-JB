@@ -186,17 +186,14 @@
     	{{ include('FaFrontendBundle::site-imgs.html.twig') }}
 	{% endif %}
 
-    <!-- START TPD HEAD CODE -->
-    <script async type="text/javascript" src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
-    <!-- END TPD HEAD CODE -->
-
-
     <script>
 
         var googletag = googletag || {};
         googletag.cmd = googletag.cmd || [];
 
     </script>
+
+    {{ include('FaFrontendBundle::gtmCode.html.twig') }}
 
     {% block blockGaCode%}
         {{ include('FaFrontendBundle::gaCode.html.twig') }}
@@ -216,17 +213,6 @@
             	ga('set', 'dimension9', 'logged in');
             {% endif %}
             ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Peripheral_Content'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %}});
-
-            {% set _logged_in = 'true' %}
-            {% if app.user.getId() is not defined or app.user.getId() is null %}
-                {% set _logged_in = 'false' %}
-            {% endif %}
-
-            {% if blockPageTitle  %}  {%  set pageType = blockPageTitle %} {% else %} {%  set pageType = 'Peripheral_Content' %} {% endif %}
-            googletag.cmd.push(function() {
-                googletag.pubads().setTargeting('page_type', '{{ pageType }}').setTargeting('adBlocker', false).setTargeting('user_logged', {{ _logged_in }});
-                googletag.enableServices();
-            });
         //]]>
         </script>
     {% endif %}
