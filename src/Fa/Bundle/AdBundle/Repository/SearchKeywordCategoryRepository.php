@@ -120,16 +120,15 @@ class SearchKeywordCategoryRepository extends EntityRepository
         foreach ($keywords as $keyword) {
             $keywordIds[]    = $keyword->getId();
             $keywordCategory = explode(' in ', $keyword->getKeyword());
-            $keywordText     = '<b>';
+            $keywordText     = '<a class="search-dropdown__link">';
             for ($i = 0; $i <= (count($keywordCategory) -2); $i++) {
                 $keywordText .= $keywordCategory[$i].' in ';
             }
             $keywordText = trim($keywordText, ' in ');
-            $keywordText .= '</b>';
-
             if (isset($keywordCategory[count($keywordCategory) -1]) && $keywordCategory[count($keywordCategory) -1]) {
                 $keywordText .= ' in '.$keywordCategory[count($keywordCategory) -1];
             }
+            $keywordText .= '</a>';
 
             $keywordsArray[] = array('id'=> ($keywordCategory[0].'--'.$keyword->getCategoryId()), 'position' => $position, 'text' => $keywordText);
             $position++;
@@ -149,7 +148,7 @@ class SearchKeywordCategoryRepository extends EntityRepository
             ->getQuery()->getResult();
 
             foreach ($keywords as $keyword) {
-                $keywordsArray[] = array('id'=> ($keyword->getKeyword().'--'), 'position' => $position, 'text' => '<b>'.$keyword->getKeyword().'</b>');
+                $keywordsArray[] = array('id'=> ($keyword->getKeyword().'--'), 'position' => $position, 'text' => '<a class="search-dropdown__link">'.$keyword->getKeyword().'</a>');
                 $position++;
             }
         }

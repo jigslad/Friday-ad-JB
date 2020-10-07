@@ -13,42 +13,11 @@
                         <a href="#" class="mega-search__popular--link">Web design</a>
                     </p>
                     <div class="mega-search__input">
-                        {{ form_widget(form.keywords, {'attr': {'class': 'mega-search__input--text', 'placeholder':'What are you looking for?'|trans({}, 'frontend-homepage') }}) }}
+                        {{ form_widget(form.keywords, {'attr': {'class': 'mega-search__input--text', 'placeholder':'What are you looking for?' }}) }}
                         <button class="mega-search__input--btn" id="searchGo" type="submit"></button>
                         <div class="close-icon" id="fa_top_search_keywords_close"></div>
                         <!-- Search dropdown Content starts-->
-                        <ul class="search-dropdown">
-                            <li class="search-dropdown__item">
-                                <a class="search-dropdown__link">Plumber
-                                    <span class="search-dropdown__link--color"></span>
-                                </a>
-                            </li>
-                            <li class="search-dropdown__item">
-                                <a class="search-dropdown__link">Plumber <span class="search-dropdown__link--colored"> plumbers and heating</span>
-                                </a>
-                            </li>
-                            <li class="search-dropdown__item">
-                                <a class="search-dropdown__link">Plumber
-                                    <span class="search-dropdown__link--colored">
-                    plumbers and heating</span>
-                                </a>
-                            </li>
-                            <li class="search-dropdown__item">
-                                <a class="search-dropdown__link">Plumber
-                                </a>
-                            </li>
-                            <li class="search-dropdown__item">
-                                <a class="search-dropdown__link">Plumber
-                                    <span class="search-dropdown__link--colored">
-                    plumbers and heating</span>
-                                </a>
-                            </li>
-                            <li class="search-dropdown__item">
-                                <a class="search-dropdown__link">Plumber
-                                </a>
-                            </li>
-                        </ul>
-
+                        <div id="fa_top_search_keywords_list"></div>
                         <!---Search dropdown Content end-->
                     </div>
                     <div class="mega-search__location">

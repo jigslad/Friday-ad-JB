@@ -4,6 +4,7 @@ $(function() {
     var cache = {};
     var userKeywordText = '';
     $("{{ field }}").autocomplete({
+        appendTo:'{{ field }}_list',
         minLength: 2,
         source: function( request, response ) {
             var term = request.term;
@@ -62,9 +63,10 @@ $(function() {
             return false;
         },
         open: function( event, ui ) {
-            $('.ui-autocomplete').css('width', $("{{ field }}").outerWidth()+'px');
             {% if dropdownCssClass is defined %}
                 $('.ui-autocomplete').addClass("{{ dropdownCssClass }}");
+                $('.ui-autocomplete').removeAttr("style");
+                $('.ui-autocomplete').show();
             {% endif %}
         },
         search: function( event, ui ) {
@@ -90,7 +92,7 @@ $(function() {
             // TODO: redirect to search result based on keyword and category selected
         },
     }).autocomplete('instance')._renderItem = function( ul, item ) {
-         return $("<li>").append(item.label).appendTo( ul );
+         return $("<li class='search-dropdown__item'>").append(item.label).appendTo( ul );
     };
 });
 
