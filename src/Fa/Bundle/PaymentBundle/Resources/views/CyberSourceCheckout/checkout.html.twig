@@ -157,10 +157,15 @@
     });
     
     $('#fa_payment_cyber_source_checkout_save').click(function(){
-        blockPage();
-        $(this).attr('disabled', true);
-        $('#cyber_source_form').submit();
-        return false;
+        if ($('#fa_payment_cyber_source_checkout_save').hasClass('disabled')) {
+            return false;
+        }
+        else {
+            blockPage();
+            $(this).attr('disabled', true);
+            $('#cyber_source_form').submit();
+            return false;
+        }
     });
     function getUserAddress()
     {
