@@ -2,6 +2,8 @@
 {% set currentRoute      = app.request.get('_route') %}
 {% if currentRoute is defined and currentRoute=='ad_detail_page' and adDetail is defined %}
     {% set paaBlock = staticPageRepository.getStaticBlockGTMDetailArray('google-ad-manager-code' , fetch_container_instance(), adDetail) %}
+{% elseif currentRoute is defined and (currentRoute=='listing_page' or currentRoute=='motor_listing_page') %}
+    {% set paaBlock = staticPageRepository.getStaticBlockGTMDetailArray('google-ad-manager-code' , fetch_container_instance(), null, facetResult) %}
 {% else %}
 	{% set paaBlock = staticPageRepository.getStaticBlockGTMDetailArray('google-ad-manager-code' , fetch_container_instance()) %}
 {% endif %}

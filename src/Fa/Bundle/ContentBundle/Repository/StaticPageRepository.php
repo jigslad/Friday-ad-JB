@@ -171,7 +171,7 @@ class StaticPageRepository extends EntityRepository
         return $staticBlockDetailArray;
     }
 
-    public function getStaticBlockGTMDetailArray($slug, $container = null, $ad = null)
+    public function getStaticBlockGTMDetailArray($slug, $container = null, $ad = null, $facetResult=null)
     {
         if ($container) {
             $culture     = CommonManager::getCurrentCulture($container);
@@ -206,6 +206,9 @@ class StaticPageRepository extends EntityRepository
             }
             if ($ad) {
                 $extraParams = array_merge($extraParams, array('ad'=>$ad));
+            }
+            if ($facetResult) {
+                $extraParams = array_merge($extraParams, array('facetResult'=>$facetResult));
             }
             $staticBlockDetailArray['description'] = $container->get('fa.banner.manager')->parseStaticBlockGTMCode($staticBlockDetailArray['description'], $extraParams);
         }
