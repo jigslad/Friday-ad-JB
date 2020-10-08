@@ -31,11 +31,6 @@
     {% else %}
     	ga('set', 'dimension9', 'logged in');
     {% endif %}
-
-    googletag.cmd.push(function() {
-        googletag.pubads().setTargeting('page_type', '410_page').setTargeting('adBlocker', false).setTargeting('user_logged', false);
-        googletag.enableServices();
-    });
     ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  '_410_page'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %}});
 //]]>
 </script>

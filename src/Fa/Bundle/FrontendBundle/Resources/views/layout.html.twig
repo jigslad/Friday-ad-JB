@@ -193,8 +193,16 @@
 
     </script>
 
-    {{ include('FaFrontendBundle::gtmCode.html.twig') }}
-
+    {% if otherblockPageTitle is defined %}
+        <script language="javascript" type="text/javascript">
+            googletag.cmd.push(function() {
+                googletag.pubads().setTargeting('page_type', '{{ otherblockPageTitle }}').setTargeting('adBlocker', false).setTargeting('user_logged', {% if (app.user.getId() is not defined or app.user.getId() is null) %} false {% else %}true{% endif %});
+                googletag.enableServices();
+            });
+        </script>
+    {% else %}
+        {{ include('FaFrontendBundle::gtmCode.html.twig') }}
+    {% endif %}
     {% block blockGaCode%}
         {{ include('FaFrontendBundle::gaCode.html.twig') }}
     {% endblock %}

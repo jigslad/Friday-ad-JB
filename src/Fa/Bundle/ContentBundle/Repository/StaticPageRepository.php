@@ -210,6 +210,7 @@ class StaticPageRepository extends EntityRepository
             if ($facetResult) {
                 $extraParams = array_merge($extraParams, array('facetResult'=>$facetResult));
             }
+
             $staticBlockDetailArray['description'] = $container->get('fa.banner.manager')->parseStaticBlockGTMCode($staticBlockDetailArray['description'], $extraParams);
         }
 
