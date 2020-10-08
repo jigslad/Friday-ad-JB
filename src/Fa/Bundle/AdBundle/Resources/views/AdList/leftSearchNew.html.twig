@@ -21,7 +21,10 @@
                             {% for key, category in leftFilters.categories %}
                                 {% if key == (maxDimensionCount) %}
                                     </ul>
-                                    <a href="javascript:void(0);" rel="nofollow" onclick="$('#categoryLHSFilters').foundation('reveal', 'open');">See more</a>
+                                    <div class="see-more clearfix">
+                                        <a href="javascript:void(0);" rel="nofollow" onclick="$('#categoryLHSFilters').foundation('reveal', 'open');">See more</a>
+                                        <a href="javascript:void(0)" rel="nofollow" class="right clear_filter" id="{{ key }}_clear">{{ 'Clear'|trans({}, 'frontend-left-search') }}</a>
+                                    </div>
                                     <div class="reveal-modal" id="categoryLHSFilters" data-reveal>
                                         <a class="close-reveal-modal">&times;</a>
                                         <div>
@@ -60,42 +63,72 @@
             </dd>
             {# Category search params - end #}
 
-            {# Town left filters #}
-            {% if leftFilters.locationFacets|length %}
-                <div class="towns-list">
-                    <label>{{'Nearby towns'|trans({}, 'frontend-left-search')}}:</label>
-                    <ul>
-                        {% for key, location in leftFilters.locationFacets %}
-                            {% if key == (maxDimensionCount) %}
-                                </ul>
-                                <a href="javascript:void(0);" rel="nofollow" onclick="$('#locationLHSFilters').foundation('reveal', 'open');">See more</a>
-                                <div class="reveal-modal" id="locationLHSFilters" data-reveal>
-                                    <a class="close-reveal-modal">&times;</a>
-                                    <div>
-                                        <h5 class="modal-title">Showing Category</h5>
-                                        <div class="modal-content dimension-modal">
-                                            <div class="dimension-content">
-                                                <div class="clearfix">
-                            {% endif %}
-                            {% if key >= maxDimensionCount and key is divisible by(4) %}
-                                <ul class="seller-link dimension-list">
-                            {% endif %}
-                            <li><a data-location-href="{{ location.slug }}">{{ location.name }} ({{ location.count }})</a></li>
-                            {% if key >= maxDimensionCount and (key + 1) is divisible by(4) %}
-                                </ul>
-                            {% endif %}
-                            {% if key > maxDimensionCount and key == (leftFilters.locationFacets|length - 1) %}
+            <dd class="accordion-navigation keep-shown">
+                <a href="#panel3a" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Distance I\'m happy to travel'|trans({}, 'frontend-left-search')}}</h5></a>
+                <div class="content active clearfix">
+                    <ul class="distance-search clearfix" id="distance-left-search" style="display:none">
+                        <li class="col white-select">
+                            {# {{ form_widget(form.default_distance) }}
+                            {{ form_widget(form.item__distance, {'attr': {'class': 'fa-select-white'}}) }} #}
+                        </li>
+                        <li>
+                            <label>{{ 'from'|trans({}, 'frontend')}}</label>
+                        </li>
+                    </ul>
+
+                    <ul class="distance-search clearfix">
+                        <li class="col">
+                            <div>
+                                <input type="text" class="form-control white-field ui-autocomplete-input" id="fa_left_search_item__location_autocomplete" name="fa_left_search[item__location_autocomplete]" required="required" value="Brighton" autocomplete="off" placeholder="Type postal code or town">
+                                <a href="javascript:void(0);" rel="nofollow" id="fa_left_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                            </div>
+                        </li>
+                        <li>
+                            <button class="budget-go-btn" type="button" id="left_search_location_btn"></button>
+                        </li>
+                    </ul>
+                    <ul class="distance-search distance-left-search clearfix">
+                        <li id="distance-error-placeholder"><small class="error" style="display:none"></small></li>
+                    </ul>
+                    {# Town left filters #}
+                    {% if leftFilters.locationFacets|length %}
+                        <div class="towns-list">
+                            <label>{{'Nearby towns'|trans({}, 'frontend-left-search')}}:</label>
+                            <ul>
+                                {% for key, location in leftFilters.locationFacets %}
+                                    {% if key == (maxDimensionCount) %}
+                                        </ul>
+                                        <a href="javascript:void(0);" rel="nofollow" onclick="$('#locationLHSFilters').foundation('reveal', 'open');">See more</a>
+                            <a href="javascript:void(0)" rel="nofollow" class="right clear_filter" id="{{ key }}_clear">{{ 'Clear'|trans({}, 'frontend-left-search') }}</a>
+                                        <div class="reveal-modal" id="locationLHSFilters" data-reveal>
+                                            <a class="close-reveal-modal">&times;</a>
+                                            <div>
+                                                <h5 class="modal-title">Showing Category</h5>
+                                                <div class="modal-content dimension-modal">
+                                                    <div class="dimension-content">
+                                                        <div class="clearfix">
+                                    {% endif %}
+                                    {% if key >= maxDimensionCount and key is divisible by(4) %}
+                                        <ul class="seller-link dimension-list">
+                                    {% endif %}
+                                    <li><a data-location-href="{{ location.slug }}">{{ location.name }} ({{ location.count }})</a></li>
+                                    {% if key >= maxDimensionCount and (key + 1) is divisible by(4) %}
+                                        </ul>
+                                    {% endif %}
+                                    {% if key > maxDimensionCount and key == (leftFilters.locationFacets|length - 1) %}
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </ul>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    {# Town left filters - end #}
                 </div>
-            {% endif %}
-            {# Town left filters - end #}
+            </dd>
 
             {# Static search filters - start #}
             <dd class="accordion-navigation keep-shown">
@@ -123,6 +156,9 @@
                         {% for user_type in leftFilters.user_types %}
                             <li><a {% if entity.selected is defined and entity.selected == true %} class="bold" {% endif %}  data-href="{{ user_type.url_param }}" rel="nofollow">{{ user_type.title }} ({{ user_type.count }})</a></li>
                         {% endfor %}
+                        <div class="see-more clearfix">
+                            <a href="javascript:void(0)" rel="nofollow" class="right clear_filter" id="user_type_clear">{{ 'Clear'|trans({}, 'frontend-left-search') }}</a>
+                        </div>
                     </ul>
                 </div>
             </dd>
@@ -163,6 +199,15 @@
                 </div>
             </dd>
             {# Static search filters - end #}
+
+            <div class="reset-search clearfix">
+                {% if isShopPage is defined and isShopPage %}
+                    {% set profileAdsUrl = container.get('fa_ad.manager.ad_routing').getProfilePageAdsUrl(searchParams['item__user_id']) %}
+                    <a href="{{ profileAdsUrl }}" title="{{ 'Reset search'|trans({}, 'frontend-left-search') }}">{{ 'Reset search'|trans({}, 'frontend-left-search') }}</a>
+                {% else %}
+                    <a href="javascript:void(0)" id="reset_search" title="{{ 'Reset search'|trans({}, 'frontend-left-search') }}">{{ 'Reset search'|trans({}, 'frontend-left-search') }}</a>
+                {% endif %}
+            </div>
     </dl>
     </div>
 {% endif %}

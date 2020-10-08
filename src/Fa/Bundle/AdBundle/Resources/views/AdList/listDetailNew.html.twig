@@ -67,11 +67,11 @@
                     <div class="list-hr-ago">
                         {{ ad.last_updated|time_ago_in_words }}
                     </div>
+                    {% if ad.affiliate_ad %}
+                        <div class="fad-shop-icon hide-for-small-only">AD SHOP</div>
+                    {% endif %}
                 </div>
             </div>
-            {% if ad.affiliate_ad %}
-                <div class="fad-shop-icon hide-for-small-only">AD SHOP</div>
-            {% endif %}
         </div>
     </div>
     {% if ad.affiliate_ad %}
