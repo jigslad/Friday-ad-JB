@@ -464,6 +464,24 @@ class BannerManager
             $locationArray = json_decode($this->container->get('request_stack')->getCurrentRequest()->cookies->get('location'), true);
         }
 
+        $keywordCategories = array(); $keywordCat = null;
+        if(($currentRoute && ($currentRoute ==  'listing_page'|| $currentRoute ==  'motor_listing_page')) && ($extraParams && isset($extraParams['facetResult']))) {
+            $mainCategories = $this->em->getRepository('FaEntityBundle:Category')->getCategoryByLevelArray(1, $this->container);
+            foreach ($mainCategories as $categoryId=>$categoryName) {
+                $adCount = 0;
+                $nestedChildrenCategories = $this->em->getRepository('FaEntityBundle:Category')->getNestedLeafChildrenIdsByCategoryId($categoryId, $this->container);
+                foreach ($nestedChildrenCategories as $nestedCategoryId) {
+                    if (isset($extraParams['facetResult']['a_category_id_i'][$nestedCategoryId])) {
+                        $adCount =  $adCount + $extraParams['facetResult']['a_category_id_i'][$nestedCategoryId];
+                    }
+                }
+                if($adCount>0) {
+                    array_push($keywordCategories, $categoryName);
+                }
+            }
+            if(!empty($keywordCategories)) { $keywordCat = implode(",",$keywordCategories); }
+        }
+
         preg_match_all('/\{.*?\}/', $staticBlockCodeString, $staticBlockVariables);
         $categoryPath = $locDet = array(); $rootCategoryId = $town = $townLvl = $county = $printEditionName = '';
         $contactMethod = $srchKeyword = $adDet_adId = $selcountry = $adlocation = '';
@@ -561,12 +579,12 @@ class BannerManager
                     } elseif ($currentRoute && ($currentRoute ==  'ad_detail_page')) {
                         $userType = 'Others';
                         if ($extraParams && count($extraParams) > 0 && isset($extraParams['ad'])) {
-                            if (isset($extraParams['user']) && isset($extraParams['user']['role_id'])) {
+                            if (isset($extraParams['ad']['user']) && isset($extraParams['ad']['user']['role_id'])) {
                                 $userType = 'Private';
-                                if($extraParams['user']['role_id']== RoleRepository::ROLE_BUSINESS_SELLER_ID || $extraParams['user']['role_id']== RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
+                                if($extraParams['ad']['user']['role_id']== RoleRepository::ROLE_BUSINESS_SELLER_ID || $extraParams['ad']['user']['role_id']== RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
                                     $userType = 'Dealer';
-                                    if($extraParams['user']['business_category_id']==CategoryRepository::FOR_SALE_ID) { $userType = 'Shop'; }
-                                    elseif($extraParams['user']['business_category_id']==CategoryRepository::JOBS_ID) { $userType = 'Recruiter'; }
+                                    if($extraParams['ad']['user']['business_category_id']==CategoryRepository::FOR_SALE_ID) { $userType = 'Shop'; }
+                                    elseif($extraParams['ad']['user']['business_category_id']==CategoryRepository::JOBS_ID) { $userType = 'Recruiter'; }
                                 }
                             }
                         }
@@ -580,6 +598,8 @@ class BannerManager
                     if ($categoryPath && isset($categoryPath[0]) && $categoryPath[0]['slug'] != '') {
                         $categorySlug = $categoryPath[0]['slug'];
                         $staticBlockCodeString = str_replace($staticBlockVariable, $categorySlug, $staticBlockCodeString);
+                    } elseif($keywordCat) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, $keywordCat, $staticBlockCodeString);
                     } else {
                         $staticBlockCodeString = str_replace(".setTargeting('category',['{category}'])", '', $staticBlockCodeString);
                     }
