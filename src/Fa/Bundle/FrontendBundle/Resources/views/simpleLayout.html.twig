@@ -64,16 +64,14 @@
         <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}?v=3000"/>
     {% endstylesheets %}#}
 
-    <!-- START TPD HEAD CODE -->
-    <script async type="text/javascript" src="https://cdn.tpdads.com/configs/dogsandpuppies.js"></script>
-    <script async type="text/javascript" src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
-    <!-- END TPD HEAD CODE -->
     <script>
 
         var googletag = googletag || {};
         googletag.cmd = googletag.cmd || [];
 
     </script>
+
+    {{ include('FaFrontendBundle::gtmCode.html.twig') }}
 
     {% block blockGaCode %}
         {{ include('FaFrontendBundle::gaCode.html.twig') }}
@@ -90,19 +88,6 @@
             	ga('set', 'dimension9', 'logged in');
             {% endif %}
             ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Peripheral_Content'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %}});
-
-            {% set _logged_in = 'true' %}
-            {% if app.user.getId() is not defined or app.user.getId() is null %}
-            {% set _logged_in = 'false' %}
-            {% endif %}
-
-
-            googletag.cmd.push(function() {
-                googletag.pubads().setTargeting('page_type', 'Peripheral_Content');
-                googletag.pubads().setTargeting('adBlocker', false);
-                googletag.pubads().setTargeting('user_logged', {{ _logged_in }});
-            });
-
          //]]>
         </script>
     {% endif %}
@@ -113,8 +98,6 @@
                 googletag.pubads().setTargeting(key, value);
             });
         });
-
-
     </script>
     
     {% if mobileDetectManager.isMobile() or mobileDetectManager.isTablet() %}
