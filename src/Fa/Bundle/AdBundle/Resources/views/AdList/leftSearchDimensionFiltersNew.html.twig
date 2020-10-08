@@ -13,7 +13,10 @@
 
                 {% if key == (maxDimensionCount) %}
                     </ul>
-                    <a href="javascript:void(0);" rel="nofollow" onclick="$('#{{ dimension_id }}LHSFilters').foundation('reveal', 'open');">See more</a>
+                    <div class="see-more clearfix">
+                        <a href="javascript:void(0);" rel="nofollow" onclick="$('#{{ dimension_id }}LHSFilters').foundation('reveal', 'open');">See more</a>
+                        <a href="javascript:void(0)" rel="nofollow" class="right clear_filter" id="{{ key }}_clear">{{ 'Clear'|trans({}, 'frontend-left-search') }}</a>
+                    </div>
                     <div class="reveal-modal" id="{{ dimension_id }}LHSFilters" data-reveal>
                         <a class="close-reveal-modal">&times;</a>
                         <div>
@@ -60,7 +63,10 @@
             {% for id, entity in entities %}
             {% if key == (maxDimensionCount) %}
                 </ul>
-                <a href="javascript:void(0);" rel="nofollow" onclick="$('#{{ dimension_id }}LHSFilters').foundation('reveal', 'open');">See more</a>
+                <div class="see-more clearfix">
+                    <a href="javascript:void(0);" rel="nofollow" onclick="$('#{{ dimension_id }}LHSFilters').foundation('reveal', 'open');">See more</a>
+                    <a href="javascript:void(0)" rel="nofollow" class="right clear_filter" id="{{ key }}_clear">{{ 'Clear'|trans({}, 'frontend-left-search') }}</a>
+                </div>
                 <div class="reveal-modal" id="{{ dimension_id }}LHSFilters" data-reveal>
                     <a class="close-reveal-modal">&times;</a>
                     <div>
