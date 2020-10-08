@@ -60,14 +60,14 @@
         </div>
     </div>
     {# FFR-4030 starts Here #}
-    <div class="covid-19-block bottom-border">
+    {#<div class="covid-19-block bottom-border">
         <div class="row">
             <div class="columns text-center">
                 <div class="small-24 medium-15 large-14 columns align-text">
-{#                    <div class="head">Covid-19. <span class="ask-for-offer-help">Ask for & Offer Help in our <a href="https://www.friday-ad.co.uk/uk/community/coronavirus-support/" class="ga-covid-19-support-link-homepage">Coronavirus Support section</a></span></div>#}
+#}{#                    <div class="head">Covid-19. <span class="ask-for-offer-help">Ask for & Offer Help in our <a href="https://www.friday-ad.co.uk/uk/community/coronavirus-support/" class="ga-covid-19-support-link-homepage">Coronavirus Support section</a></span></div>#}{#
                     <div class="head">NEW mobile app available now</div>
                 </div>
-{#                <div class="medium-7 large-6 columns align-text mt-space"><a class="button place-free-ad-btn thin-btn ga-covid-19-paa-link-homepage" href="https://www.friday-ad.co.uk/paa/first_step?categoryName=Coronavirus%20Support">Place Help Ad</a></div>#}
+#}{#                <div class="medium-7 large-6 columns align-text mt-space"><a class="button place-free-ad-btn thin-btn ga-covid-19-paa-link-homepage" href="https://www.friday-ad.co.uk/paa/first_step?categoryName=Coronavirus%20Support">Place Help Ad</a></div>#}{#
                 <div class="small-24 medium-9 large-10 columns mt-space">
                     <a class="button place-free-ad-btn thin-btn ga-covid-19-paa-link-homepage" href="http://onelink.to/rpu3jn">
                         Get the App
@@ -75,11 +75,13 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>#}
     {# FFR-4030 ends Here #}
-    <div class="what-u-discover">
+
+    <!--Category Navigation code Starts-->
+    <div class="category-nav">
         <div class="row">
-            <div class="columns">
+            <div class="columns container">
                 {% set forSaleId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
                 {% set motorsId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}
                 {% set jobsId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
@@ -92,36 +94,86 @@
                 {% if cookieLocationDetails is defined and cookieLocationDetails is not null and cookieLocationDetails.location is defined and cookieLocationDetails.location %}
                     {% set locationId = cookieLocationDetails.location %}
                 {% endif %}
-                {% cache 'home|page|'~locationId~'front/home_page_discover' 1800 %}
-                <div class="discover-categories">
-                    {% set linkParams = { 'item__location': locationId, 'item__category_id': forSaleId } %}
-                    <a href="{{ container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParams) }}" class="discover-forsale">{{'For Sale'|trans({}, 'frontend-homepage')}}</a>
-
-                    {% set linkParams = { 'item__location': locationId, 'item__category_id': motorsId } %}
-                    <a href="{{ container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParams) }}" class="discover-motors">{{'Motors'|trans({}, 'frontend-homepage')}}</a>
-
-                    {% set linkParams = { 'item__location': locationId, 'item__category_id': jobsId } %}
-                    <a href="{{ container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParams) }}" class="discover-jobs">{{'Jobs'|trans({}, 'frontend-homepage')}}</a>
-
-                    {% set linkParams = { 'item__location': locationId, 'item__category_id': servicesId } %}
-                    <a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}" class="discover-services">{{'Services'|trans({}, 'frontend-homepage')}}</a>
-
-                    {% set linkParams = { 'item__location': locationId, 'item__category_id': propertyId } %}
-                    <a href="{{ container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParams) }}" class="discover-property">{{'Property'|trans({}, 'frontend-homepage')}}</a>
-
-                    {% set linkParams = { 'item__location': locationId, 'item__category_id': animalsId } %}
-                    <a href="{{ container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParams) }}" class="discover-animals">{{'Animals'|trans({}, 'frontend-homepage')}}</a>
-
-                    {% set linkParams = { 'item__location': locationId, 'item__category_id': communityId } %}
-                    <a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}" class="discover-community">{{'Community'|trans({}, 'frontend-homepage')}}</a>
-                    
-                    {% set linkParams = { 'item__location': locationId, 'item__category_id': adultId } %}
-                    <a href="{{ path('fa_new_adult_homepage') }}" class="discover-adult">{{'Adult'|trans({}, 'frontend-homepage')}}</a>
-                </div>
-                {% endcache %}
+{#                {% cache 'home|page|'~locationId~'front/home_page_discover' 1800 %}#}
+                    <div class="category-nav__block owl-carousel" id="categoryNavSlider">
+                        <div class="category-nav__item">
+                            {% set linkParams = { 'item__location': locationId, 'item__category_id': servicesId } %}
+                            <a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}">
+                                <div class="category-nav__item--icon services"></div>
+                                <span class="category-nav__item--title">
+                                    {{'Services'|trans({}, 'frontend-homepage')}}
+                                </span>
+                            </a>
+                        </div>
+                        <div class="category-nav__item">
+                            {% set linkParams = { 'item__location': locationId, 'item__category_id': forSaleId } %}
+                            <a href="{{ container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParams) }}" >
+                                <div class="category-nav__item--icon forsale"></div>
+                                <span class="category-nav__item--title">
+                                    {{'For Sale'|trans({}, 'frontend-homepage')}}
+                                </span>
+                            </a>
+                        </div>
+                        <div class="category-nav__item">
+                            {% set linkParams = { 'item__location': locationId, 'item__category_id': motorsId } %}
+                            <a href="{{ container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParams) }}" >
+                                <div class="category-nav__item--icon motors"></div>
+                                <span class="category-nav__item--title">
+                                    {{'Motors'|trans({}, 'frontend-homepage')}}
+                                </span>
+                            </a>
+                        </div>
+                        <div class="category-nav__item">
+                            {% set linkParams = { 'item__location': locationId, 'item__category_id': jobsId } %}
+                            <a href="{{ container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParams) }}" >
+                                <div class="category-nav__item--icon  jobs"></div>
+                                <span class="category-nav__item--title">
+                                    {{'Jobs'|trans({}, 'frontend-homepage')}}
+                                </span>
+                            </a>
+                        </div>
+                        <div class="category-nav__item">
+                            {% set linkParams = { 'item__location': locationId, 'item__category_id': propertyId } %}
+                            <a href="{{ container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParams) }}" >
+                                <div class="category-nav__item--icon property"></div>
+                                <span class="category-nav__item--title">
+                                    {{'Property'|trans({}, 'frontend-homepage')}}
+                                </span>
+                            </a>
+                        </div>
+                        <div class="category-nav__item">
+                            {% set linkParams = { 'item__location': locationId, 'item__category_id': animalsId } %}
+                            <a href="{{ container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParams) }}" >
+                                <div class="category-nav__item--icon animals"></div>
+                                <span class="category-nav__item--title">
+                                    {{'Animals'|trans({}, 'frontend-homepage')}}
+                                </span>
+                            </a>
+                        </div>
+                        <div class="category-nav__item">
+                            {% set linkParams = { 'item__location': locationId, 'item__category_id': communityId } %}
+                            <a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}" >
+                                <div class="category-nav__item--icon community"></div>
+                                <span class="category-nav__item--title">
+                                    {{'Community'|trans({}, 'frontend-homepage')}}
+                                </span>
+                            </a>
+                        </div>
+                        <div class="category-nav__item">
+                            {% set linkParams = { 'item__location': locationId, 'item__category_id': adultId } %}
+                            <a href="{{ path('fa_new_adult_homepage') }}" >
+                                <div class="category-nav__item--icon adult"></div>
+                                <span class="category-nav__item--title">
+                                    {{'Adult'|trans({}, 'frontend-homepage')}}
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+{#                {% endcache %}#}
             </div>
         </div>
     </div>
+    <!--Category Navigation code end-->
 
     {% if recommendedAds|length >= 3 %}
         <div class="homepage-row">
@@ -273,12 +325,11 @@
 
 {% block scriptbottom %}
     {% javascripts filter='uglifyjs2' output='bundles/js/compiled/home.js'
-        'bundles/facore/js/owl.carousel.min.js'
         'bundles/fafrontend/js/parallax.min.js'
     %}
     <script defer src="{{ static_asset_url(asset_url) }}"></script>
     {% endjavascripts %}
-    
+
     {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
     {% if mobileDetectManager.is('IE') %}
         {% javascripts filter='uglifyjs2' output='bundles/js/compiled/parallaxFix.js'
@@ -312,7 +363,7 @@
     var headerParallax;
     $(document).ready(function() {
         $('div.homepage-row:even').addClass('white-bg');
-        getHeaderImage();
+        // getHeaderImage();
 
         $('#s2id_fa_top_search_item__category_id').attr('placeholder', 'All');
         
@@ -435,6 +486,34 @@
         });
     }
     //]]>
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#categoryNavSlider').owlCarousel({
+                autoplay: false,
+                lazyLoad: true,
+                loop: false,
+                margin: 0,
+                responsiveClass: true,
+                autoHeight: true,
+                autoplayTimeout: 4000,
+                smartSpeed: 400,
+                // stagePadding: 30,
+                nav: false,
+                dots: false,
+                navText: ['<span aria-hidden="true"><img src="../public/images/back.svg"></span>', '<span aria-hidden="true"><img src="../public/images/next.svg"></span>'],
+                responsive: {
+                    0: {
+                        items: 4.5,
+                        nav: true,
+                    },
+                    768: {
+                        items: 8,
+                        mouseDrag: false,
+                    }
+                }
+            });
+        });
     </script>
 {% endblock %}
 {% block dimension2 %}
