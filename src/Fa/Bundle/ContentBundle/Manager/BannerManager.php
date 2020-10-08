@@ -479,7 +479,7 @@ class BannerManager
                     array_push($keywordCategories, $categoryName);
                 }
             }
-            if(!empty($keywordCategories)) { $keywordCat = implode(",",$keywordCategories); }
+            if(!empty($keywordCategories)) { $keywordCat = implode("','",$keywordCategories); }
         }
 
         preg_match_all('/\{.*?\}/', $staticBlockCodeString, $staticBlockVariables);
