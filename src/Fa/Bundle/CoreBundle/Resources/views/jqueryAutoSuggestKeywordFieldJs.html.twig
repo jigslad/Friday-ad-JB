@@ -65,8 +65,8 @@ $(function() {
         open: function( event, ui ) {
             {% if dropdownCssClass is defined %}
                 $("{{ field }}_list ul").addClass("{{ dropdownCssClass }}");
-                $('.ui-autocomplete').removeAttr("style");
-                $('.ui-autocomplete').show();
+                $("{{ field }}_list ul").removeAttr("style");
+                $("{{ field }}_list ul").show();
             {% endif %}
         },
         search: function( event, ui ) {
