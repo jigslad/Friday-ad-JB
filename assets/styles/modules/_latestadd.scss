@@ -66,10 +66,10 @@
         justify-content: left;
         overflow: auto;
         white-space: nowrap;
+        scrollbar-width: none;
         &::-webkit-scrollbar {
             display: none;
             -ms-overflow-style: none;
-            scrollbar-width: none;
         }
         @include media-breakpoint-up(md) {
             overflow: unset;
@@ -259,8 +259,8 @@
             cursor: pointer;
             width: 342px;
             background: linear-gradient(135deg,
-            #A8DC28 0%,
-            #79D378 100%);
+                    #A8DC28 0%,
+                    #79D378 100%);
             border: 1px solid #91d851;
             color: #fff;
             padding: 7px 0;

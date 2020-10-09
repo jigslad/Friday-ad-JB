@@ -81,7 +81,7 @@
     <!--Category Navigation code Starts-->
     <div class="category-nav">
         <div class="row">
-            <div class="columns container">
+            <div class="container">
                 {% set forSaleId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
                 {% set motorsId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}
                 {% set jobsId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
@@ -175,6 +175,2042 @@
     </div>
     <!--Category Navigation code end-->
 
+    <!--Services code Starts-->
+    <div class="fad-services">
+        <div class="row">
+            <div class="container">
+                <div class="fad-services__title">Explore Services around you
+                </div>
+                <div class="fad-services__wrapper">
+                    <div class="fad-services__block">
+                        <a class="fad-services__block--link" href="https://www.friday-ad.co.uk/uk/services/pet-farming-equestrian-services/pet-services/pet-walking-sitting/" title="">
+                            <img src="public/images/deskto-tablet/DT-Pet-Walking-Sitting.png" alt="Pet Walking and Sitting">
+                            <div class="fad-services__content overlay">
+                                <h5 class="fad-services__text">Pet Walking and Sitting</h5>
+                            </div>
+
+                        </a>
+                    </div>
+                    <div class="fad-services__block">
+                        <div class="fad-services__block--inner">
+                            <a class="fad-services__block--link" href="https://www.friday-ad.co.uk/uk/services/health-beauty-services/beauty-services/">
+                                <img src="public/images/deskto-tablet/DT-Beauty-Services.png" alt="Beauty Services">
+                                <div class="fad-services__content overlay">
+                                    <h5 class="fad-services__text">Beauty Services</h5>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="fad-services__block--inner">
+                            <a href="https://www.friday-ad.co.uk/uk/services/celebrations-special-occasions/photographers/">
+                                <img src="public/images/deskto-tablet/Dt-Photographers.png" alt="Photographers">
+                                <div class="fad-services__content overlay">
+                                    <h5 class="fad-services__text">Photographers</h5>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="fad-services__block">
+                        <a class="fad-services__block--link" href="https://www.friday-ad.co.uk/uk/services/health-beauty-services/health-services/">
+                            <img src="public/images/deskto-tablet/DT-Health-Services.png" alt="Health Services">
+                            <div class="fad-services__content overlay">
+                                <h5 class="fad-services__text">Health Services</h5>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="fad-services__block">
+                        <div class="fad-services__block--inner">
+                            <a class="fad-services__block--link" href="https://www.friday-ad.co.uk/uk/services/celebrations-special-occasions/hall-venue-hire/">
+                                <img src="public/images/deskto-tablet/DT-Hall-VenueHire.png" alt="Hall and Venue Hire">
+                                <div class="fad-services__content overlay">
+                                    <h5 class="fad-services__text">Hall and Venue Hire</h5>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="fad-services__block--inner">
+                            <p>Are you a business?</p>
+                            <a href="{{ path('ad_post_first_step') }}?categoryName=Services" class="fad-services__btn btn-rounded">Place a free ad now</a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!---mobile design-->
+                <div class="fad-services-mobile-wraper">
+                    <div class="fad-services__mobile owl-carousel"  id="servicesSlider">
+                        <div class="fad-services__block">
+                            <a href="https://www.friday-ad.co.uk/uk/services/pet-farming-equestrian-services/pet-services/pet-walking-sitting/" title="">
+                                <img src="public/images/mobile/MB-Pet-Walking-Sitting.png" alt="Pet Walking and Sitting">
+                                <div class="fad-services__content overlay">
+                                    <h5 class="fad-services__text">Pet Walking and Sitting</h5>
+                                </div>
+
+                            </a>
+                        </div>
+                        <div class="fad-services__block">
+                            <a href="https://www.friday-ad.co.uk/uk/services/health-beauty-services/beauty-services/">
+                                <img src="public/images/mobile/MB-Beauty-Services.png" alt="Beauty Services">
+                                <div class="fad-services__content overlay">
+                                    <h5 class="fad-services__text">Beauty Services</h5>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="fad-services__block">
+                            <a href="https://www.friday-ad.co.uk/uk/services/celebrations-special-occasions/photographers/">
+                                <img src="public/images/mobile/MB-Photographers.png" alt="Photographers">
+                                <div class="fad-services__content overlay">
+                                    <h5 class="fad-services__text">Photographers</h5>
+                                </div>
+                            </a>
+
+                        </div>
+                        <div class="fad-services__block">
+                            <a href="https://www.friday-ad.co.uk/uk/services/health-beauty-services/health-services/">
+                                <img src="public/images/mobile/MB-Health-Services.png" alt="Health Services">
+                                <div class="fad-services__content overlay">
+                                    <h5 class="fad-services__text">Health Services</h5>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="fad-services__block">
+                            <a href="https://www.friday-ad.co.uk/uk/services/celebrations-special-occasions/hall-venue-hire/">
+                                <img src="public/images/mobile/MB-Hall-Venue-Hire.png" alt="Hall and Venue Hire">
+                                <div class="fad-services__content overlay">
+                                    <h5 class="fad-services__text">Hall and Venue Hire</h5>
+                                </div>
+                            </a>
+                        </div>
+
+                    </div>
+                    <div class="fad-services__block--inner">
+                        <p>Are you a business?</p>
+                        <a href="{{ path('ad_post_first_step') }}?categoryName=Services" class="fad-services__btn">Place a free ad now</a>
+                    </div>
+                </div>
+                <!--mobile design end-->
+            </div>
+        </div>
+    </div>
+    <!--Services code end-->
+
+    <!--TrustBox code Starts-->
+    <div class="reviews" id="reviews">
+        <div class="row">
+            <div class="container">
+                <div class="reviews__block">
+                    <!-- TrustBox widget - Micro Combo -->
+                    <div class="trustpilot-widget" data-locale="en-GB" data-template-id="5419b6ffb0d04a076446a9af" data-businessunit-id="46e343710000640005014c08" data-style-height="40px" data-style-width="100%" data-theme="dark">
+                        <a href="https://uk.trustpilot.com/review/www.friday-ad.co.uk" target="_blank" rel="noopener">Trustpilot</a>
+                    </div>
+                    <!-- End TrustBox widget -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--TrustBox code end-->
+
+    <!--Category Navigation code Starts-->
+    <div class="latest-ads">
+        <div class="row">
+            <div class="columns container">
+                <div class="latest-ads__header">
+                    <div class="latest-ads__title">Today’s picks in
+                        <span>Location</span>
+                    </div>
+                </div>
+                <div class="latest-ads__tabs">
+                    <ul id="latest-tabs-nav" class="latest-ads__nav">
+                        <li class="latest-ads__nav--item">
+                            <a href="#tab-categories" class="latest-ads__nav--link">All categories</a>
+                        </li>
+                        <li class="latest-ads__nav--item">
+                            <a href="#tab-services" class="latest-ads__nav--link">Services
+                            </a>
+                        </li>
+                        <li class="latest-ads__nav--item">
+                            <a href="#tab-sale" class="latest-ads__nav--link">For sale
+                            </a>
+                        </li>
+                        <li class="latest-ads__nav--item">
+                            <a href="#tab-motors" class="latest-ads__nav--link">Motors</a>
+                        </li>
+                        <li class="latest-ads__nav--item">
+                            <a href="#tab-animals" class="latest-ads__nav--link">Animals</a>
+                        </li>
+                        <li class="latest-ads__nav--item">
+                            <a href="#tab-community" class="latest-ads__nav--link">Community</a>
+                        </li>
+                        <li class="latest-ads__nav--item">
+                            <a href="#tab-jobs" class="latest-ads__nav--link">Jobs</a>
+                        </li>
+                        <li class="latest-ads__nav--item">
+                            <a href="#tab-property" class="latest-ads__nav--link">Property</a>
+                        </li>
+                    </ul>
+                    <!-- END tabs-nav -->
+                    <div id="tabs-content" class="latest-ads-tabs">
+                        <div id="tab-categories" class="latest-ads__content">
+                            <div class="latest-ads__cards-wrapper">
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="" class="img-hover">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+
+                                            <span class="latest-ads__card--price">
+											£290
+
+										</span>
+                                        </div>
+                                    </div>
+
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+
+                                            <span class="latest-ads__card--price">
+											£290
+
+										</span>
+                                        </div>
+                                    </div>
+
+
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+
+                                            <span class="latest-ads__card--price">
+											£290
+
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="" class="img-hover">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+
+
+                            </div>
+                        </div>
+                        <div id="tab-services" class="latest-ads__content">
+                            <div class="latest-ads__cards-wrapper">
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="" class="img-hover">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+
+                                            <span class="latest-ads__card--price">
+											£290
+
+										</span>
+                                        </div>
+                                    </div>
+
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+
+                                            <span class="latest-ads__card--price">
+											£290
+
+										</span>
+                                        </div>
+                                    </div>
+
+
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+
+                                            <span class="latest-ads__card--price">
+											£290
+
+										</span>
+                                        </div>
+                                    </div>
+
+
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="" class="img-hover">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+
+
+                            </div>
+                        </div>
+                        <div id="tab-sale" class="latest-ads__content">
+                            <div class="latest-ads__cards-wrapper">
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="" class="img-hover">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+
+                                            <span class="latest-ads__card--price">
+											£290
+
+										</span>
+                                        </div>
+                                    </div>
+
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+
+                                            <span class="latest-ads__card--price">
+											£290
+
+										</span>
+                                        </div>
+                                    </div>
+
+
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+
+                                            <span class="latest-ads__card--price">
+											£290
+
+										</span>
+                                        </div>
+                                    </div>
+
+
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="" class="img-hover">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+
+
+                            </div>
+                        </div>
+                        <div id="tab-motors" class="latest-ads__content">
+                            <div class="latest-ads__cards-wrapper">
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="" class="img-hover">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+
+                                            <span class="latest-ads__card--price">
+											£290
+
+										</span>
+                                        </div>
+                                    </div>
+
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+
+                                            <span class="latest-ads__card--price">
+											£290
+
+										</span>
+                                        </div>
+                                    </div>
+
+
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+
+                                            <span class="latest-ads__card--price">
+											£290
+
+										</span>
+                                        </div>
+                                    </div>
+
+
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="" class="img-hover">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+
+
+                            </div>
+                        </div>
+                        <div id="tab-animals" class="latest-ads__content">
+                            <div class="latest-ads__cards-wrapper">
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="" class="img-hover">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+
+                                            <span class="latest-ads__card--price">
+											£290
+
+										</span>
+                                        </div>
+                                    </div>
+
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+
+                                            <span class="latest-ads__card--price">
+											£290
+
+										</span>
+                                        </div>
+                                    </div>
+
+
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+
+                                            <span class="latest-ads__card--price">
+											£290
+
+										</span>
+                                        </div>
+                                    </div>
+
+
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="" class="img-hover">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+
+
+                            </div>
+                        </div>
+                        <div id="tab-community" class="latest-ads__content">
+                            <div class="latest-ads__cards-wrapper">
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="" class="img-hover">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+
+                                            <span class="latest-ads__card--price">
+											£290
+
+										</span>
+                                        </div>
+                                    </div>
+
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+
+                                            <span class="latest-ads__card--price">
+											£290
+
+										</span>
+                                        </div>
+                                    </div>
+
+
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+
+                                            <span class="latest-ads__card--price">
+											£290
+
+										</span>
+                                        </div>
+                                    </div>
+
+
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="" class="img-hover">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+
+
+                            </div>
+                        </div>
+                        <div id="tab-jobs" class="latest-ads__content">
+                            <div class="latest-ads__cards-wrapper">
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="" class="img-hover">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+
+                                            <span class="latest-ads__card--price">
+											£290
+
+										</span>
+                                        </div>
+                                    </div>
+
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+
+                                            <span class="latest-ads__card--price">
+											£290
+
+										</span>
+                                        </div>
+                                    </div>
+
+
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+
+                                            <span class="latest-ads__card--price">
+											£290
+
+										</span>
+                                        </div>
+                                    </div>
+
+
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="" class="img-hover">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+
+
+                            </div>
+                        </div>
+                        <div id="tab-property" class="latest-ads__content">
+                            <div class="latest-ads__cards-wrapper">
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="" class="img-hover">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+
+                                            <span class="latest-ads__card--price">
+											£290
+
+										</span>
+                                        </div>
+                                    </div>
+
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+
+                                            <span class="latest-ads__card--price">
+											£290
+
+										</span>
+                                        </div>
+                                    </div>
+
+
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+
+                                            <span class="latest-ads__card--price">
+											£290
+
+										</span>
+                                        </div>
+                                    </div>
+
+
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="" class="img-hover">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="latest-ads__card" href="#">
+                                    <div class="latest-ads__card--img">
+									<span class="latest-ads__card--sponsored">
+										<img src="public/images/sponsored-ribbon.svg" alt="">
+									</span>
+                                        <span class="latest-ads__card--caticon"></span>
+                                        <img src="public/images/card-img.jpg" class="img-hover" alt="">
+                                        <div class="latest-ads__card--overlay">
+                                            <p class="latest-ads__card--title">
+                                                When the working day is done oh girls, they…wanna…
+                                            </p>
+                                            <span class="latest-ads__card--price">
+											£290
+										</span>
+                                        </div>
+                                    </div>
+                                </a>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- END tabs-content -->
+                    <div class="latest-ads__btn">
+                        <div class="latest-ads__btn--cta">
+                            See more
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END tabs -->
+        </div>
+    </div>
+    <!--Category Navigation code end-->
+
+    <!--Marketing Zone code Starts-->
+    <div class="marketing-zone" id="marketing-zone">
+        <div class="row">
+            <div class="columns container">
+                <div class="marketing-zone__title">Marketing Zone
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Marketing Zone code end-->
+
+    <!--Marketing Zone code Starts-->
+    {% cache 'home|page|'~locationId~'front/home_page_read_fridayad_online' 120 %}
+        <div class="read-online" id="readOnline">
+            <div class="row">
+                <div class="columns container">
+                    <div class="read-online__title">
+                        {{'Read the Friday-Ad Online'|trans({}, 'frontend-homepage')}}
+                    </div>
+                    {{ include('FaFrontendBundle:Default:readFridayAdOnline.html.twig') }}
+                </div>
+            </div>
+        </div>
+    {% endcache %}
+    <!--Marketing Zone code end-->
+
+    <!--Ad Blog code Starts-->
+    <div class="friday-blog" id="fridayBlog">
+        <div class="row">
+            <div class="container">
+                <div class="friday-blog__title">
+                    Friday-ad Blog
+                </div>
+                <div class="friday-blog__slider owl-carousel" id="fridayBlogSlider">
+                    {% for i in 0..10 %}
+                        <div class="friday-blog__block">
+                            <a href="#" title="">
+                                <div class="friday-blog__img">
+                                    <img src="https://fad-images.friday-ad.co.uk/uploads/image/17457601_17457700/stairlifts-by-only-lifts-of-sussex-17457636-1_300X225.jpg?009a8493b17610e3" alt="UNWANTED Christmas gifts? What to do… ">
+                                </div>
+                                <div class="friday-blog__content">
+                                    <h6 class="friday-blog__text">
+                                        UNWANTED Christmas gifts? What to do…
+                                    </h6>
+                                    <span class="friday-blog__content--author">
+                                        by Beth Kidger -
+                                    </span>
+                                    <span class="friday-blog__content--posted">
+                                        Dec 16, 2019
+                                    </span>
+                                </div>
+
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="friday-blog__btn">
+                    <div class="friday-blog__btn--cta">
+                        Go to the Blog
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Ad Blog code end-->
+
+    <!--Reviews code Starts-->
+    <div class="our-reviews" id="ouReviews">
+        <div class="row">
+            <div class="container">
+                <div class="our-reviews__title">Our reviews
+                </div>
+                <div class="trustpilot-widget" data-locale="en-GB" data-template-id="54ad5defc6454f065c28af8b" data-businessunit-id="46e343710000640005014c08" data-style-height="240px" data-style-width="100%" data-theme="light" data-stars="1,2,3,4,5" data-review-languages="en">
+                    <a href="https://uk.trustpilot.com/review/www.friday-ad.co.uk" target="_blank" rel="noopener">Trustpilot</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Reviews code end-->
+
+
     {% if recommendedAds|length >= 3 %}
         <div class="homepage-row">
             <div class="row">
@@ -209,19 +2245,6 @@
         </div>
         {% endcache %}
     {% endif %}
-
-    {% cache 'home|page|'~locationId~'front/home_page_read_fridayad_online' 120 %}
-        <div class="homepage-row ga-fadPrintWidget">
-            <div class="row">
-                <div class="columns">
-                    <div class="homepage-title">
-                        {{'Read the Friday-Ad Online'|trans({}, 'frontend-homepage')}}
-                    </div>
-                    {{ include('FaFrontendBundle:Default:readFridayAdOnline.html.twig') }}
-                </div>
-            </div>
-        </div>
-    {% endcache %}
 
     {% if popularShopsSearchParams is defined and popularShopsSearchParams|length %}
         {% cache 'home|page|'~locationId~'front/home_page_popular_shops' 120 %}
@@ -315,7 +2338,7 @@
                 <div class="homepage-title">{{'Browse adverts in popular locations'|trans({}, 'frontend-homepage')}}</div>
                 {% cache 'home|page|location|block'~currentDevice 3600 %}
                     {{ render(controller('FaFrontendBundle:Default:showHomePageLocationBlocks')) }}
-                {% endcache %}
+                {% endcache %}x
             </div>
         </div>
     </div>
@@ -489,16 +2512,14 @@
     </script>
     <script>
         $(document).ready(function() {
+            // owl Slider
             $('#categoryNavSlider').owlCarousel({
-                autoplay: false,
-                lazyLoad: true,
                 loop: false,
                 margin: 0,
                 responsiveClass: true,
                 autoHeight: true,
                 autoplayTimeout: 4000,
                 smartSpeed: 400,
-                // stagePadding: 30,
                 nav: false,
                 dots: false,
                 navText: ['<span aria-hidden="true"><img src="../public/images/back.svg"></span>', '<span aria-hidden="true"><img src="../public/images/next.svg"></span>'],
@@ -506,6 +2527,7 @@
                     0: {
                         items: 4.5,
                         nav: true,
+                        loop: true,
                     },
                     768: {
                         items: 8,
@@ -513,7 +2535,73 @@
                     }
                 }
             });
+            $('#servicesSlider').owlCarousel({
+                lazyLoad: true,
+                loop: true,
+                margin: 10,
+                responsiveClass: true,
+                autoHeight: true,
+                autoplayTimeout: 4000,
+                smartSpeed: 400,
+                nav: false,
+                dots: false,
+                responsive: {
+                    0: {
+                        items: 3,
+                    },
+                    600: {
+                        items: 3,
+                    }
+                }
+            });
+            $('#fridayBlogSlider').owlCarousel({
+                autoplay: false,
+                lazyLoad: true,
+                loop: false,
+                margin: 26,
+                responsiveClass: true,
+                autoHeight: true,
+                autoplayTimeout: 4000,
+                smartSpeed: 400,
+                nav: false,
+                dots: false,
+                navText: ['<span aria-hidden="true"><img src="../public/images/back.svg"></span>', '<span aria-hidden="true"><img src="../public/images/next.svg"></span>'],
+                responsive: {
+                    0: {
+                        items: 1,
+                        nav: true,
+                    },
+                    567: {
+                        items: 2,
+                        nav: true,
+                    },
+                    768: {
+                        items: 3,
+                        margin: 15,
+                    },
+                    1024: {
+                        items: 3,
+                        margin: 26,
+                        mouseDrag: false,
+                    }
+                }
+            });
+            latestAds();
         });
+        function latestAds(){
+            // latest ads tabs
+            $('#latest-tabs-nav li:first-child').addClass('active');
+            $('.latest-ads__content').hide();
+            $('.latest-ads__content:first').show();
+            $('#latest-tabs-nav li').click(function() {
+                $('#latest-tabs-nav li').removeClass('active');
+                $(this).addClass('active');
+                $('.latest-ads__content').hide();
+                var activeTab = $(this).find('a').attr('href');
+                $(activeTab).fadeIn();
+                return false;
+            });
+        }
     </script>
 {% endblock %}
 {% block dimension2 %}
