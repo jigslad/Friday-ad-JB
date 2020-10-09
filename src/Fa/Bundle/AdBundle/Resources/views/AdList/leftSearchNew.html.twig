@@ -63,13 +63,32 @@
             </dd>
             {# Category search params - end #}
 
+            {# Static search filters - start #}
+            <dd class="accordion-navigation keep-shown">
+                <a href="#panel2a" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'My budget is from'|trans({}, 'frontend-left-search')}}</h5></a>
+                <div class="content active clearfix">
+                    <ul class="budget-box clearfix">
+                        <li class="budget-field">
+                            <span>&pound;</span>
+                            {{ form_widget(leftFilters.form.item__price_from, {'attr': {'class': 'white-field'}}) }}
+                        </li>
+                        <li class="budget-to-caption">to</li>
+                        <li class="budget-field">
+                            <span>&pound;</span>
+                            {{ form_widget(leftFilters.form.item__price_to, {'attr': {'class': 'white-field'}}) }}
+                        </li>
+                        <li><button class="budget-go-btn" type="button" onclick="formulate_photo_url();"></button></li>
+                    </ul>
+                </div>
+            </dd>
+
             <dd class="accordion-navigation keep-shown">
                 <a href="#panel3a" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Distance I\'m happy to travel'|trans({}, 'frontend-left-search')}}</h5></a>
                 <div class="content active clearfix">
                     <ul class="distance-search clearfix" id="distance-left-search" style="display:none">
                         <li class="col white-select">
-                            {# {{ form_widget(form.default_distance) }}
-                            {{ form_widget(form.item__distance, {'attr': {'class': 'fa-select-white'}}) }} #}
+                            {{ form_widget(leftFilters.form.default_distance) }}
+                            {{ form_widget(leftFilters.form.item__distance, {'attr': {'class': 'fa-select-white'}}) }}
                         </li>
                         <li>
                             <label>{{ 'from'|trans({}, 'frontend')}}</label>
@@ -79,12 +98,12 @@
                     <ul class="distance-search clearfix">
                         <li class="col">
                             <div>
-                                <input type="text" class="form-control white-field ui-autocomplete-input" id="fa_left_search_item__location_autocomplete" name="fa_left_search[item__location_autocomplete]" required="required" value="Brighton" autocomplete="off" placeholder="Type postal code or town">
+                                {{ form_widget(leftFilters.form.item__location_autocomplete, {'attr': {'class': 'white-field'}}) }}
                                 <a href="javascript:void(0);" rel="nofollow" id="fa_left_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
                             </div>
                         </li>
                         <li>
-                            <button class="budget-go-btn" type="button" id="left_search_location_btn"></button>
+                            <button class="budget-go-btn" type="button" id="left_search_location_btn" onclick="formulate_location_url();"></button>
                         </li>
                     </ul>
                     <ul class="distance-search distance-left-search clearfix">
@@ -98,8 +117,10 @@
                                 {% for key, location in leftFilters.locationFacets %}
                                     {% if key == (maxDimensionCount) %}
                                         </ul>
-                                        <a href="javascript:void(0);" rel="nofollow" onclick="$('#locationLHSFilters').foundation('reveal', 'open');">See more</a>
-                            <a href="javascript:void(0)" rel="nofollow" class="right clear_filter" id="{{ key }}_clear">{{ 'Clear'|trans({}, 'frontend-left-search') }}</a>
+                                        <div class="see-more clearfix">
+                                            <a href="javascript:void(0);" rel="nofollow" onclick="$('#locationLHSFilters').foundation('reveal', 'open');">See more</a>
+                                            <a href="javascript:void(0)" rel="nofollow" class="right clear_filter" id="{{ key }}_clear">{{ 'Clear'|trans({}, 'frontend-left-search') }}</a>
+                                        </div>
                                         <div class="reveal-modal" id="locationLHSFilters" data-reveal>
                                             <a class="close-reveal-modal">&times;</a>
                                             <div>
@@ -130,25 +151,6 @@
                 </div>
             </dd>
 
-            {# Static search filters - start #}
-            <dd class="accordion-navigation keep-shown">
-                <a href="#panel2a" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'My budget is from'|trans({}, 'frontend-left-search')}}</h5></a>
-                <div class="content active clearfix">
-                    <ul class="budget-box clearfix">
-                        <li class="budget-field">
-                            <span>&pound;</span>
-                            <input type="text" class="form-control white-field" id="fa_left_search_item__price_from" name="fa_left_search[item__price_from]" required="required" >
-                        </li>
-                        <li class="budget-to-caption">to</li>
-                        <li class="budget-field">
-                            <span>&pound;</span>
-                            <input type="text" class="form-control white-field" id="fa_left_search_item__price_to" name="fa_left_search[item__price_to]" required="required">
-                        </li>
-                        <li><button class="budget-go-btn" type="button" onclick="formulate_photo_url();"></button></li>
-                    </ul>
-                </div>
-            </dd>
-
             <dd class="accordion-navigation keep-shown">
                 <a href="#panel1b" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Seller'|trans({}, 'frontend-left-search')}}</h5></a>
                 <div class="content active clearfix">
@@ -156,10 +158,10 @@
                         {% for user_type in leftFilters.user_types %}
                             <li><a {% if entity.selected is defined and entity.selected == true %} class="bold" {% endif %}  data-href="{{ user_type.url_param }}" rel="nofollow">{{ user_type.title }} ({{ user_type.count }})</a></li>
                         {% endfor %}
-                        <div class="see-more clearfix">
-                            <a href="javascript:void(0)" rel="nofollow" class="right clear_filter" id="user_type_clear">{{ 'Clear'|trans({}, 'frontend-left-search') }}</a>
-                        </div>
                     </ul>
+                    <div class="see-more clearfix">
+                        <a href="javascript:void(0)" rel="nofollow" class="right clear_filter" id="user_type_clear">{{ 'Clear'|trans({}, 'frontend-left-search') }}</a>
+                    </div>
                 </div>
             </dd>
 
@@ -212,29 +214,49 @@
     </div>
 {% endif %}
 <script>
-    $(document).ready(function() {
-        function formulate_photo_url() {
-            let url = window.href;
-            if ($('#fa_left_search_item__price_from').val()) {
-                let url_string = 'item_price_from=' + $('#fa_left_search_item__price_from').val();
-                if (url.contains('?')) {
-                    url += '&' + url_string;
-                } else {
-                    url += '?' + url_string;
-                }
+    function formulate_photo_url() {
+        let url = window.location.href;
+        if ($('#fa_left_search_item__price_from').val()) {
+            let url_string = 'item__price_from=' + $('#fa_left_search_item__price_from').val();
+            if (url.indexOf('?') != -1) {
+                url += '&' + url_string;
+            } else {
+                url += '?' + url_string;
             }
-
-            if ($('#fa_left_search_item__price_to').val()) {
-                let url_string = '&item_price_to=' + $('#fa_left_search_item__price_to').val();
-                if (url.contains('?')) {
-                    url += '&' + url_string;
-                } else {
-                    url += '?' + url_string;
-                }
-            }
-
-            window.location.href = url;
         }
+
+        if ($('#fa_left_search_item__price_to').val()) {
+            let url_string = '&item__price_to=' + $('#fa_left_search_item__price_to').val();
+            if (url.indexOf('?') != -1) {
+                url += '&' + url_string;
+            } else {
+                url += '?' + url_string;
+            }
+        }
+
+        window.location.href = url;
+    }
+
+    function formulate_location_url() {
+        let url = window.location.href;
+        if ($('#fa_left_search_item__location_autocomplete').val() != "United Kingdom") {
+            let value = $('#fa_left_search_item__location_autocomplete').val().toLowerCase();
+            value = value.replace(' ', '_');
+
+            url = href.replace('/{{ currentLocation }}/', '/'+value+'/');
+
+            if ($('#fa_left_search_item__distance').val() != 5) {
+                let url_string = 'item__distance=' . $('#fa_left_search_item__distance').val();
+                if (url.indexOf('?') != -1) {
+                    url += '&' + url_string;
+                } else {
+                    url += '?' + url_string;
+                }
+            }
+        }
+    }
+
+    $(document).ready(function() {
 
         $('a[data-href]').each(function() {
             let href = window.location.href;

@@ -1104,7 +1104,12 @@ class AdListController extends CoreController
             }
         }
 
+        $isShopPage = 1;
+        $parentIdArray = [];
+        $form1 = $formManager->createForm(AdLeftSearchType::class, array('isShopPage' => $isShopPage, 'parentIdArray' => $parentIdArray), array('method' => 'GET', 'action' => ($isShopPage ? $this->generateUrl('shop_user_ad_left_search_result') : $this->generateUrl('ad_left_search_result'))));
+
         $parameters['createAlertBlock'] = array('form' => $form->createView());
+        $parameters['leftFilters']['form'] = $form1->createView();
 
         return $this->render('FaAdBundle:AdList:searchResultNew.html.twig', $parameters, null);
     }
@@ -1126,14 +1131,20 @@ class AdListController extends CoreController
         $staticFilters = '';
         foreach ($searchParams as $searchKey => $searchItem) {
             if (! empty($searchItem)) {
-                $solrDimensionFieldName = $adRepository->getSolrFieldName($listingFields, $this->getDimensionName($searchKey));
-
-                if (is_array($searchItem)) {
-                    foreach ($searchItem as $eachItem) {
-                        $staticFilters .= ' AND ' . $solrDimensionFieldName . ':*' . $eachItem . '*';
-                    }
+                if ($searchKey == 'item__price_from') {
+                  $staticFilters .= ' AND price : [' . $searchItem . ' TO *]';
+                } else if ($searchKey == 'item__price_to') {
+                    $staticFilters .= ' AND price : [* TO ' . $searchItem . ']';
                 } else {
-                    $staticFilters .= ' AND ' . $solrDimensionFieldName . ':*' . $searchItem . '*';
+                    $solrDimensionFieldName = $adRepository->getSolrFieldName($listingFields, $this->getDimensionName($searchKey));
+
+                    if (is_array($searchItem)) {
+                        foreach ($searchItem as $eachItem) {
+                            $staticFilters .= ' AND ' . $solrDimensionFieldName . ':*' . $eachItem . '*';
+                        }
+                    } else {
+                        $staticFilters .= ' AND ' . $solrDimensionFieldName . ':*' . $searchItem . '*';
+                    }
                 }
             }
         }
