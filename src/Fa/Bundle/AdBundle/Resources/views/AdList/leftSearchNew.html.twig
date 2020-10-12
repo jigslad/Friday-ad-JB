@@ -156,7 +156,7 @@
                 <div class="content active clearfix">
                     <ul class="seller-link">
                         {% for user_type in leftFilters.user_types %}
-                            <li><a {% if entity.selected is defined and entity.selected == true %} class="bold" {% endif %}  data-href="{{ user_type.url_param }}" rel="nofollow">{{ user_type.title }} ({{ user_type.count }})</a></li>
+                            <li><a {% if user_type.selected is defined and user_type.selected == true %} class="bold" {% endif %}  data-href="{{ user_type.url_param }}" rel="nofollow">{{ user_type.title }} ({{ user_type.count }})</a></li>
                         {% endfor %}
                     </ul>
                     <div class="see-more clearfix">
@@ -177,8 +177,8 @@
                 <div class="content active label-inline">
                     <ul class="white-checkbox search-type crawlable-checkbox">
                         <li>
-                            <span class="custom-checkbox{% if entity.selected is defined and entity.selected == true %} checked {% endif %}">
-                                <input type="checkbox" {% if entity.selected is defined and entity.selected == true %} checked="checked" {% endif %} id="fa_left_search_items_with_photo" name="fa_left_search[items_with_photo]" value="1">
+                            <span class="custom-checkbox{% if leftFilters.ads_with_images == true %} checked {% endif %}">
+                                <input type="checkbox" {% if leftFilters.ads_with_images  == true %} checked="checked" {% endif %} id="fa_left_search_items_with_photo" name="fa_left_search[items_with_photo]" value="1">
                             </span>
                             <label class="mb0" for="fa_left_search_items_with_photo">Only ads with photo ({{ leftFilters.ads_with_images }})</label>
                             <a data-href="ads_with_images=1">Only ads with photo</a>
@@ -191,8 +191,8 @@
                 <div class="content active label-inline">
                     <ul class="white-checkbox search-type crawlable-checkbox">
                         <li>
-                            <span class="custom-checkbox{% if entity.selected is defined and entity.selected == true %} checked {% endif %}">
-                                <input type="checkbox" {% if entity.selected is defined and entity.selected == true %} checked="checked" {% endif %} id="fa_left_search_expired_ads" name="fa_left_search[expired_ads]" value="1">
+                            <span class="custom-checkbox{% if leftFilters.expired_ads == true %} checked {% endif %}">
+                                <input type="checkbox" {% if leftFilters.expired_ads == true %} checked="checked" {% endif %} id="fa_left_search_expired_ads" name="fa_left_search[expired_ads]" value="1">
                             </span>
                             <label class="mb0" for="fa_left_search_items_with_photo">Expired ads</label>
                             <a data-href="expired_ads=1">Expired ads</a>
@@ -278,7 +278,7 @@
             if (index != -1) {
                 href = href.substring(0, (index + this_url.length));
             } else if (this_url.indexOf('=') != -1) {
-                url_params += this_url;
+                url_params += '&' + this_url;
             } else {
                 href += this_url + '/';
             }
