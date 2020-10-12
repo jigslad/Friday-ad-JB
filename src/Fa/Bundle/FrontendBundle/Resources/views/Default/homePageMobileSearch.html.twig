@@ -1,0 +1,64 @@
+{{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'fa_top_search'}}) }}
+    {{ form_errors(form) }}
+    <div class="top-search-modal" id="searchModal">
+        <div class="top-search-modal__container">
+            <div class="mega-search">
+                <div class="mega-search__modal-header">
+                    <div class="mega-search__modal-header--logo">
+                        <a href="{{ path('fa_frontend_homepage') }}" class="logo">
+                            <img src="public/images/Fad-logo.svg" alt="FAD-logo">
+                        </a>
+                    </div>
+                    <a href="#" class="mega-search__modal-header--close" id="modalClose"></a>
+                </div>
+                {{ include('FaCoreBundle::message.html.twig') }}
+                <div class="mega-search__block">
+                    <div class="mega-search__input">
+                        {{ form_widget(form.keywords, {'attr': {'class': 'mega-search__input--text', 'placeholder':'What are you looking for?' }}) }}
+                        <button class="mega-search__input--btn" id="fa_top_search_keywords_searchGo" type="submit"></button>
+                        <div class="close-icon" id="fa_top_search_keywords_close"></div>
+                        <!-- Search dropdown Content starts-->
+                        <div id="fa_top_search_keywords_list"></div>
+                        <!---Search dropdown Content end-->
+                    </div>
+                    <div class="mega-search__location">
+                        <div class="mega-search__location--change pickLocation" >
+                            <div id="in_text_span">
+                                {{ 'in'|trans({}, 'frontend-homepage') }}
+                            </div>
+                            &nbsp;
+                            <div id="header_search_editable_location_span">
+                                United Kingdom
+                            </div>
+                            <span id="header_search_editable_location_a">
+                                ({{ 'change'|trans({}, 'frontend-homepage') }})
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mega-search__select-location locationView" id="top_search_location">
+                        {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'mega-search__select-location--text banner-search', 'placeholder':'Type postal code or town'|trans({}, 'frontend-homepage') }}) }}
+                        <div class="close-icon closeIcon" id="fa_top_search_item__location_close"></div>
+                        <div id="fa_top_search_item__location_list"></div>
+                        <div class="mega-search__select-location--ok ok-btn" type="button" id="top_search_location_homepage_ok">{{ 'Ok'|trans({}, 'frontend-homepage') }}</div>
+                        <div class="mega-search__select-location--cancel cancel-btn" type="button" id="top_search_location_cancel">{{ 'Cancel'|trans({}, 'frontend-homepage') }}</div>
+{#                        <div id="header_search_editable_location_reveal_modal" class="reveal-modal tiny" data-reveal>#}
+{#                            {{ include('FaCoreBundle:Default:invalidLocationModal.html.twig', {'modalId': 'header_search_editable_location_reveal_modal'}) }}#}
+{#                        </div>#}
+                    </div>
+                    <p class="mega-search__popular">
+                        Popular:
+                        <a href="#" class="mega-search__popular--link">Dog walker,</a>
+                        <a href="#" class="mega-search__popular--link">Plumber,</a>
+                        <a href="#" class="mega-search__popular--link">Personal trainer,</a>
+                        <a href="#" class="mega-search__popular--link">Web design</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% do attribute(form, 'item__category_id').setRendered %}
+    {% do attribute(form, 'item__price_from').setRendered %}
+    {% do attribute(form, 'item__price_to').setRendered %}
+    {% do attribute(form, 'item__distance').setRendered %}
+{{ form_end(form) }}
+<div id="bg-overlay"></div>

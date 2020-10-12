@@ -40,14 +40,7 @@
 {% block scripttop %}
 {% endblock %}
 
-{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
-{% set currentDevice = 'D' %}
-{% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
-    {% set currentDevice = 'M' %}
-{% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
-    {% set currentDevice = 'T' %}
-{% endif %}
-    
+
 {% block body %}
     <div class="hero-banner" id="hero-banner">
         <div class="row">
@@ -55,7 +48,11 @@
                 <div class="hero-banner__block">
                     <h1 class="hero-banner__title">Find my local <span>xxxxxxx</span></h1>
                 </div>
-                {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {}, 'isHomeSearch': true } )) }}
+                {% if currentDevice == 'M' %}
+                    {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {}, 'isHomeSearch': true, 'isMobileSearch': true } )) }}
+                {% else %}
+                    {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {}, 'isHomeSearch': true, 'isMobileSearch': false } )) }}
+                {% endif %}
             </div>
         </div>
     </div>
@@ -2362,7 +2359,7 @@
         <script src="{{ static_asset_url(asset_url) }}"></script>
         {% endjavascripts %}
     {% endif %}
-    <script language="javascript" type="text/javascript">
+    <script type="text/javascript">
     //<![CDATA[
     {% if mobileDetectManager.is('IE') %}
         $(function(){   

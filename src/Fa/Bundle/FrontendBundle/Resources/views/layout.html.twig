@@ -1,27 +1,35 @@
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+{% set currentDevice = 'D' %}
+{% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+    {% set currentDevice = 'M' %}
+{% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
+    {% set currentDevice = 'T' %}
+{% endif %}
+
+{% set blockPageTitle = block('page_title') is defined ? block('page_title')|replace({' in UK': ''})|trim : false %}
+{% set blockMetaRobots = block('meta_robots') is defined ? block('meta_robots')|trim : false %}
+{% set blockMetaDescription = block('meta_description') is defined ? block('meta_description')|replace({' in UK': ''})|trim : false %}
+{% set blockMetaKeywords = block('meta_keywords') is defined ? block('meta_keywords')|trim : false %}
+{% set blockMetaCanonicalUrl = block('canonical_url') is defined ? block('canonical_url')|trim : false %}
+{% set blockFacebookMeta = block('facebook_meta') is defined ? block('facebook_meta')|trim : false %}
+{% set blockTwitterMeta = block('twitter_meta') is defined ? block('twitter_meta')|trim : false %}
+{% set blockGaCode = block('google_ga_code') is defined ? block('google_ga_code')|trim : false %}
+{% set blockBreadcrumbCode = block('breadcrumb_script') is defined ? block('breadcrumb_script')|trim : false %}
+
+{% set container = fetch_container_instance() %}
+{% set currentRoute = app.request.attributes.get('_route') %}
+{% set bannerRepository = fetch_repository('FaContentBundle:Banner') %}
+{% set bannersArray = bannerRepository.getBannersArrayByPage(currentRoute, container) %}
+{% set blockDimension2 = block('dimension2') is defined ? block('dimension2')|trim : false %}
+{% set pushNotification = block('pushNotification') is defined ? block('pushNotification')|trim : false %}
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+{% set paginationHead = block('pagination_head') is defined ? block('pagination_head')|trim : false %}
+
 <!doctype html>
 <html class="no-js" lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,target-densityDpi=medium-dpi" />
-
-	{% set blockPageTitle = block('page_title') is defined ? block('page_title')|replace({' in UK': ''})|trim : false %}
-    {% set blockMetaRobots = block('meta_robots') is defined ? block('meta_robots')|trim : false %}
-    {% set blockMetaDescription = block('meta_description') is defined ? block('meta_description')|replace({' in UK': ''})|trim : false %}
-    {% set blockMetaKeywords = block('meta_keywords') is defined ? block('meta_keywords')|trim : false %}
-    {% set blockMetaCanonicalUrl = block('canonical_url') is defined ? block('canonical_url')|trim : false %}
-    {% set blockFacebookMeta = block('facebook_meta') is defined ? block('facebook_meta')|trim : false %}
-    {% set blockTwitterMeta = block('twitter_meta') is defined ? block('twitter_meta')|trim : false %}
-    {% set blockGaCode = block('google_ga_code') is defined ? block('google_ga_code')|trim : false %}
-    {% set blockBreadcrumbCode = block('breadcrumb_script') is defined ? block('breadcrumb_script')|trim : false %}
-
-    {% set container = fetch_container_instance() %}
-    {% set currentRoute = app.request.attributes.get('_route') %}
-    {% set bannerRepository = fetch_repository('FaContentBundle:Banner') %}
-    {% set bannersArray = bannerRepository.getBannersArrayByPage(currentRoute, container) %}
-    {% set blockDimension2 = block('dimension2') is defined ? block('dimension2')|trim : false %}
-    {% set pushNotification = block('pushNotification') is defined ? block('pushNotification')|trim : false %}
-    {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
-    {% set paginationHead = block('pagination_head') is defined ? block('pagination_head')|trim : false %}
 
     {% set showAdultPopup = 0 %}
     {% set ADULT_CATEGORY_ID = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}

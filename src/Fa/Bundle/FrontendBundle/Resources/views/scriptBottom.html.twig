@@ -344,3 +344,96 @@
     });
 </script>
 <!-- Google TAG Manager -->
+{# Header script used by naveen #}
+<script>
+    // Scroll after style adding
+    $(window).scroll(function() {
+        var scroll = $(window).scrollTop();
+        if (window.matchMedia("(min-width: 768px)").matches) {
+            if (scroll >= 105) {
+                $('.header').addClass('scrolled');
+            } else {
+                $('.header').removeClass('scrolled')
+            }
+        } else {
+            if (scroll >= 150) {
+                $('.header').addClass('scrolled');
+            } else {
+                $('.header').removeClass('scrolled')
+            }
+        }
+    });
+    $('#mobileMegaDropdown').click(function(e) {
+        $(this).toggleClass('menu-green-icon')
+        $('.main-navigation__block').toggleClass('pos-static');
+        $('.nav-mobile .nav-dropdown').toggleClass('menu-toggle');
+        e.stopPropagation();
+    });
+
+    $('.accordion-link').click(function(event) {
+        if ($('.menu-accordion').hasClass('show-accordion')) {
+            $('.accordion-link').not($(this)).removeClass('active');
+            $('.nav-dropdown__block').not($(this).next()).slideUp(300);
+        }
+        $(this).toggleClass('active').next().slideToggle(300);
+    });
+    $('.nav-mobile .nav-dropdown__link').click(function(event) {
+        $(this).toggleClass('actived').next().addClass('nav-dropdown-menu-show');
+    });
+    $('.nav-mobile .nav-dropdown__menu--link').click(function(event) {
+        $(this).toggleClass('actived').next().addClass('nav-dropdown-third-show');
+    });
+    $('.goBack').click(function(event) {
+        var level = $(this).attr("level");
+        if (level == 2) {
+            $('.nav-dropdown__menu').removeClass('nav-dropdown-menu-show');
+        } else {
+            $('.nav-dropdown-third').removeClass('nav-dropdown-third-show');
+        }
+    });
+    if (window.matchMedia("(min-width:768px) and (max-width: 1199px)").matches) {
+        $('#menuDropdown').removeAttr("href");
+        //Tablet Category navigation click
+        $('#megaDropdown').click(function(e) {
+            $(this).toggleClass('cat-rotate-icon')
+            $(this).siblings('.nav-dropdown').toggleClass('menu-toggle');
+            e.stopPropagation();
+        });
+        //Tablet top navigation click
+        $('#menuDropdown').click(function(e) {
+            if ($(".nav-dropdown").hasClass('menu-toggle')) {
+                $(".nav-dropdown").removeClass("menu-toggle");
+                $("#megaDropdown").removeClass('cat-rotate-icon')
+            }
+            $('#menuDropdown').toggleClass('rotate-icon')
+            $('.dropdown-content').toggleClass('dropdown-content-toggle');
+            e.stopPropagation();
+        });
+        //Tablet body click
+        $(document).on("click", function(event) {
+            var $triggerDropdown = $(".dropdown-content");
+            console.log($triggerDropdown.has(event.target).length);
+            if ($triggerDropdown !== event.target && !$triggerDropdown.has(event.target).length) {
+                $(".dropdown-content").removeClass("dropdown-content-toggle");
+                $("#menuDropdown").removeClass('rotate-icon')
+            }
+            var $trigger = $(".nav-dropdown");
+            if ($trigger !== event.target && !$trigger.has(event.target).length) {
+                $(".nav-dropdown").removeClass("menu-toggle");
+                $("#megaDropdown").removeClass('cat-rotate-icon')
+            }
+        });
+    }
+    if (window.matchMedia("(max-width: 767px)").matches) {
+        $("#topSearch,.search-sticky-mobile").click(function() {
+            $('.top-search-modal').toggleClass('modal-show');
+            $('#bg-overlay').toggleClass('bg-overlay');
+            $('body').toggleClass('overflow-hidden');
+        });
+        $("#modalClose").click(function() {
+            $('.top-search-modal').removeClass('modal-show');
+            $('#bg-overlay').removeClass('bg-overlay');
+            $('body').removeClass('overflow-hidden');
+        });
+    }
+</script>
