@@ -152,7 +152,7 @@
                             <section class="top-bar-section">
                                 <!-- Right Nav Section -->
                                <div class="tablet-menu">
-                                   {% if currentRoute not in {0: 'ad_post_fourth_step'} %}
+                                   {% if currentRoute not in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step'} %}
                                         {% if mobileDetectManager.isTablet() %}
                                             {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':1, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'}  ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
                                         {% elseif mobileDetectManager.isMobile() %}
@@ -197,11 +197,9 @@
                                 <ul class="show-for-small-only login-menu">
                                     <li><a href="{{ path('location_home_page', {'location': 'contact-us'}) }}" id="mob-contact-header-id">{{'Contact us'|trans({}, 'frontend-top-menu')}}</a></li>
                                 </ul>
-                                {% if currentRoute not in {0: 'ad_post_fourth_step'} %}
-                                <ul class="right place-item ga-buttonPAA">
+                                <ul class="right place-item ga-buttonPAA {% if currentRoute in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step'} %} hide-for-small-only {% endif %}">
                                     <li class="place-item-btn ga-buttonPAA"><a class="ga-buttonPAA" href="{{ path('ad_post_first_step') }}" title="{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}">{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}</a></li>
                                 </ul>
-                                {% endif %}
                             </section>
                         </nav>
                         {% if status_code == 200 and currentRoute is defined and currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'listing_page', 3: 'landing_page_category_location', 4: 'landing_page_category'} %}
