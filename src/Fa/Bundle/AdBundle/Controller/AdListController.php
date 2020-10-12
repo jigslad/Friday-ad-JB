@@ -83,10 +83,10 @@ class AdListController extends CoreController
 
         if ($request->get('isHomeSearch')) {
             if ($request->get('isMobileSearch')) {
-                return $this->render('FaFrontendBundle:Default:homePageSearch.html.twig', $parameters);
+                return $this->render('FaFrontendBundle:Default:homePageMobileSearch.html.twig', $parameters);
             }
             else{
-                return $this->render('FaFrontendBundle:Default:homePageMobileSearch.html.twig', $parameters);
+                return $this->render('FaFrontendBundle:Default:homePageSearch.html.twig', $parameters);
             }
         } elseif ($request->get('isAdultHomeSearch')) {
             return $this->render('FaFrontendBundle:Adult:homePageAdultSearch.html.twig', $parameters);
