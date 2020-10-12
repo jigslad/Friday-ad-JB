@@ -59,7 +59,7 @@
     {% if seoFields.page_title is defined %}
         {{ seoManager.parseSeoStringForAdList(seoFields.page_title, searchParams, cookieLocationDetails) }}
     {% elseif app.request.queryString %}
-        {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+        {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null and searchParams.item__category_id != 1 %}
             {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id)}} | Friday-Ad
         {% else %}
             Friday-Ad

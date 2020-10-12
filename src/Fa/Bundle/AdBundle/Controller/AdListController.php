@@ -850,6 +850,8 @@ class AdListController extends CoreController
         if (strpos($searchKey, '__')) {
             $key = explode('__', $searchKey);
             return str_replace('_id', '', $key[1]);
+        } else if (strpos($searchKey, '?') === false) {
+            return $searchKey;
         } else {
             return false;
         }
@@ -868,17 +870,16 @@ class AdListController extends CoreController
         $currentRoute           = $request->get('_route');
         $requestlocation        = $request->get('location');
         $findersSearchParams    = $request->get('finders');
-        $cookieLocationDetails  = array();
 
+        // set location in cookie
+        $cookieLocationDetails = json_decode($request->cookies->get('location'), true);
+        if (!$cookieLocationDetails) {
+            $cookieLocationDetails = array();
+        }
         if (!in_array($currentRoute, array('show_business_user_ads', 'show_business_user_ads_page', 'show_business_user_ads_location'))) {
             if (preg_match("/[A-Z]/", $request->getPathInfo())) {
                 $url = str_replace($request->getPathInfo(), strtolower($request->getPathInfo()), $request->getUri());
                 return $this->redirect($url, 301);
-            }
-            // set location in cookie
-            $cookieLocationDetails = json_decode($request->cookies->get('location'), true);
-            if (!$cookieLocationDetails) {
-                $cookieLocationDetails = array();
             }
 
             $cookieValue = '';
@@ -910,35 +911,42 @@ class AdListController extends CoreController
 
         $data       = $this->setDefaultParametersNew($request, $mapFlag, 'finders', $cookieLocationDetails);
 
+        if (empty($findersSearchParams['item__category_id'])) {
+            $findersSearchParams['item__category_id'] = 1;
+        }
         $category = $this->getRepository('FaEntityBundle:Category')->findOneBy(['id' => $findersSearchParams['item__category_id']]);
 
-        if (empty($data['static_filters'])) {
-            $data['static_filters'] = '';
+        $data['static_filters'] = '';
+        if ($findersSearchParams['item__category_id'] != 1) {
+            $data['static_filters'] .= ' AND category_full_path:"' . $category->getFullSlug() . '"';
         }
-        $data['static_filters'] .= ' AND category_full_path:"' . $category->getFullSlug() .'"';
         $data['static_filters'] .= ' AND -is_topad:true';
         $page = $data['pager']['page'];
 
-        $searchableDimensions = $this->getRepository('FaEntityBundle:CategoryDimension')->getSearchableDimesionsArrayByCategoryId($category->getId(), $this->container);
-        $adRepository = $this->getRepository('FaAdBundle:Ad');
+        $static_filters = '';
+        $searchableDimensions = [];
+        if ($findersSearchParams['item__category_id'] != 1) {
+            $searchableDimensions = $this->getRepository('FaEntityBundle:CategoryDimension')->getSearchableDimesionsArrayByCategoryId($category->getId(), $this->container);
+            $adRepository = $this->getRepository('FaAdBundle:Ad');
 
-        $root = $this->getRepository('FaEntityBundle:Category')->getRootNodeByCategory($category->getId());
+            $root = $this->getRepository('FaEntityBundle:Category')->getRootNodeByCategory($category->getId());
+            $repository = $this->getRepository('FaAdBundle:' . 'Ad' . str_replace(' ', '', $root->getName()));
+            $listingFields = $repository->getAdListingFields();
+            foreach ($searchableDimensions as $key => $dimension) {
+                $solrDimensionFieldName = $adRepository->getSolrFieldName($listingFields, str_replace([' ', '.'], ['_', ''], strtolower($dimension['name'])));
+                $data['facet_fields'] = array_merge(
+                    $data['facet_fields'],
+                    [
+                        $solrDimensionFieldName => array('min_count' => 0)
+                    ]
+                );
 
-        $repository = $this->getRepository('FaAdBundle:'.'Ad'.str_replace(' ', '', $root->getName()));
-        $listingFields = $repository->getAdListingFields();
-        foreach ($searchableDimensions as $key => $dimension) {
-            $solrDimensionFieldName = $adRepository->getSolrFieldName($listingFields, str_replace([' ', '.'], ['_', ''], strtolower($dimension['name'])));
-            $data['facet_fields'] = array_merge(
-                $data['facet_fields'],
-                [
-                    $solrDimensionFieldName => array('min_count' => 0)
-                ]
-            );
-
-            $searchableDimensions[$key]['solr_field'] = $solrDimensionFieldName;
+                $searchableDimensions[$key]['solr_field'] = $solrDimensionFieldName;
+            }
+            $data['static_filters'] .= $static_filters = $this->setDimensionParams($data['search'], $listingFields, $adRepository);
+        } else {
+            $root = $category;
         }
-
-        $data['static_filters'] .= $static_filters = $this->setDimensionParams($data['search'], $listingFields, $adRepository);
 
         $keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: NULL;
         $recordsPerPage = (isset($data['pager']['limit']) && $data['pager']['limit']) ? $data['pager']['limit']: $this->container->getParameter('fa.search.records.per.page');
@@ -967,7 +975,12 @@ class AdListController extends CoreController
 
         if (! empty($category)) {
             $data['search']['item__category_id'] = $category->getId();
-            $recommendedSlot = $this->getRecommendedSlot($data, $keywords, $page, $mapFlag, $request, $category->getParent()->getId());
+            if ($category->getId() != 1) {
+                $categoryParent = $category->getParent()->getId();
+            } else {
+                $categoryParent = 1;
+            }
+            $recommendedSlot = $this->getRecommendedSlot($data, $keywords, $page, $mapFlag, $request, $categoryParent);
         } else {
             $recommendedSlot = NULL;
         }
@@ -990,7 +1003,8 @@ class AdListController extends CoreController
             'adFavouriteIds' => $adFavouriteIds,
             'leftFilters' => empty($pagination['resultCount']) ? [] : $this->getLeftFilters($category, $pagination['facetResult'], $pagination['resultCount'], $searchableDimensions, $findersSearchParams),
             'currentLocation' => $requestlocation,
-            'searchParams' => $findersSearchParams
+            'searchParams' => $findersSearchParams,
+            'cookieLocationDetails' => $cookieLocationDetails
          ];
 
         if (isset($findersSearchParams['item__category_id'])) {
@@ -1164,7 +1178,10 @@ class AdListController extends CoreController
     {
         $params = [];
         foreach ($searchParams as $dimensionSlug => $searchParam) {
-            $params[$this->getDimensionName($dimensionSlug)] = $searchParam;
+            $paramname = $this->getDimensionName($dimensionSlug);
+            if ($paramname !== false) {
+                $params[$paramname] = $searchParam;
+            }
         }
 
         // get next level categories
@@ -1182,13 +1199,13 @@ class AdListController extends CoreController
                 'title' => 'Private advertiser',
                 'url_param' => 'is_trade_ad=0',
                 'count' => empty($facetResult['is_trade_ad']) ? 0 : intval($facetResult['is_trade_ad']["false"]),
-                'selected' => isset($params['is_trade_ad'][0]) ? true : false
+                'selected' => isset($params['is_trade_ad']) && $params['is_trade_ad'] == '0' ? true : false
             ],
             1 => [
                 'title' => 'Business advertiser',
                 'url_param' => 'is_trade_ad=1',
                 'count' => empty($facetResult['is_trade_ad']) ? 0 : intval($facetResult['is_trade_ad']["true"]),
-                'selected' => isset($params['is_trade_ad'][1]) ? true : false
+                'selected' => isset($params['is_trade_ad']) && $params['is_trade_ad'] == '1' ? true : false
             ]
         ];
 
@@ -1227,15 +1244,25 @@ class AdListController extends CoreController
             }
         }
 
+        $noImages = 0;
+        if (isset($facetResult['image_count'])) {
+            $arr = get_object_vars($facetResult['image_count']);
+            if (! empty($arr)) {
+                $noImages = intval($arr[0]);
+            }
+        }
+
         return [
             'categories'        => $categories,
             'current_category'  => $categoryObj->getName(),
-            'parent_category'   => $categoryObj->getParent()->getId() == 1 ? '' : $categoryObj->getParent(),
+            'parent_category'   => $categoryObj->getParent() && $categoryObj->getParent()->getId() == 1 ? '' : $categoryObj->getParent(),
             'user_types'        => $userTypes,
-            'ads_with_images'   => intval($totalAds - $facetResult['image_count']['0']),
+            'ads_with_images'   => intval($totalAds - $noImages),
             'locationFacets'    => $locationFacets,
             'orderedDimensions' => $orderedDimensions,
-            'dimensions'        => $dimensions
+            'dimensions'        => $dimensions,
+            'ads_with_images'   => isset($params['ads_with_images']),
+            'expired_ads'       => isset($params['expired_ads'])
         ];
     }
 
