@@ -909,7 +909,7 @@ class AdListController extends CoreController
             }
         }
 
-        $data       = $this->setDefaultParametersNew($request, $mapFlag, 'finders', $cookieLocationDetails);
+        $data = $this->setDefaultParametersNew($request, $mapFlag, 'finders', $cookieLocationDetails);
 
         if (empty($findersSearchParams['item__category_id'])) {
             $findersSearchParams['item__category_id'] = 1;
@@ -951,7 +951,7 @@ class AdListController extends CoreController
         $keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: NULL;
         $recordsPerPage = (isset($data['pager']['limit']) && $data['pager']['limit']) ? $data['pager']['limit']: $this->container->getParameter('fa.search.records.per.page');
 
-        $pagination = $this->getSolrPagination('ad.new', $keywords, $data, $page, $recordsPerPage, 0, true);
+        $pagination = $this->getSolrPagination('ad.new', $keywords, $data, $page, $recordsPerPage, 0, false);
         $ads = $this->formatAds($pagination['pagination']);
 
         if ($page == 1) {
@@ -961,12 +961,35 @@ class AdListController extends CoreController
             $featuredData['static_filters'] .= ' AND is_topad:true';
             $featuredData['static_filters'] .= $static_filters;
 
+            $topAds = [];
+            $viewedTopAdsCookie = $request->cookies->get('viewed_top_ads_'.$root->getId());
+            if ($viewedTopAdsCookie) {
+                $topAds = explode(',', $viewedTopAdsCookie);
+                $featuredData['static_filters'] .= ' AND - id : ('.implode(' ', $topAds).')';
+            }
+
             $keywords = (isset($featuredData['search']['keywords']) && $featuredData['search']['keywords']) ? $featuredData['search']['keywords'] : NULL;
             $page = (isset($featuredData['pager']['page']) && $featuredData['pager']['page']) ? $featuredData['pager']['page'] : 1;
 
             $featuredPagination = $this->getSolrPagination('ad.new', $keywords, $featuredData, 1, 3, 0, true);
 
+            if (count($featuredPagination['pagination']) < 3) {
+                $featuredData = $this->setDefaultParametersNew($request, $mapFlag, 'finders', array());
+
+                $featuredData['static_filters'] = ' AND category_full_path:"' . $category->getFullSlug() . '"';
+                $featuredData['static_filters'] .= ' AND is_topad:true';
+                $featuredData['static_filters'] .= $static_filters;
+
+                $keywords = (isset($featuredData['search']['keywords']) && $featuredData['search']['keywords']) ? $featuredData['search']['keywords'] : NULL;
+                $page = (isset($featuredData['pager']['page']) && $featuredData['pager']['page']) ? $featuredData['pager']['page'] : 1;
+
+                $featuredPagination = $this->getSolrPagination('ad.new', $keywords, $featuredData, 1, 3, 0, true);
+            }
+
             $featuredAds = $this->formatAds($featuredPagination['pagination']);
+            $viewedTopAds = array_column($featuredAds, 'id');
+            $viewedTopAds = array_merge($viewedTopAds, $topAds);
+            $request->cookies->set('viewed_top_ads_'.$root->getId(), $viewedTopAds);
         } else {
             $featuredAds = [];
         }
@@ -993,29 +1016,29 @@ class AdListController extends CoreController
         $adFavouriteIds = $this->getRepository('FaAdBundle:AdFavorite')->getFavoriteAdByUserId($userId, $this->container);
 
         $parameters = [
-            'featuredAds' => $featuredAds,
-            'ads' => $ads,
-            'resultCount' => $pagination['resultCount'] + count($featuredAds),
-            'bannersArray' => $bannersArray,
+            'featuredAds'           => $featuredAds,
+            'ads'                   => $ads,
+            'resultCount'           => $pagination['resultCount'] + count($featuredAds),
+            'bannersArray'          => $bannersArray,
             'recommendedSlotResult' => $recommendedSlot,
-            'recommendedSlotLimit' => $this->getRepository('FaCoreBundle:Config')->getSponsoredLimit(),
-            'pagination' => $pagination['pagination'],
-            'adFavouriteIds' => $adFavouriteIds,
-            'leftFilters' => empty($pagination['resultCount']) ? [] : $this->getLeftFilters($category, $pagination['facetResult'], $pagination['resultCount'], $searchableDimensions, $findersSearchParams),
-            'currentLocation' => $requestlocation,
-            'searchParams' => $findersSearchParams,
+            'recommendedSlotLimit'  => $this->getRepository('FaCoreBundle:Config')->getSponsoredLimit(),
+            'pagination'            => $pagination['pagination'],
+            'adFavouriteIds'        => $adFavouriteIds,
+            'leftFilters'           => empty($pagination['resultCount']) ? [] : $this->getLeftFilters($category, $pagination['facetResult'], $pagination['resultCount'], $searchableDimensions, $findersSearchParams),
+            'currentLocation'       => $requestlocation,
+            'searchParams'          => $findersSearchParams,
             'cookieLocationDetails' => $cookieLocationDetails
          ];
 
         if (isset($findersSearchParams['item__category_id'])) {
             $parameters['selCatDet'] = $this->getRepository('FaEntityBundle:Category')->getCategoryArrayById($findersSearchParams['item__category_id']);
             if (isset($parameters['selCatDet'])) {
-                $parameters['selCatName'] = $parameters['selCatDet']['name'];
-                $parameters['selCatSlug'] = $parameters['selCatDet']['slug'];
-                $parameters['selCatNoIndex'] = $parameters['selCatDet']['no_index'];
-                $parameters['selCatNoFollow'] = $parameters['selCatDet']['no_follow'];
-                $parameters['selNoIndex'] = $parameters['selCatNoIndex'] == 1 ? 'noindex' : 'index';
-                $parameters['selNoFollow'] = $parameters['selCatNoFollow'] == 1 ? 'nofollow' : 'follow';
+                $parameters['selCatName']       = $parameters['selCatDet']['name'];
+                $parameters['selCatSlug']       = $parameters['selCatDet']['slug'];
+                $parameters['selCatNoIndex']    = $parameters['selCatDet']['no_index'];
+                $parameters['selCatNoFollow']   = $parameters['selCatDet']['no_follow'];
+                $parameters['selNoIndex']       = $parameters['selCatNoIndex'] == 1 ? 'noindex' : 'index';
+                $parameters['selNoFollow']      = $parameters['selCatNoFollow'] == 1 ? 'nofollow' : 'follow';
 
                 $parameters['customized_url'] = $request->get('customized_page');
                 if (empty($parameters['customized_url'])) {
@@ -1250,8 +1273,25 @@ class AdListController extends CoreController
                     'name' => $entityValue['name'],
                     'slug' => $entityValue['slug'],
                     'count' => $facetCount,
-                    'selected' => isset($selected) && $selected == $entityValue['id'] ? true : false
+                    'selected' => isset($selected) && (is_array($selected) ? in_array($entityValue['id'], $selected)  : $selected == $entityValue['id']) ? true : false
                 );
+            }
+
+            $entityValues = [];
+            if (! empty($selected)) {
+                $entityValues = $this->getRepository('FaEntityBundle:Entity')->getEntitiesByCategoryDimensionId($dimension['id']);
+            }
+            if (! empty($entityValues)) {
+                foreach ($entityValues as $entityValue) {
+                    if (! isset($orderedDimensions[$dimension['id']][$entityValue['id']])) {
+                        $orderedDimensions[$dimension['id']][$entityValue['id']] = array(
+                            'name'      => $entityValue['name'],
+                            'slug'      => $entityValue['slug'],
+                            'selected'  => false,
+                            'count'     => 0
+                        );
+                    }
+                }
             }
         }
 
@@ -1268,7 +1308,7 @@ class AdListController extends CoreController
             'current_category'  => $categoryObj->getName(),
             'parent_category'   => $categoryObj->getParent() && $categoryObj->getParent()->getId() == 1 ? '' : $categoryObj->getParent(),
             'user_types'        => $userTypes,
-            'ads_with_images'   => intval($totalAds - $noImages),
+            'image_count'       => $totalAds - $noImages,
             'locationFacets'    => $locationFacets,
             'orderedDimensions' => $orderedDimensions,
             'dimensions'        => $dimensions,
@@ -1327,7 +1367,7 @@ class AdListController extends CoreController
                     foreach ($dim_keys as $dim_key) {
                         $dim_field = get_object_vars(json_decode($ad[$dim_key][0]));
                         $dimensions[] = array(
-                            'name' => $dim_field['name'],
+                            'name'          => $dim_field['name'],
                             'listing_class' => empty($dim_field['listing_class']) ? '' : $dim_field['listing_class']
                         );
 
@@ -1342,22 +1382,22 @@ class AdListController extends CoreController
                 }
 
                 $ads[] = [
-                    'ad_id' => $ad['id'],
-                    'ad_title' => $ad['title'],
-                    'description' => isset($ad['description']) ? $ad['description'] : '',
-                    'price' => empty($ad['price']) ? '' : CommonManager::formatCurrency($ad['price'], $this->container),
-                    'ad_img' => isset($ad['thumbnail_url']) ? $ad['thumbnail_url'] : $this->container->getParameter('fa.static.shared.url').'/bundles/fafrontend/images/no-image-grey.svg',
-                    'image_count' => isset($ad['image_count']) ? $ad['image_count'] : 0,
-                    'img_alt' => '',
-                    'ad_url' => $ad['ad_detail_url'],
-                    'dimensions' => $dimensions,
-                    'top_ad' => empty($ad['is_topad']) ? false : true,
-                    'urgent_ad' => empty($ad['is_urgent_ad']) ? false : true,
-                    'boosted_ad' => empty($ad['is_boosted_ad']) ? false : true,
-                    'affiliate_ad' => empty($ad['is_affiliate']) ? false : true,
-                    'location' => $town,
-                    'last_updated' => $ad['updated_at'],
-                    'aff_icon_cls' => CommonManager::getAffiliateClass($ad['ad_source'])
+                    'ad_id'         => $ad['id'],
+                    'ad_title'      => $ad['title'],
+                    'description'   => isset($ad['description']) ? $ad['description'] : '',
+                    'price'         => empty($ad['price']) ? '' : CommonManager::formatCurrency($ad['price'], $this->container),
+                    'ad_img'        => isset($ad['thumbnail_url']) ? $ad['thumbnail_url'] : $this->container->getParameter('fa.static.shared.url').'/bundles/fafrontend/images/no-image-grey.svg',
+                    'image_count'   => isset($ad['image_count']) ? $ad['image_count'] : 0,
+                    'img_alt'       => '',
+                    'ad_url'        => $ad['ad_detail_url'],
+                    'dimensions'    => $dimensions,
+                    'top_ad'        => empty($ad['is_topad']) ? false : true,
+                    'urgent_ad'     => empty($ad['is_urgent_ad']) ? false : true,
+                    'boosted_ad'    => empty($ad['is_boosted_ad']) ? false : true,
+                    'affiliate_ad'  => empty($ad['is_affiliate']) ? false : true,
+                    'location'      => $town,
+                    'last_updated'  => $ad['updated_at'],
+                    'aff_icon_cls'  => CommonManager::getAffiliateClass($ad['ad_source'])
                 ];
 
             }
