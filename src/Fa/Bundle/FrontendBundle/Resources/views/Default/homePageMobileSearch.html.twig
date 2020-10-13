@@ -1,6 +1,6 @@
 {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'fa_top_search'}}) }}
     {{ form_errors(form) }}
-    <div class="top-search-modal" id="searchModal">
+    <div class="top-search-modal">
         <div class="top-search-modal__container">
             <div class="mega-search">
                 <div class="mega-search__modal-header">
@@ -15,7 +15,7 @@
                 <div class="mega-search__block">
                     <div class="mega-search__input">
                         {{ form_widget(form.keywords, {'attr': {'class': 'mega-search__input--text', 'placeholder':'What are you looking for?' }}) }}
-                        <button class="mega-search__input--btn" id="fa_top_search_keywords_searchGo" type="submit"></button>
+                        <button class="mega-search__input--btn" type="submit"></button>
                         <div class="close-icon" id="fa_top_search_keywords_close"></div>
                         <!-- Search dropdown Content starts-->
                         <div id="fa_top_search_keywords_list"></div>
@@ -39,8 +39,8 @@
                         {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'mega-search__select-location--text banner-search', 'placeholder':'Type postal code or town'|trans({}, 'frontend-homepage') }}) }}
                         <div class="close-icon closeIcon" id="fa_top_search_item__location_close"></div>
                         <div id="fa_top_search_item__location_list"></div>
-                        <div class="mega-search__select-location--ok ok-btn" type="button" id="top_search_location_homepage_ok">{{ 'Ok'|trans({}, 'frontend-homepage') }}</div>
                         <div class="mega-search__select-location--cancel cancel-btn" type="button" id="top_search_location_cancel">{{ 'Cancel'|trans({}, 'frontend-homepage') }}</div>
+                        <div class="mega-search__select-location--ok ok-btn" type="button" id="top_search_location_homepage_ok">{{ 'Ok'|trans({}, 'frontend-homepage') }}</div>
 {#                        <div id="header_search_editable_location_reveal_modal" class="reveal-modal tiny" data-reveal>#}
 {#                            {{ include('FaCoreBundle:Default:invalidLocationModal.html.twig', {'modalId': 'header_search_editable_location_reveal_modal'}) }}#}
 {#                        </div>#}
@@ -61,4 +61,18 @@
     {% do attribute(form, 'item__price_to').setRendered %}
     {% do attribute(form, 'item__distance').setRendered %}
 {{ form_end(form) }}
-<div id="bg-overlay"></div>
+<script>
+    if (window.matchMedia("(max-width: 767px)").matches) {
+        $("#topSearch,.search-sticky-mobile").click(function() {
+            $('.top-search-modal').toggleClass('modal-show');
+            $('#bg-overlay').toggleClass('bg-overlay');
+            $('body').toggleClass('overflow-hidden');
+            $('.mega-search__input--text').focus();
+        });
+        $("#modalClose").click(function() {
+            $('.top-search-modal').removeClass('modal-show');
+            $('#bg-overlay').removeClass('bg-overlay');
+            $('body').removeClass('overflow-hidden');
+        });
+    }
+</script>

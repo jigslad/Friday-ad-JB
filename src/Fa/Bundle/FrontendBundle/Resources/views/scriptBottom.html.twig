@@ -424,16 +424,4 @@
             }
         });
     }
-    if (window.matchMedia("(max-width: 767px)").matches) {
-        $("#topSearch,.search-sticky-mobile").click(function() {
-            $('.top-search-modal').toggleClass('modal-show');
-            $('#bg-overlay').toggleClass('bg-overlay');
-            $('body').toggleClass('overflow-hidden');
-        });
-        $("#modalClose").click(function() {
-            $('.top-search-modal').removeClass('modal-show');
-            $('#bg-overlay').removeClass('bg-overlay');
-            $('body').removeClass('overflow-hidden');
-        });
-    }
 </script>

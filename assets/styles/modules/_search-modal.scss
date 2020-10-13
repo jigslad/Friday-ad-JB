@@ -73,6 +73,9 @@
                         background: url('/public/images/search-white.svg') no-repeat center center, linear-gradient(135deg, #A8DC28 0%, #79D378 100%)!important;
                     }
                 }
+                .close-icon{
+                    right: 50px;
+                }
             }
             &__select-location {
                 width: 100%;
