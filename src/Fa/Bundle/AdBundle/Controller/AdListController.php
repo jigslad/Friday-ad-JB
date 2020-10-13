@@ -1144,11 +1144,17 @@ class AdListController extends CoreController
 
         $staticFilters = '';
         foreach ($searchParams as $searchKey => $searchItem) {
-            if (! empty($searchItem)) {
+            if (isset($searchItem) && $searchItem != '') {
                 if ($searchKey == 'item__price_from') {
                   $staticFilters .= ' AND price : [' . $searchItem . ' TO *]';
                 } else if ($searchKey == 'item__price_to') {
                     $staticFilters .= ' AND price : [* TO ' . $searchItem . ']';
+                } else if ($searchKey == 'ads_with_images') {
+                    $staticFilters .= ' AND image_count : 1|';
+                } else if ($searchKey == 'expired_ads') {
+                    $staticFilters .= ' AND status_id : ' . EntityRepository::AD_STATUS_EXPIRED_ID;
+                } else if ($searchKey == 'is_trade_ad') {
+                    $staticFilters .= ' AND is_trade_ad : ' . $searchItem;
                 } else {
                     $solrDimensionFieldName = $adRepository->getSolrFieldName($listingFields, $this->getDimensionName($searchKey));
 
@@ -1162,6 +1168,11 @@ class AdListController extends CoreController
                 }
             }
         }
+
+        if (array_key_exists('expired_ads', $searchParams) == false) {
+            $staticFilters .= ' AND status_id : ' . EntityRepository::AD_STATUS_LIVE_ID;
+        }
+        /*$staticFilters .= ' AND is_blocked_ad : 0';*/
 
         return $staticFilters;
     }
