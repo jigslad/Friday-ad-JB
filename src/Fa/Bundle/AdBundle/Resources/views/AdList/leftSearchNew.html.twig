@@ -180,7 +180,7 @@
                             <span class="custom-checkbox{% if leftFilters.ads_with_images == true %} checked {% endif %}">
                                 <input type="checkbox" {% if leftFilters.ads_with_images  == true %} checked="checked" {% endif %} id="fa_left_search_items_with_photo" name="fa_left_search[items_with_photo]" value="1">
                             </span>
-                            <label class="mb0" for="fa_left_search_items_with_photo">Only ads with photo ({{ leftFilters.ads_with_images }})</label>
+                            <label class="mb0" for="fa_left_search_items_with_photo">Only ads with photo ({{ leftFilters.image_count }})</label>
                             <a data-href="ads_with_images=1">Only ads with photo</a>
                         </li>
                     </ul>
@@ -194,7 +194,7 @@
                             <span class="custom-checkbox{% if leftFilters.expired_ads == true %} checked {% endif %}">
                                 <input type="checkbox" {% if leftFilters.expired_ads == true %} checked="checked" {% endif %} id="fa_left_search_expired_ads" name="fa_left_search[expired_ads]" value="1">
                             </span>
-                            <label class="mb0" for="fa_left_search_items_with_photo">Expired ads</label>
+                            <label class="mb0" for="fa_left_search_expired_ads">Expired ads</label>
                             <a data-href="expired_ads=1">Expired ads</a>
                         </li>
                     </ul>
