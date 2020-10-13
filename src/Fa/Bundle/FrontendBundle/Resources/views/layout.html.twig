@@ -290,12 +290,12 @@
         
         {% if showAdultPages==1 and currentRoute not in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote', 11: 'fa_frontend_homepage', 12: 'fa_new_adult_homepage' } %}
             {{ include('FaFrontendBundle:Adult:header.html.twig', {'status_code': status_code}) }}
-        {% elseif showAdultPages == 1 %}
-            {{ include('FaFrontendBundle:Adult:headerNew.html.twig', {'status_code': status_code}) }}
+{#        {% elseif showAdultPages == 1 %}#}
+{#            {{ include('FaFrontendBundle:Adult:headerNew.html.twig', {'status_code': status_code}) }}#}
         {% else %}
         	{{ include('FaFrontendBundle::header.html.twig', {'status_code': status_code}) }}
         {% endif %}
-	
+
         {% if status_code == 200 %}
             {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page'} %}
                 <div class="row top-msg">
