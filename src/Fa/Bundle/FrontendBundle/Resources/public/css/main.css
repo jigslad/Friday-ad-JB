@@ -27086,7 +27086,8 @@ table.responsive-card-table tr:nth-of-type(2n) {
     .top-bar .name a.logo {
         margin: 0 auto;
         width: 177px;
-        display: block
+        display: block;
+        margin-left: 6px;
     }
     .top-bar-section li:not(.has-form) a:not(.button) {
         background: #212527;
