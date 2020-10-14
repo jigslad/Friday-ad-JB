@@ -129,7 +129,7 @@
                                                 {% endif %}
                                              {% elseif staticTxtCnt == 0 and categoryId == adultCategoryId %}
                                             	{% if (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox) or (app.request.cookies.has('is_over_18')) %}
-                                            		<div class="large-6 columns live-cam-url"><a href="{{ liveCamsUrl }}" rel="nofollow" target="_blank" >Hook Ups</a></div>
+                                            		<div class="large-6 columns live-cam-url"><a href="{{ liveCamsUrl }}" rel="nofollow" target="_blank" >Escort Alternative</a></div>
                                             	    <div class="large-6 columns live-cam-url"><a href="https://engine.partylemons.com/?414907182" rel="nofollow" target="_blank">MILF Hookups</a></div>
                                             	{# {% else %}
                                             		<div class="large-6 columns live-cam-url"><a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup(0,'live-cams');">Hook Ups</a></div>
@@ -239,8 +239,8 @@
                                  
                             {% endfor %}
                         	<li class="last-level">
-                        		{% if thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox %}
-                            		<a href="{{ liveCamsUrl }}" rel="nofollow" target="_blank" ><span class="mob-adult mob-adul-menu-icons">&nbsp;</span>Hook Ups</a>
+                        		{% if (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox) or (app.request.cookies.has('is_over_18')) %}
+                            		<a href="{{ liveCamsUrl }}" rel="nofollow" target="_blank" ><span class="mob-adult mob-adul-menu-icons">&nbsp;</span>Escort Alternative</a>
                             		<a href="https://engine.partylemons.com/?414907182" rel="nofollow" target="_blank" ><span class="mob-adult mob-adul-menu-icons">&nbsp;</span>MILF Hookups</a>
                         		{# {% else %}
                             		<a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" ><span class="mob-adult mob-adul-menu-icons">&nbsp;</span>Hook Ups</a>
