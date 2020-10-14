@@ -223,7 +223,9 @@
         }
         $('#pay_now_btn').show();
         bindFormErrorEvents();
+        {% if app.request.get('_route')  == 'show_cart'%}
         enableDisableNextButton();
+        {% endif %}
     }
     //]]>
     </script>
@@ -262,10 +264,12 @@
                 }
             }
             requiredFieldsupdated.each(function( index, element ) {
-                var arrayContainsId = (checkoutNotRequred.indexOf(element.id) > -1);
-                if(!arrayContainsId) {
-                    if (!element.value) {
-                        checkAndDisableButton()
+                if(element.id.indexOf('fa_payment_cyber_source') != -1){
+                    var arrayContainsId = (checkoutNotRequred.indexOf(element.id) > -1);
+                    if(!arrayContainsId) {
+                        if (!element.value) {
+                            checkAndDisableButton()
+                        }
                     }
                 }
             });
