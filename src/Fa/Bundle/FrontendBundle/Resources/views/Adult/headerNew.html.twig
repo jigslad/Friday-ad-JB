@@ -82,34 +82,53 @@
                        <div class="tablet-menu adul-tablet-menu">
                            {{ include('FaFrontendBundle:Adult:renderHeaderCategoriesNew.html.twig', {'totalUnreadMsg': totalUnreadMsg, 'headerCategories': headerCategories}) }}
                         </div>
-                        
                             {% if app.user %}
-                            <ul class="show-for-small-only login-menu">
-                                <li>
-                            	<a href="{% if myProfileUrl %}{{ myProfileUrl }}{% else %}javascript:void(0);{% endif %}" class="logged-in-user">
-                                    {% if app.user.getFirstName() or  app.user.getLastName() %}
-                                        {{app.user.getFirstName()}} {{app.user.getLastName()}}
-                                    {% else %}
-                                        {{app.user.getUsername()}}
+                                {% set messageRepository = fetch_repository('FaMessageBundle:Message') %}
+                                {% set totalUnreadMsg = messageRepository.getMessageCount(app.user.getId(), 'all', fetch_container_instance()) %}
+                                <dl class="accordion show-for-small-only" data-accordion>
+                                    <dd class="accordion-navigation">
+                                        <a href="#db-mob-menu">MY DASHBOARD</a>
+                                        <div id="db-mob-menu" class="content">
+                                            <ul class="db-menu-mobile">
+                                                <li><a href="{{ path('dashboard_home') }}" class="home-icon">{{ 'Dashboard home'|trans({}, 'frontend-header-usermenu') }}</a></li>
+                                                <li><a href="{{ path('user_ad_message_all') }}" class="messages-icon">{{ 'Messages'|trans({}, 'frontend-header-usermenu') }}{% if totalUnreadMsg > 0 %}&nbsp;<span class="notification-digit">({{totalUnreadMsg}})</span>{% endif %}</a></li>
+                                                <li><a href="{{ path('user_review_list') }}" class="reviews-icon">{{ 'Reviews'|trans({}, 'frontend-header-usermenu') }}</a></li>
+                                                <li><a href="{{ path('manage_my_ads_active') }}" id="manage-my-ad-id" class="manage-item-icon">{{'Manage my ads'|trans({}, 'frontend-header-usermenu')}}</a></li>
+                                                <li><a href="{{ path('my_profile') }}" class="manage-profile-icon">{{ 'Edit profile'|trans({}, 'frontend-header-usermenu') }}</a></li>
+                                                <li><a href="{{ path('my_orders') }}" class="orders-icon">{{ 'Orders'|trans({}, 'frontend-header-usermenu') }}</a></li>
+                                                <li><a href="{{ path('my_favourite') }}" class="my-favourites-icon">{{ 'My favourites'|trans({}, 'frontend-header-usermenu') }}</a></li>
+                                                <li><a href="{{ path('list_search_agent') }}" id="saved-search-header-id" class="saved-searches-icon">{{'Alerts and searches'|trans({}, 'frontend-header-usermenu')}}</a></li>
+                                                <li><a href="{{ path('my_purchases') }}" id="shop-header-id" class="purchase-icon">{{ 'Purchases'|trans({}, 'frontend-header-usermenu') }}</a></li>
+                                                <li><a href="{{ path('my_account') }}" id="account-header-id" class="account-icon">{{ 'Account'|trans({}, 'frontend-header-usermenu') }}</a></li>
+                                            </ul>
+                                        </div>
+                                    </dd>
+                                </dl>
+                                <ul class="show-for-small-only login-menu">
+                                    <li>
+                                    <a href="{% if myProfileUrl %}{{ myProfileUrl }}{% else %}javascript:void(0);{% endif %}" class="logged-in-user">
+                                        {% if app.user.getFirstName() or  app.user.getLastName() %}
+                                            {{app.user.getFirstName()}} {{app.user.getLastName()}}
+                                        {% else %}
+                                            {{app.user.getUsername()}}
+                                        {% endif %}
+                                        </a>
+                                    </li>
+                                    {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+                                        {{ include('FaUserBundle:Dashboard:notificationMenuMobile.html.twig', {'count': notification_count}) }}
                                     {% endif %}
-                                    </a>
-                                </li>
-                                {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
-                                    {{ include('FaUserBundle:Dashboard:notificationMenuMobile.html.twig', {'count': notification_count}) }}
-                                {% endif %}
-                                <li><a href="{{ path('user_ad_message') }}" id="mob-inbox-header-id">{{'MESSAGES'|trans({}, 'inbox')}}{% if totalUnreadMsg > 0 %}&nbsp;<span class="notification-digit">({{totalUnreadMsg}})</span>{% endif %}</a></li>
-                                
-                                {% if userDetail|length > 0 %}
-	                            <li>
-                                    <a href="{{ path('show_cart') }}">Cart <span class="notification-digit">({{ userDetail|length }})</span></a>
-                                </li>
-                                {% endif %}
-                                
-                                <li><a href="{{ path('logout') }}" id="mob-logout-header-id">{{'Log Out'|trans({}, 'frontend-top-menu')}}</a></li>
-                            	</ul>
+                                    <li><a href="{{ path('user_ad_message') }}" id="mob-inbox-header-id">{{'MESSAGES'|trans({}, 'inbox')}}{% if totalUnreadMsg > 0 %}&nbsp;<span class="notification-digit">({{totalUnreadMsg}})</span>{% endif %}</a></li>
+
+                                    {% if userDetail|length > 0 %}
+                                    <li>
+                                        <a href="{{ path('show_cart') }}">Cart <span class="notification-digit">({{ userDetail|length }})</span></a>
+                                    </li>
+                                    {% endif %}
+
+                                    <li><a href="{{ path('logout') }}" id="mob-logout-header-id">{{'Log Out'|trans({}, 'frontend-top-menu')}}</a></li>
+                                    </ul>
                                 {% else %}
                                 <ul class="show-for-small-only login-menu login-reg-flex">
-                            
                                 <li><a href="{{ path('login') }}" id="mob-login-header-id">{{'Log In'|trans({}, 'frontend-top-menu')}}</a></li>
                                 <li><a href="{{ path('fa_user_register') }}" id="mob-register-header-id">{{'Register'|trans({}, 'frontend-top-menu')}}</a></li>
                             	</ul>
