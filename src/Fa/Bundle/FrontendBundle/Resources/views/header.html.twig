@@ -242,7 +242,7 @@
 {#    </div>#}
 {#   {% endif %}#}
     {% if status_code == 200 %}
-        {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'cybersource_checkout' ,3: 'ad_post_fourth_step'} %}
+        {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'cybersource_checkout' ,3: 'ad_post_fourth_step',4: 'fa_adult_homepage', 5: 'fa_new_adult_homepage'} %}
             {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {} } )) }}
         {% endif %}
     {% endif %}
