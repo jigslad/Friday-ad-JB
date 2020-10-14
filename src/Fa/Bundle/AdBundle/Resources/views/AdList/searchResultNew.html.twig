@@ -216,7 +216,6 @@
 
                 {% for ad in ads %}
                     {% set adCount = adCount + 1 %}
-                    {{ include('FaAdBundle:AdList:listDetailNew.html.twig') }}
 
                     {% if thisDevice == 'mobile' %}
                         {% if (adCount >= 2) %}
@@ -273,6 +272,8 @@
                             {% set slotallocated = slotallocated|merge([8]) %}
                         {% endif %}
                     {% endif %}
+
+                    {{ include('FaAdBundle:AdList:listDetailNew.html.twig') }}
                 {% endfor %}
 
                 {% if pagination.getNbPages() == pagination.getCurrentPage() %}

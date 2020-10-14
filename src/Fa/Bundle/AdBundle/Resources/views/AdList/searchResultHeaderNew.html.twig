@@ -32,7 +32,7 @@
                                 {% else %}
                                     {% set catLinkParam = { 'item__location': location_id, 'item__category_id': categoryId} %}
                                     {% set catListUrl = container.get('fa_ad.manager.ad_routing').getListingUrl(catLinkParam) %}
-                                    <a href="{{ catListUrl }}">{{ categoryName }}</a>
+                                    <a href="/ads{{ catListUrl }}">{{ categoryName }}</a>
                                 {% endif %}
                                 {% set searchTerm = 'in '~categoryName %}
                                 {% set catCnt = catCnt + 1 %}
