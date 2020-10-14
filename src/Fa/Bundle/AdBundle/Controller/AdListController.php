@@ -918,7 +918,7 @@ class AdListController extends CoreController
 
         $data['static_filters'] = '';
         if ($findersSearchParams['item__category_id'] != 1) {
-            $data['static_filters'] .= ' AND category_full_path:"' . $category->getFullSlug() . '"';
+            $data['static_filters'] .= ' AND category_full_path:' . $category->getFullSlug();
         }
         $data['static_filters'] .= ' AND -is_topad:true';
         $page = $data['pager']['page'];
@@ -951,13 +951,17 @@ class AdListController extends CoreController
         $keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: NULL;
         $recordsPerPage = (isset($data['pager']['limit']) && $data['pager']['limit']) ? $data['pager']['limit']: $this->container->getParameter('fa.search.records.per.page');
 
-        $pagination = $this->getSolrPagination('ad.new', $keywords, $data, $page, $recordsPerPage, 0, false);
+        $pagination = $this->getSolrPagination('ad.new', $keywords, $data, $page, $recordsPerPage, 0, true);
         $ads = $this->formatAds($pagination['pagination']);
 
         if ($page == 1) {
             $featuredData = $this->setDefaultParametersNew($request, $mapFlag, 'finders', array());
 
-            $featuredData['static_filters'] = ' AND category_full_path:"' . $category->getFullSlug() . '"';
+            if ($findersSearchParams['item__category_id'] != 1) {
+                $featuredData['static_filters'] = ' AND category_full_path:' . $category->getFullSlug();
+            } else {
+                $featuredData['static_filters'] = '';
+            }
             $featuredData['static_filters'] .= ' AND is_topad:true';
             $featuredData['static_filters'] .= $static_filters;
 
@@ -965,7 +969,7 @@ class AdListController extends CoreController
             $viewedTopAdsCookie = $request->cookies->get('viewed_top_ads_'.$root->getId());
             if ($viewedTopAdsCookie) {
                 $topAds = explode(',', $viewedTopAdsCookie);
-                $featuredData['static_filters'] .= ' AND - id : ('.implode(' ', $topAds).')';
+                $featuredData['static_filters'] .= ' AND -id : ('.implode(' ', $topAds).')';
             }
 
             $keywords = (isset($featuredData['search']['keywords']) && $featuredData['search']['keywords']) ? $featuredData['search']['keywords'] : NULL;
@@ -976,7 +980,11 @@ class AdListController extends CoreController
             if (count($featuredPagination['pagination']) < 3) {
                 $featuredData = $this->setDefaultParametersNew($request, $mapFlag, 'finders', array());
 
-                $featuredData['static_filters'] = ' AND category_full_path:"' . $category->getFullSlug() . '"';
+                if ($findersSearchParams['item__category_id'] != 1) {
+                    $featuredData['static_filters'] = ' AND category_full_path:' . $category->getFullSlug();
+                } else {
+                    $featuredData['static_filters'] = '';
+                }
                 $featuredData['static_filters'] .= ' AND is_topad:true';
                 $featuredData['static_filters'] .= $static_filters;
 
@@ -988,8 +996,10 @@ class AdListController extends CoreController
 
             $featuredAds = $this->formatAds($featuredPagination['pagination']);
             $viewedTopAds = array_column($featuredAds, 'id');
-            $viewedTopAds = array_merge($viewedTopAds, $topAds);
-            $request->cookies->set('viewed_top_ads_'.$root->getId(), $viewedTopAds);
+            $viewedTopAds = array_unique(array_merge($viewedTopAds, $topAds));
+            $response = new Response();
+            $response->headers->setCookie(new Cookie('viewed_top_ads_'.$root->getId(), implode(',', $viewedTopAds), CommonManager::getTimeStampFromEndDate(date('Y-m-d'))));
+            $response->sendHeaders();
         } else {
             $featuredAds = [];
         }
@@ -1024,7 +1034,7 @@ class AdListController extends CoreController
             'recommendedSlotLimit'  => $this->getRepository('FaCoreBundle:Config')->getSponsoredLimit(),
             'pagination'            => $pagination['pagination'],
             'adFavouriteIds'        => $adFavouriteIds,
-            'leftFilters'           => empty($pagination['resultCount']) ? [] : $this->getLeftFilters($category, $pagination['facetResult'], $pagination['resultCount'], $searchableDimensions, $findersSearchParams),
+            'leftFilters'           => empty($pagination['resultCount']) ? [] : $this->getLeftFilters($category, $pagination['facetResult'], $pagination['resultCount'], $searchableDimensions, $findersSearchParams, $data),
             'currentLocation'       => $requestlocation,
             'searchParams'          => $findersSearchParams,
             'cookieLocationDetails' => $cookieLocationDetails
@@ -1159,13 +1169,13 @@ class AdListController extends CoreController
      */
     private function setDimensionParams($searchParams, $listingFields, $adRepository)
     {
-        array_shift($searchParams);
         unset($searchParams['item__category_id']);
-        unset($searchParams['item__location']);
         if (isset($searchParams['sort_ord'])) unset($searchParams['sort_ord']);
         if (isset($searchParams['sort_field'])) unset($searchParams['sort_field']);
 
-        $staticFilters = '';
+        $staticFilters = ' AND (town: *\:' . $searchParams['item__location'] . '\,* OR domicile: *\:' . $searchParams['item__location'] . '\,* OR locality: *\:' . $searchParams['item__location'] . '\,*)';
+        unset($searchParams['item__location']);
+
         foreach ($searchParams as $searchKey => $searchItem) {
             if (isset($searchItem) && $searchItem != '') {
                 if ($searchKey == 'item__price_from') {
@@ -1206,9 +1216,10 @@ class AdListController extends CoreController
      * @param $totalAds
      * @param $dimensions
      * @param $searchParams
+     * @param $data
      * @return array
      */
-    private function getLeftFilters($categoryObj, $facetResult, $totalAds, $dimensions, $searchParams)
+    private function getLeftFilters($categoryObj, $facetResult, $totalAds, $dimensions, $searchParams, $data)
     {
         $params = [];
         foreach ($searchParams as $dimensionSlug => $searchParam) {
@@ -1228,17 +1239,45 @@ class AdListController extends CoreController
             }
         }
 
+        $solrSearchManager = $this->get('fa.solrsearch.manager');
+        $keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: NULL;
+
+        if (isset($params['is_trade_ad'])) {
+            if ($data['static_filters']) {
+                $staticFilters = explode(' AND ', $data['static_filters']);
+                $newStaticFilters = '';
+
+                foreach ($staticFilters as $staticFilter) {
+                    if (! empty($staticFilter) && strpos($staticFilter, 'is_trade_ad') === false) {
+                        $newStaticFilters .= ' AND '.$staticFilter;
+                    }
+                }
+                $data['static_filters'] = $newStaticFilters;
+                $data['facet_fields'] = array(
+                    'is_trade_ad' => array('min_count' => 0)
+                );
+            }
+
+            $solrSearchManager->init('ad.new', $keywords, $data, 1, 1, 0, true);
+            $solrResponse = $solrSearchManager->getSolrResponse();
+            $facetTradeResult = $solrSearchManager->getSolrResponseFacetFields($solrResponse);
+
+            $tradeFacets = $facetTradeResult['is_trade_ad'];
+        } else {
+            $tradeFacets = $facetResult['is_trade_ad'];
+        }
+
         $userTypes = [
             0 => [
                 'title' => 'Private advertiser',
                 'url_param' => 'is_trade_ad=0',
-                'count' => empty($facetResult['is_trade_ad']) ? 0 : intval($facetResult['is_trade_ad']["false"]),
+                'count' => empty($tradeFacets) ? 0 : intval($tradeFacets["false"]),
                 'selected' => isset($params['is_trade_ad']) && $params['is_trade_ad'] == '0' ? true : false
             ],
             1 => [
                 'title' => 'Business advertiser',
                 'url_param' => 'is_trade_ad=1',
-                'count' => empty($facetResult['is_trade_ad']) ? 0 : intval($facetResult['is_trade_ad']["true"]),
+                'count' => empty($tradeFacets) ? 0 : intval($tradeFacets["true"]),
                 'selected' => isset($params['is_trade_ad']) && $params['is_trade_ad'] == '1' ? true : false
             ]
         ];
@@ -1266,30 +1305,51 @@ class AdListController extends CoreController
                 $selected = $params[$paramname];
             }
 
-            foreach ($facetArraySet as $jsonValue => $facetCount) {
-                $entityValue = get_object_vars(json_decode($jsonValue));
+            if (! empty($facetArraySet)) {
+                foreach ($facetArraySet as $jsonValue => $facetCount) {
+                    $entityValue = get_object_vars(json_decode($jsonValue));
 
-                $orderedDimensions[$dimension['id']][$entityValue['id']] = array(
-                    'name' => $entityValue['name'],
-                    'slug' => $entityValue['slug'],
-                    'count' => $facetCount,
-                    'selected' => isset($selected) && (is_array($selected) ? in_array($entityValue['id'], $selected)  : $selected == $entityValue['id']) ? true : false
-                );
+                    $orderedDimensions[$dimension['id']][$entityValue['id']] = array(
+                        'name' => $entityValue['name'],
+                        'slug' => $entityValue['slug'],
+                        'count' => $facetCount,
+                        'selected' => isset($selected) && (is_array($selected) ? in_array($entityValue['id'], $selected) : $selected == $entityValue['id']) ? true : false
+                    );
+                }
             }
 
-            $entityValues = [];
             if (! empty($selected)) {
-                $entityValues = $this->getRepository('FaEntityBundle:Entity')->getEntitiesByCategoryDimensionId($dimension['id']);
-            }
-            if (! empty($entityValues)) {
-                foreach ($entityValues as $entityValue) {
-                    if (! isset($orderedDimensions[$dimension['id']][$entityValue['id']])) {
-                        $orderedDimensions[$dimension['id']][$entityValue['id']] = array(
-                            'name'      => $entityValue['name'],
-                            'slug'      => $entityValue['slug'],
-                            'selected'  => false,
-                            'count'     => 0
-                        );
+                if ($data['static_filters']) {
+                    $staticFilters = explode(' AND ', $data['static_filters']);
+                    $newStaticFilters = '';
+
+                    foreach ($staticFilters as $staticFilter) {
+                        if (! empty($staticFilter) && strpos($staticFilter, $solrFieldName) === false) {
+                            $newStaticFilters .= ' AND '.$staticFilter;
+                        }
+                    }
+                    $data['static_filters'] = $newStaticFilters;
+                    $data['facet_fields'] = array(
+                        $solrFieldName => array('min_count' => 0)
+                    );
+                }
+
+                $solrSearchManager->init('ad.new', $keywords, $data, 1, 1, 0, true);
+                $solrResponse = $solrSearchManager->getSolrResponse();
+                $facetDimResult = $solrSearchManager->getSolrResponseFacetFields($solrResponse);
+                if (! empty($facetDimResult)) {
+                    $facetDimResult = $facetDimResult[$solrFieldName];
+                    foreach ($facetDimResult as $jsonValue => $facetCount) {
+                        $entityValue = get_object_vars(json_decode($jsonValue));
+
+                        if (! isset($orderedDimensions[$dimension['id']][$entityValue['id']])) {
+                            $orderedDimensions[$dimension['id']][$entityValue['id']] = array(
+                                'name' => $entityValue['name'],
+                                'slug' => $entityValue['slug'],
+                                'count' => $facetCount,
+                                'selected' => false
+                            );
+                        }
                     }
                 }
             }
@@ -1383,7 +1443,7 @@ class AdListController extends CoreController
 
                 $ads[] = [
                     'ad_id'         => $ad['id'],
-                    'ad_title'      => $ad['title'],
+                    'ad_title'      => isset($ad['title']) ? $ad['title'] : '',
                     'description'   => isset($ad['description']) ? $ad['description'] : '',
                     'price'         => empty($ad['price']) ? '' : CommonManager::formatCurrency($ad['price'], $this->container),
                     'ad_img'        => isset($ad['thumbnail_url']) ? $ad['thumbnail_url'] : $this->container->getParameter('fa.static.shared.url').'/bundles/fafrontend/images/no-image-grey.svg',
@@ -1397,7 +1457,7 @@ class AdListController extends CoreController
                     'affiliate_ad'  => empty($ad['is_affiliate']) ? false : true,
                     'location'      => $town,
                     'last_updated'  => $ad['updated_at'],
-                    'aff_icon_cls'  => CommonManager::getAffiliateClass($ad['ad_source'])
+                    'aff_icon_cls'  => $ad['ad_source'] == 'paa' ? '' : CommonManager::getAffiliateClass($ad['ad_source'])
                 ];
 
             }
