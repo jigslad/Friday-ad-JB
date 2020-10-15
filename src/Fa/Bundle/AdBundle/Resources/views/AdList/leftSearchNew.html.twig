@@ -119,7 +119,7 @@
                                         </ul>
                                         <div class="see-more clearfix">
                                             <a href="javascript:void(0);" rel="nofollow" onclick="$('#locationLHSFilters').foundation('reveal', 'open');">See more</a>
-                                            <a href="javascript:void(0)" rel="nofollow" class="right clear_filter" id="{{ key }}_clear">{{ 'Clear'|trans({}, 'frontend-left-search') }}</a>
+                                            <a href="javascript:void(0);" rel="nofollow" class="right clear_filter" id="{{ key }}_clear">{{ 'Clear'|trans({}, 'frontend-left-search') }}</a>
                                         </div>
                                         <div class="reveal-modal" id="locationLHSFilters" data-reveal>
                                             <a class="close-reveal-modal">&times;</a>
@@ -256,6 +256,26 @@
         }
     }
 
+    function set_url_params(url_params, this_url) {
+        let this_url_part = this_url.split('=')[0];
+        if (url_params.indexOf(this_url_part) != -1) {
+            let url_param_arr = url_params.split('&');
+            let new_url_param = '?';
+            url_param_arr.forEach(function(item) {
+                if (item.indexOf(this_url_part) == -1) {
+                    new_url_param += item + '&';
+                } else {
+                    new_url_param += this_url + '&';
+                }
+            });
+            url_params = new_url_param.replace(new RegExp("[&]*$"), '');
+        } else {
+            url_params += '&' + this_url;
+        }
+
+        return url_params;
+    }
+
     $(document).ready(function() {
 
         $('a[data-href]').each(function() {
@@ -278,9 +298,27 @@
             if (index != -1) {
                 href = href.substring(0, (index + this_url.length));
             } else if (this_url.indexOf('=') != -1) {
-                url_params += '&' + this_url;
+                if (url_params == '?') {
+                    url_params += this_url;
+                } else {
+                    url_params = set_url_params(url_params, this_url);
+                }
             } else {
-                href += this_url + '/';
+                let data_href = '';
+                if ($(this).closest('li').find('input[type="checkbox"]').length) {
+                    if ($(this).closest('ul').find('li').length > 1 && $(this).closest('ul').find('span.checked')) {
+                        data_href = $(this).closest('ul').find('span.checked').closest('li').find('a').attr('data-href');
+                    }
+
+                    if (data_href.length) {
+                        let name = $(this).closest('ul').find('li').find('label').attr('for').replace('fa_left_search', '');
+                        url_params = set_url_params(url_params, 'item__' + name + '=' + this_url + '/');
+                    } else {
+                        href += this_url + '/';
+                    }
+                } else {
+                    href += this_url + '/';
+                }
             }
 
             if (url_params.length == 1) {
@@ -307,6 +345,34 @@
         $('.accordion_panel').each(function() {
             if ($(this).find('a.bold').length || $(this).find('span.checked').length) {
                 $(this).addClass('active');
+            }
+        });
+
+        $('.clear_filter').each(function() {
+            if ($(this).closest('.towns-list')) {
+                let url = window.location.href;
+
+                url = href.replace('/{{ currentLocation }}/', '/uk/');
+
+                $(this).attr('href', url);
+            } else {
+                let this_tag = $(this).closest('.accordion-navigation').find('a:first-child');
+                let href = $(this_tag).attr('href');
+                let data_href = $(this_tag).attr('data-href');
+
+                href.replace(data_href, '');
+
+                let href_arr = href.split('?');
+                let href1 = href_arr[0];
+                let urlparams = href_arr[1].split('&');
+                let new_url_params = '?';
+
+                urlparams.forEach(function (item) {
+                    new_url_params += item + '&';
+                });
+                urlparams = new_url_params.replace(new RegExp("[&]*$"), '');
+
+                $(this).attr('href', href1 + urlparams);
             }
         });
     });

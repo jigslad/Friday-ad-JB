@@ -1028,7 +1028,7 @@ class AdListController extends CoreController
         $parameters = [
             'featuredAds'           => $featuredAds,
             'ads'                   => $ads,
-            'resultCount'           => $pagination['resultCount'] + count($featuredAds),
+            'resultCount'           => $pagination['resultCount'],
             'bannersArray'          => $bannersArray,
             'recommendedSlotResult' => $recommendedSlot,
             'recommendedSlotLimit'  => $this->getRepository('FaCoreBundle:Config')->getSponsoredLimit(),
@@ -1173,31 +1173,39 @@ class AdListController extends CoreController
         if (isset($searchParams['sort_ord'])) unset($searchParams['sort_ord']);
         if (isset($searchParams['sort_field'])) unset($searchParams['sort_field']);
 
-        $staticFilters = ' AND (town: *\:' . $searchParams['item__location'] . '\,* OR domicile: *\:' . $searchParams['item__location'] . '\,* OR locality: *\:' . $searchParams['item__location'] . '\,*)';
+        if ($searchParams['item__location'] != LocationRepository::COUNTY_ID) {
+            $staticFilters = ' AND (town: *\:' . $searchParams['item__location'] . '\,* OR domicile: *\:' . $searchParams['item__location'] . '\,* OR locality: *\:' . $searchParams['item__location'] . '\,*)';
+        } else {
+            $staticFilters = '';
+        }
         unset($searchParams['item__location']);
+        foreach (array_keys($searchParams) as $key) {
+            if (preg_match('/\//', $key)) {
+                unset($searchParams[$key]);
+                break;
+            }
+        }
 
         foreach ($searchParams as $searchKey => $searchItem) {
-            if (isset($searchItem) && $searchItem != '') {
-                if ($searchKey == 'item__price_from') {
-                  $staticFilters .= ' AND price : [' . $searchItem . ' TO *]';
-                } else if ($searchKey == 'item__price_to') {
-                    $staticFilters .= ' AND price : [* TO ' . $searchItem . ']';
-                } else if ($searchKey == 'ads_with_images') {
-                    $staticFilters .= ' AND image_count : 1|';
-                } else if ($searchKey == 'expired_ads') {
-                    $staticFilters .= ' AND status_id : ' . EntityRepository::AD_STATUS_EXPIRED_ID;
-                } else if ($searchKey == 'is_trade_ad') {
-                    $staticFilters .= ' AND is_trade_ad : ' . $searchItem;
-                } else {
-                    $solrDimensionFieldName = $adRepository->getSolrFieldName($listingFields, $this->getDimensionName($searchKey));
+            if ($searchKey == 'item__price_from') {
+              $staticFilters .= ' AND price : [' . $searchItem . ' TO *]';
+            } else if ($searchKey == 'item__price_to') {
+                $staticFilters .= ' AND price : [* TO ' . $searchItem . ']';
+            } else if ($searchKey == 'ads_with_images') {
+                $staticFilters .= ' AND image_count : [1 TO *]';
+            } else if ($searchKey == 'expired_ads') {
+                $staticFilters .= ' AND status_id : ' . EntityRepository::AD_STATUS_EXPIRED_ID;
+            } else if ($searchKey == 'is_trade_ad') {
+                $staticFilters .= ' AND is_trade_ad : ' . $searchItem;
+            } else {
+                $solrDimensionFieldName = $adRepository->getSolrFieldName($listingFields, $this->getDimensionName($searchKey));
 
-                    if (is_array($searchItem)) {
-                        foreach ($searchItem as $eachItem) {
-                            $staticFilters .= ' AND ' . $solrDimensionFieldName . ':*' . $eachItem . '*';
-                        }
-                    } else {
-                        $staticFilters .= ' AND ' . $solrDimensionFieldName . ':*' . $searchItem . '*';
+                if (is_array($searchItem)) {
+                    foreach ($searchItem as $eachItem) {
+                        $staticFilters .= ' AND ' . $solrDimensionFieldName . ':*' . $eachItem . '*';
                     }
+                } else {
+                    $staticFilters .= ' AND ' . $solrDimensionFieldName . ':*' . $searchItem . '*';
                 }
             }
         }
@@ -1330,7 +1338,7 @@ class AdListController extends CoreController
                     }
                     $data['static_filters'] = $newStaticFilters;
                     $data['facet_fields'] = array(
-                        $solrFieldName => array('min_count' => 0)
+                        $solrFieldName => array('min_count' => 1)
                     );
                 }
 
@@ -1358,7 +1366,7 @@ class AdListController extends CoreController
         $noImages = 0;
         if (isset($facetResult['image_count'])) {
             $arr = get_object_vars($facetResult['image_count']);
-            if (! empty($arr)) {
+            if (! empty($arr) && isset($arr[0])) {
                 $noImages = intval($arr[0]);
             }
         }
@@ -1457,7 +1465,7 @@ class AdListController extends CoreController
                     'affiliate_ad'  => empty($ad['is_affiliate']) ? false : true,
                     'location'      => $town,
                     'last_updated'  => $ad['updated_at'],
-                    'aff_icon_cls'  => $ad['ad_source'] == 'paa' ? '' : CommonManager::getAffiliateClass($ad['ad_source'])
+                    'aff_icon_cls'  => ($ad['ad_source'] == 'paa' || $ad['ad_source'] == 'paa-app') ? '' : CommonManager::getAffiliateClass($ad['ad_source'])
                 ];
 
             }
