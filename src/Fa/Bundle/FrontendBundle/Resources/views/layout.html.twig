@@ -147,8 +147,14 @@
         {% endif %}                
     {% endif %}	
             
-    {% if currentRoute=='fa_adult_homepage' or currentRoute=='fa_new_adult_homepage' %}
+    {% if (currentRoute in {0: 'fa_adult_homepage', 1:'fa_new_adult_homepage'}) %}
     	{% set showAdultPages=1 %}
+    {% endif %}
+
+    {% if (showAdultPages==1 and (currentRoute in {0: 'fa_adult_homepage', 1:'fa_new_adult_homepage', 2:'ad_detail_page', 3:'listing_page', 4:'my_account'})) %}
+        {% set showAdultPages=1 %}
+    {% else %}
+        {% set showAdultPages=0 %}
     {% endif %}
         
 
