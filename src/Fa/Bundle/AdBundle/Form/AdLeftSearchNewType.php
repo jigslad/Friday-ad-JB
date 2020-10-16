@@ -61,6 +61,8 @@ class AdLeftSearchNewType extends AbstractType
      */
     protected $parentIdArray;
 
+    protected $searchParams;
+
     /**
      * Constructor.
      *
@@ -82,9 +84,11 @@ class AdLeftSearchNewType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $this->searchParams = $options['data']['searchParams'];
+
         $builder
-        ->add('item__price_from', TextType::class, array(/** @Ignore */'label' => false))
-        ->add('item__price_to', TextType::class, array(/** @Ignore */'label' => false))
+        ->add('item__price_from', TextType::class, array(/** @Ignore */'label' => false, 'data' => empty($this->searchParams['item__price_from']) ? '' : $this->searchParams['item__price_from']))
+        ->add('item__price_to', TextType::class, array(/** @Ignore */'label' => false, 'data' => empty($this->searchParams['item__price_to']) ? '' : $this->searchParams['item__price_to']))
         ->add('item__category_id', HiddenType::class)
         ->add('map', HiddenType::class)
         ->add('sort_field', HiddenType::class)
@@ -116,7 +120,7 @@ class AdLeftSearchNewType extends AbstractType
         $rootCategoryId = null;
 
         $categoryId   = '';$getLocLvl = 0;
-        $searchParams = $this->request->get('searchParams');
+        $searchParams = $this->searchParams;
         
         $cookieLocation = $this->request->cookies->get('location');
         if(!empty($cookieLocation)) {
@@ -128,7 +132,7 @@ class AdLeftSearchNewType extends AbstractType
         $selLocationArray = array();       
         $selLocationArray = $this->em->getRepository('FaEntityBundle:Location')->find($searchLocation);
         if(!empty($selLocationArray)) { $getLocLvl = $selLocationArray->getLvl(); }
-                
+
         if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
             $categoryId = $searchParams['item__category_id'];
         }

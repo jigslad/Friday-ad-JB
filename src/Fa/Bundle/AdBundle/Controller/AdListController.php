@@ -11,6 +11,7 @@
 
 namespace Fa\Bundle\AdBundle\Controller;
 
+use Fa\Bundle\AdBundle\Form\AdLeftSearchNewType;
 use Fa\Bundle\ContentBundle\Repository\SeoToolRepository;
 use Fa\Bundle\EntityBundle\Repository\CategoryDimensionRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -942,6 +943,7 @@ class AdListController extends CoreController
                 );
 
                 $searchableDimensions[$key]['solr_field'] = $solrDimensionFieldName;
+                $searchableDimensions[$key]['dim_slug']   = str_replace([' ', '.'], ['_', ''], strtolower($dimension['name']));
             }
             $data['static_filters'] .= $static_filters = $this->setDimensionParams($data['search'], $listingFields, $adRepository);
         } else {
@@ -1013,9 +1015,46 @@ class AdListController extends CoreController
             } else {
                 $categoryParent = 1;
             }
-            $recommendedSlot = $this->getRecommendedSlot($data, $keywords, $page, $mapFlag, $request, $categoryParent);
+            $getRecommendedSlots = $this->getRecommendedSlot($data, $keywords, $page, $mapFlag, $request, $categoryParent);
         } else {
-            $recommendedSlot = NULL;
+            $getRecommendedSlots = NULL;
+        }
+
+        $getRecommendedSrchSlotWise = array();
+        $getRecommendedSrchSlots=array();
+        if (!empty($getRecommendedSlots)) {
+            foreach ($getRecommendedSlots as $getRecommendedSlot) {
+                $getRecommendedSrchSlots[$getRecommendedSlot['creative_group']][] = $getRecommendedSlot;
+            }
+        }
+        $recommendedSlotArr = array();
+        $recommendedSlotOrder = array();
+        if (!empty($getRecommendedSrchSlots)) {
+            for ($arj=1;$arj<=8;$arj++) {
+                if (isset($getRecommendedSrchSlots[$arj])) {
+                    $recommendedSlotArr[$arj] = $getRecommendedSrchSlots[$arj][0];
+                    $recommendedSlotOrder[$arj] = $getRecommendedSrchSlots[$arj][0]['creative_ord'];
+                    if (isset($_COOKIE['recommended_slot_'.$arj])) {
+                        if (isset($getRecommendedSrchSlots[$arj][1]) && $_COOKIE['recommended_slot_'.$arj] == $getRecommendedSrchSlots[$arj][0]['creative_ord']) {
+                            $recommendedSlotArr[$arj] = $getRecommendedSrchSlots[$arj][1];
+                            $recommendedSlotOrder[$arj] = $getRecommendedSrchSlots[$arj][1]['creative_ord'];
+                        } elseif (isset($getRecommendedSrchSlots[$arj][2])) {
+                            if ($_COOKIE['recommended_slot_'.$arj]== $getRecommendedSrchSlots[$arj][1]['creative_ord'] || $_COOKIE['recommended_slot_'.$arj]== $getRecommendedSrchSlots[$arj][0]['creative_ord']) {
+                                $recommendedSlotArr[$arj] = $getRecommendedSrchSlots[$arj][2];
+                                $recommendedSlotOrder[$arj] = $getRecommendedSrchSlots[$arj][2]['creative_ord'];
+                            } elseif ($_COOKIE['recommended_slot_'.$arj]== $getRecommendedSrchSlots[$arj][2]) {
+                                $recommendedSlotArr[$arj] = $getRecommendedSrchSlots[$arj][0];
+                                $recommendedSlotOrder[$arj] = $getRecommendedSrchSlots[$arj][0]['creative_ord'];
+                            }
+                        }
+                    }
+                    setcookie('recommended_slot_'.$arj, $recommendedSlotOrder[$arj]);
+                }
+            }
+        }
+
+        if (!empty($recommendedSlotArr)) {
+            $getRecommendedSrchSlotWise = $recommendedSlotArr;
         }
 
         if (! ($user = $this->getLoggedInUser())) {
@@ -1030,7 +1069,7 @@ class AdListController extends CoreController
             'ads'                   => $ads,
             'resultCount'           => $pagination['resultCount'],
             'bannersArray'          => $bannersArray,
-            'recommendedSlotResult' => $recommendedSlot,
+            'recommendedSlotResult' => $getRecommendedSrchSlotWise,
             'recommendedSlotLimit'  => $this->getRepository('FaCoreBundle:Config')->getSponsoredLimit(),
             'pagination'            => $pagination['pagination'],
             'adFavouriteIds'        => $adFavouriteIds,
@@ -1153,7 +1192,7 @@ class AdListController extends CoreController
 
         $isShopPage = 1;
         $parentIdArray = [];
-        $form1 = $formManager->createForm(AdLeftSearchType::class, array('isShopPage' => $isShopPage, 'parentIdArray' => $parentIdArray), array('method' => 'GET', 'action' => ($isShopPage ? $this->generateUrl('shop_user_ad_left_search_result') : $this->generateUrl('ad_left_search_result'))));
+        $form1 = $formManager->createForm(AdLeftSearchNewType::class, array('isShopPage' => $isShopPage, 'parentIdArray' => $parentIdArray, 'searchParams' => $findersSearchParams), array('method' => 'GET', 'action' => ($isShopPage ? $this->generateUrl('shop_user_ad_left_search_result') : $this->generateUrl('ad_left_search_result'))));
 
         $parameters['createAlertBlock'] = array('form' => $form->createView());
         $parameters['leftFilters']['form'] = $form1->createView();
@@ -1197,6 +1236,8 @@ class AdListController extends CoreController
                 $staticFilters .= ' AND status_id : ' . EntityRepository::AD_STATUS_EXPIRED_ID;
             } else if ($searchKey == 'is_trade_ad') {
                 $staticFilters .= ' AND is_trade_ad : ' . $searchItem;
+            } else if ($searchKey == 'item__distance') {
+
             } else {
                 $solrDimensionFieldName = $adRepository->getSolrFieldName($listingFields, $this->getDimensionName($searchKey));
 
