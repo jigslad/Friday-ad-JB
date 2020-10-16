@@ -216,8 +216,8 @@
 <script>
     function formulate_photo_url() {
         let url = window.location.href;
-        if ($('#fa_left_search_item__price_from').val()) {
-            let url_string = 'item__price_from=' + $('#fa_left_search_item__price_from').val();
+        if ($('#fa_left_search_new_item__price_from').val()) {
+            let url_string = 'item__price_from=' + $('#fa_left_search_new_item__price_from').val();
             if (url.indexOf('?') != -1) {
                 url += '&' + url_string;
             } else {
@@ -225,8 +225,8 @@
             }
         }
 
-        if ($('#fa_left_search_item__price_to').val()) {
-            let url_string = '&item__price_to=' + $('#fa_left_search_item__price_to').val();
+        if ($('#fa_left_search_new_item__price_to').val()) {
+            let url_string = '&item__price_to=' + $('#fa_left_search_new_item__price_to').val();
             if (url.indexOf('?') != -1) {
                 url += '&' + url_string;
             } else {
@@ -239,20 +239,22 @@
 
     function formulate_location_url() {
         let url = window.location.href;
-        if ($('#fa_left_search_item__location_autocomplete').val() != "United Kingdom") {
-            let value = $('#fa_left_search_item__location_autocomplete').val().toLowerCase();
+        if ($('#fa_left_search_new_item__location_autocomplete').val() != "United Kingdom") {
+            let value = $('#fa_left_search_new_item__location_autocomplete').val().toLowerCase();
             value = value.replace(' ', '_');
 
-            url = href.replace('/{{ currentLocation }}/', '/'+value+'/');
+            url = url.replace('/{{ currentLocation }}/', '/'+value+'/');
 
-            if ($('#fa_left_search_item__distance').val() != 5) {
-                let url_string = 'item__distance=' . $('#fa_left_search_item__distance').val();
+            if ($('#fa_left_search_new_item__distance').val() != 5) {
+                let url_string = 'item__distance=' + $('#fa_left_search_new_item__distance').val();
                 if (url.indexOf('?') != -1) {
                     url += '&' + url_string;
                 } else {
                     url += '?' + url_string;
                 }
             }
+
+            window.location.href = url;
         }
     }
 
@@ -306,13 +308,13 @@
             } else {
                 let data_href = '';
                 if ($(this).closest('li').find('input[type="checkbox"]').length) {
-                    if ($(this).closest('ul').find('li').length > 1 && $(this).closest('ul').find('span.checked')) {
+                    if ($(this).closest('ul').find('li').length > 1 && $(this).closest('ul').find('span.checked').length) {
                         data_href = $(this).closest('ul').find('span.checked').closest('li').find('a').attr('data-href');
                     }
 
                     if (data_href.length) {
                         let name = $(this).closest('ul').find('li').find('label').attr('for').replace('fa_left_search', '');
-                        url_params = set_url_params(url_params, 'item__' + name + '=' + this_url + '/');
+                        url_params = set_url_params(url_params, 'item__' + name + '=' + this_url);
                     } else {
                         href += this_url + '/';
                     }
@@ -349,18 +351,18 @@
         });
 
         $('.clear_filter').each(function() {
-            if ($(this).closest('.towns-list')) {
+            if ($(this).closest('.towns-list').length) {
                 let url = window.location.href;
 
-                url = href.replace('/{{ currentLocation }}/', '/uk/');
+                url = url.replace('/{{ currentLocation }}/', '/uk/');
 
                 $(this).attr('href', url);
             } else {
-                let this_tag = $(this).closest('.accordion-navigation').find('a:first-child');
+                let this_tag = $(this).closest('.accordion-navigation').find('ul').find('a:first-child');
                 let href = $(this_tag).attr('href');
                 let data_href = $(this_tag).attr('data-href');
 
-                href.replace(data_href, '');
+                href = href.replace(data_href, '');
 
                 let href_arr = href.split('?');
                 let href1 = href_arr[0];
@@ -371,6 +373,10 @@
                     new_url_params += item + '&';
                 });
                 urlparams = new_url_params.replace(new RegExp("[&]*$"), '');
+
+                if (urlparams.length == 1) {
+                    urlparams = '';
+                }
 
                 $(this).attr('href', href1 + urlparams);
             }
