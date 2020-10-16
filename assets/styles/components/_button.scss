@@ -52,6 +52,7 @@
     border-radius: 4px;
     color: #fff;
     display: block;
+    border: 0;
     &:hover {
         background: linear-gradient(135deg, #BE2858 0%, #CA6C61 100%);
         color: #fff;
@@ -60,5 +61,25 @@
     &:focus {
         background: linear-gradient(135deg, #BE2858 0%, #CA6C61 100%);
         color: #fff;
+    }
+}
+
+.green-btn-color {
+    background: linear-gradient(135deg, #A8DC28 0%, #79D378 100%);
+    border: 1px solid #91d851;
+    &:hover {
+        @include transition($transition-time--base all ease-in-out);
+        background: linear-gradient(135deg, #85B021 0%, #60A85E 100%);
+        border: 1px solid #85b021;
+    }
+}
+
+.purple-btn-color {
+    background: linear-gradient(135deg, #A75BD8 0%, #C60A84 100%);
+    border: 0;
+    &:hover {
+        @include transition($transition-time--base all ease-in-out);
+        background: linear-gradient(135deg, #8646ab 0, #9e086b 100%);
+        border: 0;
     }
 }

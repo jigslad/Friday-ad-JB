@@ -31,7 +31,7 @@
         &:hover {
             color: $color--hover;
         }
-        span {
+        &--colored {
             color: $color--hover;
             display: block;
             padding-left: 4px;

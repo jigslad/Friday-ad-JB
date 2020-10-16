@@ -1,0 +1,14 @@
+.adult {
+    .footer {
+        &__paa-btn {
+            &--cta {
+                @extend .purple-btn-color;
+            }
+        }
+        &__subcribe-btn {
+            &--cta {
+                @extend .purple-btn-color;
+            }
+        }
+    }
+}

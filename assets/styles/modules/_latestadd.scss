@@ -13,7 +13,7 @@
             min-height: 540px;
         }
         @include media-breakpoint-up(lg) {
-            min-height: 750px;
+            // min-height: 750px;
         }
     }
     &__header {
@@ -25,7 +25,7 @@
         }
     }
     &__title {
-        color: #212527;
+        color: $color--primary;
         font-family: $font-family-semi-bold;
         font-size: 18px;
         @include media-breakpoint-up(md) {
@@ -70,6 +70,7 @@
         &::-webkit-scrollbar {
             display: none;
             -ms-overflow-style: none;
+            scrollbar-width: none;
         }
         @include media-breakpoint-up(md) {
             overflow: unset;
@@ -90,13 +91,13 @@
             border-bottom: 3px solid #EAEFF0;
             &:hover {
                 a {
-                    color: #82C148;
+                    color: $color--hover;
                     text-decoration: none;
                 }
             }
             &.active {
                 a {
-                    color: #82C148;
+                    color: $color--hover;
                     text-decoration: none;
                 }
                 &:after {
@@ -104,7 +105,7 @@
                     left: 0;
                     bottom: -3px;
                     position: absolute;
-                    background: #82C148;
+                    background: $color--hover;
                     height: 3px;
                     width: 100%;
                 }
@@ -112,7 +113,7 @@
         }
         &--link {
             text-decoration: none;
-            color: #ACB0B7;
+            color: $color--light-grey;
             font-family: $font-family-semi-bold;
             @include media-breakpoint-only(md) {
                 font-size: 13px;
@@ -223,12 +224,12 @@
             letter-spacing: 0;
             line-height: 21px;
             font-family: $font-family-semi-bold;
-            color: #ffffff;
+            color: $color--white;
             margin: 0;
             padding-bottom: 5px;
         }
         &--price {
-            color: #82C148;
+            color: $color--hover;
             font-family: $font-family-semi-bold;
             font-size: 14px;
             font-weight: 600;
@@ -252,26 +253,21 @@
         justify-content: flex-end;
         justify-content: center;
         &--cta {
+            @extend .green-btn-color;
             margin-top: 10px;
             @include media-breakpoint-up(md) {
                 margin-top: 3px;
             }
             cursor: pointer;
             width: 342px;
-            background: linear-gradient(135deg,
-                    #A8DC28 0%,
-                    #79D378 100%);
-            border: 1px solid #91d851;
-            color: #fff;
+            color: $color--white;
             padding: 7px 0;
             text-align: center;
             border-radius: 4px;
             font-family: $font-family-semi-bold;
             font-size: 16px;
             &:hover {
-                background: linear-gradient(135deg, #85B021 0%, #60A85E 100%);
-                border: 1px solid #85b021;
-                color: #fff;
+                color: $color--white;
             }
         }
         // }

@@ -17,6 +17,22 @@ h6 {
     margin-bottom: 0;
 }
 
+.fad-title {
+    color: $color--primary;
+    font-family: $font-family-semi-bold;
+    font-size: $font-size--heading-four;
+    letter-spacing: 0;
+    line-height: 46px;
+    text-align: center;
+    @include media-breakpoint-up(md) {
+        font-size: $font-size--heading-two;
+    }
+    @include media-breakpoint-up(lg) {
+        font-family: $font-family-medium;
+        font-size: $font-size--heading-one;
+    }
+}
+
 // h1 {
 //     font-size: $font-size--heading-one;
 //     font-weight: $font--bold;

@@ -5,7 +5,7 @@
         margin-top: 50px;
     }
     &__title {
-        color: #212527;
+        color: $color--primary;
         font-family: $font-family-semi-bold;
         font-size: 18px;
         @include media-breakpoint-up(md) {
@@ -24,7 +24,7 @@
         margin-bottom: 8px;
     }
     &__block {
-        border: 1px solid #CBD5D9;
+        border: 1px solid $color--border;
         border-radius: 4px;
         a {
             &:hover {
@@ -43,7 +43,7 @@
             }
         }
         &:hover {
-            // border: 1px solid #82c148;
+            // border: 1px solid $color--hover;
             img {
                 transform: scale(1.1);
                 transition: 0.2s;
@@ -63,16 +63,16 @@
             padding: 20px 20px 19px;
         }
         &--posted {
-            color: #82c148;
+            color: $color--hover;
             font-size: 14px;
         }
         &--author {
-            color: #82c148;
+            color: $color--hover;
             font-size: 14px;
         }
     }
     &__text {
-        color: #212527;
+        color: $color--primary;
         font-size: 16px;
         margin-bottom: 0;
         line-height: 21px;
@@ -83,7 +83,7 @@
         button {
             position: absolute;
             top: 50%;
-            color: #fff;
+            color: $color--white;
             margin: 0;
             transition: all 0.3s ease-in-out;
             transform: translateY(-50%);
@@ -112,22 +112,18 @@
         margin-top: 25px;
         justify-content: center;
         &--cta {
+            @extend .green-btn-color;
             cursor: pointer;
             width: 342px;
-            background: linear-gradient(135deg, #A8DC28 0%, #79D378 100%);
-            border: 1px solid #91d851;
-            color: #fff;
+            color: $color--white;
             padding: 7px 0;
             text-align: center;
             border-radius: 4px;
             font-size: 16px;
             font-family: $font-family-semi-bold;
             &:hover {
-                background: linear-gradient(135deg, #85B021 0%, #60A85E 100%);
-                border: 1px solid #85b021;
-                color: #fff;
+                color: $color--white;
             }
-            //}
         }
     }
 }

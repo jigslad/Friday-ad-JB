@@ -57,24 +57,6 @@
             <div id="bg-overlay"></div>
         </div>
     </div>
-    {# FFR-4030 starts Here #}
-    {#<div class="covid-19-block bottom-border">
-        <div class="row">
-            <div class="columns text-center">
-                <div class="small-24 medium-15 large-14 columns align-text">
-#}{#                    <div class="head">Covid-19. <span class="ask-for-offer-help">Ask for & Offer Help in our <a href="https://www.friday-ad.co.uk/uk/community/coronavirus-support/" class="ga-covid-19-support-link-homepage">Coronavirus Support section</a></span></div>#}{#
-                    <div class="head">NEW mobile app available now</div>
-                </div>
-#}{#                <div class="medium-7 large-6 columns align-text mt-space"><a class="button place-free-ad-btn thin-btn ga-covid-19-paa-link-homepage" href="https://www.friday-ad.co.uk/paa/first_step?categoryName=Coronavirus%20Support">Place Help Ad</a></div>#}{#
-                <div class="small-24 medium-9 large-10 columns mt-space">
-                    <a class="button place-free-ad-btn thin-btn ga-covid-19-paa-link-homepage" href="http://onelink.to/rpu3jn">
-                        Get the App
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>#}
-    {# FFR-4030 ends Here #}
 
     <!--Category Navigation code Starts-->
     <div class="category-nav">
@@ -2139,7 +2121,7 @@
     </div>
     <!--Marketing Zone code end-->
 
-    <!--Marketing Zone code Starts-->
+    <!--Read Online code Starts-->
     {% cache 'home|page|'~locationId~'front/home_page_read_fridayad_online' 120 %}
         <div class="read-online" id="readOnline">
             <div class="row">
@@ -2152,7 +2134,7 @@
             </div>
         </div>
     {% endcache %}
-    <!--Marketing Zone code end-->
+    <!--Read Online code end-->
 
     <!--Ad Blog code Starts-->
     <div class="friday-blog" id="fridayBlog">
@@ -2208,6 +2190,18 @@
     </div>
     <!--Reviews code end-->
 
+    <!--location code Starts-->
+    <div class="popular-locations">
+        <div class="row">
+            <div class="container">
+                <div class="popular-locations__title fad-title">{{'Browse adverts in popular locations'|trans({}, 'frontend-homepage')}}</div>
+{#                {% cache 'home|page|location|block'~currentDevice 3600 %}#}
+                    {{ render(controller('FaFrontendBundle:Default:showHomePageLocationBlocks')) }}
+{#                {% endcache %}x#}
+            </div>
+        </div>
+    </div>
+    <!--location code end-->
 
     {% if recommendedAds|length >= 3 %}
         <div class="homepage-row">
@@ -2329,17 +2323,7 @@
             </div>    
         </div>
     {% endif %}
-    
-    <div class="homepage-row">
-        <div class="row">
-            <div class="columns">
-                <div class="homepage-title">{{'Browse adverts in popular locations'|trans({}, 'frontend-homepage')}}</div>
-                {% cache 'home|page|location|block'~currentDevice 3600 %}
-                    {{ render(controller('FaFrontendBundle:Default:showHomePageLocationBlocks')) }}
-                {% endcache %}x
-            </div>
-        </div>
-    </div>
+
 
 {% endblock %}
 
