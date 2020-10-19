@@ -5,11 +5,11 @@
                 <div class="clearfix">
                     {% set location_id = null %}
                     {% if cookieLocationDetails['location'] is defined %}
-                        {% set location_id = cookieLocationDetails['location'] %}
+                        {% set location_id = cookieLocationDetails['location']|number_format %}
                     {% endif %}
                     {% set locality_id = null %}
                     {% if cookieLocationDetails['locality_id'] is defined %}
-                        {% set locality_id = cookieLocationDetails['locality_id'] %}
+                        {% set locality_id = cookieLocationDetails['locality_id']|number_format %}
                     {% endif %}
 
                     {% set homepageLink = '' %}

@@ -92,7 +92,11 @@ $(document).ready(function(){
         // Stop form from submitting normally
         event.preventDefault();
 
-        bindHalfAccountSubmitFormEventEmailOnly('', 'ListingBottom');
+        if ($('#fa_user_half_account_email_only_email').val().length) {
+            bindHalfAccountSubmitFormEventEmailOnly('', 'ListingBottom');
+        } else {
+            $('#fa_user_half_account_email_only_save').prop('disabled', false);
+        }
     });
 	bindFormErrorEvents();
 });

@@ -17,7 +17,7 @@
                     <div class="search-cat-sub-list">
                         <ul>
                             {% set key = 0 %}
-                            <li><label>{{ leftFilters.current_category }}</label></li>
+                            <li><label>{% if leftFilters.current_category == 'Category_root' %} {{ 'All Categories' }} {% else %} {{ leftFilters.current_category }}{% endif %}</label></li>
                             {% for key, category in leftFilters.categories %}
                                 {% if key == (maxDimensionCount) %}
                                     </ul>
