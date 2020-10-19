@@ -151,7 +151,13 @@
     	{% set showAdultPages=1 %}
     {% endif %}
 
-    {% if keywordCategoryIds is defined %}{% dump(keywordCategoryIds) %} {% endif %}
+    {% if keywordCategoryIds is defined %}
+        {% if constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') in keywordCategoryIds %}
+            {% set showAdultPages=1 %}
+        {% else %}
+            {% set showAdultPages=0 %}
+        {% endif %}
+    {% endif %}
 
     {% if (showAdultPages==1 and (currentRoute in {0: 'fa_adult_homepage', 1:'fa_new_adult_homepage', 2:'ad_detail_page', 3:'listing_page', 4:'my_account'})) %}
         {% set showAdultPages=1 %}
