@@ -813,8 +813,8 @@ class AdListController extends CoreController
             'category_ids'          => array('min_count' => 1),
             'is_trade_ad'           => array('min_count' => 0),
             'image_count'           => array('min_count' => 1),
-            'town'                  => array('min_count' => 0),
-            'area'                  => array('min_count' => 0)
+            'town'                  => array('limit' => 5, 'min_count' => 0),
+            'area'                  => array('limit' => 5, 'min_count' => 0)
         );
 
         // ad location filter with distance
@@ -871,11 +871,12 @@ class AdListController extends CoreController
         $currentRoute           = $request->get('_route');
         $requestlocation        = $request->get('location');
         $findersSearchParams    = $request->get('finders');
-
         // set location in cookie
         $cookieLocationDetails = json_decode($request->cookies->get('location'), true);
         if (!$cookieLocationDetails) {
             $cookieLocationDetails = array();
+        } else {
+            $cookieLocationDetails['location'] = intval($cookieLocationDetails['location']);
         }
         if (!in_array($currentRoute, array('show_business_user_ads', 'show_business_user_ads_page', 'show_business_user_ads_location'))) {
             if (preg_match("/[A-Z]/", $request->getPathInfo())) {
@@ -1349,7 +1350,7 @@ class AdListController extends CoreController
             $facetArraySet = $facetResult[$solrFieldName];
 
             $selected = '';
-            $paramname = strtolower($dimensions[$dimension['id']]['name']);
+            $paramname = strtolower($dimensions[$dimension['id']]['dim_slug']);
             if (isset($params[$paramname])) {
                 $selected = $params[$paramname];
             }
