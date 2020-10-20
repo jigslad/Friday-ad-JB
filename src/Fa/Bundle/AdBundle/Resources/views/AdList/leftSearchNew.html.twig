@@ -99,7 +99,7 @@
                         <li class="col">
                             <div>
                                 {{ form_widget(leftFilters.form.item__location_autocomplete, {'attr': {'class': 'white-field'}}) }}
-                                <a href="javascript:void(0);" rel="nofollow" id="fa_left_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                                <a href="javascript:void(0);" rel="nofollow" id="fa_left_search_new_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
                             </div>
                         </li>
                         <li>
@@ -381,5 +381,132 @@
                 $(this).attr('href', href1 + urlparams);
             }
         });
+
+        $("#fa_left_search_new_item__location"+'_close').click(function() {
+            $("#fa_left_search_new_item__location"+'_autocomplete').val('');
+            $("#fa_left_search_new_item__location").val('');
+            $("#fa_top_search_new_item__area").val('');
+            $("#fa_left_search_new_item__area").val('');
+            $(this).hide();
+
+            bindShowMapOnChangeLocationEvent();
+            $("div[id*=location_area_div] input[type=text]").val("");
+            $("#location_area_div").hide();
+
+
+        });
+        $("#fa_left_search_new_item__location"+'_autocomplete').attr("placeholder", "Type postal code or town");
+
+        $("#fa_left_search_new_item__location"+'_autocomplete').keyup(function() {
+            $('#fa_top_search_item__area').val('');
+            $("#fa_left_search_new_item__area").val('');
+
+            if ($(this).val().length < 1) {
+                $("#fa_left_search_new_item__location"+'_close').hide();
+                $("#fa_left_search_new_item__location").val("");
+
+            }
+        });
+
+        $('#fa_left_search_new_item__location_autocomplete').keyup(function(e) {
+            if (parseInt(e.keyCode) == 13) {
+                setLocaionCookieByLeftSearchNewLocationChange($.trim($('#fa_left_search_new_item__location').val()));
+            }
+        });
+
+        $("#fa_left_search_new_item__location"+'_autocomplete').focus(function() {
+            $(this).select();
+        });
+
+        $("#fa_left_search_new_item__location"+'_autocomplete').blur(function() {
+            if ($("#fa_left_search_new_item__location"+'_autocomplete').val().length == 0) {
+                $("#fa_left_search_new_item__location"+'_close').hide();
+            } else if($("#fa_left_search_new_item__location"+'_autocomplete').val().length > 4) {
+            }
+        });
+
+        if ($("#fa_left_search_new_item__location"+'_autocomplete').length > 0 && $("#fa_left_search_new_item__location"+'_autocomplete').val().length < 1) {
+            $("#fa_left_search_new_item__location"+'_close').hide();
+        } else {
+            $("#fa_left_search_new_item__location"+'_close').show();
+        }
+    });
+
+    function setLocaionCookieByLeftSearchNewLocationChange(searchLocation)
+    {
+        var qryItemDistance = getUrlVars()['item__distance'];
+
+        /* if (searchLocation && searchLocation != 2) {*/
+        var catId = $('#fa_left_search_new_item__category_id').val();
+        var distanceId = $('#fa_left_search_new_item__distance').val();
+        var defaultDist = $('#fa_left_search_new_default_distance').val();
+
+        $.ajax({
+            type: "post",
+            dataType: "json",
+            url: "{{ path('fa_frontend_ajax_user_location') }}",
+            data: {'location': searchLocation, 'catId' : catId },
+            success: function(data) {
+                if (!$.isEmptyObject(data)) {
+                    $('#fa_left_search_new_default_distance').val(data.default_distance);
+
+
+                    if(qryItemDistance == undefined && searchLocation != 2 && defaultDist == distanceId) {
+                        $('#fa_left_search_new_item__distance').val(data.default_distance);
+                        $('#fa_left_search_item__distance option[value="'+data.default_distance+'"]').attr("selected", "selected");
+                        $('#distance-left-search').show();
+                        $('#fa_left_search_new_hide_distance_block').val(0);
+                    } else if(distanceId != data.default_distance) {
+                        $('#fa_left_search_item__distance option[value="'+distanceId+'"]').attr("selected", "selected");
+                        $('#distance-left-search').show();
+                        $('#fa_left_search_new_hide_distance_block').val(0);
+                    } else {
+                        if(distanceId == data.default_distance) {
+                            $('#fa_left_search_new_item__distance option[value="'+data.default_distance+'"]').attr("selected", "selected");
+                        } else {
+                            setDefDistance();
+                        }
+                    }
+
+                    if(data.slug=='uk') { $('#distance-left-search').hide(); }
+                    else { $('#distance-left-search').show(); }
+                    $('form[name="fa_left_search_new"]').submit();
+                } else {
+                    $('#distance-error-placeholder small').html('Please choose a valid town or postal code');
+                    $('#fa_left_search_new_item__location_autocomplete').css("border", "solid 1px red");
+                }
+            }
+        });
+    }
+
+    $(window).on('load', function() {
+        bindDatePickerEvent();
+        bindFloatFieldKeyupEvnet('fa_left_search_new_item__price_from');
+        bindFloatFieldKeyupEvnet('fa_left_search_new_item__price_to');
+        bindFloatFieldKeyupEvnet('fa_left_search_new_item_motors__boat_length_from');
+        bindFloatFieldKeyupEvnet('fa_left_search_new_item_motors__boat_length_to');
+        bindSeeMoreLinkEvents();
+
+        var qryItemDistance = getUrlVars()['item__distance'];
+
+        if ($('#fa_left_search_new_item__location').val() == 2) {
+            $('#fa_left_search_new_item__location_autocomplete').val('United Kingdom');
+        }
+
+        if ($('#fa_left_search_new_default_distance').val() != '') {
+            setDefDistance();
+        }
+
+        if (qryItemDistance != undefined) {
+            $('#distance-left-search').show();
+            $('#fa_left_search_new_hide_distance_block').val(0);
+        }
+
+        if ($('#fa_left_search_new_hide_distance_block').val() == 1) {
+            $('#distance-left-search').hide();
+        } else {
+            $('#distance-left-search').show();
+        }
     });
 </script>
+{{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_left_search_new_item__location', 'placeHolder': 'Type postal code or town'|trans, 'route' : 'town_ajax_find_town_by_term', 'displayOnlyTown' : 'true'}) }}
