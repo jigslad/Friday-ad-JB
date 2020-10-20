@@ -13,7 +13,7 @@
         <div class="cover-img-overlay"> </div>
     {% endif %}
     <div class="shops-header-img text-center" id="user_site_banner_div">
-        <img id="user_site_banner_img" src="{{ userSiteBannerUrl }}?{{ date().timestamp }}" alt="" />
+        <img id="user_site_banner_img" src="{{ userSiteBannerUrl }}" alt="" />
     </div>
     {% if allowProfileEdit %}
         {% set bigImageRoute = "ajax_get_big_user_site_banner_image" %}

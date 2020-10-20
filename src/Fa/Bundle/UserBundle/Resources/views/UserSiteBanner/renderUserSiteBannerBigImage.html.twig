@@ -2,7 +2,7 @@
     {% set cropImageRoute = "ajax_crop_user_site_banner_image" %}
     {% set userSiteBannerUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserSiteBannerUrl', [fetch_container_instance(), userSiteObj.getId(), 1]) %}
     <div class="frame profile-banner">
-        <img id="user_site_banner_crop_big_image" src="{{ userSiteBannerUrl }}?{{ date().timestamp }}" />
+        <img id="user_site_banner_crop_big_image" src="{{ userSiteBannerUrl }}" />
         <div class="edit-pro-banner">
             <div class="clearfix">
                 <div class="large-12 columns">
