@@ -1,74 +1,230 @@
 {% set container = fetch_container_instance() %}
-<footer id="footer_tag">
-    {% if currentRoute not in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'facebook_paa_login', 4: 'ad_post_third_step_registration', 5: 'ad_post_fourth_step', 6: 'ad_edit', 7: 'ad_package_purchase', 8: 'show_cart'} %}
-        <div class="row show-for-small-only">
-            <div class="columns">
-                <a href="{{ path('ad_post_first_step') }}" title="{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}" class="primary-btn-1 button expand">{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}</a>
-            </div>
-        </div>
-    {% endif %}
+<footer  class="footer" role="fadFooterInfo" aria-label="Site footer" id="footer_tag">
     <div class="row">
-        {{ render(controller('FaEntityBundle:Category:renderFooterCategories', {'location': (currentRoute == 'listing_page' ? app.request.get('location') : null), 'searchParams': searchParams})) }}
-        <div class="large-6 columns">
-        	{% if app.request.attributes.get('_route') != 'my_account_newsletter'  and app.request.attributes.get('_route') != 'newsletter_feedback' and app.request.attributes.get('_route') != 'newsletter_feedback_success' %}
-            	<div class="clearfix"></div>
-                {{ render(controller('FaUserBundle:Newsletter:footerNewsletter')) }}
-            {% endif %}    
-            <div class="clearfix"></div>       
-            <h6 class="footer-head">{{ 'Find us on'|trans({}, 'frontend-footer') }}:</h6>
-            <div class="footer-icons">
-                <a href="{{container.getParameter('fa.footer.facebook.page.link')}}" class="facebook" target="_blank" title="{{ 'Facebook'|trans({}, 'frontend-footer') }}">{{ 'Facebook'|trans({}, 'frontend-footer') }}</a>
-                <a href="{{container.getParameter('fa.footer.twitter.page.link')}}" class="twitter" target="_blank" title="{{ 'Twitter'|trans({}, 'frontend-footer') }}">{{ 'Twitter'|trans({}, 'frontend-footer') }}</a>
-                <a href="{{container.getParameter('fa.footer.instagram.page.link')}}" class="instagram" target="_blank" title="{{ 'Instagram'|trans({}, 'frontend-footer') }}">{{ 'Instagram'|trans({}, 'frontend-footer') }}</a>
-            </div>
-            <div class="help-links">
-                <h6 class="footer-head">{{ 'Can we help?'|trans({}, 'frontend-footer') }}</h6>
-                <a href="https://blog.friday-ad.co.uk/" target="_blank">{{ 'Blog'|trans({}, 'frontend-footer') }}</a>
-                {{ render(controller('FaContentBundle:StaticPage:renderStaticPageLink', {'currentRoute': currentRoute})) }}
-                <a href="{{ path('show_all_locations') }}">{{ 'Locations'|trans({}, 'frontend-footer') }}</a>
-                <a href="{{ path('testimonials') }}">{{ 'Testimonials'|trans({}, 'frontend-footer') }}</a>
-                {# <a href="https://www.yumpu.com/user/EDITORFAD" target="__blank">{{ 'Read this week\'s Friday-Ad'|trans({}, 'frontend-footer') }}</a> #}
-            </div>
+        <div class="container">
+            <div class="footer__wrapper footer-accordion">
+                <div class="footer__left">
+                    {% if currentRoute not in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'facebook_paa_login', 4: 'ad_post_third_step_registration', 5: 'ad_post_fourth_step', 6: 'ad_edit', 7: 'ad_package_purchase', 8: 'show_cart'} %}
+                        <div class="footer__paa-btn footer__block--fourth">
+                            <a href="{{ path('ad_post_first_step') }}" class="btn-rounded footer__paa-btn--cta">
+                                {{ 'Place an ad'|trans({}, 'frontend-top-menu') }}
+                            </a>
+                        </div>
+                    {% endif %}
+                    <div class="footer__block footer__block--first">
+                        <h6 class="footer__title footer-accordion-link">Categories</h6>
+                        {{ render(controller('FaEntityBundle:Category:renderFooterCategories', {'location': (currentRoute == 'listing_page' ? app.request.get('location') : null), 'searchParams': searchParams})) }}
+                    </div>
+                    <div class="footer__block footer__block--second">
+                        <div class="footer__column">
+                            <h6 class="footer__title footer-accordion-link">
+                                {{ 'Can we help?'|trans({}, 'frontend-footer') }}
+                            </h6>
+                            <ul class="footer__list accordion-dropdown">
+                                {{ render(controller('FaContentBundle:StaticPage:renderStaticPageLink', {'currentRoute': currentRoute})) }}
+                                <li class="footer__item">
+                                    <a href="{{ path('show_all_locations') }}" class="footer__link">{{ 'Locations'|trans({}, 'frontend-footer') }}</a>
+                                </li>
+                                <li class="footer__item">
+                                    <a href="{{ path('testimonials') }}" class="footer__link">{{ 'Reviews'|trans({}, 'frontend-footer') }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="footer__column">
 
-            <!-- Start
-                FFR-3986: FAD Print mag online
-                added footer links for reading FAD online -->
-            {% if currentRoute not in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'facebook_paa_login', 4: 'ad_post_third_step_registration', 5: 'ad_post_fourth_step', 6: 'ad_edit', 7: 'ad_package_purchase', 8: 'show_cart'} %}
-                <div class="help-links hide-for-small-only ga-fadPrintWidget">
-                    <h6 class="footer-head">{{ 'Read the Friday-Ad Online / '|trans({},'frontend-footer') }}</h6>
-                    <h6 class="footer-head">{{ 'Choose a location'|trans({},'frontend-footer') }}</h6>
-                    <a href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=c50972b1-d10a-4356-84e2-8d09a3530b93" target="_blank">Brighton</a>
-                    <a href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=398dcec4-2114-410f-8484-943e89602ad0" target="_blank">Crawley</a>
-                    <a href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=7297cfac-ef93-4fba-95af-dd8a02f632fd" target="__blank">Eastbourne</a>
-                    <a href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=8fb5f3d9-7213-417f-9b15-bae6c6daad59" target="_blank">Hastings</a>
-                    <a href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=207e2563-a527-43a0-add9-d15eb349790f" target="_blank">Seaford</a>
-                    <a href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=32dc5305-7502-4d5e-8ea3-938521ae57db" target="__blank">Tunbridge Wells</a>
-                    <a href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=2e098523-cbbf-4254-8f7c-f73b46aaa4c4" target="_blank">Uckfield</a>
-                    <a href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=26c9ade6-0fd7-464c-9944-88bd7b54f8bf" target="_blank">Worthing</a>
+
+                            <h6 class="footer__title footer-accordion-link">Our community</h6>
+                            <ul class="footer__list accordion-dropdown">
+                                <li class="footer__item">
+                                    <a class="footer__link" href="https://blog.friday-ad.co.uk/" target="_blank">
+                                        {{ 'News from the blog'|trans({}, 'frontend-footer') }}
+                                    </a>
+                                </li>
+                                <li class="footer__item">
+                                    <a href="#" class="footer__link">Read our latest article</a>
+                                </li>
+
+                            </ul>
+                            <h6 class="footer__title footer-accordion-link">Business Advertising</h6>
+                            <ul class="footer__list accordion-dropdown">
+                                <li class="footer__item">
+                                    <a class="footer__link" href="https://www.fmgadvertising.com/display-item/post/choose-style" target="_blank">{{ 'Print ads'|trans }}</a>
+                                </li>
+                                <li class="footer__item">
+                                    <a class="footer__link" href="http://fadvertise.friday-ad.co.uk/" target="_blank">{{ 'Business Advertising'|trans }}</a>
+                                </li>
+                                <li class="footer__item">
+                                    <a class="footer__link" href="http://fadvertise.friday-ad.co.uk/banners-2/" target="__blank">{{ 'Business Local Banner Sponsorship'|trans({}, 'frontend-footer') }}</a>
+                                </li>
+                                <li class="footer__item">
+                                    <a class="footer__link" href="https://www.spidersnet.co.uk/" target="_blank" {% if (currentRoute != 'fa_frontend_homepage') %} rel='nofollow'{% endif %}>{{ 'Car dealer websites'|trans }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="footer__column ga-fadPrintWidget">
+                            {% if currentRoute not in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'facebook_paa_login', 4: 'ad_post_third_step_registration', 5: 'ad_post_fourth_step', 6: 'ad_edit', 7: 'ad_package_purchase', 8: 'show_cart'} %}
+                            <h6 class="footer__title footer-accordion-link">{{ 'Read the Friday-Ad Online '|trans({},'frontend-footer') }}</h6>
+                            <ul class="footer__list accordion-dropdown">
+                                <li class="footer__item">
+                                    <a class="footer__link"href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=c50972b1-d10a-4356-84e2-8d09a3530b93" target="_blank">
+                                        Brighton
+                                    </a>
+                                </li>
+                                <li class="footer__item">
+                                    <a class="footer__link"href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=398dcec4-2114-410f-8484-943e89602ad0" target="_blank">
+                                        Crawley
+                                    </a>
+                                </li>
+                                <li class="footer__item">
+                                    <a class="footer__link"href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=7297cfac-ef93-4fba-95af-dd8a02f632fd" target="__blank">
+                                        Eastbourne
+                                    </a>
+                                </li>
+                                <li class="footer__item">
+                                    <a class="footer__link"href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=8fb5f3d9-7213-417f-9b15-bae6c6daad59" target="_blank">
+                                        Hastings
+                                    </a>
+                                </li>
+                                <li class="footer__item">
+                                    <a class="footer__link"href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=207e2563-a527-43a0-add9-d15eb349790f" target="_blank">
+                                        Seaford
+                                    </a>
+                                </li>
+                                <li class="footer__item">
+                                    <a class="footer__link"href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=32dc5305-7502-4d5e-8ea3-938521ae57db" target="__blank">
+                                        Tunbridge Wells
+                                    </a>
+                                </li>
+                                <li class="footer__item">
+                                    <a class="footer__link"href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=2e098523-cbbf-4254-8f7c-f73b46aaa4c4" target="_blank">
+                                        Uckfield
+                                    </a>
+                                </li>
+                                <li class="footer__item">
+                                    <a class="footer__link"href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=26c9ade6-0fd7-464c-9944-88bd7b54f8bf" target="_blank">
+                                        Worthing
+                                    </a>
+                                </li>
+                            </ul>
+                            {% endif %}
+                        </div>
+                        <div class="footer__column">
+                            <h6 class="footer__title footer-accordion-link">Your area</h6>
+                            <ul class="footer__list accordion-dropdown">
+                                <li class="footer__item">
+                                    <a href="#" class="footer__link">Log in</a>
+                                </li>
+                                <li class="footer__item">
+                                    <a href="#" class="footer__link">Register</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="footer__block footer__block--third">
+                        <div class="footer__column">
+                            <h6 class="footer__title footer-accordion-link">Your area</h6>
+                            <ul class="footer__list">
+                                <li class="footer__item">
+                                    <a href="#" class="footer__link">Log in</a>
+                                </li>
+                                <li class="footer__item">
+                                    <a href="#" class="footer__link">Register</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="footer__column">
+                            <h6 class="footer__title footer-accordion-link">{{ 'Find us on'|trans({}, 'frontend-footer') }}</h6>
+                            <ul class="footer__list">
+                                <li class="footer__item">
+                                    <a href="{{container.getParameter('fa.footer.facebook.page.link')}}" class="footer__link facebook" target="_blank" title="{{ 'Facebook'|trans({}, 'frontend-footer') }}"></a>
+                                </li>
+                                <li class="footer__item">
+                                    <a href="{{container.getParameter('fa.footer.twitter.page.link')}}" class="footer__link twitter" target="_blank" title="{{ 'Twitter'|trans({}, 'frontend-footer') }}"></a>
+                                </li>
+                                <li class="footer__item">
+                                    <a href="{{container.getParameter('fa.footer.instagram.page.link')}}" class="footer__link instagram" target="_blank" title="{{ 'Instagram'|trans({}, 'frontend-footer') }}"></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="footer__column">
+                            <!-- TrustBox widget - Mini -->
+                            <div class="trustpilot-widget" data-locale="en-GB" data-template-id="53aa8807dec7e10d38f59f32" data-businessunit-id="46e343710000640005014c08" data-style-height="95px" data-style-width="180px" data-theme="dark">
+                                <a href="https://uk.trustpilot.com/review/www.friday-ad.co.uk" target="_blank" rel="noopener">Trustpilot</a>
+                            </div>
+                            <!-- End TrustBox widget -->
+                        </div>
+                    </div>
                 </div>
-            {% endif %}
-            <!-- End
-                FFR-3986: FAD Print mag online
-                added footer links for reading FAD online -->
+                <div class="footer__right">
+                    {% if currentRoute not in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'facebook_paa_login', 4: 'ad_post_third_step_registration', 5: 'ad_post_fourth_step', 6: 'ad_edit', 7: 'ad_package_purchase', 8: 'show_cart'} %}
+                        <div class="footer__paa-btn footer__block--fourth">
+                            <a href="{{ path('ad_post_first_step') }}" class="btn-rounded footer__paa-btn--cta">
+                                {{ 'Place an ad'|trans({}, 'frontend-top-menu') }}
+                            </a>
+                        </div>
+                    {% endif %}
+                    {% if app.request.attributes.get('_route') != 'my_account_newsletter'  and app.request.attributes.get('_route') != 'newsletter_feedback' and app.request.attributes.get('_route') != 'newsletter_feedback_success' %}
+                        {{ render(controller('FaUserBundle:Newsletter:footerNewsletter')) }}
+                    {% endif %}
+                </div>
+                <!--tab only display-->
+                <div class="footer__divider divider-tab"></div>
+                <div class="footer__block footer__block--third mobile-tab-show">
+                    <div class="footer__column">
+                        <h6 class="footer__title">Your area</h6>
+                        <ul class="footer__list">
+                            <li class="footer__item">
+                                <a href="#" class="footer__link">Log in</a>
+                            </li>
+                            <li class="footer__item">
+                                <a href="#" class="footer__link">Register</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="footer__column">
+                        <h6 class="footer__title">
+                            {{ 'Find us on'|trans({}, 'frontend-footer') }}
+                        </h6>
+                        <ul class="footer__list">
+                            <li class="footer__item">
+                                <a href="{{container.getParameter('fa.footer.facebook.page.link')}}" class="footer__link facebook" target="_blank" title="{{ 'Facebook'|trans({}, 'frontend-footer') }}"></a>
+                            </li>
+                            <li class="footer__item">
+                                <a href="{{container.getParameter('fa.footer.twitter.page.link')}}" class="footer__link twitter" target="_blank" title="{{ 'Twitter'|trans({}, 'frontend-footer') }}"></a>
+                            </li>
+                            <li class="footer__item">
+                                <a href="{{container.getParameter('fa.footer.instagram.page.link')}}" class="footer__link instagram" target="_blank" title="{{ 'Instagram'|trans({}, 'frontend-footer') }}"></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="footer__column">
+                        <!-- TrustBox widget - Mini -->
+                        <div class="trustpilot-widget" data-locale="en-GB" data-template-id="53aa8807dec7e10d38f59f32" data-businessunit-id="46e343710000640005014c08" data-style-height="95px" data-style-width="180px" data-theme="dark">
+                            <a href="https://uk.trustpilot.com/review/www.friday-ad.co.uk" target="_blank" rel="noopener">Trustpilot</a>
+                        </div>
+                        <!-- End TrustBox widget -->
+                    </div>
+                </div>
+            </div>
+            <!--tab only display end-->
         </div>
     </div>
 
-    <div class="fad-logo">
-        <span>F-Ad</span>
-    </div>
-    <div class="text-center gray-text pb30 hide-for-small-only">
-        <p>
-            <img src="{{ asset('bundles/fafrontend/images/Copyright.svg') }}">
-            Friday Media Group Ltd, London Road, Sayers Common, West Sussex, BN6 9HS - Copyright 2020
-        </p>
-    </div>
-    <div class="text-center gray-text pb30 show-for-small-only">
-        <p>
-            <img src="{{ asset('bundles/fafrontend/images/Copyright.svg') }}">
-            Friday Media Group Ltd <br />
-            London Road, Sayers Common, <br />
-            West Sussex, BN6 9HS - Copyright 2020
-        </p>
+    <div class="footer__divider"></div>
+    <div class="footer__bottom">
+        <div class="footer__log">
+            <a href="{{ path('fa_frontend_homepage') }}">
+                <img src="{{ asset('bundles/fafrontend/images/Fad-footer.svg') }}" class="" alt="footer-logo">
+            </a>
+        </div>
+        <p class="footer__copy-right">
+		<span class="footer__copy-right--ltd">
+			<span class="footer__copy-right--symbol">&#169;</span>
+			Friday Media Group Ltd,</span>
+            <br class="line-break">
+            London Road, Sayers Common,
+            <br class="line-break">
+            West Sussex, BN6 9HS - Copyright 2020</p>
     </div>
 
     {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_PIXEL_TRACKING_DESKTOP') %}
@@ -156,5 +312,16 @@
         });
     }
 //]]>
+</script>
+<script>
+    if (window.matchMedia("(max-width: 767px)").matches) {
+        $('.footer-accordion-link').click(function(event) {
+            if ($('.footer__wrapper').hasClass('footer-accordion')) {
+                $('.footer-accordion-link').not($(this)).removeClass('footer-active');
+                $('.accordion-dropdown').not($(this).next()).slideUp(300);
+            }
+            $(this).toggleClass('footer-active').next().slideToggle(300);
+        });
+    }
 </script>
 {% endblock %}

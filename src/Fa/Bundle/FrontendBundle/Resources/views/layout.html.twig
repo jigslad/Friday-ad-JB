@@ -1,11 +1,3 @@
-{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
-{% set currentDevice = 'D' %}
-{% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
-    {% set currentDevice = 'M' %}
-{% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
-    {% set currentDevice = 'T' %}
-{% endif %}
-
 {% set blockPageTitle = block('page_title') is defined ? block('page_title')|replace({' in UK': ''})|trim : false %}
 {% set blockMetaRobots = block('meta_robots') is defined ? block('meta_robots')|trim : false %}
 {% set blockMetaDescription = block('meta_description') is defined ? block('meta_description')|replace({' in UK': ''})|trim : false %}
@@ -24,6 +16,14 @@
 {% set pushNotification = block('pushNotification') is defined ? block('pushNotification')|trim : false %}
 {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
 {% set paginationHead = block('pagination_head') is defined ? block('pagination_head')|trim : false %}
+
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+{% set currentDevice = 'D' %}
+{% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+    {% set currentDevice = 'M' %}
+{% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
+    {% set currentDevice = 'T' %}
+{% endif %}
 
 <!doctype html>
 <html class="no-js" lang="en">
@@ -258,9 +258,11 @@
         
         
         {% if showAdultPages==1 and currentRoute not in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote', 11: 'fa_frontend_homepage', 12: 'fa_new_adult_homepage' } %}
-            {{ include('FaFrontendBundle:Adult:header.html.twig', {'status_code': status_code}) }}
+{#            {{ include('FaFrontendBundle:Adult:header.html.twig', {'status_code': status_code}) }}#}
+            {{ include('FaFrontendBundle::header.html.twig', {'status_code': status_code}) }}
         {% elseif showAdultPages == 1 %}
-            {{ include('FaFrontendBundle:Adult:headerNew.html.twig', {'status_code': status_code}) }}
+{#            {{ include('FaFrontendBundle:Adult:headerNew.html.twig', {'status_code': status_code}) }}#}
+            {{ include('FaFrontendBundle::header.html.twig', {'status_code': status_code}) }}
         {% else %}
         	{{ include('FaFrontendBundle::header.html.twig', {'status_code': status_code}) }}
         {% endif %}

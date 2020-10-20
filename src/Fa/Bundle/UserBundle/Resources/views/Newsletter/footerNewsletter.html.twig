@@ -1,105 +1,75 @@
-{{ include('FaUserBundle:Newsletter:footerNewsletter-css.html.twig') }}
-<div class="mb20">
-            {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'fa_user_newsletter'}}) }}
-                <div class="mb20 newsletter-head"><span class="newsletter-icon list-icons" style=""></span><label class="footer-head">Subscribe to our <br> newsletter</label></div>
-                <div class="search-box-col">
-                   <div class="clearfix">
-                       <div class="newsletter-search-box">
-                            {{ form_widget(form.email,  { 'attr': {'class': 'newsletter-email-txt', "autocomplete": "off"} }) }}
-                       </div>
-                    </div>
-                    {{ form_errors(form) }}
-                    <div class="label-inline white-checkbox mt0 mb0" style="display: inline-flex;">
-                        <span class="custom-checkbox">
-                            {{ form_widget(form.email_alert) }}
-                        </span>
-                        {{ form_label(form.email_alert,'', {'label_attr': {'class': 'footer-subscribe-label'}}) }}
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="label-inline white-checkbox mt0 mb0 third-party-email-subscription" style="display: inline-flex;">
-                        <span class="custom-checkbox">
-                            {{ form_widget(form.third_party_email_alert) }}
-                        </span>
-                        {{ form_label(form.third_party_email_alert,'', {'label_attr': {'class': 'footer-subscribe-label'}}) }}
-                    </div>
-                    <div class="clearfix">
-                       <div class="" style="display: inline-flex;">
-                            {{ form_widget(form.save) }}
-                        </div>
-                    </div>
-                    <div class="clearfix">
-                       <div class="footer-newsletter-info-box">
-                            <p>You can easily tailor or unsubscribe from our newsletters at any time by clicking on the links at the bottom of each of our emails. You can also update your preferences and personal information at any time.</p>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-            {{ form_end(form) }}
+<div class="footer__block footer__block--five">
+    <h6 class="footer__title footer-accordion-link">
+        Subscribe to our newsletter
+    </h6>
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'fa_user_newsletter', 'class': 'footer__form accordion-dropdown' }}) }}
+        {{ form_widget(form.email,  { 'attr': {'class': 'footer__form--input', "autocomplete": "off","placeholder" : "Your email"} }) }}
+        {{ form_errors(form) }}
+        <div class="footer__checkbox custom-checkbox sign-me">
+            {{ form_widget(form.email_alert, {'attr': {'class': 'footer__signme--input'}}) }}
+            {{ form_label(form.email_alert,'', {'label_attr': {'class': 'footer__checkbox--label'}}) }}
         </div>
+        <div class="footer__checkbox custom-checkbox send-me">
+            {{ form_widget(form.third_party_email_alert, {'attr': {'class': 'footer__sendme--input'}}) }}
+            {{ form_label(form.third_party_email_alert,'', {'label_attr': {'class': 'footer__checkbox--label'}}) }}
+        </div>
+        <p class="footer__subribe-text">
+            You can easily tailor or unsubscribe from our newsletters at any time by clicking on the links at the bottom of each of our emails. You can also update your preferences and personal information at any time.
+        </p>
+        <div class="footer__subcribe-btn">
+            {{ form_widget(form.save,{'attr': {'class': 'btn-rounded footer__subcribe-btn--cta'}}) }}
+        </div>
+    {{ form_end(form) }}
+</div>
         
 {% block scriptbottom %}  
 <script language="javascript" type="text/javascript">
-//<![CDATA[
-    /*$(document).ready(function(){
-    	$('#fa_user_newsletter_third_party_email_alert').prop('disabled', true);
-    });
-    $('#fa_user_newsletter_email_alert').on('click', function(){
-		if($(this). prop("checked") == true) {
-				$('#fa_user_newsletter_third_party_email_alert').prop('disabled', false);
-				$('#fa_user_newsletter_third_party_email_alert').css('cursor', 'pointer');
-			}
-    	});*/   	
+	$("#fa_user_newsletter_third_party_email_alert").on('click', function (e) {
+		if (!$('#fa_user_newsletter_third_party_email_alert').parent('span').hasClass('checked')) {
+			$('#fa_user_newsletter_third_party_email_alert').attr('checked', true);
+		} else {
+			$('#fa_user_newsletter_third_party_email_alert').attr('checked', false);
+		}
 
-    	$("#fa_user_newsletter_third_party_email_alert").parent('span').on('click', function (e) {
-    		if (!$('#fa_user_newsletter_third_party_email_alert').parent('span').hasClass('checked')) {
-    		    $('#fa_user_newsletter_third_party_email_alert').attr('checked', true);
-    		} else {
-    		    $('#fa_user_newsletter_third_party_email_alert').attr('checked', false);
-    		}
+		if ($('#fa_user_newsletter_third_party_email_alert').attr('checked')) {
+			$('#fa_user_newsletter_email_alert').attr('checked', $('#fa_user_newsletter_third_party_email_alert').attr('checked'));
+			$('#fa_user_newsletter_email_alert').parent('span').addClass('checked');
+		}
+	});
+	$("#fa_user_newsletter_email_alert").parent('span').on('click', function (e) {
+		if (!$('#fa_user_newsletter_email_alert').parent('span').hasClass('checked')) {
+			$('#fa_user_newsletter_email_alert').attr('checked', true);
+		} else {
+			$('#fa_user_newsletter_email_alert').attr('checked', false);
+		}
+		if (!$('#fa_user_newsletter_email_alert').attr('checked')) {
+			$('#fa_user_newsletter_third_party_email_alert').attr('checked', false);
+			$('#fa_user_newsletter_third_party_email_alert').parent('span').removeClass('checked');
+		}
+	});
+	$("#fa_user_newsletter_third_party_email_alert").parent('span').on('change', function (e) {
+		if ($('#fa_user_newsletter_third_party_email_alert').parent('span').hasClass('checked')) {
+			$('#fa_user_newsletter_third_party_email_alert').attr('checked', true);
+		} else {
+			$('#fa_user_newsletter_third_party_email_alert').attr('checked', false);
+		}
 
-    		if ($('#fa_user_newsletter_third_party_email_alert').attr('checked')) {
-    		    $('#fa_user_newsletter_email_alert').attr('checked', $('#fa_user_newsletter_third_party_email_alert').attr('checked'));
-    		    $('#fa_user_newsletter_email_alert').parent('span').addClass('checked');
-    		}
-    	});
-
-    	$("#fa_user_newsletter_email_alert").parent('span').on('click', function (e) {
-    		if (!$('#fa_user_newsletter_email_alert').parent('span').hasClass('checked')) {
-    			$('#fa_user_newsletter_email_alert').attr('checked', true);
-    		} else {
-    			$('#fa_user_newsletter_email_alert').attr('checked', false);
-    		}
-    		if (!$('#fa_user_newsletter_email_alert').attr('checked')) {
-    		    $('#fa_user_newsletter_third_party_email_alert').attr('checked', false);
-    		    $('#fa_user_newsletter_third_party_email_alert').parent('span').removeClass('checked');
-    		} 
-    	});
-
-    	$("#fa_user_newsletter_third_party_email_alert").parent('span').on('change', function (e) {
-    		if ($('#fa_user_newsletter_third_party_email_alert').parent('span').hasClass('checked')) {
-    		    $('#fa_user_newsletter_third_party_email_alert').attr('checked', true);
-    		} else {
-    		    $('#fa_user_newsletter_third_party_email_alert').attr('checked', false);
-    		}
-
-    		if ($('#fa_user_newsletter_third_party_email_alert').attr('checked')) {
-    		    $('#fa_user_newsletter_email_alert').attr('checked', $('#fa_user_newsletter_third_party_email_alert').attr('checked'));
-    		    $('#fa_user_newsletter_email_alert').parent('span').addClass('checked');
-    		}
-    	});
-
-    	$("#fa_user_newsletter_email_alert").parent('span').on('change', function (e) {
-    		if ($('#fa_user_newsletter_email_alert').parent('span').hasClass('checked')) {
-    			$('#fa_user_newsletter_email_alert').attr('checked', true);
-    		} else {
-    			$('#fa_user_newsletter_email_alert').attr('checked', false);
-    		}
-    		if (!$('#fa_user_newsletter_email_alert').attr('checked')) {
-    		    $('#fa_user_newsletter_third_party_email_alert').attr('checked', false);
-    		    $('#fa_user_newsletter_third_party_email_alert').parent('span').removeClass('checked');
-    		} 
-    	});
-	   
+		if ($('#fa_user_newsletter_third_party_email_alert').attr('checked')) {
+			$('#fa_user_newsletter_email_alert').attr('checked', $('#fa_user_newsletter_third_party_email_alert').attr('checked'));
+			$('#fa_user_newsletter_email_alert').parent('span').addClass('checked');
+		}
+	});
+	$("#fa_user_newsletter_email_alert").parent('span').on('change', function (e) {
+		if ($('#fa_user_newsletter_email_alert').parent('span').hasClass('checked')) {
+			$('#fa_user_newsletter_email_alert').attr('checked', true);
+		} else {
+			$('#fa_user_newsletter_email_alert').attr('checked', false);
+		}
+		if (!$('#fa_user_newsletter_email_alert').attr('checked')) {
+			$('#fa_user_newsletter_third_party_email_alert').attr('checked', false);
+			$('#fa_user_newsletter_third_party_email_alert').parent('span').removeClass('checked');
+		}
+	});
     $("#fa_user_newsletter").submit(function(event) {
     	// Stop form from submitting normally
         event.preventDefault();
@@ -128,7 +98,5 @@
             }
         });
     });
-
-//]]>
 </script>
 {% endblock %}
