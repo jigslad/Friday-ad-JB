@@ -306,7 +306,7 @@
         {% else %}
         	{{ include('FaFrontendBundle::header.html.twig', {'status_code': status_code}) }}
         {% endif %}
-	
+
         {% if status_code == 200 %}
             {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page'} %}
                 <div class="row top-msg">
