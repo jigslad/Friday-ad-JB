@@ -68,12 +68,26 @@
     $(document).ready(function(){
       {% if (gaStr is defined and gaStr != '') %}
          {% if (isErrors is defined and isErrors == 1) %}
-             ga('send', 'event', 'PAA - Step 3', 'Form error', '{{gaStr}}');
+            window.dataLayer = window.dataLayer || []
+            dataLayer.push({
+                'event' : 'Form Error PAA',
+                'eventCategory':  'PAA - Step 3',
+                'eventAction': 'Form error',
+                'eventLabel': '{{gaStr}}'
+            });
+            ga('send', 'event', 'PAA - Step 3', 'Form error', '{{gaStr}}');
          {% else %}
              ga('send', 'event', 'PAA - Step 2', 'Next step', '{{gaStr}}');
          {% endif %}
       {% elseif (loginError is defined and loginError != '') %}
-          ga('send', 'event', 'PAA - Step 3', 'Form error', '{{loginError}}');
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+            'event' : 'Form Error PAA',
+            'eventCategory':  'PAA - Step 3',
+            'eventAction': 'Form error',
+            'eventLabel': '{{loginError}}'
+        });
+        ga('send', 'event', 'PAA - Step 3', 'Form error', '{{loginError}}');
       {% endif %}
       
         showUserTypeField();
@@ -116,13 +130,27 @@
 
     function fbLoginPopupLocal(facebookLoginUrl)
     {
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+            'event' : 'PAA Next Step',
+            'eventCategory':  'login',
+            'eventAction': 'Next step',
+            'eventLabel': 'facebook'
+        });
       ga('send', 'event', 'PAA - Step 3', 'Next step', 'facebook');
       fbLoginPopup(facebookLoginUrl);
     }
 
     function googleLoginPopupLocal(googleLoginUrl)
     {
-      ga('send', 'event', 'PAA - Step 3', 'Next step', 'google +');
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+            'event' : 'PAA Next Step',
+            'eventCategory':  'login',
+            'eventAction': 'Next step',
+            'eventLabel': 'google +'
+        });
+        ga('send', 'event', 'PAA - Step 3', 'Next step', 'google +');
       googleLoginPopup(googleLoginUrl);
     }
 

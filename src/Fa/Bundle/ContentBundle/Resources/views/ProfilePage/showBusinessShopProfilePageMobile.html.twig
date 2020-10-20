@@ -110,8 +110,8 @@
                             {% endif %}
                         </div>
                         <div id="business_about_us_div">
-                             {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [userDetail['about_us'], 'hide']) %}
-                             {% set adDescWithReplacedPhoneAndEmail = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [userDetail['id'], adDescWithReplacedPhone, 'hide']) %}
+                             {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [userDetail['about_us'], 'hide','Profile']) %}
+                             {% set adDescWithReplacedPhoneAndEmail = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [userDetail['id'], adDescWithReplacedPhone, 'hide','Profile']) %}
                              {{ adDescWithReplacedPhoneAndEmail|raw }}
                         </div>
                     </div>
@@ -150,7 +150,7 @@
                 {% if userDetail['website_link'] is defined  and userDetail['website_link']|length %}
                     {% set websiteLabel = 'Visit website'|trans({}, 'frontend-profile-page') %}  
                     {% set profileWebSite = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'addHttpToUrl', [userDetail['website_link']]) %}    
-                    <a rel="nofollow" onclick="openUserWebsite('{{(userDetail['id'] ? userDetail['id'] : '-')}}', '{{ profileWebSite }}', '{{ userName }}')" href="javascript:void(0);" class="website-btn-1 button expand"><span class="website-icon"></span>{{ websiteLabel }}</a>
+                    <a rel="nofollow" onclick="openUserWebsite('{{(userDetail['id'] ? userDetail['id'] : '-')}}', '{{ profileWebSite }}', '{{ userName }}')" href="javascript:void(0);" class="website-btn-1 ga-visitWebsiteBusiness button expand"><span class="website-icon ga-visitWebsiteBusiness"></span>{{ websiteLabel }}</a>
                 {% endif %} 
 
 
@@ -194,8 +194,8 @@
                             {% endif %}
                         </div>
                         <div id="business_about_us_div">
-                             {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [userDetail['about_us'], 'hide']) %}
-                             {% set adDescWithReplacedPhoneAndEmail = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [userDetail['id'], adDescWithReplacedPhone, 'hide']) %}
+                             {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [userDetail['about_us'], 'hide','Profile']) %}
+                             {% set adDescWithReplacedPhoneAndEmail = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [userDetail['id'], adDescWithReplacedPhone, 'hide','Profile']) %}
                              {{ adDescWithReplacedPhoneAndEmail|raw }}
                         </div>
                     </div>
@@ -276,7 +276,7 @@
         $(document).ready(function() {
             $('#business_about_us_div').readmore({
                 'embedCSS': false,
-                'collapsedHeight': 250,
+                'collapsedHeight': 240,
                 'moreLink': '<div class="text-right"><a href="javascript:void(0);">Read more</a></div>',
                 'lessLink': '<div class="text-right"><a href="javascript:void(0);">Read less</a></div>'
             });
@@ -295,6 +295,16 @@
     {% endif %}
     
     ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Business_Page'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %}});
+
+    {% set _logged_in = 'true' %}
+    {% if app.user.getId() is not defined or app.user.getId() is null %}
+        {% set _logged_in = 'false' %}
+    {% endif %}
+
+    googletag.cmd.push(function() {
+        googletag.pubads().setTargeting('page_type', 'Business_Page').setTargeting('adBlocker', false).setTargeting('user_logged', {{ _logged_in }});
+        googletag.enableServices();
+    });
 
     function openBusinessWebsite(businessName)
     {

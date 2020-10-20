@@ -143,6 +143,7 @@
                   {{ form_row(form.category_id_autocomplete) }}
                   <a href="javascript:void(0);" id="fa_paa_category_select_category_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
               </span>
+              <span id="category_id_autocomplete_error" class="error" style="display:none">No matching categories found. Try a different search or use the category icons to navigate to find your category.</span>
           </div>
       </div>
     </div>
@@ -232,8 +233,15 @@
              if ($("#fa_paa_category_select_has_reg_no > .checked >").val() == '0') {
                eventLabel = eventLabel + ' - No';
              }
+                window.dataLayer = window.dataLayer || []
+                dataLayer.push({
 
-             ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
+                   'event' : 'PAA Category Selection',
+                   'eventCategory':  'PAA - Step 1',
+                   'eventAction': 'Category icon click',
+                   'eventLabel': eventLabel
+                });
+                ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
            }
            //GA Analytics code end
         });
@@ -264,7 +272,13 @@
               if ($("#fa_paa_category_select_has_reg_no > .checked >").val() == '0') {
                 eventLabel = eventLabel + ' - No';
               }
-
+                window.dataLayer = window.dataLayer || []
+                dataLayer.push({
+                    'event' : 'PAA Next Step',
+                    'eventCategory':  'Next Step',
+                    'eventAction': '',
+                    'eventLabel': category_id
+                });
               ga('send', 'event', 'PAA - Step 1', 'Category icon Next step', eventLabel);
             }
             //GA Analytics code end
@@ -320,6 +334,14 @@
                    regLookupResult = ' - Lookup unsuccessful || '+regNo;
                  }
                  var eventLabel = categoryPath + regLookupResult;
+                 window.dataLayer = window.dataLayer || []
+                 dataLayer.push({
+
+                     'event' : 'PAA Category Selection',
+                     'eventCategory':  'PAA - Step 1',
+                     'eventAction': 'Category icon click',
+                     'eventLabel': eventLabel
+                 });
                  ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
                  //GA Analytics code end
              });
@@ -445,7 +467,15 @@
            		incrscroll = 80;
            	} else if(winwidth>=400 && winwidth<=500) {
            		incrscroll = 40;
-           	} 
+           	}
+            window.dataLayer = window.dataLayer || []
+            dataLayer.push({
+
+                'event' : 'PAA Category Selection',
+                'eventCategory':  'PAA - Step 1',
+                'eventAction': 'Category icon click',
+                'eventLabel': eventLabel
+            });
             ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
             //GA Analytics code end
             

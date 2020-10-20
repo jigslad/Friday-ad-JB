@@ -283,11 +283,28 @@
 	    {% endif %}
 
 	    {% if (gaStr is defined and gaStr != '') %}
+            window.dataLayer = window.dataLayer || []
+            dataLayer.push({
+                'event' : 'Form Error PAA',
+                'eventCategory':  'PAA - Step Cart',
+                'eventAction': 'Form error',
+                'eventLabel': '{{gaStr}}'
+            });
             ga('send', 'event', 'Category PAA - Checkout', 'Form error', '{{gaStr}}');
             triggerFirstCheckBox();
         {% endif %}
 	    
         showHideCardDetail();
+    });
+
+    $('#fa_payment_cyber_source_checkout_save').click(function () {
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+            'event' : 'Options',
+            'eventCategory':  'Search Results',
+            'eventAction': 'Upgrade',
+            'eventLabel': 'Cybersource'
+        });
     });
 
     function triggerFirstCheckBox() {

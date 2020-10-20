@@ -47,7 +47,14 @@
    $(document).ready(function(){
      //GA Analytics code start
      {% if (gaStr is defined and gaStr != '') %}
-         ga('send', 'event', 'PAA - Step 2', 'Form error', '{{gaStr}}');
+       window.dataLayer = window.dataLayer || []
+       dataLayer.push({
+           'event' : 'Form Error PAA',
+           'eventCategory':  'PAA - Step 2',
+           'eventAction': 'Form error',
+           'eventLabel': '{{gaStr}}'
+       });
+       ga('send', 'event', 'PAA - Step 2', 'Form error', '{{gaStr}}');
      {% endif %}
      //GA Analytics code end
 	   if ({{ app.request.get('is_copy', 0)}}) 

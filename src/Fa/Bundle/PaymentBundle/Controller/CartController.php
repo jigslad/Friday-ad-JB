@@ -141,6 +141,19 @@ class CartController extends CoreController
                     $this->container->get('session')->set('payment_success_redirect_url', $this->generateUrl('manage_my_ads_active'));
                     
                     return $this->handleMessage($this->get('translator')->trans('Your free advert posted successfully.', array(), 'frontend-cart-payment'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success');                    
+
+                if($paymentId) {
+                //send ads for moderation
+sleep(5);
+                $this->getRepository('FaAdBundle:AdModerate')->sendAdsForModeration($paymentId, $this->container);
+
+                //redirect back to manage my ads active tab.
+                $this->container->get('session')->set('payment_success_redirect_url', $this->generateUrl('manage_my_ads_active'));
+
+                return $this->handleMessage($this->get('translator')->trans('Your free advert posted successfully.', array(), 'frontend-cart-payment'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success');
+                } else {
+                  return $this->handleMessage($this->get('translator')->trans('Problem in payment.', array(), 'frontend-cart-payment'), 'checkout_payment_failure', array('cartCode' => $cart->getCartCode()), 'error');
+>>>>>>> origin/clean_master
                 }
             } catch (\Exception $e) {
                 $this->getEntityManager()->getConnection()->rollback();

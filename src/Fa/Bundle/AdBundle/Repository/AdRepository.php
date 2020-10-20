@@ -1183,11 +1183,11 @@ class AdRepository extends EntityRepository
             if ($cookieLocation && $cookieLocation != CommonManager::COOKIE_DELETED) {
                 $cookieLocation = get_object_vars(json_decode($cookieLocation));
                 if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
-                    $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
+                    $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].','.$cookieLocation['longitude']);
 
                     // Sort by nearest first if location is set
                     if ($sortBy && $sortBy == 'geodist') {
-                        $data['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
+                        //$data['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
                     }
                 }
             }
@@ -4539,14 +4539,19 @@ class AdRepository extends EntityRepository
             $privateUserAdPostLimitRules = $this->_em->getRepository('FaCoreBundle:ConfigRule')->getPrivateUserAdPostLimit($categoryId, $container);
             $privateUserAdParams['adCategoryId'] = $categoryId;
             $privateUserAdParams['privateUserAdPostLimitRules'] = $privateUserAdPostLimitRules;
+            $subCategory = $this->_em->getRepository('FaEntityBundle:Category')->getCategoryArraySimpleById($privateUserAdPostLimitRules['configRuleCategoryId']);
+            array_push($subCategory,$privateUserAdPostLimitRules['configRuleCategoryId']);
+            $freePackage = $this->_em->getRepository('FaPromotionBundle:package')->getAllFreePacckage();
 
             $query = $this->createQueryBuilder(self::ALIAS)
             ->select('COUNT(DISTINCT '.self::ALIAS.'.id) as ad_cnt')
-            ->innerJoin(self::ALIAS.'.user', UserRepository::ALIAS, 'WITH', self::ALIAS.'.user = '.UserRepository::ALIAS.'.id')
             ->andWhere(self::ALIAS.'.status IN (:adStatus)')
             ->setParameter('adStatus', array(BaseEntityRepository::AD_STATUS_LIVE_ID, BaseEntityRepository::AD_STATUS_IN_MODERATION_ID))
-            ->andWhere($this->getRepositoryAlias().'.user = :userId')
+            ->andWhere(self::ALIAS.'.user = :userId')
             ->setParameter('userId', $userId)
+            ->leftJoin('FaAdBundle:AdUserPackage', AdUserPackageRepository::ALIAS, 'WITH', self::ALIAS.'.id ='.AdUserPackageRepository::ALIAS.'.ad_id')
+            ->andWhere(AdUserPackageRepository::ALIAS.'.package IN (:free_ad_package)')
+            ->setParameter('free_ad_package', $freePackage)
             ->setMaxResults(1);
 
             if (isset($privateUserAdPostLimitRules['configRuleCategoryId']) && $privateUserAdPostLimitRules['configRuleCategoryId']) {
@@ -4554,7 +4559,6 @@ class AdRepository extends EntityRepository
                 $query->andWhere($this->getRepositoryAlias().'.category IN (:adCategories)')
                     ->setParameter('adCategories', $adCategories);
             }
-
             $totalAds = 0;
             $userAd = $query->getQuery()->getOneOrNullResult();
             $totalAds += $userAd['ad_cnt'];
@@ -4942,10 +4946,10 @@ class AdRepository extends EntityRepository
         }
 
         $dayBeforeStartDate = CommonManager::getTimeStampFromStartDate(date('Y-m-d', strtotime('-1 day')));
-        
+
         $query = $this->createQueryBuilder(self::ALIAS)
         ->select(self::ALIAS.'.id')
-        ->andWhere(self::ALIAS.'.category = (:catId)')
+        ->andWhere(self::ALIAS.'.category IN (:catId)')
         ->setParameter('catId', $category)
         ->andWhere('IDENTITY('.self::ALIAS.'.status) ='.BaseEntityRepository::AD_STATUS_LIVE_ID)
         ->andWhere('(' . self::ALIAS . '.created_at <= ' . $dayBeforeStartDate . ' AND '. self::ALIAS . '.updated_at <= ' . $dayBeforeStartDate . ')')
@@ -4961,12 +4965,16 @@ class AdRepository extends EntityRepository
             }
         }
         $query->orderBy(self::ALIAS.'.id', 'DESC');
-        $query->setMaxResults(1);
+        $query->groupBy(self::ALIAS.'.category');
         $adList = $query->getQuery()->getArrayResult();
+
+        $adIds = [];
         if (!empty($adList)) {
-            $adId = $adList[0]['id'];
+            foreach($adList as $ad) {
+                $adIds[] = $ad['id'];
+            }
         }
-        return $adId;
+        return $adIds;
     }
     
     /** getRecentAdByCategoryArray
@@ -4976,14 +4984,6 @@ class AdRepository extends EntityRepository
      */
     public function getRecentAdByCategoryArray($categoryList, $searchParams){
         
-        $recentAd  = array();
-        $recentAdByCatArr = null;
-        foreach ($categoryList as $category){
-            $recentAdByCatArr = $this->getRecentAdByCategory($category, $searchParams);
-            if($recentAdByCatArr!='') {
-                $recentAd[$category] = $recentAdByCatArr;
-            }
-        }
-        return $recentAd;
+        return $this->getRecentAdByCategory($categoryList, $searchParams);
     }
 }

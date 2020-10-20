@@ -156,9 +156,10 @@ class UserSiteImageManager
                 unlink($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserSiteId().'_'.$this->getHash().'.png');
             }
         } else {
-            $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, $imageQuality, 'ImageMagickManager');
-            $origImage->loadFile($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName);
-            $origImage->save($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserSiteId().'_'.$this->getHash().'.jpg', 'image/jpeg');
+             exec('convert -flatten '.escapeshellarg($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName).' '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserSiteId().'_'.$this->getHash().'.jpg');
+            //$origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, $imageQuality, 'ImageMagickManager');
+            //$origImage->loadFile($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName);
+            //$origImage->save($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserSiteId().'_'.$this->getHash().'.jpg', 'image/jpeg');
         }
         if ($dimension['mime'] == 'image/gif') {
             if (is_file($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserSiteId().'-0.jpg')) {
@@ -199,12 +200,12 @@ class UserSiteImageManager
             try {
                 foreach ($thumbSize as $d) {
                     $dim        = explode('X', $d);
+                    exec('convert -define jpeg:size='.$dim[0].'x'.$dim[1].' '.$orig_image.' -thumbnail '.$d.'^ \ -gravity center -extent '.$d.' '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserSiteId().'_'.$this->getHash().'_'.$d.'.jpg');
+                    //$thumbImage = new ThumbnailManager($dim[0], $dim[1], true, false, $imageQuality, 'ImageMagickManager');
+                    //$thumbImage->loadFile($orig_image);
+                    //$thumbImage->save($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserSiteId().'_'.$this->getHash().'_'.$d.'.jpg', 'image/jpeg');
 
-                    $thumbImage = new ThumbnailManager($dim[0], $dim[1], true, false, $imageQuality, 'ImageMagickManager');
-                    $thumbImage->loadFile($orig_image);
-                    $thumbImage->save($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserSiteId().'_'.$this->getHash().'_'.$d.'.jpg', 'image/jpeg');
-
-                    unset($thumbImage);
+                   // unset($thumbImage);
                 }
             } catch (\Exception $e) {
                 throw $e;

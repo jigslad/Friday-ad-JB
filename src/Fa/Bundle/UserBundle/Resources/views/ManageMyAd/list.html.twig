@@ -238,12 +238,12 @@
                     asyn:false,
                     cache:false,
                     success:function(result)
-                            {
+                    {
                         if(result.error == "")
                         {
                             ga('send','event','MMA', 'Multi-Boost Button', result.gaStr);
-                                window.location.href = '{{ path('manage_my_ads_active') }}';
-                            }
+                            window.location.href = '{{ path('manage_my_ads_active') }}';
+                        }
                     }
             });
     	}
@@ -251,6 +251,18 @@
 
     function stopAds() {
     	$('#markAdAsSoldOrExpireBulkModal').foundation('reveal', 'open');
+        if(result.error == "")
+        {
+             window.dataLayer = window.dataLayer || []
+             dataLayer.push({
+                 'event' : 'Options',
+                 'eventCategory':  'Options',
+                 'eventAction': 'Multi-Boost Button',
+                 'eventLabel': selectedBoostAdIds+' - '+result.gaStr
+             });
+             ga('send','event','MMA', 'Multi-Boost Button', result.gaStr);
+             window.location.href = '{{ path('manage_my_ads_active') }}';
+         }
     }
 
     function unBoostSelectedAds() {
@@ -341,6 +353,13 @@
                         {
                             if(result.error == "")
                             {
+                                window.dataLayer = window.dataLayer || []
+                                dataLayer.push({
+                                    'event' : 'Options',
+                                    'eventCategory':  'Options',
+                                    'eventAction': 'Boost Button',
+                                    'eventLabel': adIdToBoost+' - '+result.gaStr
+                                });
                                 ga('send','event','MMA','Boost Button', result.gaStr);
                             }
                         },

@@ -15,7 +15,7 @@
                     {% endif %}
                     <li {% if secondLevelLength %}class="has-dropdown"{% else %}class="last-level"{% endif %}>
                     	{% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
-                        	{% set listurl1 = path('fa_adult_homepage') %}
+                        	{% set listurl1 = path('fa_new_adult_homepage') %}
                         {% else %}
                             {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['full_slug']) %}
                         {% endif %}
@@ -92,11 +92,18 @@
                                     {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
                                     	<li class="last-level">
                                     		{% if thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox %}
-                                        		<a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" >Live Sex Cams</a>
-                                        	{% else %}
-                                        		<a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" >Live Sex Cams</a>
+                                        		<a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" >Escort Alternative</a>
+                                            {% else %}
+                                        		<a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" >Escort Alternative</a>
                             	            {% endif %}
                                 		</li>
+                                        {# <li class="last-level">
+                                            {% if (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox) or (app.request.cookies.has('is_over_18')) %}
+                                                <a href="https://engine.partylemons.com/?414907182" rel="nofollow" target="_blank" >MILF Hookups</a>
+                                            {% else %}
+                                                <a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" >MILF Hookups</a>
+                                            {% endif %}
+                                        </li> #}
                                      {% endif %}
                                     <li class="last-level">
                                         {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}

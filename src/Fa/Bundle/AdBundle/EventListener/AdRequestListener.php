@@ -250,7 +250,7 @@ class AdRequestListener
             $routeManager = $this->container->get('fa_ad.manager.ad_routing');
             $url = $routeManager->getAdultHomePageUrl();
             $event->setResponse(new RedirectResponse($url, 301));
-        } elseif (preg_match('/\/adult\//', $uri)) {
+        } elseif (preg_match('/\/adult\//', $uri) && !preg_match('/delete_image\/adult\//', $uri) && !preg_match('/reset_image\/adult\//', $uri)) {
             $locationUrl = str_replace('adult', 'adult-services/escorts', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
