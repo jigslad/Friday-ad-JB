@@ -64,6 +64,15 @@
         <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}?v=3000"/>
     {% endstylesheets %}#}
 
+    <script>
+
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+
+    </script>
+
+    {{ include('FaFrontendBundle::gtmCode.html.twig') }}
+
     {% block blockGaCode %}
         {{ include('FaFrontendBundle::gaCode.html.twig') }}
     {% endblock %}
@@ -79,9 +88,17 @@
             	ga('set', 'dimension9', 'logged in');
             {% endif %}
             ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Peripheral_Content'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %}});
-        //]]>
+         //]]>
         </script>
     {% endif %}
+    
+    <script>
+        googletag.cmd.push(function() {
+            dataLayerValues.each(function(key, value) {
+                googletag.pubads().setTargeting(key, value);
+            });
+        });
+    </script>
     
     {% if mobileDetectManager.isMobile() or mobileDetectManager.isTablet() %}
         {% if mobileDetectManager.isiOS() and not mobileDetectManager.isWindowsMobileOS() and not mobileDetectManager.isWindowsPhoneOS() %}

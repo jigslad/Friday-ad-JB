@@ -49,6 +49,7 @@
                 {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_TOP_MOBILE_LEADERBOARD') %}
                 {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
             {% endif %}
+
             <div class="sortby-area">
                 <div class="clearfix">
                     {% if seoFields.h1_tag is defined %}

@@ -9,6 +9,7 @@
 {% if paaBlock['description'] is defined %}
     {{paaBlock['description']|raw}}
 {% endif %}
+
 <script language="javascript" type="text/javascript">
     function getCookie(cname) {
         var name = cname + "=";
@@ -20,9 +21,9 @@
         }
         return "";
     }
-defLocationText = 'uk';
-if (getCookie('location') != '') {
-    var obj = $.parseJSON(decodeURIComponent(getCookie('location')));
-    var defLocationText = obj.location_text.replace(/\+/g, ' ');
-}
+    defLocationText = 'uk';
+    if (getCookie('location') != '') {
+        var obj = $.parseJSON(decodeURIComponent(getCookie('location')));
+        var defLocationText = obj.location_text.replace(/\+/g, ' ');
+    }
 </script>

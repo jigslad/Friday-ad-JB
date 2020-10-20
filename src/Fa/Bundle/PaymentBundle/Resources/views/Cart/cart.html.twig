@@ -250,6 +250,9 @@ The main client-side JS. Handles displaying the Apple Pay button and requesting 
 * If we wanted more fine-grained control, we could use
 * ApplePaySession.canMakePaymentsWithActiveCards() instead.
 */
+$(document).ready(function() {
+    document.cookie = "SameSite=None;Secure;path=/";
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     if (window.ApplePaySession) {
