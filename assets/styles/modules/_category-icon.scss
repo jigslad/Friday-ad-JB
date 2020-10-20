@@ -37,7 +37,7 @@
             &:after {
                 height: 65px;
                 width: 1px;
-                background-color: #CBD5D9;
+                background-color: $color--border;
                 position: absolute;
                 content: "";
                 top: 32px;
@@ -57,8 +57,7 @@
         }
         &:hover {
             a {
-                //background-color: #82c148;
-                background: linear-gradient(45deg, #A8DC28 0%, #79D377 100%);
+                background: $color--linear-gradient-green;
                 text-decoration: none;
             }
             .services {
@@ -89,7 +88,7 @@
                 background-image: url('/public/images/category-navigation/Adult-white-hover.svg');
             }
             .category-nav__item--title {
-                color: #fff;
+                color: $color--white;
             }
         }
         &--icon {
@@ -130,12 +129,12 @@
             }
         }
         &--title {
-            font-size: 10px;
+            font-size: $font-size--xxxs-small;
             @include media-breakpoint-up(lg) {
-                font-size: 14px;
+                font-size: $font-size--small;
             }
             font-family: $font-family-semi-bold;
-            color: #313133;
+            color: $color--grey10;
             line-height: 21px;
         }
     }
@@ -143,7 +142,7 @@
         button {
             position: absolute;
             top: 50%;
-            color: #fff;
+            color: $color--white;
             margin: 0;
             transition: all 0.3s ease-in-out;
             transform: translateY(-50%);

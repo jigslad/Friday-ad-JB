@@ -3,16 +3,16 @@
 **/
 
 .block {
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: space-between;
-  align-content: flex-start;
-  .block__title {
-    padding: 1rem;
-    background: $color--whisper;
-  }
-  .block__content {
-    padding: 1rem;
-    border-top: none;
-  }
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    align-content: flex-start;
+    .block__title {
+        padding: 1rem;
+        background: $color--white;
+    }
+    .block__content {
+        padding: 1rem;
+        border-top: none;
+    }
 }

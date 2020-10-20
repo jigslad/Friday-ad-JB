@@ -61,7 +61,7 @@
                     text-align: center;
                     line-height: 40px;
                     border: 0;
-                    color: #FFF;
+                    color: $color--white;
                     -webkit-transition: background-color .4s ease;
                     transition: background-color .4s ease;
                     -webkit-border-radius: 0 4px 4px 0;
@@ -88,18 +88,18 @@
                 }
                 &--ok {
                     padding: 5px 29px;
-                    font-size: 14px;
+                    font-size: $font-size--small;
                 }
                 &--cancel {
                     padding: 5px 14px;
                     margin-right: 16px;
-                    font-size: 14px;
+                    font-size: $font-size--small;
                     border: 1px solid $color--hover;
                     border-radius: 4px;
                 }
             }
             &__popular {
-                color: #212527;
+                color: $color--primary;
                 // font-family: $font-family-bold;
                 margin-bottom: 20px;
                 span {

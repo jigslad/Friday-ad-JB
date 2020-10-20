@@ -5,23 +5,14 @@
         margin-top: 50px;
     }
     &__title {
-        color: $color--primary;
-        font-family: $font-family-semi-bold;
-        font-size: 18px;
+        @extend .fad-title;
+        margin-bottom: 8px;
         @include media-breakpoint-up(md) {
-            font-size: 24px;
             margin-bottom: 20px;
         }
         @include media-breakpoint-up(lg) {
-            font-family: $font-family-medium;
-            font-size: 36px;
             margin-bottom: 50px;
         }
-        font-weight: 500;
-        letter-spacing: 0;
-        line-height: 46px;
-        text-align: center;
-        margin-bottom: 8px;
     }
     &__block {
         border: 1px solid $color--border;
@@ -64,16 +55,16 @@
         }
         &--posted {
             color: $color--hover;
-            font-size: 14px;
+            font-size: $font-size--small;
         }
         &--author {
             color: $color--hover;
-            font-size: 14px;
+            font-size: $font-size--small;
         }
     }
     &__text {
         color: $color--primary;
-        font-size: 16px;
+        font-size: $font-size--base;
         margin-bottom: 0;
         line-height: 21px;
         font-family: $font-family-semi-bold;
@@ -119,7 +110,7 @@
             padding: 7px 0;
             text-align: center;
             border-radius: 4px;
-            font-size: 16px;
+            font-size: $font-size--base;
             font-family: $font-family-semi-bold;
             &:hover {
                 color: $color--white;

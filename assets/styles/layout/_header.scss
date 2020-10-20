@@ -7,7 +7,7 @@
         left: 0;
         width: 100%;
         z-index: 9;
-        background-color: #fff;
+        background-color: $color--white;
         animation: smoothScroll .6s;
         .main-navigation {
             @include media-breakpoint-up(md) {
@@ -25,7 +25,7 @@
     @include media-breakpoint-up(md) {
         display: block;
     }
-    border-bottom: 1px solid #CBD5D9;
+    border-bottom: 1px solid $color--border;
     .navigation-right {
         list-style: none;
         display: flex;
@@ -59,16 +59,16 @@
                     &:hover {
                         &:first-child {
                             .arrow-icon {
-                                color: #212527;
+                                color: $color--primary;
                                 @include media-breakpoint-up(xl) {
                                     background-image: url('/public/images/geen-up.svg');
-                                    color: #82c148;
+                                    color: $color--hover;
                                 }
                                 &.rotate-icon {
                                     @include media-breakpoint-between(md,
                                     lg) {
                                         background-image: url('/public/images/geen-up.svg');
-                                        color: #82c148;
+                                        color: $color--hover;
                                     }
                                 }
                             }
@@ -93,7 +93,7 @@
             &:after {
                 content: '';
                 position: absolute;
-                background: #212527;
+                background: $color--primary;
                 width: 1px;
                 height: 11px;
                 right: -13px;
@@ -112,8 +112,8 @@
             }
         }
         &__link {
-            color: #212527;
-            font-size: 12px;
+            color: $color--primary;
+            font-size: $font-size--xxs-small;
             position: relative;
             &.menu-dropdown {}
             &.basket-icon {
@@ -135,7 +135,7 @@
                 background-position-y: 1px;
             }
             &:hover {
-                color: #82c148;
+                color: $color--hover;
                 text-decoration: none;
             }
         }
@@ -168,15 +168,15 @@
     position: absolute;
     z-index: 999;
     border-radius: 4px;
-    background-color: #FFFFFF;
+    background-color: $color--white;
     box-shadow: 0 0 21px 0 rgba(57, 57, 57, 0.18);
     width: 200px;
     cursor: pointer;
-    border-top: 1px solid #CBD5D9;
+    border-top: 1px solid $color--border;
     right: -17px;
     top: 20px;
     &__block {
-        border-bottom: 1px solid #CBD5D9;
+        border-bottom: 1px solid $color--border;
         ul {
             list-style: none;
             margin-left: 0;
@@ -187,10 +187,10 @@
             border-bottom: 0;
             .dropdown-content__link {
                 padding: 14px 0;
-                color: #82c148;
+                color: $color--hover;
                 font-family: $font-family-bold;
                 // &:hover {
-                //     color: #212527;
+                //     color: $color--primary;
                 // }
             }
         }
@@ -215,15 +215,15 @@
         }
     }
     &__user-name {
-        font-size: 12px;
+        font-size: $font-size--xxs-small;
         font-family: $font-family-bold;
         margin: 12px 0 18px;
         font-weight: normal;
     }
     &__item {}
     &__link {
-        color: #212527;
-        font-size: 12px;
+        color: $color--primary;
+        font-size: $font-size--xxs-small;
         letter-spacing: 0;
         line-height: 18px;
         display: block;
@@ -237,7 +237,7 @@
             left: 16px;
         }
         &:hover {
-            color: #82c148;
+            color: $color--hover;
             text-decoration: none;
         }
         &.home-icon {
@@ -278,7 +278,7 @@
     position: relative;
     // z-index: 9;
     @include transition(all $transition-time--base ease-in-out);
-    background-color: #fff;
+    background-color: $color--white;
     &__block {
         display: flex;
         justify-content: space-between;
@@ -345,12 +345,12 @@
                         padding-right: 26px;
                     }
                     &:hover {
-                        color: #212527;
+                        color: $color--primary;
                         text-decoration: none;
                     }
                     // &.rotate-icon {
                     //     background-image: url('/public/images/green-down-arrow.svg');
-                    //     color: #82c148;
+                    //     color: $color--hover;
                     // }
                 }
                 .dropdown-icon {
@@ -362,10 +362,10 @@
                         background-position-x: right;
                         background-size: 24px;
                         background-position-y: -2px;
-                        color: #212527;
+                        color: $color--primary;
                     }
                     // &:focus {
-                    //     color: #82c148;
+                    //     color: $color--hover;
                     // }
                 }
                 .menu-hamburger {
@@ -379,7 +379,7 @@
                     background-position-y: 0px;
                     &.menu-green-icon {
                         background-image: url('/public/images/menu-icon-green.svg');
-                        color: #82c148;
+                        color: $color--hover;
                     }
                     position: relative;
                     .notify-badge {
@@ -422,7 +422,7 @@
                     background-size: 24px;
                     background-position-y: 0px;
                     &:hover {
-                        color: #212527;
+                        color: $color--primary;
                     }
                 }
             }
@@ -447,14 +447,13 @@
                 }
             }
             @include media-breakpoint-down(sm) {
-                font-size: 12px;
+                font-size: $font-size--xxs-small;
                 padding: 10px 10px;
                 display: block;
             }
             span {
-                font-size: 10px;
                 display: block;
-                font-size: 10px;
+                font-size: $font-size--xxxs-small;
                 margin-top: 17px;
                 @include media-breakpoint-up(md) {
                     display: none;
@@ -468,7 +467,7 @@
 .nav-dropdown {
     position: absolute;
     display: none;
-    background-color: #EAEFF0;
+    background-color: $color--grey;
     z-index: 2;
     left: 0;
     top: 60px;
@@ -501,11 +500,11 @@
             padding: 25px 20px 29px;
             visibility: hidden;
             opacity: 0;
-            background-color: #EAEFF0;
+            background-color: $color--grey;
             transform: translate(0);
             left: 0;
             // &:before {
-            //     background: #91D851;
+            //     background: $color--green;
             //     content: "";
             //     width: 111px;
             //     height: 5px;
@@ -535,22 +534,22 @@
         }
         &--link {
             display: block;
-            color: #212527;
+            color: $color--primary;
             line-height: 22px;
             @include media-breakpoint-between(md,
             lg) {
-                font-size: 12px;
+                font-size: $font-size--xxs-small;
                 line-height: 18px;
             }
             // @include media-breakpoint-up(lg) {
             //     font-size: 14px;
             // }
             @include media-breakpoint-up(xl) {
-                font-size: 14px;
+                font-size: $font-size--small;
             }
             &:hover {
                 @include media-breakpoint-up(md) {
-                    color: #82c148;
+                    color: $color--hover;
                 }
                 text-decoration: none;
             }
@@ -573,7 +572,7 @@
                     @include media-breakpoint-up(md) {
                         position: relative;
                         &:after {
-                            background: #91D851;
+                            background: $color--green;
                             content: "";
                             width: 100px;
                             height: 5px;
@@ -637,7 +636,7 @@
         }
         display: block;
         &:hover {
-            color: #82c148;
+            color: $color--hover;
             text-decoration: none;
         }
     }
@@ -657,11 +656,11 @@
         width: 100%;
         line-height: 40px;
         margin: 12px 0 16px;
-        color: #212121;
+        color: $color--primary;
         border: 1px solid $color--border;
         -webkit-border-radius: 4px;
         border-radius: 4px;
-        font-size: 13px;
+        font-size: $font-size--xs-small;
         margin: 0px 0 12px;
         background-image: url('/public/images/green-search-icon.svg');
         background-repeat: no-repeat;
@@ -670,8 +669,8 @@
         background-position-y: center;
         &:focus {
             outline: 0;
-            background-color: #FFF;
-            border: 1px solid #91D851;
+            background-color: $color--white;
+            border: 1px solid $color--green;
         }
     }
 }
@@ -679,7 +678,7 @@
 //Mobile menu style starts
 .nav-mobile {
     .nav-dropdown {
-        background-color: #fff;
+        background-color: $color--white;
         margin-left: 0;
         // height: 100vh;
         top: 63px;
@@ -691,7 +690,7 @@
             display: none;
         }
         &__link {
-            font-size: 12px;
+            font-size: $font-size--xxs-small;
             background-repeat: no-repeat;
             background-position-y: center;
             background-size: 22px;
@@ -766,7 +765,7 @@
         }
         &__item {
             &.logout {
-                border-top: 1px solid #CBD5D9;
+                border-top: 1px solid $color--border;
                 .nav-dropdown__link {
                     padding-left: 10px;
                 }
@@ -784,7 +783,7 @@
             padding: 15px 10px;
             .main-menu__link {
                 padding: 20px 10px;
-                font-size: 18px;
+                font-size: $font-size--heading-four;
             }
         }
         &.basket-notify {
@@ -816,7 +815,7 @@
                     }
                 }
                 &:hover {
-                    color: #212527;
+                    color: $color--primary;
                 }
             }
             &.active {
@@ -835,7 +834,7 @@
             padding: 0;
             .nav-dropdown__menu--link {
                 height: 37px;
-                font-size: 12px;
+                font-size: $font-size--xxs-small;
                 display: flex;
                 align-items: center;
                 padding-left: 50px;

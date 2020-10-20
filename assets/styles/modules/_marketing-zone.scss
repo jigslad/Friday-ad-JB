@@ -1,10 +1,10 @@
 .marketing-zone {
     min-height: 175px;
-    background-color: #3300FF;
-    background-color: #3300FF;
+    background-color: $color--blue;
+    background-color: $color--blue;
     display: flex;
     align-items: center;
-    color: white;
+    color: $color--white;
     margin-top: 20px;
     @include media-breakpoint-up(md) {
         margin-top: 48px;

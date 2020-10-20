@@ -6,22 +6,22 @@
     position: absolute;
     width: 250px;
     top: 45px;
-    border: 1px solid #E3E3E3;
+    border: 1px solid $color--grey20;
     background: $color--white;
     left: 0;
     border-radius: 2px;
     z-index: 2;
     &__item {
-        border-bottom: 1px solid #E3E3E3;
+        border-bottom: 1px solid $color--grey20;
         display: flex;
         height: 40px;
         width: 100%;
         align-items: center;
         cursor: pointer;
         padding: 0 10px;
-        font-size: 12px;
+        font-size: $font-size--xxs-small;
         &:hover {
-            background-color: #E3E3E3;
+            background-color: $color--grey20;
         }
         &:last-child {
             border-bottom: 0;
@@ -34,7 +34,7 @@
         align-items: center;
         cursor: pointer;
         padding: 0 10px;
-        font-size: 12px;
+        font-size: $font-size--xxs-small;
         &:hover {
             color: $color--hover;
         }

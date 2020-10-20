@@ -40,7 +40,7 @@
                         border: 1px solid $color--border;
                         -webkit-border-radius: 4px;
                         border-radius: 4px;
-                        font-size: 13px;
+                        font-size: $font-size--xs-small;
                         margin: 0;
                         background-image: url('/public/images/green-search-icon.svg');
                         background-repeat: no-repeat;
@@ -57,7 +57,7 @@
                     }
                     &--btn {
                         outline: 0;
-                        background: url('/public/images/search-white.svg') no-repeat center center, linear-gradient(135deg, #A8DC28 0%, #79D378 100%);
+                        background: url('/public/images/search-white.svg') no-repeat center center, $color--linear-gradient-light-green;
                         height: 40px;
                         width: 42px;
                         text-align: center;
@@ -121,11 +121,11 @@
                         height: 40px;
                         line-height: 40px;
                         padding: 10px 10px 10px 32px;
-                        color: #212121;
+                        color: $color--border;
                         border: 1px solid $color--border;
                         -webkit-border-radius: 4px;
                         border-radius: 4px;
-                        font-size: 13px;
+                        font-size: $font-size--xs-small;
                         margin: 0;
                         background-image: url('/public/images/location2.svg');
                         background-repeat: no-repeat;
@@ -149,12 +149,12 @@
                     // }
                     &--ok {
                         @extend .btn-rounded;
-                        background: linear-gradient(135deg, #A8DC28 0%, #79D378 100%);
+                        background: $color--linear-gradient-light-green;
                         font-family: $font-family-semi-bold;
-                        font-size: 16px;
+                        font-size: $font-size--base;
                         padding: 10px 39px;
                         &:hover {
-                            background: linear-gradient(135deg, #85B021 0%, #60A85E 100%);
+                            background: $color--linear-gradient-light-green-hover;
                         }
                     }
                     &--cancel {

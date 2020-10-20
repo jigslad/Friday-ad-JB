@@ -25,21 +25,7 @@
         }
     }
     &__title {
-        color: $color--primary;
-        font-family: $font-family-semi-bold;
-        font-size: 18px;
-        @include media-breakpoint-up(md) {
-            font-size: 24px;
-            font-family: $font-family-semi-bold;
-        }
-        @include media-breakpoint-up(lg) {
-            font-family: $font-family-medium;
-            font-size: 36px;
-        }
-        font-weight: 500;
-        letter-spacing: 0;
-        line-height: 46px;
-        text-align: center;
+        @extend .fad-title;
         margin-bottom: 8px;
         @include media-breakpoint-up(md) {
             margin-bottom: 22px;
@@ -61,7 +47,7 @@
         display: flex;
         flex-wrap: nowrap;
         flex-direction: row;
-        // border-bottom: 3px solid #EAEFF0;
+        // border-bottom: 3px solid $color--grey;
         margin-bottom: 31px;
         justify-content: left;
         overflow: auto;
@@ -88,7 +74,7 @@
             margin: 0;
             padding-top: 8px;
             padding-bottom: 14px;
-            border-bottom: 3px solid #EAEFF0;
+            border-bottom: 3px solid $color--grey;
             &:hover {
                 a {
                     color: $color--hover;
@@ -116,9 +102,9 @@
             color: $color--light-grey;
             font-family: $font-family-semi-bold;
             @include media-breakpoint-only(md) {
-                font-size: 13px;
+                font-size: $font-size--xs-small;
             }
-            font-size: 14px;
+            font-size: $font-size--small;
             letter-spacing: 0;
             line-height: 21px;
             width: 98px;
@@ -219,7 +205,7 @@
             border-radius: 0 0 4px 4px;
         }
         &--title {
-            font-size: 14px;
+            font-size: $font-size--small;
             font-weight: 600;
             letter-spacing: 0;
             line-height: 21px;
@@ -231,7 +217,7 @@
         &--price {
             color: $color--hover;
             font-family: $font-family-semi-bold;
-            font-size: 14px;
+            font-size: $font-size--small;
             font-weight: 600;
             letter-spacing: 0;
             line-height: 21px;
@@ -265,7 +251,7 @@
             text-align: center;
             border-radius: 4px;
             font-family: $font-family-semi-bold;
-            font-size: 16px;
+            font-size: $font-size--base;
             &:hover {
                 color: $color--white;
             }
@@ -274,7 +260,7 @@
         // .latest-ads__btn--cta {
         //     @include media-breakpoint-down(md) {
         //         border: 0 !important;
-        //         color: #82c148 !important;
+        //         color: $color--hover !important;
         //         background: transparent url('/public/images/right-arrow.svg') !important;
         //         background-position-x: right!important;
         //         background-repeat: no-repeat!important;

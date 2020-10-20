@@ -72,6 +72,9 @@
             border-bottom: 1px solid $color--black;
             box-shadow: 0 1px 0 0px $color--shadow-grey;
             background-image: url('/public/images/grey-down-arrow.svg');
+            @include media-breakpoint-up(xl) {
+                background: none;
+            }
             background-repeat: no-repeat;
             background-position: calc(100% - 25px) center;
             background-size: 24px;
@@ -86,6 +89,9 @@
             // grey-down-arrow.svg
             &.footer-active {
                 background-image: url('/public/images/grey-up-arrow.svg');
+                @include media-breakpoint-up(xl) {
+                    background: none;
+                }
                 border-bottom: 1px solid transparent;
                 box-shadow: unset;
             }

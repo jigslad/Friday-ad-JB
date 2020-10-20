@@ -27,8 +27,19 @@ h6 {
     @include media-breakpoint-up(md) {
         font-size: $font-size--heading-two;
     }
-    @include media-breakpoint-up(lg) {
+    @include media-breakpoint-up(xl) {
         font-family: $font-family-medium;
+        font-size: $font-size--heading-one;
+    }
+}
+
+.page-title {
+    color: $color--primary;
+    font-family: $font-family-medium;
+    font-size: $font-size--heading-four;
+    letter-spacing: 0;
+    line-height: 46px;
+    @include media-breakpoint-up(md) {
         font-size: $font-size--heading-one;
     }
 }
@@ -48,7 +59,4 @@ h6 {
 // h4 {
 //     font-size: $font-size--heading-four;
 //     font-weight: $font--semibold;
-// }
-// .page-title {
-//     line-height: 1;
 // }

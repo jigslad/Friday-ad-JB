@@ -7,7 +7,7 @@
     border-top: 1px solid $color--border;
     border-bottom: 1px solid $color--border;
     top: 60px;
-    background: white;
+    background: $color--white;
     &__block {
         display: flex;
         align-items: center;
@@ -27,28 +27,28 @@
             }
             line-height: 40px;
             padding: 10px 7px;
-            color: #212121;
-            border: 1px solid #91D851;
+            color:$color--primary;
+            border: 1px solid $color--green;
             -webkit-border-radius: 4px 0 0 4px;
             border-radius: 4px 0 0 4px;
-            font-size: 13px;
+            font-size: $font-size--xs-small;
             margin: 0;
             &:focus {
                 outline: 0;
-                background-color: #FFF;
-                border: 1px solid #91D851;
+                background-color: $color--white;
+                border: 1px solid $color--green;
             }
         }
         &--btn {
             outline: 0;
-            background-color: #91D851;
+            background-color: $color--green;
             background: url('/public/images/search-white.svg') no-repeat center center, linear-gradient(135deg, #A6DB2A 0%, #79D378 100%) !important;
             height: 40px;
             width: 42px;
             text-align: center;
             line-height: 40px;
             border: 0;
-            color: #FFF;
+            color: $color--white;
             -webkit-transition: background-color .4s ease;
             transition: background-color .4s ease;
             -webkit-border-radius: 0 4px 4px 0;
@@ -66,7 +66,7 @@
     &__location {
         &--change {
             font-family: $font-family-semi-bold;
-            color: #212527;
+            color: $color--primary;
             line-height: 21px;
             background-image: url('/public/images/location2.svg');
             height: 40px;
@@ -127,11 +127,11 @@
             height: 40px;
             line-height: 40px;
             padding: 10px 10px 10px 32px;
-            color: #212121;
+            color: $color--primary;
             border: 1px solid $color--border;
             -webkit-border-radius: 4px;
             border-radius: 4px;
-            font-size: 13px;
+            font-size: $font-size--xs-small;
             margin: 0 0 10px 0;
             background-image: url('/public/images/location2.svg');
             background-repeat: no-repeat;
@@ -140,8 +140,8 @@
             background-position-y: center;
             &:focus {
                 outline: 0;
-                background-color: #FFF;
-                border: 1px solid #91D851;
+                background-color: $color--white;
+                border: 1px solid $color--green;
             }
         }
         .close-icon {
@@ -151,7 +151,7 @@
             @extend .btn-rounded;
             background: linear-gradient(135deg, #A8DC28 0%, #79D378 100%);
             margin-right: 20px;
-            font-size: 16px;
+            font-size: $font-size--base;
             &:hover {
                 background: linear-gradient(135deg, #85B021 0%, #60A85E 100%);
             }
