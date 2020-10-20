@@ -83,6 +83,7 @@ class CyberSourceCheckoutController extends CoreController
         
         $expire = date('D, d M Y H:i:s', time() + (86400 * 180)); // 3 months from now
         header("Set-cookie: PHPSESSID=".$request->cookies->get('PHPSESSID')."; expires=".$expire."; path=/; HttpOnly; SameSite=None; Secure");
+        
         if ('POST' === $request->getMethod() || $this->container->get('session')->has('upgrade_cybersource_params_'.$loggedinUser->getId())) {
             if ($cybersource3DSecureResponseFlag) {
 //                 $csrfToken     = $this->container->get('form.csrf_provider')->generateCsrfToken('fa_payment_cyber_source_checkout');
@@ -188,21 +189,25 @@ class CyberSourceCheckoutController extends CoreController
                         $this->getEntityManager()->flush($cart);
                         $paymentId = $this->getRepository('FaPaymentBundle:Payment')->processPaymentSuccess($cart->getCartCode(), null, $this->container);
                         $this->getEntityManager()->getConnection()->commit();
-                            if($paymentFor != 'UP') {
+
+                        if($paymentId) {
                             try {
                                 //send ads for moderation
+                                sleep(5);
                                 $this->getRepository('FaAdBundle:AdModerate')->sendAdsForModeration($paymentId, $this->container);
-    
+
                                 if ($request->get('subscription') == 1) {
                                     $this->sendSubscriptionBillingEmail($loggedinUser, $cartDetails, $userPackage, $cart, $subscriptionId, $allow_zero_amount);
                                 }
-    
+
                                 if ($request->get('subscription') == 1) {
                                     $packageObj = null;
                                     $values = unserialize($cartDetails[0]['value']);
                                     $package = $values['package'];
                                     $p = array_pop($package);
-    
+
+
+
                                     if ((isset($p['package_for']) && $p['package_for'] == 'shop')) {
                                         $packageObj = $this->getRepository('FaPromotionBundle:Package')->findOneBy(array('id' => $p['id']));
                                     }
@@ -218,7 +223,6 @@ class CyberSourceCheckoutController extends CoreController
                                     return $this->handleMessage($this->get('translator')->trans('Your payment received successfully.', array(), 'frontend-cyber-source'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success', $cybersource3DSecureResponseFlag);
                                 }
                             }
-
                         } else {
                            return $this->handleMessage($this->get('translator')->trans('Your payment received successfully.', array(), 'frontend-cyber-source'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success', $cybersource3DSecureResponseFlag); 
                         }

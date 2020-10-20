@@ -226,6 +226,11 @@
 {% endblock %}
 
 {% block body %}
+
+
+{% set showAdultAlert = 0 %}
+{% set ADULT_CATEGORY_ID = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+
 <style>
 ul.fourlocationlist { margin: 10px auto 0px auto;text-align:center; }
 ul.fourlocationlist li { display:inline; list-style-type: none; }
