@@ -323,3 +323,26 @@ ul.toplistWithBullets li.boostBtn::before { list-style: none;content: "";font-si
         width: 85% !important;
     }
 }
+.mma-ad-list {
+    width: calc(55% - 1.875rem);
+    display: inline-block;
+}
+.maa-small-text{
+    font-size: 13px;
+    font-style: italic;
+    text-align: left;
+    margin: unset;
+    line-height: normal;
+    min-height: 22px;
+    color: #acb0b7;
+    vertical-align: middle;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+@media (min-width: 640px) and (max-width: 959px) {
+    .mma-ad-list {
+        width: calc(100% - 1.875rem);
+        display: inline-block;
+    }
+}
