@@ -6,7 +6,7 @@
         {% for solrFieldName, block in blocks %}
             {% if block['facet'] is defined and block['facet']|length %}
                 <div class="popular-locations__content" id="panelBlock{{panelCnt}}">
-                    <h6 class="popular-locations__content--title popular-accordion-link">
+                    <h6 class="popular-locations__content--title popular-accordion-link {{ panelCnt == 0 ? 'accord-active' :'' }}">
                         {{ block['heading'] }}
                     </h6>
                     <div class="popular-locations__list-block">
@@ -28,12 +28,15 @@
         {% endfor %}
     </div>
     <script>
+        if (window.matchMedia("(max-width: 767px)").matches) {
+            $('.popular-accordion-link').removeClass('accord-active');
+        }
         $('.popular-accordion-link').click(function(event) {
             if ($('.popular-locations__block').hasClass('popular-accordion')) {
                 $('.popular-accordion-link').not($(this)).removeClass('accord-active');
                 $('.popular-locations__list-block').not($(this).next()).slideUp(300);
             }
-            $(this).toggleClass('accord-active').next().slideToggle(300);
+            $(this).toggleClass('accord-active', 'mob-active').next().slideToggle(300);
         });
     </script>
 {% endif %}

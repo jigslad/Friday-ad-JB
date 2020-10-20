@@ -2195,15 +2195,15 @@
         <div class="row">
             <div class="container">
                 <div class="popular-locations__title fad-title">{{'Browse adverts in popular locations'|trans({}, 'frontend-homepage')}}</div>
-{#                {% cache 'home|page|location|block'~currentDevice 3600 %}#}
+                {% cache 'home|page|location|block'~currentDevice 3600 %}
                     {{ render(controller('FaFrontendBundle:Default:showHomePageLocationBlocks')) }}
-{#                {% endcache %}x#}
+                {% endcache %}
             </div>
         </div>
     </div>
     <!--location code end-->
 
-    {% if recommendedAds|length >= 3 %}
+    {#{% if recommendedAds|length >= 3 %}
         <div class="homepage-row">
             <div class="row">
                 <div class="columns">
@@ -2212,9 +2212,9 @@
                 </div>
             </div>
         </div>
-    {% endif %}
+    {% endif %}#}
 
-    {% if latestAds|length %}
+    {#{% if latestAds|length %}
         {% cache 'home|page|'~locationId~'front/home_page_latest' 120 %}
         <div class="homepage-row latest-items">
             <div class="row">
@@ -2236,9 +2236,9 @@
             </div>
         </div>
         {% endcache %}
-    {% endif %}
+    {% endif %}#}
 
-    {% if popularShopsSearchParams is defined and popularShopsSearchParams|length %}
+    {#{% if popularShopsSearchParams is defined and popularShopsSearchParams|length %}
         {% cache 'home|page|'~locationId~'front/home_page_popular_shops' 120 %}
             {% set popularShops = adForSaleRepository.getPopularShops(container, popularShopsSearchParams) %}
             {% if popularShops is defined and popularShops|length %}
@@ -2276,9 +2276,9 @@
                 </div>
             {% endif %}
         {% endcache %}
-    {% endif %}
+    {% endif %}#}
 
-    {% cache 'home|page|'~locationId~'front/home_page_popular' 1800 %}
+    {#{% cache 'home|page|'~locationId~'front/home_page_popular' 1800 %}
         <div class="homepage-row">
             <div class="row">
                 <div class="columns">
@@ -2287,9 +2287,9 @@
                 </div>
             </div>
         </div>
-    {% endcache %}
+    {% endcache %}#}
 
-    {% if featureAds|length %}
+    {#{% if featureAds|length %}
         <div class="homepage-row">
             <div class="row">
                 <div class="columns">
@@ -2299,9 +2299,9 @@
                 </div>
             </div>
         </div>
-    {% endif %}
+    {% endif %}#}
 
-    {% if recentlyViewedAds|length >= 3 %}
+    {#{% if recentlyViewedAds|length >= 3 %}
         <div class="homepage-row recently-viewed">
             <div class="row">
                 <div class="columns">
@@ -2310,9 +2310,9 @@
                 </div>
             </div>
         </div>
-    {% endif %}
+    {% endif %}#}
 
-    {% if facebookLoginUrl is not null %}
+    {#{% if facebookLoginUrl is not null %}
         <div class="homepage-row">
             <div class="homepage-title-small">{{'Find out what your friends are selling'|trans({}, 'frontend-homepage')}}</div>
             <div class="text-center small-wrapper m-auto pad-none">
@@ -2322,7 +2322,7 @@
                 </a>
             </div>    
         </div>
-    {% endif %}
+    {% endif %}#}
 
 
 {% endblock %}
