@@ -20,16 +20,24 @@
 {% endif %}
 <script>
     $(document).ready(function() {
-        var element = document.querySelector('.popular-search--block');
-        if(! (element.offsetHeight < element.scrollHeight) || (element.offsetWidth < element.scrollWidth)){
-            $('#toggleSearch').hide();
+        function pupularSearchToggle() {
+            $('#toggleSearch').click(function(e) {
+                $(this).toggleClass('arrow-rotate-icon');
+                $('.popular-search').toggleClass("toggleSearchShow");
+            });
         }
-
-        $('#toggleSearch').click(function(e) {
-
-            $(this).toggleClass('arrow-rotate-icon');
-            $('.popular-search').toggleClass("toggleSearchShow");
-        });
+        var div_height = $('.popular-search--block').height();
+        var vertical_div_top_position = $('.popular-search--block').offset().top;
+        var lastchild_height = $('.popular-search--block').children('li:last-child').height();
+        var vertical_lastchild_top_position = $('.popular-search--block').children('li:last-child').offset().top;
+        var vertical_lastchild_bottom_position = lastchild_height + vertical_lastchild_top_position;
+        var real_height = vertical_lastchild_bottom_position - vertical_div_top_position;
+        if (real_height > div_height) {
+            $('#toggleSearch').css('visibility', 'visible');
+            pupularSearchToggle();
+        } else {
+            $('#toggleSearch').css('visibility', 'hidden');
+        }
     });
 </script>
 <style>
