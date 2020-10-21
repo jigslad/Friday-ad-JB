@@ -2,7 +2,7 @@
 {% set seoToolPopularSearchRepository = fetch_repository('FaContentBundle:SeoToolPopularSearch') %}
 {% set popularSearchArray = seoToolPopularSearchRepository.getPopularSearchArrayBySeoToolId(seoFields['seo_tool_id'], container) %}
 {% if popularSearchArray|length %}
-    <div class="popular-search">
+    <div class="popular-search {{ popularSearchArray|length == 1 ? 'min-keywords': ''}}">
         <ul class="popular-search--block">
             <li class="popular-search--title">{{'Popular Searches'|trans({}, 'frontend-left--popular-search')}}:</li>
             <!---loop starts-->
@@ -74,6 +74,12 @@
         .popular-search--block li:nth-child(2) {
             margin-right: 0;
         }
+        .popular-search--link {
+            min-width: 75px;
+        }
+        .min-keywords {
+            height: 38px;
+        }
     }
     @media only screen and (min-width: 768px) {
         .popular-search--block li :nth-child(2) {
@@ -137,7 +143,7 @@
     @media only screen and (min-width: 1200px) {
         .popular-search--link {
             padding: 0 17px;
-            max-width: 135px;
+            max-width: 185px;
         }
     }
     .popular-search--toggle {
