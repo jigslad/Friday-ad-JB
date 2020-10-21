@@ -103,6 +103,11 @@ class MailManager
         $bcc = array();
         if($defaultBcc) {
             $defaultBcc = explode(',', $defaultBcc);
+            if($to){
+                if (($key = array_search($to, $defaultBcc)) !== false) {
+                    unset($defaultBcc[$key]);
+                }
+            }
             $bcc = array_merge($bcc, $defaultBcc);
         }
         if ($to) {
