@@ -11,6 +11,9 @@
         {% else %}
             {{ attribute(form, field).vars.label }}
         {% endif %}
+        {% if not attribute(form, field).vars.required %}
+            <span>({{ 'optional'|trans({}, 'frontend-paa-fourth-step') }})</span>
+        {% endif %}
         <span>{#({{ 'required'|trans({}, 'frontend-paa-fourth-step') }})#}</span>
     {% else %}
         {% set tabArrowClass = 'tab-down' %}
