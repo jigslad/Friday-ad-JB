@@ -38,13 +38,13 @@
                             <td>
                                 {% if headerImage.file_name %}
                                 	{% set headerImgUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSharedImageUrl', [fetch_container_instance(), headerImage.path, headerImage.file_name]) %}
-                                    <img src="{{ headerImgUrl }}?{{ random(1000) }}" width="100px" />
+                                    <img src="{{ headerImgUrl }}?{{ date().timestamp }}" width="100px" />
                                 {% endif %}
                             </td>
                             <td>
                                 {% if headerImage.phone_file_name %}
                                     {% set headerPhoneImgUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSharedImageUrl', [fetch_container_instance(), headerImage.path, headerImage.phone_file_name]) %} 
-                                    <img src="{{ headerPhoneImgUrl }}?{{ random(1000) }}" width="100px" />
+                                    <img src="{{ headerPhoneImgUrl }}?{{ date().timestamp }}" width="100px" />
                                 {% endif %}
                             </td>
                             <td>
