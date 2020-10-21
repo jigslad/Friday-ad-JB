@@ -158,7 +158,7 @@
                                             <div class="large-5 columns">
                                                 {% if form['recommended_slot_searchlist_slot_filename_'~i].vars.value is not empty %}
                                                     {% set crsimageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getOtherImageUrl', [container, 'category_recommended_slots', form['recommended_slot_searchlist_slot_filename_'~i].vars.value]) %}
-                                                    <img src="{{ crsimageUrl }}?{{ random(1000) }}" width="100px" />
+                                                    <img src="{{ crsimageUrl }}?{{ date().timestamp }}" width="100px" />
                                                 {% endif %}
                                             </div>
                                         </div>
