@@ -16,12 +16,28 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Fa\Bundle\AdFeedBundle\Repository\AdFeedRepository;
-use App\Parser\AdFeed\AdParser;
+use Fa\Bundle\AdBundle\Entity\Ad;
+use Fa\Bundle\AdBundle\Entity\AdImage;
+use Fa\Bundle\CoreBundle\Manager\CommonManager;
+use Fa\Bundle\AdBundle\Manager\AdImageManager;
+use Fa\Bundle\AdFeedBundle\Entity\AdFeedSiteUser;
+use Fa\Bundle\AdBundle\Entity\AdLocation;
+use Fa\Bundle\AdBundle\Entity\AdForSale;
+use Fa\Bundle\AdBundle\Entity\AdMain;
+use Fa\Bundle\UserBundle\Entity\UserSite;
+use Gedmo\Sluggable\Util\Urlizer;
+use \Curl\MultiCurl;
+use Fa\Bundle\AdBundle\Repository\AdUserPackageRepository;
+use Fa\Bundle\AdBundle\Entity\AdUserPackage;
+use Fa\Bundle\AdBundle\Entity\AdUserPackageUpsell;
+use Fa\Bundle\EntityBundle\Repository\LocationRepository;
+use Fa\Bundle\EntityBundle\Repository\EntityRepository;
+use Fa\Bundle\UserBundle\Repository\RoleRepository;
+
 
 /**
- * This command is used to Update feed status.
- * While updating feed advert status if there is any error or change in format of feed advert, at this time we are not updating advert status
- * and we are not updateing expire date of feed advert because of this issue expire adverts are still in solr.
+ * This command is used to create advert when feed status is active.
+ * While converting feed to advert, sometimes Feed status is active but advert not created, For this issue this command is created to fix the issue.
  *
  *
  * @author Rohini <rohini.subburam@fridaymediagroup.com>
@@ -46,7 +62,7 @@ class UpdateFeedAdIdCommand extends ContainerAwareCommand
             ->addOption('end_date', null, InputOption::VALUE_OPTIONAL, 'endDate in unix timestamp', 0)
             ->setHelp(
                 <<<EOF
-Actions:
+Actions: This cron need not be in cron list. This command can be run manually whenever feed has missed advert but feed status is active. 
 Command:
    php bin/console fa:feed:update-feed-ad-id
    php bin/console fa:feed:update-feed-ad-id --trans_id=12345
@@ -96,16 +112,17 @@ EOF
         $feedReader  = $this->getContainer()->get('fa_ad.manager.ad_feed_reader');
 
         //$adparserClass = 'Fa\Bundle\AdFeedBundle\Parser\AdParser';
-        //$parser = new $adparserClass($this->container);
+        //$parser = new $adparserClass($this->getContainer());
 
         if (!empty($feedAds)) {
-            foreach ($feedAds as $feedAd) {
+            foreach ($feedAds as $feedOrgAd) {
                 $this->advert   = array();
-                $this->advert  = unserialize($feedAd->getAdText());
+                $this->advert  = unserialize($feedOrgAd['ad_text']);
 
-                $uniqueId = $feedAd['unique_id'];
+                $uniqueId = $feedOrgAd['unique_id'];
                 $origFeed = $this->feedAdvertRequest($uniqueId);
                 $parser = $feedReader->createParser($origFeed['AdvertType']);
+                $feedAd = $this->em->getRepository('FaAdFeedBundle:AdFeed')->findOneBy(array('unique_id' => $uniqueId));
 
                 if (isset($this->advert['full_data'])) {
                     $originalJson  = unserialize($this->advert['full_data']);
@@ -130,46 +147,47 @@ EOF
 
                 $ad_feed_site   = $this->em->getRepository('FaAdFeedBundle:AdFeedSite')->findOneBy(array('type' => $this->advert['feed_type'], 'ref_site_id' => $this->advert['ref_site_id']));
 
-                if ($this->advert['set_user'] === true) {
-                    $user = $parser->getUser($this->advert['user']['email']);
+                if ($this->advert['set_user'] === true && $this->advert['user']['email']!='') {
+                    $user = $this->em->getRepository('FaUserBundle:User')->getUserByUsername($this->advert['user']['email']);
                 } else {
                     $user = null;
                 }
-
-                $ad = $parser->getAdByRef($this->advert['unique_id']);
+                if($this->advert['unique_id']) {
+                    $ad = $this->em->getRepository('FaAdBundle:Ad')->findOneBy(array('trans_id' => $this->advert['unique_id']));
+                }
 
                 if ($ad || $feedAd->getStatus() != 'R') {
-                    $adMain         = $parser->getAdMainByRef($this->advert['unique_id']);
-
+                    if($this->advert['unique_id']) {
+                        $adMain = $this->em->getRepository('FaAdBundle:AdMain')->findOneBy(array('trans_id' => $this->advert['unique_id']));
+                    }
                     if (isset($this->advert['set_user']) && $this->advert['set_user'] === true) {
                         if (!$user && $this->advert['user']['email'] != '') {
-                            $user = $parser->setUser($user);
+                            $user = $this->setUser($user, $this->advert);
                         }
                     }
 
-                    $parser->setAdFeedSiteUser($ad_feed_site, $user);
+                    $this->setAdFeedSiteUser($ad_feed_site, $user);
 
-                    $adMain = $parser->setAdMain($adMain);
+                    $adMain = $this->setAdMain($this->advert);
 
-                    if (!$ad) {
-                        $ad = $parser->setAd($user, $adMain, $ad);
-                        echo "{ new }";
-                    } else {
-                        echo "{ updated }";
-                        $ad = $parser->setAd($user, $adMain, $ad);
-                    }
+
+                    $ad = $this->setAd($user, $adMain, $ad, $this->advert);
+                    echo "{ new }";
+
 
                     $this->advert['image_hash'] = isset($this->advert['image_hash']) ? $this->advert['image_hash'] : null;
 
                     $ad_feed_site = $this->em->getRepository('FaAdFeedBundle:AdFeedSite')->findOneBy(array('id' => $feedAd->getRefSiteId()));
                     $target_dir = $ad_feed_site->getType().'_'.$ad_feed_site->getRefSiteId();
-                    $parser->parseAdForImage($originalJson, $target_dir);
-                    $parser->updateImages($ad);
+                    $this->parseAdForImage($originalJson, $target_dir);
+                    $this->updateImages($ad,$this->advert);
 
 
-                    $parser->assignOrRemoveAdPackage($ad, $user);
-                    $parser->setAdLocation($ad);
+                    $this->assignOrRemoveAdPackage($ad, $user,$this->advert);
+                    $this->setAdLocation($ad,$this->advert);
                     $parser->addChildData($ad);
+
+                    $this->getContainer()->get('fa_ad.entity_listener.ad')->handleSolr($ad);
 
                     $feedAd->setAd($ad);
                     $feedAd->setUser($user);
@@ -184,13 +202,12 @@ EOF
                     $this->em->persist($feedAd);
                     $this->em->flush();
 
-                    $parser->sendFeedCallback($feedAd, $this->advert['last_modified']);
+                    $this->sendFeedCallback($feedAd, $this->advert['last_modified']);
                     return $ad;
                 } else {
                     echo "X".$feedAd->getTransId()."\n";
-                    if (!$force) {
-                        $this->sendFeedCallback($feedAd, $this->advert['last_modified']);
-                    }
+                    $this->sendFeedCallback($feedAd, $this->advert['last_modified']);
+
                 }
             }
 
@@ -199,293 +216,573 @@ EOF
         $output->writeln('Memory Allocated: '.((memory_get_peak_usage(true) / 1024) / 1024).' MB', true);
     }
 
-    public function getDataByCat($parser, $origFeed, $refSiteId) {
-        switch ($origFeed) {
-            case ($origFeed['AdvertType'] == 'BoatAdvert') :
-                $this->mapBoatAdvertData($parser, $origFeed, $refSiteId);
-                break;
-            case ($origFeed['AdvertType'] == 'BusinessAdvert') :
-                $this->mapBusinessAdvertData($parser, $origFeed, $refSiteId);
-                break;
-            case ($origFeed['AdvertType'] == 'Wightbay') :
-                $this->mapWightbayData($parser, $origFeed, $refSiteId);
-                break;
-            case ($origFeed['AdvertType'] == 'CaravanAdvert') :
-                $this->mapCaravanAdvertData($parser, $origFeed, $refSiteId);
-                break;
-            case ($origFeed['AdvertType'] == 'GeneralAdvert') :
-                $this->mapGeneralAdvertData($parser, $origFeed, $refSiteId);
-                break;
-            case ($origFeed['AdvertType'] == 'HorseAdvert') :
-                $this->mapHorseAdvertData($parser, $origFeed, $refSiteId);
-                break;
-            case ($origFeed['AdvertType'] == 'JobAdvert') :
-                $this->mapJobAdvertData($parser, $origFeed, $refSiteId);
-                break;
-            case ($origFeed['AdvertType'] == 'LivestockAdvert') :
-                $this->mapLivestockAdvertData($parser, $origFeed, $refSiteId);
-                break;
-            case ($origFeed['AdvertType'] == 'MerchandiseAdvert') :
-                $this->mapMerchandiseAdvertData($parser, $origFeed, $refSiteId);
-                break;
-            case ($origFeed['AdvertType'] == 'MotorhomeAdvert') :
-                $this->mapMotorhomeAdvertData($parser, $origFeed, $refSiteId);
-                break;
-            case ($origFeed['AdvertType'] == 'PetAdvert') :
-                $this->mapPetAdvertData($parser, $origFeed, $refSiteId);
-                break;
-            case ($origFeed['AdvertType'] == 'PropertyAdvert') :
-                $this->mapPropertyAdvertData($parser, $origFeed, $refSiteId);
-                break;
-            case ($origFeed['AdvertType'] == 'TradeIt') :
-                $this->mapTradeItData($parser, $origFeed, $refSiteId);
-                break;
-            case ($origFeed['AdvertType'] == 'VehicleAdvert') :
-                $this->mapVehicleAdvertData($parser, $origFeed, $refSiteId);
-                break;
+    public function sendFeedCallback($feedAd, $lastModified)
+    {
+        if ($feedAd->getStatus() != 'R' || ($feedAd->getStatus() == 'R' && date('Y-m-d') == date('Y-m-d', strtotime($lastModified)))) {
+            $adFeedCallbackManager = $this->getContainer()->get('fa_ad.feed.callback.manager');
+            $adFeedCallbackManager->init($feedAd);
+            $adFeedCallbackManager->sendRequest();
         }
-        return $origFeed;
     }
 
-    public function mapBoatAdvertData($parser, $origFeed, $refSiteId) {
-        $this->advert['category_id'] = $parser->getCategoryId($origFeed['Details']['BoatType']);
+    public function updateImages($ad,$origFeed)
+    {
+        $adImageDir = $this->getContainer()->get('kernel')->getRootDir().'/../web/uploads/image/';
+        $imagePath  = $adImageDir.CommonManager::getGroupDirNameById($ad->getId());
 
-        $description = array();
+        $i = 1;
 
-        foreach ($origFeed['Descriptions'] as $d) {
-            $description[] = $d['Text'];
+        $currentImages = $this->em->getRepository('FaAdBundle:AdImage')->getAdImages($ad->getId());
+
+        // todo: download the new feed image here
+
+        // Deleting all old images
+        foreach ($currentImages as $image) {
+            $adImageManager = new AdImageManager($this->getContainer(), $ad->getId(), $image->getHash(), $imagePath);
+            $adImageManager->removeImage();
+            $this->em->remove($image);
         }
 
-        $this->advert['description'] = implode('\n', $description);
+        // Processing the images again
+        foreach ($origFeed['images'] as $img) {
+            $filePath = $this->getContainer()->getParameter('fa.feed.data.dir').'/images/'.$img['local_path'];
+            $dimension = @getimagesize($filePath);
 
-        if (isset($origFeed['Price']) && $origFeed['Price'] != '') {
-            $this->advert['property']['rent_per_id'] = 2560;
-        }
+            if (file_exists($filePath) && $dimension) {
+                $hash = CommonManager::generateHash();
+                CommonManager::createGroupDirectory($adImageDir, $ad->getId());
 
-        if (isset($origFeed['Manufacturer']) && $origFeed['Manufacturer'] != '') {
-            $this->advert['motors']['manufacturer_id'] = $this->getEntityId($origFeed['Manufacturer'], 43);
-            if (!$this->advert['motors']['manufacturer_id']) {
-                $this->advert['motors']['meta_data']['manufacturer'] = $origFeed['Manufacturer'];
+                $image = new AdImage();
+                $image->setHash($hash);
+                $image->setPath('uploads/image/'.CommonManager::getGroupDirNameById($ad->getId()));
+                $image->setOrd($i);
+                $image->setAd($ad);
+                $image->setStatus(1);
+                $image->setImageName(Urlizer::urlize($ad->getTitle().'-'.$ad->getId().'-'.$i));
+                $image->setAws(0);
+                $this->em->persist($image);
+
+                //$origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, 75, 'ImageMagickManager');
+                //$origImage->loadFile($filePath);
+                //$origImage->save($imagePath.'/'.$ad->getId().'_'.$hash.'.jpg', 'image/jpeg');
+                exec('convert -flatten '.escapeshellarg($filePath).' '.$imagePath.'/'.$ad->getId().'_'.$hash.'.jpg');
+
+                $adImageManager = new AdImageManager($this->getContainer(), $ad->getId(), $hash, $imagePath);
+                $adImageManager->createThumbnail();
+                $adImageManager->createCropedThumbnail();
+
+                $adImgPath = $imagePath.'/'.$ad->getId().'_'.$hash.'.jpg';
+                if (file_exists($adImgPath)) {
+                    $adImageManager->uploadImagesToS3($image);
+                    unlink($filePath);
+                }
+
+                $i++;
             }
         }
 
-        if (isset($origFeed['Model']) && $origFeed['Model'] != '') {
-            $this->advert['motors']['meta_data']['model'] = $origFeed['Model'];
-        }
+        $this->em->flush();
+    }
 
-        if (isset($origFeed['Details']['EngineSpecs']) && $origFeed['Details']['EngineSpecs'] != '') {
-            $specifications = $origFeed['Details']['EngineSpecs'];
-            foreach ($specifications as $specification) {
-                if (isset($specification['Equipment']) && $specification['Equipment'] == 'fuel') {
-                    $this->advert['motors']['fuel_type_id'] = $this->getEntityId($specification['Value'], 44);
-                } elseif (isset($specification['Equipment']) && $specification['Equipment'] == 'build year') {
-                    $this->advert['motors']['meta_data']['year_built'] = $this->getEntityId($specification['Value']);
+    public function parseAdForImage($ad, $target_dir)
+    {
+        $i = 0;
+        $multi_curl = new MultiCurl();
+        if ($ad['EndDate'] == '0001-01-01T00:00:00Z'|| strtotime($ad['EndDate']) >= time()) {
+            $multi_curl = $this->downLoadImages($ad, null, $multi_curl, $target_dir);
+        }
+        $multi_curl->start();
+    }
+    public function downLoadImages($ad, $ad_feed_site_download, $multi_curl, $target_dir = null)
+    {
+        //get is affiliate site or not
+        $affiliate = 0;
+        if (isset($ad['SiteVisibility']) && is_array($ad['SiteVisibility'])) {
+            foreach ($ad['SiteVisibility'] as $site) {
+                if (isset($site['SiteId']) && $site['SiteId'] == 10) {
+                    if (($site['IsMainSite'] === 'false') || ($site['IsMainSite'] === false)) {
+                        $affiliate = 1;
+                    }
                 }
             }
         }
-        return $this->advert;
-    }
 
-    public function mapBusinessAdvertData($parser, $origFeed, $refSiteId) {
-        $this->advert['category_id'] = $parser->getCategoryId($origFeed['Details']['BoatType'], $refSiteId);
-        $description = array();
+        $imageArray = array();
+        $feedReader = $this->getContainer()->get('fa_ad.manager.ad_feed_reader');
 
-        foreach ($origFeed['Descriptions'] as $d) {
-            $description[] = $d['Text'];
-        }
+        $Id = $ad['Id'];
 
-        $this->advert['description'] = implode('\n', $description);
-
-        if (isset($origFeed['Details']['Tenure']) && $origFeed['Details']['Tenure'] != '') {
-            $this->advert['for_sale']['business_type_id'] = $this->getEntityId($adArray['Details']['Tenure'], 15);
-        }
-
-        // for turn over
-        if (isset($origFeed['Details']['MinTurnover']) && $origFeed['Details']['MinTurnover'] && isset($origFeed['Details']['MaxTurnover']) && $origFeed['Details']['MaxTurnover']) {
-            if ($origFeed['Details']['MinTurnover'] == $origFeed['Details']['MaxTurnover']) {
-                $this->advert['for_sale']['meta_data']['turnover_min'] = $origFeed['Details']['MinTurnover'];
-            } else {
-                $this->advert['for_sale']['meta_data']['turnover_min'] = $origFeed['Details']['MinTurnover'];
-                $this->advert['for_sale']['meta_data']['turnover_max'] = $origFeed['Details']['MaxTurnover'];
-            }
-        }
-
-        // for net profit
-        if (isset($origFeed['Details']['MinProfit']) && $origFeed['Details']['MinProfit'] && isset($origFeed['Details']['MaxProfit']) && $origFeed['Details']['MaxProfit']) {
-            if ($origFeed['Details']['MinProfit'] == $origFeed['Details']['MaxProfit']) {
-                $this->advert['for_sale']['meta_data']['net_profit_min'] = $origFeed['Details']['MinProfit'];
-            } else {
-                $this->advert['for_sale']['meta_data']['net_profit_min'] = $origFeed['Details']['MinProfit'];
-                $this->advert['for_sale']['meta_data']['net_profit_max'] = $origFeed['Details']['MaxProfit'];
-            }
-        }
-
-        // for price
-        if (isset($origFeed['Details']['MinPrice']) && $origFeed['Details']['MinPrice'] && isset($origFeed['Details']['MaxPrice']) && $origFeed['Details']['MaxPrice']) {
-            $this->advert['price'] = $origFeed['Details']['MinPrice'];
+        if ($target_dir) {
+            $site_dir  = $target_dir;
         } else {
-            $this->setRejectAd();
-            $this->setRejectedReason('price is not specified');
-        }
-        return $this->advert;
-    }
-
-    public function mapWightbayData($parser, $origFeed, $refSiteId) {
-        $category    = $this->em->getRepository('FaEntityBundle:Category')->getCategoryByFullSlug($origFeed['category_slug']);
-        $this->advert['category_id'] = $category['id'];
-        $this->advert['parent_category'] = $origFeed['parent_category'];
-
-        return $this->advert;
-    }
-
-    public function mapCaravanAdvertData($parser, $origFeed, $refSiteId) {
-        if (!$origFeed['Details']['IsStaticCaravan'] && strtolower($origFeed['Details']['SaleOrHire']) != 'hire') {
-            $this->advert['category_id'] = 477;
-        } elseif ($origFeed['Details']['IsStaticCaravan'] && strtolower($origFeed['Details']['SaleOrHire']) != 'hire' && strtolower($origFeed['Details']['Type']) != 'lodge') {
-            $this->advert['category_id'] = 478;
-        } elseif ($origFeed['Details']['IsStaticCaravan'] && strtolower($origFeed['Details']['SaleOrHire']) != 'hire' && strtolower($origFeed['Details']['Type']) == 'lodge') {
-            $this->advert['category_id'] = 702;
-        } elseif (!$origFeed['Details']['IsStaticCaravan'] && strtolower($origFeed['Details']['SaleOrHire']) == 'hire') {
-            $this->advert['category_id'] = 702;
-        } elseif ($origFeed['Details']['IsStaticCaravan'] && strtolower($origFeed['Details']['SaleOrHire']) == 'hire') {
-            $this->advert['category_id'] = 702;
+            $site_dir  = $ad_feed_site_download->getAdFeedSite()->getType().'_'.$ad_feed_site_download->getAdFeedSite()->getRefSiteId();
         }
 
-        if (isset($origFeed['category_id']) && $origFeed['category_id'] == 702) {
-            $this->advert['ad_type_id']  = 2520;
-        }
-        return $this->advert;
-    }
+        $group_dir = substr($ad['Id'], 0, 8);
 
-    public function mapGeneralAdvertData($parser, $origFeed, $refSiteId) {
-        $this->advert['category_id'] = $parser->getCategoryId($origFeed['Details']['Category']);
-        return $this->advert;
-    }
-
-    public function mapHorseAdvertData($parser, $origFeed, $refSiteId) {
-        $this->advert['category_id'] = $parser->getCategoryId();
-        $this->advert['ad_type_id']  = 2763;
-        return $this->advert;
-    }
-
-    public function mapJobAdvertData($parser, $origFeed, $refSiteId) {
-        $this->advert['category_id'] = $parser->getCategoryId($origFeed['Details']['JobType']);
-        $this->advert['ad_type_id']  = 2763;
-        return $this->advert;
-    }
-
-    public function mapLivestockAdvertData($parser, $origFeed, $refSiteId) {
-        $this->advert['category_id'] = $parser->getCategoryId($origFeed['Details']['AnimalType']);
-        $this->advert['ad_type_id']  = 2891;
-        return $this->advert;
-    }
-
-    public function mapMerchandiseAdvertData($parser, $origFeed, $refSiteId) {
-        $this->advert['category_id'] = $parser->getCategoryId($origFeed['Details']['ClassificationCategory']);
-        $this->advert['ad_type_id']  = 2763;
-        return $this->advert;
-    }
-
-    public function mapMotorhomeAdvertData($parser, $origFeed, $refSiteId) {
-        if (isset($origFeed['Details']['VehicleType']) && (strtolower($origFeed['Details']['VehicleType']) == 'motorhomes' || strtolower($origFeed['Details']['VehicleType']) == 'campervan' || strtolower($origFeed['Details']['VehicleType']) == 'campervans' || strtolower($origFeed['Details']['VehicleType']) == 'motorhome')) {
-            $this->advert['category_id'] = 475;
-        } elseif (isset($origFeed['Details']['VehicleType']) && (strtolower($origFeed['Details']['VehicleType']) == 'touring caravans' || strtolower($origFeed['Details']['VehicleType']) == 'caravan')) {
-            $this->advert['category_id'] = 477;
-        } elseif (isset($origFeed['Details']['VehicleType']) && (strtolower($origFeed['Details']['VehicleType']) == 'static Caravans' || strtolower($origFeed['Details']['VehicleType']) == 'static')) {
-            $this->advert['category_id'] = 478; // static
-        }
-        $this->advert['ad_type_id']  = 2520;
-        return $this->advert;
-    }
-
-    public function mapPetAdvertData($parser, $origFeed, $refSiteId) {
-        $this->advert['category_id'] = $parser->getCategoryId($origFeed['Details']['AnimalType']);
-        $this->advert['ad_type_id']  = 2620;
-        return $this->advert;
-    }
-
-    public function mapPropertyAdvertData($parser, $origFeed, $refSiteId) {
-        $category_text =  str_replace(' ', '_', strtolower(trim($adArray['Details']['PropertyType'].' '.$adArray['Details']['PropertyStatus'])));
-        $this->advert['category_id'] = $parser->getCategoryId($category_text);
-        $this->advert['ad_type_id']  = 2520;
-        return $this->advert;
-    }
-
-    public function mapTradeItData($parser, $origFeed, $refSiteId) {
-        $category                    = $this->em->getRepository('FaEntityBundle:Category')->getCategoryByFullSlug($adArray['category_slug']);
-        $this->advert['category_id'] = $category['id'];
-        $this->advert['parent_category'] = $adArray['parent_category'];
-        return $this->advert;
-    }
-
-    public function mapVehicleAdvertData($parser, $origFeed, $refSiteId) {
-        if ($origFeed['Details']['VehicleType'] == 'Motorhome') {
-            $this->advert = 'Motorhomes';
+        $idir = $this->getContainer()->getParameter('fa.feed.data.dir').'/images/'.$site_dir.'/'.$group_dir;
+        if (!file_exists($idir)) {
+            $old     = umask(0);
+            mkdir($idir, 0777, true);
+            umask($old);
         }
 
-        $matchedUrl  = Urlizer::urlize($matchedName);
-        $cat= $this->em->getRepository('FaEntityBundle:Category')->getIdByNameAndFullSlugPattern($matchedName, 'motors/motorhomes-caravans/', $this->container);
-        $this->advert['category_id'] = $cat[0]['id'];
-        $this->advert['ad_type_id']  = 2763;
-        return $this->advert;
-    }
+        // todo: Download only max 20 images.
+        // todo: Check with @Laura to confirm - the image count.
 
-    public function getCategoryParameter($origFeed)
-    {
-        $cdata = '';
-        switch ($origFeed) {
-            case ($origFeed['AdvertType'] == 'BoatAdvert') :
-                $cdata = $origFeed['Details']['BoatType'];
-                break;
-            case ($origFeed['AdvertType'] == 'BusinessAdvert') :
-                $cdata = $origFeed['Details']['BoatType'];
-                break;
-        }
-        return $cdata;
-    }
+        $i = 1;
+        foreach ($ad['AdvertImages'] as $key => $img) {
+            $fileName     = $idir.'/'.$ad['Id'].'_'.basename($img['Uri']);
+            $imageArray[] = $fileName;
 
-    public function getCategoryChild($type)
-    {
-        switch ($type) {
-            case ($type == 'BoatAdvert' || $type == 'ClickEditVehicleAdvert' || $type == 'MotorhomeAdvert' || $type == 'CaravanAdvert' || $type == 'VehicleAdvert' || $type == 'Motors') :
-                $cname = 'ad_motors';
-                break;
-            case ($type == 'HorseAdvert' || $type == 'PetAdvert' || $type == 'LivestockAdvert' || $type == 'Animals'):
-                $cname = 'ad_animals';
-                break;
-            case ($type == 'PropertyAdvert' || $type == 'Property') :
-                $cname = 'ad_property';
-                break;
-            case ($type == 'MerchandiseAdvert') :
-                $cname = 'merchandise';
-                break;
-            case ($type == 'JobAdvert' || $type == 'Jobs') :
-                $cname = 'ad_jobs';
-                break;
-            case ($type == 'TradeIt' || $type == 'BusinessAdvert' || $type == 'GeneralAdvert' || $type == 'For Sale') :
-                $cname = 'ad_for_sale';
-                break;
-        }
+            // todo: Affiliate ad check should be happening outside the foreach-loop
+            // todo: Inside the for-loop the Affiliate is not going to change as its the same ad.
 
-        return $cname;
+            if (!$affiliate || ($affiliate && $img['IsMainImage'])) {
+                if (!file_exists($fileName)) {
+                    $multi_curl->addDownload($img['Uri'], function ($instance, $tempFile) use ($fileName) {
+                        try {
+                            $fh = @fopen($fileName, 'wb+');
+                            stream_copy_to_stream($tempFile, $fh);
+                            fclose($fh);
+                            echo 'Downloaded '.$fileName."\n";
+                        } catch (\Exception $e) {
+                            echo 'Download failed '.$e->getMessage()."\n";
+                        }
+                    });
+                } else {
+                    echo 'Already exists '.$fileName."\n";
+                }
+                echo $i++;
+            }
+        }//end if
+
+        echo "\n";
+
+        $this->removeExtraImages($idir, $Id, $imageArray);
+        return $multi_curl;
     }
 
     /**
-     * Set ad table data.
+     * Remove old deleted images - from NFS [+ S3].
      *
-     * @param object $user
-     * @param object $ad
-     *
-     * @return Ambigous <string, \Fa\Bundle\AdBundle\Entity\Ad>
+     * @param string $dir        Directory path.
+     * @param string $productId  Product id.
+     * @param array  $imageArray Image array.
      */
-    protected function setAdMain($origFeed)
+    public function removeExtraImages($dir, $productId, $imageArray)
     {
+        $files = glob($dir.'/'.$productId.'_*');
+        foreach ($files as $file) {
+            if (!in_array($file, $imageArray)) {
+                if (is_file($file)) {
+                    echo $file.": remove old file \n";
+                    unlink($file);
+                }
+            }
+        }
+    }
+    public function setAd($user, $adMain, $ad = null,$origFeed)
+    {
+        $ad = new Ad();
+        $newAd = true;
+
+
+        if (isset($origFeed['title'])) {
+            $ad->setTitle($origFeed['title']);
+        }
+
+        if (isset($origFeed['affiliate']) && $origFeed['affiliate'] == 1) {
+            $ad->setAffiliate(1);
+
+            if (isset($origFeed['image_count'])) {
+                $ad->setImageCount($origFeed['image_count']);
+            }
+
+            if (isset($origFeed['track_back_url'])) {
+                $ad->setTrackBackUrl($origFeed['track_back_url']);
+            }
+        }
+
+        if (isset($origFeed['advert_source'])) {
+            $ad->setSource($origFeed['advert_source']);
+        } else {
+            $ad->setSource('Feed advert: source not provided');
+        }
+
+        if (isset($origFeed['description'])) {
+            $ad->setDescription($origFeed['description']);
+        } else {
+            $ad->setDescription(null);
+        }
+
+        if (isset($origFeed['personalized_title'])) {
+            $ad->setPersonalizedTitle($origFeed['personalized_title']);
+        } else {
+            $ad->setPersonalizedTitle(null);
+        }
+
+        if (isset($origFeed['unique_id'])) {
+            $ad->setTransId($origFeed['unique_id']);
+        }
+
+        if (isset($origFeed['price'])) {
+            $ad->setPrice($origFeed['price']);
+        } else {
+            $ad->setPrice(null);
+        }
+
+        $metadata = $this->em->getClassMetaData('Fa\Bundle\AdBundle\Entity\Ad');
+        $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
+
+        $ad->setId($adMain->getId());
+        $ad->setAdMain($adMain);
+
+        $ad->setType($this->em->getReference('FaEntityBundle:Entity', EntityRepository::AD_TYPE_FORSALE_ID));
+
+        if (isset($origFeed['category_id']) && $origFeed['category_id'] > 0) {
+            $ad->setCategory($this->em->getReference('FaEntityBundle:Category', $origFeed['category_id']));
+        } else {
+            $ad->setCategory(null);
+        }
+
+        if (isset($origFeed['ad_type_id']) && $origFeed['ad_type_id'] > 0) {
+            $ad->setType($this->em->getReference('FaEntityBundle:Entity', $origFeed['ad_type_id']));
+        } else {
+            $ad->setType(null);
+        }
+
+        if (isset($origFeed['delivery_method_option_id']) && $origFeed['delivery_method_option_id'] > 0) {
+            $ad->setDeliveryMethodOption($this->em->getReference('FaPaymentBundle:DeliveryMethodOption', $origFeed['delivery_method_option_id']));
+        } else {
+            $ad->setDeliveryMethodOption(null);
+        }
+
+        if (isset($origFeed['payment_method_id']) && $origFeed['payment_method_id'] > 0) {
+            $ad->setPaymentMethodId($origFeed['payment_method_id']);
+        } else {
+            $ad->setPaymentMethodId(null);
+        }
+
+        if (isset($origFeed['is_new'])) {
+            $ad->setIsNew($origFeed['is_new']);
+        } else {
+            $ad->setIsNew(1);
+        }
+
+        if (isset($origFeed['published_date'])) {
+            $ad->setPublishedAt($origFeed['published_date']);
+        }
+
+        if (isset($origFeed['end_date'])) {
+            $ad->setExpiresAt($origFeed['end_date']);
+        }
+
+        if (isset($origFeed['updated_date'])) {
+            $ad->setUpdatedAt($origFeed['updated_date']);
+        }
+
+        if (isset($origFeed['status']) && $origFeed['status'] == 'A') {
+            $ad->setStatus($this->em->getReference('FaEntityBundle:Entity', EntityRepository::AD_STATUS_LIVE_ID));
+        } elseif (isset($origFeed['status']) && $origFeed['status'] == 'R') {
+            $ad->setStatus($this->em->getReference('FaEntityBundle:Entity', EntityRepository::AD_STATUS_REJECTED_ID));
+        } else {
+            $ad->setStatus($this->em->getReference('FaEntityBundle:Entity', EntityRepository::AD_STATUS_EXPIRED_ID));
+            if (isset($origFeed['end_date'])) {
+                $ad->setExpiresAt($origFeed['end_date']);
+            } else {
+                $ad->setExpiresAt(time());
+            }
+        }
+
+        $ad->setIsFeedAd(1);
+        $ad->setUser($user);
+        $ad->setSkipSolr(1); // TO skip solr update
+
+        $rejectedReason = count($origFeed['rejected_reason']) > 0 ? serialize($origFeed['rejected_reason']) : null;
+
+        // Save ad is trade ad or not
+        if ($user) {
+            $userRoles = $this->em->getRepository('FaUserBundle:User')->getUserRolesArray($user);
+            if (!empty($userRoles)) {
+                if (in_array(RoleRepository::ROLE_BUSINESS_SELLER, $userRoles) || in_array(RoleRepository::ROLE_NETSUITE_SUBSCRIPTION, $userRoles)) {
+                    $ad->setIsTradeAd(1);
+                } elseif (in_array(RoleRepository::ROLE_SELLER, $userRoles)) {
+                    $ad->setIsTradeAd(0);
+                }
+            }
+        } else {
+            if (isset($origFeed['is_trade_ad'])) {
+                $ad->setIsTradeAd($origFeed['is_trade_ad']);
+            } else {
+                $ad->setIsTradeAd(null);
+            }
+        }
+
+        if ($rejectedReason) {
+            $ad->setRejectedReason($rejectedReason);
+        } else {
+            $ad->setRejectedReason(null);
+        }
+
+        $this->em->persist($ad);
+        $this->em->flush();
+        return $ad;
+    }
+
+    /**
+     * Set ad location.
+     *
+     * @param object $ad
+     */
+    public function setAdLocation($ad,$origFeed)
+    {
+        $ad_location = $this->em->getRepository('FaAdBundle:AdLocation')->findOneBy(array('ad' => $ad->getId()));
+
+        if (!$ad_location) {
+            $ad_location = new AdLocation();
+        }
+
+        $ad_location->setAd($ad);
+
+        if (isset($origFeed['location']['postcode']) && $origFeed['location']['postcode']) {
+            $ad_location->setPostcode($origFeed['location']['postcode']);
+        } else {
+            $ad_location->setPostcode(null);
+        }
+
+        if (isset($origFeed['location']['town_id']) && $origFeed['location']['town_id']) {
+            $ad_location->setLocationTown($this->em->getReference('FaEntityBundle:Location', $origFeed['location']['town_id']));
+            //check for location area
+            if ($origFeed['location']['town_id'] == LocationRepository::LONDON_TOWN_ID) {
+                //check post Code is exist
+                if (isset($origFeed['location']['postcode']) && $origFeed['location']['postcode'] != '') {
+                    $getPostalCode = explode(" ", $origFeed['location']['postcode']);
+                    $getArea = $this->em->getRepository('FaEntityBundle:LocationPostal')->getAreasByPostCode($getPostalCode[0]);
+                    if (!empty($getArea)) {
+                        if (count($getArea) == '1') {
+                            $ad_location->setLocationArea($this->em->getReference('FaEntityBundle:Location', $getArea[0]['id']));
+                        } elseif (count($getArea) > '1') {
+                            //get the nearest area for this location
+                            $getNearestAreaObj = $this->em->getRepository('FaEntityBundle:Location')->getNearestAreaByPostLatLong($origFeed['location']['postcode'], $origFeed['location']['town_id']);
+                            if (!empty($getNearestAreaObj) && $getNearestAreaObj->getLvl() == 4) {
+                                $ad_location->setLocationArea($getNearestAreaObj);
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            $ad_location->setLocationTown(null);
+        }
+
+        if (isset($origFeed['location']['latitude']) && $origFeed['location']['latitude']) {
+            $ad_location->setLatitude($origFeed['location']['latitude']);
+        } else {
+            $ad_location->setLatitude(null);
+        }
+
+        if (isset($origFeed['location']['longitude']) && $origFeed['location']['longitude']) {
+            $ad_location->setLongitude($origFeed['location']['longitude']);
+        } else {
+            $ad_location->setLongitude(null);
+        }
+
+        if (isset($origFeed['location']['county_id']) && $origFeed['location']['county_id']) {
+            $ad_location->setLocationDomicile($this->em->getReference('FaEntityBundle:Location', $origFeed['location']['county_id']));
+        } else {
+            $ad_location->setLocationDomicile(null);
+        }
+
+        if (isset($origFeed['location']['countrycode']) && $origFeed['location']['countrycode'] == 'GB') {
+            $ad_location->setLocationCountry($this->em->getReference('FaEntityBundle:Location', 2));
+        } else {
+            $ad_location->setLocationCountry(null);
+        }
+
+        $this->em->persist($ad_location);
+    }
+
+    /**
+     * Set for sale data.
+     *
+     * @param object $ad
+     */
+    public function setForSaleData($ad, $origFeed)
+    {
+        $ad_forsale = $this->em->getRepository('FaAdBundle:AdForSale')->findOneBy(array('ad' => $ad->getId()));
+
+        if (!$ad_forsale) {
+            $ad_forsale = new AdForSale();
+        }
+
+        $ad_forsale->setAd($ad);
+
+        if ($origFeed['condition']) {
+            $ad_forsale->setConditionId($origFeed['condition']);
+        }
+
+        $this->em->persist($ad_forsale);
+        $this->em->flush();
+    }
+
+    public function setAdMain($origFeed)
+    {
+
         $adMain = new AdMain();
 
         $adMain->setTransId($origFeed['unique_id']);
         $this->em->persist($adMain);
         $this->em->flush($adMain);
         return $adMain;
+    }
+
+    public function setAdFeedSiteUser($ad_feed_site, $user)
+    {
+        $user_details = $this->em->getRepository('FaAdFeedBundle:AdFeedSiteUser')->findOneBy(array('ad_feed_site' => $ad_feed_site, 'user' => $user));
+
+        if (!$user_details) {
+            $user_details = new AdFeedSiteUser();
+            $user_details->setAdFeedSite($ad_feed_site);
+            $user_details->setUser($user);
+
+            $this->em->persist($user_details);
+            $this->em->flush();
+        }
+
+        return $user_details;
+    }
+
+
+    public function setUser($user, $origFeed)
+    {
+        if (!$user) {
+            $user = new User();
+            $user->setUsername($origFeed['user']['email']);
+            $user->setPassword(md5($origFeed['user']['email']));
+            $user->setEmail($origFeed['user']['email']);
+            $userActiveStatus = $this->em->getRepository('FaEntityBundle:Entity')->find(EntityRepository::USER_STATUS_ACTIVE_ID);
+            $user->setStatus($userActiveStatus);
+            if ($origFeed['user']['role'] == RoleRepository::ROLE_BUSINESS_SELLER) {
+                $sellerRole = $this->em->getRepository('FaUserBundle:Role')->findOneBy(array('name' => RoleRepository::ROLE_BUSINESS_SELLER));
+                $user->addRole($sellerRole);
+                $user->setRole($sellerRole);
+            } elseif ($origFeed['user']['role'] == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
+                $sellerRole = $this->em->getRepository('FaUserBundle:Role')->findOneBy(array('name' => RoleRepository::ROLE_NETSUITE_SUBSCRIPTION));
+                $user->addRole($sellerRole);
+                $user->setRole($sellerRole);
+            } else {
+                $sellerRole = $this->em->getRepository('FaUserBundle:Role')->findOneBy(array('name' => RoleRepository::ROLE_SELLER));
+                $user->addRole($sellerRole);
+                $user->setRole($sellerRole);
+            }
+
+            $user->setIsFeedUser(1);
+            $this->em->persist($user);
+        }
+
+        $user_roles = $user->getRoles();
+
+        $roles = array();
+        foreach ($user_roles as $role) {
+            $roles[] = $role->getName();
+        }
+
+        $sellerRole = $this->em->getRepository('FaUserBundle:Role')->findOneBy(array('name' => RoleRepository::ROLE_BUSINESS_SELLER));
+
+        if (in_array(RoleRepository::ROLE_BUSINESS_SELLER, $roles) || in_array(RoleRepository::ROLE_NETSUITE_SUBSCRIPTION, $roles)) {
+            if ($user->getBusinessName() == '') {
+                $user->setBusinessName($origFeed['user']['business_name']);
+            }
+
+            if ($user->getBusinessCategoryId() == '') {
+                if (isset($origFeed['user']['business_category_id'])) {
+                    $user->setBusinessCategoryId($origFeed['user']['business_category_id']);
+                }
+            }
+        } else {
+            if ($user->getZip() == '') {
+                $user->setZip($origFeed['user']['poscode']);
+            }
+            if ($user->getFirstName() == '') {
+                if (isset($origFeed['user']['first_name'])) {
+                    $user->setFirstName($origFeed['user']['first_name']);
+                }
+            }
+        }
+
+        if ($user->getPhone() == '') {
+            $user->setPhone($origFeed['user']['phone']);
+        }
+
+        if ($user->getPhone() == '') {
+            $user->setContactThroughPhone(0);
+        } else {
+            $user->setContactThroughPhone(1);
+        }
+
+        if (preg_match('/@email_unknown_clickedit.com/', $user->getEmail())) {
+            $user->setContactThroughEmail(0);
+        } else {
+            $user->setContactThroughEmail(1);
+        }
+
+        $user->setIsFeedUser(1);
+        $this->em->persist($user);
+        $this->em->flush();
+
+        if (in_array(RoleRepository::ROLE_BUSINESS_SELLER, $roles) || in_array(RoleRepository::ROLE_NETSUITE_SUBSCRIPTION, $roles)) {
+            $user_site = $this->em->getRepository('FaUserBundle:UserSite')->findOneBy(array('user' => $user));
+
+            if (!$user_site) {
+                $user_site = new UserSite();
+                $user_site->setUser($user);
+            }
+
+            if ($user_site->getWebsiteLink() == '') {
+                $user_site->setWebsiteLink($origFeed['user']['website']);
+            }
+
+            if ($user_site->getCompanyAddress() == '') {
+                $address   = array();
+                $address[] = $origFeed['user']['house_name'] != '' ? $origFeed['user']['house_name'] : null ;
+                $address[] = $origFeed['user']['local_area'] != '' ? $origFeed['user']['local_area'] : null ;
+                $address[] = $origFeed['user']['area'] != '' ? $origFeed['user']['area'] : null ;
+                $address[] = $origFeed['user']['town'] != '' ? $origFeed['user']['town'] : null ;
+                $address[] = $origFeed['user']['country'] != '' ? $origFeed['user']['country'] : null ;
+                $address[] = $origFeed['user']['poscode'] != '' ? $origFeed['user']['poscode'] : null ;
+                $address  = array_filter($address);
+                $companyAddress = implode(', ', $address);
+                $user_site->setCompanyAddress($companyAddress);
+            }
+
+            if ($user_site->getPhone1() == '') {
+                $user_site->setPhone1($origFeed['user']['phone']);
+            }
+
+            if ($user_site->getPhone2() == '') {
+                $user_site->setPhone2($origFeed['user']['mobile']);
+            }
+
+            if ($user_site->getStatus() == '') {
+                $user_site->setStatus(1);
+            }
+
+            if ($user_site->getSlug() == '') {
+                $this->em->getRepository('FaUserBundle:User')->getUserProfileSlug($user->getId(), $this->getContainer(), false);
+            }
+
+            $this->em->persist($user_site);
+            $this->em->flush();
+
+            $package = $this->em->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($user);
+
+            if (!$package) {
+                $this->em->getRepository('FaUserBundle:UserPackage')->assignFreePackageToUser($user, null, $this->getContainer(), false);
+            }
+        }
+
+        return $user;
     }
 
     /**
@@ -611,42 +908,6 @@ EOF
     }
 
     /**
-     * Map add data.
-     *
-     * @param array   $imageArray
-     * @param boolean $single_image single image only
-     */
-    public function mapAdImages($imageArray, $single_image = false)
-    {
-        $this->advert['images'] = array();
-        $i = 1;
-        foreach ($imageArray as $image) {
-            if ($image['IsMainImage']) {
-                $this->advert['images'][$i]['ord'] = 0;
-            } else {
-                $this->advert['images'][$i]['ord'] = $i;
-            }
-
-            $this->advert['images'][$i]['uri']           = $image['Uri'];
-            $this->advert['images'][$i]['last_modified'] = $image['LastModified'];
-            $this->advert['images'][$i]['main_image']    = $image['IsMainImage'];
-
-            $group_dir = substr($origFeed['unique_id'], 0, 8);
-            $idir      = $origFeed['feed_type'].'_'.$origFeed['ref_site_id'].'/'.$group_dir;
-            $fileName  = $idir.'/'.$origFeed['unique_id'].'_'.basename($image['Uri']);
-            $this->advert['images'][$i]['local_path'] = $fileName;
-
-            if ($single_image) {
-                break;
-            }
-            $i++;
-        }
-
-        $this->advert['image_hash'] = md5(serialize($origFeed['images']));
-        $this->advert['image_count'] = count($imageArray);
-    }
-
-    /**
      * Get condition id.
      *
      * @param string $string
@@ -676,10 +937,10 @@ EOF
      * @param object $ad
      * @param object $user
      */
-    protected function assignOrRemoveAdPackage($ad, $user = null)
+    protected function assignOrRemoveAdPackage($ad, $user = null,$origFeed)
     {
         if (isset($origFeed['package_id']) && $origFeed['package_id'] && $ad->getStatus() && $ad->getStatus()->getId() == EntityRepository::AD_STATUS_LIVE_ID) {
-            $this->handleAdPackage($ad, $user, 'assign-if-no-package');
+            $this->handleAdPackage($ad, $user, 'assign-if-no-package',$origFeed);
         } else {
             //$this->handleAdPackage($ad, $user, 'remove');
         }
@@ -692,7 +953,7 @@ EOF
      * @param object $user
      * @param string $type
      */
-    protected function handleAdPackage($ad, $user = null, $type = 'update')
+    protected function handleAdPackage($ad, $user = null, $type = 'update',$origFeed)
     {
         $deleteManager = $this->getContainer()->get('fa.deletemanager');
         $adId = $ad->getId();
@@ -854,467 +1115,5 @@ EOF
             $this->em->flush();
         }
     }
-
-    /**
-     * Setcommon data.
-     *
-     * @param array   $origFeed
-     */
-    protected function setCommonData($origFeed)
-    {
-        $this->advert['published_date'] = strtotime($origFeed['StartDate']);
-        $this->advert['updated_date'] = strtotime($origFeed['LastModified']);
-
-        if (($origFeed['EndDate'] == '0001-01-01T00:00:00Z' || strtotime($origFeed['EndDate']) >= time()) && $commonDataArr['status'] == 'A') {
-            $this->advert['status'] = 'A';
-        } elseif ($origFeed['EndDate'] != '0001-01-01T00:00:00Z' && strtotime($origFeed['EndDate']) < time() && $commonDataArr['status'] == 'A') {
-            $this->advert['status'] = 'E';
-            $this->advert['end_date'] = strtotime($origFeed['EndDate']);
-        }
-
-        $ec = $this->getContainer()->get('fa.entity.cache.manager');
-
-        if (isset($origFeed['Details']['Condition'])) {
-            $this->advert['condition'] = $this->getConditionId($origFeed['Details']['Condition']);
-        }
-
-        $this->advert['is_trade_ad'] = 1;
-        if (isset($origFeed['IsPrivateSeller']) && $origFeed['IsPrivateSeller'] != null && $origFeed['IsPrivateSeller'] == true) {
-            $this->advert['is_trade_ad'] = 0;
-        }
-
-        if (isset($origFeed['AdvertSource'])) {
-            if (in_array(strtolower($origFeed['AdvertSource']), array('kapow scrape', 'not specified')) && $commonDataArr['affiliate'] == 1) {
-                if (isset($origFeed['SiteVisibility']) && is_array($origFeed['SiteVisibility'])) {
-                    foreach ($origFeed['SiteVisibility'] as $site) {
-                        if (($site['IsMainSite'] === 'true') || ($site['IsMainSite'] === true)) {
-                            $this->advert['advert_source'] = CommonManager::addHttpToUrl($site['Site']);
-                        }
-                    }
-                }
-            }
-
-            if (!isset($this->advert['advert_source']) || $this->advert['advert_source'] == '') {
-                $this->advert['advert_source'] = CommonManager::addHttpToUrl($origFeed['AdvertSource']);
-            }
-        }
-
-        $this->advert['title'] = $origFeed['Title'];
-        $this->advert['price'] = $origFeed['Price'];
-        $this->advert['currency'] = $origFeed['Currency'];
-        $this->advert['description'] = isset($origFeed['Descriptions'][0]['Text']) ? $origFeed['Descriptions'][0]['Text'] : null;
-        $this->advert['trans_id'] = $origFeed['OriginatorsReference'];
-        $this->advert['unique_id'] = isset($origFeed['Id']) ? $origFeed['Id'] : null;
-        $this->advert['last_modified'] = $origFeed['LastModified'];
-        $location_not_found = false;
-
-        if ($origFeed['AdvertType'] == 'MotorhomeAdvert' || $origFeed['AdvertType'] == 'VehicleAdvert' || $origFeed['AdvertType'] == 'ClickEditVehicleAdvert' || $origFeed['AdvertType'] == 'JobAdvert') {
-            $locationArray = array();
-            if ($origFeed['Advertiser']['Postcode']) {
-                $locationArray = $this->em->getRepository('FaEntityBundle:Postcode')->getPostCodInfoArrayByLocation($origFeed['Advertiser']['Postcode'], $this->getContainer(), true);
-            }
-            if (!empty($locationArray)) {
-                $location_not_found = true;
-            } else {
-                $townstring = explode(',', $origFeed['Advertiser']['TownCity']);
-                if (isset($townstring[0]) && $townstring[0]) {
-                    if ($ec->getEntityIdByName('FaEntityBundle:Location', $townstring[0])) {
-                        $locationArray = $this->em->getRepository('FaEntityBundle:Location')->getTownInfoArrayById($townstring[0], $this->getContainer(), 'name');
-                        $location_not_found = true;
-                    } else {
-                        $locationArray = $this->em->getRepository('FaEntityBundle:Locality')->getLocalityInfoArrayById($townstring[0], $this->getContainer(), 'name');
-                        $location_not_found = true;
-                    }
-                }
-            }
-        } else {
-            if ($origFeed['Town'] != '') {
-                $this->advert['location']['locality'] = $origFeed['Locality'];
-                $townstring = explode(',', $origFeed['Town']);
-
-                if ($townstring[0] && $ec->getEntityIdByName('FaEntityBundle:Location', $townstring[0])) {
-                    $locationArray = $this->em->getRepository('FaEntityBundle:Location')->getTownInfoArrayById($townstring[0], $this->getContainer(), 'name');
-                    $location_not_found = true;
-                } elseif ($townstring[0]) {
-                    $locationArray = $this->em->getRepository('FaEntityBundle:Locality')->getLocalityInfoArrayById($townstring[0], $this->getContainer(), 'name');
-                    $location_not_found = true;
-                }
-            } else {
-                $locationArray = array();
-                if ($origFeed['Advertiser']['Postcode']) {
-                    $locationArray = $this->em->getRepository('FaEntityBundle:Postcode')->getPostCodInfoArrayByLocation($origFeed['Advertiser']['Postcode'], $this->getContainer(), true);
-                }
-
-                if (!empty($locationArray)) {
-                    $location_not_found = true;
-                } else {
-                    $townstring = explode(',', $origFeed['Advertiser']['TownCity']);
-                    if (isset($townstring[0]) && $townstring[0]) {
-                        if ($ec->getEntityIdByName('FaEntityBundle:Location', $townstring[0])) {
-                            $locationArray = $this->em->getRepository('FaEntityBundle:Location')->getTownInfoArrayById($townstring[0], $this->getContainer(), 'name');
-                            $location_not_found = true;
-                        } else {
-                            $locationArray = $this->em->getRepository('FaEntityBundle:Locality')->getLocalityInfoArrayById($townstring[0], $this->getContainer(), 'name');
-                            $location_not_found = true;
-                        }
-                    }
-                }
-            }
-        }
-
-        if ($location_not_found == true) {
-            if (!empty($locationArray) && $origFeed['Advertiser']['Postcode']) {
-                // Fall back to advertiser
-                $locationArray = $this->em->getRepository('FaEntityBundle:Postcode')->getPostCodInfoArrayByLocation($origFeed['Advertiser']['Postcode'], $this->getContainer(), true);
-            }
-
-            if (!empty($locationArray)) {
-                $this->advert['location']['town_id'] = isset($locationArray['town_id']) && $locationArray['town_id'] ? $locationArray['town_id'] : null;
-                $this->advert['location']['latitude'] = isset($locationArray['latitude']) && $locationArray['latitude'] ? $locationArray['latitude'] : null;
-                $this->advert['location']['longitude'] = isset($locationArray['longitude']) && $locationArray['longitude'] ? $locationArray['longitude'] : null;
-                $this->advert['location']['locality_id'] = isset($locationArray['locality_id']) && $locationArray['locality_id'] ? $locationArray['locality_id'] : null;
-                $this->advert['location']['county_id'] = isset($locationArray['county_id']) && $locationArray['county_id'] ? $locationArray['county_id'] : null;
-
-                if (isset($locationArray['town_id']) && ($locationArray['town_id'] == LocationRepository::LONDON_TOWN_ID || (isset($locationArray['lvl']) && $locationArray['lvl'] == 4))) {
-                    $this->advert['location']['postcode'] = isset($origFeed['Advertiser']['Postcode']) && $origFeed['Advertiser']['Postcode'] ? $origFeed['Advertiser']['Postcode'] : null;
-                } else {
-                    $this->advert['location']['postcode'] = isset($locationArray['postcode']) && $locationArray['postcode'] ? $locationArray['postcode'] : null;
-                }
-                $this->advert['location']['countrycode'] = 'GB';
-            }
-        }
-        return $this->advert;
-    }
-
-    protected function getCategoryId($origFeed) {
-        $feedReader  = $this->getContainer()->get('fa_ad.manager.ad_feed_reader');
-        $categoryId = '';
-        switch($origFeed['AdvertType']) {
-            case ($origFeed['AdvertType']=='BoatAdvert') :
-                $categoryId = $this->getBoatCategoryId($origFeed['Details']['BoatType']);
-                break;
-        }
-        return $categoryId;
-    }
-
-
-    /**
-     * Set ad table data.
-     *
-     * @param object $user
-     * @param object $ad
-     *
-     * @return Ambigous <string, \Fa\Bundle\AdBundle\Entity\Ad>
-     */
-    protected function setAd($origFeed, $adMain, $user)
-    {
-        $newAd = false;
-
-        $ad = new Ad();
-        $newAd = true;
-
-        $this->advert['description'] = isset($origFeed['Descriptions'][0]['Text']) ? $origFeed['Descriptions'][0]['Text'] : null;
-
-        $this->advert['affiliate'] = 0;
-        if (($origFeed['SiteVisibility']['IsMainSite'] === 'false') || ($origFeed['SiteVisibility']['IsMainSite'] === false)) {
-            $this->advert['affiliate'] = 1;
-        }
-
-        if (isset($origFeed['title'])) {
-            $ad->setTitle($origFeed['title']);
-        }
-
-        if (isset($origFeed['affiliate']) && $origFeed['affiliate'] == 1) {
-            $ad->setAffiliate(1);
-
-            if (isset($origFeed['image_count'])) {
-                $ad->setImageCount($origFeed['image_count']);
-            }
-
-            if (isset($origFeed['track_back_url'])) {
-                $ad->setTrackBackUrl($origFeed['track_back_url']);
-            }
-        }
-
-        if (isset($origFeed['advert_source'])) {
-            $ad->setSource($origFeed['advert_source']);
-        } else {
-            $ad->setSource('Feed advert: source not provided');
-        }
-
-        if (isset($origFeed['description'])) {
-            $ad->setDescription($origFeed['description']);
-        } else {
-            $ad->setDescription(null);
-        }
-
-        if (isset($origFeed['personalized_title'])) {
-            $ad->setPersonalizedTitle($origFeed['personalized_title']);
-        } else {
-            $ad->setPersonalizedTitle(null);
-        }
-
-        if (isset($origFeed['unique_id'])) {
-            $ad->setTransId($origFeed['unique_id']);
-        }
-
-        if (isset($origFeed['price'])) {
-            $ad->setPrice($origFeed['price']);
-        } else {
-            $ad->setPrice(null);
-        }
-
-        $metadata = $this->em->getClassMetaData('Fa\Bundle\AdBundle\Entity\Ad');
-        $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
-
-        $ad->setId($adMain->getId());
-        $ad->setAdMain($adMain);
-
-        $ad->setType($this->em->getReference('FaEntityBundle:Entity', EntityRepository::AD_TYPE_FORSALE_ID));
-
-        if (isset($origFeed['category_id']) && $origFeed['category_id'] > 0) {
-            $ad->setCategory($this->em->getReference('FaEntityBundle:Category', $origFeed['category_id']));
-        } else {
-            $ad->setCategory(null);
-        }
-
-        if (isset($origFeed['ad_type_id']) && $origFeed['ad_type_id'] > 0) {
-            $ad->setType($this->em->getReference('FaEntityBundle:Entity', $origFeed['ad_type_id']));
-        } else {
-            $ad->setType(null);
-        }
-
-        if (isset($origFeed['delivery_method_option_id']) && $origFeed['delivery_method_option_id'] > 0) {
-            $ad->setDeliveryMethodOption($this->em->getReference('FaPaymentBundle:DeliveryMethodOption', $origFeed['delivery_method_option_id']));
-        } else {
-            $ad->setDeliveryMethodOption(null);
-        }
-
-        if (isset($origFeed['payment_method_id']) && $origFeed['payment_method_id'] > 0) {
-            $ad->setPaymentMethodId($origFeed['payment_method_id']);
-        } else {
-            $ad->setPaymentMethodId(null);
-        }
-
-        if (isset($origFeed['is_new'])) {
-            $ad->setIsNew($origFeed['is_new']);
-        } else {
-            $ad->setIsNew(1);
-        }
-
-        if (isset($origFeed['published_date'])) {
-            $ad->setPublishedAt($origFeed['published_date']);
-        }
-
-        if (isset($origFeed['end_date'])) {
-            $ad->setExpiresAt($origFeed['end_date']);
-        }
-
-        if (isset($origFeed['updated_date'])) {
-            $ad->setUpdatedAt($origFeed['updated_date']);
-        }
-
-        if (isset($origFeed['status']) && $origFeed['status'] == 'A') {
-            $ad->setStatus($this->em->getReference('FaEntityBundle:Entity', EntityRepository::AD_STATUS_LIVE_ID));
-        } elseif (isset($origFeed['status']) && $origFeed['status'] == 'R') {
-            $ad->setStatus($this->em->getReference('FaEntityBundle:Entity', EntityRepository::AD_STATUS_REJECTED_ID));
-        } else {
-            $ad->setStatus($this->em->getReference('FaEntityBundle:Entity', EntityRepository::AD_STATUS_EXPIRED_ID));
-            if (isset($origFeed['end_date'])) {
-                $ad->setExpiresAt($origFeed['end_date']);
-            } else {
-                $ad->setExpiresAt(time());
-            }
-        }
-
-        $ad->setIsFeedAd(1);
-        $ad->setUser($user);
-        $ad->setSkipSolr(1); // TO skip solr update
-
-        $rejectedReason = count($origFeed['rejected_reason']) > 0 ? serialize($origFeed['rejected_reason']) : null;
-
-        // Save ad is trade ad or not
-        if ($user) {
-            $userRoles = $this->em->getRepository('FaUserBundle:User')->getUserRolesArray($user);
-            if (!empty($userRoles)) {
-                if (in_array(RoleRepository::ROLE_BUSINESS_SELLER, $userRoles) || in_array(RoleRepository::ROLE_NETSUITE_SUBSCRIPTION, $userRoles)) {
-                    $ad->setIsTradeAd(1);
-                } elseif (in_array(RoleRepository::ROLE_SELLER, $userRoles)) {
-                    $ad->setIsTradeAd(0);
-                }
-            }
-        } else {
-            if (isset($origFeed['is_trade_ad'])) {
-                $ad->setIsTradeAd($origFeed['is_trade_ad']);
-            } else {
-                $ad->setIsTradeAd(null);
-            }
-        }
-
-        if ($rejectedReason) {
-            $ad->setRejectedReason($rejectedReason);
-        } else {
-            $ad->setRejectedReason(null);
-        }
-
-        $this->em->persist($ad);
-        $this->em->flush();
-        return $ad;
-    }
-
-    /**
-     * Set ad location.
-     *
-     * @param object $ad
-     */
-    protected function setAdLocation($ad, $origFeed)
-    {
-        $ad_location = $this->em->getRepository('FaAdBundle:AdLocation')->findOneBy(array('ad' => $ad->getId()));
-
-        if (!$ad_location) {
-            $ad_location = new AdLocation();
-        }
-
-        $ad_location->setAd($ad);
-
-        if (isset($origFeed['location']['postcode']) && $origFeed['location']['postcode']) {
-            $ad_location->setPostcode($origFeed['location']['postcode']);
-        } else {
-            $ad_location->setPostcode(null);
-        }
-
-        if (isset($origFeed['location']['town_id']) && $origFeed['location']['town_id']) {
-            $ad_location->setLocationTown($this->em->getReference('FaEntityBundle:Location', $origFeed['location']['town_id']));
-            //check for location area
-            if ($origFeed['location']['town_id'] == LocationRepository::LONDON_TOWN_ID) {
-                //check post Code is exist
-                if (isset($origFeed['location']['postcode']) && $origFeed['location']['postcode'] != '') {
-                    $getPostalCode = explode(" ", $origFeed['location']['postcode']);
-                    $getArea = $this->em->getRepository('FaEntityBundle:LocationPostal')->getAreasByPostCode($getPostalCode[0]);
-                    if (!empty($getArea)) {
-                        if (count($getArea) == '1') {
-                            $ad_location->setLocationArea($this->em->getReference('FaEntityBundle:Location', $getArea[0]['id']));
-                        } elseif (count($getArea) > '1') {
-                            //get the nearest area for this location
-                            $getNearestAreaObj = $this->em->getRepository('FaEntityBundle:Location')->getNearestAreaByPostLatLong($origFeed['location']['postcode'], $origFeed['location']['town_id']);
-                            if (!empty($getNearestAreaObj) && $getNearestAreaObj->getLvl() == 4) {
-                                $ad_location->setLocationArea($getNearestAreaObj);
-                            }
-                        }
-                    }
-                }
-            }
-        } else {
-            $ad_location->setLocationTown(null);
-        }
-
-        if (isset($origFeed['location']['latitude']) && $origFeed['location']['latitude']) {
-            $ad_location->setLatitude($origFeed['location']['latitude']);
-        } else {
-            $ad_location->setLatitude(null);
-        }
-
-        if (isset($origFeed['location']['longitude']) && $origFeed['location']['longitude']) {
-            $ad_location->setLongitude($origFeed['location']['longitude']);
-        } else {
-            $ad_location->setLongitude(null);
-        }
-
-        if (isset($origFeed['location']['county_id']) && $origFeed['location']['county_id']) {
-            $ad_location->setLocationDomicile($this->em->getReference('FaEntityBundle:Location', $origFeed['location']['county_id']));
-        } else {
-            $ad_location->setLocationDomicile(null);
-        }
-
-        if (isset($origFeed['location']['countrycode']) && $origFeed['location']['countrycode'] == 'GB') {
-            $ad_location->setLocationCountry($this->em->getReference('FaEntityBundle:Location', 2));
-        } else {
-            $ad_location->setLocationCountry(null);
-        }
-
-        $this->em->persist($ad_location);
-    }
-
-    /**
-     * Set for sale data.
-     *
-     * @param object $ad
-     */
-    protected function setForSaleData($ad)
-    {
-        $ad_forsale = $this->em->getRepository('FaAdBundle:AdForSale')->findOneBy(array('ad' => $ad->getId()));
-
-        if (!$ad_forsale) {
-            $ad_forsale = new AdForSale();
-        }
-
-        $ad_forsale->setAd($ad);
-
-        if ($this->advert['condition']) {
-            $ad_forsale->setConditionId($this->advert['condition']);
-        }
-
-        $this->em->persist($ad_forsale);
-        $this->em->flush();
-    }
-
-    /**
-     * Update image data.
-     *
-     * @param object $ad
-     */
-    protected function updateImages($ad, $origFeed)
-    {
-        $adImageDir = $this->getContainer()->get('kernel')->getRootDir().'/../web/uploads/image/';
-        $imagePath  = $adImageDir.CommonManager::getGroupDirNameById($ad->getId());
-
-        $i = 1;
-
-        $currentImages = $this->em->getRepository('FaAdBundle:AdImage')->getAdImages($ad->getId());
-
-        foreach ($currentImages as $image) {
-            $adImageManager = new AdImageManager($this->getContainer(), $ad->getId(), $image->getHash(), $imagePath);
-            $adImageManager->removeImage();
-            $this->em->remove($image);
-        }
-
-        foreach ($origFeed['images'] as $img) {
-            $filePath = $this->dir.'/images/'.$img['local_path'];
-            $dimension = @getimagesize($filePath);
-
-            if (file_exists($filePath) && $dimension) {
-                $hash = CommonManager::generateHash();
-                CommonManager::createGroupDirectory($adImageDir, $ad->getId());
-
-                $image = new AdImage();
-                $image->setHash($hash);
-                $image->setPath('uploads/image/'.CommonManager::getGroupDirNameById($ad->getId()));
-                $image->setOrd($i);
-                $image->setAd($ad);
-                $image->setStatus(1);
-                $image->setImageName(Urlizer::urlize($ad->getTitle().'-'.$ad->getId().'-'.$i));
-                $image->setAws(0);
-                $this->em->persist($image);
-
-                //$origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, 75, 'ImageMagickManager');
-                //$origImage->loadFile($filePath);
-                //$origImage->save($imagePath.'/'.$ad->getId().'_'.$hash.'.jpg', 'image/jpeg');
-                exec('convert -flatten '.escapeshellarg($filePath).' '.$imagePath.'/'.$ad->getId().'_'.$hash.'.jpg');
-
-                $adImageManager = new AdImageManager($this->getContainer(), $ad->getId(), $hash, $imagePath);
-                $adImageManager->createThumbnail();
-                $adImageManager->createCropedThumbnail();
-
-                $adImgPath = $imagePath.'/'.$ad->getId().'_'.$hash.'.jpg';
-                if (file_exists($adImgPath)) {
-                    $adImageManager->uploadImagesToS3($image);
-                    unlink($filePath);
-                }
-
-                $i++;
-            }
-        }
-
-        $this->em->flush();
-    }
 }
+
