@@ -68,12 +68,8 @@
     {% endif %} #}
 {% endif %}
 {% block scripttop %}
-    {% stylesheets filter="uglifycss" output='bundles/css/compiled/mma.css'
-        'build/css/mmacss.css'
-        'build/css/upsell-featured.css'
-    %}
-        <link rel="stylesheet" href="{{ asset('/bundles/css/compiled/mma.css') }}"/>
-    {% endstylesheets %}
+    <link rel="stylesheet" href="{{ asset('/build/css/mmacss.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('/build/css/upsell-featured.css') }}" />
 {% endblock %}
 
 {{ include('FaUserBundle:ManageMyAd:individualUpsellJs.html.twig') }}
