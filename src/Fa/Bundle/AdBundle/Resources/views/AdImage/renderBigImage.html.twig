@@ -32,7 +32,7 @@
             <div class="edit-item frame">
                 <a href="javascript:deleteImage('{{path(deleteRoute, {'adId': imageAdId, 'imageId': adImgObj.getId(), 'imageHash': adImgObj.getHash(), 'vertical': vertical})}}')" class="xs-btn-2 button remove-btn" id="remove_img"><span class="delete-icon"></span>{{ 'Remove'|trans({}, 'frontend-paa-fourth-step')}}</a>
                 {% set adCropBigImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageUrl', [container, imageAdId, adImgObj.getPath(), adImgObj.getHash(), '', adImgObj.getAws(), adImgObj.getImageName()]) %}
-                <img id='crop_big_image' src="{{ adCropBigImageUrl }}?{{ random(1000) }}">
+                <img id='crop_big_image' src="{{ adCropBigImageUrl }}?{{ date().timestamp }}">
             </div>
             <div class="photo-link">
                 <div class="row">
