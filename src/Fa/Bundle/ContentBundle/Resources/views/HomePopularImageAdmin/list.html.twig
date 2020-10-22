@@ -24,7 +24,7 @@
                             <td>
                                 {% if homePopularImage.file_name %}
                                     {% set homePopularImgUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSharedImageUrl', [fetch_container_instance(), homePopularImage.path, homePopularImage.file_name]) %}
-                                    <img src="{{ homePopularImgUrl }}?{{ random(1000) }}" width="100px" />
+                                    <img src="{{ homePopularImgUrl }}?{{ date().timestamp }}" width="100px" />
                                 {% endif %}
                             </td>
                             <td>
