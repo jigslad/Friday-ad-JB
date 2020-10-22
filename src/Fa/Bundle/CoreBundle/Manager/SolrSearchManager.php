@@ -291,11 +291,13 @@ class SolrSearchManager
         }
 
         if ($this->geoDistQuery && count($this->geoDistQuery)) {
-            if ($this->getSolrCoreName() == 'ad') {
+            $distance = (isset($this->geoDistQuery['d']))?$this->geoDistQuery['d']:200;
+            $query->addFilterQuery('{!geofilt pt='.$this->geoDistQuery['pt'].' sfield=store d='.$distance.'}&sort=geodist()+asc');
+            /*if ($this->getSolrCoreName() == 'ad') {
                 $query->addField(\Fa\Bundle\AdBundle\Solr\AdSolrFieldMapping::AWAY_FROM_LOCATION.', '.$fields);
             } elseif ($this->getSolrCoreName() == 'ad.view.counter') {
                 $query->addField(\Fa\Bundle\AdBundle\Solr\AdViewCounterSolrFieldMapping::AWAY_FROM_LOCATION.', '.$fields);
-            }
+            }*/
         } else {
             $query->addField($fields);
         }

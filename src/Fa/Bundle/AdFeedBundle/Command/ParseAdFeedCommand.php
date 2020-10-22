@@ -88,6 +88,8 @@ class ParseAdFeedCommand extends ContainerAwareCommand
         switch ($input->getArgument('action')) {
             case 'image':
                 if ($input->getOption('file')) {
+                    // todo: Remove/Comment this download. Only download when needed
+                    // todo: Refer to: Fa/Bundle/AdFeedBundle/Parser/AdParser.php:576
                     $feedReader->downloadImage($input->getOption('type'), $input->getOption('file'), $input->getOption('site_id'), $modified_since, $input->getOption('force'));
                     echo 'Images downloaded for '.$input->getOption('file')."\n";
                     exit;

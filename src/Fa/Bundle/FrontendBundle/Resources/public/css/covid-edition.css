@@ -16,3 +16,8 @@
     .mt-space { margin-top: 20px; }
     /* .home-slider-content, .hero-img { min-height: 430px !important;height: 430px !important; } */
 }
+@media only screen and (min-width: 960px) {
+    .covid-19-block .mt-space {
+        text-align: left;
+    }
+}

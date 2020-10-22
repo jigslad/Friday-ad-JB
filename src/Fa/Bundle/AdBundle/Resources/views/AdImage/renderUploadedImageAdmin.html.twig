@@ -25,7 +25,7 @@
                         {% set imageAdId = adImage.getAd().getId() %}
                     {% endif %}
                     {% set adImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageUrl', [container, imageAdId, adImage.getPath(), adImage.getHash(), '800X600', adImage.getAws(), adImage.getImageName()]) %}
-                    <img alt="{{imageAdId}}_{{adImage.getHash()}}_800X600.jpg" src="{{ adImageUrl }}{% if cache is defined and cache == true %}?{{ random(1000) }}{% endif %}" title="{{ 'Drag photo to change order'|trans }}" />
+                    <img alt="{{imageAdId}}_{{adImage.getHash()}}_800X600.jpg" src="{{ adImageUrl }}{% if cache is defined and cache == true %}?{{ date().timestamp }}{% endif %}" title="{{ 'Drag photo to change order'|trans }}" />
                     {% if adImage.getHash() %}
                         <a class="secondary-btn-1 button edit-img" href="javascript:getOriginalImage('{{path(bigImageRoute, {'adId': imageAdId, 'imageId': adImage.getId(), 'imageHash': adImage.getHash(), 'vertical': vertical, 'is_admin': 1})}}')">{{'Edit'|trans}}</a>
                     {% endif %}
