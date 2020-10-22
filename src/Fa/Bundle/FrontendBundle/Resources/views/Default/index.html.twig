@@ -44,7 +44,7 @@
 {% block body %}
     <div class="hero-banner" id="hero-banner">
         <div class="row">
-            <div class="columns container">
+            <div class="container">
                 <div class="hero-banner__block">
                     <h1 class="hero-banner__title">Find my local <span>xxxxxxx</span></h1>
                 </div>
@@ -292,7 +292,7 @@
     <!--Category Navigation code Starts-->
     <div class="latest-ads">
         <div class="row">
-            <div class="columns container">
+            <div class="container">
                 <div class="latest-ads__header">
                     <div class="latest-ads__title">Today’s picks in
                         <span>Location</span>
@@ -2113,7 +2113,7 @@
     <!--Marketing Zone code Starts-->
     <div class="marketing-zone" id="marketing-zone">
         <div class="row">
-            <div class="columns container">
+            <div class="container">
                 <div class="marketing-zone__title">Marketing Zone
                 </div>
             </div>
@@ -2125,8 +2125,8 @@
     {% cache 'home|page|'~locationId~'front/home_page_read_fridayad_online' 120 %}
         <div class="read-online" id="readOnline">
             <div class="row">
-                <div class="columns container">
-                    <div class="read-online__title">
+                <div class="container">
+                    <div class="read-online__title fad-title">
                         {{'Read the Friday-Ad Online'|trans({}, 'frontend-homepage')}}
                     </div>
                     {{ include('FaFrontendBundle:Default:readFridayAdOnline.html.twig') }}
