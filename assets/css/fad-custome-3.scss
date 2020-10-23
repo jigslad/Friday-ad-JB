@@ -39,7 +39,7 @@
     }
     .nav-bg .search-icon {
         top: 17px;
-        right: 9px;
+        right: 60px;
         position: absolute
     }
     .nav-bg .search-icon a {
@@ -51,7 +51,7 @@
     }
     .top-bar .name h1,
     .top-bar .name a.logo {
-        margin: 0 auto;
+        margin: 0 auto 0 5px;
         width: 177px;
         display: block
     }
@@ -69,7 +69,7 @@
     .top-bar .toggle-topbar.menu-icon {
         margin-top: 0;
         top: 8px;
-        right: auto
+        right: 5px;
     }
     .top-bar .toggle-topbar.menu-icon a {
         padding: 10px;
@@ -2721,7 +2721,7 @@
     }
     .nav-bg .search-icon {
         top: 17px;
-        right: 9px;
+        right: 60px;
         position: absolute
     }
     .nav-bg .search-icon a {
@@ -2733,7 +2733,7 @@
     }
     .top-bar .name h1,
     .top-bar .name a.logo {
-        margin: 0 auto;
+        margin: 0 auto 0 5px;
         width: 177px;
         display: block
     }
@@ -2751,7 +2751,7 @@
     .top-bar .toggle-topbar.menu-icon {
         margin-top: 0;
         top: 8px;
-        right: auto
+        right: 5px;
     }
     .top-bar .toggle-topbar.menu-icon a {
         padding: 10px;
@@ -4657,7 +4657,6 @@
         width: 50%
     }
     .latest-shop-img {
-        width: 137px;
         height: 103px
     }
     .latest-shop-img img {
