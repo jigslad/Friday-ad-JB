@@ -1074,7 +1074,7 @@ class AdListController extends CoreController
             'recommendedSlotLimit'  => $this->getRepository('FaCoreBundle:Config')->getSponsoredLimit(),
             'pagination'            => $pagination['pagination'],
             'adFavouriteIds'        => $adFavouriteIds,
-            'leftFilters'           => empty($pagination['resultCount']) ? [] : $this->getLeftFilters($category, $pagination['facetResult'], $pagination['resultCount'], $searchableDimensions, $findersSearchParams, $data),
+            'leftFilters'           => $this->getLeftFilters($category, $pagination['facetResult'], $pagination['resultCount'], $searchableDimensions, $findersSearchParams, $data),
             'currentLocation'       => $requestlocation,
             'searchParams'          => $findersSearchParams,
             'cookieLocationDetails' => $cookieLocationDetails
@@ -1226,6 +1226,33 @@ class AdListController extends CoreController
             }
         }
 
+        $staticKeys = [
+            'item__price_from',
+            'item__price_to',
+            'ads_with_images',
+            'expired_ads',
+            'is_trade_ad',
+            'item__distance'
+        ];
+        $diffKeys = array_diff(array_keys($searchParams), $staticKeys);
+
+        foreach ($diffKeys as $diffKey) {
+            $solrDimensionFieldName = $adRepository->getSolrFieldName($listingFields, $this->getDimensionName($diffKey));
+            if (! isset($searchParams[$solrDimensionFieldName])) {
+                $searchParams[$solrDimensionFieldName] = [];
+            }
+
+            if (is_array($searchParams[$diffKey])) {
+                $searchParams[$solrDimensionFieldName][] = $searchParams[$diffKey][0];
+            } elseif (strpos($searchParams[$diffKey], '___') !== false) {
+                $searchParams[$solrDimensionFieldName] = array_merge($searchParams[$solrDimensionFieldName], explode('___', $searchParams[$diffKey]));
+            } else {
+                $searchParams[$solrDimensionFieldName][] = $searchParams[$diffKey];
+            }
+
+            unset($searchParams[$diffKey]);
+        }
+
         foreach ($searchParams as $searchKey => $searchItem) {
             if ($searchKey == 'item__price_from') {
               $staticFilters .= ' AND price : [' . $searchItem . ' TO *]';
@@ -1240,15 +1267,12 @@ class AdListController extends CoreController
             } else if ($searchKey == 'item__distance') {
 
             } else {
-                $solrDimensionFieldName = $adRepository->getSolrFieldName($listingFields, $this->getDimensionName($searchKey));
-
-                if (is_array($searchItem)) {
-                    foreach ($searchItem as $eachItem) {
-                        $staticFilters .= ' AND ' . $solrDimensionFieldName . ':*' . $eachItem . '*';
-                    }
-                } else {
-                    $staticFilters .= ' AND ' . $solrDimensionFieldName . ':*' . $searchItem . '*';
+                $thisFilter = [];
+                foreach ($searchItem as $dimItem) {
+                    $thisFilter[] = $searchKey .':*'.$dimItem.'*';
                 }
+
+                $staticFilters .= ' AND (' . implode(' OR ', $thisFilter) .')';
             }
         }
 
@@ -1275,17 +1299,35 @@ class AdListController extends CoreController
         foreach ($searchParams as $dimensionSlug => $searchParam) {
             $paramname = $this->getDimensionName($dimensionSlug);
             if ($paramname !== false) {
-                $params[$paramname] = $searchParam;
+                if (isset($params[$paramname])) {
+                    $selectedValue = $params[$paramname];
+                } else {
+                    $selectedValue = [];
+                }
+
+                if (is_array($searchParam)) {
+                    $selectedValue[] = $searchParam[0];
+                } elseif (strpos($searchParam, '___') !== false) {
+                    $selectedValue = array_merge($selectedValue, explode('___', $searchParam));
+                } else {
+                    $selectedValue[] = $searchParam;
+                }
+
+                $params[$paramname] = $selectedValue;
             }
         }
 
         // get next level categories
         $categoryRepository = $this->getRepository('FaEntityBundle:Category');
 
-        $categories = $categoryRepository->getChildrenById($categoryObj->getId());
-        foreach($categories as $key => $category) {
-            if (isset($facetResult['category_ids'][$category['id']])) {
-                $categories[$key]['count'] = $facetResult['category_ids'][$category['id']];
+        $allCategories = $categoryRepository->getChildrenById($categoryObj->getId(), 'id');
+        $categories = [];
+        foreach($allCategories as $key => $category) {
+            if (! empty($facetResult['category_ids'][$category['id']])) {
+                if ($categoryObj->getId() != 1 || ($categoryObj->getId() == 1 && $category['id'] != CategoryRepository::ADULT_ID)) {
+                    $categories[$key]          = $category;
+                    $categories[$key]['count'] = $facetResult['category_ids'][$category['id']];
+                }
             }
         }
 
@@ -1359,11 +1401,29 @@ class AdListController extends CoreController
                 foreach ($facetArraySet as $jsonValue => $facetCount) {
                     $entityValue = get_object_vars(json_decode($jsonValue));
 
-                    $orderedDimensions[$dimension['id']][$entityValue['id']] = array(
+                    $key = 'id';
+                    if (empty($entityValue[$key])) {
+                        $key = 'name';
+                    }
+
+                    $isSelected = false;
+                    if (! empty($selected)) {
+                        if (is_array($selected)) {
+                            if (in_array($entityValue[$key], $selected) || in_array($entityValue['slug'], $selected)) {
+                                $isSelected = true;
+                            }
+                        } else {
+                            if ($selected == $entityValue[$key]) {
+                                $isSelected = true;
+                            }
+                        }
+                    }
+
+                    $orderedDimensions[$dimension['id']][$entityValue[$key]] = array(
                         'name' => $entityValue['name'],
-                        'slug' => $entityValue['slug'],
+                        'slug' => isset($entityValue['slug']) ? $entityValue['slug'] : $entityValue['name'],
                         'count' => $facetCount,
-                        'selected' => isset($selected) && (is_array($selected) ? in_array($entityValue['id'], $selected) : $selected == $entityValue['id']) ? true : false
+                        'selected' => $isSelected
                     );
                 }
             }

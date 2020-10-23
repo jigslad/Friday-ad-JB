@@ -95,13 +95,6 @@ class AdLeftSearchNewType extends AbstractType
         ->add('sort_ord', HiddenType::class)
         ->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'preSetData'));
 
-        if (isset($options['data']) && isset($options['data']['isShopPage']) && $options['data']['isShopPage']) {
-            $builder->add('keywords', TextType::class)
-            ->add('item__user_id', HiddenType::class);
-        } else {
-            $builder->add('keywords', HiddenType::class);
-        }
-
         if (isset($options['data']['parentIdArray']) && $options['data']['parentIdArray']) {
             $this->parentIdArray = $options['data']['parentIdArray'];
         }
@@ -128,20 +121,20 @@ class AdLeftSearchNewType extends AbstractType
         }
         
         $searchLocation = isset($searchParams['item__location'])?$searchParams['item__location']:((!empty($cookieLocationDet) && isset($cookieLocationDet->town_id))?$cookieLocationDet->town_id:2);
-        
-        $selLocationArray = array();       
+
         $selLocationArray = $this->em->getRepository('FaEntityBundle:Location')->find($searchLocation);
         if(!empty($selLocationArray)) { $getLocLvl = $selLocationArray->getLvl(); }
 
         if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
             $categoryId = $searchParams['item__category_id'];
         }
+
         if (isset($searchParams['item__distance']) && $searchParams['item__distance']) {
             $defDistance = $searchParams['item__distance'];
         } else {
             $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
             $defDistance = ($getDefaultRadius)?$getDefaultRadius:'';
-        }       
+        }
         if($defDistance=='') {
             if($categoryId!='') {
                 $rootCategoryId = $this->em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
@@ -149,14 +142,14 @@ class AdLeftSearchNewType extends AbstractType
             } else {
                 $defDistance = CategoryRepository::MAX_DISTANCE;
             }
-       }  
-       
-       if($searchLocation == 2 || $getLocLvl==2) {                      
-           $form->add('hide_distance_block', HiddenType::class,array('mapped' => false,'empty_data' => 1,'data'=>1));
-        } else {            
-           $form->add('hide_distance_block', HiddenType::class,array('mapped' => false,'empty_data' => 0,'data'=>0));
         }
-        
+
+        if($searchLocation == 2 || $getLocLvl==2) {
+            $form->add('hide_distance_block', HiddenType::class,array('mapped' => false,'empty_data' => 1,'data'=>1));
+        } else {
+            $form->add('hide_distance_block', HiddenType::class,array('mapped' => false,'empty_data' => 0,'data'=>0));
+        }
+
         $form->add(
             'item__distance',
             ChoiceType::class,
@@ -173,11 +166,10 @@ class AdLeftSearchNewType extends AbstractType
             array(
                 'mapped' => false,
                 'empty_data' => $defDistance,
-                'data' => $defDistance,             
+                'data' => $defDistance,
             )
         );
         $this->addLocationAutoSuggestField($form,$selLocationArray);
-        $this->addIsTradeAdField($form);
     }
     
     /**

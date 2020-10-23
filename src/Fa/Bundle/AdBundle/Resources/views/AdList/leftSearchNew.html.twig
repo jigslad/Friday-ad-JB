@@ -1,6 +1,7 @@
 {% set maxDimensionCount = 12 %}
 
-{% if resultCount > 0 %}
+{{ form_start(leftFilters.form, {'attr': {'novalidate': 'novalidate'}}) }}
+{{ form_errors(leftFilters.form) }}
     <div class="search-filters">
         <dl class="accordion" data-accordion>
             {# Category search params - start #}
@@ -212,7 +213,7 @@
             </div>
     </dl>
     </div>
-{% endif %}
+{{ form_end(leftFilters.form) }}
 <script>
     function formulate_photo_url() {
         let url = window.location.href;
@@ -245,7 +246,7 @@
 
             url = url.replace('/{{ currentLocation }}/', '/'+value+'/');
 
-            if ($('#fa_left_search_new_item__distance').val() != 5) {
+            if ($('#fa_left_search_new_item__distance').val() != 200) {
                 let url_string = 'item__distance=' + $('#fa_left_search_new_item__distance').val();
                 if (url.indexOf('?') != -1) {
                     url += '&' + url_string;
@@ -259,23 +260,33 @@
     }
 
     function set_url_params(url_params, this_url) {
-        let this_url_part = this_url.split('=')[0];
-        if (url_params.indexOf(this_url_part) != -1) {
-            let url_param_arr = url_params.split('&');
-            let new_url_param = '?';
-            url_param_arr.forEach(function(item) {
-                if (item.indexOf(this_url_part) == -1) {
-                    new_url_param += item + '&';
+        let this_url_parts = this_url.split('=');
+        let this_url_part = this_url_parts[0];
+        let this_url_value = this_url_parts[1];
+
+        if (url_params.length == 0) {
+            return '?' + this_url;
+        } else if (url_params.indexOf(this_url_part) == -1) {
+            return '?' + url_params + '&' + this_url;
+        } else {
+            let url_param_vars = url_params.split('&');
+            let new_url_params = '';
+
+            url_param_vars.forEach(function(item) {
+                if (item.indexOf(this_url_part) != -1) {
+                    if (item.indexOf(this_url) != -1) {
+                        new_url_params += this_url + '&';
+                    } else {
+                        new_url_params += item + '___' + this_url_value + '&';
+                    }
                 } else {
-                    new_url_param += this_url + '&';
+                    new_url_params += this_url + '&';
                 }
             });
-            url_params = new_url_param.replace(new RegExp("[&]*$"), '');
-        } else {
-            url_params += '&' + this_url;
+
+            return '?' + new_url_params.replace(new RegExp("[&]?$"), '');
         }
 
-        return url_params;
     }
 
     $(document).ready(function() {
@@ -286,13 +297,16 @@
             if (href.indexOf('#')) {
                 let _var = href.split('#');
                 href = _var[0];
+                if ($(this).closest('.search-cat-sub-list').length && href.indexOf('/search/') != -1) {
+                    href = href.replace('/search/', '/');
+                }
             }
 
-            let url_params = '?';
+            let url_params = '';
 
             if (href.indexOf('?') != -1) {
                 let split_params = href.split('?');
-                url_params += split_params[1];
+                url_params = '?' + split_params[1];
                 href = split_params[0];
             }
 
@@ -300,10 +314,10 @@
             if (index != -1) {
                 href = href.substring(0, (index + this_url.length));
             } else if (this_url.indexOf('=') != -1) {
-                if (url_params == '?') {
-                    url_params += this_url;
+                if (url_params.length) {
+                    url_params += '&' + this_url;
                 } else {
-                    url_params = set_url_params(url_params, this_url);
+                    url_params = set_url_params(url_params.replace('?', ''), this_url);
                 }
             } else {
                 let data_href = '';
@@ -313,8 +327,8 @@
                     }
 
                     if (data_href.length) {
-                        let name = $(this).closest('ul').find('li').find('label').attr('for').replace('fa_left_search', '');
-                        url_params = set_url_params(url_params, 'item__' + name + '=' + this_url);
+                        let name = $(this).closest('ul').find('li').find('label').attr('for').replace('fa_left_search_', '');
+                        url_params = set_url_params(url_params.replace('?', ''), 'item__' + name + '=' + this_url);
                     } else {
                         href += this_url + '/';
                     }
@@ -358,7 +372,7 @@
 
                 $(this).attr('href', url);
             } else {
-                let this_tag = $(this).closest('.accordion-navigation').find('ul').find('a:first-child');
+                let this_tag = $(this).closest('.accordion-navigation').find('ul').find('a').first();
                 let href = $(this_tag).attr('href');
                 let data_href = $(this_tag).attr('data-href');
 
@@ -369,8 +383,18 @@
                 let urlparams = href_arr[1].split('&');
                 let new_url_params = '?';
 
+                let name = '';
+                if ($(this_tag).closest('li').find('label').length) {
+                    name = $(this_tag).closest('li').find('label').attr('for').replace('fa_left_search_', '');
+                    name = 'item__' + name;
+                }
+
                 urlparams.forEach(function (item) {
-                    new_url_params += item + '&';
+                    if (name.length && item.indexOf(name) == -1) {
+                        new_url_params += item + '&';
+                    } else if (name.length == 0) {
+                        new_url_params += item + '&';
+                    }
                 });
                 urlparams = new_url_params.replace(new RegExp("[&]*$"), '');
 
@@ -381,132 +405,5 @@
                 $(this).attr('href', href1 + urlparams);
             }
         });
-
-        $("#fa_left_search_new_item__location"+'_close').click(function() {
-            $("#fa_left_search_new_item__location"+'_autocomplete').val('');
-            $("#fa_left_search_new_item__location").val('');
-            $("#fa_top_search_new_item__area").val('');
-            $("#fa_left_search_new_item__area").val('');
-            $(this).hide();
-
-            bindShowMapOnChangeLocationEvent();
-            $("div[id*=location_area_div] input[type=text]").val("");
-            $("#location_area_div").hide();
-
-
-        });
-        $("#fa_left_search_new_item__location"+'_autocomplete').attr("placeholder", "Type postal code or town");
-
-        $("#fa_left_search_new_item__location"+'_autocomplete').keyup(function() {
-            $('#fa_top_search_item__area').val('');
-            $("#fa_left_search_new_item__area").val('');
-
-            if ($(this).val().length < 1) {
-                $("#fa_left_search_new_item__location"+'_close').hide();
-                $("#fa_left_search_new_item__location").val("");
-
-            }
-        });
-
-        $('#fa_left_search_new_item__location_autocomplete').keyup(function(e) {
-            if (parseInt(e.keyCode) == 13) {
-                setLocaionCookieByLeftSearchNewLocationChange($.trim($('#fa_left_search_new_item__location').val()));
-            }
-        });
-
-        $("#fa_left_search_new_item__location"+'_autocomplete').focus(function() {
-            $(this).select();
-        });
-
-        $("#fa_left_search_new_item__location"+'_autocomplete').blur(function() {
-            if ($("#fa_left_search_new_item__location"+'_autocomplete').val().length == 0) {
-                $("#fa_left_search_new_item__location"+'_close').hide();
-            } else if($("#fa_left_search_new_item__location"+'_autocomplete').val().length > 4) {
-            }
-        });
-
-        if ($("#fa_left_search_new_item__location"+'_autocomplete').length > 0 && $("#fa_left_search_new_item__location"+'_autocomplete').val().length < 1) {
-            $("#fa_left_search_new_item__location"+'_close').hide();
-        } else {
-            $("#fa_left_search_new_item__location"+'_close').show();
-        }
-    });
-
-    function setLocaionCookieByLeftSearchNewLocationChange(searchLocation)
-    {
-        var qryItemDistance = getUrlVars()['item__distance'];
-
-        /* if (searchLocation && searchLocation != 2) {*/
-        var catId = $('#fa_left_search_new_item__category_id').val();
-        var distanceId = $('#fa_left_search_new_item__distance').val();
-        var defaultDist = $('#fa_left_search_new_default_distance').val();
-
-        $.ajax({
-            type: "post",
-            dataType: "json",
-            url: "{{ path('fa_frontend_ajax_user_location') }}",
-            data: {'location': searchLocation, 'catId' : catId },
-            success: function(data) {
-                if (!$.isEmptyObject(data)) {
-                    $('#fa_left_search_new_default_distance').val(data.default_distance);
-
-
-                    if(qryItemDistance == undefined && searchLocation != 2 && defaultDist == distanceId) {
-                        $('#fa_left_search_new_item__distance').val(data.default_distance);
-                        $('#fa_left_search_item__distance option[value="'+data.default_distance+'"]').attr("selected", "selected");
-                        $('#distance-left-search').show();
-                        $('#fa_left_search_new_hide_distance_block').val(0);
-                    } else if(distanceId != data.default_distance) {
-                        $('#fa_left_search_item__distance option[value="'+distanceId+'"]').attr("selected", "selected");
-                        $('#distance-left-search').show();
-                        $('#fa_left_search_new_hide_distance_block').val(0);
-                    } else {
-                        if(distanceId == data.default_distance) {
-                            $('#fa_left_search_new_item__distance option[value="'+data.default_distance+'"]').attr("selected", "selected");
-                        } else {
-                            setDefDistance();
-                        }
-                    }
-
-                    if(data.slug=='uk') { $('#distance-left-search').hide(); }
-                    else { $('#distance-left-search').show(); }
-                    $('form[name="fa_left_search_new"]').submit();
-                } else {
-                    $('#distance-error-placeholder small').html('Please choose a valid town or postal code');
-                    $('#fa_left_search_new_item__location_autocomplete').css("border", "solid 1px red");
-                }
-            }
-        });
-    }
-
-    $(window).on('load', function() {
-        bindDatePickerEvent();
-        bindFloatFieldKeyupEvnet('fa_left_search_new_item__price_from');
-        bindFloatFieldKeyupEvnet('fa_left_search_new_item__price_to');
-        bindFloatFieldKeyupEvnet('fa_left_search_new_item_motors__boat_length_from');
-        bindFloatFieldKeyupEvnet('fa_left_search_new_item_motors__boat_length_to');
-        bindSeeMoreLinkEvents();
-
-        var qryItemDistance = getUrlVars()['item__distance'];
-
-        if ($('#fa_left_search_new_item__location').val() == 2) {
-            $('#fa_left_search_new_item__location_autocomplete').val('United Kingdom');
-        }
-
-        if ($('#fa_left_search_new_default_distance').val() != '') {
-            setDefDistance();
-        }
-
-        if (qryItemDistance != undefined) {
-            $('#distance-left-search').show();
-            $('#fa_left_search_new_hide_distance_block').val(0);
-        }
-
-        if ($('#fa_left_search_new_hide_distance_block').val() == 1) {
-            $('#distance-left-search').hide();
-        } else {
-            $('#distance-left-search').show();
-        }
     });
 </script>
-{{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_left_search_new_item__location', 'placeHolder': 'Type postal code or town'|trans, 'route' : 'town_ajax_find_town_by_term', 'displayOnlyTown' : 'true'}) }}
