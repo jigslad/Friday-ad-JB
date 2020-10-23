@@ -813,8 +813,8 @@ class AdListController extends CoreController
             'category_ids'          => array('min_count' => 1),
             'is_trade_ad'           => array('min_count' => 0),
             'image_count'           => array('min_count' => 1),
-            'town'                  => array('min_count' => 0),
-            'area'                  => array('min_count' => 0)
+            'town'                  => array('min_count' => 1),
+            'area'                  => array('min_count' => 1)
         );
 
         // ad location filter with distance
