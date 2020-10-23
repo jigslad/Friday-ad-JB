@@ -153,10 +153,11 @@ class CategoryRepository extends NestedTreeRepository
      * Get children by id.
      *
      * @param string $id
+     * @param string $orderBy
      *
      * @return Object
      */
-    public function getChildrenById($id = null)
+    public function getChildrenById($id = null, $orderBy = null)
     {
         $query = $this->createQueryBuilder(self::ALIAS);
 
@@ -166,7 +167,11 @@ class CategoryRepository extends NestedTreeRepository
             $query->where(self::ALIAS.'.parent = '.$id.' AND '.self::ALIAS.'.status = 1');
         }
 
-        $query->addOrderBy(self::ALIAS.'.name');
+        if (empty($orderBy)) {
+            $query->addOrderBy(self::ALIAS.'.name');
+        } else {
+            $query->addOrderBy(self::ALIAS. '.' .$orderBy);
+        }
 
         $objResources = $query->getQuery()->getArrayResult();
 
