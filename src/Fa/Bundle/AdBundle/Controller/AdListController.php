@@ -813,8 +813,8 @@ class AdListController extends CoreController
             'category_ids'          => array('min_count' => 1),
             'is_trade_ad'           => array('min_count' => 0),
             'image_count'           => array('min_count' => 1),
-            'town'                  => array('limit' => 5, 'min_count' => 0),
-            'area'                  => array('limit' => 5, 'min_count' => 0)
+            'town'                  => array('min_count' => 0),
+            'area'                  => array('min_count' => 0)
         );
 
         // ad location filter with distance
@@ -909,6 +909,16 @@ class AdListController extends CoreController
                     'location_text' => 'United Kingdom',
                 ));
             }
+        }
+
+        // get location from cookie
+        if (isset($cookieValue) && $cookieValue) {
+            if (is_array($cookieValue)) {
+                $cookieValue = json_encode($cookieValue);
+            }
+            $cookieLocationDetails = json_decode($cookieValue, true);
+        } else {
+            $cookieLocationDetails = json_decode($request->cookies->get('location'), true);
         }
 
         $data = $this->setDefaultParametersNew($request, $mapFlag, 'finders', $cookieLocationDetails);
@@ -1375,15 +1385,56 @@ class AdListController extends CoreController
         ];
 
         $locationFacets = [];
-        foreach ($facetResult['town'] as $town => $count) {
+        if ($searchParams['item__location'] == 2) {
+            foreach ($facetResult['town'] as $town => $count) {
+                $town = get_object_vars(json_decode($town));
+
+                $locationFacets[] = array(
+                    'id'    => $town['id'],
+                    'name'  => $town['name'],
+                    'slug'  => $town['slug'],
+                    'count' => $count
+                );
+            }
+        } else {
+            foreach ($facetResult['town'] as $town => $count) {}
             $town = get_object_vars(json_decode($town));
 
-            $locationFacets[] = array(
-                'id'    => $town['id'],
-                'name'  => $town['name'],
-                'slug'  => $town['slug'],
-                'count' => $count
-            );
+            if ($data['static_filters']) {
+                $staticFilters = explode(' AND ', $data['static_filters']);
+                $newStaticFilters = '';
+
+                foreach ($staticFilters as $staticFilter) {
+                    if (! empty($staticFilter) && strpos($staticFilter, 'town') === false) {
+                        $newStaticFilters .= ' AND '.$staticFilter;
+                    }
+                }
+                $newStaticFilters .= ' AND (town:*parent_id\"\:'.$town['parent_id'].'\,* OR locality:*parent_id\"\:'.$town['parent_id'].'\,* OR domicile:*parent_id\"\:'.$town['parent_id'].'\,* ) AND -(town:*\"id\"\:'.$town['id'].'\,* OR locality:*\"id\"\:'.$town['id'].'\,* OR domicile:*\"id\"\:'.$town['id'].'\,*)';
+
+                $data['static_filters'] = $newStaticFilters;
+                $data['facet_fields'] = array(
+                    'town' => array('min_count' => 1),
+                    'area' => array('min_count' => 1),
+                    'locality' => array('min_count' => 1)
+                );
+            }
+
+            $solrSearchManager->init('ad.new', $keywords, $data, 1, 1, 0, true);
+            $solrResponse = $solrSearchManager->getSolrResponse();
+            $facetDimResult = $solrSearchManager->getSolrResponseFacetFields($solrResponse);
+            if (! empty($facetDimResult)) {
+                $facetDimResult = $facetDimResult['town'];
+                foreach ($facetDimResult as $jsonValue => $facetCount) {
+                    $town = get_object_vars(json_decode($jsonValue));
+
+                    $locationFacets[] = array(
+                        'id'    => $town['id'],
+                        'name'  => $town['name'],
+                        'slug'  => $town['slug'],
+                        'count' => $facetCount
+                    );
+                }
+            }
         }
 
         $orderedDimensions = [];
@@ -1451,11 +1502,15 @@ class AdListController extends CoreController
                     $facetDimResult = $facetDimResult[$solrFieldName];
                     foreach ($facetDimResult as $jsonValue => $facetCount) {
                         $entityValue = get_object_vars(json_decode($jsonValue));
+                        $key = 'id';
+                        if (empty($entityValue['id'])) {
+                            $key = 'name';
+                        }
 
-                        if (! isset($orderedDimensions[$dimension['id']][$entityValue['id']])) {
-                            $orderedDimensions[$dimension['id']][$entityValue['id']] = array(
+                        if (! isset($orderedDimensions[$dimension['id']][$entityValue[$key]])) {
+                            $orderedDimensions[$dimension['id']][$entityValue[$key]] = array(
                                 'name' => $entityValue['name'],
-                                'slug' => $entityValue['slug'],
+                                'slug' => isset($entityValue['slug']) ? $entityValue['slug'] : $entityValue['name'],
                                 'count' => $facetCount,
                                 'selected' => false
                             );
