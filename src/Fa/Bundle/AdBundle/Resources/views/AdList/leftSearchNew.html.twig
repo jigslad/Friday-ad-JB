@@ -125,7 +125,7 @@
                                         <div class="reveal-modal" id="locationLHSFilters" data-reveal>
                                             <a class="close-reveal-modal">&times;</a>
                                             <div>
-                                                <h5 class="modal-title">Showing Category</h5>
+                                                <h5 class="modal-title">Showing Towns</h5>
                                                 <div class="modal-content dimension-modal">
                                                     <div class="dimension-content">
                                                         <div class="clearfix">
@@ -380,7 +380,10 @@
 
                 let href_arr = href.split('?');
                 let href1 = href_arr[0];
-                let urlparams = href_arr[1].split('&');
+                let urlparams = '';
+                if (href_arr[1] != undefined) {
+                    urlparams = href_arr[1].split('&');
+                }
                 let new_url_params = '?';
 
                 let name = '';
@@ -389,14 +392,16 @@
                     name = 'item__' + name;
                 }
 
-                urlparams.forEach(function (item) {
-                    if (name.length && item.indexOf(name) == -1) {
-                        new_url_params += item + '&';
-                    } else if (name.length == 0) {
-                        new_url_params += item + '&';
-                    }
-                });
-                urlparams = new_url_params.replace(new RegExp("[&]*$"), '');
+                if (urlparams.length) {
+                    urlparams.forEach(function (item) {
+                        if (name.length && item.indexOf(name) == -1) {
+                            new_url_params += item + '&';
+                        } else if (name.length == 0) {
+                            new_url_params += item + '&';
+                        }
+                    });
+                    urlparams = new_url_params.replace(new RegExp("[&]*$"), '');
+                }
 
                 if (urlparams.length == 1) {
                     urlparams = '';

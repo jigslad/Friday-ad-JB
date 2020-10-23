@@ -95,6 +95,11 @@ $(document).ready(function(){
         if ($('#fa_user_half_account_email_only_email').val().length) {
             bindHalfAccountSubmitFormEventEmailOnly('', 'ListingBottom');
         } else {
+            $('#fa_user_half_account_email_only_email').addClass('error');
+            if ($('#fa_user_half_account_email_only_save').next().hasClass('error')) {
+                $('#fa_user_half_account_email_only_save').next().remove();
+            }
+            $('#fa_user_half_account_email_only_save').after('<small class="error"> Email is required</small>');
             $('#fa_user_half_account_email_only_save').prop('disabled', false);
         }
     });
@@ -120,6 +125,7 @@ function bindHalfAccountSubmitFormEventEmailOnly(ad_id, callFrom)
                 $("#fa_user_half_account_email_only_email").addClass("error");
                 $("<small id='createAlertBlockError' class='error'>"+response.errorMessage+"</span>").insertAfter('#fa_user_half_account_email_only_save');
             }
+            $('#fa_user_half_account_email_only_save').prop('disabled', false);
         }
     });
 }
