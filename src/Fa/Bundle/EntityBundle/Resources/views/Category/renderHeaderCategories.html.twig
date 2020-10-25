@@ -1,6 +1,9 @@
 {% set container = fetch_container_instance() %}
 {% set entityCacheManager = container.get('fa.entity.cache.manager') %}
 {% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+{% if status_code is not defined %}
+    {% set status_code = 200 %}
+{% endif %}
 <div class="nav-mobile">
     <div class="nav-dropdown">
         <ul class="menu-accordion show-accordion ">
@@ -262,94 +265,17 @@
         </div>
     </div>
 </div>
-{% cache 'header|menu|'~location_id|replace({' ':''})~'front/header_menu_tablet' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0 ) (staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isBot', [container]) ? 600 : 86400) %}
+{#{% cache 'header|menu|'~location_id|replace({' ':''})~'front/header_menu_tablet' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0 ) (staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isBot', [container]) ? 600 : 86400) %}#}
     <ul class="main-menu__list">
         <li class="main-menu__item">
-{#
             {% if status_code == 200 %}
                 {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'cybersource_checkout'} %}
-                    {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {} } )) }}
                     <a href="#!" class="main-menu__link search-icon" id="topSearch">
                         <span>Search</span>
                     </a>
-                    <div class="top-search">
-                        <div class="row">
-                            <div class="container">
-                                <div class="top-search__block">
-                                    <form class="top-search__input">
-                                        <input type="text" class="top-search__input--text" vlaue="" placeholder="What are you looking for?" id="topSearchKeywords">
-                                        <a hre="#" class="top-search__input--btn"></a>
-                                        <!-- Search dropdown Content starts-->
-                                        <ul class="search-dropdown">
-                                            <li class="search-dropdown__item">
-                                                <a class="search-dropdown__link">
-                                                    Plumber
-                                                    <span class="search-dropdown__link--color"></span>
-                                                </a>
-                                            </li>
-                                            <li class="search-dropdown__item">
-                                                <a class="search-dropdown__link">
-                                                    Plumber
-                                                    <span class="search-dropdown__link--colored">
-                                                plumbers and heating
-                                            </span>
-                                                </a>
-                                            </li>
-                                            <li class="search-dropdown__item">
-                                                <a class="search-dropdown__link">Plumber
-                                                    <span class="search-dropdown__link--colored">
-                                                plumbers and heating
-                                            </span>
-                                                </a>
-                                            </li>
-                                            <li class="search-dropdown__item">
-                                                <a class="search-dropdown__link">
-                                                    Plumber
-                                                </a>
-                                            </li>
-                                            <li class="search-dropdown__item">
-                                                <a class="search-dropdown__link">
-                                                    Plumber
-                                                    <span class="search-dropdown__link--colored">
-                                                plumbers and heating
-                                            </span>
-                                                </a>
-                                            </li>
-                                            <li class="search-dropdown__item">
-                                                <a class="search-dropdown__link">
-                                                    Plumber
-                                                </a>
-                                            </li>
-                                        </ul>
-                                        <!---Search dropdown Content end-->
-                                    </form>
-                                    <div class="top-search__location">
-                                        <div class="top-search__location--change">
-                                            in United Kingdom
-                                            <span id="topPickLocation">
-                                        (change)
-                                    </span>
-                                        </div>
-                                    </div>
-                                    <div class="top-search__select-location" id="topLocationView">
-                                        <input type="text" class="top-search__select-location--text" value="" placeholder="Type postal code or town" id="topSelectLocation">
-                                        <div class="close-icon" id="topCloseIcon"></div>
-                                        <div class="top-search__select-location--ok" id="topCancelBtn">Ok
-                                        </div>
-                                        <div class="top-search__select-location--cancel" id="topCancelBtn">cancel
-                                        </div>
-                                    </div>
-                                    <div class="top-search__preferences">
-                                        <a class="top-search__preferences--link">Set search preferences
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {} } )) }}
                 {% endif %}
             {% endif %}
-#}
         </li>
         <li class="main-menu__item post-btn ga-buttonPAA" >
             <a href="{{ path('ad_post_first_step') }}" class="main-menu__link post-icon ga-buttonPAA" title="{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}">
@@ -450,7 +376,7 @@
             <a href="{{ path('ad_post_first_step') }}" class="main-menu__link ga-PAAbutton btn-rounded">Place an ad</a>
         </li>
     </ul>
-{% endcache %}
+{#{% endcache %}#}
 <div id="show-confirm-age-main"></div>
 <script language="javascript" type="text/javascript">
 //<![CDATA[

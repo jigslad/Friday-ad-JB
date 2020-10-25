@@ -1,42 +1,58 @@
-<div class="site-search hide-for-small-only" id="top_search">
-    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'fa_top_search'}}) }}
-    {{ form_errors(form) }}
-    {% set showInSearch = true %}
-    {% if searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
-        {% set showInSearch = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'showPriceInSearchFilter', [searchParams.item__category_id, fetch_container_instance()]) %}
-    {% endif %}
-
+{% set showInSearch = true %}
+{% if searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+    {% set showInSearch = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'showPriceInSearchFilter', [searchParams.item__category_id, fetch_container_instance()]) %}
+{% endif %}
+<div class="top-search" id="top_search" style="display: block">
     <div class="row">
-    	<div class="columns">
-	        <div class="find-label hide-for-small-only">{{ form_widget(attribute(form, 'item__category_id'), {'attr': {'class':'find-all custom_select' }}) }}</div>
-	        <div class="search-box-col">
-	           <div class="clearfix">
-	               <div class="search-box">
-	                   {{ form_widget(form.keywords, {'attr': {'placeholder':'Looking for...'|trans({}, 'frontend-header-search') }}) }}
-	                   <a href="javascript:void(0);" rel="nofollow" id="fa_top_search_keywords_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
-	               </div>
-	               <input type="submit" class="button postfix search-icon" value="Go" />
-	                <div class="change-location hide-for-small-only">
-	                    <span class="left">{{ 'in'|trans({}, 'frontend-header-search') }}</span>
-                        <span id="header_search_editable_location_span">United Kingdom</span>
-	                    <a href="javascript:void(0)" rel="nofollow" id="header_search_editable_location_a"> ({{ 'change'|trans({}, 'frontend-header-search') }})</a>
-	                    <div id="top_search_location" class="white-autocomplete">
-	                        {{ form_widget(form.item__location_autocomplete) }}
-	                        <a href="javascript:void(0);" rel="nofollow" id="fa_top_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
-	                        <div class="clearfix">
-	                            <button class="button xs-btn-1 expand left" type="button" id="top_search_location_ok">{{ 'Ok'|trans({}, 'frontend-header-search') }}</button>
-	                            <button class="button xs-btn-1 expand right" type="cancel" id="top_search_location_cancel">{{ 'Cancel'|trans({}, 'frontend-header-search') }}</button>
-	                        </div>
-	                    </div>
-	                </div>
-	                <div id="header_search_editable_location_reveal_modal" class="reveal-modal tiny" data-reveal>
-                        {{ include('FaCoreBundle:Default:invalidLocationModal.html.twig', {'modalId': 'header_search_editable_location_reveal_modal'}) }}
-	                </div>
-	            </div>
-	        </div>
-	        <div class="search-pref">
-	            <a href="javascript:void(0)" rel="nofollow" id="search_preferences_link" class="expand-search">{{ 'Set search preferences'|trans({}, 'frontend-header-search')}}</a>
-	        </div>
+    	<div class="container">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'fa_top_search','class':'top-search__block'}}) }}
+                {{ form_errors(form) }}
+                <div class="top-search__input">
+                    {{ form_widget(form.keywords, {'attr': {'placeholder':'Looking for...'|trans({}, 'frontend-header-search'), 'class':'top-search__input--text' }}) }}
+                    <button class="top-search__input--btn" id="fa_top_search_keywords_searchGo" type="submit"></button>
+                    <a rel="nofollow" id="fa_top_search_keywords_close" class="close-icon"></a>
+                    <!-- Search dropdown Content starts-->
+                    <div id="fa_top_search_keywords_list"></div>
+                    <!---Search dropdown Content end-->
+                </div>
+                <div class="top-search__location">
+                    <div class="top-search__location--change">
+                        <div id="in_text_span">
+                        {{ 'in'|trans({}, 'frontend-header-search') }}
+                        </div>
+                        <span id="header_search_editable_location_span">
+                            United Kingdom
+                        </span>
+                        <a rel="nofollow" id="header_search_editable_location_a">
+                            ({{ 'change'|trans({}, 'frontend-header-search') }})
+                        </a>
+                    </div>
+                </div>
+                <div class="top-search__select-location" id="top_search_location">
+                    {{ form_widget(form.item__location_autocomplete,{'attr':{'class':'top-search__select-location--text', 'placeholder': 'Type postal code or town'}}) }}
+                    <div class="close-icon closeIcon" id="fa_top_search_item__location_close"></div>
+                    <div id="fa_top_search_item__location_list"></div>
+                    <button class="top-search__select-location--ok" type="button" id="top_search_location_ok">
+                        {{ 'Ok'|trans({}, 'frontend-header-search') }}
+                    </button>
+                    <button class="top-search__select-location--cancel" type="cancel" id="top_search_location_cancel">
+                        {{ 'Cancel'|trans({}, 'frontend-header-search') }}
+                    </button>
+                </div>
+                <div class="top-search__preferences">
+                    <a href="javascript:void(0)" rel="nofollow" id="search_preferences_link" class="top-search__preferences--link">
+                        {{ 'Set search preferences'|trans({}, 'frontend-header-search')}}
+                    </a>
+                </div>
+                <div style="display: none" class="search-box-col">
+                   <div class="clearfix">
+                        <div style="display: none" id="header_search_editable_location_reveal_modal" class="reveal-modal tiny" data-reveal>
+                            {{ include('FaCoreBundle:Default:invalidLocationModal.html.twig', {'modalId': 'header_search_editable_location_reveal_modal'}) }}
+                        </div>
+                    </div>
+                </div>
+            {% do attribute(form, 'item__category_id').setRendered %}
+            {{ form_end(form) }}
         </div>
     </div>
     <div class="search-sliders">
@@ -73,7 +89,6 @@
             </div>
         </div>
     </div>
-    {{ form_end(form) }}
 </div>
 {% if searchParams.item__distance is defined and searchParams.item__distance is not null %}
   <script language="javascript" type="text/javascript">

@@ -61,12 +61,16 @@ class CategoryController extends CoreController
     /**
      * Lists all Category entities.
      *
-     * @param boolean $is_tablet
-     * @param boolean $is_mobile
+     * @param Request $request
+     * @param $currentRoute
+     * @param int $is_tablet
+     * @param int $is_mobile
      *
+     * @param null $location
+     * @param array $searchParams
      * @return Response A Response object.
      */
-    public function renderHeaderCategoriesAction(Request $request, $is_tablet = 0, $is_mobile = 0, $location = null, $searchParams = [])
+    public function renderHeaderCategoriesAction(Request $request, $currentRoute, $is_tablet = 0, $is_mobile = 0, $location = null, $searchParams = [])
     {
         $thirdPartyAdultModalBox = false;
         if (isset($searchParams['item__category_id'])) {
@@ -116,6 +120,7 @@ class CategoryController extends CoreController
             $parameters['location'] = $this->getRepository('FaEntityBundle:Location')->getIdBySlug('uk');
         }
         $parameters['thirdPartyAdultModalBox'] = $thirdPartyAdultModalBox;
+        $parameters['currentRoute'] = $currentRoute;
         
 
         /*if ($is_mobile) {
