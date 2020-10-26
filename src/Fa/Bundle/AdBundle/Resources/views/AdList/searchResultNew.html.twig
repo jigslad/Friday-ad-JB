@@ -340,6 +340,13 @@
     <script language="javascript" type="text/javascript">
         //<![CDATA[
 
+        let href = window.location.href;
+        if (href.indexOf('?') == -1) {
+            $('.map-view').attr('href', href + '?map=1');
+        } else {
+            $('.map-view').attr('href', href + '&map=1');
+        }
+
         $(document).on("click", '.unsaved-item', function(event) {
             ga('send', 'event', 'Top Widget', 'Like');
         });
@@ -347,8 +354,6 @@
         $(document).on("click", '.saved-item', function(event) {
             ga('send', 'event', 'Top Widget', 'Unlike');
         });
-
-
 
         {% if userLiveBasicAd is defined and userLiveBasicAd and userLiveBasicAd|length %}
         ga('send', 'event', 'Search Results', 'Upgrade', 'View', { nonInteraction: true });
