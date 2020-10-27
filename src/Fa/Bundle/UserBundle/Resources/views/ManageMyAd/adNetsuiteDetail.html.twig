@@ -193,18 +193,18 @@
                 </div>
                 {% endif %}
 
-                <div class="list-det-cr-pg">
-                    <div class="list-expired-hours">
+                <div class="mma-ad-block hide-for-small-only">
+                    <span class="mma-ad-list maa-small-text">
                         {{ 'Reference : '|trans({}, 'frontend-manage-my-ad') }} {{ad.id}}
-                    </div>
+                    </span>
 
                     {% set adViewCounter = 0 %}
                     {% if adViewCounterArray[adId] is defined and adViewCounterArray[adId] is not null %}
                         {% set adViewCounter = adViewCounterArray[adId] %}
                     {% endif %}
-                    <div class="list-created-hours">
+                    <span class="mma-ad-list maa-small-text">
                         {{ 'Page views : '|trans({}, 'frontend-manage-my-ad') }} {{ adViewCounter }}
-                    </div>
+                    </span>
                 </div>
 
                 {% if adPackageArray[adId] is defined and adPackageArray[adId] is not null and adPackageArray[adId]['price'] > 0 %}
