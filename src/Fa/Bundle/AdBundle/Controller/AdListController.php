@@ -776,12 +776,6 @@ class AdListController extends CoreController
         if ($mapFlag) {
             unset($data['query_sorter']);
 
-            if (isset($data['search']['item__location']) && $data['search']['item__location'] != LocationRepository::COUNTY_ID && (!isset($data['search']['item__distance']) || (isset($data['search']['item__distance']) && $data['search']['item__distance'] >= 0 && $data['search']['item__distance'] <= CategoryRepository::MAX_DISTANCE))) {
-                if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['latitude']) && isset($cookieLocationDetails['longitude'])) {
-                    $data['query_sorter']['item']['geodist'] = 'asc';
-                }
-            }
-
             $data['query_sorter']['item']['weekly_refresh_published_at'] = 'desc';
             $data['sorter']['sort_field'] = 'item__weekly_refresh_published_at';
             $data['sorter']['sort_ord'] = 'desc';
@@ -1249,7 +1243,7 @@ class AdListController extends CoreController
                 }
 
                 if ($parameters['seoPageRule']) {
-                    $parameters['seoFields'] = CommonManager::getSeoFields([$parameters['seoPageRule']]);
+                    $parameters['seoFields'] = CommonManager::getSeoFields($parameters['seoPageRule']);
                 }
 
                 if ($request->get('queryString') or strpos($request->get('uri'), '/search')) {
