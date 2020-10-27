@@ -59,6 +59,12 @@ class AdSolrIndex implements AdSolrFieldMapping
                 return false;
             }
         }
+        $solrClientNew = $container->get('fa.solr.client.ad.new');
+        if (!$solrClientNew->ping()) {
+            return false;
+        }
+
+        $this->updateNew($solrClientNew, $ad, $container, $isBatchUpdate);
 
         return false;
     }

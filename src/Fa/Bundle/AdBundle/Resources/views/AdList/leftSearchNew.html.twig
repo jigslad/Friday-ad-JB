@@ -19,7 +19,7 @@
                         <ul>
                             {% set key = 0 %}
                             <li><label>{% if leftFilters.current_category == 'Category_root' %} {{ 'All Categories' }} {% else %} {{ leftFilters.current_category }}{% endif %}</label></li>
-                            {% for key, category in leftFilters.categories %}
+                            {% for key1, category in leftFilters.categories %}
                                 {% if key == (maxDimensionCount) %}
                                     </ul>
                                     <div class="see-more clearfix">
@@ -55,6 +55,7 @@
                                         </div>
                                     </div>
                                 {% endif %}
+                                {% set key = key + 1 %}
                             {% endfor %}
                             {% if key < maxDimensionCount %}
                                 </ul>
