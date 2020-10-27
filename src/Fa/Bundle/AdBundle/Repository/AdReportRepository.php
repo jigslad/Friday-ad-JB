@@ -107,7 +107,7 @@ class AdReportRepository extends EntityRepository
         $solr->deleteById($adId);
         $solr->commit(true);
 
-        $solrClientNew = $this->getContainer()->get('fa.solr.client.ad');
+        $solrClientNew = $this->getContainer()->get('fa.solr.client.ad.new');
         if (!$solrClientNew->ping()) {
             return false;
         }
