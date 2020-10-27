@@ -92,7 +92,7 @@
         {% endif %}
     </ul>
     {% if step == 1 and app.user and app.user.getRole() and (app.user.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or app.user.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
-        <div class="paaLeftContainer">
+        <div class="paaLeftContainer" style="display: none">
             <div class="dpaa-section text-center hide-for-small-only" id="paaLeftPrintItem">
                 <span class="self-service-img">&nbsp;</span>
                 <span class="magazines-img">&nbsp;</span>
