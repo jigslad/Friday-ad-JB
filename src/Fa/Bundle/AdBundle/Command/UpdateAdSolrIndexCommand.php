@@ -194,7 +194,7 @@ EOF
             $solr->commit(true);
             //$solr->optimize();
 
-            $solrClientNew = $this->getContainer()->get('fa.solr.client.ad');
+            $solrClientNew = $this->getContainer()->get('fa.solr.client.ad.new');
             if (!$solrClientNew->ping()) {
                 $output->writeln('Solr service is not available. Please start it.', true);
                 return false;
