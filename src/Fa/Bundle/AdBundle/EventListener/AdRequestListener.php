@@ -380,7 +380,7 @@ class AdRequestListener
             if ($catObj) {
                 $request->attributes->set('category_id', $catObj['id']);
             }
-        } elseif ($currentRoute ==  'new_listing_page'|| $currentRoute ==  'listing_page'|| $currentRoute ==  'motor_listing_page') {
+        } elseif ($currentRoute ==  'old_listing_page'|| $currentRoute ==  'listing_page'|| $currentRoute ==  'motor_listing_page') {
             $queryParams  =  array();
             $searchParams = $request->query->all();
             $redirectString = $request->get('page_string');

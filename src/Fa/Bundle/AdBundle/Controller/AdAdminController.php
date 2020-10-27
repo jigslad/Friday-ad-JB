@@ -331,6 +331,14 @@ class AdAdminController extends CrudController implements ResourceAuthorizationC
             $solr = $solrClient->connect();
             $solr->deleteById($id);
             $solr->commit();
+
+            $solrClientNew = $this->getContainer()->get('fa.solr.client.ad.new');
+            if (!$solrClientNew->ping()) {
+                return false;
+            }
+            $solrNew = $solrClientNew->connect();
+            $solrNew->deleteById($id);
+            $solrNew->commit(true);
         } catch (\Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException $e) {
             return parent::handleMessage($this->get('translator')->trans("This record can not be removed from database because it's reference exists in database.", array(), 'error'), $this->getRouteName(''), array(), 'error');
         } catch (\Exception $e) {

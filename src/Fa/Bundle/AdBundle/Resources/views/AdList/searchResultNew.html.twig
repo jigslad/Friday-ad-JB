@@ -344,7 +344,7 @@
     {% endif %}
     <script language="javascript" type="text/javascript">
         //<![CDATA[
-
+        $('#fa_left_search_new_item__category_id').val({{ searchParams.item__category_id }})
         let href = window.location.href;
         if (href.indexOf('?') == -1) {
             $('.map-view').attr('href', href + '?map=1');

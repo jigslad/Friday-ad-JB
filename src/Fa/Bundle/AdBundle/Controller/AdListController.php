@@ -1436,8 +1436,9 @@ class AdListController extends CoreController
         $keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: NULL;
 
         if (isset($params['is_trade_ad'])) {
-            if ($data['static_filters']) {
-                $staticFilters = explode(' AND ', $data['static_filters']);
+            $newData = $data;
+            if ($newData['static_filters']) {
+                $staticFilters = explode(' AND ', $newData['static_filters']);
                 $newStaticFilters = '';
 
                 foreach ($staticFilters as $staticFilter) {
@@ -1445,13 +1446,13 @@ class AdListController extends CoreController
                         $newStaticFilters .= ' AND '.$staticFilter;
                     }
                 }
-                $data['static_filters'] = $newStaticFilters;
-                $data['facet_fields'] = array(
+                $newData['static_filters'] = $newStaticFilters;
+                $newData['facet_fields'] = array(
                     'is_trade_ad' => array('min_count' => 0)
                 );
             }
 
-            $solrSearchManager->init('ad.new', $keywords, $data, 1, 1, 0, true);
+            $solrSearchManager->init('ad.new', $keywords, $newData, 1, 1, 0, true);
             $solrResponse = $solrSearchManager->getSolrResponse();
             $facetTradeResult = $solrSearchManager->getSolrResponseFacetFields($solrResponse);
 
@@ -1493,8 +1494,9 @@ class AdListController extends CoreController
             if (! empty($town)) {
                 $town = get_object_vars(json_decode($town));
 
-                if ($data['static_filters']) {
-                    $staticFilters = explode(' AND ', $data['static_filters']);
+                $newData = $data;
+                if ($newData['static_filters']) {
+                    $staticFilters = explode(' AND ', $newData['static_filters']);
                     $newStaticFilters = '';
 
                     foreach ($staticFilters as $staticFilter) {
@@ -1504,15 +1506,15 @@ class AdListController extends CoreController
                     }
                     $newStaticFilters .= ' AND (town:*parent_id\"\:'.$town['parent_id'].'\,* OR locality:*parent_id\"\:'.$town['parent_id'].'\,* OR domicile:*parent_id\"\:'.$town['parent_id'].'\,* ) AND -(town:*\"id\"\:'.$town['id'].'\,* OR locality:*\"id\"\:'.$town['id'].'\,* OR domicile:*\"id\"\:'.$town['id'].'\,*)';
 
-                    $data['static_filters'] = $newStaticFilters;
-                    $data['facet_fields'] = array(
+                    $newData['static_filters'] = $newStaticFilters;
+                    $newData['facet_fields'] = array(
                         'town' => array('min_count' => 1),
                         'area' => array('min_count' => 1),
                         'locality' => array('min_count' => 1)
                     );
                 }
 
-                $solrSearchManager->init('ad.new', $keywords, $data, 1, 1, 0, true);
+                $solrSearchManager->init('ad.new', $keywords, $newData, 1, 1, 0, true);
                 $solrResponse = $solrSearchManager->getSolrResponse();
                 $facetDimResult = $solrSearchManager->getSolrResponseFacetFields($solrResponse);
                 if (! empty($facetDimResult)) {
@@ -1574,8 +1576,9 @@ class AdListController extends CoreController
             }
 
             if (! empty($selected)) {
-                if ($data['static_filters']) {
-                    $staticFilters = explode(' AND ', $data['static_filters']);
+                $newData = $data;
+                if ($newData['static_filters']) {
+                    $staticFilters = explode(' AND ', $newData['static_filters']);
                     $newStaticFilters = '';
 
                     foreach ($staticFilters as $staticFilter) {
@@ -1583,13 +1586,13 @@ class AdListController extends CoreController
                             $newStaticFilters .= ' AND '.$staticFilter;
                         }
                     }
-                    $data['static_filters'] = $newStaticFilters;
+                    $newData['static_filters'] = $newStaticFilters;
                     $data['facet_fields'] = array(
                         $solrFieldName => array('min_count' => 1)
                     );
                 }
 
-                $solrSearchManager->init('ad.new', $keywords, $data, 1, 1, 0, true);
+                $solrSearchManager->init('ad.new', $keywords, $newData, 1, 1, 0, true);
                 $solrResponse = $solrSearchManager->getSolrResponse();
                 $facetDimResult = $solrSearchManager->getSolrResponseFacetFields($solrResponse);
                 if (! empty($facetDimResult)) {
