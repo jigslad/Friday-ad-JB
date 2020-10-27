@@ -674,6 +674,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 
     {% set mainCategories = fetch_repository('FaEntityBundle:Category').getCategoryByLevelArray(1, fetch_container_instance()) %}
     {% set keywordCategories = {} %}
+    {% set keywordCategoryIds = {} %}
     {% for categoryId, categoryName in mainCategories %}
         {% set adCount = 0 %}
         {% set nestedChildrenCategories = fetch_repository('FaEntityBundle:Category').getNestedLeafChildrenIdsByCategoryId(categoryId, fetch_container_instance()) %}
@@ -684,6 +685,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
         {% endfor %}
         {% if adCount > 0 %}
             {% set keywordCategories = keywordCategories | merge([categoryName]) %}
+            {% set keywordCategoryIds = keywordCategoryIds | merge([categoryId]) %}
         {% endif %}
     {% endfor %}
 
