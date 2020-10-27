@@ -324,18 +324,26 @@
         				
         				$.each(mapSearchList, function (i, item) {
         					rescnt = rescnt + 1;
-        					if( typeof item.latitude == 'number' && item.latitude != '' && typeof item.longitude == 'number' && item.longitude != '') {
+        					if( typeof item.latitude !== undefined && item.latitude != '' && typeof item.longitude !== undefined && item.longitude != '') {
         						lat = parseFloat(item.latitude);
         						lng = parseFloat(item.longitude);
-        						
-        						if(rescnt>defaultRadCnt) {
-        							extendedRadLayer.push(L.marker([lat, lng], {icon: myIcon}).bindPopup('   ').on('click', function() { updateContent(item.ad_id); }));
-        						} else {
-        							defaultRadLayer.push(L.marker([lat, lng], {icon: myIcon}).bindPopup('  ').on('click', function() { updateContent(item.ad_id); }));
-                                    defaultRadFeature.push(L.marker([lat, lng]));  
-        							focusedLat = parseFloat(lat);
-        							focusedLng = parseFloat(lng);
-                				}   						
+
+        						if (! isNaN(lat) && ! isNaN(lng)) {
+                                    if (rescnt > defaultRadCnt) {
+                                        extendedRadLayer.push(L.marker([lat, lng], {icon: myIcon}).bindPopup('   ').on('click', function () {
+                                            updateContent(item.ad_id);
+                                        }));
+                                    } else {
+                                        defaultRadLayer.push(L.marker([lat, lng], {icon: myIcon}).bindPopup('  ').on('click', function () {
+                                            updateContent(item.ad_id);
+                                        }));
+                                        defaultRadFeature.push(L.marker([lat, lng]));
+                                        focusedLat = parseFloat(lat);
+                                        focusedLng = parseFloat(lng);
+                                    }
+                                } else {
+        						    console.log('ad id: ' + item.ad_id + ' :: latitude: ' + item.latitude + ' :: longitude: ' + item.longitude);
+                                }
         					}
         				});
         				var defaultLoc = L.layerGroup(defaultRadLayer);

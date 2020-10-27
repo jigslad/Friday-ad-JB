@@ -194,6 +194,17 @@ EOF
             $solr->commit(true);
             //$solr->optimize();
 
+            $solrClientNew = $this->getContainer()->get('fa.solr.client.ad.new');
+            if (!$solrClientNew->ping()) {
+                $output->writeln('Solr service is not available. Please start it.', true);
+                return false;
+            }
+            $solrNew = $solrClientNew->connect();
+            if ($ids && is_array($ids)) {
+                $solrNew->deleteByIds($ids);
+            }
+            $solrNew->commit(true);
+
             if ($ids && is_array($ids)) {
                 $output->writeln('Solr index removed for ad id: '.join(',', $ids), true);
             } else {
@@ -241,7 +252,20 @@ EOF
         if (count($idsNotFound) > 0) {
             $solr->deleteByIds($idsNotFound);
         }
+
         $solr->commit(true);
+
+        $solrClientNew = $this->getContainer()->get('fa.solr.client.ad.new');
+        if (!$solrClientNew->ping()) {
+            $output->writeln('Solr service is not available. Please start it.', true);
+            return false;
+        }
+        $solrNew = $solrClientNew->connect();
+        if (count($idsNotFound) > 0) {
+            $solrNew->deleteByIds($idsNotFound);
+        }
+        $solrNew->commit(true);
+
         $output->writeln('Memory Allocated: '.((memory_get_peak_usage(true) / 1024) / 1024).' MB', true);
     }
 

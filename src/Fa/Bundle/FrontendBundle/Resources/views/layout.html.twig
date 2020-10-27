@@ -16,7 +16,7 @@
 
     {% set container = fetch_container_instance() %}
     {% set currentRoute = app.request.attributes.get('_route') %}
-    {% if currentRoute != 'new_listing_page' %}
+    {% if currentRoute != 'listing_page' %}
         {% set bannerRepository = fetch_repository('FaContentBundle:Banner') %}
         {% set bannersArray = bannerRepository.getBannersArrayByPage(currentRoute, container) %}
     {% endif %}
