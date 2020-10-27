@@ -2,7 +2,7 @@
 {% if searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
     {% set showInSearch = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'showPriceInSearchFilter', [searchParams.item__category_id, fetch_container_instance()]) %}
 {% endif %}
-<div class="top-search" id="top_search" style="display: block">
+<div class="top-search" id="top_search">
     <div class="row">
     	<div class="container">
             {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'fa_top_search','class':'top-search__block'}}) }}
@@ -55,7 +55,7 @@
             {{ form_end(form) }}
         </div>
     </div>
-    <div class="search-sliders">
+    <div class="search-sliders" style="display: none">
         <div class="row">
             <div class="columns">
                 <div class="fa-range-slider">
