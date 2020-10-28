@@ -11,6 +11,9 @@
 
 namespace Fa\Bundle\AdBundle\Controller;
 
+use Fa\Bundle\AdBundle\Form\AdLeftSearchNewType;
+use Fa\Bundle\ContentBundle\Repository\SeoToolRepository;
+use Fa\Bundle\EntityBundle\Repository\CategoryDimensionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Fa\Bundle\CoreBundle\Controller\CoreController;
@@ -711,8 +714,1027 @@ class AdListController extends CoreController
         }
         return $this->render('FaAdBundle:AdList:'.$templateName.'.html.twig', $parameters, $objResponse);
     }
-    
-    
+
+    /**
+     * Set default parameters for sorting and paging for different listing view.
+     *
+     * @param Request $request               Request object.
+     * @param boolean $mapFlag               Boolean flag for map.
+     * @param string  $searchType            Left or top search.
+     * @param array   $cookieLocationDetails Location cookie value.
+     *
+     * @return array
+     */
+    public function setDefaultParametersNew($request, $mapFlag, $searchType, $cookieLocationDetails = array())
+    {
+        $currentRoute      = $request->get('_route');
+        $hasSortField      = true;
+        $parentCategoryIds = array();
+        // set default sorting for list view
+        if (!$request->get('sort_field') && !$mapFlag) {
+            $request->request->set('sort_field', 'item__weekly_refresh_published_at');
+            $request->request->set('sort_ord', 'desc');
+            $hasSortField = false;
+        }
+
+        // initialize search filter manager service and prepare filter data for searching
+        $this->get('fa.searchfilters.manager')->init($this->getRepository('FaAdBundle:Ad'), $this->getRepositoryTable('FaAdBundle:Ad'), 'finders');
+        $data = $this->get('fa.searchfilters.manager')->getFiltersData();
+
+        // add published at as second sort
+        if (!$mapFlag) {
+            if ($request->get('sort_field') == 'item__weekly_refresh_published_at') {
+                unset($data['query_sorter']['item']['weekly_refresh_published_at']);
+            }
+
+            if (isset($data['search']['item__category_id']) && $data['search']['item__category_id']) {
+                $parentCategoryIds = array_keys($this->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($data['search']['item__category_id'], false, $this->container));
+            }
+
+            if (!$hasSortField && isset($parentCategoryIds[1]) && $parentCategoryIds[1] == CategoryRepository::WHATS_ON_ID) {
+                $data['query_sorter']['ad_community']['event_start'] = array('sort_ord' => 'asc', 'field_ord' => 1);
+            } else {
+                if ((!isset($data['search']['item__distance']) || (isset($data['search']['item__distance']) && $data['search']['item__distance'] >= 0 && $data['search']['item__distance'] <= CategoryRepository::MAX_DISTANCE))) {
+                    if (is_array($cookieLocationDetails) &&
+                        (!isset($cookieLocationDetails['latitude']) || !$cookieLocationDetails['latitude']) &&
+                        (!isset($cookieLocationDetails['longitude']) || !$cookieLocationDetails['longitude']) &&
+                        (isset($data['query_sorter']['item']) && isset($data['query_sorter']['item']['geodist']))) {
+                        unset($data['query_sorter']['item']['geodist']);
+                    }
+                }
+                if (isset($data['search']['keywords']) && strlen(trim($data['search']['keywords']))) {
+                    $data['query_sorter']['item']['score'] = array('sort_ord' => 'desc', 'field_ord' => 4);
+                }
+
+                $data['query_sorter']['item']['created_at'] = array('sort_ord' => 'desc', 'field_ord' => 1);
+                $data['query_sorter']['item']['weekly_refresh_published_at'] = array('sort_ord' => 'desc', 'field_ord' => 2);
+            }
+            $data['query_sorter']['item']['is_topad'] = array('sort_ord' => 'desc', 'field_ord' => 3);
+        }
+
+        //set default sorting for map
+        if ($mapFlag) {
+            unset($data['query_sorter']);
+
+            $data['query_sorter']['item']['weekly_refresh_published_at'] = 'desc';
+            $data['sorter']['sort_field'] = 'item__weekly_refresh_published_at';
+            $data['sorter']['sort_ord'] = 'desc';
+            $data['pager']['page']  = 1;
+            $data['pager']['limit'] = $this->container->getParameter('fa.search.map.records.per.page');
+            $data['select_fields'] = array('item' => array('id', 'title', 'latitude', 'longitude'));
+        } else {
+            $numberOfRecords = $this->getRepository('FaCoreBundle:ConfigRule')->getNumberOfOrganicResult($this->container);
+            if ($numberOfRecords) {
+                $data['pager']['limit'] = $numberOfRecords;
+            } else {
+                $data['pager']['limit'] = $this->container->getParameter('fa.search.records.per.page');
+            }
+        }
+
+        // Active or expired ads
+        if (isset($data['search']['expired_ads']) && $data['search']['expired_ads']) {
+            $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_EXPIRED_ID;
+        } else {
+            $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
+        }
+
+        // ads with min 1 photo
+        if (isset($data['search']['items_with_photo']) && $data['search']['items_with_photo']) {
+            $data['query_filters']['item']['image_count'] = '1|';
+        }
+
+        $data['facet_fields'] = array(
+            'category_ids'          => array('min_count' => 1),
+            'is_trade_ad'           => array('min_count' => 0),
+            'image_count'           => array('min_count' => 1),
+            'town'                  => array('min_count' => 1),
+            'area'                  => array('min_count' => 1)
+        );
+
+        // ad location filter with distance
+        if (isset($data['search']['item__location']) && $data['search']['item__location']) {
+            $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'.((isset($data['search']['item__distance']) ? $data['search']['item__distance'] : ''));
+        }
+        $data['query_filters']['item']['is_blocked_ad'] = 0;
+        // remove adult results when there is no category selected
+        if (!isset($data['search']['item__category_id']) && !in_array($currentRoute, array('show_business_user_ads', 'show_business_user_ads_page', 'show_business_user_ads_location','fa_adult_homepage'))) {
+            $data['static_filters'] = ' AND -category_ids:'.CategoryRepository::ADULT_ID;
+        }
+
+        $dataSearch = $data['search'];
+        unset($dataSearch['item__category_id']);
+        unset($dataSearch['item__location']);
+
+        foreach ($dataSearch as $searchKey => $searchItem) {
+            if (! empty($searchItem)) {
+                if ($dimension = $this->getDimensionName($searchKey)) {
+                    $data['query_filters']['item'][$dimension] = $searchItem;
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param $searchKey
+     * @return bool|mixed
+     */
+    private function getDimensionName($searchKey)
+    {
+        if (strpos($searchKey, '__')) {
+            $key = explode('__', $searchKey);
+            return str_replace('_id', '', $key[1]);
+        } else if (strpos($searchKey, '?') === false) {
+            return $searchKey;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Top search result.
+     *
+     * @param Request $request Request object.
+     *
+     * @return Response A Response object.
+     */
+    public function searchResultNewAction(Request $request)
+    {
+        $mapFlag                = $request->get('map', false);
+        $currentRoute           = $request->get('_route');
+        $requestlocation        = $request->get('location');
+        $findersSearchParams    = $request->get('finders');
+        // set location in cookie
+        $cookieLocationDetails = json_decode($request->cookies->get('location'), true);
+        if (!$cookieLocationDetails) {
+            $cookieLocationDetails = array();
+        } else {
+            $cookieLocationDetails['location'] = intval($cookieLocationDetails['location']);
+        }
+        if (!in_array($currentRoute, array('show_business_user_ads', 'show_business_user_ads_page', 'show_business_user_ads_location'))) {
+            if (preg_match("/[A-Z]/", $request->getPathInfo())) {
+                $url = str_replace($request->getPathInfo(), strtolower($request->getPathInfo()), $request->getUri());
+                return $this->redirect($url, 301);
+            }
+
+            $cookieValue = '';
+
+            if ($requestlocation != null && $requestlocation != 'uk' && (!isset($cookieLocationDetails['slug']) || $cookieLocationDetails['slug'] != $requestlocation || $requestlocation == LocationRepository::LONDON_TXT)) {
+                $cookieValue = $this->getRepository('FaEntityBundle:Location')->getCookieValue($requestlocation, $this->container, true);
+
+                if (count($cookieValue) && count($cookieValue) !== count(array_intersect($cookieValue, $cookieLocationDetails))) {
+                    $response = new Response();
+                    $cookieValue = json_encode($cookieValue);
+                    $response->headers->clearCookie('location');
+                    $response->headers->setCookie(new Cookie('location', $cookieValue, time() + (365*24*60*60*1000), '/', null, false, false));
+                    $response->sendHeaders();
+                } else {
+                    $cookieValue = json_encode($cookieValue);
+                }
+            } elseif ($requestlocation != null && $requestlocation == 'uk') {
+                $response = new Response();
+                $response->headers->clearCookie('location');
+                $response->sendHeaders();
+
+                $cookieValue = json_encode(array(
+                    'location' => LocationRepository::COUNTY_ID,
+                    'slug'     => 'uk',
+                    'location_text' => 'United Kingdom',
+                ));
+            }
+        }
+
+        // get location from cookie
+        if (isset($cookieValue) && $cookieValue) {
+            if (is_array($cookieValue)) {
+                $cookieValue = json_encode($cookieValue);
+            }
+            $cookieLocationDetails = json_decode($cookieValue, true);
+        } else {
+            $cookieLocationDetails = json_decode($request->cookies->get('location'), true);
+        }
+
+        $data = $this->setDefaultParametersNew($request, $mapFlag, 'finders', $cookieLocationDetails);
+
+        if (empty($findersSearchParams['item__category_id'])) {
+            $findersSearchParams['item__category_id'] = 1;
+        }
+        $category = $this->getRepository('FaEntityBundle:Category')->findOneBy(['id' => $findersSearchParams['item__category_id']]);
+
+        $data['static_filters'] = '';
+        if ($findersSearchParams['item__category_id'] != 1) {
+            $data['static_filters'] .= ' AND category_full_path:' . $category->getFullSlug();
+        }
+        $data['static_filters'] .= ' AND -is_topad:true';
+        $page = $data['pager']['page'];
+
+        $static_filters = '';
+        $searchableDimensions = [];
+        if ($findersSearchParams['item__category_id'] != 1) {
+            $searchableDimensions = $this->getRepository('FaEntityBundle:CategoryDimension')->getSearchableDimesionsArrayByCategoryId($category->getId(), $this->container);
+            $adRepository = $this->getRepository('FaAdBundle:Ad');
+
+            $root = $this->getRepository('FaEntityBundle:Category')->getRootNodeByCategory($category->getId());
+            $repository = $this->getRepository('FaAdBundle:' . 'Ad' . str_replace(' ', '', $root->getName()));
+            $listingFields = $repository->getAdListingFields();
+            foreach ($searchableDimensions as $key => $dimension) {
+                $solrDimensionFieldName = $adRepository->getSolrFieldName($listingFields, str_replace([' ', '.'], ['_', ''], strtolower($dimension['name'])));
+                $data['facet_fields'] = array_merge(
+                    $data['facet_fields'],
+                    [
+                        $solrDimensionFieldName => array('min_count' => 0)
+                    ]
+                );
+
+                $searchableDimensions[$key]['solr_field'] = $solrDimensionFieldName;
+                $searchableDimensions[$key]['dim_slug']   = str_replace([' ', '.'], ['_', ''], strtolower($dimension['name']));
+            }
+            $data['static_filters'] .= $static_filters = $this->setDimensionParams($data['search'], $listingFields, $adRepository);
+        } else {
+            $root = $category;
+        }
+
+        $keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: NULL;
+        $recordsPerPage = (isset($data['pager']['limit']) && $data['pager']['limit']) ? $data['pager']['limit']: $this->container->getParameter('fa.search.records.per.page');
+
+        $pagination = $this->getSolrPagination('ad.new', $keywords, $data, $page, $recordsPerPage, 0, true);
+        $ads = $this->formatAds($pagination['pagination']);
+
+        if ($page == 1) {
+            $featuredData = $this->setDefaultParametersNew($request, $mapFlag, 'finders', array());
+
+            if ($findersSearchParams['item__category_id'] != 1) {
+                $featuredData['static_filters'] = ' AND category_full_path:' . $category->getFullSlug();
+            } else {
+                $featuredData['static_filters'] = '';
+            }
+            $featuredData['static_filters'] .= ' AND is_topad:true';
+            $featuredData['static_filters'] .= $static_filters;
+
+            $topAds = [];
+            $viewedTopAdsCookie = $request->cookies->get('viewed_top_ads_'.$root->getId());
+            if ($viewedTopAdsCookie) {
+                $topAds = explode(',', $viewedTopAdsCookie);
+                $featuredData['static_filters'] .= ' AND -id : ('.implode(' ', $topAds).')';
+            }
+
+            $keywords = (isset($featuredData['search']['keywords']) && $featuredData['search']['keywords']) ? $featuredData['search']['keywords'] : NULL;
+            $page = (isset($featuredData['pager']['page']) && $featuredData['pager']['page']) ? $featuredData['pager']['page'] : 1;
+
+            $featuredPagination = $this->getSolrPagination('ad.new', $keywords, $featuredData, 1, 3, 0, true);
+
+            if (count($featuredPagination['pagination']) < 3) {
+                $featuredData = $this->setDefaultParametersNew($request, $mapFlag, 'finders', array());
+
+                if ($findersSearchParams['item__category_id'] != 1) {
+                    $featuredData['static_filters'] = ' AND category_full_path:' . $category->getFullSlug();
+                } else {
+                    $featuredData['static_filters'] = '';
+                }
+                $featuredData['static_filters'] .= ' AND is_topad:true';
+                $featuredData['static_filters'] .= $static_filters;
+
+                $keywords = (isset($featuredData['search']['keywords']) && $featuredData['search']['keywords']) ? $featuredData['search']['keywords'] : NULL;
+                $page = (isset($featuredData['pager']['page']) && $featuredData['pager']['page']) ? $featuredData['pager']['page'] : 1;
+
+                $featuredPagination = $this->getSolrPagination('ad.new', $keywords, $featuredData, 1, 3, 0, true);
+            }
+
+            $featuredAds = $this->formatAds($featuredPagination['pagination']);
+            $viewedTopAds = array_column($featuredAds, 'id');
+            $viewedTopAds = array_unique(array_merge($viewedTopAds, $topAds));
+            $response = new Response();
+            $response->headers->setCookie(new Cookie('viewed_top_ads_'.$root->getId(), implode(',', $viewedTopAds), CommonManager::getTimeStampFromEndDate(date('Y-m-d'))));
+            $response->sendHeaders();
+        } else {
+            $featuredAds = [];
+        }
+
+        if ($mapFlag) {
+            $bannersArray = [];
+        } else {
+            $bannersArray = $this->getRepository('FaContentBundle:Banner')->getBannersArrayByPage('listing_page', $this->container);
+        }
+
+        $getRecommendedSrchSlotWise = array();
+        $getRecommendedSrchSlots=array();
+        if (! empty($category)) {
+            $data['search']['item__category_id'] = $category->getId();
+            if ($category->getId() != 1) {
+                $categoryParent = $category->getParent()->getId();
+            } else {
+                $categoryParent = 1;
+            }
+            $getRecommendedSlots = $this->getRecommendedSlot($data, $keywords, $page, $mapFlag, $request, $categoryParent);
+        } else {
+            $getRecommendedSlots = NULL;
+        }
+
+        if (!empty($getRecommendedSlots)) {
+            foreach ($getRecommendedSlots as $getRecommendedSlot) {
+                $getRecommendedSrchSlots[$getRecommendedSlot['creative_group']][] = $getRecommendedSlot;
+            }
+        }
+        $recommendedSlotArr = array();
+        $recommendedSlotOrder = array();
+        if (! $mapFlag) {
+            if (!empty($getRecommendedSrchSlots)) {
+                for ($arj = 1; $arj <= 8; $arj++) {
+                    if (isset($getRecommendedSrchSlots[$arj])) {
+                        $recommendedSlotArr[$arj] = $getRecommendedSrchSlots[$arj][0];
+                        $recommendedSlotOrder[$arj] = $getRecommendedSrchSlots[$arj][0]['creative_ord'];
+                        if (isset($_COOKIE['recommended_slot_' . $arj])) {
+                            if (isset($getRecommendedSrchSlots[$arj][1]) && $_COOKIE['recommended_slot_' . $arj] == $getRecommendedSrchSlots[$arj][0]['creative_ord']) {
+                                $recommendedSlotArr[$arj] = $getRecommendedSrchSlots[$arj][1];
+                                $recommendedSlotOrder[$arj] = $getRecommendedSrchSlots[$arj][1]['creative_ord'];
+                            } elseif (isset($getRecommendedSrchSlots[$arj][2])) {
+                                if ($_COOKIE['recommended_slot_' . $arj] == $getRecommendedSrchSlots[$arj][1]['creative_ord'] || $_COOKIE['recommended_slot_' . $arj] == $getRecommendedSrchSlots[$arj][0]['creative_ord']) {
+                                    $recommendedSlotArr[$arj] = $getRecommendedSrchSlots[$arj][2];
+                                    $recommendedSlotOrder[$arj] = $getRecommendedSrchSlots[$arj][2]['creative_ord'];
+                                } elseif ($_COOKIE['recommended_slot_' . $arj] == $getRecommendedSrchSlots[$arj][2]) {
+                                    $recommendedSlotArr[$arj] = $getRecommendedSrchSlots[$arj][0];
+                                    $recommendedSlotOrder[$arj] = $getRecommendedSrchSlots[$arj][0]['creative_ord'];
+                                }
+                            }
+                        }
+                        setcookie('recommended_slot_' . $arj, $recommendedSlotOrder[$arj]);
+                    }
+                }
+            }
+
+            if (!empty($recommendedSlotArr)) {
+                $getRecommendedSrchSlotWise = $recommendedSlotArr;
+            }
+        }
+
+        if (! ($user = $this->getLoggedInUser())) {
+            $userId = $request->getSession()->getId();
+        } else {
+            $userId = $user->getId(); 
+        }
+        $adFavouriteIds = $this->getRepository('FaAdBundle:AdFavorite')->getFavoriteAdByUserId($userId, $this->container);
+
+        $resultCount = count($ads);
+        $defaultRadiusPageCount = ($page==0)?1:ceil($resultCount/$recordsPerPage);
+        $defaultRadiusLastPageCount = ($resultCount%$recordsPerPage);
+
+        $extendlocation = '';
+        $setDefRadius = 1;
+        $isBusinessPage = 0;
+        if (($currentRoute == 'show_business_user_ads' || $currentRoute == "show_business_user_ads_location" || $currentRoute == "show_business_user_ads_page")) {
+            $isBusinessPage = 1;
+            $setDefRadius = 0;
+        }
+        if (isset($data['search']) && isset($data['search']['item__distance'])) {
+            $setDefRadius = 0;
+        }
+        if (($requestlocation != null && $requestlocation == 'uk') || (isset($cookieLocationDetails['lvl']) && $cookieLocationDetails['lvl']=='') || (!isset($cookieLocationDetails['lvl']))) {
+            $setDefRadius = 0;
+        }
+
+        $locationRadius = array();
+        if ($setDefRadius && $isBusinessPage==0) {
+            if (isset($findersSearchParams['item__category_id']) && $findersSearchParams['item__category_id']) {
+                $parentCategoryIds = array_keys($this->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($findersSearchParams['item__category_id'], false, $this->container));
+                $locationRadius = $this->getRepository('FaAdBundle:LocationRadius')->getSingleLocationRadiusByCategoryIds($parentCategoryIds);
+                if ($locationRadius) {
+                    $findersSearchParams['item__distance'] = $data['search']['item__distance'] = $data['query_filters']['item']['distance'] = $locationRadius['defaultRadius'];
+                    $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'. (isset($data['search']['item__distance']) ? $data['search']['item__distance'] : '');
+                    if ($locationRadius['extendedRadius']>0 && $locationRadius['extendedRadius'] > $locationRadius['defaultRadius']) {
+                        $extendlocation = $data['search']['item__location'].'|'. (isset($locationRadius['extendedRadius']) ? $locationRadius['extendedRadius']: '').'|'. (isset($data['search']['item__distance']) ? $data['search']['item__distance'] : '');
+                    }
+                }
+            }
+        }
+
+        if ($request->attributes->get('customized_page')) {
+            list($keywords, $data) = $this->handleCustomizedUrl($data, $request);
+        }
+
+        $extendedData = $otherMatchingData = $data;
+
+        if ($extendlocation) {
+            $extendedData['query_filters']['item']['location'] = $extendlocation;
+        }
+        if ($locationRadius) {
+            $otherMatchingData['query_filters']['item']['location'] = $data['search']['item__location'].'| '.CategoryRepository::MAX_DISTANCE.' | '. (isset($locationRadius['extendedRadius']) ? $locationRadius['extendedRadius']: (isset($locationRadius['defaultRadius'])?$locationRadius['defaultRadius']:0));
+        } else {
+            $otherMatchingData['query_filters']['item']['location'] = $data['search']['item__location'].'| '.CategoryRepository::MAX_DISTANCE.' | '.(isset($data['search']['item__distance'])?$data['search']['item__distance']:0);
+        }
+
+        $extendedResultCount = 0;
+        $extendedResult = [];
+        if ($extendlocation) {
+            // initialize solr search manager service and fetch data based of above prepared search options
+            if ($page == $defaultRadiusPageCount) {
+                $extpage = 1;
+                $staticOffset = 0;
+            } elseif ($page > $defaultRadiusPageCount && $defaultRadiusPageCount>0 && $page>0) {
+                $extpagediff = $page - $defaultRadiusPageCount;
+                if ($extpagediff<=0) {
+                    $extpage = 1;
+                } else {
+                    $extpage = $extpagediff;
+                }
+                $staticOffset = ($extpagediff>0)?((($extpage)*$recordsPerPage) - $defaultRadiusLastPageCount):0;
+            } elseif ($page > $defaultRadiusPageCount && $page>0) {
+                $extpagediff = $page;
+                if ($extpagediff<=0) {
+                    $extpage = 1;
+                } else {
+                    $extpage = $extpagediff;
+                }
+                $staticOffset = ($extpagediff>0)?((($extpage-1)*$recordsPerPage) - $defaultRadiusLastPageCount):0;
+            } else {
+                $extpage =1;
+                $staticOffset = 0;
+            }
+            $this->get('fa.solrsearch.manager')->init('ad.new', $keywords, $extendedData, $extpage, $recordsPerPage, $staticOffset, true);
+            $extendedSolrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
+            $extendedResult      = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($extendedSolrResponse);
+            $extendedResultCount = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($extendedSolrResponse);
+        }
+
+        $parameters = [
+            'featuredAds'           => $featuredAds,
+            'ads'                   => $ads,
+            'resultCount'           => $pagination['resultCount'] + $extendedResultCount,
+            'bannersArray'          => $bannersArray,
+            'recommendedSlotResult' => $getRecommendedSrchSlotWise,
+            'recommendedSlotLimit'  => $this->getRepository('FaCoreBundle:Config')->getSponsoredLimit(),
+            'pagination'            => $pagination['pagination'],
+            'adFavouriteIds'        => $adFavouriteIds,
+            'leftFilters'           => $this->getLeftFilters($category, $pagination['facetResult'], $pagination['resultCount'], $searchableDimensions, $findersSearchParams, $data),
+            'currentLocation'       => $requestlocation,
+            'searchParams'          => $findersSearchParams,
+            'cookieLocationDetails' => $cookieLocationDetails,
+            'keywords'              => $keywords,
+            'extendedResult'        => $extendedResult,
+            'extendedResultCount'   => $extendedResultCount
+         ];
+
+        if (isset($findersSearchParams['item__category_id'])) {
+            $parameters['selCatDet'] = $this->getRepository('FaEntityBundle:Category')->getCategoryArrayById($findersSearchParams['item__category_id']);
+            if (isset($parameters['selCatDet'])) {
+                $parameters['selCatName']       = $parameters['selCatDet']['name'];
+                $parameters['selCatSlug']       = $parameters['selCatDet']['slug'];
+                $parameters['selCatNoIndex']    = $parameters['selCatDet']['no_index'];
+                $parameters['selCatNoFollow']   = $parameters['selCatDet']['no_follow'];
+                $parameters['selNoIndex']       = $parameters['selCatNoIndex'] == 1 ? 'noindex' : 'index';
+                $parameters['selNoFollow']      = $parameters['selCatNoFollow'] == 1 ? 'nofollow' : 'follow';
+
+                $parameters['customized_url'] = $request->get('customized_page');
+                if (empty($parameters['customized_url'])) {
+                    $targetUrl = $findersSearchParams['item__category_id'];
+                } else {
+                    $targetUrl = $parameters['customized_url']['target_url'];
+                }
+
+                $seoToolRepository = $this->getRepository('FaContentBundle:SeoTool');
+                $parameters['seoPageRule'] = $seoToolRepository->getSeoPageRuleDetailForListResult(SeoToolRepository::ADVERT_LIST_PAGE, $targetUrl, $this->container);
+
+                if (empty($parameters['seoPageRule'])) {
+                    $parameters['seoPageRule'] = $seoToolRepository->getSeoPageRuleDetailForListResult(SeoToolRepository::ADVERT_LIST_PAGE, null, $this->container);
+                }
+
+                $pageUrl = $this->getPageUrl($request);
+                $findersSearchParams = $request->get('finders');
+                if (isset($findersSearchParams['advertgone'])) {
+                    unset($findersSearchParams['advertgone']);
+                }
+                $objSeoToolOverride = null;
+                if ($pageUrl) {
+                    $objSeoToolOverride = $this->getRepository('FaContentBundle:SeoToolOverride')->findSeoRuleByPageUrl($pageUrl, $findersSearchParams, $this->container);
+                }
+
+                //get SEO Source URL for classic-car
+                if (strpos($pageUrl, 'motors/classic-cars') !== false && !$request->query->has('item_motors__reg_year')) {
+                    $getClassicCarRegYear = $this->getRepository('FaContentBundle:SeoTool')->findSeoSourceUrlMotorRegYear('motors/classic-cars/');
+                    if (!empty($getClassicCarRegYear)) {
+                        $findersSearchParams['item_motors__reg_year'] = $getClassicCarRegYear;
+                    }
+                }
+
+                $isClassicCarPage = 0;
+                if (strpos($pageUrl, 'motors/cars') !== false && isset($findersSearchParams['item_motors__reg_year'])) {
+                    $allUnder25Yrs = 1;
+                    $get25ysrOlder = date('Y') - 24;
+
+                    foreach ($findersSearchParams['item_motors__reg_year'] as $srchRegYr) {
+                        if ($srchRegYr > $get25ysrOlder) {
+                            $allUnder25Yrs = 0;
+                            break;
+                        }
+                    }
+
+                    if ($allUnder25Yrs==1) {
+                        $isClassicCarPage = 1;
+                    }
+                }
+
+                if ($objSeoToolOverride) {
+                    if ($isClassicCarPage) {
+                        $selCatName = $parameters['selCatName'] != 'Cars' ? $parameters['selCatName'] : '';
+                        $parameters['seoPageRule'] += ['h1_tag' => str_replace('Manufacturer', $selCatName, $objSeoToolOverride->getH1Tag()), 'page_title' => str_replace('Manufacturer', $selCatName, $objSeoToolOverride->getPageTitle()), 'meta_description'=> str_replace('Manufacturer', $selCatName, $objSeoToolOverride->getMetaDescription()), 'no_index'=> str_replace('Manufacturer', $selCatName, $objSeoToolOverride->getNoIndex()), 'no_follow'=> str_replace('Manufacturer', $selCatName, $objSeoToolOverride->getNoFollow()), 'canonical_url'=> str_replace('Manufacturer', $selCatName, $objSeoToolOverride->getCanonicalUrl())];
+                    } else {
+                        $parameters['seoPageRule'] += ['h1_tag' => $objSeoToolOverride->getH1Tag(), 'page_title' => $objSeoToolOverride->getPageTitle(), 'meta_description'=> $objSeoToolOverride->getMetaDescription(), 'no_index'=> $objSeoToolOverride->getNoIndex(), 'no_follow'=> $objSeoToolOverride->getNoFollow(), 'canonical_url'=> $objSeoToolOverride->getCanonicalUrl()];
+                    }
+                }
+
+                if ($parameters['seoPageRule']) {
+                    $parameters['seoFields'] = CommonManager::getSeoFields($parameters['seoPageRule']);
+                }
+
+                if ($request->get('queryString') or strpos($request->get('uri'), '/search')) {
+                    $parameters['isUrlIndexable'] = false;
+                } else {
+                    $parameters['isUrlIndexable'] = $this->getRepository('FaEntityBundle:CategoryDimension')->isUrlIndexableBySearchParams($findersSearchParams, $this->container);
+                }
+            }
+        }
+
+        if ($pagination['resultCount'] && !in_array($currentRoute, array('show_business_user_ads', 'show_business_user_ads_location', 'show_business_user_ads_page'))) {
+            // profile categories other than Services & Adults
+            if (!in_array($root->getId(), array(CategoryRepository::ADULT_ID, CategoryRepository::SERVICES_ID))) {
+                $shopParameters = $this->getShopUserBySearchCriteria($data, $request);
+                if (!empty($shopParameters)) {
+                    $parameters = $parameters + $shopParameters;
+                }
+            }
+            // profile categories Services & Adults
+            if ($root) {
+                if (in_array($root->getId(), array(CategoryRepository::ADULT_ID, CategoryRepository::SERVICES_ID))) {
+                    $shopBusinessParameters = $this->getBusinessUserBySearchCriteria($data, $request);
+                    if (!empty($shopBusinessParameters)) {
+                        $parameters = $parameters + $shopBusinessParameters;
+                    }
+                }
+            }
+        }
+
+        $formManager = $this->get('fa.formmanager');
+        $form        = $formManager->createForm(UserHalfAccountEmailOnlyType::class, null, array('method' => 'POST'));
+
+        if ($request->isXmlHttpRequest() && 'POST' === $request->getMethod() && $request->get('is_form_load', null) == null) {
+            if ($formManager->isValid($form)) {
+                $user = $this->getRepository('FaUserBundle:User')->findOneBy(array('email' => $form->get('email')->getData()));
+                return new JsonResponse(array('success' => '1', 'user_id' => $user->getId()));
+            } else {
+                return new JsonResponse(array('success' => '', 'user_id' => '', 'errorMessage' => 'Please enter valid email address.'));
+            }
+        }
+
+        $isShopPage = 1;
+        $parentIdArray = [];
+        $form1 = $formManager->createForm(AdLeftSearchNewType::class, array('isShopPage' => $isShopPage, 'parentIdArray' => $parentIdArray, 'searchParams' => $findersSearchParams), array('method' => 'GET', 'action' => ($isShopPage ? $this->generateUrl('shop_user_ad_left_search_result') : $this->generateUrl('ad_left_search_result'))));
+
+        $parameters['createAlertBlock'] = array('form' => $form->createView());
+        $parameters['leftFilters']['form'] = $form1->createView();
+
+        if ($mapFlag) {
+            $template = 'mapSearchResultNew';
+        } else {
+            $template = 'searchResultNew';
+        }
+
+        return $this->render('FaAdBundle:AdList:' . $template . '.html.twig', $parameters, null);
+    }
+
+    /**
+     * @param $searchParams
+     * @param $listingFields
+     * @param $adRepository
+     * @return string
+     */
+    private function setDimensionParams($searchParams, $listingFields, $adRepository)
+    {
+        unset($searchParams['item__category_id']);
+        if (isset($searchParams['sort_ord'])) unset($searchParams['sort_ord']);
+        if (isset($searchParams['sort_field'])) unset($searchParams['sort_field']);
+
+        if ($searchParams['item__location'] != LocationRepository::COUNTY_ID) {
+            $staticFilters = ' AND (town: *\:' . $searchParams['item__location'] . '\,* OR domicile: *\:' . $searchParams['item__location'] . '\,* OR locality: *\:' . $searchParams['item__location'] . '\,*)';
+        } else {
+            $staticFilters = '';
+        }
+        unset($searchParams['item__location']);
+        foreach (array_keys($searchParams) as $key) {
+            if (preg_match('/\//', $key)) {
+                unset($searchParams[$key]);
+                break;
+            }
+        }
+
+        $staticKeys = [
+            'item__price_from',
+            'item__price_to',
+            'ads_with_images',
+            'expired_ads',
+            'is_trade_ad',
+            'item__distance',
+            'map'
+        ];
+        $diffKeys = array_diff(array_keys($searchParams), $staticKeys);
+
+        foreach ($diffKeys as $diffKey) {
+            $solrDimensionFieldName = $adRepository->getSolrFieldName($listingFields, $this->getDimensionName($diffKey));
+            if (! isset($searchParams[$solrDimensionFieldName])) {
+                $searchParams[$solrDimensionFieldName] = [];
+            }
+
+            if (is_array($searchParams[$diffKey])) {
+                $searchParams[$solrDimensionFieldName][] = $searchParams[$diffKey][0];
+            } elseif (strpos($searchParams[$diffKey], '___') !== false) {
+                $searchParams[$solrDimensionFieldName] = array_merge($searchParams[$solrDimensionFieldName], explode('___', $searchParams[$diffKey]));
+            } else {
+                $searchParams[$solrDimensionFieldName][] = $searchParams[$diffKey];
+            }
+
+            unset($searchParams[$diffKey]);
+        }
+
+        foreach ($searchParams as $searchKey => $searchItem) {
+            if ($searchKey == 'item__price_from') {
+              $staticFilters .= ' AND price : [' . $searchItem . ' TO *]';
+            } else if ($searchKey == 'item__price_to') {
+                $staticFilters .= ' AND price : [* TO ' . $searchItem . ']';
+            } else if ($searchKey == 'ads_with_images') {
+                $staticFilters .= ' AND image_count : [1 TO *]';
+            } else if ($searchKey == 'expired_ads') {
+                $staticFilters .= ' AND status_id : ' . EntityRepository::AD_STATUS_EXPIRED_ID;
+            } else if ($searchKey == 'is_trade_ad') {
+                $staticFilters .= ' AND is_trade_ad : ' . $searchItem;
+            } else if ($searchKey == 'item__distance' || $searchKey == 'map') {
+
+            } else {
+                $thisFilter = [];
+                foreach ($searchItem as $dimItem) {
+                    $thisFilter[] = $searchKey .':*'.$dimItem.'*';
+                }
+
+                $staticFilters .= ' AND (' . implode(' OR ', $thisFilter) .')';
+            }
+        }
+
+        if (array_key_exists('expired_ads', $searchParams) == false) {
+            $staticFilters .= ' AND status_id : ' . EntityRepository::AD_STATUS_LIVE_ID;
+        }
+        /*$staticFilters .= ' AND is_blocked_ad : 0';*/
+
+        return $staticFilters;
+    }
+
+    /**
+     * @param $categoryObj
+     * @param $facetResult
+     * @param $totalAds
+     * @param $dimensions
+     * @param $searchParams
+     * @param $data
+     * @return array
+     */
+    private function getLeftFilters($categoryObj, $facetResult, $totalAds, $dimensions, $searchParams, $data)
+    {
+        $params = [];
+        foreach ($searchParams as $dimensionSlug => $searchParam) {
+            $paramname = $this->getDimensionName($dimensionSlug);
+            if ($paramname !== false) {
+                if (isset($params[$paramname])) {
+                    $selectedValue = $params[$paramname];
+                } else {
+                    $selectedValue = [];
+                }
+
+                if (is_array($searchParam)) {
+                    $selectedValue[] = $searchParam[0];
+                } elseif (strpos($searchParam, '___') !== false) {
+                    $selectedValue = array_merge($selectedValue, explode('___', $searchParam));
+                } else {
+                    $selectedValue[] = $searchParam;
+                }
+
+                $params[$paramname] = $selectedValue;
+            }
+        }
+
+        // get next level categories
+        $categoryRepository = $this->getRepository('FaEntityBundle:Category');
+
+        $allCategories = $categoryRepository->getChildrenById($categoryObj->getId(), 'id');
+        $categories = [];
+        foreach($allCategories as $key => $category) {
+            if (! empty($facetResult['category_ids'][$category['id']])) {
+                if ($categoryObj->getId() != 1 || ($categoryObj->getId() == 1 && $category['id'] != CategoryRepository::ADULT_ID)) {
+                    $categories[$key]          = $category;
+                    $categories[$key]['count'] = $facetResult['category_ids'][$category['id']];
+                }
+            }
+        }
+
+        $solrSearchManager = $this->get('fa.solrsearch.manager');
+        $keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: NULL;
+
+        if (isset($params['is_trade_ad'])) {
+            $newData = $data;
+            if ($newData['static_filters']) {
+                $staticFilters = explode(' AND ', $newData['static_filters']);
+                $newStaticFilters = '';
+
+                foreach ($staticFilters as $staticFilter) {
+                    if (! empty($staticFilter) && strpos($staticFilter, 'is_trade_ad') === false) {
+                        $newStaticFilters .= ' AND '.$staticFilter;
+                    }
+                }
+                $newData['static_filters'] = $newStaticFilters;
+                $newData['facet_fields'] = array(
+                    'is_trade_ad' => array('min_count' => 0)
+                );
+            }
+
+            $solrSearchManager->init('ad.new', $keywords, $newData, 1, 1, 0, true);
+            $solrResponse = $solrSearchManager->getSolrResponse();
+            $facetTradeResult = $solrSearchManager->getSolrResponseFacetFields($solrResponse);
+
+            $tradeFacets = $facetTradeResult['is_trade_ad'];
+        } else {
+            $tradeFacets = $facetResult['is_trade_ad'];
+        }
+
+        $userTypes = [
+            0 => [
+                'title' => 'Private advertiser',
+                'url_param' => 'is_trade_ad=0',
+                'count' => empty($tradeFacets) ? 0 : intval($tradeFacets["false"]),
+                'selected' => isset($params['is_trade_ad']) && $params['is_trade_ad'] == '0' ? true : false
+            ],
+            1 => [
+                'title' => 'Business advertiser',
+                'url_param' => 'is_trade_ad=1',
+                'count' => empty($tradeFacets) ? 0 : intval($tradeFacets["true"]),
+                'selected' => isset($params['is_trade_ad']) && $params['is_trade_ad'] == '1' ? true : false
+            ]
+        ];
+
+        $locationFacets = [];
+        if ($searchParams['item__location'] == 2) {
+            foreach ($facetResult['town'] as $town => $count) {
+                $town = get_object_vars(json_decode($town));
+
+                $locationFacets[] = array(
+                    'id'    => $town['id'],
+                    'name'  => $town['name'],
+                    'slug'  => $town['slug'],
+                    'count' => $count
+                );
+            }
+        } else {
+            foreach ($facetResult['town'] as $town => $count) {}
+
+            if (! empty($town)) {
+                $town = get_object_vars(json_decode($town));
+
+                $newData = $data;
+                if ($newData['static_filters']) {
+                    $staticFilters = explode(' AND ', $newData['static_filters']);
+                    $newStaticFilters = '';
+
+                    foreach ($staticFilters as $staticFilter) {
+                        if (! empty($staticFilter) && strpos($staticFilter, 'town') === false) {
+                            $newStaticFilters .= ' AND '.$staticFilter;
+                        }
+                    }
+                    $newStaticFilters .= ' AND (town:*parent_id\"\:'.$town['parent_id'].'\,* OR locality:*parent_id\"\:'.$town['parent_id'].'\,* OR domicile:*parent_id\"\:'.$town['parent_id'].'\,* ) AND -(town:*\"id\"\:'.$town['id'].'\,* OR locality:*\"id\"\:'.$town['id'].'\,* OR domicile:*\"id\"\:'.$town['id'].'\,*)';
+
+                    $newData['static_filters'] = $newStaticFilters;
+                    $newData['facet_fields'] = array(
+                        'town' => array('min_count' => 1),
+                        'area' => array('min_count' => 1),
+                        'locality' => array('min_count' => 1)
+                    );
+                }
+
+                $solrSearchManager->init('ad.new', $keywords, $newData, 1, 1, 0, true);
+                $solrResponse = $solrSearchManager->getSolrResponse();
+                $facetDimResult = $solrSearchManager->getSolrResponseFacetFields($solrResponse);
+                if (! empty($facetDimResult)) {
+                    $facetDimResult = $facetDimResult['town'];
+                    foreach ($facetDimResult as $jsonValue => $facetCount) {
+                        $town = get_object_vars(json_decode($jsonValue));
+
+                        $locationFacets[] = array(
+                            'id'    => $town['id'],
+                            'name'  => $town['name'],
+                            'slug'  => $town['slug'],
+                            'count' => $facetCount
+                        );
+                    }
+                }
+            }
+        }
+
+        $orderedDimensions = [];
+        foreach ($dimensions as $dimension) {
+            $solrFieldName = $dimensions[$dimension['id']]['solr_field'];
+            $facetArraySet = $facetResult[$solrFieldName];
+
+            $selected = '';
+            $paramname = strtolower($dimensions[$dimension['id']]['dim_slug']);
+            if (isset($params[$paramname])) {
+                $selected = $params[$paramname];
+            }
+
+            if (! empty($facetArraySet)) {
+                foreach ($facetArraySet as $jsonValue => $facetCount) {
+                    $entityValue = get_object_vars(json_decode($jsonValue));
+
+                    $key = 'id';
+                    if (empty($entityValue[$key])) {
+                        $key = 'name';
+                    }
+
+                    $isSelected = false;
+                    if (! empty($selected)) {
+                        if (is_array($selected)) {
+                            if (in_array($entityValue[$key], $selected) || in_array($entityValue['slug'], $selected)) {
+                                $isSelected = true;
+                            }
+                        } else {
+                            if ($selected == $entityValue[$key]) {
+                                $isSelected = true;
+                            }
+                        }
+                    }
+
+                    $orderedDimensions[$dimension['id']][$entityValue[$key]] = array(
+                        'name' => $entityValue['name'],
+                        'slug' => isset($entityValue['slug']) ? $entityValue['slug'] : $entityValue['name'],
+                        'count' => $facetCount,
+                        'selected' => $isSelected
+                    );
+                }
+            }
+
+            if (! empty($selected)) {
+                $newData = $data;
+                if ($newData['static_filters']) {
+                    $staticFilters = explode(' AND ', $newData['static_filters']);
+                    $newStaticFilters = '';
+
+                    foreach ($staticFilters as $staticFilter) {
+                        if (! empty($staticFilter) && strpos($staticFilter, $solrFieldName) === false) {
+                            $newStaticFilters .= ' AND '.$staticFilter;
+                        }
+                    }
+                    $newData['static_filters'] = $newStaticFilters;
+                    $data['facet_fields'] = array(
+                        $solrFieldName => array('min_count' => 1)
+                    );
+                }
+
+                $solrSearchManager->init('ad.new', $keywords, $newData, 1, 1, 0, true);
+                $solrResponse = $solrSearchManager->getSolrResponse();
+                $facetDimResult = $solrSearchManager->getSolrResponseFacetFields($solrResponse);
+                if (! empty($facetDimResult)) {
+                    $facetDimResult = $facetDimResult[$solrFieldName];
+                    foreach ($facetDimResult as $jsonValue => $facetCount) {
+                        $entityValue = get_object_vars(json_decode($jsonValue));
+                        $key = 'id';
+                        if (empty($entityValue['id'])) {
+                            $key = 'name';
+                        }
+
+                        if (! isset($orderedDimensions[$dimension['id']][$entityValue[$key]])) {
+                            $orderedDimensions[$dimension['id']][$entityValue[$key]] = array(
+                                'name' => $entityValue['name'],
+                                'slug' => isset($entityValue['slug']) ? $entityValue['slug'] : $entityValue['name'],
+                                'count' => $facetCount,
+                                'selected' => false
+                            );
+                        }
+                    }
+                }
+            }
+        }
+
+        $noImages = 0;
+        if (isset($facetResult['image_count'])) {
+            $arr = get_object_vars($facetResult['image_count']);
+            if (! empty($arr) && isset($arr[0])) {
+                $noImages = intval($arr[0]);
+            }
+        }
+
+        return [
+            'categories'        => $categories,
+            'current_category'  => $categoryObj->getName(),
+            'parent_category'   => $categoryObj->getParent() && $categoryObj->getParent()->getId() == 1 ? '' : $categoryObj->getParent(),
+            'user_types'        => $userTypes,
+            'image_count'       => $totalAds - $noImages,
+            'locationFacets'    => $locationFacets,
+            'orderedDimensions' => $orderedDimensions,
+            'dimensions'        => $dimensions,
+            'ads_with_images'   => isset($params['ads_with_images']),
+            'expired_ads'       => isset($params['expired_ads'])
+        ];
+    }
+
+    /**
+     * @param $solrCoreName
+     * @param $keywords
+     * @param $data
+     * @param int $page
+     * @param int $recordsPerPage
+     * @param int $staticOffset
+     * @param bool $exactMatch
+     * @return mixed
+     */
+    private function getSolrPagination($solrCoreName, $keywords, $data, $page = 1, $recordsPerPage = 30, $staticOffset = 0, $exactMatch = false)
+    {
+        $solrSearchManager = $this->get('fa.solrsearch.manager');
+
+        $solrSearchManager->init($solrCoreName, $keywords, $data, $page, $recordsPerPage, $staticOffset, $exactMatch);
+        $solrResponse = $solrSearchManager->getSolrResponse();
+
+        // fetch result set from solr
+        $result      = $solrSearchManager->getSolrResponseDocs($solrResponse);
+        $resultCount = $solrSearchManager->getSolrResponseDocsCount($solrResponse);
+        if ($recordsPerPage > 3) {
+            $facetResult = $solrSearchManager->getSolrResponseFacetFields($solrResponse);
+        } else {
+            $facetResult = [];
+        }
+
+        $this->get('fa.pagination.manager')->init($result, $page, $recordsPerPage, $resultCount);
+
+        return ['pagination' => $this->get('fa.pagination.manager')->getSolrPagination(), 'resultCount' => $resultCount, 'facetResult' => $facetResult];
+    }
+
+    /**
+     * @param $pagination
+     * @return array
+     */
+    private function formatAds($pagination)
+    {
+        $ads = [];
+
+        if (! empty($pagination)) {
+            foreach ($pagination->getCurrentPageResults() as $key => $ad) {
+                $ad = get_object_vars($ad);
+
+                $dim_keys = preg_grep('/^dim_list_*/', array_keys($ad));
+
+                $dimensions = [];
+                if (count($dim_keys)) {
+                    foreach ($dim_keys as $dim_key) {
+                        $dim_field = get_object_vars(json_decode($ad[$dim_key][0]));
+                        $dimensions[] = array(
+                            'name'          => $dim_field['name'],
+                            'listing_class' => empty($dim_field['listing_class']) ? '' : $dim_field['listing_class']
+                        );
+
+                    }
+                }
+
+                if (empty($ad['town'])) {
+                    $town = NULL;
+                } else {
+                    $town = get_object_vars(json_decode($ad['town']));
+                    $town = is_array($town) ? $town['name'] : NULL;
+                }
+
+                $ads[] = [
+                    'ad_id'         => $ad['id'],
+                    'ad_title'      => isset($ad['title']) ? $ad['title'] : '',
+                    'description'   => isset($ad['description']) ? $ad['description'] : '',
+                    'price'         => empty($ad['price']) ? '' : CommonManager::formatCurrency($ad['price'], $this->container),
+                    'ad_img'        => isset($ad['thumbnail_url']) ? $ad['thumbnail_url'] : $this->container->getParameter('fa.static.shared.url').'/bundles/fafrontend/images/no-image-grey.svg',
+                    'image_count'   => isset($ad['image_count']) ? $ad['image_count'] : 0,
+                    'img_alt'       => '',
+                    'ad_url'        => $ad['ad_detail_url'],
+                    'dimensions'    => $dimensions,
+                    'top_ad'        => empty($ad['is_topad']) ? false : true,
+                    'urgent_ad'     => empty($ad['is_urgent_ad']) ? false : true,
+                    'boosted_ad'    => empty($ad['is_boosted_ad']) ? false : true,
+                    'affiliate_ad'  => empty($ad['is_affiliate']) ? false : true,
+                    'location'      => $town,
+                    'latitude'      => isset($ad['latitude']) ? $ad['latitude'] : null,
+                    'longitude'     => isset($ad['longitude']) ? $ad['longitude'] : null,
+                    'last_updated'  => $ad['updated_at'],
+                    'aff_icon_cls'  => ($ad['ad_source'] == 'paa' || $ad['ad_source'] == 'paa-app') ? '' : CommonManager::getAffiliateClass($ad['ad_source'])
+                ];
+
+            }
+        }
+
+        return $ads;
+    }
+
+    /**
+     * @param $locationFacets
+     * @param $data
+     * @return array
+     */
     private function getLocationFacetForSearchResult($locationFacets, $data)
     {
         if (!empty($locationFacets) && !empty($data)) {
@@ -732,7 +1754,11 @@ class AdListController extends CoreController
         }
     }
 
-    
+    /**
+     * @param $key
+     * @param $facetdata
+     * @return mixed
+     */
     private function getFacetCountForNearbyTown($key, $facetdata)
     {
         $keywords       = (isset($facetdata['search']['keywords']) && $facetdata['search']['keywords']) ? $facetdata['search']['keywords']: null;

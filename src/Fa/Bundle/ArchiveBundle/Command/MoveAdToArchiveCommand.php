@@ -193,6 +193,13 @@ EOF
                     $solr->deleteByIds($movedAdIds);
                     $solr->commit();
                 }
+
+                $solrClientNew = $this->getContainer()->get('fa.solr.client.ad.new');
+                if ($solrClientNew->ping()) {
+                    $solrNew = $solrClientNew->connect();
+                    $solrNew->deleteByIds($movedAdIds);
+                    $solrNew->commit(true);
+                }
             } catch (\Exception $e) {
                 $output->writeln('Exception for removing ads from solr for offset: '.$originalOffset, true);
             }

@@ -74,6 +74,12 @@ EOF
             return false;
         }
 
+        $solrClientNew = $this->getContainer()->get('fa.solr.client.ad.new');
+        if (!$solrClientNew->ping()) {
+            $output->writeln('Solr service is not available. Please start it.', true);
+            return false;
+        }
+
         //get options passed in command
         $ids      = $input->getOption('id');
         $offset   = $input->getOption('offset');
@@ -111,9 +117,9 @@ EOF
         }
 
         if (isset($offset)) {
-            $this->updateSolrIndexWithOffset($solrClient, $searchParam, $input, $output);
+            $this->updateSolrIndexWithOffset($solrClient, $searchParam, $input, $output, $solrClientNew);
         } else {
-            $this->updateSolrIndex($solrClient, $searchParam, $input, $output);
+            $this->updateSolrIndex($solrClient, $searchParam, $input, $output, $solrClientNew);
         }
     }
 
@@ -124,8 +130,9 @@ EOF
      * @param array  $searchParam Search parameters.
      * @param object $input       Input object.
      * @param object $output      Output object.
+     * @param object $solrClientNew
      */
-    protected function updateSolrIndexWithOffset($solrClient, $searchParam, $input, $output)
+    protected function updateSolrIndexWithOffset($solrClient, $searchParam, $input, $output, $solrClientNew)
     {
         $idsFound = array();
         $qb       = $this->getAdQueryBuilder($searchParam);
@@ -147,6 +154,10 @@ EOF
             $solr->commit(true);
             //$solr->optimize();
 
+            $solrNew = $solrClientNew->connect();
+            $solrNew->deleteByIds($idsFound);
+            $solrNew->commit(true);
+
             $output->writeln('Solr index removed for ad ids: '.join(", ", $idsFound), true);
         }
 
@@ -161,7 +172,7 @@ EOF
      * @param object $input       Input object.
      * @param object $output      Output object.
      */
-    protected function updateSolrIndex($solrClient, $searchParam, $input, $output)
+    protected function updateSolrIndex($solrClient, $searchParam, $input, $output, $solrClientNew)
     {
         $count     = $this->getAdCount($searchParam);
         $step      = 100;

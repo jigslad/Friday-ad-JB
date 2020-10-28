@@ -16,8 +16,10 @@
 
     {% set container = fetch_container_instance() %}
     {% set currentRoute = app.request.attributes.get('_route') %}
-    {% set bannerRepository = fetch_repository('FaContentBundle:Banner') %}
-    {% set bannersArray = bannerRepository.getBannersArrayByPage(currentRoute, container) %}
+    {% if currentRoute != 'listing_page' %}
+        {% set bannerRepository = fetch_repository('FaContentBundle:Banner') %}
+        {% set bannersArray = bannerRepository.getBannersArrayByPage(currentRoute, container) %}
+    {% endif %}
     {% set blockDimension2 = block('dimension2') is defined ? block('dimension2')|trim : false %}
     {% set pushNotification = block('pushNotification') is defined ? block('pushNotification')|trim : false %}
     {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
@@ -167,6 +169,14 @@
         
 
     {{ include('FaFrontendBundle::scriptTop.html.twig') }}
+    {# safe to remove, when the new listing page route is swapped with the older one #}
+    {% if currentRoute in {0: 'new_listing_page'} %}
+        {% set rootCategoryId = fetch_repository('FaEntityBundle:Category').getRootCategoryId(assignedCategoryId, container) %}
+        {% if (rootCategoryId == ADULT_CATEGORY_ID) %}
+            {% set showAdultPages=1 %}
+        {% endif %}
+    {% endif %}
+
     {% block scripttop %}{% endblock %}
     {#
         main-css.css - Common CSS - taken from src/Fa/Bundle/FrontendBundle/Resources/views/main-css.html.twig - moved from src/Fa/Bundle/FrontendBundle/Resources/views/scriptTop.html.twig

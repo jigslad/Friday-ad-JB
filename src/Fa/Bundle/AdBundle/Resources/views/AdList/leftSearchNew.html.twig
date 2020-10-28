@@ -1,0 +1,439 @@
+{% set maxDimensionCount = 12 %}
+
+{{ form_start(leftFilters.form, {'attr': {'novalidate': 'novalidate'}}) }}
+{{ form_errors(leftFilters.form) }}
+    <div class="search-filters">
+        <dl class="accordion" data-accordion>
+            {# Category search params - start #}
+            <dd class="accordion-navigation keep-shown">
+                <a href="#panel1a" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Categories'|trans({}, 'frontend-left-search')}}</h5></a>
+                <div class="content active clearfix">
+                    {% if leftFilters.parent_category is defined and leftFilters.parent_category != '' %}
+                        <div class="search-cat-parent-list">
+                            <ul>
+                                <li><a data-href="{{ leftFilters.parent_category.getSlug() }}">{{ leftFilters.parent_category.getName() }}</a></li>
+                            </ul>
+                        </div>
+                    {% endif %}
+                    <div class="search-cat-sub-list">
+                        <ul>
+                            {% set key = 0 %}
+                            <li><label>{% if leftFilters.current_category == 'Category_root' %} {{ 'All Categories' }} {% else %} {{ leftFilters.current_category }}{% endif %}</label></li>
+                            {% for key1, category in leftFilters.categories %}
+                                {% if key == (maxDimensionCount) %}
+                                    </ul>
+                                    <div class="see-more clearfix">
+                                        <a href="javascript:void(0);" rel="nofollow" onclick="$('#categoryLHSFilters').foundation('reveal', 'open');">See more</a>
+                                        <a href="javascript:void(0)" rel="nofollow" class="right clear_filter" id="{{ key }}_clear">{{ 'Clear'|trans({}, 'frontend-left-search') }}</a>
+                                    </div>
+                                    <div class="reveal-modal" id="categoryLHSFilters" data-reveal>
+                                        <a class="close-reveal-modal">&times;</a>
+                                        <div>
+                                            <h5 class="modal-title">Showing Category</h5>
+                                            <div class="modal-content dimension-modal">
+                                                <div class="dimension-content">
+                                                    <div class="clearfix">
+                                {% endif %}
+                                {% if key >= maxDimensionCount and key is divisible by(4) %}
+                                    <ul class="seller-link dimension-list">
+                                {% endif %}
+
+                                <li><a data-href="{{ category.slug }}">{{ category.name }}
+                                        {% if category.count is defined %}
+                                            ({{ category.count }})
+                                        {% else %}
+                                            ({{ 0 }})
+                                        {% endif %}
+                                    </a></li>
+                                {% if key >= maxDimensionCount and (key + 1) is divisible by(4) %}
+                                    </ul>
+                                {% endif %}
+                                {% if key > maxDimensionCount and key == (leftFilters.categories|length  - 1) %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {% set key = key + 1 %}
+                            {% endfor %}
+                            {% if key < maxDimensionCount %}
+                                </ul>
+                            {% endif %}
+                    </div>
+                </div>
+            </dd>
+            {# Category search params - end #}
+
+            {# Static search filters - start #}
+            <dd class="accordion-navigation keep-shown">
+                <a href="#panel2a" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'My budget is from'|trans({}, 'frontend-left-search')}}</h5></a>
+                <div class="content active clearfix">
+                    <ul class="budget-box clearfix">
+                        <li class="budget-field">
+                            <span>&pound;</span>
+                            {{ form_widget(leftFilters.form.item__price_from, {'attr': {'class': 'white-field'}}) }}
+                        </li>
+                        <li class="budget-to-caption">to</li>
+                        <li class="budget-field">
+                            <span>&pound;</span>
+                            {{ form_widget(leftFilters.form.item__price_to, {'attr': {'class': 'white-field'}}) }}
+                        </li>
+                        <li><button class="budget-go-btn" type="button" onclick="formulate_photo_url();"></button></li>
+                    </ul>
+                </div>
+            </dd>
+
+            <dd class="accordion-navigation keep-shown">
+                <a href="#panel3a" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Distance I\'m happy to travel'|trans({}, 'frontend-left-search')}}</h5></a>
+                <div class="content active clearfix">
+                    <ul class="distance-search clearfix" id="distance-left-search" style="display:none">
+                        <li class="col white-select">
+                            {{ form_widget(leftFilters.form.default_distance) }}
+                            {{ form_widget(leftFilters.form.item__distance, {'attr': {'class': 'fa-select-white'}}) }}
+                        </li>
+                        <li>
+                            <label>{{ 'from'|trans({}, 'frontend')}}</label>
+                        </li>
+                    </ul>
+
+                    <ul class="distance-search clearfix">
+                        <li class="col">
+                            <div>
+                                {{ form_widget(leftFilters.form.item__location_autocomplete, {'attr': {'class': 'white-field'}}) }}
+                                <a href="javascript:void(0);" rel="nofollow" id="fa_left_search_new_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                            </div>
+                        </li>
+                        <li>
+                            <button class="budget-go-btn" type="button" id="left_search_location_btn" onclick="formulate_location_url();"></button>
+                        </li>
+                    </ul>
+                    <ul class="distance-search distance-left-search clearfix">
+                        <li id="distance-error-placeholder"><small class="error" style="display:none"></small></li>
+                    </ul>
+                    {# Town left filters #}
+                    {% if leftFilters.locationFacets|length %}
+                        <div class="towns-list">
+                            <label>{{'Nearby towns'|trans({}, 'frontend-left-search')}}:</label>
+                            <ul>
+                                {% for key, location in leftFilters.locationFacets %}
+                                    {% if key == (maxDimensionCount) %}
+                                        </ul>
+                                        <div class="see-more clearfix">
+                                            <a href="javascript:void(0);" rel="nofollow" onclick="$('#locationLHSFilters').foundation('reveal', 'open');">See more</a>
+                                            <a href="javascript:void(0);" rel="nofollow" class="right clear_filter" id="{{ key }}_clear">{{ 'Clear'|trans({}, 'frontend-left-search') }}</a>
+                                        </div>
+                                        <div class="reveal-modal" id="locationLHSFilters" data-reveal>
+                                            <a class="close-reveal-modal">&times;</a>
+                                            <div>
+                                                <h5 class="modal-title">Showing Towns</h5>
+                                                <div class="modal-content dimension-modal">
+                                                    <div class="dimension-content">
+                                                        <div class="clearfix">
+                                    {% endif %}
+                                    {% if key >= maxDimensionCount and key is divisible by(4) %}
+                                        <ul class="seller-link dimension-list">
+                                    {% endif %}
+                                    <li><a data-location-href="{{ location.slug }}">{{ location.name }} ({{ location.count }})</a></li>
+                                    {% if key >= maxDimensionCount and (key + 1) is divisible by(4) %}
+                                        </ul>
+                                    {% endif %}
+                                    {% if key > maxDimensionCount and key == (leftFilters.locationFacets|length - 1) %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    {# Town left filters - end #}
+                </div>
+            </dd>
+
+            <dd class="accordion-navigation keep-shown">
+                <a href="#panel1b" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Seller'|trans({}, 'frontend-left-search')}}</h5></a>
+                <div class="content active clearfix">
+                    <ul class="seller-link">
+                        {% for user_type in leftFilters.user_types %}
+                            <li><a {% if user_type.selected is defined and user_type.selected == true %} class="bold" {% endif %}  data-href="{{ user_type.url_param }}" rel="nofollow">{{ user_type.title }} ({{ user_type.count }})</a></li>
+                        {% endfor %}
+                    </ul>
+                    <div class="see-more clearfix">
+                        <a href="javascript:void(0)" rel="nofollow" class="right clear_filter" id="user_type_clear">{{ 'Clear'|trans({}, 'frontend-left-search') }}</a>
+                    </div>
+                </div>
+            </dd>
+
+            {% if leftFilters.orderedDimensions|length %}
+                {% for dimension_id, entities in leftFilters.orderedDimensions %}
+                    <dd class="accordion-navigation">
+                    {{ include('FaAdBundle:AdList:leftSearchDimensionFiltersNew.html.twig') }}
+                    </dd>
+                {% endfor %}
+            {% endif %}
+
+            <dd class="accordion-navigation keep-shown">
+                <div class="content active label-inline">
+                    <ul class="white-checkbox search-type crawlable-checkbox">
+                        <li>
+                            <span class="custom-checkbox{% if leftFilters.ads_with_images == true %} checked {% endif %}">
+                                <input type="checkbox" {% if leftFilters.ads_with_images  == true %} checked="checked" {% endif %} id="fa_left_search_items_with_photo" name="fa_left_search[items_with_photo]" value="1">
+                            </span>
+                            <label class="mb0" for="fa_left_search_items_with_photo">Only ads with photo ({{ leftFilters.image_count }})</label>
+                            <a data-href="ads_with_images=1">Only ads with photo</a>
+                        </li>
+                    </ul>
+                </div>
+            </dd>
+
+            <dd class="accordion-navigation keep-shown">
+                <div class="content active label-inline">
+                    <ul class="white-checkbox search-type crawlable-checkbox">
+                        <li>
+                            <span class="custom-checkbox{% if leftFilters.expired_ads == true %} checked {% endif %}">
+                                <input type="checkbox" {% if leftFilters.expired_ads == true %} checked="checked" {% endif %} id="fa_left_search_expired_ads" name="fa_left_search[expired_ads]" value="1">
+                            </span>
+                            <label class="mb0" for="fa_left_search_expired_ads">Expired ads</label>
+                            <a data-href="expired_ads=1">Expired ads</a>
+                        </li>
+                    </ul>
+                </div>
+            </dd>
+            {# Static search filters - end #}
+
+            <div class="reset-search clearfix">
+                {% if isShopPage is defined and isShopPage %}
+                    {% set profileAdsUrl = container.get('fa_ad.manager.ad_routing').getProfilePageAdsUrl(searchParams['item__user_id']) %}
+                    <a href="{{ profileAdsUrl }}" title="{{ 'Reset search'|trans({}, 'frontend-left-search') }}">{{ 'Reset search'|trans({}, 'frontend-left-search') }}</a>
+                {% else %}
+                    <a href="javascript:void(0)" id="reset_search" title="{{ 'Reset search'|trans({}, 'frontend-left-search') }}">{{ 'Reset search'|trans({}, 'frontend-left-search') }}</a>
+                {% endif %}
+            </div>
+    </dl>
+    </div>
+{{ form_end(leftFilters.form) }}
+<script>
+    function formulate_photo_url() {
+        let url = window.location.href;
+        if ($('#fa_left_search_new_item__price_from').val()) {
+            let url_string = 'item__price_from=' + $('#fa_left_search_new_item__price_from').val();
+            if (url.indexOf('?') != -1) {
+                url += '&' + url_string;
+            } else {
+                url += '?' + url_string;
+            }
+        }
+
+        if ($('#fa_left_search_new_item__price_to').val()) {
+            let url_string = '&item__price_to=' + $('#fa_left_search_new_item__price_to').val();
+            if (url.indexOf('?') != -1) {
+                url += '&' + url_string;
+            } else {
+                url += '?' + url_string;
+            }
+        }
+
+        window.location.href = url;
+    }
+
+    function formulate_location_url() {
+        let url = window.location.href;
+        if ($('#fa_left_search_new_item__location_autocomplete').val() != "United Kingdom") {
+            let value = $('#fa_left_search_new_item__location_autocomplete').val().toLowerCase();
+            value = value.replace(' ', '_');
+
+            url = url.replace('/{{ currentLocation }}/', '/'+value+'/');
+
+            if ($('#fa_left_search_new_item__distance').val() != 200) {
+                let url_string = 'item__distance=' + $('#fa_left_search_new_item__distance').val();
+                if (url.indexOf('?') != -1) {
+                    url += '&' + url_string;
+                } else {
+                    url += '?' + url_string;
+                }
+            }
+
+            window.location.href = url;
+        }
+    }
+
+    function set_url_params(url_params, this_url) {
+        let this_url_parts = this_url.split('=');
+        let this_url_part = this_url_parts[0];
+        let this_url_value = this_url_parts[1];
+
+        if (url_params.length == 0) {
+            return '?' + this_url;
+        } else if (url_params.indexOf(this_url_part) == -1) {
+            return '?' + url_params + '&' + this_url;
+        } else {
+            let url_param_vars = url_params.split('&');
+            let new_url_params = '';
+
+            url_param_vars.forEach(function(item) {
+                if (item.indexOf(this_url_part) != -1) {
+                    if (item.indexOf(this_url) != -1) {
+                        new_url_params += this_url + '&';
+                    } else {
+                        new_url_params += item + '___' + this_url_value + '&';
+                    }
+                } else {
+                    new_url_params += this_url + '&';
+                }
+            });
+
+            return '?' + new_url_params.replace(new RegExp("[&]?$"), '');
+        }
+
+    }
+
+    $(document).ready(function() {
+
+        $('a[data-href]').each(function() {
+            let href = window.location.href;
+            let this_url = $(this).attr('data-href');
+            if (href.indexOf('#')) {
+                let _var = href.split('#');
+                href = _var[0];
+                if ($(this).closest('.search-cat-sub-list').length && href.indexOf('/search/') != -1) {
+                    href = href.replace('/search/', '/');
+                }
+            }
+
+            let url_params = '';
+
+            if (href.indexOf('?') != -1) {
+                let split_params = href.split('?');
+                url_params = '?' + split_params[1];
+                href = split_params[0];
+            }
+
+            let index = href.indexOf(this_url);
+            if (index != -1) {
+                href = href.substring(0, (index + this_url.length));
+            } else if (this_url.indexOf('=') != -1) {
+                if (url_params.length) {
+                    url_params += '&' + this_url;
+                } else {
+                    url_params = set_url_params(url_params.replace('?', ''), this_url);
+                }
+            } else {
+                let data_href = '';
+                if ($(this).closest('li').find('input[type="checkbox"]').length) {
+                    if ($(this).closest('ul').find('li').length > 1 && $(this).closest('ul').find('span.checked').length) {
+                        data_href = $(this).closest('ul').find('span.checked').closest('li').find('a').attr('data-href');
+                    }
+
+                    if (data_href.length) {
+                        let name = $(this).closest('ul').find('li').find('label').attr('for').replace('fa_left_search_', '');
+                        url_params = set_url_params(url_params.replace('?', ''), 'item__' + name + '=' + this_url);
+                    } else {
+                        href += this_url + '/';
+                    }
+                } else {
+                    href += this_url + '/';
+                }
+            }
+
+            if (url_params.length == 1) {
+                url_params = '';
+            }
+            $(this).attr('href', href + url_params);
+        });
+
+        $('a[data-location-href]').each(function() {
+            let href = window.location.href;
+
+            let new_url = href.replace('/{{ currentLocation }}/', '/'+$(this).attr('data-location-href')+'/');
+            $(this).attr('href', new_url);
+        });
+
+        $('.white-checkbox input[type="checkbox"]').on('click', function() {
+            window.location.replace($(this).closest('li').find('a').attr('href'));
+        });
+
+        $('.white-checkbox label').on('click', function() {
+            window.location.replace($(this).closest('li').find('a').attr('href'));
+        });
+
+        $('.accordion_panel').each(function() {
+            if ($(this).find('a.bold').length || $(this).find('span.checked').length) {
+                $(this).addClass('active');
+            }
+        });
+
+        $('.clear_filter').each(function() {
+            if ($(this).closest('.towns-list').length) {
+                let url = window.location.href;
+
+                url = url.replace('/{{ currentLocation }}/', '/uk/');
+
+                $(this).attr('href', url);
+            } else {
+                let this_tag = $(this).closest('.accordion-navigation').find('ul').find('a').first();
+                let href = $(this_tag).attr('href');
+                let data_href = $(this_tag).attr('data-href');
+
+                href = href.replace(data_href, '');
+
+                let href_arr = href.split('?');
+                let href1 = href_arr[0];
+                let urlparams = '';
+                if (href_arr[1] != undefined) {
+                    urlparams = href_arr[1].split('&');
+                }
+                let new_url_params = '?';
+
+                let name = '';
+                if ($(this_tag).closest('li').find('label').length) {
+                    name = $(this_tag).closest('li').find('label').attr('for').replace('fa_left_search_', '');
+                    name = 'item__' + name;
+                }
+
+                if (urlparams.length) {
+                    urlparams.forEach(function (item) {
+                        if (name.length && item.indexOf(name) == -1) {
+                            new_url_params += item + '&';
+                        } else if (name.length == 0) {
+                            new_url_params += item + '&';
+                        }
+                    });
+                    urlparams = new_url_params.replace(new RegExp("[&]*$"), '');
+                }
+
+                if (urlparams.length == 1) {
+                    urlparams = '';
+                }
+
+                $(this).attr('href', href1 + urlparams);
+            }
+        });
+    });
+</script>
+<div id="left_search_dimension_modal" class="reveal-modal" data-reveal></div>
+<div id="removeSavedSearch" class="reveal-modal tiny" data-reveal>
+    <a class="close-reveal-modal" rel="nofollow" href="javascript:void(0);" onclick="cancleRemoveSearchAgentPopup();">&#215;</a>
+    <h5 class="modal-title">
+        {{'Stop search alert'|trans({}, 'frontend-my-saved-searches')}}
+    </h5>
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns">
+                <h5>{{'Are you sure you want to stop this search alert?'|trans({}, 'frontend-my-saved-searches')}}</h5>
+            </div>
+        </div>
+        <div class="mt20 remove-search-btn">
+            <div class="row">
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-4 thin-btn expand mb0" onclick="closeRevealModel('#removeSavedSearch');removeSavedSearch();">{{'Ok'|trans({}, 'frontend-my-saved-searches')}}</button>
+                </div>
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-1 thin-btn expand mb0" onclick="cancleRemoveSearchAgentPopup();">{{'Cancel'|trans({}, 'frontend-my-saved-searches')}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

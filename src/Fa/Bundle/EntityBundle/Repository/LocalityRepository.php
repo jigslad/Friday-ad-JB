@@ -318,4 +318,61 @@ class LocalityRepository extends BaseEntityRepository
 
         return $isDuplicateName;
     }
+
+    /**
+     * @param $container
+     * @return mixed
+     */
+    public function getAllLocalities($container)
+    {
+        if ($container) {
+            $culture     = CommonManager::getCurrentCulture($container);
+            $cacheKey    = $this->getTableName().'|'.__FUNCTION__.'|'.$culture;
+            $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
+
+            if ($cachedValue !== false) {
+                return $cachedValue;
+            }
+        }
+
+        $query = $this->createQueryBuilder(self::ALIAS);
+
+        $objResources = $query->getQuery()->getArrayResult();
+
+        $locationDetails = [];
+        foreach ($objResources as $location) {
+            $locationDetails[$location['id']]['name']           = $location['name'];
+            $locationDetails[$location['id']]['slug']           = $location['url'];
+            $locationDetails[$location['id']]['locality_text']  = $location['locality_text'];
+            $locationDetails[$location['id']]['town_id']        = $location['town_id'];
+        }
+
+        if ($container) {
+            CommonManager::setCacheVersion($container, $cacheKey, $locationDetails);
+        }
+
+        return $locationDetails;
+    }
+
+    /**
+     * @param $container
+     * @param $id
+     * @return array
+     */
+    public function getCachedLocalityById($container, $id)
+    {
+        if (! empty($id)) {
+            $localities = CommonManager::getCacheVersion($container, 'locality|getAllLocalities|en_GB');
+
+            return [
+                'id'            => $id,
+                'name'          => $localities[$id]['name'],
+                'slug'          => $localities[$id]['slug'],
+                'locality_text' => $localities[$id]['locality_text'],
+                'town_id'       => $localities[$id]['town_id']
+            ];
+        } else {
+            return [];
+        }
+    }
 }

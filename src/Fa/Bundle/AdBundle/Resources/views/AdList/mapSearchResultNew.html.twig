@@ -1,0 +1,377 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+
+{% set container = fetch_container_instance() %}
+{% set seoManager = container.get('fa.seo.manager') %}
+{% set seoFields = {} %}
+{% set customized_url = app.request.get('customized_page')  %}
+
+{% if app.request.queryString or '/search' in app.request.uri %}
+    {% set isUrlIndexable = false %}
+{% else %}
+    {% set isUrlIndexable = fetch_repository('FaEntityBundle:CategoryDimension').isUrlIndexableBySearchParams(searchParams, container) %}
+{% endif %}
+
+{% block meta_robots %}
+    {% set metaRobotsArray = {} %}
+    {% if not pagination.getNbResults() %}
+        noindex, follow
+        {% set metaRobotsArray = {0: 'noindex', 1: 'follow'} %}
+    {% elseif 'item__distance=0' not in app.request.queryString %}
+        {% if customized_url|length %}
+            {% if seoFields.meta_robots is defined %}
+                {{seoFields.meta_robots}}
+                {% set metaRobotsArray = seoFields.meta_robots|split(', ') %}
+             {% else %}
+                index, follow
+                {% set metaRobotsArray = {0: 'index', 1: 'follow'} %}
+            {% endif %}
+        {% else %}
+            {% if isUrlIndexable == false %}
+                noindex, follow
+                {% set metaRobotsArray = {0: 'noindex', 1: 'follow'} %}
+            {% else %}
+                {% if seoFields.meta_robots is defined %}
+                    {{seoFields.meta_robots}}
+                    {% set metaRobotsArray = seoFields.meta_robots|split(', ') %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% endif %}
+    {{ set_variables('metaRobots', {'metaRobotsArray': metaRobotsArray}) }}
+{% endblock %}
+
+{% block page_title %}
+    {% if app.request.queryString %}
+        {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+            {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id)}} | Friday-Ad
+        {% else %}
+            Friday-Ad
+        {% endif %}
+    {% else %}
+        {% if seoFields.page_title is defined %}
+            {{ seoManager.parseSeoStringForAdList(seoFields.page_title, searchParams, cookieLocationDetails) }}
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block meta_description %}
+    {% if app.request.queryString %}
+        {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+            {{'%resultCount% results in %category%'|trans({'%resultCount%': resultCount, '%category%': fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id)}, 'frontend-search-result')}}
+        {% else %}
+            {{'%resultCount% results'|trans({'%resultCount%': resultCount}, 'frontend-search-result')}}
+        {% endif %}
+    {% else %}
+        {% if seoFields.meta_description is defined %}
+            {{ seoManager.parseSeoStringForAdList(seoFields.meta_description, searchParams, cookieLocationDetails) }}
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block meta_keywords %}
+    {% if app.request.queryString %}
+        no-keywords
+    {% else %}
+        {% if seoFields.meta_keywords is defined %}
+            {{ seoManager.parseSeoStringForAdList(seoFields.meta_keywords, searchParams, cookieLocationDetails) }}
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block canonical_url %}
+    {% set metaRobotsArray = get_variables('metaRobots').metaRobotsArray %}
+    {% if not metaRobotsArray|length or (metaRobotsArray|length and metaRobotsArray[0] is defined and metaRobotsArray[0] != 'noindex') or (metaRobotsArray|length and metaRobotsArray[0] is defined and metaRobotsArray[0] == 'index' and metaRobotsArray[1] is defined and metaRobotsArray[1] != 'nofollow') %}
+        {% if seoFields.canonical_url is defined %}
+            {{ replace_case_insensitive('{Location}', app.request.get('location'), seoFields.canonical_url) }}
+        {% else %}
+            {{ app.request.uri|replace({('?'~app.request.queryString) : ''})}}
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block scripttop %}
+    {% if profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length %}
+        {% stylesheets filter='uglifycss' output='bundles/css/compiled/searchResult.css'
+            'bundles/facore/css/owl.carousel.css'
+            'bundles/facore/css/owl.theme.css'
+              %}
+            <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}"/>
+        {% endstylesheets %}
+    {% endif %}
+{% endblock %}
+
+{% set showAdultMapMarker = 0 %}
+{% set ADULT_CATEGORY_ID = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+{% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+	{% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(searchParams.item__category_id, false, fetch_container_instance()) %}
+    {% set catCnt = 0 %}
+    {% if categoryPath|length %}
+        {% for categoryId, categoryName in categoryPath %}
+            {% if catCnt == 0 %}
+                {% if (categoryId == ADULT_CATEGORY_ID) %}
+                    {% set showAdultMapMarker = 1 %}
+                {% endif %}
+            {% endif %}
+            {% set catCnt = catCnt + 1 %}
+        {% endfor %}
+    {% endif %}      
+{% endif %}
+{% if showAdultMapMarker==1  %}
+    {% set markerUrl = asset_url('fafrontend/images/adul-map-marker.svg') %}
+{% else %}
+	{% set markerUrl = asset_url('fafrontend/images/map-marker.png') %}
+{% endif %}
+
+{% block body %}
+    {{ include('FaAdBundle:AdList:mapSearchResult-css.html.twig') }}
+<link href="https://leafletjs-cdn.s3.amazonaws.com/content/leaflet/master/leaflet.css" rel="stylesheet" type="text/css"/>
+{{ include('FaAdBundle:AdList:searchResultHeaderNew.html.twig') }}
+<div class="row relative map-results-main">
+    <div class="large-6 columns" id="left_search">
+        <div class="search-filters">
+            <a href="javascript:void(0);" class="search-close" onclick="return showLeftSearch(false);">search-close</a>
+            {% if isShopPage is not defined %}
+                {{ include('FaAdBundle:AdList:saveSearch.html.twig') }}
+            {% endif %}
+            {{ include('FaAdBundle:AdList:leftSearchNew.html.twig') }}
+            {% if seoFields|length and seoFields['popular_search'] is defined and seoFields['popular_search'] and seoFields['seo_tool_id'] is defined and seoFields['seo_tool_id'] %}
+                {{ include('FaAdBundle:AdList:leftPopularSearchLinks.html.twig', {'mapFlag': 1}) }}
+            {% endif %}
+        </div>
+    </div>
+    <div id="listingDiv" class="large-18 columns">
+        <div class="map-result-main">
+            {% if resultCount > container.getParameter('fa.search.map.records.per.page') %}
+                <div data-alert class="alert-box success radius">
+                    <span class="alert-icon">&nbsp;</span>
+                    {{'Showing 1000 results near by you on map.'|trans({}, 'frontend-search-result')}}
+                    <a href="javascript:void(0)" class="close">&times;</a>
+                </div>
+            {% endif %}
+            {% if isShopPage is not defined %}
+                    {{ include('FaAdBundle:AdList:saveSearch.html.twig') }}
+            {% endif %}
+            <div class="map-wrapper">
+                <h3>
+                    {% if keywords|length%}
+                        {{'%keywords% near you...'|trans({'%keywords%': keywords}, 'frontend-search-result')}}
+                    {% else %}
+                        {{'Search result'|trans({}, 'frontend-search-result')}}
+                    {% endif %}
+                </h3>
+                {# <div id="googlemaps" style="width:757px;height:545px;"></div> #}
+                <div id="mapfit" style="width:757px;height:545px;"></div>
+            </div>
+        </div>
+        {{ render(controller('FaAdBundle:AdList:showListingSeoBlocks', {'searchParams': searchParams, 'map': true, 'location': app.request.get('location'), 'seoPageRule': seoPageRule, 'orgRequest': app.request})) }}
+    </div>
+</div>
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ include('FaAdBundle:AdList:leftSearchJsNew.html.twig') }}
+    {{ include('FaAdBundle:AdList:listJsNew.html.twig') }}
+        
+    {% javascripts filter='uglifyjs2' output='bundles/js/compiled/mapSearchResult.js'
+        'bundles/facore/js/owl.carousel.min.js'
+    %}
+    <script src="{{ static_asset_url(asset_url) }}?v=111"></script>
+    {% endjavascripts %}
+    
+    {# {% javascripts filter='uglifyjs2' output='bundles/js/compiled/mapSearchResult.js'
+        'bundles/facore/js/googleMapOms.js'
+        'bundles/facore/js/googleMapInfobox.js'
+        'bundles/facore/js/owl.carousel.min.js'
+    %}
+    <script src="{{ static_asset_url(asset_url) }}?v=40"></script>
+    {% endjavascripts %}
+    {% set container = fetch_container_instance() %}
+    <script language="javascript" type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function(){
+            var gm = google.maps;
+            var map = new gm.Map(document.getElementById('googlemaps'), {
+                zoom:10,
+                zoomControl: false,
+                panControl:false,
+                streetViewControl: false,
+                mapTypeControl: false,
+                mapTypeId:google.maps.MapTypeId.ROADMAP
+            });
+
+            var iw = new InfoBox({
+                alignBottom: true,
+                pixelOffset: new google.maps.Size(-232, -23),
+                boxStyle: {
+                    width: "467px"
+                },
+                closeBoxMargin: "infobox-close",
+                closeBoxURL: "{{ asset_url('fafrontend/images/cross.svg') }}",
+                infoBoxClearance: new google.maps.Size(20, 20),
+                isHidden: false,
+                pane: "floatPane",
+                enableEventPropagation: false,
+                disableAutoPan: true
+            });
+            var oms = new OverlappingMarkerSpiderfier(map,
+              {markersWontMove: true, markersWontHide: true});
+
+            var getMapIcon = function() {
+              return new google.maps.MarkerImage("{{ asset_url('fafrontend/images/map-marker.png') }}", null, null, null, new google.maps.Size(15, 15));
+            }
+
+            oms.addListener('click', function(marker) {
+              iw.setContent('');
+              updateContent(marker, iw);
+              map.setCenter(marker.getPosition());
+              map.panBy(2, -50);
+              iw.open(map, marker);
+            });
+            oms.addListener('spiderfy', function(markers) {
+              for(var i = 0; i < markers.length; i ++) {
+                markers[i].setIcon(getMapIcon());
+              }
+              iw.close();
+            });
+            oms.addListener('unspiderfy', function(markers) {
+              for(var i = 0; i < markers.length; i ++) {
+                markers[i].setIcon(getMapIcon());
+              }
+            });
+            var bounds = new gm.LatLngBounds();
+            {% set adWithLatLng = false %}
+            {% if pagination.getNbResults() %}
+                {% for ad in pagination.getCurrentPageResults() %}
+                    {% if attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::LATITUDE')) is defined and attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::LONGITUDE')) is defined %}
+                        {% set adWithLatLng = true %}
+                        point =  new google.maps.LatLng(parseFloat({{attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::LATITUDE')).0}}), parseFloat({{attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::LONGITUDE')).0}}));
+                        bounds.extend(point);
+                        {% if attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::TITLE')) is defined %}
+                            title = '{{ attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::TITLE')) }}'
+                        {% else %}
+                            title = '{{ad.id}}'
+                        {% endif %}
+
+                        var marker = new gm.Marker({
+                            position: point,
+                            title: title,
+                            map: map,
+                            icon: getMapIcon(),
+                          });
+                          marker.id = {{ad.id}};
+                          oms.addMarker(marker);
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% if adWithLatLng %}
+                map.fitBounds(bounds);
+            {% else %}
+                map.setCenter(new google.maps.LatLng(51.50, -0.12));
+            {% endif %}
+
+            function updateContent(marker, iw)
+            {
+                var route = Routing.generate('ad_show_ad_for_infobox', { 'adId': marker.id });
+                route = route.replace(':https','');
+                $.ajax({
+                    type: "GET",
+                    url : route,
+                })
+                .done(function(response) {
+                    if (response.length) {
+                        marker.desc = response;
+                        iw.setContent(marker.desc);
+                    }
+                });
+            }
+
+        });
+      //]]>
+    </script> #}
+    {% set container = fetch_container_instance() %}
+    {% set mapFitkey = '' %}
+    {% set mapFitConfig = fetch_repository('FaCoreBundle:ConfigRule').getActiveConfigRulesByCategoryId(constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::MAPFIT_API_KEY_ID'), null, 1) %}
+    {% if mapFitConfig and mapFitConfig.0.value is defined %}
+    	{% set mapFitkey = mapFitConfig.0.value %}
+    {% endif %}
+    
+    <script  type="text/javascript" src="https://leafletjs-cdn.s3.amazonaws.com/content/leaflet/master/leaflet.js"></script>
+	<script  type="text/javascript" src="https://tiles.unwiredmaps.com/js/leaflet-unwired.js"></script>
+    
+    <script language="javascript" type="text/javascript">
+        //<![CDATA[
+        		 var apikey = "{{ mapFitkey }}";
+                 var streets = L.tileLayer.Unwired({key: apikey, scheme: "streets"});
+        		 $(document).ready(function(){
+        			 var defaultRadCnt = {{resultCount}};
+                     var extRadCnt = {{extendedResultCount}};
+                     
+                     
+        			 {% if pagination.getNbResults() %}
+                 	 	var mapSearchList = {{ ads|json_encode|raw }};
+                 	 	showSearchResultMapLocations(mapSearchList, defaultRadCnt, extRadCnt);
+                 	 {% endif %}
+        			 
+        		 });
+
+        		 function showSearchResultMapLocations(mapSearchList, defaultRadCnt = 0, extRadCnt = 0) {
+        				var rescnt = 0;
+        				var defaultRadLayer = [];
+        				var extendedRadLayer = [];
+                        var defaultRadFeature = [];
+        				var lat, lng, focusedLat = 0.0, focusedLng = 0.0;
+        				var myIcon = L.icon({className:"", iconUrl: "{{ markerUrl }}" });
+        				
+        				$.each(mapSearchList, function (i, item) {
+        					rescnt = rescnt + 1;
+        					if( typeof item.latitude !== undefined && item.latitude != '' && typeof item.longitude !== undefined && item.longitude != '') {
+        						lat = parseFloat(item.latitude);
+        						lng = parseFloat(item.longitude);
+
+        						if (! isNaN(lat) && ! isNaN(lng)) {
+                                    if (rescnt > defaultRadCnt) {
+                                        extendedRadLayer.push(L.marker([lat, lng], {icon: myIcon}).bindPopup('   ').on('click', function () {
+                                            updateContent(item.ad_id);
+                                        }));
+                                    } else {
+                                        defaultRadLayer.push(L.marker([lat, lng], {icon: myIcon}).bindPopup('  ').on('click', function () {
+                                            updateContent(item.ad_id);
+                                        }));
+                                        defaultRadFeature.push(L.marker([lat, lng]));
+                                        focusedLat = parseFloat(lat);
+                                        focusedLng = parseFloat(lng);
+                                    }
+                                } else {
+        						    console.log('ad id: ' + item.ad_id + ' :: latitude: ' + item.latitude + ' :: longitude: ' + item.longitude);
+                                }
+        					}
+        				});
+        				var defaultLoc = L.layerGroup(defaultRadLayer);
+        				var extLoc = L.layerGroup(extendedRadLayer);
+                        var group = new L.featureGroup(defaultRadFeature);
+ 
+        			     map = L.map('mapfit', {
+        			        center: [focusedLat, focusedLng],
+        			        zoom: 10,
+        			        layers: [streets, defaultLoc, extLoc]
+        				});
+                        map.fitBounds(group.getBounds());
+        			}
+
+        		 function updateContent(adId) {
+                     var route = Routing.generate('ad_show_ad_for_infobox', { 'adId': adId });
+                     route = route.replace(':https','');
+                     $.ajax({
+                         type: "GET",
+                         url : route,
+                     })
+                     .done(function(response) {
+                         if (response.length) {
+                        	 var desc = response;
+                        	 $(".leaflet-popup-content").html(desc);
+                         }
+                     });
+                 }
+        //]]>
+      </script>
+{% endblock %}
