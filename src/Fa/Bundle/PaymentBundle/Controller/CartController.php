@@ -134,26 +134,18 @@ class CartController extends CoreController
                     return $this->handleMessage($this->get('translator')->trans('Your featured upsell added to the advert successfully.', array(), 'frontend-cart-payment'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success');
                     
                 } else {
-                    //send ads for moderation
-                    $this->getRepository('FaAdBundle:AdModerate')->sendAdsForModeration($paymentId, $this->container);
-                    
-                    //redirect back to manage my ads active tab.
-                    $this->container->get('session')->set('payment_success_redirect_url', $this->generateUrl('manage_my_ads_active'));
-                    
-                    return $this->handleMessage($this->get('translator')->trans('Your free advert posted successfully.', array(), 'frontend-cart-payment'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success');                    
+                    if ($paymentId) {
+                        //send ads for moderation
+                        sleep(5);
+                        $this->getRepository('FaAdBundle:AdModerate')->sendAdsForModeration($paymentId, $this->container);
 
-                if($paymentId) {
-                //send ads for moderation
-sleep(5);
-                $this->getRepository('FaAdBundle:AdModerate')->sendAdsForModeration($paymentId, $this->container);
+                        //redirect back to manage my ads active tab.
+                        $this->container->get('session')->set('payment_success_redirect_url', $this->generateUrl('manage_my_ads_active'));
 
-                //redirect back to manage my ads active tab.
-                $this->container->get('session')->set('payment_success_redirect_url', $this->generateUrl('manage_my_ads_active'));
-
-                return $this->handleMessage($this->get('translator')->trans('Your free advert posted successfully.', array(), 'frontend-cart-payment'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success');
-                } else {
-                  return $this->handleMessage($this->get('translator')->trans('Problem in payment.', array(), 'frontend-cart-payment'), 'checkout_payment_failure', array('cartCode' => $cart->getCartCode()), 'error');
->>>>>>> origin/clean_master
+                        return $this->handleMessage($this->get('translator')->trans('Your free advert posted successfully.', array(), 'frontend-cart-payment'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success');
+                    } else {
+                        return $this->handleMessage($this->get('translator')->trans('Problem in payment.', array(), 'frontend-cart-payment'), 'checkout_payment_failure', array('cartCode' => $cart->getCartCode()), 'error');
+                    }
                 }
             } catch (\Exception $e) {
                 $this->getEntityManager()->getConnection()->rollback();
@@ -242,7 +234,7 @@ sleep(5);
                 $this->getRepository('FaPaymentBundle:Cart')->clear();
                 $this->getRepository('FaPaymentBundle:Transaction')->clear();
                 $cart        = $this->getRepository('FaPaymentBundle:Cart')->getUserCart($loggedinUser->getId(), $this->container);
-                $cartDetails = $this->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
+                    $cartDetails = $this->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
                 $parameters = array(
                     'cart' => $cart,
                     'cartDetails' => $cartDetails,
