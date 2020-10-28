@@ -40,6 +40,7 @@ class UpdateAdSolrIndexNewCommand extends ContainerAwareCommand
         ->addOption('memory_limit', null, InputOption::VALUE_OPTIONAL, 'Memory limit of script execution', null)
         ->addOption('status', null, InputOption::VALUE_OPTIONAL, 'Ad status', 'A')
         ->addOption('id', null, InputOption::VALUE_OPTIONAL, 'Ad ids', null)
+        ->addOption('start_from', null, InputOption::VALUE_OPTIONAL, 'Start Offset for main command', 0)
         ->addOption('offset', null, InputOption::VALUE_OPTIONAL, 'Offset of the query', null)
         ->addOption('category', null, InputOption::VALUE_OPTIONAL, 'Category name', null)
         ->addOption('update_type', null, InputOption::VALUE_OPTIONAL, 'Update type', null)
@@ -263,7 +264,10 @@ EOF
 
         $output->writeln('SCRIPT START TIME '.date('d-m-Y H:i:s', $stat_time), true);
         $output->writeln('Total ads : '.$count, true);
-        for ($i = 0; $i <= $count;) {
+
+        $startFrom = $input->getOption("start_from");
+        $startFrom = $startFrom ? $startFrom : 0;
+        for ($i = $startFrom; $i <= $count;) {
             if ($i == 0) {
                 $low = 0;
             } else {
@@ -290,7 +294,7 @@ EOF
             $output->writeln($command, true);
 //            passthru($command, $returnVar);
             $this->command_in_background($command);
-            sleep(5);
+            sleep(40);
 
 //            if ($returnVar !== 0) {
 //                $output->writeln('Error occurred during subtask', true);
