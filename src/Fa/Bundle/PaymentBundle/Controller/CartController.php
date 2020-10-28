@@ -135,11 +135,9 @@ class CartController extends CoreController
                     return $this->handleMessage($this->get('translator')->trans('Your featured upsell added to the advert successfully.', array(), 'frontend-cart-payment'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success');
                     
                 } else {
-                    //send ads for moderation
                     if ($paymentId) {
                         //send ads for moderation
                         sleep(5);
-
                         $this->getRepository('FaAdBundle:AdModerate')->sendAdsForModeration($paymentId, $this->container);
 
                         //redirect back to manage my ads active tab.
@@ -238,7 +236,7 @@ class CartController extends CoreController
                 $this->getRepository('FaPaymentBundle:Cart')->clear();
                 $this->getRepository('FaPaymentBundle:Transaction')->clear();
                 $cart        = $this->getRepository('FaPaymentBundle:Cart')->getUserCart($loggedinUser->getId(), $this->container);
-                $cartDetails = $this->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
+                    $cartDetails = $this->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
                 $parameters = array(
                     'cart' => $cart,
                     'cartDetails' => $cartDetails,
