@@ -861,7 +861,6 @@ class AdRepository extends EntityRepository
         $document = $this->addField($document, 'weekly_refresh_at', $ad->getWeeklyRefreshAt());
         $document = $this->addField($document, 'weekly_refresh_count', $ad->getManualRefresh());
 
-        // TODO: location details to be fetched for ad
         $categoryString = explode('/', $allParentCategories[0]['full_slug']);
         $categoryString = isset($categoryString[1]) ? $categoryString[1] : $categoryString[0];
 

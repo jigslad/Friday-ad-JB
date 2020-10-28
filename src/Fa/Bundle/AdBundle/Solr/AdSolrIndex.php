@@ -152,7 +152,8 @@ class AdSolrIndex implements AdSolrFieldMapping
 
                 return true;
             } catch (\Exception $e) {
-                echo $e->getMessage();
+                //echo $e->getMessage();
+                file_put_contents('/var/www/html/newfriday-ad/web/uploads/indexing-logs.log', $e->getMessage());
                 return false;
             }
         }
