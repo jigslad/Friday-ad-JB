@@ -288,15 +288,33 @@ EOF
             }
             $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:update:ad-solr-index-new '.$commandOptions.' '.$input->getArgument('action');
             $output->writeln($command, true);
-            passthru($command, $returnVar);
+//            passthru($command, $returnVar);
+            $this->command_in_background($command);
+            sleep(5);
 
-            if ($returnVar !== 0) {
-                $output->writeln('Error occurred during subtask', true);
-            }
+//            if ($returnVar !== 0) {
+//                $output->writeln('Error occurred during subtask', true);
+//            }
         }
 
         $output->writeln('SCRIPT END TIME '.date('d-m-Y H:i:s', time()), true);
         $output->writeln('TIME TAKEN TO EXECUTE SCRIPT '.((time() - $stat_time) / 60), true);
+    }
+
+    /**
+     * Run the given command in background.
+     *
+     * @param $command
+     */
+    function command_in_background($command)
+    {
+        $outputBuffer = null;
+
+        try {
+            exec("{$command} > /dev/null 2>&1 &", $outputBuffer, $exitCode);
+        } catch (\Exception $e) {
+            sleep(3);
+        }
     }
 
     /**
