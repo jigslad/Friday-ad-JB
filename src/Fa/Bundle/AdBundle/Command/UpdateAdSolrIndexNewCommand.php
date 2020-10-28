@@ -294,7 +294,7 @@ EOF
             $output->writeln($command, true);
 //            passthru($command, $returnVar);
             $this->command_in_background($command);
-            sleep(40);
+            sleep(12);
 
 //            if ($returnVar !== 0) {
 //                $output->writeln('Error occurred during subtask', true);
