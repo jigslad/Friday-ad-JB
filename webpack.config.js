@@ -36,6 +36,7 @@ Encore
     .addStyleEntry('css/fad-custome-2', './assets/css/fad-custome-2.scss')
     .addStyleEntry('css/fad-custome-3', './assets/css/fad-custome-3.scss')
     .addStyleEntry('css/fad-custome-4', './assets/css/fad-custome-4.scss')
+    .addStyleEntry('css/popularSearch', './assets/scss/popular-search.scss')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
