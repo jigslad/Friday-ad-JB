@@ -267,6 +267,7 @@ EOF
 
         $startFrom = $input->getOption("start_from");
         $startFrom = $startFrom ? $startFrom : 0;
+        $batchSize = 0;
         for ($i = $startFrom; $i <= $count;) {
             if ($i == 0) {
                 $low = 0;
@@ -294,7 +295,14 @@ EOF
             $output->writeln($command, true);
 //            passthru($command, $returnVar);
             $this->command_in_background($command);
-            sleep(25);
+            sleep(20);
+            $batchSize++;
+
+            // After triggering every 10 items, wait for 2 mins
+            if ($batchSize >= 10) {
+                sleep(120);
+                $batchSize = 0;
+            }
 
 //            if ($returnVar !== 0) {
 //                $output->writeln('Error occurred during subtask', true);
