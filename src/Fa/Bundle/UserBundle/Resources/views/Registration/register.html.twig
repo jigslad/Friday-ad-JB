@@ -376,6 +376,6 @@
     	ga('set', 'dimension9', 'logged in');
     {% endif %}
     ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Login_Or_Register'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %}});
-//]]>
+    //]]>
 </script>
 {% endblock %}

@@ -37,6 +37,12 @@
 {% set container = fetch_container_instance() %}
 <script language="javascript" type="text/javascript">
 //<![CDATA[
+
+$(document).ready(function() {
+    document.cookie = "SameSite=None;Secure;path=/";
+});
+
+
     function removeCartItem(transactionId)
     {
         if (confirm('{{'Are you sure you want to remove selected item?'|trans({}, 'backend-cart')}}')) {

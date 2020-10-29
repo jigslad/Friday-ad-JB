@@ -1,10 +1,10 @@
 {% set bigImageRoute = "ajax_get_big_user_site_banner_image" %}
-{% set userSiteBannerUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserSiteBannerUrl', [fetch_container_instance(), userSiteObj.getId(), 1]) %}
+{% set userSiteBannerUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserSiteBannerUrl', [fetch_container_instance(), userSiteObj.getId(), 0]) %}
 {% if fromProfilePage is defined and fromProfilePage %}
-    <img id="user_site_banner_img" class="sie-if" src="{{ userSiteBannerUrl }}?{{ random(1000) }}" />
+    <img id="user_site_banner_img" class="sie-if" src="{{ userSiteBannerUrl }}" />
 {% else %}
     <div class="profile-banner">
-        <img id="user_site_banner_img" class="sie-else" src="{{ userSiteBannerUrl }}?{{ random(1000) }}" />
+        <img id="user_site_banner_img" class="sie-else" src="{{ userSiteBannerUrl }}" />
         <div class="edit-pro-banner">
             <div class="clearfix">
                 <div class="edit-pro-btns">

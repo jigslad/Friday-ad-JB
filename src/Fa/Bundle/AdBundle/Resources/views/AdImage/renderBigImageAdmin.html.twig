@@ -29,7 +29,7 @@
                 {% set imageAdId = adImgObj.getAd().getId() %}
             {% endif %}
             {% set adCropBigImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageUrl', [container, imageAdId, adImgObj.getPath(), adImgObj.getHash(), '', adImgObj.getAws(), adImgObj.getImageName()]) %}
-            <img id='crop_big_image' src="{{ adCropBigImageUrl }}?{{ random(1000) }}">
+            <img id='crop_big_image' src="{{ adCropBigImageUrl }}?{{ date().timestamp }}">
         </div>
         <div id='controls'>
           <span id="reset_image_success_msg"></span>
