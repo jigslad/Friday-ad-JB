@@ -1171,7 +1171,8 @@ class AdListController extends CoreController
             'cookieLocationDetails' => $cookieLocationDetails,
             'keywords'              => $keywords,
             'extendedResult'        => $extendedResult,
-            'extendedResultCount'   => $extendedResultCount
+            'extendedResultCount'   => $extendedResultCount,
+            'facetResult'           => $pagination['facetResult']
          ];
 
         if (isset($findersSearchParams['item__category_id'])) {
@@ -1466,13 +1467,13 @@ class AdListController extends CoreController
                 'title' => 'Private advertiser',
                 'url_param' => 'is_trade_ad=0',
                 'count' => empty($tradeFacets) ? 0 : intval($tradeFacets["false"]),
-                'selected' => isset($params['is_trade_ad']) && $params['is_trade_ad'] == '0' ? true : false
+                'selected' => isset($params['is_trade_ad']) && $params['is_trade_ad'][0] == '0' ? true : false
             ],
             1 => [
                 'title' => 'Business advertiser',
                 'url_param' => 'is_trade_ad=1',
                 'count' => empty($tradeFacets) ? 0 : intval($tradeFacets["true"]),
-                'selected' => isset($params['is_trade_ad']) && $params['is_trade_ad'] == '1' ? true : false
+                'selected' => isset($params['is_trade_ad']) && $params['is_trade_ad'][0] == '1' ? true : false
             ]
         ];
 

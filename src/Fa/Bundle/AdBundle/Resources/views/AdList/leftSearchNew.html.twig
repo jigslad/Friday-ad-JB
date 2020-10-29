@@ -260,7 +260,7 @@
         }
     }
 
-    function set_url_params(url_params, this_url) {
+    function set_url_params(url_params, this_url, isCheckbox=true) {
         let this_url_parts = this_url.split('=');
         let this_url_part = this_url_parts[0];
         let this_url_value = this_url_parts[1];
@@ -278,7 +278,12 @@
                     if (item.indexOf(this_url) != -1) {
                         new_url_params += this_url + '&';
                     } else {
-                        new_url_params += item + '___' + this_url_value + '&';
+                        if (isCheckbox) {
+                            new_url_params += item + '___' + this_url_value + '&';
+                        } else {
+                            let values = item.split('=');
+                            new_url_params += values[0] + '=' + this_url_value + '&';
+                        }
                     }
                 } else {
                     new_url_params += this_url + '&';
@@ -302,6 +307,7 @@
                     href = href.replace('/search/', '/');
                 }
             }
+            let isCheckbox = $(this).closest('li').find('input[type="checkbox"]').length ? true : false;
 
             let url_params = '';
 
@@ -313,25 +319,46 @@
 
             let index = href.indexOf(this_url);
             if (index != -1) {
-                href = href.substring(0, (index + this_url.length));
+                href = href.substring(0, (index));
             } else if (this_url.indexOf('=') != -1) {
-                if (url_params.length) {
-                    url_params += '&' + this_url;
-                } else {
-                    url_params = set_url_params(url_params.replace('?', ''), this_url);
-                }
+                url_params = set_url_params(url_params.replace('?', ''), this_url, isCheckbox);
             } else {
                 let data_href = '';
-                if ($(this).closest('li').find('input[type="checkbox"]').length) {
-                    if ($(this).closest('ul').find('li').length > 1 && $(this).closest('ul').find('span.checked').length) {
-                        data_href = $(this).closest('ul').find('span.checked').closest('li').find('a').attr('data-href');
-                    }
+                if (isCheckbox) {
+                    if ($(this).closest('li').find('input[type="checkbox"]').is(':checked')) {
+                        if (href.indexOf(this_url) !== -1) {
+                            href = href.replace('/' + this_url, '');
+                        } else if (url_params.indexOf(this_url) !== -1) {
+                            let name = $(this).closest('li').find('label').attr('for').replace('fa_left_search_', '');
+                            url_params = url_params.replace('item__' + name+'='+this_url, '');
 
-                    if (data_href.length) {
-                        let name = $(this).closest('ul').find('li').find('label').attr('for').replace('fa_left_search_', '');
-                        url_params = set_url_params(url_params.replace('?', ''), 'item__' + name + '=' + this_url);
+                            let new_url_params = '';
+                            url_params = url_params.split('&');
+                             if (url_params.length) {
+                                 url_params.forEach(function(this_item) {
+                                     if (this_item == '?' || this_item == '') {
+
+                                     } else {
+                                         new_url_params += this_item + '&';
+                                     }
+                                 });
+                             }
+                             url_params = new_url_params.replace(new RegExp("[&]*$"), '');
+                             if (url_params.indexOf('?') === -1) {
+                                 url_params = '?' + url_params;
+                             }
+                        }
                     } else {
-                        href += this_url + '/';
+                        if ($(this).closest('ul').find('li').length > 1 && $(this).closest('ul').find('span.checked').length) {
+                            data_href = $(this).closest('ul').find('span.checked').closest('li').find('a').attr('data-href');
+                        }
+
+                        if (data_href.length) {
+                            let name = $(this).closest('ul').find('li').find('label').attr('for').replace('fa_left_search_', '');
+                            url_params = set_url_params(url_params.replace('?', ''), 'item__' + name + '=' + this_url);
+                        } else {
+                            href += this_url + '/';
+                        }
                     }
                 } else {
                     href += this_url + '/';
