@@ -300,6 +300,28 @@
     
     <script language="javascript" type="text/javascript">
         //<![CDATA[
+
+        let href = window.location.href;
+        let split = href.split('?');
+        let urlparams = split[1];
+
+        urlparams = urlparams.split('&');
+        let newurlparams = '';
+        if (urlparams.length) {
+            urlparams.forEach(function(item) {
+                if (item.indexOf('map=1') === -1) {
+                    newurlparams += item + '&';
+                }
+            });
+
+            if (newurlparams.length) {
+                newurlparams = '?' + newurlparams;
+                newurlparams = newurlparams.replace(new RegExp("[&]*$"), '');
+            }
+        }
+
+        $('.list-view').attr('href', split[0] + newurlparams);
+
         		 var apikey = "{{ mapFitkey }}";
                  var streets = L.tileLayer.Unwired({key: apikey, scheme: "streets"});
         		 $(document).ready(function(){

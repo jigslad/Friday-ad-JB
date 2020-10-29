@@ -145,21 +145,21 @@ class PaaLiteCommonType extends PaaLiteType
                     'paypal_email',
                     EmailType::class,
                     array(
-                        'label' => 'Paypal email address',
+                        'label' => 'PayPal email address',
                         'mapped' => false
                     )
                 )->add(
                     'paypal_first_name',
                     TextType::class,
                     array(
-                        'label' => 'Paypal first name',
+                        'label' => 'PayPal first name',
                         'mapped' => false
                     )
                 )->add(
                     'paypal_last_name',
                     TextType::class,
                     array(
-                        'label' => 'Paypal last name',
+                        'label' => 'PayPal last name',
                         'mapped' => false
                     )
                 );
