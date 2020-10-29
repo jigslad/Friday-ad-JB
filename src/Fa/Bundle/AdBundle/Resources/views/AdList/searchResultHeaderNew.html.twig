@@ -70,7 +70,7 @@
                         <div class="sortby-fields">
                             <div class="clearfix">
                                 <div class="right">
-                                    <a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(searchParams|merge({'map': '' })) }}" class="list-view {% if not app.request.get('map', false) %}active{% endif %}" {% if app.request.queryString and app.request.queryString != 'map=1' %}rel="nofollow"{% endif %}>{{'List'|trans({}, 'frontend-search-result')}}</a>
+                                    <a href="javascript:void(0);" class="list-view {% if not app.request.get('map', false) %}active{% endif %}" {% if app.request.queryString and app.request.queryString != 'map=1' %}rel="nofollow"{% endif %}>{{'List'|trans({}, 'frontend-search-result')}}</a>
                                     <a href="javascript:void(0);" class="map-view {% if app.request.get('map', false) %}active{% endif %}" rel="nofollow">{{'Map'|trans({}, 'frontend-search-result')}}</a>
                                 </div>
                                 <div class="right hide-for-small-only white-select">
