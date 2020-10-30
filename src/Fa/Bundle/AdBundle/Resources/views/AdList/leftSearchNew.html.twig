@@ -66,7 +66,7 @@
             {# Category search params - end #}
 
             {# Static search filters - start #}
-            <dd class="accordion-navigation keep-shown">
+            <dd class="accordion-navigation keep-shown {% if not leftFilters.showPriceField %} hide {% endif %}">
                 <a href="#panel2a" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'My budget is from'|trans({}, 'frontend-left-search')}}</h5></a>
                 <div class="content active clearfix">
                     <ul class="budget-box clearfix">
