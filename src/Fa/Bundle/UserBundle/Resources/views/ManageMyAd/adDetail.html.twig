@@ -169,6 +169,11 @@
                             </span>
                         {% endif %}
                     {% endif %}
+
+                    <span class="mma-ad-list maa-small-text">
+                        {{ 'Reference : '|trans({}, 'frontend-manage-my-ad') }} {{ad.id}}
+                    </span>
+
                     {% if currentRoute == 'manage_my_ads_active' or currentRoute == 'dashboard_home' %}
                         {% if ad.expires_at is defined and ad.expires_at is not null and ad.published_at is defined and ad.published_at is not null%}
                             {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') %}
@@ -182,9 +187,7 @@
                             {% endif %}
                         {% endif %}
                     {% endif %}
-                    <span class="mma-ad-list maa-small-text">
-                        {{ 'Reference : '|trans({}, 'frontend-manage-my-ad') }} {{ad.id}}
-                    </span>
+
                     {% set adViewCounter = 0 %}
                     {% if adViewCounterArray[adId] is defined and adViewCounterArray[adId] is not null %}
                         {% set adViewCounter = adViewCounterArray[adId] %}
