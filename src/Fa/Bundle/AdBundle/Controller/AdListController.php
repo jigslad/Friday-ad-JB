@@ -813,6 +813,10 @@ class AdListController extends CoreController
 
         // ad location filter with distance
         if (isset($data['search']['item__location']) && $data['search']['item__location']) {
+            if ($data['search']['item__location'] == 2) {
+                $data['facet_fields']['town'] = array('min_count' => 1, 'limit' => 10);
+            }
+
             $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'.((isset($data['search']['item__distance']) ? $data['search']['item__distance'] : ''));
         }
         $data['query_filters']['item']['is_blocked_ad'] = 0;
@@ -1334,7 +1338,8 @@ class AdListController extends CoreController
             'expired_ads',
             'is_trade_ad',
             'item__distance',
-            'map'
+            'map',
+            'keywords'
         ];
         $diffKeys = array_diff(array_keys($searchParams), $staticKeys);
 
@@ -1366,12 +1371,12 @@ class AdListController extends CoreController
                 $staticFilters .= ' AND status_id : ' . EntityRepository::AD_STATUS_EXPIRED_ID;
             } else if ($searchKey == 'is_trade_ad') {
                 $staticFilters .= ' AND is_trade_ad : ' . $searchItem;
-            } else if ($searchKey == 'item__distance' || $searchKey == 'map') {
+            } else if ($searchKey == 'item__distance' || $searchKey == 'map' || $searchKey == 'keywords') {
 
             } else {
                 $thisFilter = [];
                 foreach ($searchItem as $dimItem) {
-                    $thisFilter[] = $searchKey .':*'.$dimItem.'*';
+                    $thisFilter[] = $searchKey .':*'.str_replace('-', '\-', $dimItem).'*';
                 }
 
                 $staticFilters .= ' AND (' . implode(' OR ', $thisFilter) .')';
@@ -1636,7 +1641,8 @@ class AdListController extends CoreController
             'orderedDimensions' => $orderedDimensions,
             'dimensions'        => $dimensions,
             'ads_with_images'   => isset($params['ads_with_images']),
-            'expired_ads'       => isset($params['expired_ads'])
+            'expired_ads'       => isset($params['expired_ads']),
+            'showPriceField'    => $categoryObj->getId() > 1 ? CommonManager::showPriceInSearchFilter($categoryObj->getId(), $this->container) : true
         ];
     }
 
@@ -1688,11 +1694,13 @@ class AdListController extends CoreController
                 $dimensions = [];
                 if (count($dim_keys)) {
                     foreach ($dim_keys as $dim_key) {
-                        $dim_field = get_object_vars(json_decode($ad[$dim_key][0]));
-                        $dimensions[] = array(
-                            'name'          => $dim_field['name'],
-                            'listing_class' => empty($dim_field['listing_class']) ? '' : $dim_field['listing_class']
-                        );
+                        foreach ($ad[$dim_key] as $key => $value) {
+                            $dim_field = get_object_vars(json_decode($ad[$dim_key][$key]));
+                            $dimensions[] = array(
+                                'name' => $dim_field['name'],
+                                'listing_class' => empty($dim_field['listing_class']) ? '' : $dim_field['listing_class']
+                            );
+                        }
 
                     }
                 }
