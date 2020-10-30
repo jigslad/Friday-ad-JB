@@ -175,31 +175,22 @@
                         <b>{{ adLocation }}</b>
                     </div>
                 {% endif %}
-                {% if ad['status_id'] == adStatusLive %}
-                
-                    <div class="clearfix dtl-social-icons-desk-tab dtl-social-icons manage-list-social-icons show-for-small-up-only">
-                        {# <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/facebook/offer?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0','Facebook');" href="javascript:void(0);" title="{{'Facebook'|trans({}, 'frontend-show-ad')}}" class="dtl-fb" id="dtl-fb-id"></a> #}
-                        <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/twitter/offer?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0', 'Twitter');" href="javascript:void(0);" title="{{'Twitter'|trans({}, 'frontend-show-ad')}}" class="dtl-twi" id="dtl-twi-id"></a>
-                        {# <a onclick="return socialShare('{{ ad.id }}', 'https://plus.google.com/share?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0', 'GooglePlus');" href="javascript:void(0);" title="{{'Google Plus'|trans({}, 'frontend-show-ad')}}" class="dtl-gpl" id="dtl-gpl-id"></a>
-                        <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/pinterest/offer?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0', 'Pinterest');" href="javascript:void(0);" title="{{'Pinterest'|trans({}, 'frontend-show-ad')}}" class="dtl-pin" id="dtl-pin-id"></a> #}
-                        <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/email/offer?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0', 'Email');" href="javascript:void(0);" title="{{'Email'|trans({}, 'frontend-show-ad')}}" class="dtl-eml" id="dtl-eml-id"></a>
-                    
-                    
-                    {% if isBoostEnabled is defined and isBoostEnabled==1 and ad.boosted_at is defined and ad.is_boosted==1 %}
-                        <div class="list-boosted-hours list-boosted-hours-desk-tab show-for-small-up-only">
-                        {% set boostedInwords = ad.boosted_at |time_ago_in_words %}
-                    	{% set boostedInwords = (boostedInwords=='less than 1 minute ago' or boostedInwords=='less than a minute ago')?'1 minute ago':boostedInwords %}
-                        {{ 'Boosted'|trans({}, 'frontend-manage-my-ad') }} {{boostedInwords|replace({'minute': 'min','about' : ''})}}
+                <div class="mma-ad-block">
+                    {% if ad['status_id'] == adStatusLive %}
+                        <div class="clearfix dtl-social-icons-desk-tab dtl-social-icons manage-list-social-icons manage-netsuitelist-social-icons show-for-small-up-only">
+                            {# <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/facebook/offer?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0','Facebook');" href="javascript:void(0);" title="{{'Facebook'|trans({}, 'frontend-show-ad')}}" class="dtl-fb" id="dtl-fb-id"></a> #}
+                            <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/twitter/offer?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0', 'Twitter');" href="javascript:void(0);" title="{{'Twitter'|trans({}, 'frontend-show-ad')}}" class="dtl-twi" id="dtl-twi-id"></a>
+                            {# <a onclick="return socialShare('{{ ad.id }}', 'https://plus.google.com/share?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0', 'GooglePlus');" href="javascript:void(0);" title="{{'Google Plus'|trans({}, 'frontend-show-ad')}}" class="dtl-gpl" id="dtl-gpl-id"></a>
+                            <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/pinterest/offer?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0', 'Pinterest');" href="javascript:void(0);" title="{{'Pinterest'|trans({}, 'frontend-show-ad')}}" class="dtl-pin" id="dtl-pin-id"></a> #}
+                            <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/email/offer?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0', 'Email');" href="javascript:void(0);" title="{{'Email'|trans({}, 'frontend-show-ad')}}" class="dtl-eml" id="dtl-eml-id"></a>
                         </div>
-                    {% endif %} 
+                    {% endif %}
+                    <div class="ref-ad-netsuitelist maa-small-text">
+                        {{ 'Reference : '|trans({}, 'frontend-manage-my-ad') }} {{ad.id}}
+                    </div>
                 </div>
-                {% endif %}
 
                 <div class="mma-ad-block hide-for-small-only">
-                    <span class="mma-ad-list maa-small-text">
-                        {{ 'Reference : '|trans({}, 'frontend-manage-my-ad') }} {{ad.id}}
-                    </span>
-
                     {% set adViewCounter = 0 %}
                     {% if adViewCounterArray[adId] is defined and adViewCounterArray[adId] is not null %}
                         {% set adViewCounter = adViewCounterArray[adId] %}
@@ -207,6 +198,14 @@
                     <span class="mma-ad-list maa-small-text">
                         {{ 'Page views : '|trans({}, 'frontend-manage-my-ad') }} {{ adViewCounter }}
                     </span>
+
+                    {% if isBoostEnabled is defined and isBoostEnabled==1 and ad.boosted_at is defined and ad.is_boosted==1 %}
+                        <div class="list-boosted-hours netsuitelist-boosted-hours list-boosted-hours-desk-tab show-for-small-up-only">
+                            {% set boostedInwords = ad.boosted_at |time_ago_in_words %}
+                            {% set boostedInwords = (boostedInwords=='less than 1 minute ago' or boostedInwords=='less than a minute ago')?'1 minute ago':boostedInwords %}
+                            {{ 'Boosted'|trans({}, 'frontend-manage-my-ad') }} {{boostedInwords|replace({'minute': 'min','about' : ''})}}
+                        </div>
+                    {% endif %}
                 </div>
 
                 {% if adPackageArray[adId] is defined and adPackageArray[adId] is not null and adPackageArray[adId]['price'] > 0 %}
