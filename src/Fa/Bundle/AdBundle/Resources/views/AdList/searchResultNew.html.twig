@@ -217,7 +217,7 @@
                 {% set adCount = 0 %}
 
                 {% for ad in featuredAds %}
-                    {{ include('FaAdBundle:AdList:listDetailNew.html.twig') }}
+                    {{ include('FaAdBundle:AdList:listDetailNew.html.twig', {'isFeatured' : true}) }}
                 {% endfor %}
 
                 {% for ad in ads %}

@@ -32,7 +32,7 @@
                                 {% else %}
                                     {% set catLinkParam = { 'item__location': location_id, 'item__category_id': categoryId} %}
                                     {% set catListUrl = container.get('fa_ad.manager.ad_routing').getListingUrl(catLinkParam) %}
-                                    <a href="/ads{{ catListUrl }}">{{ categoryName }}</a>
+                                    <a href="{{ catListUrl }}">{{ categoryName }}</a>
                                 {% endif %}
                                 {% set searchTerm = 'in '~categoryName %}
                                 {% set catCnt = catCnt + 1 %}
@@ -53,8 +53,8 @@
                 <div class="clearfix">
                     {% set searchParams = [] %}
                     {% if seoFields.h1_tag is defined %}
-                            {% set h1Title = seoManager.parseSeoStringForAdList(seoFields.h1_tag, searchParams, cookieLocationDetails)|replace({' in UK': ''})|trim %}
-                            <h1 class="sub-page-head">{{ h1Title }}</h1><span class="no-of-results"> {% if h1Title|length %}-{% endif %} {{'%resultCount% results'|trans({'%resultCount%': resultCount}, 'frontend-search-result')}}</span>
+                        {% set h1Title = seoManager.parseSeoStringForAdList(seoFields.h1_tag, searchParams, cookieLocationDetails)|replace({' in UK': ''})|trim %}
+                        <h1 class="sub-page-head">{{ h1Title }}</h1><span class="no-of-results"> {% if h1Title|length %}-{% endif %} {{'%resultCount% results'|trans({'%resultCount%': resultCount}, 'frontend-search-result')}}</span>
                     {% elseif app.request.queryString %}
                         {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
                             <h1 class="sub-page-head">{{'%resultCount% results in %category%'|trans({'%resultCount%': resultCount, '%category%': fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id)}, 'frontend-search-result')}}</h1>
