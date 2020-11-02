@@ -9,21 +9,23 @@
   justify-content: space-between;
 }
 .popular-search-mobile {
-  flex-direction: row;
-  flex-wrap: nowrap;
-  display: flex;
-  margin-bottom: 10px;
-  margin-top: 0px;
-  justify-content: space-between;
-  overflow: hidden;
-  width:100%;
+  margin: 7px 0 13px 0;
 }
 .popular-search-mobile .owl-stage {
   padding-left: 0!important;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  white-space: nowrap;
+  width: 100% !important;
 }
 .popular-search-mobile .owl-stage .owl-item {
   width: auto!important;
 }
+.popular-search-mobile .owl-stage-outer{
+  width: 100% !important;
+
+ }
 .popular-search-mobile .owl-nav,
 .popular-search-mobile .owl-dots {
   display: none;
