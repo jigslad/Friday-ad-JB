@@ -1597,10 +1597,11 @@ class AdListController extends CoreController
 
             if (! empty($facetArraySet)) {
                 foreach ($facetArraySet as $jsonValue => $facetCount) {
-                    if (! is_object($jsonValue)) {
-                        break;
+                    try {
+                        $entityValue = get_object_vars(json_decode($jsonValue));
+                    } catch (\Exception $e) {
+
                     }
-                    $entityValue = get_object_vars(json_decode($jsonValue));
 
                     $key = 'id';
                     if (empty($entityValue[$key])) {
