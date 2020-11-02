@@ -1600,7 +1600,7 @@ class AdListController extends CoreController
                     try {
                         $entityValue = get_object_vars(json_decode($jsonValue));
                     } catch (\Exception $e) {
-
+                        continue;
                     }
 
                     $key = 'id';
