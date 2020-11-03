@@ -63,14 +63,14 @@ class CyberSourceCheckoutController extends CoreController
         $cartDetails       = $this->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
         $allow_zero_amount = $request->get('trail') ? true : false;
         $userPackage       = $this->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($loggedinUser);
-        
+
         $paymentFor = '';
-        
+
         if(!empty($cartDetails)) {
             $cartDetailsValues = unserialize($cartDetails[0]['value']);
             $paymentFor = isset($cartDetailsValues['payment_for'])?$cartDetailsValues['payment_for']:'';
         }
-        
+
         //check for cart price and item
         if ((!$cart->getAmount() && !$allow_zero_amount) || !count($cartDetails)) {
             $this->container->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('There is no item in your cart.', array(), 'frontend-cyber-source'));
@@ -80,49 +80,49 @@ class CyberSourceCheckoutController extends CoreController
         $formManager = $this->get('fa.formmanager');
         $form        = $formManager->createForm(CyberSourceCheckoutType::class, array('subscription' => $request->get('subscription')));
         $gaStr       = '';
-        
+
         $expire = date('D, d M Y H:i:s', time() + (86400 * 180)); // 3 months from now
         header("Set-cookie: PHPSESSID=".$request->cookies->get('PHPSESSID')."; expires=".$expire."; path=/; HttpOnly; SameSite=None; Secure");
-        
+
+
         if ('POST' === $request->getMethod() || $this->container->get('session')->has('upgrade_cybersource_params_'.$loggedinUser->getId())) {
             if ($cybersource3DSecureResponseFlag) {
 //                 $csrfToken     = $this->container->get('form.csrf_provider')->generateCsrfToken('fa_payment_cyber_source_checkout');
-                $csrfToken = $this->get('security.csrf.token_manager')->getToken('fa_payment_cyber_source_checkout')->getValue();
-                $cyberSourceData = $this->get('session')->get('cybersource_params_' . $loggedinUser->getId()) + array('_token' => $csrfToken);
+                $csrfToken     = $this->get('security.csrf.token_manager')->getToken('fa_payment_cyber_source_checkout')->getValue();
+                $cyberSourceData = $this->get('session')->get('cybersource_params_'.$loggedinUser->getId()) + array('_token' => $csrfToken);
                 if (array_key_exists('subscription', $cyberSourceData)) {
                     $request->attributes->set('subscription', $cyberSourceData['subscription']);
                     unset($cyberSourceData['subscription']);
                 }
                 // Bind data from session
                 $form->submit($cyberSourceData);
-            } elseif ($this->container->get('session')->has('upgrade_cybersource_params_' . $loggedinUser->getId())) {
+            } elseif ($this->container->get('session')->has('upgrade_cybersource_params_'.$loggedinUser->getId())) {
 //             	$csrfToken     = $this->container->get('form.csrf_provider')->generateCsrfToken('fa_payment_cyber_source_checkout');
-                $csrfToken = $this->get('security.csrf.token_manager')->getToken('fa_payment_cyber_source_checkout')->getValue();
-                $upgradeSourceData = $this->get('session')->get('upgrade_cybersource_params_' . $loggedinUser->getId()) + array('_token' => $csrfToken);
+                $csrfToken     = $this->get('security.csrf.token_manager')->getToken('fa_payment_cyber_source_checkout')->getValue();
+                $upgradeSourceData = $this->get('session')->get('upgrade_cybersource_params_'.$loggedinUser->getId()) + array('_token' => $csrfToken);
                 $form->submit($upgradeSourceData);
             } else {
                 $form->handleRequest($request);
             }
 
-            if ($form->isValid() || $this->container->get('session')->has('upgrade_cybersource_params_' . $loggedinUser->getId())) {
+            if ($form->isValid() || $this->container->get('session')->has('upgrade_cybersource_params_'.$loggedinUser->getId())) {
                 if (!$cybersource3DSecureResponseFlag) {
                     if (isset($upgradeSourceData) && !empty($upgradeSourceData)) {
-                        $this->get('session')->set('cybersource_params_' . $loggedinUser->getId(), array_merge($form->getData(), $upgradeSourceData));
+                        $this->get('session')->set('cybersource_params_'.$loggedinUser->getId(), array_merge($form->getData(), $upgradeSourceData));
                     } else {
-                        $this->get('session')->set('cybersource_params_' . $loggedinUser->getId(), array_merge($form->getData(), $request->get('fa_payment_cyber_source_checkout')));
+                        $this->get('session')->set('cybersource_params_'.$loggedinUser->getId(), array_merge($form->getData(), $request->get('fa_payment_cyber_source_checkout')));
                     }
                 }
-                $cyberSourceManager = $this->get('fa.cyber.source.manager');
+                $cyberSourceManager  = $this->get('fa.cyber.source.manager');
                 if ($request->get('subscription')) {
                     $cyberSourceManager->setMerchantReferenceCodeForSubscription();
                 }
-                $billTo = $this->getBillToArray($loggedinUser, $form);
+                $billTo              = $this->getBillToArray($loggedinUser, $form);
                 $userAddressBookInfo = $this->getBillToArray($loggedinUser, $form, true);
-                $cardInfo = $this->getCardInfoArray($form);
-                $paymentMethod = $form->get('payment_method')->getData();
-                $saveToken = false;
-                $subscriptionId = null;
-
+                $cardInfo            = $this->getCardInfoArray($form);
+                $paymentMethod       = $form->get('payment_method')->getData();
+                $saveToken           = false;
+                $subscriptionId      = null;
                 if ($paymentMethod) {
                     $token = $this->getRepository('FaPaymentBundle:PaymentTokenization')->isValidUserToken($loggedinUser->getId(), $paymentMethod);
                     if (!$token) {
@@ -134,7 +134,7 @@ class CyberSourceCheckoutController extends CoreController
                             $userAddressBookInfo = $billTo;
                         }
 
-                        $subscriptionId = $token->getSubscriptionId();
+                        $subscriptionId            = $token->getSubscriptionId();
                         $recurringSubscriptionInfo = array('subscriptionID' => $token->getSubscriptionId());
                         if ($allow_zero_amount) {
                             $cyberSourceReply = $cyberSourceManager->checkSavedToken($subscriptionId);
@@ -147,7 +147,7 @@ class CyberSourceCheckoutController extends CoreController
                         }
                     }
                 } else {
-                    $saveToken = $form->get('is_save_credit_card')->getData();
+                    $saveToken                 = $form->get('is_save_credit_card')->getData();
                     $recurringSubscriptionInfo = array('frequency' => 'on-demand');
                     if ($cybersource3DSecureResponseFlag) {
                         $cyberSourceReply = $cyberSourceManager->getCyberSourceReply($loggedinUser, $billTo, $cardInfo, $cart, $cartDetails, $saveToken, $recurringSubscriptionInfo, $allow_zero_amount, true, array('PaRes' => $request->get('PaRes'), 'MD' => $request->get('MD')));
@@ -157,7 +157,7 @@ class CyberSourceCheckoutController extends CoreController
                 }
 
                 //remove session for upgrade modal box
-                $this->container->get('session')->remove('upgrade_cybersource_params_' . $loggedinUser->getId());
+                $this->container->get('session')->remove('upgrade_cybersource_params_'.$loggedinUser->getId());
 
                 if ((!$cybersource3DSecureResponseFlag && $cyberSourceReply && property_exists($cyberSourceReply, 'reasonCode') && $cyberSourceReply->reasonCode == PaymentCyberSourceRepository::SUCCESS_REASON_CODE) || ($cyberSourceReply && property_exists($cyberSourceReply, 'reasonCode') && $cyberSourceReply->reasonCode == PaymentCyberSourceRepository::SUCCESS_REASON_CODE && property_exists($cyberSourceReply, "payerAuthValidateReply") && property_exists($cyberSourceReply->payerAuthValidateReply, "authenticationResult") && in_array($cyberSourceReply->payerAuthValidateReply->authenticationResult, array(0, 1)))) {
                     $cartValue = unserialize($cart->getValue());
@@ -172,13 +172,12 @@ class CyberSourceCheckoutController extends CoreController
                     if ($saveToken && property_exists($cyberSourceReply, 'paySubscriptionCreateReply') && property_exists($cyberSourceReply->paySubscriptionCreateReply, 'reasonCode') && $cyberSourceReply->paySubscriptionCreateReply->reasonCode == PaymentCyberSourceRepository::SUCCESS_REASON_CODE && property_exists($cyberSourceReply->paySubscriptionCreateReply, 'subscriptionID') && $cyberSourceReply->paySubscriptionCreateReply->subscriptionID) {
                         $subscriptionId = $cyberSourceReply->paySubscriptionCreateReply->subscriptionID;
                         $cardHolderName = $form->get('card_holder_name')->getData();
-                        $cardType = $form->get('card_type')->getData();
+                        $cardType       = $form->get('card_type')->getData();
                         if ($form->get('card_number')->getData()) {
                             $cardNumber = substr($form->get('card_number')->getData(), -4);
                         }
                         $this->getRepository('FaPaymentBundle:PaymentTokenization')->addNewToken($loggedinUser->getId(), $subscriptionId, $cardNumber, $cardHolderName, $cardType, PaymentRepository::PAYMENT_METHOD_CYBERSOURCE, $billTo);
                     }
-
                     //update cart value and payment method.
                     $this->getEntityManager()->beginTransaction();
                     try {
@@ -189,103 +188,46 @@ class CyberSourceCheckoutController extends CoreController
                         $this->getEntityManager()->flush($cart);
                         $paymentId = $this->getRepository('FaPaymentBundle:Payment')->processPaymentSuccess($cart->getCartCode(), null, $this->container);
                         $this->getEntityManager()->getConnection()->commit();
-
                         if($paymentId) {
+                            if($paymentFor != 'UP') {
+                                try {
+                                    //send ads for moderation
+                                    sleep(5);
+                                    $this->getRepository('FaAdBundle:AdModerate')->sendAdsForModeration($paymentId, $this->container);
 
-                            try {
-                                //send ads for moderation
-                                sleep(5);
-                                $this->getRepository('FaAdBundle:AdModerate')->sendAdsForModeration($paymentId, $this->container);
+                                    if ($request->get('subscription') == 1) {
+                                        $this->sendSubscriptionBillingEmail($loggedinUser, $cartDetails, $userPackage, $cart, $subscriptionId, $allow_zero_amount);
+                                    }
 
-                                if ($request->get('subscription') == 1) {
-                                    $this->sendSubscriptionBillingEmail($loggedinUser, $cartDetails, $userPackage, $cart, $subscriptionId, $allow_zero_amount);
-                                }
+                                    if ($request->get('subscription') == 1) {
+                                        $packageObj = null;
+                                        $values = unserialize($cartDetails[0]['value']);
+                                        $package = $values['package'];
+                                        $p = array_pop($package);
 
-                                if ($request->get('subscription') == 1) {
-                                    $packageObj = null;
-                                    $values = unserialize($cartDetails[0]['value']);
-                                    $package = $values['package'];
-                                    $p = array_pop($package);
-
-                                    if ($paymentFor != 'UP') {
-                                        try {
-                                            //send ads for moderation
-                                            $this->getRepository('FaAdBundle:AdModerate')->sendAdsForModeration($paymentId, $this->container);
-
-                                            if ($request->get('subscription') == 1) {
-                                                $this->sendSubscriptionBillingEmail($loggedinUser, $cartDetails, $userPackage, $cart, $subscriptionId, $allow_zero_amount);
-                                            }
-
-                                            if ($request->get('subscription') == 1) {
-                                                $packageObj = null;
-                                                $values = unserialize($cartDetails[0]['value']);
-                                                $package = $values['package'];
-                                                $p = array_pop($package);
-
-                                                if ((isset($p['package_for']) && $p['package_for'] == 'shop')) {
-                                                    $packageObj = $this->getRepository('FaPromotionBundle:Package')->findOneBy(array('id' => $p['id']));
-                                                }
-                                                return $this->handleMessage($this->get('translator')->trans('You have successfully upgraded to %package-name%. Please check and update your profile information now!. Your transaction ID is %transaction_id%.', array('%package-name%' => ($packageObj ? $packageObj->getTitle() : ''), '%transaction_id%' => $cart->getCartCode()), 'frontend-cyber-source'), 'my_profile', array('transactionId' => $cart->getCartCode()), 'success', $cybersource3DSecureResponseFlag);
-                                            } else {
-                                                return $this->handleMessage($this->get('translator')->trans('Your payment received successfully.', array(), 'frontend-cyber-source'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success', $cybersource3DSecureResponseFlag);
-                                            }
-                                        } catch (\Exception $e) {
-                                            CommonManager::sendErrorMail($this->container, 'Error: Problem in sending user subscription email', $e->getMessage(), $e->getTraceAsString());
-                                            if ($request->get('subscription') == 1) {
-                                                return $this->handleMessage($this->get('translator')->trans('Your payment received successfully.', array(), 'frontend-cyber-source'), 'my_profile', array('cartCode' => $cart->getCartCode()), 'success', $cybersource3DSecureResponseFlag);
-                                            } else {
-                                                return $this->handleMessage($this->get('translator')->trans('Your payment received successfully.', array(), 'frontend-cyber-source'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success', $cybersource3DSecureResponseFlag);
-                                            }
+                                        if ((isset($p['package_for']) && $p['package_for'] == 'shop')) {
+                                            $packageObj = $this->getRepository('FaPromotionBundle:Package')->findOneBy(array('id' => $p['id']));
                                         }
+                                        return $this->handleMessage($this->get('translator')->trans('You have successfully upgraded to %package-name%. Please check and update your profile information now!. Your transaction ID is %transaction_id%.', array('%package-name%' => ($packageObj ? $packageObj->getTitle() : ''), '%transaction_id%' => $cart->getCartCode()), 'frontend-cyber-source'), 'my_profile', array('transactionId' => $cart->getCartCode()), 'success', $cybersource3DSecureResponseFlag);
                                     } else {
                                         return $this->handleMessage($this->get('translator')->trans('Your payment received successfully.', array(), 'frontend-cyber-source'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success', $cybersource3DSecureResponseFlag);
                                     }
-                                } else {
+                                } catch (\Exception $e) {
+                                    CommonManager::sendErrorMail($this->container, 'Error: Problem in sending user subscription email', $e->getMessage(), $e->getTraceAsString());
                                     if ($request->get('subscription') == 1) {
-                                        return $this->handleMessage($this->get('translator')->trans('Problem in payment. Your transaction ID is %transaction_id%.', array('%transaction_id%' => $cart->getCartCode()), 'frontend-cyber-source'), 'my_profile', array(), 'error', $cybersource3DSecureResponseFlag);
+                                        return $this->handleMessage($this->get('translator')->trans('Your payment received successfully.', array(), 'frontend-cyber-source'), 'my_profile', array('cartCode' => $cart->getCartCode()), 'success', $cybersource3DSecureResponseFlag);
                                     } else {
-                                        return $this->handleMessage($this->get('translator')->trans('Problem in payment.', array(), 'frontend-cyber-source'), 'checkout_payment_failure', array('cartCode' => $cart->getCartCode()), 'error', $cybersource3DSecureResponseFlag);
+                                        return $this->handleMessage($this->get('translator')->trans('Your payment received successfully.', array(), 'frontend-cyber-source'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success', $cybersource3DSecureResponseFlag);
                                     }
                                 }
-                            } catch (\Exception $e) {
-                                CommonManager::sendErrorMail($this->container, 'Error: Problem in payment', $e->getMessage(), $e->getTraceAsString());
-                                $this->getEntityManager()->getConnection()->rollback();
-
-                                if ($request->get('subscription') == 1) {
-                                    return $this->handleMessage($this->get('translator')->trans('Problem in payment. Your transaction ID is %transaction_id%.', array('%transaction_id%' => $cart->getCartCode()), 'frontend-cyber-source'), 'my_profile', array(), 'error', $cybersource3DSecureResponseFlag);
-                                } else {
-                                    return $this->handleMessage($this->get('translator')->trans('Problem in payment.', array(), 'frontend-cyber-source'), 'checkout_payment_failure', array('cartCode' => $cart->getCartCode()), 'error', $cybersource3DSecureResponseFlag);
-                                }
-                            }
-
-                            return $this->handleMessage($this->get('translator')->trans('Your payment received successfully.', array(), 'frontend-cyber-source'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success', $cybersource3DSecureResponseFlag);
-                        } elseif ($cyberSourceReply && property_exists($cyberSourceReply, 'decision') && $cyberSourceReply->decision == PaymentCyberSourceRepository::SUCCESS_3D_REASON_TEXT && property_exists($cyberSourceReply, 'reasonCode') && $cyberSourceReply->reasonCode == PaymentCyberSourceRepository::SUCCESS_3D_REASON_CODE && property_exists($cyberSourceReply, 'payerAuthEnrollReply') && $cyberSourceReply->payerAuthEnrollReply && property_exists($cyberSourceReply->payerAuthEnrollReply, 'reasonCode') && $cyberSourceReply->payerAuthEnrollReply->reasonCode == PaymentCyberSourceRepository::SUCCESS_3D_REASON_CODE && property_exists($cyberSourceReply->payerAuthEnrollReply, 'acsURL') && $cyberSourceReply->payerAuthEnrollReply->acsURL && property_exists($cyberSourceReply->payerAuthEnrollReply, 'paReq') && $cyberSourceReply->payerAuthEnrollReply->paReq && property_exists($cyberSourceReply->payerAuthEnrollReply, 'xid') && $cyberSourceReply->payerAuthEnrollReply->xid) {
-                            $cartValue = unserialize($cart->getValue());
-                            if (!$cartValue) {
-                                $cartValue = array();
-                            }
-                            $cartValue = array_merge($cartValue, array('cyber_source_3d_response' => $cyberSourceReply));
-                            $cart->setValue(serialize($cartValue));
-                            $this->getEntityManager()->persist($cart);
-                            $this->getEntityManager()->flush($cart);
-
-                            $parameters = array(
-                                'subscription' => $request->get('subscription'),
-                                'cyberSourceReply' => $cyberSourceReply,
-                                'trail' => $request->get('trail'),
-                                'termUrl' => $this->generateUrl('cybersource_checkout', array('subscription' => $request->get('subscription'), 'trail' => $request->get('trail')), UrlGeneratorInterface::ABSOLUTE_URL),
-                            );
-
-                            return $this->render('FaPaymentBundle:CyberSourceCheckout:checkout3dSecure.html.twig', $parameters);
-                        } elseif ($cyberSourceReply) {
-                            if ($cybersource3DSecureResponseFlag) {
-                                $reasonCode = $cyberSourceReply->reasonCode;
-                                if ($reasonCode == 100) {
-                                    $reasonCode = 476;
-                                }
-                                return $this->handleMessage($cyberSourceManager->getError($reasonCode), 'cybersource_checkout', array('subscription' => $request->get('subscription'), 'trail' => $request->get('trail')), 'error', $cybersource3DSecureResponseFlag);
                             } else {
-                                $this->container->get('session')->getFlashBag()->add('error', $cyberSourceManager->getError($cyberSourceReply->reasonCode));
+                                return $this->handleMessage($this->get('translator')->trans('Your payment received successfully.', array(), 'frontend-cyber-source'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success', $cybersource3DSecureResponseFlag);
+                            }
+                        } else {
+                            if ($request->get('subscription') == 1) {
+                                return $this->handleMessage($this->get('translator')->trans('Problem in payment. Your transaction ID is %transaction_id%.', array('%transaction_id%' => $cart->getCartCode()), 'frontend-cyber-source'), 'my_profile', array(), 'error', $cybersource3DSecureResponseFlag);
+                            } else {
+                                return $this->handleMessage($this->get('translator')->trans('Problem in payment.', array(), 'frontend-cyber-source'), 'checkout_payment_failure', array('cartCode' => $cart->getCartCode()), 'error', $cybersource3DSecureResponseFlag);
                             }
                         }
                     } catch (\Exception $e) {
@@ -295,26 +237,53 @@ class CyberSourceCheckoutController extends CoreController
                         if ($request->get('subscription') == 1) {
                             return $this->handleMessage($this->get('translator')->trans('Problem in payment. Your transaction ID is %transaction_id%.', array('%transaction_id%' => $cart->getCartCode()), 'frontend-cyber-source'), 'my_profile', array(), 'error', $cybersource3DSecureResponseFlag);
                         } else {
-                            return $this->handleMessage($this->get('translator')->trans('Problem in paymentCyber.', array(), 'frontend-cyber-source'), 'checkout_payment_failure', array('cartCode' => $cart->getCartCode()), 'error', $cybersource3DSecureResponseFlag);
+                            return $this->handleMessage($this->get('translator')->trans('Problem in payment.', array(), 'frontend-cyber-source'), 'checkout_payment_failure', array('cartCode' => $cart->getCartCode()), 'error', $cybersource3DSecureResponseFlag);
                         }
                     }
                     return $this->handleMessage($this->get('translator')->trans('Your payment received successfully.', array(), 'frontend-cyber-source'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success', $cybersource3DSecureResponseFlag);
-
-                } else {
-                    $formErrors = $formManager->getFormSimpleErrors($form, 'label');
-                    $errorMessages = '';
-                    foreach ($formErrors as $fieldName => $errorMessage) {
-                        if ($errorMessages != '') {
-                            $errorMessages = $errorMessages . ' | ' . $fieldName . ': ' . $errorMessage[0];
-                        } else {
-                            $errorMessages = $fieldName . ': ' . $errorMessage[0];
-                        }
+                } elseif ($cyberSourceReply && property_exists($cyberSourceReply, 'decision') && $cyberSourceReply->decision == PaymentCyberSourceRepository::SUCCESS_3D_REASON_TEXT && property_exists($cyberSourceReply, 'reasonCode') && $cyberSourceReply->reasonCode == PaymentCyberSourceRepository::SUCCESS_3D_REASON_CODE && property_exists($cyberSourceReply, 'payerAuthEnrollReply') && $cyberSourceReply->payerAuthEnrollReply && property_exists($cyberSourceReply->payerAuthEnrollReply, 'reasonCode') && $cyberSourceReply->payerAuthEnrollReply->reasonCode == PaymentCyberSourceRepository::SUCCESS_3D_REASON_CODE && property_exists($cyberSourceReply->payerAuthEnrollReply, 'acsURL') && $cyberSourceReply->payerAuthEnrollReply->acsURL && property_exists($cyberSourceReply->payerAuthEnrollReply, 'paReq') && $cyberSourceReply->payerAuthEnrollReply->paReq && property_exists($cyberSourceReply->payerAuthEnrollReply, 'xid') && $cyberSourceReply->payerAuthEnrollReply->xid) {
+                    $cartValue = unserialize($cart->getValue());
+                    if (!$cartValue) {
+                        $cartValue = array();
                     }
-                    $gaStr = $gaStr . $errorMessages;
-                }
-            }
+                    $cartValue = array_merge($cartValue, array('cyber_source_3d_response' => $cyberSourceReply));
+                    $cart->setValue(serialize($cartValue));
+                    $this->getEntityManager()->persist($cart);
+                    $this->getEntityManager()->flush($cart);
 
+                    $parameters = array(
+                        'subscription' => $request->get('subscription'),
+                        'cyberSourceReply' => $cyberSourceReply,
+                        'trail' => $request->get('trail'),
+                        'termUrl' => $this->generateUrl('cybersource_checkout', array('subscription' => $request->get('subscription'), 'trail' => $request->get('trail')), UrlGeneratorInterface::ABSOLUTE_URL),
+                    );
+
+                    return $this->render('FaPaymentBundle:CyberSourceCheckout:checkout3dSecure.html.twig', $parameters);
+                } elseif ($cyberSourceReply) {
+                    if ($cybersource3DSecureResponseFlag) {
+                        $reasonCode = $cyberSourceReply->reasonCode;
+                        if ($reasonCode == 100) {
+                            $reasonCode = 476;
+                        }
+                        return $this->handleMessage($cyberSourceManager->getError($reasonCode), 'cybersource_checkout', array('subscription' => $request->get('subscription'), 'trail' => $request->get('trail')), 'error', $cybersource3DSecureResponseFlag);
+                    } else {
+                        $this->container->get('session')->getFlashBag()->add('error', $cyberSourceManager->getError($cyberSourceReply->reasonCode));
+                    }
+                }
+            } else {
+                $formErrors    = $formManager->getFormSimpleErrors($form, 'label');
+                $errorMessages = '';
+                foreach ($formErrors as $fieldName => $errorMessage) {
+                    if ($errorMessages != '') {
+                        $errorMessages = $errorMessages . ' | ' . $fieldName . ': ' . $errorMessage[0];
+                    } else {
+                        $errorMessages = $fieldName . ': ' . $errorMessage[0];
+                    }
+                }
+                $gaStr = $gaStr . $errorMessages;
+            }
         }
+
         $parameters = array(
             'form' => $form->createView(),
             'subscription' => $request->get('subscription'),
