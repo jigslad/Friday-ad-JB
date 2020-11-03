@@ -180,7 +180,7 @@ class AdLocationRepository extends EntityRepository
 
         if ($mainTownId != '') {
             $mainTownArr = $locationRepository->getCachedLocationById($container, $mainTownId);
-            $mainTownName = $mainTownArr['name'];
+            $mainTownName = $mainTownArr['slug'];
 
             $document = $this->addField($document, 'main_town', $mainTownArr);
         }
