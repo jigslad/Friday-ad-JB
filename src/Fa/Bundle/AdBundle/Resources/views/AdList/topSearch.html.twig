@@ -9,7 +9,7 @@
                 {{ form_errors(form) }}
                 <div class="top-search__input">
                     {{ form_widget(form.keywords, {'attr': {'placeholder':'Looking for...'|trans({}, 'frontend-header-search'), 'class':'top-search__input--text' }}) }}
-                    <button class="top-search__input--btn" id="fa_top_search_keywords_searchGo" type="submit"></button>
+                    <button class="top-search__input--btn" type="submit"></button>
                     <a rel="nofollow" id="fa_top_search_keywords_close" class="close-icon"></a>
                     <!-- Search dropdown Content starts-->
                     <div id="fa_top_search_keywords_list"></div>
@@ -20,9 +20,9 @@
                         <div id="in_text_span">
                         {{ 'in'|trans({}, 'frontend-header-search') }}
                         </div>
-                        <span id="header_search_editable_location_span">
+                        <div  class="top-search__location--change-name" id="header_search_editable_location_span">
                             United Kingdom
-                        </span>
+                        </div>
                         <a rel="nofollow" id="header_search_editable_location_a">
                             ({{ 'change'|trans({}, 'frontend-header-search') }})
                         </a>

@@ -424,4 +424,32 @@
             }
         });
     }
+    if (window.matchMedia("(max-width: 767px)").matches) {
+        $("#topSearch,.search-sticky-mobile").click(function() {
+            $('.top-search-modal').toggleClass('modal-show');
+            $('#bg-overlay').toggleClass('bg-overlay');
+            $('body').toggleClass('overflow-hidden');
+        });
+        $("#modalClose").click(function() {
+            $('.top-search-modal').removeClass('modal-show');
+            $('#bg-overlay').removeClass('bg-overlay');
+            $('body').removeClass('overflow-hidden');
+        });
+    } else {
+        $('#topSearch').click(function(e) {
+            $(this).toggleClass('top-search-show')
+            $(this).siblings('.top-search').toggleClass('search-toggle');
+            e.stopPropagation();
+        });
+    }
+    $('#header_search_editable_location_a').click(function(e) {
+        $(this).parent().hide();
+        $('.top-search__block').addClass('top-search-center');
+        $('#top_search_location').addClass('location-search-toggle');
+    });
+    $('#top_search_location_ok, #top_search_location_cancel').click(function(e) {
+        $("#header_search_editable_location_a").parent().show();
+        $('.top-search__block').removeClass('top-search-center');
+        $('#top_search_location').removeClass('location-search-toggle');
+    });
 </script>
