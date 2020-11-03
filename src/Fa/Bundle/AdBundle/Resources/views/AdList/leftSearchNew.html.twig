@@ -8,17 +8,20 @@
             <dd class="accordion-navigation keep-shown">
                 <a href="#panel1a" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Categories'|trans({}, 'frontend-left-search')}}</h5></a>
                 <div class="content active clearfix">
-                    {% if leftFilters.parent_category is defined and leftFilters.parent_category != '' %}
+                    {% if leftFilters.parent_category is defined and leftFilters.parent_category != '' and leftFilters.current_category.getLvl() > 1 %}
                         <div class="search-cat-parent-list">
                             <ul>
-                                <li><a data-href="{{ leftFilters.parent_category.getSlug() }}">{{ leftFilters.parent_category.getName() }}</a></li>
+                                <li><a data-parent-href="{{ leftFilters.parent_category.getSlug() }}">{{ leftFilters.parent_category.getName() }}</a></li>
+                                {% if leftFilters.sub_category != '' %}
+                                    <li><a data-parent-href="{{ leftFilters.sub_category.getSlug() }}">{{ leftFilters.sub_category.getName() }}</a></li>
+                                {% endif %}
                             </ul>
                         </div>
                     {% endif %}
                     <div class="search-cat-sub-list">
                         <ul>
                             {% set key = 0 %}
-                            <li><label>{% if leftFilters.current_category == 'Category_root' %} {{ 'All Categories' }} {% else %} {{ leftFilters.current_category }}{% endif %}</label></li>
+                            <li><label>{% if leftFilters.current_category.getName() == 'Category_root' %} {{ 'All Categories' }} {% else %} {{ leftFilters.current_category.getName() }}{% endif %}</label></li>
                             {% for key1, category in leftFilters.categories %}
                                 {% if key == (maxDimensionCount) %}
                                     </ul>
@@ -154,7 +157,7 @@
             </dd>
 
             <dd class="accordion-navigation keep-shown">
-                <a href="#panel1b" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Seller'|trans({}, 'frontend-left-search')}}</h5></a>
+                <a href="#panel1b" class="clearfix" rel="nofollow" ><h5 class="left">{{ leftFilters.userTypeTitle|trans({}, 'frontend-left-search')}}</h5></a>
                 <div class="content active clearfix">
                     <ul class="seller-link">
                         {% for user_type in leftFilters.user_types %}
@@ -297,6 +300,35 @@
 
     $(document).ready(function() {
 
+        $('a[data-parent-href]').each(function() {
+            let href = window.location.href;
+            let this_url = $(this).attr('data-parent-href');
+            if (href.indexOf('#')) {
+                let _var = href.split('#');
+                href = _var[0];
+                if ($(this).closest('.search-cat-sub-list').length && href.indexOf('/search/') != -1) {
+                    href = href.replace('/search/', '/');
+                }
+            }
+            let url_params = '';
+
+            if (href.indexOf('?') != -1) {
+                let split_params = href.split('?');
+                url_params = '?' + split_params[1];
+                href = split_params[0];
+            }
+
+            let index = href.indexOf(this_url);
+            if (index != -1) {
+                href = href.substring(0, (index + this_url.length + 1));
+            }
+
+            if (url_params.length == 1) {
+                url_params = '';
+            }
+            $(this).attr('href', href + url_params);
+        });
+
         $('a[data-href]').each(function() {
             let href = window.location.href;
             let this_url = $(this).attr('data-href');
@@ -330,14 +362,30 @@
                             href = href.replace('/' + this_url, '');
                         } else if (url_params.indexOf(this_url) !== -1) {
                             let name = $(this).closest('li').find('label').attr('for').replace('fa_left_search_', '');
-                            url_params = url_params.replace('item__' + name+'='+this_url, '');
+                            let url_params_arr = url_params.split('&');
+
+
+                            //url_params = url_params.replace('item__' + name+'='+this_url, '');
 
                             let new_url_params = '';
-                            url_params = url_params.split('&');
-                             if (url_params.length) {
-                                 url_params.forEach(function(this_item) {
+                             if (url_params_arr.length) {
+                                 url_params_arr.forEach(function(this_item) {
                                      if (this_item == '?' || this_item == '') {
 
+                                     } else if (this_item.indexOf(this_url) !== -1) {
+                                        if (this_item.indexOf('___') !== -1) {
+                                            let parts = this_item.split('=');
+                                            let values = parts[1].split('___');
+
+                                            let index = $.inArray(this_url, values);
+                                            if (index != -1) {
+                                                values.splice(index, 1);
+                                            }
+
+                                            new_url_params += 'item__' + name+'='+(values.join('___')) + '&';
+                                        } else {
+                                            new_url_params += this_item.replace('item__' + name+'='+this_url, '') + '&';
+                                        }
                                      } else {
                                          new_url_params += this_item + '&';
                                      }

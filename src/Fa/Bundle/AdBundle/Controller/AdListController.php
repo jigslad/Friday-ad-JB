@@ -936,6 +936,7 @@ class AdListController extends CoreController
 
         $static_filters = '';
         $searchableDimensions = [];
+        $root = $category;
         if ($findersSearchParams['item__category_id'] != 1) {
             $searchableDimensions = $this->getRepository('FaEntityBundle:CategoryDimension')->getSearchableDimesionsArrayByCategoryId($category->getId(), $this->container);
             $adRepository = $this->getRepository('FaAdBundle:Ad');
@@ -956,8 +957,6 @@ class AdListController extends CoreController
                 $searchableDimensions[$key]['dim_slug']   = str_replace([' ', '.'], ['_', ''], strtolower($dimension['name']));
             }
             $data['static_filters'] .= $static_filters = $this->setDimensionParams($data['search'], $listingFields, $adRepository);
-        } else {
-            $root = $category;
         }
 
         $keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: NULL;
@@ -1181,7 +1180,7 @@ class AdListController extends CoreController
             'recommendedSlotLimit'  => $this->getRepository('FaCoreBundle:Config')->getSponsoredLimit(),
             'pagination'            => $mergedPagination,
             'adFavouriteIds'        => $adFavouriteIds,
-            'leftFilters'           => $this->getLeftFilters($category, $facetResult, $mergedResultCount, $searchableDimensions, $findersSearchParams, $data, $extendedFacetResult),
+            'leftFilters'           => $this->getLeftFilters($category, $root, $facetResult, $mergedResultCount, $searchableDimensions, $findersSearchParams, $data, $extendedFacetResult),
             'currentLocation'       => $requestlocation,
             'searchParams'          => $findersSearchParams,
             'cookieLocationDetails' => $cookieLocationDetails,
@@ -1404,6 +1403,7 @@ class AdListController extends CoreController
 
     /**
      * @param $categoryObj
+     * @param $rootCategory
      * @param $facetResult
      * @param $totalAds
      * @param $dimensions
@@ -1412,7 +1412,7 @@ class AdListController extends CoreController
      * @param $extendedFacetResult
      * @return array
      */
-    private function getLeftFilters($categoryObj, $facetResult, $totalAds, $dimensions, $searchParams, $data, $extendedFacetResult)
+    private function getLeftFilters($categoryObj, $rootCategory, $facetResult, $totalAds, $dimensions, $searchParams, $data, $extendedFacetResult)
     {
         $params = [];
         foreach ($searchParams as $dimensionSlug => $searchParam) {
@@ -1487,15 +1487,16 @@ class AdListController extends CoreController
             }
         }
 
+        $userTypeLabels = $this->getRepository('FaAdBundle:Ad')->getLeftSearchLabelForUserType($rootCategory->getId());
         $userTypes = [
             0 => [
-                'title' => 'Private advertiser',
+                'title' => $userTypeLabels['private_user'],
                 'url_param' => 'is_trade_ad=0',
                 'count' => empty($tradeFacets) ? 0 : intval($tradeFacets["false"]),
                 'selected' => isset($params['is_trade_ad']) && $params['is_trade_ad'][0] == '0' ? true : false
             ],
             1 => [
-                'title' => 'Business advertiser',
+                'title' => $userTypeLabels['business_user'],
                 'url_param' => 'is_trade_ad=1',
                 'count' => empty($tradeFacets) ? 0 : intval($tradeFacets["true"]),
                 'selected' => isset($params['is_trade_ad']) && $params['is_trade_ad'][0] == '1' ? true : false
@@ -1600,7 +1601,7 @@ class AdListController extends CoreController
                     try {
                         $entityValue = get_object_vars(json_decode($jsonValue));
                     } catch (\Exception $e) {
-
+                        continue;
                     }
 
                     $key = 'id';
@@ -1684,10 +1685,17 @@ class AdListController extends CoreController
             }
         }
 
+        $subCategory = '';
+        $lvlCategory = $categoryObj;
+        while ($lvlCategory->getLvl() > 1 && $rootCategory->getId() !== $lvlCategory->getParent()->getId()) {
+            $subCategory = $lvlCategory = $lvlCategory->getParent();
+        }
+
         return [
             'categories'        => $categories,
-            'current_category'  => $categoryObj->getName(),
-            'parent_category'   => $categoryObj->getParent() && $categoryObj->getParent()->getId() == 1 ? '' : $categoryObj->getParent(),
+            'current_category'  => $categoryObj,
+            'parent_category'   => $rootCategory,
+            'sub_category'      => $subCategory,
             'user_types'        => $userTypes,
             'image_count'       => $totalAds - $noImages,
             'locationFacets'    => $locationFacets,
@@ -1695,7 +1703,8 @@ class AdListController extends CoreController
             'dimensions'        => $dimensions,
             'ads_with_images'   => isset($params['ads_with_images']),
             'expired_ads'       => isset($params['expired_ads']),
-            'showPriceField'    => $categoryObj->getId() > 1 ? CommonManager::showPriceInSearchFilter($categoryObj->getId(), $this->container) : true
+            'showPriceField'    => $categoryObj->getId() > 1 ? CommonManager::showPriceInSearchFilter($categoryObj->getId(), $this->container) : true,
+            'userTypeTitle'     => $userTypeLabels['header']
         ];
     }
 
@@ -1748,11 +1757,14 @@ class AdListController extends CoreController
                 if (count($dim_keys)) {
                     foreach ($dim_keys as $dim_key) {
                         foreach ($ad[$dim_key] as $key => $value) {
-                            $dim_field = get_object_vars(json_decode($ad[$dim_key][$key]));
-                            $dimensions[] = array(
-                                'name' => $dim_field['name'],
-                                'listing_class' => empty($dim_field['listing_class']) ? '' : $dim_field['listing_class']
-                            );
+                            $json = json_decode($ad[$dim_key][$key]);
+                            if (is_object($json)) {
+                                $dim_field = get_object_vars($json);
+                                $dimensions[] = array(
+                                    'name' => $dim_field['name'],
+                                    'listing_class' => empty($dim_field['listing_class']) ? '' : $dim_field['listing_class']
+                                );
+                            }
                         }
 
                     }
