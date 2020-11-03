@@ -189,9 +189,6 @@ $(function() {
             {% if 'location' in field and submitFormAfterSelect is not defined %}
                 bindShowMapOnChangeLocationEvent();
             {% endif %}
-            {% if 'category_id' in field and not mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
-                // onSelectAutoSuggestCategory();
-            {% endif %}
         },
         close: function( event, ui ) { 
             {% if displayOnlyTown is defined %}

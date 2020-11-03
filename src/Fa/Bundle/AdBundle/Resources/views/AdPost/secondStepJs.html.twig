@@ -273,3 +273,94 @@
 
 //]]>
 </script>
+<script>
+    $(document).ready(function(){
+        var requiredFields = $(':input');
+        requiredFields.keyup(function (){
+            enableDisableNextButton()
+        });
+        requiredFields.change(function (){
+            enableDisableNextButton()
+        });
+        disableNextButton()
+        enableDisableNextButton()
+        $("form[name='fa_paa_second_step_{{ categoryName }}']").submit(function() {
+            if ($('#fa_paa_second_step_{{ categoryName }}_save').hasClass('disabled')) {
+                return false;
+            }
+        });
+        {% if categoryName == 'community' %}
+            var adTypes = $('[id^="fa_paa_second_step_{{ categoryName }}_ad_type_id_"]');
+            adTypes.on("input", function(){
+                enableDisableNextButton()
+            });
+        {% endif %}
+    });
+    function enableDisableNextButton(){
+        $('#fa_paa_second_step_{{ categoryName }}_save').removeClass('disabled');
+        if($('#fa_paa_second_step_{{ categoryName }}_description') .length != 0) {
+            if (!$('#fa_paa_second_step_{{ categoryName }}_description').val()) {
+                disableNextButton()
+            }
+        }
+        if($("#fa_paa_second_step_{{ categoryName }}_price").is(":visible")) {
+            if (!$('#fa_paa_second_step_{{ categoryName }}_price').val()) {
+                disableNextButton()
+            }
+        }
+        {% if categoryName == 'jobs' %}
+            var contractTypes = $('[id^="fa_paa_second_step_{{ categoryName }}_contract_type_id_"]');
+            var contractTypeSelected = false;
+            contractTypes.each(function (index, element){
+                if(element.checked) {
+                    contractTypeSelected = true;
+                }
+            });
+
+            if(!contractTypeSelected){
+                disableNextButton()
+            }
+        {% endif %}
+        {% if categoryName == 'property' %}
+            var rentTypes = $('[id^="fa_paa_second_step_{{ categoryName }}_rent_per_id_"]');
+            var rentTypeSelected = false;
+            rentTypes.each(function (index, element){
+                if(element.checked) {
+                    rentTypeSelected = true;
+                }
+            });
+
+            if(!rentTypeSelected){
+                disableNextButton()
+            }
+        {% endif %}
+        {% if categoryName == 'community' %}
+            var adTypes = $('[id^="fa_paa_second_step_{{ categoryName }}_ad_type_id_"]');
+            var adTypeSelected = false;
+            adTypes.each(function (index, element){
+                if(element.checked) {
+                    adTypeSelected = true;
+                }
+            });
+
+            if(!adTypeSelected){
+                disableNextButton()
+            }
+        {% endif %}
+        var requiredFieldsUpdated = $(':input[required]:visible');
+        requiredFieldsUpdated.each(function( index, element ) {
+            var str1 = element.id;
+            var str2 = "fa_paa_second_step_community_ad_type_id_";
+            if(str1.indexOf(str2) == -1) {
+                if (!element.value) {
+                    disableNextButton()
+                }
+            }
+        });
+    }
+    function disableNextButton(){
+        if (!$('#fa_paa_second_step_{{ categoryName }}_save').hasClass('disabled')) {
+            $('#fa_paa_second_step_{{ categoryName }}_save').addClass('disabled');
+        }
+    }
+</script>
