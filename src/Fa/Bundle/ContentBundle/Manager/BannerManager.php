@@ -473,6 +473,8 @@ class BannerManager
                 foreach ($nestedChildrenCategories as $nestedCategoryId) {
                     if (isset($extraParams['facetResult']['a_category_id_i'][$nestedCategoryId])) {
                         $adCount =  $adCount + $extraParams['facetResult']['a_category_id_i'][$nestedCategoryId];
+                    } else if (isset($extraParams['facetResult']['category_ids'][$nestedCategoryId])) {
+                        $adCount =  $adCount + $extraParams['facetResult']['category_ids'][$nestedCategoryId];
                     }
                 }
                 if($adCount>0) {
