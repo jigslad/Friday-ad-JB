@@ -972,7 +972,7 @@ class AdListController extends CoreController
 
             if ($findersSearchParams['item__category_id'] != 1) {
                 $featuredData['static_filters'] = ' AND category_full_path:' . $category->getFullSlug();
-            } else {
+            } else if (empty($featuredData['static_filters'])) {
                 $featuredData['static_filters'] = '';
             }
             $featuredData['static_filters'] .= ' AND is_topad:true';
