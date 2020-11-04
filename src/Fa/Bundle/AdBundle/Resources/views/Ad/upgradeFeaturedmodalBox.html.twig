@@ -206,8 +206,7 @@
                 	</li>
                 {% endfor %}
                 {% do attribute(form, 'payment_method').setRendered %}
-            </ul>            
-        </div>
+            </ul>
     </div>
     <div id="payment-form">
    	    {{ include('FaAdBundle:Ad:upgradePaymentForm.html.twig', {'form': form }) }}
@@ -234,6 +233,7 @@
     </div>
 {{ form_end(form) }}
 {% endif %}
+    </div>
 </div>
 <script src="{{ asset_url('fafrontend/js/jquery.equalizer.min.js') }}"></script>
 <script src="{{ asset_url('facore/js/jquery.query-object.js') }}"></script>
@@ -298,6 +298,8 @@
     });
 
     $('#fa_payment_cyber_source_checkout_save').click(function () {
+        $(this).attr('disabled', true);
+        $('#cyber_source_form').submit();
         window.dataLayer = window.dataLayer || []
         dataLayer.push({
             'event' : 'Options',
