@@ -202,6 +202,9 @@
                 {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
             </div>
             <div id="listingDiv" class="large-18 columns">
+                {% if seoFields|length and seoFields['popular_search'] is defined and seoFields['popular_search'] and seoFields['seo_tool_id'] is defined and seoFields['seo_tool_id'] %}
+                    {{ include('FaAdBundle:AdList:popularSearchLinks.html.twig', {'mapFlag': 0}) }}
+                {% endif %}
 
                 {% if resultCount > 0 %}
                     {% if isShopPage is not defined %}
