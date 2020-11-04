@@ -190,6 +190,14 @@ class PaaFieldRule
     private $is_added;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="hide_field", type="boolean", nullable=true, options={"default" = 1})
+     * @Gedmo\Versioned
+     */
+    private $hide_field;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -683,5 +691,27 @@ class PaaFieldRule
     public function getIsAdded()
     {
         return $this->is_added;
+    }
+
+    /**
+     * Set is hide field
+     *
+     * @param tinyint $hideField
+     * @return PaaFieldRule
+     */
+    public function setHideField($hideField)
+    {
+        $this->hide_field = $hideField;
+        return $this;
+    }
+
+    /**
+     * Get is hide field
+     *
+     * @return tinyint
+     */
+    public function getHideField()
+    {
+        return $this->hide_field;
     }
 }

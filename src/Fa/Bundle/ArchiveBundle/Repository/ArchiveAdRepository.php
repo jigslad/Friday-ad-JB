@@ -355,6 +355,13 @@ class ArchiveAdRepository extends EntityRepository
                 $solr->deleteById($adId);
                 $solr->commit(true);
             }
+
+            $solrClientNew = $this->getContainer()->get('fa.solr.client.ad.new');
+            if ($solrClientNew->ping()) {
+                $solrNew = $solrClientNew->connect();
+                $solrNew->deleteById($adId);
+                $solrNew->commit(true);
+            }
         } catch (\Exception $e) {
         }
     }

@@ -22,8 +22,8 @@ use Fa\Bundle\AdBundle\Repository\AdLocationRepository;
 /**
  * This command is used to add/update/delete solr index for ads.
  *
- * @author Samir Amrutya <samiram@aspl.in>
- * @copyright 2014 Friday Media Group Ltd
+ * @author Chaitra Bhat <chaitra.bhat@fridaymediagroup.com>
+ * @copyright 2020 Friday Media Group Ltd
  * @version 1.0
  */
 class UpdateAdSolrIndexCommand extends ContainerAwareCommand
@@ -194,6 +194,17 @@ EOF
             $solr->commit(true);
             //$solr->optimize();
 
+            $solrClientNew = $this->getContainer()->get('fa.solr.client.ad.new');
+            if (!$solrClientNew->ping()) {
+                $output->writeln('Solr service is not available. Please start it.', true);
+                return false;
+            }
+            $solrNew = $solrClientNew->connect();
+            if ($ids && is_array($ids)) {
+                $solrNew->deleteByIds($ids);
+            }
+            $solrNew->commit(true);
+
             if ($ids && is_array($ids)) {
                 $output->writeln('Solr index removed for ad id: '.join(',', $ids), true);
             } else {
@@ -241,7 +252,20 @@ EOF
         if (count($idsNotFound) > 0) {
             $solr->deleteByIds($idsNotFound);
         }
+
         $solr->commit(true);
+
+        $solrClientNew = $this->getContainer()->get('fa.solr.client.ad.new');
+        if (!$solrClientNew->ping()) {
+            $output->writeln('Solr service is not available. Please start it.', true);
+            return false;
+        }
+        $solrNew = $solrClientNew->connect();
+        if (count($idsNotFound) > 0) {
+            $solrNew->deleteByIds($idsNotFound);
+        }
+        $solrNew->commit(true);
+
         $output->writeln('Memory Allocated: '.((memory_get_peak_usage(true) / 1024) / 1024).' MB', true);
     }
 
