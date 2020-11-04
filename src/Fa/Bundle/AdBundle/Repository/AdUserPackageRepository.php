@@ -652,6 +652,21 @@ class AdUserPackageRepository extends BaseEntityRepository
         }
         return true;
     }
+
+    public function forceExpireAdUserPackage($adId = null)
+    {
+        if ($adId) {
+            $adUserPackages = $this->_em->getRepository('FaAdBundle:AdUserPackage')->findBy(array('ad_id' => $adId, 'status' => 1));
+            if (!empty($adUserPackages)) {
+                foreach ($adUserPackages as $adPackage) {
+                    $adPackage->setStatus(self::STATUS_EXPIRED);
+                    $this->_em->persist($adPackage);
+                    $this->_em->flush($adPackage);
+                }
+            }
+        }
+        return true;
+    }
     
     public function checkIsNurseryPackageForAd($adId) {
         $adIdArray = array();

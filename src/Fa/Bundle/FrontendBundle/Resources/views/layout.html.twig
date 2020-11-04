@@ -89,7 +89,7 @@
 
     <title>{% block title %}{% if blockPageTitle %}{{blockPageTitle|raw}}{% else %}{{'Friday-Ad'|trans}}{% endif %}{% endblock %}</title>
     {% if blockMetaRobots and (not app.request.get('advertgone') or app.request.get('expired_ads')) %}
-        <meta name="robots" content="{{blockMetaRobots}}" />
+        <meta name="robots" content="noindex, follow">
     {% endif %}
     {% if blockMetaDescription %}
         <meta name="description" content="{{blockMetaDescription|raw}}" />
@@ -161,11 +161,12 @@
         {% endif %}
     {% endif %}
 
-    {% if (showAdultPages==1 and (currentRoute in {0: 'fa_adult_homepage', 1:'fa_new_adult_homepage', 2:'ad_detail_page', 3:'listing_page', 4:'my_account'})) %}
+    {% if (showAdultPages==1 and (currentRoute in {0: 'fa_adult_homepage', 1:'fa_new_adult_homepage', 2:'ad_detail_page', 3:'listing_page', 4:'my_account', 5:'manage_my_ads_active', 6:'manage_my_ads_inactive', 7:'dashboard_home', 8:'ajax_manage_my_ads_get_status' })) %}
         {% set showAdultPages=1 %}
     {% else %}
         {% set showAdultPages=0 %}
     {% endif %}
+        
 
     {{ include('FaFrontendBundle::scriptTop.html.twig') }}
 
@@ -179,6 +180,7 @@
         'bundles/fafrontend/css/main-css.css'
         'bundles/fafrontend/css/main.css'
         'bundles/fafrontend/css/covid-edition.css'
+        'bundles/fafrontend/css/css-fv1.css'
     %}
         <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
     {% endstylesheets %}
@@ -186,13 +188,18 @@
     {% if (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration',4: 'show_draft_ad',5: 'ad_package_purchase',6: 'show_cart',7: 'cybersource_checkout'}) %}
         <style>.nav-bar .top-bar-section, #top_search, #field_arrow, .nav-bg .search-icon a { display:none !important; }</style>
     {% endif %}
-    
+
+    <link rel="stylesheet" href="{{ asset(cached_asset('build/css/fad-custome-1.css')) }}">
+    <link rel="stylesheet" href="{{ asset(cached_asset('build/css/fad-custome-2.css')) }}">
+    <link rel="stylesheet" href="{{ asset(cached_asset('build/css/fad-custome-3.css')) }}">
+    <link rel="stylesheet" href="{{ asset(cached_asset('build/css/fad-custome-4.css')) }}">
+
 	{% if showAdultPages == 1 %}
 	    <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
-	    <link rel="stylesheet" href="{{ asset(cached_asset('/build/css/adulcss.css')) }}">
+	    <link rel="stylesheet" href="{{ asset('/build/css/adulcss.css') }}?v=1.0.4">
     	{{ include('FaFrontendBundle:Adult:adul-imgs.html.twig') }}
 	{% else %}
-    	<link rel="stylesheet" href="{{ asset(cached_asset('/build/css/site.css')) }}">
+    	<link rel="stylesheet" href="{{ asset('/build/css/site.css') }}?v=1.0.2">
     	{{ include('FaFrontendBundle::site-imgs.html.twig') }}
 	{% endif %}
 
@@ -288,7 +295,6 @@
     <!-- End TrustBox script -->
 </head>
 <body {% if (showAdultPopup == 1) %} class="transbox" {% endif %}>
-
 
         {% if status_code is not defined %}
             {% set status_code = 200 %}

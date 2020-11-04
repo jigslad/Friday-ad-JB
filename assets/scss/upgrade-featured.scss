@@ -1,0 +1,16 @@
+.upgrade-modal .payment-buttons-block { column-count: 1; margin-left: 0px!important; }
+.upgrade-modal .payment-card-option-block { margin-left: 0px; }
+.upgrade-modal .payment-card-option-block li { border-top: 1px solid #CBD5D9; }
+.upgrade-modal .payment-card-option-block li .card-number { margin-right: 10px; }
+.upgrade-modal .security-block { display: inline-flex; width: 100%; }
+.upgrade-modal .input-block { width: 30%; margin-right: 10px; }
+.featured-upgrade-border { border: 1px dashed #999 !important; }
+#contactSellerModal .receive-alert li label, #profilePageContactUserModal .receive-alert li label { line-height:20px !important;padding-top:2px !important}
+.modal-paypal-box{ height:37px;margin-bottom: 3px;border:solid 1px #DC911D;border-radius:2px;cursor:pointer}
+.upgrade-payments #AmazonPayButton { height: 46px;cursor: pointer;text-align:center;}
+.upgrade-payments #AmazonPayButton img { width: 100%; }
+.mt0 { margin-top:0px !important}
+.ui-front.ui-selectmenu-open {
+z-index: 10000 !important;
+}
+

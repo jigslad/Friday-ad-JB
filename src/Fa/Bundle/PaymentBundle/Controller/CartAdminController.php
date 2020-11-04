@@ -152,7 +152,7 @@ class CartAdminController extends CoreController implements ResourceAuthorizatio
 
                 // Remove session for cart id
                 $this->container->get('session')->remove('cart_id');
-                sleep(5);
+
                 if ($paymentId && $request->get('skip_payment_reason') && $cart->getAmount() > 0 && ($paymentMethod == PaymentRepository::PAYMENT_METHOD_FREE && $this->get('fa.resource.authorization.manager')->isGranted('show_cart_skip_payment_button')) || ($cart->getAmount() > 0 && $this->container->getParameter('by_pass_payment_admin'))) {
                     $patmentObj = $this->getRepository('FaPaymentBundle:Payment')->findOneBy(array('id' => $paymentId));
                     if ($patmentObj) {

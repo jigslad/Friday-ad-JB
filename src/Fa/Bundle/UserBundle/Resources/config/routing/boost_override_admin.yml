@@ -1,0 +1,16 @@
+boost_override_admin:
+    path:     /
+    defaults: { _controller: "FaUserBundle:BoostOverrideAdmin:index" }
+
+boost_override_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaUserBundle:BoostOverrideAdmin:edit" }
+
+boost_override_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaUserBundle:BoostOverrideAdmin:update" }
+    requirements: { methods: post|put }
+
+boost_override_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaUserBundle:BoostOverrideAdmin:delete" }

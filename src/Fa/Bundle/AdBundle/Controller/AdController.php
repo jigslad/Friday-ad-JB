@@ -345,13 +345,13 @@ class AdController extends CoreController
         $adTitle          = $adDetail[0][AdSolrFieldMapping::TITLE];
         $similarAds       = $this->getRepository('FaAdBundle:Ad')->getPaaSimilarAdverts($this->container, $adCategoryId, $adTitle, 1, 12, 0, 'geodist', ' AND -id:'.$adId);
         $adRootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($adCategoryId, $this->container);
-
-        $paaFieldArray = array();
-        $paaFieldRules = $this->getRepository('FaAdBundle:PaaFieldRule')->getPaaFieldRulesArrayByCategoryAncestor($adCategoryId,$this->container,'edit');
+        
+        $paaFieldArray = $paaFieldLabelArray = array();
+        $paaFieldRules = $this->getRepository('FaAdBundle:PaaFieldRule')->getPaaFieldRulesArrayByCategoryAncestor($adCategoryId);
         foreach ($paaFieldRules as $paaFieldRule) {
             $paaFieldArray[] = $paaFieldRule['paa_field']['field'];
+            $paaFieldLabelArray[] = $paaFieldRule['paa_field']['label'];
         }
-            
         //remove script tag from description
         if (isset($adDetail[0][AdSolrFieldMapping::DESCRIPTION])) {
             $adDetail[0][AdSolrFieldMapping::DESCRIPTION] = preg_replace('#<a.*?>([^>]*)</a>#i', '$1', $adDetail[0][AdSolrFieldMapping::DESCRIPTION]);
@@ -386,6 +386,7 @@ class AdController extends CoreController
             'successPaymentModalbox' => $successPaymentModalbox,
             'paymentTransactionJs'	 => $transactionJsArr,
             'paaFieldArray' => $paaFieldArray,
+            'paaFieldLabelArray' => $paaFieldLabelArray,
         );
 
         if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
@@ -449,7 +450,10 @@ class AdController extends CoreController
 
         $recommendedSlotArray = $this->getRepository('FaEntityBundle:CategoryRecommendedSlot')->getCategoryRecommendedSlotArrayByCategoryId($adCategoryId, $this->container);
         $parameters['recommendedSlotArray'] = $recommendedSlotArray;
-        
+        if ($adDetail[0][AdSolrFieldMapping::IS_FEED_AD] && $this->getRepository('FaAdFeedBundle:AdFeed')->isFeedAdExpired($parameters['adDetail']['id'])) {
+            $parameters['feed_expired_ad'] = 1;
+        }
+
         return $this->render('FaAdBundle:Ad:showAd.html.twig', $parameters, $objResponse);
     }
 

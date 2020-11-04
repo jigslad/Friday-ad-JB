@@ -1,0 +1,204 @@
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+$(window).on('load', function() {           
+    $(document).on("click", '.continue-btn', function(event) {
+    	$('#featuredTopSuccessPaymentModal').foundation('reveal', 'close');
+    });
+
+    {% if paymentTransactionJs['ga_transaction'] is defined and paymentTransactionJs['ga_transaction'].PAYMENT_ID is defined %}
+        ga('require', 'ecommerce');
+        
+        {% if paymentTransactionJs['getTranscationJs'] is defined %}
+            {{ paymentTransactionJs['getTranscationJs'] | raw }}
+        {% endif %}
+        
+        {% if paymentTransactionJs['getItemJs'] is defined %}
+            {{ paymentTransactionJs['getItemJs'] | raw }}
+        {% endif %}
+        
+        ga('ecommerce:send');
+        
+        $.ajax({
+            type: "POST",
+            url: "{{path('ajax_update_ga_status')}}",
+            data: {'id':'{{ paymentTransactionJs['ga_transaction'].PAYMENT_ID }}'},
+        })
+        .done(function(response) {
+        });
+
+    {% endif %}
+});
+
+
+function gaEvent(adId,categories,featuredStatus) {
+	window.dataLayer = window.dataLayer || []
+	dataLayer.push({
+	  
+	'event' : 'Featured Toggle',
+	'eventCategory':  'Options',     
+	'eventAction': featuredStatus,
+	'eventLabel': adId+' - '+categories
+	});                
+}
+function featuredTopUpsellBtn(id,upsellId,catupsellId) {
+    blockPage();
+    var route = Routing.generate('individual_upsell', { 'adId': id, 'upsellId': upsellId, 'catupsellId': catupsellId });
+    $.ajax({
+        type: "GET",
+        url : route,
+        data : {'redirectUrl': '{{app.request.getUri()}}'},   
+    })
+    .always(function(response) {
+        unblockPage();
+    })
+    .done(function(response) {
+        $('#featuredTopUpsellModal').html(response.htmlContent);
+        $('#featuredTopUpsellModal').foundation('reveal', 'open');       
+    });
+}
+
+function featuredTopPackageBtn(id, rootCategoryId) {
+	blockPage();
+	var route = Routing.generate('upgrade_to_featured_ad_netsuite', { 'adId': id, 'rootCategoryId': rootCategoryId});
+    route = route.replace(':https','');
+    $.ajax({
+        type: "GET",
+        url : route,
+        data : {'redirectUrl': '{{app.request.getUri()}}'},
+    })
+    .always(function(response) {
+        unblockPage();
+    })
+    .done(function(response) {
+        $('#featuredTopUpsellModal').html(response.htmlContent);
+        $('#featuredTopUpsellModal').foundation('reveal', 'open');       
+    });	
+}
+
+function useCreditForFeaturedIndividualUpsell(adId, upsellId) {
+	blockPage();
+    var route = Routing.generate('credit_payment_process_for_individual_upsell', { 'upsellId': upsellId, 'adId': adId });
+    $.ajax({
+        type: "GET",
+        url : route,
+        data : {'redirectUrl': '{{app.request.getUri()}}'},   
+    })
+    .always(function(response) {
+        unblockPage();
+    })
+    .done(function(response) {
+    	window.location.href = '{{ path('manage_my_ads_active') }}';
+    });
+}
+
+function useCreditForFeaturedPackage(adId, upsellId) {
+	blockPage();
+    var route = Routing.generate('credit_payment_process_for_featured_ad_package', { 'upsellId': upsellId, 'adId': adId });
+    $.ajax({
+        type: "GET",
+        url : route,
+        data : {'redirectUrl': '{{app.request.getUri()}}'},   
+    })
+    .always(function(response) {
+        unblockPage();
+    })
+    .done(function(response) {
+    	window.location.href = '{{ path('manage_my_ads_active') }}';
+    });
+}
+
+function paypalIndividualUpsellPaymentProcess(upsellModalName, upsellId, adId) {
+	
+	var modalName = '#'+upsellModalName;
+    blockElement(modalName); 
+    
+    // Stop form from submitting normally
+    event.preventDefault();
+    var formData = $('#cyber_source_form').serializeArray();
+    
+    var redirect_url, route;
+
+    {% if paa_lite_redirect is defined and paa_lite_redirect==1 %}
+    	route = Routing.generate('paypal_add_to_cart_ajax');
+    {% else %}
+    	route = Routing.generate('paypal_payment_process_for_individual_upsell', { 'upsellId': upsellId, 'adId': adId }); 
+    {% endif %}
+
+    $.ajax({
+        type: "POST",
+        url: route,
+        data: formData,
+    })
+    .always(function(response) {
+        unblockElement('#upgradeBasicAdToFeaturedModal');
+    })
+    .done(function(response) {
+    	if(response.htmlContent.success) {
+            window.location.href = "{{ path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL')}) }}";
+        } else {
+			if(response.error && response.error != '') {
+				$("#post-all-errors").html('<small class="error">'+response.error+'<br></small>');
+				return false;
+			}                
+        }
+    });
+} 
+
+function getUserAddress()
+{
+    blockPage();
+    $.ajax({
+        type: "POST",
+        url : '{{ path("ajax_get_user_address") }}',
+        data: { postCode: $('#fa_payment_cyber_source_checkout_zip').val()}
+    })
+    .always(function(response) {
+        unblockPage();
+    })
+    .done(function(response) {
+        $('#form_zip_error').hide();
+        if (response.errorMsg.length) {
+            //clearForm($('#cyber_source_form'));
+            $('#zip_error_div').html(response.errorMsg);
+            $('#zip_error_div').show();
+        } else {
+            $('#zip_error_div').hide();
+            if (response.street_address && response.street_address.length) {
+                $('#fa_payment_cyber_source_checkout_street_address').val(response.street_address);
+                $('#fa_payment_cyber_source_checkout_street_address').focus();
+            }
+            if (response.street_address_2 && response.street_address_2.length) {
+                $('#fa_payment_cyber_source_checkout_street_address_2').val(response.street_address_2);
+                $('#fa_payment_cyber_source_checkout_street_address_2').focus();
+            }
+            if (response.town_name && response.town_name.length) {
+                $('#fa_payment_cyber_source_checkout_town').val(response.town_name);
+                $('#fa_payment_cyber_source_checkout_town').focus();
+            }
+            if (response.domicile_name && response.domicile_name.length) {
+                $('#fa_payment_cyber_source_checkout_county').val(response.domicile_name);
+                $('#fa_payment_cyber_source_checkout_county').focus();
+            }
+        }
+    });
+}
+
+function showHideCardDetail()
+{
+    var paymentMethod = $("input[name='fa_payment_cyber_source_checkout[payment_method]']:checked").val();
+    if (paymentMethod == 0) {
+        $('#card_detail').show();
+        $('.fa-select-white').selectmenu().selectmenu('refresh',true);
+        $('#card_detail_save').show();
+    } else {
+        $('#card_detail').hide();
+        $('#card_detail_save').hide();
+        $('.expiry-date').nextAll('small.error').first().remove();
+        $('.expiry-date').nextAll('small.error').first().remove();
+    }
+    $('#pay_now_btn').show();
+    bindFormErrorEvents();
+}
+//]]>
+</script>
+

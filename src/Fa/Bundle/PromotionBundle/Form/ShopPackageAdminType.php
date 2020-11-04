@@ -34,6 +34,8 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 
 /**
  * Shop package admin type form.
@@ -199,6 +201,14 @@ class ShopPackageAdminType extends AbstractType
                 array(
                     'required' => false,
                     'label'    => 'Boost button enabled',
+                )
+            )
+            ->add(
+                'ad_limit',
+                NumberType::class,
+                array(
+                    'label'    => 'Ad Limit',
+                    'required' => false
                 )
             )
             ->add('save', SubmitType::class)
@@ -382,14 +392,25 @@ class ShopPackageAdminType extends AbstractType
                 if (!count($form->get('package_sr_no_'.$i)->getData())) {
                     $event->getForm()->get('package_sr_no_'.$i)->addError(new \Symfony\Component\Form\FormError('Please select a package type or types.'));
                 }
-                if (!$form->get('duration_value_'.$i)->getData()) {
-                    $event->getForm()->get('duration_value_'.$i)->addError(new \Symfony\Component\Form\FormError('Please enter duration.'));
-                }
-                if (!$form->get('duration_type_'.$i)->getData()) {
-                    $event->getForm()->get('duration_type_'.$i)->addError(new \Symfony\Component\Form\FormError('Please select a duration type.'));
+                if ($form->get('role')->getData()->getid()!=9) {
+                    if (!$form->get('duration_value_'.$i)->getData()) {
+                        $event->getForm()->get('duration_value_'.$i)->addError(new \Symfony\Component\Form\FormError('Please enter duration.'));
+                    }
+                    if (!$form->get('duration_type_'.$i)->getData()) {
+                        $event->getForm()->get('duration_type_'.$i)->addError(new \Symfony\Component\Form\FormError('Please select a duration type.'));
+                    }
                 }
             }
         }
+        
+        if ($form->get('role')->getData()->getid()==9 && !$form->get('ad_limit')->getData()) {
+            $event->getForm()->get('ad_limit')->addError(new \Symfony\Component\Form\FormError('Please enter the ad limit.'));
+        }
+        
+        if ($form->get('role')->getData()->getid()==9 && ($form->get('ad_limit')->getData() < $form->get('credit_1')->getData())) {
+            $event->getForm()->get('credit_1')->addError(new \Symfony\Component\Form\FormError('Credit limit is greater than total Ad limit.'));
+        }
+        
     }
 
     /**
@@ -419,56 +440,131 @@ class ShopPackageAdminType extends AbstractType
             $this->em->persist($packageRule);
 
             //set category
-            for ($i = 1; $i <= $this->noOfCreditblocks; $i++) {
-                $shopPackageCredit = null;
-                if ($form->get('shop_package_credit_id_'.$i)->getData()) {
-                    $shopPackageCredit = $this->em->getRepository('FaPromotionBundle:ShopPackageCredit')->find($form->get('shop_package_credit_id_'.$i)->getData());
-                } elseif ($form->get('credit_'.$i)->getData() && $form->get('category_id_'.$i)->getData() && $form->get('package_sr_no_'.$i)->getData() && $form->get('duration_value_'.$i)->getData() && $form->get('duration_type_'.$i)->getData()) {
+            $totalCredit = 0;
+            
+            if($form->get('ad_limit')->getData()) {
+                if ($form->get('shop_package_credit_id_1')->getData()) {
+                    $shopPackageCredit = $this->em->getRepository('FaPromotionBundle:ShopPackageCredit')->find($form->get('shop_package_credit_id_1')->getData());
+                } elseif ($form->get('credit_1')->getData() && $form->get('category_id_1')->getData() && $form->get('package_sr_no_1')->getData() && $form->get('duration_value_1')->getData() && $form->get('duration_type_1')->getData()) {
                     $shopPackageCredit = new ShopPackageCredit();
                     $shopPackageCredit->setPackage($package);
                 }
                 if ($shopPackageCredit) {
-                    if ($form->get('credit_'.$i)->getData()) {
-                        $shopPackageCredit->setCredit($form->get('credit_'.$i)->getData());
+                    if ($form->get('credit_1')->getData()) {
+                        $shopPackageCredit->setCredit($form->get('credit_1')->getData());
+                        $totalCredit = $totalCredit + $form->get('credit_1')->getData();
                     } else {
-                        $shopPackageCredit->setCredit(null);
+                        $shopPackageCredit->setCredit($form->get('ad_limit')->getData());
+                        $totalCredit = $totalCredit + $form->get('ad_limit')->getData();
                     }
-
-                    if ($form->get('category_id_'.$i)->getData()) {
-                        $shopPackageCredit->setCategory($this->em->getReference('FaEntityBundle:Category', $form->get('category_id_'.$i)->getData()));
+                    
+                    if ($form->get('category_id_1')->getData()) {
+                        $shopPackageCredit->setCategory($this->em->getReference('FaEntityBundle:Category', $form->get('category_id_1')->getData()));
                     } else {
-                        $shopPackageCredit->setCategory(null);
+                        $shopPackageCredit->setCategory($this->em->getReference('FaEntityBundle:Category', CategoryRepository::ADULT_ID));
                     }
-
-                    if ($form->get('package_sr_no_'.$i)->getData()) {
-                        $packageSrNoArray = $form->get('package_sr_no_'.$i)->getData();
+                    
+                    if ($form->get('package_sr_no_1')->getData()) {
+                        $packageSrNoArray = $form->get('package_sr_no_1')->getData();
                         if (isset($packageSrNoArray[0]) && $packageSrNoArray[0] == '-1') {
                             unset($packageSrNoArray[0]);
                         }
-
+                        
                         asort($packageSrNoArray);
                         $shopPackageCredit->setPackageSrNo(implode(',', $packageSrNoArray));
                     } else {
-                        $shopPackageCredit->setPackageSrNo(null);
+                        $shopPackageCredit->setPackageSrNo(1);
                     }
-
-                    if ($form->get('duration_value_'.$i)->getData() && $form->get('duration_type_'.$i)->getData()) {
-                        $shopPackageCredit->setDuration($form->get('duration_value_'.$i)->getData().$form->get('duration_type_'.$i)->getData());
+                    
+                    if ($form->get('duration_value_1')->getData() && $form->get('duration_type_1')->getData()) {
+                        $shopPackageCredit->setDuration($form->get('duration_value_1')->getData().$form->get('duration_type_1')->getData());
                     } else {
                         $shopPackageCredit->setDuration(null);
                     }
-
-                    if ($form->get('paid_user_only_'.$i)->getData()) {
-                        $shopPackageCredit->setPaidUserOnly($form->get('paid_user_only_'.$i)->getData());
+                    
+                    if ($form->get('paid_user_only_1')->getData()) {
+                        $shopPackageCredit->setPaidUserOnly($form->get('paid_user_only_1')->getData());
                     } else {
                         $shopPackageCredit->setPaidUserOnly(0);
                     }
-
+                    
                     $this->em->persist($shopPackageCredit);
                 }
+                $remainingCredit = $form->get('ad_limit')->getData() - $totalCredit;
+                
+                if($remainingCredit > 0) {
+                    if ($form->get('shop_package_credit_id_2')->getData()) {
+                        $shopPackageCredit = $this->em->getRepository('FaPromotionBundle:ShopPackageCredit')->find($form->get('shop_package_credit_id_2')->getData());
+                    } else {
+                        $shopPackageCredit = new ShopPackageCredit();
+                        $shopPackageCredit->setPackage($package);
+                    }
+                    if ($shopPackageCredit) {
+                        $shopPackageCredit->setCredit($remainingCredit);
+                        $shopPackageCredit->setCategory($this->em->getReference('FaEntityBundle:Category', CategoryRepository::ADULT_ID));
+                        $shopPackageCredit->setPackageSrNo(1);
+                        $shopPackageCredit->setDuration(null);
+                        $shopPackageCredit->setPaidUserOnly(0);
+                        $this->em->persist($shopPackageCredit);                           
+                    }
+                }
+                $this->em->flush();               
+            }  else {
+                for ($i = 1; $i <= $this->noOfCreditblocks; $i++) {
+                    $shopPackageCredit = null;
+                    if ($form->get('shop_package_credit_id_'.$i)->getData()) {
+                        $shopPackageCredit = $this->em->getRepository('FaPromotionBundle:ShopPackageCredit')->find($form->get('shop_package_credit_id_'.$i)->getData());
+                    } elseif ($form->get('credit_'.$i)->getData() && $form->get('category_id_'.$i)->getData() && $form->get('package_sr_no_'.$i)->getData() && $form->get('duration_value_'.$i)->getData() && $form->get('duration_type_'.$i)->getData()) {
+                        $shopPackageCredit = new ShopPackageCredit();
+                        $shopPackageCredit->setPackage($package);
+                    }
+                    if ($shopPackageCredit) {
+                        if ($form->get('credit_'.$i)->getData()) {
+                            $shopPackageCredit->setCredit($form->get('credit_'.$i)->getData());
+                            $totalCredit = $totalCredit + $form->get('credit_'.$i)->getData();
+                        } else {
+                            $shopPackageCredit->setCredit(null);
+                        }
+                        
+                        if ($form->get('category_id_'.$i)->getData()) {
+                            $shopPackageCredit->setCategory($this->em->getReference('FaEntityBundle:Category', $form->get('category_id_'.$i)->getData()));
+                        } else {
+                            $shopPackageCredit->setCategory(null);
+                        }
+                        
+                        if ($form->get('package_sr_no_'.$i)->getData()) {
+                            $packageSrNoArray = $form->get('package_sr_no_'.$i)->getData();
+                            if (isset($packageSrNoArray[0]) && $packageSrNoArray[0] == '-1') {
+                                unset($packageSrNoArray[0]);
+                            }
+                            
+                            asort($packageSrNoArray);
+                            $shopPackageCredit->setPackageSrNo(implode(',', $packageSrNoArray));
+                        } else {
+                            $shopPackageCredit->setPackageSrNo(null);
+                        }
+                        
+                        if ($form->get('duration_value_'.$i)->getData() && $form->get('duration_type_'.$i)->getData()) {
+                            $shopPackageCredit->setDuration($form->get('duration_value_'.$i)->getData().$form->get('duration_type_'.$i)->getData());
+                        } else {
+                            $shopPackageCredit->setDuration(null);
+                        }
+                        
+                        if ($form->get('paid_user_only_'.$i)->getData()) {
+                            $shopPackageCredit->setPaidUserOnly($form->get('paid_user_only_'.$i)->getData());
+                        } else {
+                            $shopPackageCredit->setPaidUserOnly(0);
+                        }
+                        
+                        $this->em->persist($shopPackageCredit);
+                    }
+                }
+    
+                $this->em->flush();
             }
-
-            $this->em->flush();
+            
+            
+                      
         }
     }
 

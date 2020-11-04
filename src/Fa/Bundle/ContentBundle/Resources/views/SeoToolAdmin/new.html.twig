@@ -190,6 +190,15 @@
             clearForm($('#image_seo_field_div'));
             $('#item_dimensions_div, #category_dimensions_div').hide();
             $('#home_page_dimensions_div').show();
+        } else if (pageVal == "{{ constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADULT_HOME_PAGE') }}") {
+            $('#image_seo_field_div, #seo_fields2_div, #seo_fields_h1_div, #top_link_fields_div, #list_content_div').hide();
+            $('#seo_fields_div').show();
+            clearForm($('#seo_fields2_div'));
+            clearForm($('#seo_fields_h1_div'));
+            clearForm($('#image_seo_field_div'));
+            $('#item_dimensions_div, #category_dimensions_div').hide();
+            $('#home_page_dimensions_div').show();
+            $('#popular_search_fields_div').show();
         } else if (pageVal == "{{ constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_LIST_PAGE') }}") {
             $('#image_seo_field_div').hide();
             clearForm($('#image_seo_field_div'));

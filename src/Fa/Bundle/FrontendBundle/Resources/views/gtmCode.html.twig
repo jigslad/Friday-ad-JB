@@ -1,9 +1,14 @@
 {% set staticPageRepository = fetch_repository('FaContentBundle:StaticPage') %}
 {% set currentRoute      = app.request.get('_route') %}
+{% if facetResult is defined %}
+    {% set resfacetResult = facetResult %}
+{% else %}
+    {% set resfacetResult = null %}
+{% endif %}
 {% if currentRoute is defined and currentRoute=='ad_detail_page' and adDetail is defined %}
     {% set paaBlock = staticPageRepository.getStaticBlockGTMDetailArray('google-ad-manager-code' , fetch_container_instance(), adDetail) %}
 {% elseif currentRoute is defined and (currentRoute=='listing_page' or currentRoute=='motor_listing_page') %}
-    {% set paaBlock = staticPageRepository.getStaticBlockGTMDetailArray('google-ad-manager-code' , fetch_container_instance(), null, facetResult) %}
+    {% set paaBlock = staticPageRepository.getStaticBlockGTMDetailArray('google-ad-manager-code' , fetch_container_instance(), null, resfacetResult) %}
 {% else %}
 	{% set paaBlock = staticPageRepository.getStaticBlockGTMDetailArray('google-ad-manager-code' , fetch_container_instance()) %}
 {% endif %}

@@ -1605,4 +1605,199 @@ class UserRepository extends EntityRepository implements UserProviderInterface
         $response->headers->setCookie(new Cookie('is_over_18', 1, time() + 1 * 86400));
         $response->sendHeaders();
     }
+   /* public function getUserDataBoostDetailsArrayByUserId($userId = array())
+    {
+        if (!is_array($userId)) {
+            $userId = array($userId);
+        }
+        
+        $userId = array_unique($userId);
+        $qb = $this->createQueryBuilder(self::ALIAS)
+        ->select(self::ALIAS.'.id', self::ALIAS.'.first_name', self::ALIAS.'.last_name', self::ALIAS.'.business_name', self::ALIAS.'.username', self::ALIAS.'.email', self::ALIAS.'.created_at', self::ALIAS.'.password', self::ALIAS.'.town', 'IDENTITY('.self::ALIAS.'.role) as user_role_id', self::ALIAS.'.boost_overide', self::ALIAS.'.is_reset_boost_count');
+        
+        if (!is_array($userId)) {
+            $userId = array($userId);
+        }
+        
+        if (count($userId)) {
+            $qb->andWhere(self::ALIAS.'.id IN (:userId)');
+            $qb->setParameter('userId', $userId);
+        }
+        
+        $objResources = $qb->getQuery()->getArrayResult();
+        $arr = array();
+        if (count($objResources)) {
+            for ($i=0; $i<count($objResources); $i++) {
+                $getBoostDetails = $this->getBoostDetailsByUserId($objResources[$i]['id']);
+                $arr[$i]['user_id']    = $objResources[$i]['id'];
+                $arr[$i]['first_name']    = $objResources[$i]['first_name'];
+                $arr[$i]['last_name']     = $objResources[$i]['last_name'];
+                $arr[$i]['username']      = $objResources[$i]['username'];
+                $arr[$i]['business_name'] = $objResources[$i]['business_name'];
+                $arr[$i]['email']         = $objResources[$i]['email'];
+                $arr[$i]['created_at']    = $objResources[$i]['created_at'];
+                $arr[$i]['password']      = $objResources[$i]['password'];
+                $arr[$i]['town']          = $objResources[$i]['town'];
+                $arr[$i]['role_id']       = $objResources[$i]['user_role_id'];
+                $arr[$i]['boost_overide'] = $objResources[$i]['boost_overide'];
+                $arr[$i]['is_reset_boost_count'] = $objResources[$i]['is_reset_boost_count'];
+                $arr[$i]['used_boost_count']  = $getBoostDetails['boostedAdCount'];
+                $arr[$i]['max_boost_count']  = $getBoostDetails['boostMaxPerMonth'];
+                $arr[$i]['remaining_boost_count']  = $getBoostDetails['boostAdRemaining'];
+                $arr[$i]['boost_renew_date']  = $getBoostDetails['boostRenewDate'];
+            }
+        }
+        
+        //print_r($arr);exit;
+        
+        return $arr;
+    }
+    
+    public function getBoostDetailsByUserId($userId)
+    {
+        $isBoostEnabled = 0;
+        $boostMaxPerMonth = 0;
+        $boostAdRemaining = 0;
+        $getExipryDate = $boostRenewDate = '';
+        $boostedAdCountArray = array();
+        $user = $this->_em->getRepository('FaUserBundle:User')->find($userId);
+        
+        $boostedAdCount = $this->_em->getRepository('FaAdBundle:BoostedAd')->getMyBoostedAdsCount($userId);
+        $remainingDaysToRenewBoost = '';
+        $userBusinessCategory = '';
+        if ($user->getRole() == 'ROLE_BUSINESS_SELLER' || $user->getRole() == 'ROLE_NETSUITE_SUBSCRIPTION') {
+            $userBusinessCategory = $user->getBusinessCategoryId();
+            $getCurrentActivePackage = $this->_em->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($user);
+            if ($getCurrentActivePackage) {
+                if ($getCurrentActivePackage->getPackage() && $getCurrentActivePackage->getPackage()->getPrice() >0) {
+                    $isBoostEnabled = $getCurrentActivePackage->getPackage()->getBoostAdEnabled();
+                    $boostMaxPerMonth = ($user->getBoostOveride()!='' && $user->getIsResetBoostCount()==1)?$user->getBoostOveride():(($getCurrentActivePackage->getBoostOveride())?$getCurrentActivePackage->getBoostOveride():$getCurrentActivePackage->getPackage()->getMonthlyBoostCount());
+                    $boostAdRemaining = $boostMaxPerMonth;
+                    $getExpiryAtDate =  $getCurrentActivePackage->getExpiresAt();
+                    $getCreateOrUpdateDate = ($getCurrentActivePackage->getUpdatedAt() > $getCurrentActivePackage->getCreatedAt())?$getCurrentActivePackage->getUpdatedAt():$getCurrentActivePackage->getCreatedAt();
+                    if ($getExpiryAtDate=='') {
+                        $getExpiryDate = strtotime('+28 days', $getCreateOrUpdateDate);
+                    } else {
+                        $getExpiryDate =  $getCurrentActivePackage->getExpiresAt();
+                    }
+                    $todaysTime  = time();
+                    
+                    $remainingDaysToRenewBoost = date('jS M Y', $getExpiryDate);
+                }
+            }
+        }
+        
+        if ($boostedAdCount > 0 && $boostMaxPerMonth > 0) {
+            $boostAdRemaining = $boostMaxPerMonth - $boostedAdCount;
+        }
+        
+        $BoostDetails = array(
+            'boostedAdCount'  => $boostedAdCount,
+            'isBoostEnabled'  => $isBoostEnabled,
+            'boostMaxPerMonth'=> $boostMaxPerMonth,
+            'boostAdRemaining'=> $boostAdRemaining,
+            'boostRenewDate'  => $remainingDaysToRenewBoost,
+            'userBusinessCategory' => $userBusinessCategory,
+        );
+        
+        return $BoostDetails;
+    }*/
+    
+    
+    
+    public function getUserDataBoostDetailsArrayByUserId($userId = array())
+    {
+        if (!is_array($userId)) {
+            $userId = array($userId);
+        }
+        
+        $userId = array_unique($userId);
+        $qb = $this->createQueryBuilder(self::ALIAS)
+        ->select(self::ALIAS.'.id', self::ALIAS.'.first_name', self::ALIAS.'.last_name', self::ALIAS.'.business_name', self::ALIAS.'.username', self::ALIAS.'.email', self::ALIAS.'.created_at', self::ALIAS.'.password', self::ALIAS.'.town', 'IDENTITY('.self::ALIAS.'.role) as user_role_id', self::ALIAS.'.boost_overide', self::ALIAS.'.is_reset_boost_count');
+        
+        if (!is_array($userId)) {
+            $userId = array($userId);
+        }
+        
+        if (count($userId)) {
+            $qb->andWhere(self::ALIAS.'.id IN (:userId)');
+            $qb->setParameter('userId', $userId);
+        }
+        
+        $objResources = $qb->getQuery()->getArrayResult();
+        $arr = array();
+        if (count($objResources)) {
+            for ($i=0; $i<count($objResources); $i++) {
+                $getBoostDetails = $this->getBoostDetailsByUserId($objResources[$i]['id']);
+                
+                $arr[$objResources[$i]['id']]['first_name']    = $objResources[$i]['first_name'];
+                $arr[$objResources[$i]['id']]['last_name']     = $objResources[$i]['last_name'];
+                $arr[$objResources[$i]['id']]['username']      = $objResources[$i]['username'];
+                $arr[$objResources[$i]['id']]['business_name'] = $objResources[$i]['business_name'];
+                $arr[$objResources[$i]['id']]['email']         = $objResources[$i]['email'];
+                $arr[$objResources[$i]['id']]['created_at']    = $objResources[$i]['created_at'];
+                $arr[$objResources[$i]['id']]['password']      = $objResources[$i]['password'];
+                $arr[$objResources[$i]['id']]['town']          = $objResources[$i]['town'];
+                $arr[$objResources[$i]['id']]['role_id']       = $objResources[$i]['user_role_id'];
+                $arr[$objResources[$i]['id']]['boost_overide'] = $objResources[$i]['boost_overide'];
+                $arr[$objResources[$i]['id']]['is_reset_boost_count'] = $objResources[$i]['is_reset_boost_count'];
+                $arr[$objResources[$i]['id']]['used_boost_count']  = $getBoostDetails['boostedAdCount'];
+                $arr[$objResources[$i]['id']]['max_boost_count']  = $getBoostDetails['boostMaxPerMonth'];
+                $arr[$objResources[$i]['id']]['remaining_boost_count']  = $getBoostDetails['boostAdRemaining'];
+                $arr[$objResources[$i]['id']]['boost_renew_date']  = $getBoostDetails['boostRenewDate'];
+            }
+        }
+        
+        //print_r($arr);exit;
+        
+        return $arr;
+    }
+    
+    public function getBoostDetailsByUserId($userId)
+    {
+        $isBoostEnabled = 0;
+        $boostMaxPerMonth = 0;
+        $boostAdRemaining = 0;
+
+        $user = $this->_em->getRepository('FaUserBundle:User')->find($userId);
+        
+        $boostedAdCount = $this->_em->getRepository('FaAdBundle:BoostedAd')->getMyBoostedAdsCount($userId);
+        $remainingDaysToRenewBoost = '';
+        $userBusinessCategory = '';
+        if ($user->getRole() == 'ROLE_BUSINESS_SELLER' || $user->getRole() == 'ROLE_NETSUITE_SUBSCRIPTION') {
+            $userBusinessCategory = $user->getBusinessCategoryId();
+            $getCurrentActivePackage = $this->_em->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($user);
+            if ($getCurrentActivePackage) {
+                if ($getCurrentActivePackage->getPackage() && $getCurrentActivePackage->getPackage()->getPrice() >0) {
+                    $isBoostEnabled = $getCurrentActivePackage->getPackage()->getBoostAdEnabled();
+                    $boostMaxPerMonth = ($user->getBoostOveride()!='' && $user->getIsResetBoostCount()==1)?$user->getBoostOveride():(($getCurrentActivePackage->getBoostOveride())?$getCurrentActivePackage->getBoostOveride():$getCurrentActivePackage->getPackage()->getMonthlyBoostCount());
+                    $boostAdRemaining = $boostMaxPerMonth;
+                    $getExpiryAtDate =  $getCurrentActivePackage->getExpiresAt();
+                    $getCreateOrUpdateDate = ($getCurrentActivePackage->getUpdatedAt() > $getCurrentActivePackage->getCreatedAt())?$getCurrentActivePackage->getUpdatedAt():$getCurrentActivePackage->getCreatedAt();
+                    if ($getExpiryAtDate=='') {
+                        $getExpiryDate = strtotime('+28 days', $getCreateOrUpdateDate);
+                    } else {
+                        $getExpiryDate =  $getCurrentActivePackage->getExpiresAt();
+                    }
+                     
+                    $remainingDaysToRenewBoost = date('jS M Y', $getExpiryDate);
+                }
+            }
+        }
+        
+        if ($boostedAdCount > 0 && $boostMaxPerMonth > 0) {
+            $boostAdRemaining = $boostMaxPerMonth - $boostedAdCount;
+        }
+        
+        $BoostDetails = array(
+            'boostedAdCount'  => $boostedAdCount,
+            'isBoostEnabled'  => $isBoostEnabled,
+            'boostMaxPerMonth'=> $boostMaxPerMonth,
+            'boostAdRemaining'=> $boostAdRemaining,
+            'boostRenewDate'  => $remainingDaysToRenewBoost,
+            'userBusinessCategory' => $userBusinessCategory,
+        );
+        
+        return $BoostDetails;
+    }
 }

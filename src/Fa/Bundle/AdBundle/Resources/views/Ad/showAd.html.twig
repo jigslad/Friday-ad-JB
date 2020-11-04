@@ -171,7 +171,6 @@
     {% set feedStatusDescription = '<p><b>SOLD! No longer available.</b></p>' ~ attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) %}
     {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), feedStatusDescription) %}
 {% endif %}
-
 {% block facebook_meta %}
     {% set adUrl = container.get('fa_ad.manager.ad_routing').getDetailUrl(adDetail) %}
     <meta property="og:url" content="{{ adUrl }}" />

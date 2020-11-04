@@ -40,19 +40,21 @@ $(function() {
                     if(!data['results'].length) {
                         $('#category_id_autocomplete_error').show();
                     }
-                    var result = $.map(data['results'], function(item) {
-                        return {
-                            label: item.text,
-                            id: item.id,
-                            text2: item.text2 ? item.text2 : '',
-                            index: item.index,
-                            area_id: item.area_id ? item.area_id : '',
-                            locationBy: item.locationBy ? item.locationBy : '',
-                           	latlong: item.latlong ? item.latlong : '',
-                        };
-                    });
-                    cache[ term ] = result;
-                    response(result);
+                    if(jQuery.type(data) == 'object') {
+                        var result = $.map(data['results'], function (item) {
+                            return {
+                                label: item.text,
+                                id: item.id,
+                                text2: item.text2 ? item.text2 : '',
+                                index: item.index,
+                                area_id: item.area_id ? item.area_id : '',
+                                locationBy: item.locationBy ? item.locationBy : '',
+                                latlong: item.latlong ? item.latlong : '',
+                            };
+                        });
+                        cache[term] = result;
+                        response(result);
+                    }
                 }
             });
         },
@@ -174,9 +176,6 @@ $(function() {
             {% if 'location' in field and submitFormAfterSelect is not defined %}
                 bindShowMapOnChangeLocationEvent();
             {% endif %}
-            {% if 'category_id' in field and not mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
-                onSelectAutoSuggestCategory();
-            {% endif %}
         },
         close: function( event, ui ) { 
             {% if displayOnlyTown is defined %}
@@ -223,7 +222,6 @@ $(document).ready(function(){
     {% endif %}
     
     $("{{ field }}"+'_close').click(function() {
-        $('#category_id_autocomplete_error').hide();
         $("{{ field }}"+'_autocomplete').val('');
         $("{{ field }}").val('');
         $("#fa_top_search_item__area").val('');
@@ -262,7 +260,6 @@ $(document).ready(function(){
     	
         if ($(this).val().length < 1) {
             $("{{ field }}"+'_close').hide();
-            $('#category_id_autocomplete_error').hide();
             $("{{ field }}").val("");
             
             {% if child_field is defined %}
@@ -280,7 +277,6 @@ $(document).ready(function(){
     $("{{ field }}"+'_autocomplete').blur(function() {
         if ($("{{ field }}"+'_autocomplete').val().length == 0) {
             $("{{ field }}"+'_close').hide();
-            $('#category_id_autocomplete_error').hide();
         } else if($("{{ field }}"+'_autocomplete').val().length > 4) {
         	 {% if 'location' in field and 'paa' in field %}
 				//check location is related to area;
@@ -311,7 +307,6 @@ $(document).ready(function(){
     
     if ($("{{ field }}"+'_autocomplete').length > 0 && $("{{ field }}"+'_autocomplete').val().length < 1) {
         $("{{ field }}"+'_close').hide();
-        $('#category_id_autocomplete_error').hide();
     } else {
         $("{{ field }}"+'_close').show();
     }

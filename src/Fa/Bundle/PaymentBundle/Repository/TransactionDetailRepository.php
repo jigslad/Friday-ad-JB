@@ -32,6 +32,7 @@ class TransactionDetailRepository extends EntityRepository
     const PAYMENT_FOR_PACKAGE = 'AP';
     const PAYMENT_FOR_SHOP    = 'SP';
     const PAYMENT_FOR_BUY_NOW = 'BN';
+    const PAYMENT_FOR_UPSELL = 'UP';
 
     /**
      * Prepare query builder.

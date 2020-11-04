@@ -279,7 +279,20 @@ class Ad
      * })
      * @Gedmo\Versioned
      */
+        
     private $user;
+    
+    /**
+     * @var \Fa\Bundle\UserBundle\Entity\UserCredit
+     *
+     * @ORM\ManyToOne(targetEntity="Fa\Bundle\UserBundle\Entity\UserCredit")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="used_credit_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
+     * })
+     * @Gedmo\Versioned
+     */
+    
+    private $used_credit;
 
     /**
      * @var \Fa\Bundle\EntityBundle\Entity\Entity
@@ -2448,5 +2461,28 @@ class Ad
     public function getOldPrivacyNumber()
     {
         return $this->old_privacy_number;
+    }
+    
+    /**
+     * Set user_credit
+     *
+     * @param \Fa\Bundle\UserBundle\Entity\UserCredit $user_credit
+     * @return Ad
+     */
+    public function setUserCredit(\Fa\Bundle\UserBundle\Entity\UserCredit $user_credit = null)
+    {
+        $this->user_credit = $user_credit;
+        
+        return $this;
+    }
+    
+    /**
+     * Get user_credit
+     *
+     * @return \Fa\Bundle\UserBundle\Entity\UserCredit
+     */
+    public function getUserCredit()
+    {
+        return $this->user_credit;
     }
 }

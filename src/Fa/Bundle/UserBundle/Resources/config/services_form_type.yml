@@ -281,3 +281,16 @@ services:
             - { name: form.type, alias: newsletter_feedback }
        arguments: ['@doctrine', '@security.encoder_factory', '@service_container']
        
+    fa_user.form.type.boost_override_admin:
+        class: Fa\Bundle\UserBundle\Form\BoostOverrideAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_boost_override_admin }
+
+    fa_user.form.type.boost_override_search_admin:
+        class: Fa\Bundle\UserBundle\Form\BoostOverrideSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_boost_override_search_admin }
+
+       

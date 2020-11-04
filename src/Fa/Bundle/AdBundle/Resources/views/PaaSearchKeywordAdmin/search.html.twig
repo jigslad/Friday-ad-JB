@@ -1,0 +1,20 @@
+{% block search_html %}
+<div class="row">
+    <div class="columns">
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline search_box'}}) }}
+            {{ form_errors(form) }}
+            <div class="row">
+                <div class="large-4 columns">
+                    {{ form_widget(form.category__synonyms_keywords, {'attr': {'class':'form-control', 'placeholder': 'Synonyms Keyword'}}) }}
+                </div>
+                <div class="large-4 columns">
+                    {{ form_widget(form.category__name, {'attr': {'class':'form-control', 'placeholder': 'Category'}}) }}
+                </div>
+                <div class="large-4 columns">
+                    {{ form_widget(form.search, {'attr': {'class':'small button'}}) }}
+                </div>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

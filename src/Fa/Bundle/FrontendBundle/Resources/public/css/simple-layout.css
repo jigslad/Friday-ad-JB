@@ -1024,3 +1024,8 @@ footer a:hover, .footer-head:hover, .pkg-includes a {
         width: 240px !important;
     }
 }
+.bz-profile-logo.rounded img {
+    width: 103px;
+    height: 103px;
+    border-radius: 50%;
+}

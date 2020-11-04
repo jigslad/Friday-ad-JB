@@ -25,9 +25,18 @@ Encore
      */
     .addStyleEntry('css/site', './assets/scss/site.scss')
     .addStyleEntry('css/adulcss', './assets/scss/adul-css.scss')
-    // .addEntry('app', './assets/js/app.js')
-    //.addEntry('page1', './assets/js/page1.js')
-    //.addEntry('page2', './assets/js/page2.js')
+    .addStyleEntry('css/mmacss', './assets/scss/mmacss.scss')
+    .addStyleEntry('css/featured-ads', './assets/scss/featured-ads.scss')
+    .addStyleEntry('css/owl-carousel', './assets/scss/owl-carousel.scss')
+    .addStyleEntry('css/sponsored-slots', './assets/scss/sponsored-slots.scss')
+    .addStyleEntry('css/upgrade-featured', './assets/scss/upgrade-featured.scss')
+    .addStyleEntry('css/upsell-featured', './assets/scss/upsell-featured.scss')
+    .addStyleEntry('css/sitenew', './assets/css/site.css')
+    .addStyleEntry('css/fad-custome-1', './assets/css/fad-custome-1.scss')
+    .addStyleEntry('css/fad-custome-2', './assets/css/fad-custome-2.scss')
+    .addStyleEntry('css/fad-custome-3', './assets/css/fad-custome-3.scss')
+    .addStyleEntry('css/fad-custome-4', './assets/css/fad-custome-4.scss')
+    .addStyleEntry('css/popularSearch', './assets/scss/popular-search.scss')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()

@@ -98,8 +98,24 @@ class UserCreditUsed
      * @ORM\Column(name="created_at", type="integer", length=10)
      */
     private $created_at;
+    
+    /**
+     * @var \Fa\Bundle\UserBundle\Entity\Upsell
+     *
+     * @ORM\ManyToOne(targetEntity="Fa\Bundle\PromotionBundle\Entity\Upsell", cascade={"persist"})
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="upsell_id", referencedColumnName="id", onDelete="CASCADE")
+     * })
+     */
+    private $upsell;
 
-
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="status", type="boolean", nullable=true, options={"default" = 1})
+     */
+    private $status;
+    
     /**
      * Get id
      *
@@ -280,5 +296,51 @@ class UserCreditUsed
     public function getCredit()
     {
         return $this->credit;
+    }
+    
+    /**
+     * Set upsell
+     *
+     * @param \Fa\Bundle\UserBundle\Entity\Upsell $upsell
+     * @return UserCreditUsed
+     */
+    public function setUpsell(\Fa\Bundle\PromotionBundle\Entity\Upsell $upsell = null)
+    {
+        $this->upsell = $upsell;
+        
+        return $this;
+    }
+    
+    /**
+     * Get upsell
+     *
+     * @return \Fa\Bundle\UserBundle\Entity\Upsell
+     */
+    public function getUpsell()
+    {
+        return $this->upsell;
+    }
+    
+    /**
+     * Set status
+     *
+     * @param boolean $status
+     * @return UserCreditUsed
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+        
+        return $this;
+    }
+    
+    /**
+     * Get status
+     *
+     * @return boolean
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }

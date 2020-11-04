@@ -968,7 +968,7 @@ class CommonManager
                     if ($isCompany) {
                         return '<img src="'.$container->getParameter('fa.static.shared.url').'/uploads/tmp/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).'" alt="'.$userName.'"  />';
                     } else {
-                        return '<span style="background-image: url('.$container->getParameter('fa.static.shared.url').'/uploads/tmp/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).')" title="'.$userName.'" />';
+                        return '<img src="'.$container->getParameter('fa.static.shared.url').'/uploads/tmp/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).'" title="'.$userName.'" />';
                     }
                 } else {
                     $noImageName = 'user-icon.svg';
@@ -995,14 +995,14 @@ class CommonManager
             if ($isCompany) {
                 return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img src="'.$newImagePath.'" width="'.$imageWidth.'" height="'.$imageHeight.'" alt="'.$userName.'" />';
             } else {
-                return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<span style="background-image: url('.$newImagePath.')" title="'.$userName.'"></span>';
+                return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img src="'.$newImagePath.'" title="'.$userName.'" />';
             }
         } elseif (is_file($imagePath)) {
             if (($imageWidth==null && $imageHeight== null) || ($imageWidth =='' && $imageHeight=='') || ($imageWidth ==0 || $imageHeight==0)) {
                 if ($isCompany) {
                     return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img src="'.$container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).'" alt="'.$userName.'" />';
                 } else {
-                    return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<span style="background-image: url('.$container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).')" title="'.$userName.'" />';
+                    return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img src="'.$container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).'" title="'.$userName.'" />';
                 }
             } else {                
                 if (!file_exists($container->get('kernel')->getRootDir().'/../web/'.$path.'/'.$userId.'_'.$imageWidth.'X'.$imageHeight.'.jpg')) {
@@ -1019,7 +1019,7 @@ class CommonManager
                 if ($isCompany) {
                     return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img src="'.$newImagePath.'" width="'.$imageWidth.'" height="'.$imageHeight.'" alt="'.$userName.'" />';
                 } else {
-                    return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<span style="background-image: url('.$newImagePath.')" title="'.$userName.'"></span>';
+                    return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img src="'.$newImagePath.'" title="'.$userName.'" />';
                 }
             }
         } else {
@@ -1242,7 +1242,7 @@ class CommonManager
      */
     public static function sendErrorMail($container, $subject, $exceptionMessage, $stackTrace)
     {
-        $transport = \Swift_SmtpTransport::newInstance("192.168.206.2", 25);
+        $transport = \Swift_SmtpTransport::newInstance("172.30.3.79", 25);
         $mailer = \Swift_Mailer::newInstance($transport);
         $message = \Swift_Message::newInstance()
         ->setSubject($subject)
@@ -3732,6 +3732,28 @@ HTML;
         }
     }
 
+    public function getIndividualUpsellModalDetails($upsellId) {
+        $upsellModalDetail = array();
+        switch ($upsellId) {
+            case 5:
+            case 51:
+            case 54:
+                $upsellModalDetail['title'] = 'Featured ad';
+                $upsellModalDetail['name'] = 'featuredTopUpsellModal';
+                break;
+        }
+        return $upsellModalDetail;
+    }
+    
+    public static function dateDiffInDays($date1, $date2)
+    {
+        // Calulating the difference in timestamps
+        $diff = $date2 - $date1;
+        
+        // 1 day = 24 hours
+        // 24 * 60 * 60 = 86400 seconds
+        return abs(round($diff / 86400));
+    } 
     public static function checkImageExistOnAws($container, $imageUrl)
     {
         $client = new S3Client([
@@ -3796,5 +3818,21 @@ HTML;
             $imgRelPath = $imagePath . '/' . $adId . '_' . $imageHash . ($size ? '_' . $size : '') . '.jpg';
         }
         return $imgRelPath;
+    }
+    public static function multisort($sortArray, $sortField,$sortAs) {
+        $sortColumn = array_column($sortArray, $sortField);
+        
+        //echo '<pre>'; print_r($sortColumn);die;
+        /*$sortColumn = array();
+        foreach($sortArray as $sortRow) {
+            $sortColumn[] = $sortRow[$sortField];
+        }*/       
+        if($sortAs=='desc') { 
+            array_multisort($sortColumn, SORT_DESC, $sortArray);
+        } else {
+            array_multisort($sortColumn, SORT_ASC, $sortArray);
+        }
+        
+        return $sortArray;
     }
 }

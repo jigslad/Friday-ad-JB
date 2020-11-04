@@ -127,7 +127,6 @@ class CyberSourceCheckoutAdminController extends CoreController implements Resou
 
                         // Remove session for cart id
                         $this->container->get('session')->remove('cart_id');
-                        sleep(5);
 
                         //send ads for moderation
                         //$this->getRepository('FaAdBundle:AdModerate')->sendAdsForModeration($paymentId, $this->container);

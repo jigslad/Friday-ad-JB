@@ -5,12 +5,14 @@
                 {% if adDetailAndDimensionFields['detail'] is defined or adCommunityDetail['price'] is defined %}
                     <ul class="details-info">
                         {% for fieldName, fieldValue in adDetailAndDimensionFields['detail'] %}
+                        {% if fieldName in paaFieldLabelArray or fieldName == 'Category'  or fieldName == 'Sub category' %} 
                             <li class="clearfix">
                                 <div class="detail-text">{{fieldName}}</div>
                                 <div class="detail-text">{{fieldValue|join(', ')|raw}}</div>
                             </li>
+                        {% endif %} 
                         {% endfor %}
-                        {% if adCommunityDetail['price'] is defined and adCommunityDetail['price'] %}
+                        {% if 'price' in paaFieldArray and adCommunityDetail['price'] is defined and adCommunityDetail['price'] %}
                             <li class="clearfix">
                                 <div class="detail-text">
                                     {{'Price'|trans({}, 'frontend-preview-ad')}}
@@ -20,7 +22,7 @@
                         {% endif %}
                     </ul>
                 {% endif %}
-                {% if adCommunityDetail['description'] is defined %}
+                {% if 'description' in paaFieldArray and adCommunityDetail['description'] is defined %}
                     <div class="hide-for-small-only">
                         <div id="ad_desc">
                             <p>{{adCommunityDetail['description']|replace({"\\n": "<br />", "&nbsp;": " "})|raw|nl2br }}</p>

@@ -6,79 +6,94 @@
 {% set adUserPackageRepository = fetch_repository('FaAdBundle:AdUserPackage') %}
 {% set adStatusLive   = constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') %}
 {% set adModerateRepository = fetch_repository('FaAdBundle:AdModerate') %}
+{% set userCreditRepository = fetch_repository('FaUserBundle:UserCredit') %}
+{% set userCreditCount = userCreditRepository.getActiveCreditCountForUser(app.user.getId()) %}
+{% set adUserPackageUpsellRepository = fetch_repository('FaAdBundle:AdUserPackageUpsell') %}
+{% set shopPackageCreditRepository = fetch_repository('FaPromotionBundle:ShopPackageCredit') %}
+{% set categoryUpsellRepository = fetch_repository('FaPromotionBundle:CategoryUpsell') %}
 
 {% set adIdArray = {} %}
+{% set userRoleId = app.user.getRole().getId() %}
+{% set userBusinessCategory = app.user.getBusinessCategoryId() %}
+{% set userBusType = 'private' %}
+{% if (userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
+	{% set userBusType = 'netsuite' %}
+{% elseif (userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID')) %}
+	{% set userBusType = 'business' %}
+{% else %}
+	{% set userBusType = 'private' %}
+{% endif %}
+
+{% set totalFeaturedCredit = 0 %}
+{% set usedFeaturedCredits = 0 %}
+{% set remainingFeaturedCredits = 0 %}
+{% set adFeaturedCreditCnt = 0 %}
+{% set adFeaturedUpsellArray = {} %}
+{% set adFeaturedCreditCnt = adUserPackageUpsellRepository.getAdFeaturedUpsellCountByuserId(app.user.getId()) %}
+
 {% if pagination.getNbResults() %}
     {% for ad in pagination.getCurrentPageResults() %}
         {% set adIdArray = adIdArray|merge({0 : ad.id}) %}
     {% endfor %}
-
+	
+	{% set adCategoryIdArray    = adRepository.getAdCategoryIdArrayByAdId(adIdArray) %} 
     {% set adImageArray         = adImageRepository.getAdMainImageArrayByAdId(adIdArray) %}
     {% set adViewCounterArray   = adViewCounterRepository.getAdViewCounterArrayByAdId(adIdArray) %}
     {% set adPackageArray       = adUserPackageRepository.getAdPackageArrayByAdId(adIdArray, true) %}
     {% set inModerationLiveAdIds = adModerateRepository.getInModerationStatusForLiveAdIds(adIdArray) %}
+    {% set adFeaturedUpsellArray = adUserPackageUpsellRepository.getAdFeaturedUpsellArrayByAdId(adIdArray) %}
+    {% set adModerateArray      = adModerateRepository.findResultsByAdIdsAndModerationResult(adIdArray, 'rejected') %}
+    
+    {% set adCategoryIdValArray = {} %}
+    {% for key,value in adCategoryIdArray %}
+    	{%  set  adCategoryIdValArray = adCategoryIdValArray|merge([value])  %}
+    {% endfor %}
+    
+    {% if adCategoryIdValArray|length >0 %}
+    	{% set categoryUpsellArray    = categoryUpsellRepository.getCategoryUpsellForCategoryIds(adCategoryIdValArray) %}
+    {% endif %}
+    
+    {# {% if (activeShopPackage and activeShopPackage.getPackage()) %}
+        {% set shopPackageCreditArr = shopPackageCreditRepository.getFeaturedCreditsByPackageId(activeShopPackage.getPackage().getId()) %}    	
+        {% if shopPackageCreditArr|length >0 %}
+            {% set totalFeaturedCredit = shopPackageCreditArr[0].getCredit() %}
+            {% set remainingFeaturedCredits = userCreditRepository.getActiveFeaturedCreditCountForUser(app.user.getId()) %}
+            
+            {% if  remainingFeaturedCredits > totalFeaturedCredit %}
+                {% set usedFeaturedCredits = totalFeaturedCredit %}
+            {% else %}
+                {% set usedFeaturedCredits = totalFeaturedCredit - remainingFeaturedCredits %}
+            {% endif %}
+        {% endif %}
+    {% endif %} #}
 {% endif %}
+{% block scripttop %}
+    <link rel="stylesheet" href="{{ asset('/build/css/mmacss.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('/build/css/upsell-featured.css') }}" />
+{% endblock %}
 
-       {% if pagination.getNbResults() %}
-            {% for ad in pagination.getCurrentPageResults() %}
-                {% set adId = ad.id %}
-                {% set adCategoryId = ad.cat_id %}
-                {% if ad['status_id'] == adStatusLive %}
-                    {% set adUrl = container.get('router').generate('ad_detail_page_by_id', {'id': adId}, true) %}
-                    {# {% set adUrl = adUrl|trim('/') %} #}
-                {% endif %}
-                {{ include('FaUserBundle:ManageMyAd:adDetail.html.twig') }}
-            {% endfor %}
+{{ include('FaUserBundle:ManageMyAd:individualUpsellJs.html.twig') }}
+{% if pagination.getNbResults() %}
+    {% for ad in pagination.getCurrentPageResults() %}
+        {% set adId = ad.id %}
+        {% set adCategoryId = ad.cat_id %}
+        {% if ad['status_id'] == adStatusLive %}
+            {% set adUrl = container.get('router').generate('ad_detail_page_by_id', {'id': adId}, true) %}
+            {# {% set adUrl = adUrl|trim('/') %} #}
         {% endif %}
 
+        {% set dateRemainingForExpiry = 0 %}
+        {% set adExpiry = ad['expires_at'] %}
+        {% if adExpiry is defined and adExpiry > 0 %}
+           {% set dateRemainingForExpiry = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager','dateDiffInDays', [adExpiry,date().timestamp]) %}
+        {% endif %}
 
-<div id="markAdAsSoldOrExpireModal" class="reveal-modal tiny" data-reveal>
-    <a class="close-reveal-modal">&#215;</a>
-    <h5 class="modal-title">
-        {{'Remove ad'|trans({}, 'frontend-manage-my-ad')}}
-    </h5>
-    <div class="modal-content remove-modal">
-        <div class="row">
-            <div class="columns">
-                <h5>{{'Was your advert successful?'|trans({}, 'frontend-manage-my-ad')}}</h5>
-            </div>
-        </div>
-        <div class="mt20">
-            <div class="row">
-                <div class="large-6 columns">
-                    <button type="button" class="button secondary-btn-4 thin-btn expand mb0" onclick="closeRevealModel('#markAdAsSoldOrExpireModal');changeAdStatus('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID')}}');">{{'Yes'|trans({}, 'frontend-manage-my-ad')}}</button>
-                </div>
-                <div class="large-6 columns">
-                    <button type="button" class="button secondary-btn-4 thin-btn expand mb0" onclick="closeRevealModel('#markAdAsSoldOrExpireModal');changeAdStatus('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID')}}');">{{'No'|trans({}, 'frontend-manage-my-ad')}}</button>
-                </div>
-                <div class="large-12 columns">
-                    <button type="button" class="button secondary-btn-1 thin-btn expand mb0" onclick="closeRemoveAdConfirmationBox('markAdAsSoldOrExpireModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+        {% if userBusType is defined and userBusType == 'netsuite' %}
+            {{ include('FaUserBundle:ManageMyAd:adNetsuiteDetail.html.twig') }}
+        {% else %}
+            {{ include('FaUserBundle:ManageMyAd:adDetail.html.twig') }}
+        {% endif %}
+    {% endfor %}
+{% endif %}
 
-<div id="markAdAsInactiveModal" class="reveal-modal tiny" data-reveal>
-    <a class="close-reveal-modal">&#215;</a>
-    <h5 class="modal-title">
-        {{'Remove ad'|trans({}, 'frontend-manage-my-ad')}}
-    </h5>
-    <div class="modal-content remove-modal">
-        <div class="row">
-            <div class="columns">
-                <h5>{{'Are you sure that you want to permanently delete this advert?'|trans({}, 'frontend-manage-my-ad')}}</h5>
-            </div>
-        </div>
-        <div class="mt20">
-            <div class="row">
-                <div class="large-12 columns">
-                    <button type="button" class="button secondary-btn-4 thin-btn expand mb0" onclick="closeRevealModel('#markAdAsInactiveModal');changeAdStatus('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_INACTIVE_ID')}}');">{{'Delete'|trans({}, 'frontend-manage-my-ad')}}</button>
-                </div>
-                <div class="large-12 columns">
-                    <button type="button" class="button secondary-btn-1 thin-btn expand mb0" onclick="closeRemoveAdConfirmationBox('markAdAsInactiveModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+{{ include('FaUserBundle:ManageMyAd:mma-js.html.twig') }}

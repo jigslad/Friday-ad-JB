@@ -9,11 +9,11 @@
     </ul>
     <dl class="accordion" data-accordion="">
         <dd class="accordion-navigation">
-            {% if additionalJobReqIds|length or additionalJobBenefitIds|length %}
+            {% if ('additional_job_requirements_id' in paaFieldArray and additionalJobReqIds|length) or ('additional_benefits_id' in paaFieldArray and additionalJobBenefitIds|length) %}
                 <a href="#basic_info_panel" id="basic_info_panel_anchor" class="show-for-small-only">{{'The basics'|trans({}, 'frontend-show-ad')}} <i class="fi-plus right"></i></a>
             {% endif %}
             <div class="content active" id="basic_info_panel">
-                {% if adJobDetail['description'] is defined %}
+                {% if 'description' in paaFieldArray and adJobDetail['description'] is defined %}
                         <div id="ad_desc">
                             <p>{{adJobDetail['description']|replace({"\\n": "<br />", "&nbsp;": " "})|raw|nl2br }}</p>
                         </div>
@@ -23,16 +23,18 @@
                 {% if adDetailAndDimensionFields['detail'] is defined %}
                     <ul class="details-info">
                         {% for fieldName, fieldValue in adDetailAndDimensionFields['detail'] %}
+                        {% if fieldName in paaFieldLabelArray  or fieldName == 'Category' or fieldName == 'Sub category' %}
                             <li class="clearfix">
                                 <div class="detail-text">{{fieldName}}</div>
                                 <div class="detail-text">{{fieldValue|join(', ')|raw}}</div>
                             </li>
+                        {% endif %}
                         {% endfor %}
                     </ul>
                 {% endif %}
             </div>
             
-            {% if additionalJobReqIds|length or additionalJobReqIds|length %}
+            {% if 'additional_job_requirements_id' in paaFieldArray and (additionalJobReqIds|length or additionalJobReqIds|length) %}
                 <a href="#more_details_panel" class="show-for-small-only" id="more_details_panel_tab">{{'More details'|trans({}, 'frontend-show-ad')}}<i class="fi-plus right"></i></a>
                 <div class="content" id="more_details_panel">
                     {% if additionalJobReqIds|length %}
@@ -49,7 +51,7 @@
                         </div>
                     {% endif %}
                     
-                    {% if additionalJobBenefitIds|length %}
+                    {% if 'additional_benefits_id' in paaFieldArray and additionalJobBenefitIds|length %}
                         <h5 class="safety-title">{{'Additional benefits'|trans({}, 'frontend-show-ad')}}</h5>
                         <div class="safety-features">
                             <ul class="details-info">

@@ -1,0 +1,200 @@
+.fe-modal-content {
+	padding: 20px 40px 40px;
+}
+
+.payment-card-option-block {
+	margin-left: 0 !important;
+}
+
+.payment-card-option-block label {
+	margin-bottom: 0px !important;
+}
+
+.upsell-l-block {
+	padding-right: 25px;
+	padding-left: 0px;
+}
+
+.upsell-r-block {
+	padding-left: 25px;
+	padding-right: 0px;
+}
+
+.upsell-pkg-box {
+	border: 0px;
+	background-color: #313133;
+	display: inline-block;
+	padding: 0px;
+}
+
+.upsell-subtitle {
+	font-size: 12px;
+	line-height: 18px;
+	color: #fff;
+}
+
+.featured-switch .toggle-bg-on {
+	background-color: #82C249 !important;
+}
+
+.upsell-pkg-inner-box {
+	padding: 15px 15px 20px;
+	position: relative !important;
+	display: inline-block !important;
+}
+
+.upsell-head {
+	color: #FFFFFF;
+	font-family: "Poppins-SemiBold";
+	font-size: 18px;
+	font-weight: normal !important;
+	letter-spacing: 0;
+	line-height: 24px;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.upsell-pkg-left .upsell-img {
+	background-size: cover !important;
+	width: 100%;
+	display: list-item;
+	height: 124px;
+	list-style: none;
+}
+
+.upsell-price-corner {
+	width: 0;
+	height: 0;
+	border-bottom: 76px solid #91D851;
+	border-left: 76px solid transparent;
+	position: absolute;
+	right: 0;
+	bottom: 0;
+}
+
+.upgrade-payments ul label {
+	font-size: 14px;
+	font-weight: 700;
+	letter-spacing: 0;
+	line-height: 16px;
+}
+
+.upsell-price {
+	position: absolute;
+	bottom: 8px;
+	color: #ffffff;
+	right: 8px;
+	font-weight: 600;
+}
+
+.price-count {
+	color: #38383A;
+	font-size: 18px;
+	font-weight: 600;
+	letter-spacing: 0;
+	line-height: 20px;
+	text-align: right;
+}
+
+.per-ad-text {
+	color: #212527;
+	font-size: 12px;
+	letter-spacing: 0;
+	line-height: 18px;
+	text-align: right;
+}
+
+.individual-upsell-modal-content ul li {
+	padding-bottom: 18px;
+	padding-top: 18px;
+	border-bottom: 1px solid #e3e3e3;
+}
+
+.sec-code-inline {
+	display: inline-flex;
+}
+
+.paypal-box {
+	height: 60px !important;
+	margin-bottom: 0 !important;
+}
+
+.expiry-date .ui-selectmenu-button {
+	margin-right: 12px !important;
+}
+
+.postcode {
+	display: inline-flex;
+	width: 100%;
+}
+
+.sec-code-inline input,
+.postcode input[type="text"] {
+	max-width: 90px;
+	margin-right: 15px;
+	margin-bottom: 0px;
+}
+
+.postcode input[type="text"] {
+	width: 35% !important;
+}
+
+.postcode button {
+	width: 100%;
+}
+
+.sec-code-icon {
+	width: 61px;
+	height: 40px;
+	text-indent: -9999px;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.available-payment-options {
+	width: 100%;
+	height: 40px;
+	display: inline-block;
+	background-size: contain;
+}
+
+.upsell-pkg-left {
+	width: 25%;
+	height: 124px;
+	float: left;
+	margin-right: 15px;
+}
+
+.mb40 {
+	margin-bottom: 40px !important;
+}
+
+@media only screen and (max-width: 640px) {
+	.modal-form-body {
+		max-width: 300px;
+		margin: 0 auto;
+	}
+	.upsell-l-block {
+		padding-right: 0px !important;
+		padding-left: 0px !important;
+	}
+	.upsell-r-block {
+		padding-left: 0px !important;
+		padding-right: 0px !important;
+	}
+	.remove-item-btn {
+		padding: 0px;
+	}
+}
+
+@media only screen and (min-width: 640px) and (max-width: 759px) {
+	.featured-top-modal {
+		width: 640px !important;
+	}
+}
+
+@media only screen and (min-width: 760px) {
+	.featured-top-modal {
+		width: 680px !important;
+	}
+}

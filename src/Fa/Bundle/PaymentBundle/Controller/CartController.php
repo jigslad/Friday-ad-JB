@@ -76,10 +76,17 @@ class CartController extends CoreController
         }
         $loggedinUser = $this->getLoggedInUser();
         $cart         = $this->getRepository('FaPaymentBundle:Cart')->getUserCart($loggedinUser->getId(), $this->container);
-
+        $paymentFor = '';
+        
         $transactions = $this->getRepository('FaPaymentBundle:Transaction')->getTransactionsByCartId($cart->getId());
         if (!$transactions) {
             return $this->handleMessage($this->get('translator')->trans('You do not have any item in your cart.', array(), 'frontend-cart-payment'), 'fa_frontend_homepage', array(), 'error');
+        } 
+        
+        if(!empty($cart)) {
+            $cartDetails  = $this->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
+            $cartDetailsValues = unserialize($cartDetails[0]['value']);
+            $paymentFor = isset($cartDetailsValues['payment_for'])?$cartDetailsValues['payment_for']:'';            
         }
 
         $cartValue = unserialize($cart->getValue());
@@ -105,7 +112,8 @@ class CartController extends CoreController
         }
 
         //redirect to payment method or process payment.
-        if ($cart->getAmount() <= 0 || ($cart->getAmount() > 0 && $this->container->getParameter('by_pass_payment'))) {
+        if ($cart->getAmount() <= 0 || ($cart->getAmount() > 0 && $this->container->getParameter('by_pass_payment')))
+        {
             //update cart vlaue and payment method.
             $this->getEntityManager()->beginTransaction();
 
@@ -115,23 +123,36 @@ class CartController extends CoreController
                 $this->getEntityManager()->flush($cart);
                 $paymentId = $this->getRepository('FaPaymentBundle:Payment')->processPaymentSuccess($cart->getCartCode(), null, $this->container);
                 $this->getEntityManager()->getConnection()->commit();
-
-                if($paymentId) {
-                //send ads for moderation
-sleep(5);
-                $this->getRepository('FaAdBundle:AdModerate')->sendAdsForModeration($paymentId, $this->container);
-
-                //redirect back to manage my ads active tab.
-                $this->container->get('session')->set('payment_success_redirect_url', $this->generateUrl('manage_my_ads_active'));
-
-                return $this->handleMessage($this->get('translator')->trans('Your free advert posted successfully.', array(), 'frontend-cart-payment'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success');
+                
+                if($paymentFor=='UP') { 
+                    //redirect back to manage my ads active tab.
+                    $this->container->get('session')->set('payment_success_redirect_url', $this->generateUrl('manage_my_ads_active'));
+                    if($cart) {
+                        $cart->setStatus(0);
+                        $this->_em->persist($cart);
+                        $this->_em->flush($cart);
+                    }
+                    return $this->handleMessage($this->get('translator')->trans('Your featured upsell added to the advert successfully.', array(), 'frontend-cart-payment'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success');
+                    
                 } else {
-                  return $this->handleMessage($this->get('translator')->trans('Problem in payment.', array(), 'frontend-cart-payment'), 'checkout_payment_failure', array('cartCode' => $cart->getCartCode()), 'error');
+                    if ($paymentId) {
+                        //send ads for moderation
+                        sleep(5);
+                        $this->getRepository('FaAdBundle:AdModerate')->sendAdsForModeration($paymentId, $this->container);
+
+                        //redirect back to manage my ads active tab.
+                        $this->container->get('session')->set('payment_success_redirect_url', $this->generateUrl('manage_my_ads_active'));
+
+                        return $this->handleMessage($this->get('translator')->trans('Your free advert posted successfully.', array(), 'frontend-cart-payment'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success');
+
+                    } else {
+                        return $this->handleMessage($this->get('translator')->trans('Problem in payment.', array(), 'frontend-cart-payment'), 'checkout_payment_failure', array('cartCode' => $cart->getCartCode()), 'error');
+                    }
                 }
             } catch (\Exception $e) {
                 $this->getEntityManager()->getConnection()->rollback();
                 CommonManager::sendErrorMail($this->container, 'Error: Problem in payment', $e->getMessage(), $e->getTraceAsString());
-                return $this->handleMessage($this->get('translator')->trans('Problem in payment.', array(), 'frontend-cart-payment'), 'checkout_payment_failure', array('cartCode' => $cart->getCartCode()), 'error');
+                return $this->handleMessage($this->get('translator')->trans('Problem in paymentCart.', array(), 'frontend-cart-payment'), 'checkout_payment_failure', array('cartCode' => $cart->getCartCode()), 'error');
             }
         } else {
             //redirect user to selected payment method.
@@ -215,7 +236,7 @@ sleep(5);
                 $this->getRepository('FaPaymentBundle:Cart')->clear();
                 $this->getRepository('FaPaymentBundle:Transaction')->clear();
                 $cart        = $this->getRepository('FaPaymentBundle:Cart')->getUserCart($loggedinUser->getId(), $this->container);
-                $cartDetails = $this->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
+                    $cartDetails = $this->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
                 $parameters = array(
                     'cart' => $cart,
                     'cartDetails' => $cartDetails,

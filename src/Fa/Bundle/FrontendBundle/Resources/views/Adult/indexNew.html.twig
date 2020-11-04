@@ -70,15 +70,16 @@
             </div>
         </div>
     </div>
-
-    <div class="homepage-row">
-        <div class="row">
-            <div class="columns">
-                <div class="homepage-title">{{'Popular searches'|trans({}, 'frontend-homepage')}}</div>
-                {{ include('FaFrontendBundle:Adult:homePopularSearches.html.twig', {'divId': 'recommended-item-slider', 'ads': ''}) }}
+    {% if seoFields|length and seoFields['popular_search'] is defined and seoFields['popular_search'] and seoFields['seo_tool_id'] is defined and seoFields['seo_tool_id'] %}
+        <div class="homepage-row">
+            <div class="row">
+                <div class="columns">
+                    <div class="homepage-title">{{'Popular searches'|trans({}, 'frontend-homepage')}}</div>
+                    {{ include('FaFrontendBundle:Adult:homePopularSearches.html.twig', {'divId': 'recommended-item-slider', 'ads': '','mapFlag': 0}) }}
+                </div>
             </div>
         </div>
-    </div>
+    {% endif %}
     
     <div class="homepage-row">
         <div class="row">
@@ -123,7 +124,7 @@
         </div>
     </div>
 	{% endif %}
-	
+
     <div class="homepage-row">
         <div class="row">
             <div class="columns">
@@ -298,13 +299,15 @@
             	$("form[name='fa_top_search']").submit();
             });
 
-            {% if currentDevice == 'D' %}
-                var loc_first_accordion = $('#list_home_location_box').find('.accordion-navigation:first');
-                $(loc_first_accordion).addClass('active');
-                $(loc_first_accordion).find('i').removeClass('fi-plus');
-                $(loc_first_accordion).find('i').addClass('fi-minus');
-                $(loc_first_accordion).find('div.content').addClass('active');
-            {% endif %}
+{#            {% if currentDevice == 'D' %}#}
+{#                if(!window.matchMedia("(max-width: 767px)").matches) {#}
+{#                    var loc_first_accordion = $('#list_home_location_box').find('.accordion-navigation:first');#}
+{#                    $(loc_first_accordion).addClass('active');#}
+{#                    $(loc_first_accordion).find('i').removeClass('fi-plus');#}
+{#                    $(loc_first_accordion).find('i').addClass('fi-minus');#}
+{#                    $(loc_first_accordion).find('div.content').addClass('active');#}
+{#                }#}
+{#            {% endif %}#}
             
         });
 
