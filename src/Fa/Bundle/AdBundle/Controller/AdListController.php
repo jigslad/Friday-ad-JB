@@ -1309,6 +1309,8 @@ class AdListController extends CoreController
         $parameters['createAlertBlock'] = array('form' => $form->createView());
         $parameters['leftFilters']['form'] = $form1->createView();
 
+        $parameters['listingSeoBlocks'] = $this->showListingSeoBlocksNew($request, $findersSearchParams, $requestlocation, $parameters['seoPageRule'], $request);
+
         if ($mapFlag) {
             $template = 'mapSearchResultNew';
         } else {
@@ -1316,6 +1318,222 @@ class AdListController extends CoreController
         }
 
         return $this->render('FaAdBundle:AdList:' . $template . '.html.twig', $parameters, null);
+    }
+
+
+    /**
+     * Show listing blocks.
+     *
+     * @param Request $request Request object.
+     *
+     * @return Response A Response object.
+     */
+    private function showListingSeoBlocksNew(Request $request, $searchParams, $location = null, $seoPageRule = null, $orgRequest = null)
+    {
+        //remove ads with image filter
+        if (isset($searchParams['search']['items_with_photo'])) {
+            unset($searchParams['search']['items_with_photo']);
+        }
+
+        $parentCategoryIds = array();
+        $seoSearchParams   = array();
+        $categoryId        = null;
+        $mapFlag           = $request->get('map', 0);
+        $searchQueryString = $orgRequest->getQueryString();
+
+        $page = $orgRequest->get('page');
+        if (!$page) {
+            $routeParams = $orgRequest->attributes->get('_route_params');
+            if (isset($routeParams['page'])) {
+                $page = $routeParams['page'];
+            }
+        }
+        // set seo search parameters and solr search parameters.
+        if ($mapFlag) {
+            $seoSearchParams['map'] = $mapFlag;
+        }
+        if (isset($searchParams['search']['item__location']) && $searchParams['search']['item__location']) {
+            $seoSearchParams['item__location'] = $searchParams['search']['item__location'];
+        }
+        if (isset($searchParams['search']['item__category_id']) && $searchParams['search']['item__category_id']) {
+            $categoryId        = $searchParams['search']['item__category_id'];
+            $parentCategoryIds = array_keys($this->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId, false, $this->container));
+            $indexableDimensionFieldArray = $this->getRepository('FaEntityBundle:CategoryDimension')->getIndexableDimensionFieldsArrayByCategoryId($categoryId, $this->container);
+            $seoSearchParams['item__category_id']         = $categoryId;
+            $data['query_filters']['item']['category_id'] = $categoryId;
+
+            // set all indexable fields.
+            if (count($indexableDimensionFieldArray)) {
+                foreach ($indexableDimensionFieldArray as $indexableDimensionField) {
+                    if (isset($searchParams['search'][$indexableDimensionField]) && $searchParams['search'][$indexableDimensionField]) {
+                        $explodeRes                                            = explode('__', $indexableDimensionField);
+                        $data['query_filters'][$explodeRes[0]][$explodeRes[1]] = $searchParams['search'][$indexableDimensionField];
+                        $seoSearchParams[$indexableDimensionField]             = $searchParams['search'][$indexableDimensionField];
+                    }
+                }
+            }
+        }
+
+        // initialize search filter manager service and prepare filter data for searching
+        $this->get('fa.searchfilters.manager')->init($this->getRepository('FaAdBundle:Ad'), $this->getRepositoryTable('FaAdBundle:Ad'));
+
+        // Active ads
+        $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
+        // fetch location from cookie.
+        $cookieLocation = CommonManager::getLocationDetailFromParamsOrCookie($location, $request, $this->container);
+
+        $blocks = $this->getListingBlockParamsNew($categoryId, $parentCategoryIds, $cookieLocation, $seoPageRule, $seoSearchParams);
+
+        $data['facet_fields'] = array();
+        if (empty($cookieLocation)) {
+            $data['facet_fields'] = array(
+                'domicile'  => array('limit' => $blocks['domicile']['facet_limit'], 'min_count' => 1),
+                'town'      => array('limit' => $blocks['town']['facet_limit'], 'min_count' => 1),
+                'area'	    => array('limit' => 9, 'min_count' => 1),
+            );
+        } else {
+            if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
+                //$data['query_sorter']['item']['geodist'] = 'asc';
+            }
+
+            // for jobs and property and all their children categories need to show county seo box.
+            if (isset($parentCategoryIds[0]) && in_array($parentCategoryIds[0], array(CategoryRepository::JOBS_ID, CategoryRepository::PROPERTY_ID))) {
+                $data['facet_fields'] = array(
+                    'domicile' => array('limit' => 9, 'min_count' => 1),
+                    'town'     => array('limit' => $blocks['town']['facet_limit'], 'min_count' => 1),
+                    'area'		=> array('limit' => 9, 'min_count' => 1),
+                );
+            } else {
+                $data['facet_fields'] = array(
+                    'town' => array('limit' => $blocks['town']['facet_limit'], 'min_count' => 1),
+                    'area' => array('limit' => 9, 'min_count' => 1),
+                );
+            }
+        }
+
+        // set facet categorywise.
+        list($blocks, $data) = $this->getSeoBlocksByCategoryNew($categoryId, $parentCategoryIds, $blocks, $cookieLocation, $searchParams, $data, $seoPageRule, $seoSearchParams);
+
+        // initialize solr search manager service and fetch data based of above prepared search options
+        $this->get('fa.solrsearch.manager')->init('ad.new', '', $data);
+        if (!empty($cookieLocation)) {
+            if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
+                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].','.$cookieLocation['longitude']);
+                $this->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
+            }
+        }
+        $solrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
+
+        // fetch result set from solr
+        $facetResult = $this->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
+
+        if ($facetResult) {
+            $facetResult = get_object_vars($facetResult);
+            foreach ($blocks as $solrFieldName => $block) {
+                if ($solrFieldName == 'dim_make' && isset($seoSearchParams['item_motors__model_id'])) {
+                    unset($seoSearchParams['item_motors__model_id']);
+                }
+                if (isset($facetResult[$solrFieldName]) && !empty($facetResult[$solrFieldName])) {
+                    $blocks[$solrFieldName]['facet'] = get_object_vars($facetResult[$solrFieldName]);
+                    //get Location Areas
+                    if ($solrFieldName == 'town' && isset($facetResult['area']) && !empty($facetResult['area'])) {
+                        $blocks[$solrFieldName]['facet'] = $blocks[$solrFieldName]['facet'] + get_object_vars($facetResult['area']);
+                    }
+                }
+            }
+        }
+
+        //to show seo block for For Sale, Jobs, Property
+        if (isset($blocks['category_ids']) && isset($parentCategoryIds[0]) && in_array($parentCategoryIds[0], array(CategoryRepository::JOBS_ID, CategoryRepository::PROPERTY_ID, CategoryRepository::FOR_SALE_ID))) {
+            $tmpSearchParams = array();
+            $tmpSearchParams['search']['item__category_id'] = $parentCategoryIds[0];
+            $tmpSearchParams['search']['item__location'] = LocationRepository::COUNTY_ID;
+            $facetResult = $this->getDimensionFacetByFieldNew('category_ids', 'item__category_id', $blocks['category_ids']['facet_limit'], $tmpSearchParams, $this->container, null, false, $cookieLocation);
+            if (count($facetResult)) {
+                $blocks['category_ids']['facet'] = array($categoryId => 1) + $facetResult;
+            }
+            if (!count($facetResult)) {
+                $blocks['category_ids']['facet'] = array($categoryId => 1) + $this->getDimensionFacetByFieldNew('category_ids', 'item__category_id', $blocks['category_ids']['facet_limit'], $tmpSearchParams, $this->container, null, false, $cookieLocation);
+            }
+        } elseif (isset($blocks[AdAnimalsSolrFieldMapping::SPECIES_ID.'_UK']) && isset($parentCategoryIds[2]) && isset($parentCategoryIds[2]) == CategoryRepository::BIRDS) {
+            $tmpSearchParams = array();
+            $tmpSearchParams['search']['item__category_id'] = $parentCategoryIds[2];
+            $tmpSearchParams['search']['item__location'] = LocationRepository::COUNTY_ID;
+            $facetResult = $this->getDimensionFacetByFieldNew('dim_species', 'item_animals__species_id', $blocks['dim_species']['facet_limit'], $tmpSearchParams, $this->container, null, false, $cookieLocation);
+            if (count($facetResult)) {
+                $searchResultUrl = $this->container->get('fa_ad.manager.ad_routing')->getListingUrl(array_merge($seoSearchParams, array('item__location' => LocationRepository::COUNTY_ID)));
+                $blocks['dim_species_UK']['facet'] = array('0' => array('title' => $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Category', $categoryId), 'url' => $searchResultUrl)) + $facetResult;
+            }
+        } elseif (isset($blocks['dim_breed_UK']) && isset($parentCategoryIds[2]) && in_array($parentCategoryIds[2], array(CategoryRepository::DOGS_AND_PUPPIES, CategoryRepository::HORSES, CategoryRepository::CATS_AND_KITTENS))) {
+            $tmpSearchParams = array();
+            $tmpSearchParams['search']['item__category_id'] = $parentCategoryIds[2];
+            $tmpSearchParams['search']['item__location'] = LocationRepository::COUNTY_ID;
+            $facetResult = $this->getDimensionFacetByFieldNew('dim_breed', 'item_animals__breed_id', $blocks['dim_breed']['facet_limit'], $tmpSearchParams, $this->container, null, false, $cookieLocation);
+            if (count($facetResult)) {
+                $searchResultUrl = $this->container->get('fa_ad.manager.ad_routing')->getListingUrl(array_merge($seoSearchParams, array('item__location' => LocationRepository::COUNTY_ID)));
+                $blocks['dim_breed_UK']['facet'] = array('0' => array('title' => $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Category', $categoryId), 'url' => $searchResultUrl)) + $facetResult;
+            }
+        } elseif (isset($blocks[AdMotorsSolrFieldMapping::MANUFACTURER_ID.'_UK']) && isset($parentCategoryIds[1]) && in_array($parentCategoryIds[1], array(CategoryRepository::BOATS_ID, CategoryRepository::FARM_ID))) {
+            $tmpSearchParams = array();
+            $tmpSearchParams['search']['item__category_id'] = $parentCategoryIds[1];
+            $tmpSearchParams['search']['item__location'] = LocationRepository::COUNTY_ID;
+            $facetResult = $this->getDimensionFacetByFieldNew('dim_manufacturer', 'item_motors__manufacturer_id', $blocks['dim_manufacturer_UK']['facet_limit'], $tmpSearchParams, $this->container, null, false, $cookieLocation);
+            if (count($facetResult)) {
+                $searchResultUrl = $this->container->get('fa_ad.manager.ad_routing')->getListingUrl(array_merge($seoSearchParams, array('item__location' => LocationRepository::COUNTY_ID)));
+                $blocks['dim_manufacturer_UK']['facet'] = array('0' => array('title' => $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Category', $categoryId), 'url' => $searchResultUrl)) + $facetResult;
+            }
+        } elseif (isset($blocks['dim_make_UK']) && isset($parentCategoryIds[0]) && in_array($parentCategoryIds[0], array(CategoryRepository::MOTORS_ID))) {
+            $maxParentCategoryCnt = (count($parentCategoryIds) - 1);
+            $tmpSearchParams = array();
+            $tmpSearchParams['search']['item__category_id'] = (isset($parentCategoryIds[$maxParentCategoryCnt]) ? $parentCategoryIds[$maxParentCategoryCnt] : null);
+            $tmpSearchParams['search']['item__location'] = LocationRepository::COUNTY_ID;
+            $facetResult = $this->getDimensionFacetByFieldNew('dim_make', 'item_motors__make_id', $blocks['dim_make_UK']['facet_limit'], $tmpSearchParams, $this->container, null, false, $cookieLocation);
+            if (count($facetResult)) {
+                $searchResultUrl = $this->container->get('fa_ad.manager.ad_routing')->getListingUrl(array_merge($seoSearchParams, array('item__location' => LocationRepository::COUNTY_ID)));
+                $blocks['dim_make_UK']['facet'] = array('0' => array('title' => $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Category', $categoryId), 'url' => $searchResultUrl)) + $facetResult;
+            }
+        }
+
+        //switch position of top maked in uk and town
+        if (isset($parentCategoryIds[1]) && (isset($blocks['dim_make_UK']) || (isset($blocks[CategoryRepository::MOTORS_ID.'_top_links']) && count($blocks[CategoryRepository::MOTORS_ID.'_top_links']['facet']))) && isset($blocks['dim_make']) && in_array(isset($parentCategoryIds[1]), array(CategoryRepository::CARS_ID, CategoryRepository::MOTORHOMES_ID, CategoryRepository::MOTORHOMES_AND_CARAVANS_STATIC_CARAVANS_ID, CategoryRepository::COMMERCIALVEHICLES_ID, CategoryRepository::MOTORBIKES_ID, CategoryRepository::MOTORBIKES_MOTORBIKES_ID, CategoryRepository::MOTORBIKES_QUAD_BIKES_ID, CategoryRepository::MOTORHOMES_AND_CARAVANS_CARAVANS_ID))) {
+            if (isset($blocks['dim_make_UK'])) {
+                $blocks = CommonManager::arraySwapAssoc('dim_make_UK', 'dim_make', $blocks);
+            }
+            if (isset($blocks[CategoryRepository::MOTORS_ID.'_top_links']) && isset($blocks[CategoryRepository::MOTORS_ID.'_top_links']['facet']) && count($blocks[CategoryRepository::MOTORS_ID.'_top_links']['facet']) && isset($blocks['dim_make']) && isset($blocks['dim_make']['facet']) && count($blocks['dim_make']['facet'])) {
+                $blocks = CommonManager::arraySwapAssoc(CategoryRepository::MOTORS_ID.'_top_links', 'dim_make', $blocks);
+            }
+        }
+
+        //switch position of model
+        if (isset($parentCategoryIds[1]) && (isset($blocks['dim_make_UK']) || (isset($blocks[CategoryRepository::MOTORS_ID.'_top_links']) && count($blocks[CategoryRepository::MOTORS_ID.'_top_links']['facet']))) && isset($blocks['dim_model']) && in_array(isset($parentCategoryIds[1]), array(CategoryRepository::CARS_ID, CategoryRepository::MOTORHOMES_ID, CategoryRepository::MOTORHOMES_AND_CARAVANS_STATIC_CARAVANS_ID, CategoryRepository::COMMERCIALVEHICLES_ID, CategoryRepository::MOTORBIKES_ID, CategoryRepository::MOTORBIKES_MOTORBIKES_ID, CategoryRepository::MOTORBIKES_QUAD_BIKES_ID, CategoryRepository::MOTORHOMES_AND_CARAVANS_CARAVANS_ID))) {
+            if (isset($blocks['dim_model_UK']) && isset($blocks['dim_model_UK']['facet']) && count($blocks['dim_model_UK']['facet']) && isset($blocks['dim_model']) && isset($blocks['dim_model']['facet']) && count($blocks['dim_model']['facet'])) {
+                $blocks = CommonManager::arraySwapAssoc('dim_model_UK', 'dim_model', $blocks);
+            }
+            if (isset($blocks[CategoryRepository::MOTORS_ID.'_top_links']) && isset($blocks[CategoryRepository::MOTORS_ID.'_top_links']['facet']) && count($blocks[CategoryRepository::MOTORS_ID.'_top_links']['facet']) && isset($blocks['dim_model']) && isset($blocks['dim_model']['facet']) && count($blocks['dim_model']['facet'])) {
+                $blocks = CommonManager::arraySwapAssoc(CategoryRepository::MOTORS_ID.'_top_links', 'dim_model', $blocks);
+            }
+        }
+
+        //switch position of manufacturer
+        if (isset($parentCategoryIds[1]) && (isset($blocks['dim_manufacturer_UK']) || (isset($blocks[CategoryRepository::MOTORS_ID.'_top_links']) && count($blocks[CategoryRepository::MOTORS_ID.'_top_links']['facet']))) && isset($blocks['dim_manufacturer']) && in_array(isset($parentCategoryIds[1]), array(CategoryRepository::CARS_ID, CategoryRepository::MOTORHOMES_ID, CategoryRepository::MOTORHOMES_AND_CARAVANS_STATIC_CARAVANS_ID, CategoryRepository::COMMERCIALVEHICLES_ID, CategoryRepository::MOTORBIKES_ID, CategoryRepository::MOTORBIKES_MOTORBIKES_ID, CategoryRepository::MOTORBIKES_QUAD_BIKES_ID, CategoryRepository::MOTORHOMES_AND_CARAVANS_CARAVANS_ID))) {
+            if (isset($blocks['dim_manufacturer_UK']) && isset($blocks['dim_manufacturer_UK']['facet']) && count($blocks['dim_manufacturer_UK']['facet']) && isset($blocks['dim_manufacturer']) && isset($blocks['dim_manufacturer']['facet']) && count($blocks['dim_manufacturer']['facet'])) {
+                $blocks = CommonManager::arraySwapAssoc('dim_manufacturer_UK', 'dim_manufacturer', $blocks);
+            }
+            if (isset($blocks[CategoryRepository::MOTORS_ID.'_top_links']) && isset($blocks[CategoryRepository::MOTORS_ID.'_top_links']['facet']) && count($blocks[CategoryRepository::MOTORS_ID.'_top_links']['facet']) && isset($blocks['dim_manufacturer']) && isset($blocks['dim_manufacturer']['facet']) && count($blocks['dim_manufacturer']['facet'])) {
+                $blocks = CommonManager::arraySwapAssoc(CategoryRepository::MOTORS_ID.'_top_links', 'dim_manufacturer', $blocks);
+            }
+        }
+        $parameters = array(
+            'blocks'          => $blocks,
+            'seoSearchParams' => $seoSearchParams,
+            'categoryId'      => $categoryId,
+            'seoPageRule'     => $seoPageRule,
+            'page'            => $page,
+            'cookieLocation'  => $cookieLocation,
+            'searchParams'    => $searchParams,
+            'searchQueryString'=> $searchQueryString,
+        );
+        return $parameters;
     }
 
     /**
@@ -2826,6 +3044,121 @@ class AdListController extends CoreController
         return array($blocks, $data);
     }
 
+
+    /**
+     * Get seo blocks facet by category.
+     *
+     * @param integer $categoryId        Category id.
+     * @param array   $parentCategoryIds Array of parent categories.
+     * @param array   $blocks            Block array.
+     * @param array   $cookieLocation    Array of location.
+     * @param array   $searchParams      Array of search parameters.
+     * @param array   $data              Array of facet fields.
+     *
+     * @return array
+     */
+    private function getSeoBlocksByCategoryNew($categoryId, $parentCategoryIds, $blocks, $cookieLocation, $searchParams, $data, $seoPageRule, $seoSearchParams)
+    {
+        $rootCategoryId = (isset($parentCategoryIds[0]) ? $parentCategoryIds[0] : null);
+
+        if ($rootCategoryId) {
+            // check for cars and commercial vehicles
+            if (isset($parentCategoryIds[1]) && in_array($parentCategoryIds[1], array(CategoryRepository::CARS_ID, CategoryRepository::COMMERCIALVEHICLES_ID))) {
+                if (count($parentCategoryIds) >= 3) {
+                    if (isset($blocks['dim_manufacturer'])) {
+                        unset($blocks['dim_make']);
+                    }
+                    if (isset($blocks[CategoryRepository::MOTORS_ID.'_top_links'])) {
+                        unset($blocks[CategoryRepository::MOTORS_ID.'_top_links']);
+                    }
+                    $topModelLinks = array();
+                    if (!empty($cookieLocation) && !empty($seoPageRule) && isset($seoPageRule['seo_tool_id'])) {
+                        $topModelLinks = $this->getRepository('FaContentBundle:SeoToolTopLink')->getTopLinkArrayBySeoToolId($seoPageRule['seo_tool_id'], $this->container);
+                        $blocks = CommonManager::insertBeforeArray($blocks, 'town', array(CategoryRepository::MOTORS_ID.'_top_links' => array(
+                            'heading' => $this->get('translator')->trans('Top Models', array(), 'frontend-search-list-block'),
+                            'is_category_specific' => false,
+                            'is_top_links' => true,
+                            'facet' => $topModelLinks
+                        )));
+                    }
+                    if (!empty($cookieLocation) && empty($topModelLinks)) {
+                        $searchResultUrl = $this->container->get('fa_ad.manager.ad_routing')->getListingUrl(array_merge($seoSearchParams, array('item__location' => LocationRepository::COUNTY_ID)));
+                        $blocks = CommonManager::insertBeforeArray($blocks, 'town', array('dim_model_UK' => array(
+                            'heading' => $this->get('translator')->trans('Top Models', array(), 'frontend-search-list-block'),
+                            'search_field_name' => 'item__category_id',
+                            'is_category_specific' => true,
+                            'facet_limit'          => 19,
+                            'dimension_name'       => 'model',
+                            'repository'           => 'FaEntityBundle:Category',
+                            'show_all_link'        => false,
+                            'facet'                => array('0' => array('title' => $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Category', $categoryId), 'url' => $searchResultUrl)) + $this->getDimensionFacetByField(AdMotorsSolrFieldMapping::CATEGORY_ID, 'item__category_id', 19, $searchParams, $this->container, ' AND (a_parent_category_lvl_3_id_i : '.$parentCategoryIds[2].')', true, $cookieLocation),
+                            'first_entry_as_uk' => true,
+                        )));
+                    }
+                    $blocks = CommonManager::insertBeforeArray($blocks, 'town', array('dim_model' =>  array(
+                        'heading' => $this->get('translator')->trans('Top Models'.(isset($cookieLocation['location_text']) ? ' in '.$cookieLocation['location_text'] : null), array(), 'frontend-search-list-block'),
+                        'search_field_name' => 'item__category_id',
+                        'is_category_specific' => true,
+                        'facet_limit'          => 25,
+                        'dimension_name'       => 'model',
+                        'repository'           => 'FaEntityBundle:Category',
+                        'show_all_link'        => false,
+                        'facet'                => $this->getDimensionFacetByField('category_ids', 'item__category_id', (!empty($cookieLocation) ? 10 : 25), $searchParams, $this->container, ' AND (category_ids : '.$parentCategoryIds[2].')', true, $cookieLocation),
+                    )));
+                } else {
+                    $solrFieldName = AdMotorsSolrFieldMapping::MAKE_ID;
+                    $blocks[$solrFieldName]['facet'] = $this->getDimensionFacetByField(AdMotorsSolrFieldMapping::CATEGORY_MAKE_ID, 'item__category_id', (!empty($cookieLocation) ? 10 : 25), $searchParams, $this->container, ' AND (a_category_id_i : ('.$parentCategoryIds[1].') OR a_parent_category_lvl_2_id_i : ('.$parentCategoryIds[1].') OR a_parent_category_lvl_3_id_i : ('.$parentCategoryIds[1].'))', true, $cookieLocation);
+                    $blocks[$solrFieldName]['repository'] = 'FaEntityBundle:Category';
+                    $blocks[$solrFieldName]['search_field_name'] = 'item__category_id';
+                    if (empty($cookieLocation)) {
+                        $blocks[$solrFieldName]['show_all_link'] = true;
+                    }
+                    if (!empty($cookieLocation) && !isset($blocks[CategoryRepository::MOTORS_ID.'_top_links']) && isset($blocks[AdMotorsSolrFieldMapping::MAKE_ID.'_UK'])) {
+                        $solrFieldName = AdMotorsSolrFieldMapping::MAKE_ID.'_UK';
+                        $searchResultUrl = $this->container->get('fa_ad.manager.ad_routing')->getListingUrl(array_merge($seoSearchParams, array('item__location' => LocationRepository::COUNTY_ID)));
+                        $blocks[$solrFieldName]['facet'] = array('0' => array('title' => $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Category', $categoryId), 'url' => $searchResultUrl)) + $this->getDimensionFacetByField(AdMotorsSolrFieldMapping::CATEGORY_MAKE_ID, 'item__category_id', $blocks[AdMotorsSolrFieldMapping::MAKE_ID.'_UK']['facet_limit'], $searchParams, $this->container, ' AND (a_parent_category_lvl_2_id_i : '.$parentCategoryIds[1].')', true, $cookieLocation);
+                        $blocks[$solrFieldName]['repository'] = 'FaEntityBundle:Category';
+                        $blocks[$solrFieldName]['search_field_name'] = 'item__category_id';
+                        $blocks[$solrFieldName]['first_entry_as_uk'] = true;
+                    }
+                }
+            } else {
+                //remove make if cat is not Boats, Farm, Motorbikes, Motorhomes & Caravans.
+                if ($rootCategoryId == CategoryRepository::MOTORS_ID && (!isset($parentCategoryIds[1]) || !in_array($parentCategoryIds[1], array(CategoryRepository::MOTORBIKES_ID, CategoryRepository::MOTORHOMES_AND_CARAVANS_ID)))) {
+                    unset($blocks[AdMotorsSolrFieldMapping::MAKE_ID]);
+                }
+
+                if (in_array($rootCategoryId, array(CategoryRepository::MOTORS_ID, CategoryRepository::ANIMALS_ID))) {
+                    foreach ($blocks as $solrFieldName => $block) {
+                        $blocksTmpSearchParams = $searchParams;
+                        if ($solrFieldName == 'a_m_make_id_i' && isset($blocksTmpSearchParams['search']) && isset($blocksTmpSearchParams['search']['item_motors__model_id'])) {
+                            unset($blocksTmpSearchParams['search']['item_motors__model_id']);
+                        }
+                        if ($block['is_category_specific'] && (!isset($block['first_entry_as_uk']))) {
+                            $categoryDimensions = $this->getRepository('FaEntityBundle:CategoryDimension')->getDimesionsByCategoryId($categoryId, $this->container);
+                            $categoryDimensions = array_map('strtolower', $categoryDimensions);
+                            if (!empty($categoryDimensions) && in_array($block['dimension_name'], $categoryDimensions)) {
+                                if (isset($searchParams['search'][$block['search_field_name']]) || !empty($cookieLocation)) {
+                                    $blocks[$solrFieldName]['facet'] = $this->getDimensionFacetByField($solrFieldName, $block['search_field_name'], $block['facet_limit'], $blocksTmpSearchParams, $this->container, null, true, $cookieLocation);
+                                } else {
+                                    $data['facet_fields'][$solrFieldName] = array('limit' => $block['facet_limit'], 'min_count' => 1);
+                                }
+                                $categoryDimensions = $this->getRepository('FaEntityBundle:CategoryDimension')->getDimesionsByCategoryId($categoryId, $this->container);
+                                $categoryDimensions = array_map('strtolower', $categoryDimensions);
+
+                                if (empty($cookieLocation) && ($rootCategoryId == CategoryRepository::ANIMALS_ID || $categoryId == CategoryRepository::MOTORHOMES_ID || $categoryId == CategoryRepository::MOTORHOMES_AND_CARAVANS_CARAVANS_ID || ($rootCategoryId == CategoryRepository::MOTORS_ID && count($parentCategoryIds) == 2))) {
+                                    $blocks[$solrFieldName]['show_all_link'] = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return array($blocks, $data);
+    }
+
     /**
      * Get blocks.
      *
@@ -3057,6 +3390,310 @@ class AdListController extends CoreController
         );
 
         return $blocks;
+    }
+
+
+    /**
+     * Get blocks.
+     *
+     * @param integer $categoryId        Category id.
+     * @param array   $parentCategoryIds Array of parent categories.
+     * @param array   $cookieLocation    Array of location.
+     *
+     * @return array
+     */
+    private function getListingBlockParamsNew($categoryId, $parentCategoryIds, $cookieLocation, $seoPageRule, $seoSearchParams)
+    {
+        $locationFlag = !empty($cookieLocation);
+        $blocks = array();
+        $rootCategoryId = (isset($parentCategoryIds[0]) ? $parentCategoryIds[0] : null);
+        if ($rootCategoryId == CategoryRepository::FOR_SALE_ID) {
+            $forsaleTopLinkArray = array();
+            if (count($seoPageRule) && isset($seoPageRule['seo_tool_id'])) {
+                $forsaleTopLinkArray = $this->getRepository('FaContentBundle:SeoToolTopLink')->getTopLinkArrayBySeoToolId($seoPageRule['seo_tool_id'], $this->container);
+            }
+            if (count($forsaleTopLinkArray)) {
+                $searchResultUrl = $this->container->get('fa_ad.manager.ad_routing')->getListingUrl(array_merge($seoSearchParams, array('item__location' => LocationRepository::COUNTY_ID)));
+                array_unshift($forsaleTopLinkArray, array('title' => $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Category', $categoryId), 'url' => $searchResultUrl));
+                $blocks = $blocks + array(
+                        CategoryRepository::FOR_SALE_ID.'_top_links' => array(
+                            'heading' => $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block'),
+                            'is_category_specific' => false,
+                            'is_top_links' => true,
+                            'facet' => $forsaleTopLinkArray
+                        )
+                    );
+            } else {
+                if (isset($parentCategoryIds[2])) {
+                    $blocks = $blocks+ array(
+                            'category_ids' => array(
+                                'heading' => $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block'),
+                                'search_field_name' => 'item__category_id',
+                                'is_category_specific' => true,
+                                'is_top_links' => false,
+                                'facet_limit' => 19,
+                                'repository'  => 'FaEntityBundle:Category',
+                                'first_entry_as_uk' => true,
+                                'removeOtherParams' => true,
+                            )
+                        );
+                }
+            }
+        } elseif ($rootCategoryId == CategoryRepository::MOTORS_ID && $locationFlag) {
+            $motorTopLinkArray = array();
+            if (count($seoPageRule) && isset($seoPageRule['seo_tool_id'])) {
+                $motorTopLinkArray = $this->getRepository('FaContentBundle:SeoToolTopLink')->getTopLinkArrayBySeoToolId($seoPageRule['seo_tool_id'], $this->container);
+            }
+            if (count($motorTopLinkArray)) {
+                $heading = $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block');
+                if (isset($parentCategoryIds[1]) && in_array($parentCategoryIds[1], array(CategoryRepository::BOATS_ID, CategoryRepository::FARM_ID))) {
+                    $heading = $this->get('translator')->trans('Top Manufacturers', array(), 'frontend-search-list-block');
+                }
+                $blocks =$blocks + array(
+                        CategoryRepository::MOTORS_ID.'_top_links' => array(
+                            'heading' => $heading,
+                            'is_category_specific' => false,
+                            'is_top_links' => true,
+                            'facet' => $this->getRepository('FaContentBundle:SeoToolTopLink')->getTopLinkArrayBySeoToolId($seoPageRule['seo_tool_id'], $this->container)
+                        ));
+            } else {
+                if (isset($parentCategoryIds[1]) && in_array($parentCategoryIds[1], array(CategoryRepository::BOATS_ID, CategoryRepository::FARM_ID))) {
+                    $blocks = $blocks + array(
+                            'dim_manufacturer_UK' => array(
+                                'heading' => $this->get('translator')->trans('Top Manufacturers', array(), 'frontend-search-list-block'),
+                                'search_field_name' => 'item__manufacturer_id',
+                                'is_category_specific' => true,
+                                'is_top_links' => false,
+                                'facet_limit' => 19,
+                                'repository'  => 'FaEntityBundle:Entity',
+                                'first_entry_as_uk' => true,
+                            ));
+                } else {
+                    $blocks = $blocks + array(
+                            'dim_make_UK' => array(
+                                'heading' => $this->get('translator')->trans('Top Makes in UK', array(), 'frontend-search-list-block'),
+                                'search_field_name' => 'item__make_id',
+                                'is_category_specific' => true,
+                                'is_top_links' => false,
+                                'facet_limit' => 19,
+                                'repository'  => 'FaEntityBundle:Entity',
+                                'first_entry_as_uk' => true,
+                            ));
+                }
+            }
+        } elseif ($rootCategoryId == CategoryRepository::ANIMALS_ID && $locationFlag) {
+            $animalsTopLinkArray = array();
+            if (count($seoPageRule) && isset($seoPageRule['seo_tool_id'])) {
+                $animalsTopLinkArray = $this->getRepository('FaContentBundle:SeoToolTopLink')->getTopLinkArrayBySeoToolId($seoPageRule['seo_tool_id'], $this->container);
+            }
+            if (count($animalsTopLinkArray)) {
+                $heading = $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block');
+                if (isset($parentCategoryIds[2]) && in_array($parentCategoryIds[2], array(CategoryRepository::BIRDS))) {
+                    $heading = $this->get('translator')->trans('Top Species', array(), 'frontend-search-list-block');
+                }
+                $blocks = $blocks + array(
+                        CategoryRepository::ANIMALS_ID.'_top_links' => array(
+                            'heading' => $heading,
+                            'is_category_specific' => false,
+                            'is_top_links' => true,
+                            'facet' => $this->getRepository('FaContentBundle:SeoToolTopLink')->getTopLinkArrayBySeoToolId($seoPageRule['seo_tool_id'], $this->container)
+                        ));
+            } elseif (isset($parentCategoryIds[2]) && in_array($parentCategoryIds[2], array(CategoryRepository::BIRDS))) {
+                $blocks = $blocks + array(
+                        'dim_species_UK' => array(
+                            'heading' => $this->get('translator')->trans('Top Species', array(), 'frontend-search-list-block'),
+                            'search_field_name' => 'item__species_id',
+                            'is_category_specific' => true,
+                            'is_top_links' => false,
+                            'facet_limit' => 19,
+                            'repository'  => 'FaEntityBundle:Entity',
+                            'first_entry_as_uk' => true,
+                        ));
+            } elseif (isset($parentCategoryIds[2]) && in_array($parentCategoryIds[2], array(CategoryRepository::DOGS_AND_PUPPIES, CategoryRepository::HORSES, CategoryRepository::CATS_AND_KITTENS))) {
+                $blocks = $blocks + array(
+                        'dim_breed_UK' => array(
+                            'heading' => $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block'),
+                            'search_field_name' => 'item__breed_id',
+                            'is_category_specific' => true,
+                            'is_top_links' => false,
+                            'facet_limit' => 19,
+                            'repository'  => 'FaEntityBundle:Entity',
+                            'first_entry_as_uk' => true,
+                        ));
+            }
+        } elseif (in_array($rootCategoryId, array(CategoryRepository::PROPERTY_ID, CategoryRepository::JOBS_ID))) {
+            $jobPropertyTopLinkArray = array();
+            if (count($seoPageRule) && isset($seoPageRule['seo_tool_id'])) {
+                $jobPropertyTopLinkArray = $this->getRepository('FaContentBundle:SeoToolTopLink')->getTopLinkArrayBySeoToolId($seoPageRule['seo_tool_id'], $this->container);
+            }
+            if (count($jobPropertyTopLinkArray)) {
+                $searchResultUrl = $this->container->get('fa_ad.manager.ad_routing')->getListingUrl(array_merge($seoSearchParams, array('item__location' => LocationRepository::COUNTY_ID)));
+                array_unshift($jobPropertyTopLinkArray, array('title' => $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Category', $categoryId), 'url' => $searchResultUrl));
+                $blocks = $blocks + array(
+                        $rootCategoryId.'_top_links' => array(
+                            'heading' => $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block'),
+                            'is_category_specific' => false,
+                            'is_top_links' => true,
+                            'facet' => $jobPropertyTopLinkArray
+                        )
+                    );
+            } else {
+                if (isset($parentCategoryIds[2])) {
+                    $blocks = $blocks + array(
+                            'category_ids' => array(
+                                'heading' => $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block'),
+                                'search_field_name' => 'item__category_id',
+                                'is_category_specific' => true,
+                                'is_top_links' => false,
+                                'facet_limit'          => 19,
+                                'repository'           => 'FaEntityBundle:Category',
+                                'first_entry_as_uk' => true,
+                                'removeOtherParams' => true,
+                            )
+                        );
+                }
+            }
+        }
+
+        if ($rootCategoryId == CategoryRepository::ANIMALS_ID) {
+            if (isset($parentCategoryIds[2]) && in_array($parentCategoryIds[2], array(CategoryRepository::DOGS_AND_PUPPIES, CategoryRepository::HORSES, CategoryRepository::CATS_AND_KITTENS))) {
+                $blocks = $blocks + array(
+                        'dim_breed' => array(
+                            'heading' => $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block'),
+                            'search_field_name' => 'item__breed_id',
+                            'is_category_specific' => true,
+                            'is_top_links' => false,
+                            'facet_limit'          => ($locationFlag ? 10 : 25),
+                            'dimension_name'       => 'breed',
+                            'repository'           => 'FaEntityBundle:Entity',
+                        ));
+            } elseif (isset($parentCategoryIds[2]) && in_array($parentCategoryIds[2], array(CategoryRepository::BIRDS))) {
+                $blocks = $blocks + array(
+                        'dim_species' => array(
+                            'heading' => $this->get('translator')->trans('Top Species'.(isset($cookieLocation['location_text']) ? ' in '.$cookieLocation['location_text'] : null), array(), 'frontend-search-list-block'),
+                            'search_field_name' => 'item__species_id',
+                            'is_category_specific' => true,
+                            'is_top_links' => false,
+                            'facet_limit'          => ($locationFlag ? 10 : 25),
+                            'dimension_name'       => 'species',
+                            'repository'           => 'FaEntityBundle:Entity',
+                        ));
+            }
+        } elseif($rootCategoryId == CategoryRepository::MOTORS_ID) {
+            if (isset($parentCategoryIds[1]) && in_array($parentCategoryIds[1], array(CategoryRepository::BOATS_ID, CategoryRepository::FARM_ID))) {
+                $blocks = $blocks + array(
+                        'dim_manufacturer' => array(
+                            'heading' => $this->get('translator')->trans('Top Manufacturers'.(isset($cookieLocation['location_text']) ? ' in '.$cookieLocation['location_text'] : null), array(), 'frontend-search-list-block'),
+                            'search_field_name' => 'item__manufacturer_id',
+                            'is_category_specific' => true,
+                            'is_top_links' => false,
+                            'facet_limit'          => ($locationFlag ? 10 : 25),
+                            'dimension_name'       => 'manufacturer',
+                            'repository'           => 'FaEntityBundle:Entity',
+                        ));
+            } else {
+                $blocks = $blocks + array(
+                        'dim_make' => array(
+                            'heading' => $this->get('translator')->trans('Top Makes', array(), 'frontend-search-list-block'),
+                            'search_field_name' => 'item__make_id',
+                            'is_category_specific' => true,
+                            'is_top_links' => false,
+                            'facet_limit'          => ($locationFlag ? 10 : 25),
+                            'dimension_name'       => 'make',
+                            'repository'           => 'FaEntityBundle:Entity',
+                        ));
+            }
+        }
+        $blocks = $blocks + array(
+                'domicile' => array(
+                    'heading' => $this->get('translator')->trans('Top Counties', array(), 'frontend-search-list-block'),
+                    'search_field_name' => 'item__location',
+                    'is_category_specific' => false,
+                    'is_top_links' => false,
+                    'facet_limit'          => 10,
+                    'repository'           => 'FaEntityBundle:Location',
+                ),
+                'town' => array(
+                    'heading' => $this->get('translator')->trans('Top Cities/Towns', array(), 'frontend-search-list-block'),
+                    'search_field_name' => 'item__location',
+                    'is_category_specific' => false,
+                    'is_top_links' => false,
+                    'facet_limit'          => 20,
+                    'repository'           => 'FaEntityBundle:Location',
+                ),
+            );
+
+        return $blocks;
+    }
+
+    /**
+     * Get facet by parameters.
+     *
+     * @param string  $solrFieldName   Solr mapping field name.
+     * @param string  $searchFieldName Solr search field name.
+     * @param integer $facetLimit      Facet limit.
+     * @param array   $searchParams    Array of search params.
+     * @param object  $container       Container identifier.
+     * @param string  $staticFilters   Solr search static filters.
+     *
+     * @return array
+     */
+    public function getDimensionFacetByFieldNew($solrFieldName, $searchFieldName, $facetLimit, $searchParams, $container, $staticFilters = null, $removeSearchFieldName = true, $cookieLocation = null)
+    {
+        // Active ads
+        $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
+        if ($removeSearchFieldName && isset($searchParams['search'][$searchFieldName])) {
+            unset($searchParams['search'][$searchFieldName]);
+        }
+
+        // static filters.
+        if ($staticFilters) {
+            $appendStaticfilters = '';
+            $appendStaticfilters = $this->getAppendableStaticFiltersNew($searchParams);
+            $data['static_filters'] = $staticFilters.$appendStaticfilters;
+        }
+
+        if (isset($searchParams['search']['item__category_id']) && $searchParams['search']['item__category_id']) {
+            $categoryId                   = $searchParams['search']['item__category_id'];
+            $indexableDimensionFieldArray = $this->getRepository('FaEntityBundle:CategoryDimension')->getIndexableDimensionFieldsArrayByCategoryId($categoryId, $this->container);
+            $data['query_filters']['item']['category_id'] = $categoryId;
+
+            if (!empty($indexableDimensionFieldArray)) {
+                foreach ($indexableDimensionFieldArray as $indexableDimensionField) {
+                    if (isset($searchParams['search'][$indexableDimensionField]) && $searchParams['search'][$indexableDimensionField]) {
+                        $explodeRes                                            = explode('__', $indexableDimensionField);
+                        $data['query_filters'][$explodeRes[0]][$explodeRes[1]] = $searchParams['search'][$indexableDimensionField];
+                    }
+                }
+            }
+        }
+        if (isset($searchParams['search']['item__location']) && $searchParams['search']['item__location']) {
+            $data['query_filters']['item']['location'] = $searchParams['search']['item__location'].'|30';
+        }
+
+        $data['facet_fields'][$solrFieldName] = array('limit' => $facetLimit, 'min_count' => 1);
+        // initialize solr search manager service and fetch data based of above prepared search options
+        $container->get('fa.solrsearch.manager')->init('ad.new', '', $data);
+
+        if (!empty($cookieLocation)) {
+            if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
+                if (isset($searchParams['search']['item__location']) && $searchParams['search']['item__location']) {
+                    $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'] . ',' . $cookieLocation['longitude'], 'd' => 30);
+                } else {
+                    $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].','.$cookieLocation['longitude']);
+                }
+                $this->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
+            }
+        }
+        $solrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
+        $facetResult  = $this->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
+
+        $facetArray = array();
+        if (isset($facetResult[$solrFieldName]) && !empty($facetResult[$solrFieldName])) {
+            $facetArray = get_object_vars($facetResult[$solrFieldName]);
+        }
+
+        return $facetArray;
     }
 
     /**
@@ -3768,6 +4405,105 @@ class AdListController extends CoreController
         }
 
         return new JsonResponse();
+    }
+
+
+    public function getAppendableStaticFiltersNew($searchParams)
+    {
+        $appendQueryFilters = '';
+        if (isset($searchParams['search']['item_motors__colour_id']) && $searchParams['search']['item_motors__colour_id']) {
+            if (!empty($searchParams['search']['item_motors__colour_id'])) {
+                $itemMotorsColourIds = $searchParams['search']['item_motors__colour_id'];
+                $appendQueryFilters .= ' AND (';
+                //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
+                foreach ($itemMotorsColourIds as $itemMotorsColourId) {
+                    $appendQueryFilters .= "(dim_colour : (*".$itemMotorsColourId."*)) OR ";
+                }
+                $appendQueryFilters = rtrim($appendQueryFilters, " OR ");
+                $appendQueryFilters .= ')';
+            }
+        }
+
+        if (isset($searchParams['search']['item_motors__body_type_id']) && $searchParams['search']['item_motors__body_type_id']) {
+            if (!empty($searchParams['search']['item_motors__body_type_id'])) {
+                $itemMotorsBodyTypeIds = $searchParams['search']['item_motors__body_type_id'];
+                $appendQueryFilters .= ' AND (';
+                //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
+                foreach ($itemMotorsBodyTypeIds as $itemMotorsBodyTypeId) {
+                    $appendQueryFilters .= "(dim_body_type : (*".$itemMotorsBodyTypeId."*)) OR ";
+                }
+                $appendQueryFilters = rtrim($appendQueryFilters, " OR ");
+                $appendQueryFilters .= ')';
+            }
+        }
+
+        if (isset($searchParams['search']['item_motors__fuel_type_id']) && $searchParams['search']['item_motors__fuel_type_id']) {
+            if (!empty($searchParams['search']['item_motors__fuel_type_id'])) {
+                $itemMotorsFuelTypeIds = $searchParams['search']['item_motors__fuel_type_id'];
+                $appendQueryFilters .= ' AND (';
+                //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
+                foreach ($itemMotorsFuelTypeIds as $itemMotorsFuelTypeId) {
+                    $appendQueryFilters .= "(dim_fuel_type : (*".$itemMotorsFuelTypeId."*)) OR ";
+                }
+                $appendQueryFilters = rtrim($appendQueryFilters, " OR ");
+                $appendQueryFilters .= ')';
+            }
+        }
+
+        if (isset($searchParams['search']['item_motors__reg_year']) && $searchParams['search']['item_motors__reg_year']) {
+            if (!empty($searchParams['search']['item_motors__reg_year'])) {
+                $itemMotorsRegYears = $searchParams['search']['item_motors__reg_year'];
+                $appendQueryFilters .= ' AND (';
+                //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
+                foreach ($itemMotorsRegYears as $itemMotorsRegYear) {
+                    $appendQueryFilters .= "(dim_reg_year : (".$itemMotorsRegYear.")) OR ";
+                }
+                $appendQueryFilters = rtrim($appendQueryFilters, " OR ");
+                $appendQueryFilters .= ')';
+            }
+        }
+
+        if (isset($searchParams['search']['item_motors__transmission_id']) && $searchParams['search']['item_motors__transmission_id']) {
+            if (!empty($searchParams['search']['item_motors__transmission_id'])) {
+                $itemMotorsTransmissionIds = $searchParams['search']['item_motors__transmission_id'];
+                $appendQueryFilters .= ' AND (';
+                //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
+                foreach ($itemMotorsTransmissionIds as $itemMotorsTransmissionId) {
+                    $appendQueryFilters .= "(dim_transmission : (*".$itemMotorsTransmissionId."*)) OR ";
+                }
+                $appendQueryFilters = rtrim($appendQueryFilters, " OR ");
+                $appendQueryFilters .= ')';
+            }
+        }
+
+        /*if(isset($searchParams['search']['item_motors__mileage_range']) && $searchParams['search']['item_motors__mileage_range']) {
+            if (count($searchParams['search']['item_motors__mileage_range'])) {
+                $itemMotorsMileageRanges = $searchParams['search']['item_motors__mileage_range'];
+                $appendQueryFilters .= ' AND (';
+                //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
+                foreach($itemMotorsMileageRanges as $itemMotorsMileageRange) {
+                    $appendQueryFilters .= "(a_m_mileage_d : (".$itemMotorsMileageRange.")) OR ";
+                }
+                $appendQueryFilters = rtrim($appendQueryFilters," OR ");
+                $appendQueryFilters .= ')';
+
+            }
+        }*/
+
+        if (isset($searchParams['search']['item_motors__condition_id']) && $searchParams['search']['item_motors__condition_id']) {
+            if (!empty($searchParams['search']['item_motors__condition_id'])) {
+                $itemMotorsConditionIds = $searchParams['search']['item_motors__condition_id'];
+                $appendQueryFilters .= ' AND (';
+                //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
+                foreach ($itemMotorsConditionIds as $itemMotorsConditionId) {
+                    $appendQueryFilters .= "(dim_condition : (*".$itemMotorsConditionId."*)) OR ";
+                }
+                $appendQueryFilters = rtrim($appendQueryFilters, " OR ");
+                $appendQueryFilters .= ')';
+            }
+        }
+
+        return $appendQueryFilters;
     }
 
     public function getAppendableStaticFilters($searchParams)
