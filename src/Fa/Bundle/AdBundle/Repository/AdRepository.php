@@ -806,6 +806,7 @@ class AdRepository extends EntityRepository
         $document = $this->addField($document, 'postage_price', $ad->getPostagePrice());
         $document = $this->addField($document, 'payment_method_option', $ad->getPaymentMethodId() ? $ad->getPaymentMethodId() : null);
         $document = $this->addField($document, 'youtube_video_url', $ad->getYoutubeVideoUrl());
+        $document = $this->addField($document, 'is_blocked_ad', $ad->getIsBlockedAd());
 
         if ($ad->getIsNew() != null) {
             $document = $this->addField($document, 'is_new', ($ad->getIsNew() ? $ad->getIsNew() : '0'));
@@ -911,13 +912,10 @@ class AdRepository extends EntityRepository
             }
         }
         // Index images
-        $imageLimit = 0;
+        $category = $this->getRepository('FaEntityBundle:Category')->getRootNodeByCategory($categoryId);
+        $imagelimitCategoryName = CommonManager::getCategoryClassNameById($category['id']);
+        $imageLimit = $container->getParameter('fa.image.'.$imagelimitCategoryName.'_upload_limit');
 
-        if (count($allParentCategories)) {
-            $category = $allParentCategories[count($allParentCategories) - 2];
-            $imagelimitCategoryName = CommonManager::getCategoryClassNameById($category['id']);
-            $imageLimit = $container->getParameter('fa.image.'.$imagelimitCategoryName.'_upload_limit');
-        }
         if (isset($adUpsellValues[UpsellRepository::UPSELL_TYPE_ADDITIONAL_PHOTO_VALUE])) {
             $imageLimit = $adUpsellValues[UpsellRepository::UPSELL_TYPE_ADDITIONAL_PHOTO_VALUE];
         }

@@ -148,7 +148,8 @@ class AdLocationRepository extends EntityRepository
         $localityRepository = $this->_em->getRepository('FaEntityBundle:Locality');
 
         $mainTownName = 'uk';
-        foreach ($locations as $location) {
+        $location = $locations[0];
+        if (! empty($location)) {
             $localityArr = ($location->getLocality() ? $localityRepository->getCachedLocalityById($container, $location->getLocality()->getId()) : null);
             if ($localityArr) {
                 $mainTownName = $localityArr['name'];
@@ -180,7 +181,7 @@ class AdLocationRepository extends EntityRepository
 
         if ($mainTownId != '') {
             $mainTownArr = $locationRepository->getCachedLocationById($container, $mainTownId);
-            $mainTownName = $mainTownArr['name'];
+            $mainTownName = $mainTownArr['slug'];
 
             $document = $this->addField($document, 'main_town', $mainTownArr);
         }
