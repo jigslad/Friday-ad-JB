@@ -278,6 +278,10 @@ EOF
             $i              = ($i + $step);
             $commandOptions = null;
             foreach ($input->getOptions() as $option => $value) {
+                if ($option == 'start_from') {
+                    continue;
+                }
+
                 if ($value) {
                     $commandOptions .= ' --'.$option.'="'.$value.'"';
                 }
@@ -300,6 +304,7 @@ EOF
 
             // After triggering every 10 items, wait for 2 mins
             if ($batchSize >= 10) {
+                $output->writeln('Waiting for 2 mins', true);
                 sleep(120);
                 $batchSize = 0;
             }
