@@ -1513,4 +1513,67 @@ class LocationRepository extends BaseEntityRepository
 
         return $locationDetails;
     }
+
+    /**
+     * @param $container
+     * @return mixed
+     */
+    public function getAllLocations($container)
+    {
+        if ($container) {
+            $culture     = CommonManager::getCurrentCulture($container);
+            $cacheKey    = $this->getTableName().'|'.__FUNCTION__.'|'.$culture;
+            $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
+
+            if ($cachedValue !== false) {
+                return $cachedValue;
+            }
+        }
+
+        $query = $this->createQueryBuilder(self::ALIAS);
+
+        $objResources = $query->getQuery()->getResult();
+
+        $regions = $this->_em->getRepository('FaEntityBundle:Region')->getAllRegions($container);
+
+        $locationDetails = [];
+        foreach ($objResources as $location) {
+            $locationDetails[$location->getId()]['name']           = $location->getName();
+            $locationDetails[$location->getId()]['slug']           = $location->getUrl();
+            $locationDetails[$location->getId()]['parent_id']      = empty($location->getParent()) ? NULL : $location->getParent()->getId();
+            $locationDetails[$location->getId()]['latitude']       = $location->getLatitude();
+            $locationDetails[$location->getId()]['longitude']      = $location->getLongitude();
+            $locationDetails[$location->getId()]['region_id']      = $location->getRegionId();
+            $locationDetails[$location->getId()]['region_name']    = ! empty($location->getRegionId()) ? $regions[$location->getRegionId()]['name'] : '';
+        }
+
+        if ($container) {
+            CommonManager::setCacheVersion($container, $cacheKey, $locationDetails);
+        }
+    }
+
+    /**
+     * @param $container
+     * @param $id
+     * @return array
+     */
+    public function getCachedLocationById($container, $id)
+    {
+        if (! empty($id)) {
+            $locations = CommonManager::getCacheVersion($container, 'location|getAllLocations|en_GB');
+            
+            return [
+                'id'            => $id,
+                'name'          => $locations[$id]['name'],
+                'slug'          => $locations[$id]['slug'],
+                'parent_id'     => $locations[$id]['parent_id'],
+                'latitude'      => $locations[$id]['latitude'],
+                'longitude'     => $locations[$id]['longitude'],
+                'region_id'     => $locations[$id]['region_id'],
+                'region_name'   => $locations[$id]['region_name']
+            ];
+        } else {
+            return [];
+        }
+    }
 }
