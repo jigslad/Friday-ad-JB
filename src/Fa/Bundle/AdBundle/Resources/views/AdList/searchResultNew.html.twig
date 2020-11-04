@@ -320,10 +320,6 @@
 
                 {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_PAGINATION_MOBILE') %}
                 {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
-
-                {% if searchParams is defined and (searchParams.expired_ads is not defined or (searchParams.expired_ads is defined and searchParams.expired_ads is null)) %}
-                    {{ render(controller('FaAdBundle:AdList:showListingSeoBlocks', {'searchParams': searchParams, 'customized_url': customized_url, 'location': app.request.get('location'), 'seoPageRule': seoPageRule, 'orgRequest': app.request})) }}
-                {% endif %}
             </div>
         </div>
         <div class="right-banner">
