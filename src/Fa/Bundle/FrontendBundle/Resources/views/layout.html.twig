@@ -168,14 +168,7 @@
     {% endif %}
         
 
-    {{ include('FaFrontendBundle::scriptTop.html.twig', {'showAdultPages': showAdultPages}) }}
-    {# safe to remove, when the new listing page route is swapped with the older one #}
-    {% if currentRoute in {0: 'new_listing_page'} %}
-        {% set rootCategoryId = fetch_repository('FaEntityBundle:Category').getRootCategoryId(assignedCategoryId, container) %}
-        {% if (rootCategoryId == ADULT_CATEGORY_ID) %}
-            {% set showAdultPages=1 %}
-        {% endif %}
-    {% endif %}
+    {{ include('FaFrontendBundle::scriptTop.html.twig') }}
 
     {% block scripttop %}{% endblock %}
     {#
