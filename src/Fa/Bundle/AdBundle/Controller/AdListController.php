@@ -926,7 +926,9 @@ class AdListController extends CoreController
         }
         $category = $this->getRepository('FaEntityBundle:Category')->findOneBy(['id' => $findersSearchParams['item__category_id']]);
 
-        $data['static_filters'] = '';
+        if (empty($data['static_filters'])) {
+            $data['static_filters'] = '';
+        }
         if ($findersSearchParams['item__category_id'] != 1) {
             $data['static_filters'] .= ' AND category_full_path:' . $category->getFullSlug();
         }
