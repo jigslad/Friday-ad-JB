@@ -1,3 +1,4 @@
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
 {% if currentRoute in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote' } %}
 {% endif %}
 <header class="header" id="header" role="banner" aria-label="Site header">
@@ -120,9 +121,10 @@
                                     {% set userCartUrl = 'javascript:void(0);' %}
                                 {% endif %}
                                 <a href="{{ userCartUrl }}" class="navigation-right__link basket-icon">
-                                    <span class="notify-badge"></span>
+                                    {% if userDetail|length > 0 %}
+                                        <span class="notify-badge"></span>
+                                    {% endif %}
                                 </a>
-{#                                    <a href="{{ userCartUrl }}" class="basket-icon"><span>({{ userDetail|length }})</span></a>|#}
                             </li>
                             <li class="navigation-right__item">
                                 <a href="{{ path('user_ad_message_all') }}" id="inbox-header-id" class="navigation-right__link message-icon ga-widgetMessages">
@@ -130,10 +132,6 @@
                                         <span class="notify-badge"></span>
                                     {% endif %}
                                 </a>
-{#                                    <a href="{{ path('user_ad_message_all') }}" id="inbox-header-id" class="ga-widgetMessages">{{'Messages'|trans({}, 'frontend-header-usermenu')}} <span class="ga-widgetMessages">({{totalUnreadMsg}})</span> <span class="unread-msg ga-widgetMessages" id="total_unread_msg_icon_div" {% if totalUnreadMsg == 0 %} style="display:none" {% endif %}>&nbsp;</span></a>|#}
-                            </li>
-                            <li class="navigation-right__item">
-                                <a href="{{ path('location_home_page', {'location': 'contact-us'}) }}" id="contact-header-id" class="navigation-right__link">Contact us</a>
                             </li>
                             {# need to disscuss about notification area with lauara and chaira #}
                             {# {{ render(controller('FaUserBundle:Dashboard:notification', { 'template': 'menu' })) }}#}
@@ -144,31 +142,37 @@
                             <li class="navigation-right__item">
                                 <a href="{{ path('fa_user_register') }}" id="register-header-id" class="navigation-right__link">{{'Register'|trans({}, 'frontend-header-usermenu')}}</a>
                             </li>
-                            <li class="navigation-right__item">
-                                    <a href="{{ path('location_home_page', {'location': 'contact-us'}) }}" id="contact-header-id" class="navigation-right__link">{{'Contact us'|trans({}, 'frontend-header-usermenu')}}</a>
-                                </li>
                         {% endif %}
+                        <li class="navigation-right__item">
+                            <a href="{{ path('location_home_page', {'location': 'contact-us'}) }}" id="contact-header-id" class="navigation-right__link">{{'Contact us'|trans({}, 'frontend-header-usermenu')}}</a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
     <!--Top navigation END-->
-   {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+
     <!--Main navigation Starts-->
     <div class="main-navigation">
         <div class="row">
             <div class="container">
                 <div class="main-navigation__block">
                     <div class="brand">
-                        {# trade it logo  not configerd #}
-                        <a href="{{ path('fa_frontend_homepage') }}" class="logo {% if showTiLogo %}tradeit-logo{% endif %}">
-                            {% if showTiLogo %}
-                                <img src="{{ asset_url('fafrontend/images/fad-ti-logo.png') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" />
-                            {% else %}
-                                <img src="{{ asset_url('fafrontend/images/fad-logo-new.svg') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" />
-                            {% endif %}
-                        </a>
+                        {% if showAdultPages==1 %}
+                            <a href="{{ path('fa_new_adult_homepage') }}" class="logo">
+                                <img src="{{ asset_url('fafrontend/images/Fad-Adult-logo.svg') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" />
+                            </a>
+                        {% else %}
+                            {# trade it logo  not configerd #}
+                            <a href="{{ path('fa_frontend_homepage') }}" class="logo {% if showTiLogo %}tradeit-logo{% endif %}">
+                                {% if showTiLogo %}
+                                    <img src="{{ asset_url('fafrontend/images/fad-ti-logo.png') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" />
+                                {% else %}
+                                    <img src="{{ asset_url('fafrontend/images/fad-logo-new.svg') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" />
+                                {% endif %}
+                            </a>
+                        {% endif %}
                     </div>
                     <nav class="main-menu">
                         {% if mobileDetectManager.isTablet() %}
@@ -181,7 +185,7 @@
                     </nav>
                 </div>
                 <div class="search-sticky search-sticky-mobile">
-                    <input type="text" class="search-sticky__input" value="" placeholder="What are you lookng for?" id="searchStickyKeey">
+                    <input type="text" class="search-sticky__input" value="" placeholder="What are you lookng for?" id="mobile_search_li">
                 </div>
             </div>
         </div>

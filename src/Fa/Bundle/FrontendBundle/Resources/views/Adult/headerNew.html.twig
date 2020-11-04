@@ -4,130 +4,196 @@
             <div class="container">
                 <div class="navigation-right">
                     <ul class="navigation-right__block {{ app.user ? 'logged': 'login' }}">
-                {% if app.user %}
-                    <ul class="clearfix">
-                        <li>
-                            <a href="{{ path('dashboard_home') }}" class="dropdown bold my-db-desktop">{{ 'My Dashboard'|trans({}, 'frontend-header-usermenu') }}</a>
-                            <a href="javascript:void(0);" class="dropdown bold my-db-tablet needsclick" data-dropdown="db-dropdown-menu" aria-controls="db-dropdown-menu">{{ 'My Dashboard'|trans({}, 'frontend-header-usermenu') }}</a>
-                            <ul id="db-dropdown-menu" data-dropdown-content class="f-dropdown" aria-hidden="true">
-                                <li><a href="{{ path('dashboard_home') }}" class="home-icon">{{ 'Dashboard home'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                                <li><a href="{{ path('user_ad_message_all') }}" class="messages-icon">{{ 'Messages'|trans({}, 'frontend-header-usermenu') }}&nbsp;<span id="total_unread_msg_div" class="show-for-small-only">({{totalUnreadMsg}})</span> </a></li>
-                                <li><a href="{{ path('user_review_list') }}" class="reviews-icon">{{ 'Reviews'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                                <li><a href="{{ path('manage_my_ads_active') }}" id="manage-my-ad-id" class="manage-item-icon">{{'Manage my ads'|trans({}, 'frontend-header-usermenu')}}</a></li>
-                                <li><a href="{{ path('my_profile') }}" class="manage-profile-icon">{{ 'Edit profile'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                                <li><a href="{{ path('my_orders') }}" class="orders-icon">{{ 'Orders'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                                <li><a href="{{ path('my_favourite') }}" class="my-favourites-icon">{{ 'My favourites'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                                <li><a href="{{ path('list_search_agent') }}" id="saved-search-header-id" class="alerts-icon">{{'Alerts and searches'|trans({}, 'frontend-header-usermenu')}}</a></li>
-                                <li><a href="{{ path('my_purchases') }}" id="shop-header-id" class="purchase-icon">{{ 'Purchases'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                                <li><a href="{{ path('my_account') }}" id="account-header-id" class="account-icon">{{ 'Account'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            |<a href="{% if myProfileUrl %}{{ myProfileUrl }}{% else %}javascript:void(0);{% endif %}">
-                                <span class="topbar-user-icon {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}rounded{% endif %}">
-                                    <span id="top_profile_image_div">
-                                        {{userLogo|replace({'<div': '<span', '</div>':'</span>'})|raw}}
-                                    </span>
-                                </span>
-                                {% if app.user.getFullName() %}
-                                    {{app.user.getFullName()}}
+                        {% if app.user %}
+                            <li class="navigation-right__item menu-dropdown">
+                                <a id="menuDropdown" class="arrow-icon navigation-right__link" href="{% if myProfileUrl %}{{ myProfileUrl }}{% else %}javascript:void(0);{% endif %}">
+                                    Hello,
+                                    {% if app.user.getFullName() %}
+                                        {{app.user.getFullName()}}
+                                    {% else %}
+                                        {{app.user.getUsername()}}
+                                    {% endif %}
+                                    <span class="notify-badge"></span>
+                                </a>
+                                <div class="dropdown-content">
+                                    <div class="dropdown-content__block user-profile">
+                                        <div class="dropdown-content__profile {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}private-user {% else %} business-user {% endif %} ">
+                                            {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), app.user.getId(), true, true, app.user.getProfileName() ]) %}
+                                            {#                                                {{userLogo|replace({'<div': '<span', '</div>':'</span>'})|raw}}#}
+                                            <img src="{{ userLogo ? userLogo : '/public/images/Image-Avatar-null.png' }}" alt="{% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}private-user {% else %} business-user {% endif %}">
+                                        </div>
+                                        <h6 class="dropdown-content__user-name">
+                                            Hello,
+                                            {% if app.user.getFullName() %}
+                                                {{app.user.getFullName()}}
+                                            {% else %}
+                                                {{app.user.getUsername()}}
+                                            {% endif %}
+                                        </h6>
+                                    </div>
+                                    <div class="dropdown-content__block dashboard">
+                                        <ul>
+                                            <li class="dropdown-content__item">
+                                                <a href="{{ path('dashboard_home') }}" class="dropdown-content__link home-icon">My Dashboard</a>
+                                            </li>
+                                            <li class="dropdown-content__item">
+                                                <a href="{{ path('user_ad_message_all') }}" class="dropdown-content__link messages-icon">
+                                                    {{ 'Messages'|trans({}, 'frontend-header-usermenu') }}
+                                                    {% if totalUnreadMsg != 0 %}
+                                                        <span id="total_unread_msg_div" class="notify-badge"></span>
+                                                    {% endif %}
+                                                </a>
+                                            </li>
+                                            <li class="dropdown-content__item">
+                                                <a href="{{ path('user_review_list') }}" class="dropdown-content__link reviews-icon">Reviews</a>
+                                            </li>
+                                            <li class="dropdown-content__item">
+                                                <a href="#" class="dropdown-content__link account-icon">Preferences</a>
+                                                {# <a href="{{ path('my_account') }}" id="account-header-id" class="account-icon">{{ 'Account'|trans({}, 'frontend-header-usermenu') }}</a>#}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="dropdown-content__block settings">
+                                        <ul>
+                                            <li class="dropdown-content__item">
+                                                <a href="{{ path('manage_my_ads_active') }}" id="manage-my-ad-id" class="dropdown-content__link manage-item-icon">Manage my ads</a>
+                                            </li>
+                                            <li class="dropdown-content__item">
+                                                <a href="{{ path('my_profile') }}" class="dropdown-content__link manage-profile-icon">Edit profile</a>
+                                            </li>
+                                            <li class="dropdown-content__item">
+                                                <a href="{{ path('my_orders') }}" class="dropdown-content__link orders-icon">Orders
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="dropdown-content__block favourites">
+                                        <ul>
+                                            <li class="dropdown-content__item">
+                                                <a href="{{ path('my_favourite') }}" class="dropdown-content__link my-favourites-icon">Favourites
+                                                </a>
+                                            </li>
+                                            <li class="dropdown-content__item">
+                                                <a href="{{ path('list_search_agent') }}" id="saved-search-header-id" class="dropdown-content__link alerts-icon">Search alerts</a>
+                                            </li>
+                                            <li class="dropdown-content__item">
+                                                <a href="{{ path('my_purchases') }}" id="shop-header-id" class="dropdown-content__link purchase-icon">Purchases</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="dropdown-content__block logout">
+                                        <ul>
+                                            <li class="dropdown-content__item">
+                                                <a href="{{ path('logout') }}" class="dropdown-content__link" id="logout-header-id">Logout
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="navigation-right__item">
+                                {% if userDetail|length > 0 %}
+                                    {% set userCartUrl = path('show_cart') %}
                                 {% else %}
-                                    {{app.user.getUsername()}}
+                                    {% set userCartUrl = 'javascript:void(0);' %}
                                 {% endif %}
-                            </a>|
+                                <a href="{{ userCartUrl }}" class="navigation-right__link basket-icon">
+                                    {% if userDetail|length > 0 %}
+                                        <span class="notify-badge"></span>
+                                    {% endif %}
+                                </a>
+                            </li>
+                            <li class="navigation-right__item">
+                                <a href="{{ path('user_ad_message_all') }}" id="inbox-header-id" class="navigation-right__link message-icon ga-widgetMessages">
+                                    {% if totalUnreadMsg != 0 %}
+                                        <span class="notify-badge"></span>
+                                    {% endif %}
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="navigation-right__item">
+                                <a href="{{ path('login') }}" id="login-header-id" class="navigation-right__link">{{'Log In'|trans({}, 'frontend-header-usermenu')}}</a>
+                            </li>
+                            <li class="navigation-right__item">
+                                <a href="{{ path('fa_user_register') }}" id="register-header-id" class="navigation-right__link">{{'Register'|trans({}, 'frontend-header-usermenu')}}</a>
+                            </li>
+                        {% endif %}
+                        <li class="navigation-right__item">
+                            <a href="{{ path('location_home_page', {'location': 'contact-us'}) }}" id="contact-header-id" class="navigation-right__link">{{'Contact us'|trans({}, 'frontend-header-usermenu')}}</a>
                         </li>
-
-                        {{ include('FaUserBundle:Dashboard:notificationMenuHeading.html.twig', {'count': notification_count}) }}
-
-                        <li class="msg-link"><a href="{{ path('user_ad_message_all') }}" id="inbox-header-id">{{'Messages'|trans({}, 'frontend-header-usermenu')}} <span>({{totalUnreadMsg}})</span> <span class="unread-msg" id="total_unread_msg_icon_div" {% if totalUnreadMsg == 0 %} style="display:none" {% endif %}>&nbsp;</span></a>|</li>
-
-                        <li>
-                            {% if userDetail|length > 0 %}
-                              {% set userCartUrl = path('show_cart') %}
-                            {% else %}
-                              {% set userCartUrl = 'javascript:void(0);' %}
-                            {% endif %}
-                            <a href="{{ userCartUrl }}" class="basket-icon"><span>({{ userDetail|length }})</span></a>|
-                        </li>
-                        <li><a href="{{ path('logout') }}" id="logout-header-id">{{'Log Out'|trans({}, 'frontend-header-usermenu')}}</a></li>
-                        <li><a href="{{ path('location_home_page', {'location': 'contact-us'}) }}" id="contact-header-id">{{'Contact us'|trans({}, 'frontend-header-usermenu')}}</a></li>
-                    </ul>
-                {% else %}
-                    <ul class="clearfix">
-                        <li><a href="{{ path('login') }}" id="login-header-id">{{'Log In'|trans({}, 'frontend-header-usermenu')}}</a>|</li>
-                        <li><a href="{{ path('fa_user_register') }}" id="register-header-id">{{'Register'|trans({}, 'frontend-header-usermenu')}}</a>|</li>
-                        <li><a href="{{ path('location_home_page', {'location': 'contact-us'}) }}" id="contact-header-id">{{'Contact us'|trans({}, 'frontend-header-usermenu')}}</a></li>
-                    </ul>
-                {% endif %}
                     </ul>
                 </div>
             </div>
         </div>
     </div>
-   <div id="sticky_nav_top">
-    <div class="nav-bg">
-        <div class="row">
-            <div class="columns">
-                <nav class="top-bar" id="top_bar_nav" data-topbar="" data-options="sticky_on: large">
-                    <ul class="title-area">
-                        <li class="name">
-                        <h1 class="mob-logo-h1">
-                             <a href="{{ path('fa_new_adult_homepage') }}" class="adul-logo"><img src="{{ asset_url('fafrontend/images/Fad-Adult-logo.svg') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" /></a>
-                        </h1>
-                        </li>
-                        <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
-                        <li class="toggle-topbar menu-icon" id="mobile_menu_li"><a href="javascript:void(0);"><span class="menu" id="top_bar_nav_menu_span"></span></a></li>
-                        <li class="show-for-small-only search-icon" id="mobile_search_li"><a href="javascript:void(0)" class="search">Search</a></li>
-                    </ul>
-                    <section class="top-bar-section">
-                        <!-- Right Nav Section -->
-                        
-                       <div class="tablet-menu adul-tablet-menu">
-                           {{ include('FaFrontendBundle:Adult:renderHeaderCategoriesNew.html.twig', {'totalUnreadMsg': totalUnreadMsg, 'headerCategories': headerCategories}) }}
-                        </div>
-                        
+    <!--Main navigation Starts-->
+    <div id="sticky_nav_top">
+        <div class="main-navigation">
+            <div class="row">
+                <div class="container">
+{#                    <nav class="top-bar" id="top_bar_nav" data-topbar="" data-options="sticky_on: large"></nav>#}
+                    {#<nav class="top-bar" id="top_bar_nav" data-topbar="" data-options="sticky_on: large">
+                        <section class="top-bar-section">
+                            <!-- Right Nav Section -->
                             {% if app.user %}
-                            <ul class="show-for-small-only login-menu">
-                                <li>
-                            	<a href="{% if myProfileUrl %}{{ myProfileUrl }}{% else %}javascript:void(0);{% endif %}" class="logged-in-user">
-                                    {% if app.user.getFirstName() or  app.user.getLastName() %}
-                                        {{app.user.getFirstName()}} {{app.user.getLastName()}}
-                                    {% else %}
-                                        {{app.user.getUsername()}}
+                                <ul class="show-for-small-only login-menu">
+                                    <li>
+                                        <a href="{% if myProfileUrl %}{{ myProfileUrl }}{% else %}javascript:void(0);{% endif %}" class="logged-in-user">
+                                            {% if app.user.getFirstName() or  app.user.getLastName() %}
+                                                {{app.user.getFirstName()}} {{app.user.getLastName()}}
+                                            {% else %}
+                                                {{app.user.getUsername()}}
+                                            {% endif %}
+                                        </a>
+                                    </li>
+                                    {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+                                        {{ include('FaUserBundle:Dashboard:notificationMenuMobile.html.twig', {'count': notification_count}) }}
                                     {% endif %}
-                                    </a>
-                                </li>
-                                {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
-                                    {{ include('FaUserBundle:Dashboard:notificationMenuMobile.html.twig', {'count': notification_count}) }}
-                                {% endif %}
-                                <li><a href="{{ path('user_ad_message') }}" id="mob-inbox-header-id">{{'MESSAGES'|trans({}, 'inbox')}}{% if totalUnreadMsg > 0 %}&nbsp;<span class="notification-digit">({{totalUnreadMsg}})</span>{% endif %}</a></li>
-                                
-                                {% if userDetail|length > 0 %}
-	                            <li>
-                                    <a href="{{ path('show_cart') }}">Cart <span class="notification-digit">({{ userDetail|length }})</span></a>
-                                </li>
-                                {% endif %}
-                                
-                                <li><a href="{{ path('logout') }}" id="mob-logout-header-id">{{'Log Out'|trans({}, 'frontend-top-menu')}}</a></li>
-                            	</ul>
-                                {% else %}
+                                    <li><a href="{{ path('user_ad_message') }}" id="mob-inbox-header-id">{{'MESSAGES'|trans({}, 'inbox')}}{% if totalUnreadMsg > 0 %}&nbsp;<span class="notification-digit">({{totalUnreadMsg}})</span>{% endif %}</a></li>
+
+                                    {% if userDetail|length > 0 %}
+                                        <li>
+                                            <a href="{{ path('show_cart') }}">Cart <span class="notification-digit">({{ userDetail|length }})</span></a>
+                                        </li>
+                                    {% endif %}
+
+                                    <li><a href="{{ path('logout') }}" id="mob-logout-header-id">{{'Log Out'|trans({}, 'frontend-top-menu')}}</a></li>
+                                </ul>
+                            {% else %}
                                 <ul class="show-for-small-only login-menu login-reg-flex">
-                            
-                                <li><a href="{{ path('login') }}" id="mob-login-header-id">{{'Log In'|trans({}, 'frontend-top-menu')}}</a></li>
-                                <li><a href="{{ path('fa_user_register') }}" id="mob-register-header-id">{{'Register'|trans({}, 'frontend-top-menu')}}</a></li>
-                            	</ul>
-                                {% endif %}
-                        <ul class="show-for-small-only login-menu">
-                            <li><a href="{{ path('location_home_page', {'location': 'contact-us'}) }}" id="mob-contact-header-id">{{'Contact us'|trans({}, 'frontend-top-menu')}}</a></li>
-                        </ul>
-                        <ul class="right place-item">
-                            <li class="place-item-btn"><a href="{{ path('ad_post_first_step') }}" title="{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}">{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}</a></li>
-                        </ul>
-                    </section>
-                </nav>
+
+                                    <li><a href="{{ path('login') }}" id="mob-login-header-id">{{'Log In'|trans({}, 'frontend-top-menu')}}</a></li>
+                                    <li><a href="{{ path('fa_user_register') }}" id="mob-register-header-id">{{'Register'|trans({}, 'frontend-top-menu')}}</a></li>
+                                </ul>
+                            {% endif %}
+                        </section>
+                    </nav>#}
+                    <div class="main-navigation__block">
+                        <div class="brand">
+                            <a href="{{ path('fa_new_adult_homepage') }}" class="logo">
+                                <img src="{{ asset_url('fafrontend/images/Fad-Adult-logo.svg') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" />
+                            </a>
+                        </div>
+                        <nav class="main-menu">
+                            {{ include('FaFrontendBundle:Adult:renderHeaderCategoriesNew.html.twig', {'totalUnreadMsg': totalUnreadMsg, 'headerCategories': headerCategories}) }}
+                        </nav>
+                    </div>
+                    <div class="search-sticky search-sticky-mobile">
+                        <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+                        <div class="toggle-topbar menu-icon" id="mobile_menu_li">
+                            <a href="javascript:void(0);">
+                                <span class="menu" id="top_bar_nav_menu_span"></span>
+                            </a>
+                        </div>
+                        <div class="show-for-small-only search-icon" id="mobile_search_li">
+                            <a href="javascript:void(0)" class="search">Search</a>
+                        </div>
+                        <input type="text" class="search-sticky__input" value="" placeholder="What are you lookng for?" id="mobile_search_li">
+                    </div>
+                </div>
             </div>
+            <div class="dropdown-bg"></div>
         </div>
-        <div class="dropdown-bg"></div>
     </div>
-</div>
+    <!--Main navigation END-->
 </header>
