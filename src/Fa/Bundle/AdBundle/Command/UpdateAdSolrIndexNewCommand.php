@@ -299,7 +299,7 @@ EOF
             $output->writeln($command, true);
 //            passthru($command, $returnVar);
             $this->command_in_background($command);
-            sleep(20);
+            sleep(7);
             $batchSize++;
 
             // After triggering every 10 items, wait for 2 mins

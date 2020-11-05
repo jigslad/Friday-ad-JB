@@ -1008,7 +1008,7 @@ class AdListController extends CoreController
             }
 
             $featuredAds = $this->formatAds($featuredPagination['pagination']);
-            $viewedTopAds = array_column($featuredAds, 'id');
+            $viewedTopAds = array_column($featuredAds, 'ad_id');
             $viewedTopAds = array_unique(array_merge($viewedTopAds, $topAds));
             $response = new Response();
             $response->headers->setCookie(new Cookie('viewed_top_ads_'.$root->getId(), implode(',', $viewedTopAds), CommonManager::getTimeStampFromEndDate(date('Y-m-d'))));
