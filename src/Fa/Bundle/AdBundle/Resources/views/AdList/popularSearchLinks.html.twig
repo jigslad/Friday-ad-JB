@@ -2,7 +2,7 @@
 {% set seoToolPopularSearchRepository = fetch_repository('FaContentBundle:SeoToolPopularSearch') %}
 {% set popularSearchArray = seoToolPopularSearchRepository.getPopularSearchArrayBySeoToolId(seoFields['seo_tool_id'], container) %}
 {% if popularSearchArray|length %}
-    <link rel="stylesheet" href="{{ asset('build/css/popularSearch.css') }}" />
+    <link rel="stylesheet" href="{{ asset('build/css/popularSearch.css') }}?v=1.0.0" />
     <div class="popular-search {{ popularSearchArray|length == 1 ? 'min-keywords': ''}} {{ showAdultPages == 1 ? 'adult' : ''}}">
         <ul class="popular-search--block">
             <li class="popular-search--title">{{'Popular Searches'|trans({}, 'frontend-left--popular-search')}}:</li>
