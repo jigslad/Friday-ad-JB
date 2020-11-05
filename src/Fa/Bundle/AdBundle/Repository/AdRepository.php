@@ -912,13 +912,10 @@ class AdRepository extends EntityRepository
             }
         }
         // Index images
-        $imageLimit = 0;
+        $category = $this->getRepository('FaEntityBundle:Category')->getRootNodeByCategory($categoryId);
+        $imagelimitCategoryName = CommonManager::getCategoryClassNameById($category['id']);
+        $imageLimit = $container->getParameter('fa.image.'.$imagelimitCategoryName.'_upload_limit');
 
-        if (count($allParentCategories)) {
-            $category = $allParentCategories[count($allParentCategories) - 2];
-            $imagelimitCategoryName = CommonManager::getCategoryClassNameById($category['id']);
-            $imageLimit = $container->getParameter('fa.image.'.$imagelimitCategoryName.'_upload_limit');
-        }
         if (isset($adUpsellValues[UpsellRepository::UPSELL_TYPE_ADDITIONAL_PHOTO_VALUE])) {
             $imageLimit = $adUpsellValues[UpsellRepository::UPSELL_TYPE_ADDITIONAL_PHOTO_VALUE];
         }

@@ -1209,10 +1209,10 @@ class AdListController extends CoreController
                 }
 
                 $seoToolRepository = $this->getRepository('FaContentBundle:SeoTool');
-                $parameters['seoPageRule'] = $seoToolRepository->getSeoPageRuleDetailForListResult(SeoToolRepository::ADVERT_LIST_PAGE, $targetUrl, $this->container);
+                $seoPageRule = $seoToolRepository->getSeoPageRuleDetailForListResult(SeoToolRepository::ADVERT_LIST_PAGE, $targetUrl, $this->container);
 
-                if (empty($parameters['seoPageRule'])) {
-                    $parameters['seoPageRule'] = $seoToolRepository->getSeoPageRuleDetailForListResult(SeoToolRepository::ADVERT_LIST_PAGE, null, $this->container);
+                if (empty($seoPageRule)) {
+                    $seoPageRule = $seoToolRepository->getSeoPageRuleDetailForListResult(SeoToolRepository::ADVERT_LIST_PAGE, null, $this->container);
                 }
 
                 $pageUrl = $this->getPageUrl($request);
@@ -1253,14 +1253,14 @@ class AdListController extends CoreController
                 if ($objSeoToolOverride) {
                     if ($isClassicCarPage) {
                         $selCatName = $parameters['selCatName'] != 'Cars' ? $parameters['selCatName'] : '';
-                        $parameters['seoPageRule'] += ['h1_tag' => str_replace('Manufacturer', $selCatName, $objSeoToolOverride->getH1Tag()), 'page_title' => str_replace('Manufacturer', $selCatName, $objSeoToolOverride->getPageTitle()), 'meta_description'=> str_replace('Manufacturer', $selCatName, $objSeoToolOverride->getMetaDescription()), 'no_index'=> str_replace('Manufacturer', $selCatName, $objSeoToolOverride->getNoIndex()), 'no_follow'=> str_replace('Manufacturer', $selCatName, $objSeoToolOverride->getNoFollow()), 'canonical_url'=> str_replace('Manufacturer', $selCatName, $objSeoToolOverride->getCanonicalUrl())];
+                        $seoPageRule += ['h1_tag' => str_replace('Manufacturer', $selCatName, $objSeoToolOverride->getH1Tag()), 'page_title' => str_replace('Manufacturer', $selCatName, $objSeoToolOverride->getPageTitle()), 'meta_description'=> str_replace('Manufacturer', $selCatName, $objSeoToolOverride->getMetaDescription()), 'no_index'=> str_replace('Manufacturer', $selCatName, $objSeoToolOverride->getNoIndex()), 'no_follow'=> str_replace('Manufacturer', $selCatName, $objSeoToolOverride->getNoFollow()), 'canonical_url'=> str_replace('Manufacturer', $selCatName, $objSeoToolOverride->getCanonicalUrl())];
                     } else {
-                        $parameters['seoPageRule'] += ['h1_tag' => $objSeoToolOverride->getH1Tag(), 'page_title' => $objSeoToolOverride->getPageTitle(), 'meta_description'=> $objSeoToolOverride->getMetaDescription(), 'no_index'=> $objSeoToolOverride->getNoIndex(), 'no_follow'=> $objSeoToolOverride->getNoFollow(), 'canonical_url'=> $objSeoToolOverride->getCanonicalUrl()];
+                        $seoPageRule += ['h1_tag' => $objSeoToolOverride->getH1Tag(), 'page_title' => $objSeoToolOverride->getPageTitle(), 'meta_description'=> $objSeoToolOverride->getMetaDescription(), 'no_index'=> $objSeoToolOverride->getNoIndex(), 'no_follow'=> $objSeoToolOverride->getNoFollow(), 'canonical_url'=> $objSeoToolOverride->getCanonicalUrl()];
                     }
                 }
 
-                if ($parameters['seoPageRule']) {
-                    $parameters['seoFields'] = CommonManager::getSeoFields($parameters['seoPageRule']);
+                if ($seoPageRule) {
+                    $parameters['seoFields'] = CommonManager::getSeoFields($seoPageRule);
                 }
 
                 if ($request->get('queryString') or strpos($request->get('uri'), '/search')) {
@@ -1797,7 +1797,7 @@ class AdListController extends CoreController
                     'latitude'      => isset($ad['latitude']) ? $ad['latitude'] : null,
                     'longitude'     => isset($ad['longitude']) ? $ad['longitude'] : null,
                     'last_updated'  => $ad['updated_at'],
-                    'aff_icon_cls'  => ($ad['ad_source'] == 'paa' || $ad['ad_source'] == 'paa-app') ? '' : CommonManager::getAffiliateClass($ad['ad_source'])
+                    'aff_icon_cls'  => ($ad['is_affiliate'] && ($ad['ad_source'] != 'paa' || $ad['ad_source'] != 'paa-app' || $ad['ad_source'] != 'admin')) ? CommonManager::getAffiliateClass($ad['ad_source']) : ''
                 ];
 
             }
