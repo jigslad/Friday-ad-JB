@@ -912,7 +912,7 @@ class AdRepository extends EntityRepository
             }
         }
         // Index images
-        $category = $this->getRepository('FaEntityBundle:Category')->getRootNodeByCategory($categoryId);
+        $category = $this->_em->getRepository('FaEntityBundle:Category')->getRootNodeByCategory($categoryId);
         $imagelimitCategoryName = CommonManager::getCategoryClassNameById($category['id']);
         $imageLimit = $container->getParameter('fa.image.'.$imagelimitCategoryName.'_upload_limit');
 
