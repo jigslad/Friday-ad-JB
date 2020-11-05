@@ -3,7 +3,8 @@
 {% set popularSearchArray = seoToolPopularSearchRepository.getPopularSearchArrayBySeoToolId(seoFields['seo_tool_id'], container) %}
 {% if popularSearchArray|length %}
     <link rel="stylesheet" href="{{ asset('build/css/popularSearch.css') }}" />
-    <div class="popular-search {{ popularSearchArray|length == 1 ? 'min-keywords': ''}}">
+    <link rel="stylesheet" href="{{ asset('build/css/adultPopularSearch.css') }}" />
+    <div class="popular-search {{ popularSearchArray|length == 1 ? 'min-keywords': ''}} {{ showAdultPages == 1 ? 'adult' : ''}}">
         <ul class="popular-search--block">
             <li class="popular-search--title">{{'Popular Searches'|trans({}, 'frontend-left--popular-search')}}:</li>
             <!---loop starts-->
@@ -18,7 +19,7 @@
         </ul>
         <div class="popular-search--toggle" id="toggleSearch"></div>
     </div>
-    <div class="popular-search-mobile">
+    <div class="popular-search-mobile {{ showAdultPages == 1 ? 'adult' : ''}}">
         <ul class="popular-search--block owl-carousel" id="popularSearchSlider">
             <!---loop starts-->
             {% for popularSearch in popularSearchArray %}
