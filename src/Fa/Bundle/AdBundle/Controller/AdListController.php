@@ -991,6 +991,7 @@ class AdListController extends CoreController
             $featuredPagination = $this->getSolrPagination('ad.new', $keywords, $featuredData, 1, 3, 0, true);
 
             if (count($featuredPagination['pagination']) < 3) {
+                $topAds = [];
                 $featuredData = $this->setDefaultParametersNew($request, $mapFlag, 'finders', array());
 
                 if ($findersSearchParams['item__category_id'] != 1) {
@@ -1008,7 +1009,7 @@ class AdListController extends CoreController
             }
 
             $featuredAds = $this->formatAds($featuredPagination['pagination']);
-            $viewedTopAds = array_column($featuredAds, 'id');
+            $viewedTopAds = array_column($featuredAds, 'ad_id');
             $viewedTopAds = array_unique(array_merge($viewedTopAds, $topAds));
             $response = new Response();
             $response->headers->setCookie(new Cookie('viewed_top_ads_'.$root->getId(), implode(',', $viewedTopAds), CommonManager::getTimeStampFromEndDate(date('Y-m-d'))));
@@ -1398,7 +1399,7 @@ class AdListController extends CoreController
         if (array_key_exists('expired_ads', $searchParams) == false) {
             $staticFilters .= ' AND status_id : ' . EntityRepository::AD_STATUS_LIVE_ID;
         }
-        /*$staticFilters .= ' AND is_blocked_ad : 0';*/
+        $staticFilters .= ' AND -is_blocked_ad:true';
 
         return $staticFilters;
     }
