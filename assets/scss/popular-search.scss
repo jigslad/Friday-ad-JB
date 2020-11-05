@@ -115,7 +115,6 @@
 }
 @media only screen and (max-width: 767px) {
   .popular-search--link {
-    min-width: 115px;
     padding: 0 8px;
   }
   .popular-search--item {
@@ -150,7 +149,7 @@
 .adult .popular-search--link {
   color: #9C1F9F;
 }
-.popular-search-mobile  .popular-search--block{
+.popular-search-mobile .popular-search--block{
   position: absolute;
   left: 0;
   right: 0;
