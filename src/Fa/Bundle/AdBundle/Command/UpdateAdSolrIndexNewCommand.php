@@ -388,6 +388,11 @@ EOF
     protected function getAdCount($searchParam)
     {
         $qb = $this->getAdQueryBuilder($searchParam);
+
+        if (isset($searchParam['ad']['boosted_at'])) {
+            $qb->andWhere(AdRepository::ALIAS . '.boosted_at IS NOT NULL AND ' . AdRepository::ALIAS . '.boosted_at > 0');
+        }
+
         $qb->select('COUNT('.$qb->getRootAlias().'.id)');
 
         return $qb->getQuery()->getSingleScalarResult();
