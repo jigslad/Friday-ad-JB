@@ -451,13 +451,13 @@ class UserImageController extends CoreController
                     }
                     
                     $awsImagePath = $this->container->getParameter('fa.static.aws.url').DIRECTORY_SEPARATOR.$orgImageName;
-                    $orgawsurl = $awsImagePath.DIRECTORY_SEPARATOR.$userId.'_org.jpg';
+                    $orgawsurl = $awsImagePath.DIRECTORY_SEPARATOR.$userId.'_org.jpg?'.time();
                     $orglocalimg = $orgImagePath.DIRECTORY_SEPARATOR.$userId.'_org.jpg';
                     file_put_contents($orglocalimg, file_get_contents($orgawsurl));
-                    $originalawsurl = $awsImagePath.DIRECTORY_SEPARATOR.$userId.'_original.jpg';
+                    $originalawsurl = $awsImagePath.DIRECTORY_SEPARATOR.$userId.'_original.jpg?'.time();
                     $originallocalimg = $orgImagePath.DIRECTORY_SEPARATOR.$userId.'_original.jpg';
                     file_put_contents($originallocalimg, file_get_contents($originalawsurl));
-                    $awsurl = $awsImagePath.DIRECTORY_SEPARATOR.$userId.'.jpg';
+                    $awsurl = $awsImagePath.DIRECTORY_SEPARATOR.$userId.'.jpg?'.time();
                     $localimg = $orgImagePath.DIRECTORY_SEPARATOR.$userId.'.jpg';
                     file_put_contents($localimg, file_get_contents($awsurl));
                     $fileExistsInAws = 1;

@@ -7,7 +7,7 @@
 {% endif %}
 
 {% set userSiteViewCounter = fetch_repository('FaUserBundle:UserSiteViewCounter').getUserSiteViewCounter(userDetail['id'], fetch_container_instance()) %}
-{% set userSiteBannerUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserSiteBannerUrl', [fetch_container_instance(), userDetail['site_id'], 1]) %}
+{% set userSiteBannerUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserSiteBannerUrl', [fetch_container_instance(), userDetail['site_id'], 0]) %}
 <div class="shops-header" id="shop_header_div">
     {% if allowProfileEdit %}
         <div class="cover-img-overlay"> </div>
