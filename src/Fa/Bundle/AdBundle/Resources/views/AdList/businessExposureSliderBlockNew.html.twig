@@ -63,7 +63,7 @@
                                             
                                         </div>
                                         <div class="list-price">
-                                            {% if businessExposureUserAd['price'] is defined %}
+                                            {% if businessExposureUserAd['price'] is defined and businessExposureUserAd['price'] > 0 %}
                                                 {{ format_currency(businessExposureUserAd['price']) }}
                                                 {% if businessExposureUserAd['post_fix_text']|length %}
                                                     <span>{{ businessExposureUserAd['post_fix_text'] }}</span>
