@@ -15,8 +15,10 @@
     </div>   
    {{ form_start(form, {'attr': {'novalidate': '', 'id': 'cyber_source_form'}}) }} 
    <div class="modal-form-body">
+       <div class="row">
+           <div class="small-24 medium-24 large-24 columns">
    {% if individualUpsellArr|length %} 
-    	{% set upsellPrice = format_currency(individualUpsellArr['price']) %}              
+    	{% set upsellPrice = format_currency(individualUpsellArr['price']) %}
         <div class="small-24 medium-12 large-12 columns upsell-l-block">
             <div class="upsell-pkg-box">
 	        	<div class="upsell-pkg-inner-box">
@@ -76,6 +78,7 @@
                     {{ form_widget(form.save, {'attr': {'class':'button secondary-btn-1 expand mt20'}, 'label': 'Pay'}) }}
                 </div>               
 	    	</div>
+           </div></div>
 		</div>
 	{{ form_end(form) }}
 	<div class="clearfix"></div>

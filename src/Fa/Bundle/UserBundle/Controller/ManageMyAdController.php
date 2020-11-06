@@ -961,7 +961,7 @@ class ManageMyAdController extends CoreController
                                     $this->getEntityManager()->getConnection()->commit();
 
                                     $transcationsGaTag = array();
-                                    if($transactions) {
+                                    if($transactions && $transactions->getTransactionId()) {
                                         $transcationsGaTag  = $this->getRepository('FaPaymentBundle:Payment')->getTranscationDetailsForGA($transactions->getTransactionId(), $loggedinUser);
                                     }
 
