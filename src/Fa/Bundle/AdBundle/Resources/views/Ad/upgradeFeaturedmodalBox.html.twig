@@ -43,6 +43,9 @@
     <div class="row fa-equalizer" id="package_equalizer">
 {% if packages|length %}     
     {{ form_start(form, {'attr': {'novalidate': '', 'id': 'cyber_source_form'}}) }}  
+        <div class="row">
+            <div class="">
+
 
         {% for package in packages %}
             {% set packageValues = array_unserialize(package.getPackage().getValue()) %}
@@ -211,6 +214,7 @@
     <div id="payment-form">
    	    {{ include('FaAdBundle:Ad:upgradePaymentForm.html.twig', {'form': form }) }}
 	</div>
+
     <div class="payment-row">
 	    <div id="card_detail_save">
             <div class="payment-row">
@@ -222,6 +226,9 @@
             </div>
    	    </div>
     </div>
+    </div>
+    </div>
+
     <div class="mt20 mb20 remove-item-btn">
         <div class="row">
             <div class="columns">

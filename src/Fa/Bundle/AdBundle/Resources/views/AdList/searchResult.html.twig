@@ -401,7 +401,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                     {% for ad in userLiveBasicAd %}
                         {{ include('FaAdBundle:AdList:listDetail.html.twig', {'isLiveBasicAd': 1, 'isTopAd': 1}) }}
                     {% endfor %}
-                    <div id="upgradeBasicAdToFeaturedModal" class="reveal-modal tiny remove-item-modal upgrade-modal" data-reveal></div>
+                    <div id="upgradeBasicAdToFeaturedModal" class="reveal-modal medium remove-item-modal upgrade-modal" data-reveal></div>
                 {% endif %}
 
                 {% set adFavoriteAdIds = adFavoriteRepository.getFavoriteAdByUserId(userId, container) %}
