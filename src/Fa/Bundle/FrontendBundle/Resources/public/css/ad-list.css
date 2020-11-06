@@ -70,6 +70,8 @@
     border: none;
     padding: 0 !important;
     font: inherit;
+    position: absolute;
+    top: 45%;
 }
 .owl-carousel.owl-loading {
     opacity: 0;
@@ -194,7 +196,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 .bus-shop-user-item-slider h3 {float:none;font-size:14px !important;overflow:hidden;height: 45px !important;padding: 0px 10px !important; }
 
 .bus-shop-user-item-slider .owl-prev, .bus-shop-user-item-slider .owl-next {top:40%;position:absolute;width:40px}
-.bus-shop-user-item-slider .owl-item .item {margin:auto}
+.bus-shop-user-item-slider .owl-item .item {margin:auto;}
 .bus-shop-user-item-slider .owl-item .busad-item { width:164px;float:left;border:1px solid #eee;margin:0px 15px; }
 .bus-shop-user-item-slider .owl-item .busad-item:first-child { margin-left:15px; }
 .bus-shop-user-item-slider .owl-item .busad-item:last-child { margin-right:1px; }
