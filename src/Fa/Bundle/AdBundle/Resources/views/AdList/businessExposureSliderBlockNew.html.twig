@@ -1,0 +1,90 @@
+<div class="businessExposureCarousel">
+	<div class="listing-exposure">        
+        <div class="owl-carousel fa-slider bus-shop-user-item-slider" id="busshop-user-item-slider_{{ blockposition }}" data-equalizer>
+    {% for businessExposureUsersDetail in businessExposureUsersDetails %}       
+    {% if businessExposureUsersDetail is defined %}	
+    	{% set  businessExposureUserAds = businessExposureUsersDetail['businessExposureUserAds'] %}
+    	{% set  businessUserId = businessExposureUsersDetail['businessUserId'] %}
+    	{% set  businessUserDetail = businessExposureUsersDetail['businessUserDetail'] %}
+    	{% if businessExposureUserAds is defined and businessUserId is defined and businessUserDetail is defined and businessUserDetail|length %}
+            {% set profileLabel = 'Visit profile'|trans({}, 'frontend-profile-exposure') %}
+            {% if businessUserDetail['business_category_id'] is defined and businessUserDetail['business_category_id'] is not null %}
+                {% if businessUserDetail['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID')}  %}
+                    {% set profileLabel = 'Visit shop'|trans({}, 'frontend-profile-exposure') %}
+                {% elseif businessUserDetail['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID')}  %}
+                    {% set profileLabel = 'Visit dealership'|trans({}, 'frontend-profile-exposure') %}
+                {% elseif businessUserDetail['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID')}  %}
+                    {% set profileLabel = 'Visit agency'|trans({}, 'frontend-profile-exposure') %}
+                {% endif %}
+            {% endif %}
+            {% set gaEventLabel = businessUserDetail['user_name'] ~ ' - Business ad' %}            
+                <div class="list-featured-bz item" data-equalizer-watch>
+                    <div class="row">
+                        <div class="small-24 medium-24 large-24 columns">
+                        <div class="small-24  medium-5 large-5 columns bus-det-box">
+                            {% if businessUserDetail['business_category_id'] == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
+                                <div class="fad-shop-icon">AD SHOP</div>
+                            {% endif %}
+                            <a class="tricky-link" href="{{ user_profile_url }}" onClick='visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");'></a>
+                            <div class="exposure-logo">
+                                <div class="exposure-logo-thumb">
+                                    {{user_company_logo|raw}}
+                                </div>
+                            </div>
+                            
+                            <h2 class="text-center">{{businessUserDetail['user_name']}}</h2>
+                            
+                            <div class="exposure-rating">
+                            {% if (businessUserDetail and businessUserDetail['user_rating'] and businessUserDetail['user_rating'] > 0) %}
+                              {{ include('FaCoreBundle::showStarRating.html.twig', {'rating': businessUserDetail['user_rating']}) }}
+                            {% endif %}
+                            </div>                           
+                            <span class="button expand secondary-btn-1 mb0">{{ profileLabel }}</span>
+                        </div>
+                        <div class="medium-19 large-19 columns hide-for-small-only">
+                            <div>
+                                {% set adBusPosition = 1 %}
+                                {% set break = false %}
+                                {% for businessExposureUserAd in businessExposureUserAds if not break %}
+                                	{% if adBusPosition > 3 %} {% set break = true %} {% endif %}
+                                    {% set adCategoryId  = businessExposureUserAd['category_id'] %}
+
+                                    <div class="busad-item">
+                                    	<a href="{{ businessExposureUserAd['ad_url'] }}" class="tricky-link" style="width:auto !important;" onClick='javascript:visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");'></a>
+                                        {% set gaEventLabel = businessUserDetail['user_name'] ~ ' - ' ~ adBusPosition %}
+                                        
+                                        <div class="list-img {% if businessExposureUserAd['ad_img']|length == 0 %}similar-placeholder{% endif %}">
+                                            
+                                        {% if businessExposureUserAd['ad_img']|length %}
+                                                <img class="lazyOwl" src="{{ businessExposureUserAd['ad_img'] }}" alt="{{ businessExposureUserAd['img_alt'] }}"/>
+                                            {% else %}
+                                                <img class="lazyOwl" src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ businessExposureUserAd['img_alt'] }}"/>
+                                            {% endif %}
+                                            
+                                        </div>
+                                        <div class="list-price">
+                                            {% if businessExposureUserAd['price'] is defined %}
+                                                {{ format_currency(businessExposureUserAd['price']) }}
+                                                {% if businessExposureUserAd['post_fix_text']|length %}
+                                                    <span>{{ businessExposureUserAd['post_fix_text'] }}</span>
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>
+                                            <h3 style="color:#212527">{% if businessExposureUserAd['ad_title'] is defined %}
+                                               {{trim_text(businessExposureUserAd['ad_title'], 65)|raw}}
+                                           {% endif %}
+                                        </h3>
+                                    </div>
+                                    {% set adBusPosition = adBusPosition + 1 %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                 </div>  
+                 </div>              
+        {% endif %}    
+    {% endif %}
+    {% endfor %}
+     </div>
+            </div>
+</div>
