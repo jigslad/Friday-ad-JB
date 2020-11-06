@@ -222,16 +222,16 @@
                     {{ include('FaAdBundle:AdList:listDetailNew.html.twig', {'isFeatured' : true}) }}
                 {% endfor %}
 
+                {% if thisDevice == 'mobile' %}
+                    {% if (featuredAds|length >= 2) %}
+                        {% set bannerStatus = false %}
+                        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_ABOVE_RESULTS') %}
+                        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                    {% endif %}
+                {% endif %}
+
                 {% for ad in ads %}
                     {% set adCount = adCount + 1 %}
-
-                    {% if thisDevice == 'mobile' %}
-                        {% if (adCount >= 2) %}
-                            {% set bannerStatus = false %}
-                            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_ABOVE_RESULTS') %}
-                            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
-                        {% endif %}
-                    {% endif %}
 
                     {% if thisDevice == 'mobile' %}
                         {% if (adCount == 2 and resultCount > 2 and bannerStatus) %}

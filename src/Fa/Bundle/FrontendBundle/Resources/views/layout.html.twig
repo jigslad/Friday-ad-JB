@@ -16,10 +16,10 @@
 
     {% set container = fetch_container_instance() %}
     {% set currentRoute = app.request.attributes.get('_route') %}
-    {% if currentRoute != 'listing_page' %}
+    {#{% if currentRoute != 'listing_page' %}#}
         {% set bannerRepository = fetch_repository('FaContentBundle:Banner') %}
         {% set bannersArray = bannerRepository.getBannersArrayByPage(currentRoute, container) %}
-    {% endif %}
+    {#{% endif %}#}
     {% set blockDimension2 = block('dimension2') is defined ? block('dimension2')|trim : false %}
     {% set pushNotification = block('pushNotification') is defined ? block('pushNotification')|trim : false %}
     {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
