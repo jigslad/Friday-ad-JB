@@ -872,6 +872,8 @@ class AdRepository extends EntityRepository
         $document = $this->addField($document, 'upsells', [
             'boost' => $ad->getBoostedAt()
         ]);
+        $document = $this->addField($document, 'is_boosted', $ad->getIsBoosted());
+        $document = $this->addField($document, 'boosted_at', $ad->getBoostedAt());
 
         //ad user business category id
         //shop detail.
