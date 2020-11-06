@@ -110,11 +110,11 @@
                        			<option value="sel-basic"  {{ (filterBy=='sel-basic')?'selected':'' }}>Basic ads</option>
                        			<option value="sel-featured"  {{ (filterBy=='sel-featured')?'selected':'' }}>Featured ads</option>
                        		</select></div>
-                            {% if onlyActiveAdInPageCount > 0 and (currentRoute == 'manage_my_ads_active' or currentRoute == 'dashboard_home') %}
-                                    <div class="select-all-ads-active"><span class="all-sel-chkbox custom-checkbox"><input type="checkbox" class="boostad_selectall"></span> <span class="all-sel-text boostad_selectall"> {% if currentRoute == 'manage_my_ads_active' %}
-                                        Select all ads <span class="hide-for-small-only">on this page</span> ({{ onlyActiveAdInPageCount }})
-                                    {% endif %} </span></div>
-                            {% endif %}
+
+                            <div class="select-all-ads-active" style="{% if onlyActiveAdInPageCount > 0 and (currentRoute == 'manage_my_ads_active' or currentRoute == 'dashboard_home') %}{% else %}visibility:hidden{% endif %}"><span class="all-sel-chkbox custom-checkbox"><input type="checkbox" class="boostad_selectall"></span> <span class="all-sel-text boostad_selectall"> {% if currentRoute == 'manage_my_ads_active' %}
+                                Select all ads <span class="hide-for-small-only">on this page</span> ({{ onlyActiveAdInPageCount }})
+                            {% endif %} </span></div>
+
                        </div>
                        {% endif %} 
                            

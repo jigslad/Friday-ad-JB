@@ -43,6 +43,9 @@
     <div class="row fa-equalizer" id="package_equalizer">
 {% if packages|length %}     
     {{ form_start(form, {'attr': {'novalidate': '', 'id': 'cyber_source_form'}}) }}  
+        <div class="row">
+            <div class="">
+
 
         {% for package in packages %}
             {% set packageValues = array_unserialize(package.getPackage().getValue()) %}
@@ -206,12 +209,12 @@
                 	</li>
                 {% endfor %}
                 {% do attribute(form, 'payment_method').setRendered %}
-            </ul>            
-        </div>
+            </ul>
     </div>
     <div id="payment-form">
    	    {{ include('FaAdBundle:Ad:upgradePaymentForm.html.twig', {'form': form }) }}
 	</div>
+
     <div class="payment-row">
 	    <div id="card_detail_save">
             <div class="payment-row">
@@ -223,6 +226,9 @@
             </div>
    	    </div>
     </div>
+    </div>
+    </div>
+
     <div class="mt20 mb20 remove-item-btn">
         <div class="row">
             <div class="columns">
@@ -234,6 +240,7 @@
     </div>
 {{ form_end(form) }}
 {% endif %}
+    </div>
 </div>
     </div>
 <script src="{{ asset_url('fafrontend/js/jquery.equalizer.min.js') }}"></script>
@@ -299,6 +306,8 @@
     });
 
     $('#fa_payment_cyber_source_checkout_save').on('click', function () {
+        $(this).attr('disabled', true);
+        $('#cyber_source_form').submit();
         window.dataLayer = window.dataLayer || []
         dataLayer.push({
             'event' : 'Options',
