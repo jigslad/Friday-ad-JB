@@ -13,6 +13,7 @@ namespace Fa\Bundle\AdBundle\Controller;
 
 use Fa\Bundle\AdBundle\Form\AdLeftSearchNewType;
 use Fa\Bundle\ContentBundle\Repository\SeoToolRepository;
+use Fa\Bundle\EntityBundle\Entity\Entity;
 use Fa\Bundle\EntityBundle\Repository\CategoryDimensionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -946,8 +947,14 @@ class AdListController extends CoreController
             $root = $this->getRepository('FaEntityBundle:Category')->getRootNodeByCategory($category->getId());
             $repository = $this->getRepository('FaAdBundle:' . 'Ad' . str_replace(' ', '', $root->getName()));
             $listingFields = $repository->getAdListingFields();
+
             foreach ($searchableDimensions as $key => $dimension) {
-                $solrDimensionFieldName = $adRepository->getSolrFieldName($listingFields, str_replace([' ', '.'], ['_', ''], strtolower($dimension['name'])));
+                $nameInLowerCase = str_replace([' ', '.'], ['_', ''], strtolower($dimension['name']));
+                if ($nameInLowerCase == 'ad_type') {
+                    $solrDimensionFieldName = 'type_id';
+                } else {
+                    $solrDimensionFieldName = $adRepository->getSolrFieldName($listingFields, $nameInLowerCase);
+                }
                 $data['facet_fields'] = array_merge(
                     $data['facet_fields'],
                     [
@@ -956,7 +963,7 @@ class AdListController extends CoreController
                 );
 
                 $searchableDimensions[$key]['solr_field'] = $solrDimensionFieldName;
-                $searchableDimensions[$key]['dim_slug']   = str_replace([' ', '.'], ['_', ''], strtolower($dimension['name']));
+                $searchableDimensions[$key]['dim_slug']   = $nameInLowerCase;
             }
             $data['static_filters'] .= $static_filters = $this->setDimensionParams($data['search'], $listingFields, $adRepository);
         }
@@ -1347,6 +1354,7 @@ class AdListController extends CoreController
         $staticKeys = [
             'item__price_from',
             'item__price_to',
+            'item__ad_type_id',
             'ads_with_images',
             'expired_ads',
             'is_trade_ad',
@@ -1384,6 +1392,17 @@ class AdListController extends CoreController
                 $staticFilters .= ' AND status_id : ' . EntityRepository::AD_STATUS_EXPIRED_ID;
             } else if ($searchKey == 'is_trade_ad') {
                 $staticFilters .= ' AND is_trade_ad : ' . $searchItem;
+            } else if ($searchKey == 'item__ad_type_id') {
+                if (is_array($searchItem)) {
+                    $sf = [];
+                    foreach ($searchItem as $item) {
+                        $sf[] = 'type_id : ' . $item;
+                    }
+
+                    $staticFilters .= ' AND (' . implode(' OR ', $sf) .')';
+                } else {
+                    $staticFilters .= ' AND type_id : ' . $searchItem;
+                }
             } else if ($searchKey == 'item__distance' || $searchKey == 'map' || $searchKey == 'keywords') {
 
             } else {
@@ -1436,6 +1455,19 @@ class AdListController extends CoreController
                 }
 
                 $params[$paramname] = $selectedValue;
+            }
+        }
+
+        $adTypes = [];
+        if (in_array('type_id', array_column($dimensions, 'solr_field'))) {
+            $adTypesResult = $this->getRepository('FaEntityBundle:Entity')->getEntitiesByCategoryDimensionId(EntityRepository::AD_TYPE_ID);
+
+            $adTypes = [];
+            foreach ($adTypesResult as $adType) {
+                $adTypes[$adType->getId()] = [
+                    'name' => $adType->getName(),
+                    'slug' => $adType->getSlug()
+                ];
             }
         }
 
@@ -1582,14 +1614,21 @@ class AdListController extends CoreController
             $extendedFacetSet = [];
             if (isset($extendedFacetResult[$solrFieldName])) {
                 foreach($extendedFacetResult[$solrFieldName] as $jsonKey => $eFacetCount) {
-                    $entityValue = get_object_vars(json_decode($jsonKey));
+                    $value = json_decode($jsonKey);
+                    if (is_object($value)) {
+                        $entityValue = get_object_vars($value);
 
-                    $key = 'id';
-                    if (empty($entityValue[$key])) {
-                        $key = 'name';
+                        $key = 'id';
+                        if (empty($entityValue[$key])) {
+                            $key = 'name';
+                        }
+
+                        $extendedFacetSet[$solrFieldName][$entityValue[$key]] = $eFacetCount;
+                    } else {
+                        if ($dimension['id'] == EntityRepository::AD_TYPE_ID) {
+                            $extendedFacetSet[$solrFieldName][$jsonKey] = $eFacetCount;
+                        }
                     }
-
-                    $extendedFacetSet[$solrFieldName][$entityValue[$key]] = $eFacetCount;
                 }
             }
 
@@ -1601,40 +1640,67 @@ class AdListController extends CoreController
 
             if (! empty($facetArraySet)) {
                 foreach ($facetArraySet as $jsonValue => $facetCount) {
-                    try {
-                        $entityValue = get_object_vars(json_decode($jsonValue));
-                    } catch (\Exception $e) {
-                        continue;
-                    }
+                    $value = json_decode($jsonValue);
+                    if (is_object($value)) {
+                        $entityValue = get_object_vars($value);
 
-                    $key = 'id';
-                    if (empty($entityValue[$key])) {
-                        $key = 'name';
-                    }
+                        $key = 'id';
+                        if (empty($entityValue[$key])) {
+                            $key = 'name';
+                        }
 
-                    if (isset($extendedFacetSet[$solrFieldName]) && isset($extendedFacetSet[$solrFieldName][$entityValue[$key]])) {
-                        $facetCount += $extendedFacetSet[$solrFieldName][$entityValue[$key]];
-                    }
+                        if (isset($extendedFacetSet[$solrFieldName]) && isset($extendedFacetSet[$solrFieldName][$entityValue[$key]])) {
+                            $facetCount += $extendedFacetSet[$solrFieldName][$entityValue[$key]];
+                        }
 
-                    $isSelected = false;
-                    if (! empty($selected)) {
-                        if (is_array($selected)) {
-                            if (in_array($entityValue[$key], $selected) || in_array($entityValue['slug'], $selected)) {
-                                $isSelected = true;
+                        $isSelected = false;
+                        if (! empty($selected)) {
+                            if (is_array($selected)) {
+                                if (in_array($entityValue[$key], $selected) || in_array($entityValue['slug'], $selected)) {
+                                    $isSelected = true;
+                                }
+                            } else {
+                                if ($selected == $entityValue[$key]) {
+                                    $isSelected = true;
+                                }
                             }
-                        } else {
-                            if ($selected == $entityValue[$key]) {
-                                $isSelected = true;
+                        }
+
+                        $orderedDimensions[$dimension['id']][$entityValue[$key]] = array(
+                            'name' => $entityValue['name'],
+                            'slug' => isset($entityValue['slug']) ? $entityValue['slug'] : $entityValue['name'],
+                            'count' => $facetCount,
+                            'selected' => $isSelected
+                        );
+                    } else {
+                        if ($dimension['id'] == EntityRepository::AD_TYPE_ID) {
+                            $isSelected = false;
+                            if (! empty($selected)) {
+                                if (is_array($selected)) {
+                                    if (in_array($jsonValue, $selected)) {
+                                        $isSelected = true;
+                                    }
+                                } else {
+                                    if ($selected == $jsonValue) {
+                                        $isSelected = true;
+                                    }
+                                }
+                            }
+
+                            if (isset($extendedFacetSet[$solrFieldName]) && isset($extendedFacetSet[$solrFieldName][$jsonValue])) {
+                                $facetCount += $extendedFacetSet[$solrFieldName][$jsonValue];
+                            }
+
+                            if (isset($adTypes[$jsonValue])) {
+                                $orderedDimensions[$dimension['id']][$jsonValue] = array(
+                                    'name' => $adTypes[$jsonValue]['name'],
+                                    'slug' => $adTypes[$jsonValue]['slug'],
+                                    'count' => $facetCount,
+                                    'selected' => $isSelected
+                                );
                             }
                         }
                     }
-
-                    $orderedDimensions[$dimension['id']][$entityValue[$key]] = array(
-                        'name' => $entityValue['name'],
-                        'slug' => isset($entityValue['slug']) ? $entityValue['slug'] : $entityValue['name'],
-                        'count' => $facetCount,
-                        'selected' => $isSelected
-                    );
                 }
             }
 
@@ -1650,7 +1716,7 @@ class AdListController extends CoreController
                         }
                     }
                     $newData['static_filters'] = $newStaticFilters;
-                    $data['facet_fields'] = array(
+                    $newData['facet_fields'] = array(
                         $solrFieldName => array('min_count' => 1)
                     );
                 }
@@ -1661,19 +1727,34 @@ class AdListController extends CoreController
                 if (! empty($facetDimResult)) {
                     $facetDimResult = $facetDimResult[$solrFieldName];
                     foreach ($facetDimResult as $jsonValue => $facetCount) {
-                        $entityValue = get_object_vars(json_decode($jsonValue));
-                        $key = 'id';
-                        if (empty($entityValue['id'])) {
-                            $key = 'name';
-                        }
+                        $value = json_decode($jsonValue);
 
-                        if (! isset($orderedDimensions[$dimension['id']][$entityValue[$key]])) {
-                            $orderedDimensions[$dimension['id']][$entityValue[$key]] = array(
-                                'name' => $entityValue['name'],
-                                'slug' => isset($entityValue['slug']) ? $entityValue['slug'] : $entityValue['name'],
-                                'count' => $facetCount,
-                                'selected' => false
-                            );
+                        if (is_object($value)) {
+                            $entityValue = get_object_vars($value);
+                            $key = 'id';
+                            if (empty($entityValue['id'])) {
+                                $key = 'name';
+                            }
+
+                            if (! isset($orderedDimensions[$dimension['id']][$entityValue[$key]])) {
+                                $orderedDimensions[$dimension['id']][$entityValue[$key]] = array(
+                                    'name' => $entityValue['name'],
+                                    'slug' => isset($entityValue['slug']) ? $entityValue['slug'] : $entityValue['name'],
+                                    'count' => $facetCount,
+                                    'selected' => false
+                                );
+                            }
+                        } else {
+                            if ($dimension['id'] == EntityRepository::AD_TYPE_ID) {
+                                if (isset($adTypes[$jsonValue])) {
+                                    $orderedDimensions[$dimension['id']][$jsonValue] = array(
+                                        'name' => $adTypes[$jsonValue]['name'],
+                                        'slug' => $adTypes[$jsonValue]['slug'],
+                                        'count' => $facetCount,
+                                        'selected' => false
+                                    );
+                                }
+                            }
                         }
                     }
                 }
