@@ -47,6 +47,7 @@ class UpdateAdSolrIndexNewCommand extends ContainerAwareCommand
         ->addOption('user_id', null, InputOption::VALUE_OPTIONAL, 'User id', null)
         ->addOption('town_id', null, InputOption::VALUE_OPTIONAL, 'Town id', null)
         ->addOption('last_days', null, InputOption::VALUE_OPTIONAL, 'add or update for last few days only', null)
+        ->addOption('boosted_only', null, InputOption::VALUE_OPTIONAL, 'Only Boosted ads', null)
         ->setHelp(
             <<<EOF
 Cron: To be setup to run at mid-night.
@@ -99,6 +100,7 @@ EOF
         $lastDays = $input->getOption('last_days');
         $userId = $input->getOption('user_id');
         $townId = $input->getOption('town_id');
+        $boostedAd = $input->getOption('boosted_only');
 
         $categoryIds = array();
 
@@ -177,8 +179,11 @@ EOF
                 $searchParam['ad']['town_id'] = $townId;
             }
 
+            if (! empty($boostedAd)) {
+                $searchParam['ad']['boosted_at'] = 'IS NOT NULL';
+            }
 
-            //$searchParam['ad']['is_blocked_ad'] = 0;
+            $searchParam['ad']['is_blocked_ad'] = 0;
 
             if (isset($offset)) {
                 $this->updateSolrIndexWithOffset($solrClient, $searchParam, $input, $output);
@@ -220,6 +225,10 @@ EOF
         $qb          = $this->getAdQueryBuilder($searchParam);
         $step        = 200;
         $offset      = $input->getOption('offset');
+
+        if (isset($searchParam['ad']['boosted_at'])) {
+            $qb->andWhere(AdRepository::ALIAS . '.boosted_at IS NOT NULL');
+        }
 
         $qb->setFirstResult($offset);
         $qb->setMaxResults($step);

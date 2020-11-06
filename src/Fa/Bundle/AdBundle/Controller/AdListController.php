@@ -748,12 +748,14 @@ class AdListController extends CoreController
                 unset($data['query_sorter']['item']['weekly_refresh_published_at']);
             }
 
+            $data['query_sorter']['item']['boosted_at'] = array('sort_ord' => 'desc', 'field_ord' => 1);
+
             if (isset($data['search']['item__category_id']) && $data['search']['item__category_id']) {
                 $parentCategoryIds = array_keys($this->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($data['search']['item__category_id'], false, $this->container));
             }
 
             if (!$hasSortField && isset($parentCategoryIds[1]) && $parentCategoryIds[1] == CategoryRepository::WHATS_ON_ID) {
-                $data['query_sorter']['ad_community']['event_start'] = array('sort_ord' => 'asc', 'field_ord' => 1);
+                $data['query_sorter']['ad_community']['event_start'] = array('sort_ord' => 'asc', 'field_ord' => 2);
             } else {
                 if ((!isset($data['search']['item__distance']) || (isset($data['search']['item__distance']) && $data['search']['item__distance'] >= 0 && $data['search']['item__distance'] <= CategoryRepository::MAX_DISTANCE))) {
                     if (is_array($cookieLocationDetails) &&
@@ -764,13 +766,13 @@ class AdListController extends CoreController
                     }
                 }
                 if (isset($data['search']['keywords']) && strlen(trim($data['search']['keywords']))) {
-                    $data['query_sorter']['item']['score'] = array('sort_ord' => 'desc', 'field_ord' => 4);
+                    $data['query_sorter']['item']['score'] = array('sort_ord' => 'desc', 'field_ord' => 5);
                 }
 
-                $data['query_sorter']['item']['created_at'] = array('sort_ord' => 'desc', 'field_ord' => 1);
-                $data['query_sorter']['item']['weekly_refresh_published_at'] = array('sort_ord' => 'desc', 'field_ord' => 2);
+                $data['query_sorter']['item']['created_at'] = array('sort_ord' => 'desc', 'field_ord' => 2);
+                $data['query_sorter']['item']['weekly_refresh_published_at'] = array('sort_ord' => 'desc', 'field_ord' => 3);
             }
-            $data['query_sorter']['item']['is_topad'] = array('sort_ord' => 'desc', 'field_ord' => 3);
+            $data['query_sorter']['item']['is_topad'] = array('sort_ord' => 'desc', 'field_ord' => 4);
         }
 
         //set default sorting for map
