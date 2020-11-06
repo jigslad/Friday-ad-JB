@@ -742,9 +742,9 @@ footer a:hover, .footer-head:hover, .pkg-includes a {
 }
 @media only screen and (max-width: 640px) {
     .help-links {
-        margin: 10px 0px 0 !important !important;
-        column-count: 1 !important !important;
-        width: 100% !important !important;
+        margin: 10px 0px 0 !important;
+        column-count: 1 !important;
+        width: 100% !important;
     }
    .paa-footer-links { column-count: 2; }                   
    .big-wrapper { width: auto !important;}  
@@ -2672,8 +2672,8 @@ a {
   }
 
   .adul-tagline-text {
-    font-size: 28px !important !important;
-    line-height: 24px !important !important;
+    font-size: 28px !important;
+    line-height: 24px !important;
     margin-top: 10px !important;
   }
 
@@ -3420,4 +3420,34 @@ h1.paa-title{
 }
 .fad-sign-bdr{
   display: none;
+}
+.textbox-wrapper {
+  display: inline-block;
+  position: relative;
+  width: 300px;
+  height: 56px;
+  margin-bottom: 8px;
+  border: 4px solid rgba(156, 31, 159,0.3);
+  border-radius: 8px;
+}
+#fa_paa_category_select_category_id_autocomplete {
+  border: 1px solid #EAEFF0;
+  background-color: #fff;
+  height: 48px;
+  width: 292px;
+}
+#fa_paa_category_select_category_id_autocomplete:focus {
+  border: 1px solid #9C1F9F !important;
+  background-color: #fff;
+}
+.textbox-wrapper .ui-autocomplete-close {
+  top: 19px;
+}
+@media only screen and (min-width:768px) {
+  #fa_paa_category_select_category_id_autocomplete {
+    width: 340px;
+  }
+  .textbox-wrapper {
+    width: 348px;
+  }
 }
