@@ -227,7 +227,7 @@ EOF
         $offset      = $input->getOption('offset');
 
         if (isset($searchParam['ad']['boosted_at'])) {
-            $qb->andWhere(AdRepository::ALIAS . '.boosted_at IS NOT NULL');
+            $qb->andWhere(AdRepository::ALIAS . '.boosted_at IS NOT NULL AND ' . AdRepository::ALIAS . '.boosted_at > 0');
         }
 
         $qb->setFirstResult($offset);
