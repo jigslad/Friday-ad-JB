@@ -1358,7 +1358,15 @@ class AdListController extends CoreController
         if (isset($searchParams['sort_field'])) unset($searchParams['sort_field']);
 
         if ($searchParams['item__location'] != LocationRepository::COUNTY_ID) {
-            $staticFilters = ' AND (town: *\:' . $searchParams['item__location'] . '\,* OR domicile: *\:' . $searchParams['item__location'] . '\,* OR locality: *\:' . $searchParams['item__location'] . '\,*)';
+            $location = $this->getRepository('FaEntityBundle:Location')->find($searchParams['item__location']);
+
+            $radius = '200';
+            if (isset($searchParams['item__distance'])) {
+                $radius = $searchParams['item__distance'];
+            }
+
+            $staticFilters = ' AND ((town: *\:' . $searchParams['item__location'] . '\,* OR domicile: *\:' . $searchParams['item__location'] . '\,* OR locality: *\:' . $searchParams['item__location'] . '\,*)';
+            $staticFilters .= ' OR ({!geofilt pt='.$location->getLatitude().','.$location->getLongitude().' sfield=store d='.$radius.'}))';
         } else {
             $staticFilters = '';
         }
