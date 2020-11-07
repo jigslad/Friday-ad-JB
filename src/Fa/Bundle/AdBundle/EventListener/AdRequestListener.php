@@ -500,18 +500,24 @@ class AdRequestListener
                                 
                 $catObj = $this->getMatchedCategory($categoryText);
                 $this->getCatRedirects($redirectString, $categoryText, $locationId, $request, $event);
-                                
                 if ($catObj) {
                     $this->getCatRedirects($redirectString, $catObj['full_slug'], $locationId, $request, $event);
                     /*if($catObj['status']!=1) {
                         $this->redirectParentCatUrls($redirectString,$catObj['id'], $locationId, $request, $event);
                     } */
-                    
+
                     $check = false;
                     $request->attributes->set('cat_full_slug', $catObj['full_slug']);
                     //$categoryText = $catObj['full_slug'].'/';
-                    
+
                     //$parent   = $this->getFirstLevelParent($catObj['id']);
+
+                    if (! isset($searchParams['item__category_id'])) {
+                        $searchParams['item__category_id'] = $catObj['id'];
+                    }
+                    if (! isset($searchParams['item__location'])) {
+                        $searchParams['item__location'] = $locationId;
+                    }
 
                     $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
                     if ($request->get('item__distance')) {
@@ -519,7 +525,6 @@ class AdRequestListener
                     } else {
                         $searchParams['item__distance']  =  ($getDefaultRadius)?$getDefaultRadius:'';
                     }
-
                     /*if (($catObj['id'] == CategoryRepository::MOTORS_ID) || ($parent['id'] == CategoryRepository::MOTORS_ID)) {
                         $queryParams['item__distance']  =  $request->get('item__distance') == '' ? CategoryRepository::MOTORS_DISTANCE : $request->get('item__distance');
                     } else {
@@ -529,19 +534,21 @@ class AdRequestListener
                     //check location belongs to area
                     if (preg_match('/^\d+$/', $locationId) && is_null($request->get('item__distance'))) {
                         $isLocationArea = $this->em->getRepository('FaEntityBundle:Location')->find($locationId);
-                        if (!empty($isLocationArea) && $isLocationArea && $isLocationArea->getLvl() == '4' && isset($queryParams['item__distance'])) {                            
+                        if (!empty($isLocationArea) && $isLocationArea && $isLocationArea->getLvl() == '4' && isset($queryParams['item__distance'])) {
                             $queryParams['item__distance'] = $queryParams['item__distance']/CategoryRepository::AREA_DISTANCE_DIVISION;
                         }
                     }
 
                     if (isset($searchParams['item__distance'])) {
                         $request->attributes->set('finders', array_merge($queryParams, array('item__distance' => $searchParams['item__distance'])));
+                        $queryParams = $request->attributes->get('finders');
                     }
-                    
+
                     $request->attributes->set('finders', array_merge($queryParams, array('item__category_id' => $catObj['id'], 'item__location' => $locationId)));
                 } else {
                     $request->attributes->set('finders', array_merge($queryParams, array('item__location' => $locationId)));
                 }
+
 
                 if (!strpos($categoryText, '/')) {
                     $check = false;
