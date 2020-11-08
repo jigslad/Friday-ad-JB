@@ -5592,6 +5592,7 @@ ul.off-canvas-list {
 
 /* Foundation Dropdowns */
 .f-dropdown {
+  width: auto;
   position: absolute;
   left: -9999px;
   list-style: none;
