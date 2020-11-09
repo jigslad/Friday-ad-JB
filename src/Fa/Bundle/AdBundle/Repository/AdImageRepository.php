@@ -377,7 +377,7 @@ class AdImageRepository extends EntityRepository
         foreach ($images as $key => $image) {
             $smallImage = CommonManager::getAdImageUrl($container, $ad->getId(), $image->getPath(), $image->getHash(), '300X225', $image->getAws(), ($image->getImageName()=='' ? $image->getHash() : $image->getImageName()));
             if ($smallImage != $container->getParameter('fa.static.shared.url').'/bundles/fafrontend/images/no-image-grey.svg') {
-                $indexableImages[] = [
+                $indexableImages[$key] = [
                     'small' => $smallImage,
                     'original' => CommonManager::getAdImageUrl($container, $ad->getId(), $image->getPath(), $image->getHash(), null, $image->getAws(), ($image->getImageName() == '' ? $image->getHash() : $image->getImageName())),
                     'medium' => CommonManager::getAdImageUrl($container, $ad->getId(), $image->getPath(), $image->getHash(), '800X600', $image->getAws(), ($image->getImageName() == '' ? $image->getHash() : $image->getImageName())),

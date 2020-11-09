@@ -793,7 +793,7 @@ class SolrSearchManager
     protected function addFilters($filters = array())
     {
         if (count($filters)) {
-            if ($this->solrCoreName == 'ad.new') {
+            /*if ($this->solrCoreName == 'ad.new') {
                 if (isset($filters['item']['distance'])) {
                     $serviceName = 'fa.ad.solrsearch';
                     if ($this->container->has($serviceName)) {
@@ -807,7 +807,7 @@ class SolrSearchManager
                         }
                     }
                 }
-            } else {
+            } else {*/
                 foreach (array_keys($filters) as $service) {
                     $filters[$service] = array_filter($filters[$service], array($this, 'filterEmptyValues'));
                     if (count($filters[$service])) {
@@ -825,7 +825,7 @@ class SolrSearchManager
                         }
                     }
                 }
-            }
+            /*}*/
         }
     }
 
