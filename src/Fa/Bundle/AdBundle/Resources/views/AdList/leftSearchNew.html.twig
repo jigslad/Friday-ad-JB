@@ -219,8 +219,21 @@
     </div>
 {{ form_end(leftFilters.form) }}
 <script>
-    function formulate_photo_url() {
+    function getPageUrl() {
         let url = window.location.href;
+        let pageIndex = url.indexOf('/page-');
+
+        if (pageIndex != -1) {
+            let endIndex = url.indexOf('/', pageIndex + 1);
+            let searchString = url.substring(pageIndex, endIndex + 1);
+            url = url.replace(searchString, '/');
+        }
+
+        return url;
+    }
+
+    function formulate_photo_url() {
+        let url = getPageUrl();
         if ($('#fa_left_search_new_item__price_from').val()) {
             let url_string = 'item__price_from=' + $('#fa_left_search_new_item__price_from').val();
             if (url.indexOf('?') != -1) {
@@ -243,19 +256,38 @@
     }
 
     function formulate_location_url() {
-        let url = window.location.href;
+        let url = getPageUrl();
         if ($('#fa_left_search_new_item__location_autocomplete').val() != "United Kingdom") {
-            let value = $('#fa_left_search_new_item__location_autocomplete').val().toLowerCase();
-            value = value.replace(' ', '_');
+            let value = $('#fa_left_search_new_item__location').val();
 
             url = url.replace('/{{ currentLocation }}/', '/'+value+'/');
 
             if ($('#fa_left_search_new_item__distance').val() != 200) {
-                let url_string = 'item__distance=' + $('#fa_left_search_new_item__distance').val();
+                let url_param = 'item__distance=' + $('#fa_left_search_new_item__distance').val();
                 if (url.indexOf('?') != -1) {
-                    url += '&' + url_string;
+                    let url_string = url.split('?');
+                    url = url_string[0];
+                    url_string = url_string[1];
+
+                    let distance_index = url_string.indexOf('item__distance');
+                    if (distance_index != -1) {
+                        let end_position = url_string.indexOf('&', distance_index);
+                        if (end_position == -1) {
+                            end_position = url_string.length;
+                        }
+
+                        let search_string = url_string.substring(distance_index, end_position);
+                        url_string = url_string.replace(search_string, '');
+                        if (url_string.length <= 1) {
+                            url += '?' + url_param;
+                        } else {
+                            url += '&' + url_param;
+                        }
+                    } else {
+                        url += '&' + url_param;
+                    }
                 } else {
-                    url += '?' + url_string;
+                    url += '?' + url_param;
                 }
             }
 
@@ -301,7 +333,7 @@
     $(document).ready(function() {
 
         $('a[data-parent-href]').each(function() {
-            let href = window.location.href;
+            let href = getPageUrl();
             let this_url = $(this).attr('data-parent-href');
             if (href.indexOf('#')) {
                 let _var = href.split('#');
@@ -330,7 +362,7 @@
         });
 
         $('a[data-href]').each(function() {
-            let href = window.location.href;
+            let href = getPageUrl();
             let this_url = $(this).attr('data-href');
             if (href.indexOf('#')) {
                 let _var = href.split('#');
@@ -420,7 +452,7 @@
         });
 
         $('a[data-location-href]').each(function() {
-            let href = window.location.href;
+            let href = getPageUrl();
 
             let new_url = href.replace('/{{ currentLocation }}/', '/'+$(this).attr('data-location-href')+'/');
             $(this).attr('href', new_url);
@@ -442,7 +474,7 @@
 
         $('.clear_filter').each(function() {
             if ($(this).closest('.towns-list').length) {
-                let url = window.location.href;
+                let url = getPageUrl();
 
                 url = url.replace('/{{ currentLocation }}/', '/uk/');
 
