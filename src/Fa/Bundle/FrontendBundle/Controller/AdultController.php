@@ -180,7 +180,7 @@ class AdultController extends ThirdPartyLoginController
             }
         }
 
-        $locationId = '';
+        $locationId = LocationRepository::COUNTY_ID;
         if (! empty($cookieLocationDetails) && ! empty($cookieLocationDetails['location'])) {
             $locationId = $cookieLocationDetails['location'];
         }
@@ -227,7 +227,6 @@ class AdultController extends ThirdPartyLoginController
     {
         $categories = $constants = [];
         $adRoutingManager = $this->container->get('fa_ad.manager.ad_routing');
-
         $constants = [
             'categoryAdultId'       => CategoryRepository::ADULT_ID,
             'escortServicesId'      => CategoryRepository::ESCORT_SERVICES_ID
