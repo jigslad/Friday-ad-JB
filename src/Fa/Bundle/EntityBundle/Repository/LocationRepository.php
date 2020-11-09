@@ -246,7 +246,7 @@ class LocationRepository extends BaseEntityRepository
         
         $areaArray = array();
         foreach ($areas as $area) {
-            $areaArray[] = array('id'=> $area->getParent()->getId(), 'text' => $area->getName().', '.$area->getParent()->getName(), 'area_id'=> $area->getId(), 'locationBy' => 'area', 'latlong' => $area->getLatitude().', '.$area->getLongitude());
+            $areaArray[] = array('id'=> $area->getParent()->getId(), 'text' => $area->getName().', '.$area->getParent()->getName(), 'area_id'=> $area->getId(), 'locationBy' => 'area', 'latlong' => $area->getLatitude().', '.$area->getLongitude(), 'slug' => $area->getUrl());
         }
         
         return $areaArray;
