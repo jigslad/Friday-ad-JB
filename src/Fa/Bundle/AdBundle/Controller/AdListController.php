@@ -1393,8 +1393,11 @@ class AdListController extends CoreController
                 $radius = $searchParams['item__distance'];
             }
 
-            $staticFilters = ' AND ((town: *\:' . $searchParams['item__location'] . '\,* OR domicile: *\:' . $searchParams['item__location'] . '\,* OR locality: *\:' . $searchParams['item__location'] . '\,*)';
-            $staticFilters .= ' OR ({!geofilt pt='.$location->getLatitude().','.$location->getLongitude().' sfield=store d='.$radius.'}))';
+            if (empty($location->getLatitude()) && empty($location->getLongitude())) {
+                $staticFilters = ' AND (town: *\:' . $searchParams['item__location'] . '\,* OR domicile: *\:' . $searchParams['item__location'] . '\,* OR locality: *\:' . $searchParams['item__location'] . '\,*)';
+            } else {
+                $staticFilters = ' AND ({!geofilt pt='.$location->getLatitude().','.$location->getLongitude().' sfield=store d='.$radius.'})';
+            }
         } else {
             $staticFilters = '';
         }
