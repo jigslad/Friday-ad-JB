@@ -748,7 +748,8 @@ class AdListController extends CoreController
                 unset($data['query_sorter']['item']['weekly_refresh_published_at']);
             }
 
-            $data['query_sorter']['item']['boosted_at'] = array('sort_ord' => 'desc', 'field_ord' => 1);
+            $data['query_sorter']['item']['weekly_refresh_published_at'] = array('sort_ord' => 'desc', 'field_ord' => 1);
+            $data['query_sorter']['item']['boosted_at'] = array('sort_ord' => 'desc', 'field_ord' => 2);
 
             if (isset($data['search']['item__category_id']) && $data['search']['item__category_id']) {
                 $parentCategoryIds = array_keys($this->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($data['search']['item__category_id'], false, $this->container));
@@ -769,8 +770,7 @@ class AdListController extends CoreController
                     $data['query_sorter']['item']['score'] = array('sort_ord' => 'desc', 'field_ord' => 5);
                 }
 
-                $data['query_sorter']['item']['created_at'] = array('sort_ord' => 'desc', 'field_ord' => 2);
-                $data['query_sorter']['item']['weekly_refresh_published_at'] = array('sort_ord' => 'desc', 'field_ord' => 3);
+                $data['query_sorter']['item']['created_at'] = array('sort_ord' => 'desc', 'field_ord' => 3);
             }
             $data['query_sorter']['item']['is_topad'] = array('sort_ord' => 'desc', 'field_ord' => 4);
         }
@@ -2489,18 +2489,8 @@ class AdListController extends CoreController
             // if 1st level category is what's on then sort by event end.
             if (!$hasSortField && isset($parentCategoryIds[1]) && $parentCategoryIds[1] == CategoryRepository::WHATS_ON_ID) {
                 $data['query_sorter']['ad_community']['event_start'] = array('sort_ord' => 'asc', 'field_ord' => 1);
-            } /*elseif (!$hasSortField && isset($parentCategoryIds[0]) && $parentCategoryIds[0] == CategoryRepository::SERVICES_ID) {
-                //if service category then sort by nearest first else by rating
-                if (isset($data['search']['item__location']) && $data['search']['item__location'] != LocationRepository::COUNTY_ID && (!isset($data['search']['item__distance']) || (isset($data['search']['item__distance']) && $data['search']['item__distance'] >= 0 && $data['search']['item__distance'] <= 200))) {
-                    $data['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
-                    $request->attributes->set('sort_field', 'item__geodist');
-                    $request->attributes->set('sort_ord', 'asc');
-                } else {
-                    $data['query_sorter']['user']['rating'] = array('sort_ord' => 'desc', 'field_ord' => 1);
-                    $request->attributes->set('sort_field', 'user__rating');
-                    $request->attributes->set('sort_ord', 'desc');
-                }
-            }*/ else {
+            }
+            else {
             if ((!isset($data['search']['item__distance']) || (isset($data['search']['item__distance']) && $data['search']['item__distance'] >= 0 && $data['search']['item__distance'] <= CategoryRepository::MAX_DISTANCE))) {
                     if (is_array($cookieLocationDetails) &&
                        (!isset($cookieLocationDetails['latitude']) || !$cookieLocationDetails['latitude']) &&
