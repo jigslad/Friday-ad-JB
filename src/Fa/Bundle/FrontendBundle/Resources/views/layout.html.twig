@@ -16,7 +16,6 @@
 {% set pushNotification = block('pushNotification') is defined ? block('pushNotification')|trim : false %}
 {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
 {% set paginationHead = block('pagination_head') is defined ? block('pagination_head')|trim : false %}
-
 {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
 {% set currentDevice = 'D' %}
 {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
@@ -155,10 +154,23 @@
         {% endif %}                
     {% endif %}	
             
-    {% if currentRoute=='fa_adult_homepage' or currentRoute=='fa_new_adult_homepage' %}
+    {% if (currentRoute in {0: 'fa_adult_homepage', 1:'fa_new_adult_homepage'}) %}
     	{% set showAdultPages=1 %}
     {% endif %}
-        
+
+    {% if keywordCategoryIds is defined %}
+        {% if constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') in keywordCategoryIds %}
+            {% set showAdultPages=1 %}
+        {% else %}
+            {% set showAdultPages=0 %}
+        {% endif %}
+    {% endif %}
+
+    {% if (showAdultPages==1 and (currentRoute in {0: 'fa_adult_homepage', 1:'fa_new_adult_homepage', 2:'ad_detail_page', 3:'listing_page', 4:'my_account'})) %}
+        {% set showAdultPages=1 %}
+    {% else %}
+        {% set showAdultPages=0 %}
+    {% endif %}
 
     {{ include('FaFrontendBundle::scriptTop.html.twig') }}
     {% block scripttop %}{% endblock %}
@@ -171,7 +183,24 @@
 	{% else %}
 
 	{% endif %}
-    
+
+    <script>
+
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+
+    </script>
+
+    {% if otherblockPageTitle is defined %}
+        <script language="javascript" type="text/javascript">
+            googletag.cmd.push(function() {
+                googletag.pubads().setTargeting('page_type', '{{ otherblockPageTitle }}').setTargeting('adBlocker', false).setTargeting('user_logged', {% if (app.user.getId() is not defined or app.user.getId() is null) %} false {% else %}true{% endif %});
+                googletag.enableServices();
+            });
+        </script>
+    {% else %}
+        {{ include('FaFrontendBundle::gtmCode.html.twig') }}
+    {% endif %}
     {% block blockGaCode%}
         {{ include('FaFrontendBundle::gaCode.html.twig') }}
     {% endblock %}

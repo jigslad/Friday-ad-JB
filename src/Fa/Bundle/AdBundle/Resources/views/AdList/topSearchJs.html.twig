@@ -35,9 +35,14 @@
                 })
             });
         }
-    
+
+        let defRadius = 15;
+        {% if searchParams.item__distance is defined and searchParams.item__distance is not null %}
+            defRadius = {{ searchParams.item__distance }};
+        {% endif %}
+
         $('#distance_slider').noUiSlider({
-            start: [ 15 ],
+            start: [ defRadius ],
             range: {
                 'min': [0, 2],
                 '5%':  [2, 3],
@@ -91,7 +96,7 @@
                 
         $('#price_slider').val([$('#fa_top_search_item__price_from').val(), $('#fa_top_search_item__price_to').val()]);
         //setDistanceByCategoryId('', true);
-		setDistance();
+		//setDistance();
         if ($('#price_slider').length) {
             setAndMoveSliderCaption('price_slider', 'lower', 'price_from', false);
             setAndMoveSliderCaption('price_slider', 'upper', 'price_to', false);

@@ -732,6 +732,23 @@ class AdRoutingManager
     }
 
     /**
+     * @param $categoryString
+     * @param $locationString
+     * @param $adString
+     * @param $adId
+     * @return mixed
+     */
+    public function getAdDetailUrlByDetails($categoryString, $locationString, $adString, $adId)
+    {
+        return $this->router->generate('ad_detail_page', array(
+            'location'        => $locationString,
+            'ad_string'       => $adString,
+            'category_string' => $categoryString,
+            'id'              => $adId,
+        ), true);
+    }
+
+    /**
      * set dimension orders
      */
     private function setDimensionOrder()

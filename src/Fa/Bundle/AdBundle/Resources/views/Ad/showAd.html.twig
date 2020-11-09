@@ -166,7 +166,12 @@
         {% set userTypeText = 'Private ad' %}
     {% endif %}
 {% endif %}
-    
+
+{% if feed_expired_ad is defined %}
+    {% set feedStatusDescription = '<p><b>SOLD! No longer available.</b></p>' ~ attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) %}
+    {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), feedStatusDescription) %}
+{% endif %}
+
 {% block facebook_meta %}
     {% set adUrl = container.get('fa_ad.manager.ad_routing').getDetailUrl(adDetail) %}
     <meta property="og:url" content="{{ adUrl }}" />
@@ -924,7 +929,91 @@
     {% endif %}
 {% endblock %}
 
+{% set locationRepository = fetch_repository('FaEntityBundle:Location') %}
+{% if adDetail.a_l_main_town_id_i is defined %}
+    {% set locDet = locationRepository.find(adDetail.a_l_main_town_id_i)%}
+    {% set town = locDet.name %}
+    {% set lvl = locDet.lvl %}
+    {% set county = locationRepository.getCountyByTownId(adDetail.a_l_main_town_id_i)%}
+    {% set locationGroupRepository = fetch_repository('FaEntityBundle:LocationGroup') %}
+    {% set locationGroup = locationGroupRepository.getLocationGroupByLocation(adDetail.a_l_main_town_id_i) %}
+{% else %}
+    {% set town = 'null' %}
+    {% set lvl = 'null' %}
+    {% set county = 'null' %}
+    {% set locationGroup = '' %}
+{% endif %}
 
+{% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(adCategoryId, false, fetch_container_instance()) %}
+
+{% set dimension6 = '' %}
+{% set catArr =  {} %}
+{% if categoryPath|length %}
+    {% set dimension6 = categoryPath|join(':') %}
+    {% set catArr = dimension6|split(':')  %}
+{% endif %}
+
+{% set is_business_seller = 'false' %}
+{% if adDetail['user']['business_category_id'] is defined and adDetail['user']['business_category_id'] is not null %}
+    {% set is_business_seller = 'true' %}
+{% endif %}
+
+{% set _logged_in = 'true' %}
+{% if app.user.getId() is not defined or app.user.getId() is null %}
+    {% set _logged_in = 'false' %}
+{% endif %}
+
+{% set userTypePubAds = 'Others' %}
+{% if adDetail['user']['role_id'] is defined %}
+    {% set userTypePubAds = 'Private' %}
+    {% if (adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
+        {% set userTypePubAds = 'Dealer' %}
+        {% if adDetail['user']['business_category_id'] is defined and adDetail['user']['business_category_id'] is not null %}
+            {% if adDetail['user']['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID')}  %}
+                {% set userTypePubAds = 'Shop' %}
+            {% elseif adDetail['user']['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID')}  %}
+                {% set userTypePubAds = 'Recruiter' %}
+            {% endif %}
+        {% endif %}
+    {% endif %}
+{% endif %}
+
+{% set contactMethods = '' %}
+{% if adDetail['user'] is defined and adDetail['user']['contact_through_email'] == 1 %}
+    {% set contactMethods = contactMethods ~ 'Email' %}
+{% endif %}
+{% if (adDetail['user'] is defined and adDetail['user']['contact_through_phone'] == 1) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) %}
+    {% if contactMethods != '' %}
+        {% set contactMethods = contactMethods ~ '|Phone' %}
+    {% else %}
+        {% set contactMethods = contactMethods ~ 'Phone' %}
+    {% endif %}
+{% endif %}
+
+{%  set targetCat = '' %}
+{%  set targetClass = '' %}
+{%  set targetSubClass = '' %}
+{%  set targetSubSubClass = '' %}
+
+{% if catArr is defined %}
+    {% if catArr[0] is defined %}
+        {%  set targetCat = catArr[0] %}
+    {% endif %}
+    {% if catArr[1] is defined %}
+        {%  set targetClass = catArr[1] %}
+    {% endif %}
+    {% if catArr[2] is defined %}
+        {%  set targetSubClass = catArr[2] %}
+    {% endif %}
+    {% if catArr[3] is defined %}
+        {%  set targetSubSubClass = catArr[3] %}
+    {% endif %}
+{% endif %}
+
+{% set targetAdPrice = '' %}
+{% if attribute(adDetail, constant(solrMapping ~ 'PRICE')) is defined %}
+    {% set targetAdPrice = attribute(adDetail, constant(solrMapping ~ 'PRICE')) %}
+{% endif %}
 
 {% block scriptbottom %}
     {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
@@ -1747,28 +1836,19 @@
     {% endif %}
 
     {# Location @Jigar Lad #}
-    {% set locationReposetry = fetch_repository('FaEntityBundle:Location') %}
-    {% if adDetail.a_l_main_town_id_i is defined %}
-        {% set Country = locationReposetry.getCountyByTownId(adDetail.a_l_main_town_id_i)%}
-        {% set Town = locationReposetry.find(adDetail.a_l_main_town_id_i)%}
-        {% set Town = Town.name %}
-    {% else %}
-        {% set Country = 'UK' %}
-        {% set Town = '' %}
-    {% endif %}
     <script>
         {# get date and create as new #}
         {% if adDetail.a_published_at_i is defined %}
-            var tempPublishedDate = new Date(1000*{{ adDetail.a_published_at_i }});
-            var publishedDate = tempPublishedDate.getFullYear() + "/" + (tempPublishedDate.getMonth() + 1) + "/" + tempPublishedDate.getDate();
+        var tempPublishedDate = new Date(1000*{{ adDetail.a_published_at_i }});
+        var publishedDate = tempPublishedDate.getFullYear() + "/" + (tempPublishedDate.getMonth() + 1) + "/" + tempPublishedDate.getDate();
         {% else %}
-            var publishedDate = null;
+        var publishedDate = null;
         {% endif %}
         {% if adDetail.a_published_at_i is defined %}
-            var tempExpiredDate = new Date(1000*{{ adDetail.a_expires_at_i }});
-            var expiredDate =tempExpiredDate.getFullYear()  + "/" + (tempExpiredDate.getMonth() + 1) + "/" + tempExpiredDate.getDate();
+        var tempExpiredDate = new Date(1000*{{ adDetail.a_expires_at_i }});
+        var expiredDate =tempExpiredDate.getFullYear()  + "/" + (tempExpiredDate.getMonth() + 1) + "/" + tempExpiredDate.getDate();
         {% else %}
-            var expiredDate = null;
+        var expiredDate = null;
         {% endif %}
         $( document ).ready(function() {
             window.dataLayer = window.dataLayer || [];
@@ -1780,9 +1860,9 @@
                     "subSubSubCategory": "{{ (categoryArray.3 is defined ? categoryArray.3 : '')|raw }}",
                     "id": '{{ adId }}',
                     "photos": '{{ adDetail.a_total_images_i }}',
-                    "county": "{{ Country|raw }}",
+                    "county": "{{ county|raw }}",
                     "locationGroup": "{{ (locationGroup.name is defined ? locationGroup.name : locationGroup)|raw}}",
-                    "town": "{{ Town|raw }}",
+                    "town": "{{ town }}",
                     "video": {{ youtubeVideoUrl is not  null ? 'true' : 'false' }},
                     "paypalEnabled": {{ showBuyNowWithPaypal ? 'true' : 'false'}},
                     "publishDate": publishedDate,

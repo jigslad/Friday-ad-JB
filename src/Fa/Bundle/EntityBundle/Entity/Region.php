@@ -22,7 +22,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @version 1.0
  *
  * @ORM\Table(name="region")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Fa\Bundle\EntityBundle\Repository\RegionRepository")
  * @Gedmo\TranslationEntity(class="Fa\Bundle\EntityBundle\Entity\RegionTranslation")
  */
 class Region

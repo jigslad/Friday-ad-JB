@@ -192,4 +192,81 @@ class PostcodeRepository extends BaseEntityRepository
         
         return $results[0]['post_code'];
     }
+
+    /**
+     * @param $container
+     * @return mixed
+     */
+    public function getAllPostcodes($container)
+    {
+        if ($container) {
+            $culture     = CommonManager::getCurrentCulture($container);
+            $cacheKey    = $this->getTableName().'|'.__FUNCTION__.'|'.$culture;
+            $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
+
+            if ($cachedValue !== false) {
+                //return $cachedValue;
+            }
+        }
+
+        $recordsPerLoop = 1000;
+        $query = $this->createQueryBuilder(self::ALIAS);
+        $query->setMaxResults($recordsPerLoop);
+
+        $offset = 0;
+        do {
+            $query->setFirstResult($offset);
+            $objResources = $query->getQuery()->getArrayResult();
+            $count = count($objResources);
+            if ($count) {
+
+                $locationDetails = [];
+                foreach ($objResources as $location) {
+                    $locationDetails[$location['post_code']]['post_code']      = $location['post_code'];
+                    $locationDetails[$location['post_code']]['post_code_c']    = $location['post_code_c'];
+                    $locationDetails[$location['post_code']]['easting']        = $location['easting'];
+                    $locationDetails[$location['post_code']]['northing']       = $location['northing'];
+                    $locationDetails[$location['post_code']]['latitude']       = $location['latitude'];
+                    $locationDetails[$location['post_code']]['longitude']      = $location['longitude'];
+                    $locationDetails[$location['post_code']]['locality_id']    = $location['locality_id'];
+                    $locationDetails[$location['post_code']]['town_id']        = $location['town_id'];
+                    $locationDetails[$location['post_code']]['county_id']      = $location['county_id'];
+                }
+
+                if ($container) {
+                    CommonManager::setCacheVersion($container, $cacheKey, $locationDetails);
+                }
+
+                $offset += $recordsPerLoop;
+            }
+        } while($count);
+    }
+
+
+    /**
+     * @param $container
+     * @param $id
+     * @return array
+     */
+    public function getCachedPostcodeById($container, $postcode)
+    {
+        if (! empty($id)) {
+            $postcodes = CommonManager::getCacheVersion($container, 'postcode|getAllPostcodes|en_GB');
+
+            return [
+                'id'            => $postcodes['id'],
+                'post_code'     => $postcodes['post_code'],
+                'post_code_c'   => $postcodes['post_code_c'],
+                'easting'       => $postcodes['easting'],
+                'northing'      => $postcodes['northing'],
+                'latitude'      => $postcodes['latitude'],
+                'longitude'     => $postcodes['longitude'],
+                'locality_id'   => $postcodes['locality_id'],
+                'town_id'       => $postcodes['town_id'],
+                'county_id'     => $postcodes['county_id']
+            ];
+        } else {
+            return [];
+        }
+    }
 }
