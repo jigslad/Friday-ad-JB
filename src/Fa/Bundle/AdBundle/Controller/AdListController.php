@@ -748,7 +748,8 @@ class AdListController extends CoreController
                 unset($data['query_sorter']['item']['weekly_refresh_published_at']);
             }
 
-            $data['query_sorter']['item']['boosted_at'] = array('sort_ord' => 'desc', 'field_ord' => 1);
+            $data['query_sorter']['item']['weekly_refresh_published_at'] = array('sort_ord' => 'desc', 'field_ord' => 1);
+            $data['query_sorter']['item']['boosted_at'] = array('sort_ord' => 'desc', 'field_ord' => 2);
 
             if (isset($data['search']['item__category_id']) && $data['search']['item__category_id']) {
                 $parentCategoryIds = array_keys($this->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($data['search']['item__category_id'], false, $this->container));
@@ -769,8 +770,7 @@ class AdListController extends CoreController
                     $data['query_sorter']['item']['score'] = array('sort_ord' => 'desc', 'field_ord' => 5);
                 }
 
-                $data['query_sorter']['item']['created_at'] = array('sort_ord' => 'desc', 'field_ord' => 2);
-                $data['query_sorter']['item']['weekly_refresh_published_at'] = array('sort_ord' => 'desc', 'field_ord' => 3);
+                $data['query_sorter']['item']['created_at'] = array('sort_ord' => 'desc', 'field_ord' => 3);
             }
             $data['query_sorter']['item']['is_topad'] = array('sort_ord' => 'desc', 'field_ord' => 4);
         }
