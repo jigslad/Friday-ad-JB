@@ -748,7 +748,8 @@ class AdListController extends CoreController
                 unset($data['query_sorter']['item']['weekly_refresh_published_at']);
             }
 
-            $data['query_sorter']['item']['boosted_at'] = array('sort_ord' => 'desc', 'field_ord' => 1);
+            $data['query_sorter']['item']['weekly_refresh_published_at'] = array('sort_ord' => 'desc', 'field_ord' => 1);
+            $data['query_sorter']['item']['boosted_at'] = array('sort_ord' => 'desc', 'field_ord' => 2);
 
             if (isset($data['search']['item__category_id']) && $data['search']['item__category_id']) {
                 $parentCategoryIds = array_keys($this->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($data['search']['item__category_id'], false, $this->container));
@@ -769,8 +770,7 @@ class AdListController extends CoreController
                     $data['query_sorter']['item']['score'] = array('sort_ord' => 'desc', 'field_ord' => 5);
                 }
 
-                $data['query_sorter']['item']['created_at'] = array('sort_ord' => 'desc', 'field_ord' => 2);
-                $data['query_sorter']['item']['weekly_refresh_published_at'] = array('sort_ord' => 'desc', 'field_ord' => 3);
+                $data['query_sorter']['item']['created_at'] = array('sort_ord' => 'desc', 'field_ord' => 3);
             }
             $data['query_sorter']['item']['is_topad'] = array('sort_ord' => 'desc', 'field_ord' => 4);
         }
@@ -1344,7 +1344,7 @@ class AdListController extends CoreController
     }
 
     /**
-     * @param $extendRadius
+     * @param $newRadius
      * @param $keywords
      * @param $extendedData
      * @param $extpage
@@ -1388,13 +1388,16 @@ class AdListController extends CoreController
         if ($searchParams['item__location'] != LocationRepository::COUNTY_ID) {
             $location = $this->getRepository('FaEntityBundle:Location')->find($searchParams['item__location']);
 
-            $radius = '200';
+            $radius = '15';
             if (! empty($searchParams['item__distance'])) {
                 $radius = $searchParams['item__distance'];
             }
 
-            $staticFilters = ' AND ((town: *\:' . $searchParams['item__location'] . '\,* OR domicile: *\:' . $searchParams['item__location'] . '\,* OR locality: *\:' . $searchParams['item__location'] . '\,*)';
-            $staticFilters .= ' OR ({!geofilt pt='.$location->getLatitude().','.$location->getLongitude().' sfield=store d='.$radius.'}))';
+            if (empty($location->getLatitude()) && empty($location->getLongitude())) {
+                $staticFilters = ' AND (town: *\:' . $searchParams['item__location'] . '\,* OR domicile: *\:' . $searchParams['item__location'] . '\,* OR locality: *\:' . $searchParams['item__location'] . '\,*)';
+            } else {
+                $staticFilters = ' AND ({!geofilt pt='.$location->getLatitude().','.$location->getLongitude().' sfield=store d='.$radius.'})';
+            }
         } else {
             $staticFilters = '';
         }
