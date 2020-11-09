@@ -15,6 +15,8 @@
     {% set displayRecommendedSlot = 0 %}
 {% endif %}
 
+{% set businessExposureUsersCount = (businessExposureUsersDetails is defined )?(businessExposureUsersDetails|length) :0%}
+
 {% block meta_robots %}
     {% set metaRobotsArray = {} %}
     {% if not pagination.getNbResults() %}
@@ -223,35 +225,35 @@
                     {{ include('FaAdBundle:AdList:listDetailNew.html.twig', {'isFeatured' : true}) }}
                 {% endfor %}
 
+                {% if thisDevice == 'mobile' %}
+                    {% if (featuredAds|length >= 2) %}
+                        {% set bannerStatus = false %}
+                        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_ABOVE_RESULTS') %}
+                        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                    {% endif %}
+                {% endif %}
+
                 {% for ad in ads %}
                     {% set adCount = adCount + 1 %}
 
                     {% if thisDevice == 'mobile' %}
-                        {% if (adCount >= 2) %}
-                            {% set bannerStatus = false %}
+                        {% if (adCount == 2 and resultCount > 2 and bannerStatus) %}
                             {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_ABOVE_RESULTS') %}
                             {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
                         {% endif %}
                     {% endif %}
 
-                    {% if thisDevice == 'mobile' %}
-                        {% if (adCount == 2 	and resultCount > 2 and bannerStatus) %}
-                            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_ABOVE_RESULTS') %}
-                            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
-                        {% endif %}
-                    {% endif %}
-
-                    {% if adCount == 5 and resultCount > 5 %}
+                    {% if thisDevice != 'mobile' and adCount == 5 and resultCount > 5 %}
                         {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_IN_RESULTS_TOP') %}
                         {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
                     {% endif %}
 
                     {% if adCount == 10 and resultCount > 10 %}
-                        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_IN_RESULTS_BOTTOM') %}
-                        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
-
                         {% if thisDevice == 'mobile' %}
                             {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_IN_RESULTS') %}
+                            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                        {% else %}
+                            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_IN_RESULTS_BOTTOM') %}
                             {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
                         {% endif %}
                     {% endif %}
@@ -281,6 +283,16 @@
                             {% set slotallocated = slotallocated|merge([8]) %}
                         {% endif %}
                     {% endif %}
+
+                    {# As discussed over slack, featured business section is commented for time being, will take this up again on Monday #}
+                {# {% if businessExposureUsersDetails is defined and businessExposureUsersDetails|length > 0 and resultCount > 0  %}
+                        {% if (adCount == 5 or adCount == 15) and businessExposureUsersDetails is defined and  businessExposureUsersDetails|length > 0 %}
+                            {{ include('FaAdBundle:AdList:businessExposureSliderBlockNew.html.twig', {'blockposition': adCount }) }}
+                        {% endif %}
+                        {% if adCount == 10 and businessExposureUsersDetails is defined and  businessExposureUsersDetails|length > 0 %}
+                            {{ include('FaAdBundle:AdList:businessExposureSingleBlockNew.html.twig') }}
+                        {% endif %}
+                    {% endif %} #}
 
                     {{ include('FaAdBundle:AdList:listDetailNew.html.twig') }}
                 {% endfor %}

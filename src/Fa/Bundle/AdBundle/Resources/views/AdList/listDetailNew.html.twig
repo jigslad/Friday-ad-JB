@@ -52,7 +52,7 @@
             <div class="list-desc {{aff_desc_cls}} hide-for-small-only">
                 {{trim_text(ad.description, 250)|replace({"\\n": "<br />"})|raw}}
             </div>
-            {% if fromSimilarAdverts is not defined and ad.aff_icon_cls is not null %}
+            {% if fromSimilarAdverts is not defined and ad.aff_icon_cls is not null and ad.aff_icon_cls|length %}
                 <div class="ext-link">
                     <span class="{{ad.aff_icon_cls}}"></span>
                 </div>

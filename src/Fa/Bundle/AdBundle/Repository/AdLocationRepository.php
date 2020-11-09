@@ -148,35 +148,37 @@ class AdLocationRepository extends EntityRepository
         $localityRepository = $this->_em->getRepository('FaEntityBundle:Locality');
 
         $mainTownName = 'uk';
-        $location = $locations[0];
-        if (! empty($location)) {
-            $localityArr = ($location->getLocality() ? $localityRepository->getCachedLocalityById($container, $location->getLocality()->getId()) : null);
-            if ($localityArr) {
-                $mainTownName = $localityArr['name'];
-            }
-
-            $document = $this->addField($document, 'postcode', $location->getPostcode());
-            $document = $this->addField($document, 'domicile', ($location->getLocationDomicile() ? $locationRepository->getCachedLocationById($container, $location->getLocationDomicile()->getId()) : null));
-            $document = $this->addField($document, 'town', ($location->getLocationTown() ? $locationRepository->getCachedLocationById($container, $location->getLocationTown()->getId()) : null));
-            $document = $this->addField($document, 'latitude', $location->getLatitude());
-            $document = $this->addField($document, 'longitude', $location->getLongitude());
-            $document = $this->addField($document, 'locality', $localityArr);
-            //for Location Area
-            if ($location->getLocationArea()) {
-                $document = $this->addField($document, 'area', $locationRepository->getCachedLocationById($container, $location->getLocationArea()->getId()));
-                if ($location->getLocationArea()->getIsSpecialArea()) {
-                    $document = $this->addField($document, 'is_special_area_location', '1');
-                } else {
-                    $document = $this->addField($document, 'is_special_area_location', '0');
+        if (! empty($locations)) {
+            $location = $locations[0];
+            if (!empty($location)) {
+                $localityArr = ($location->getLocality() ? $localityRepository->getCachedLocalityById($container, $location->getLocality()->getId()) : null);
+                if ($localityArr) {
+                    $mainTownName = $localityArr['name'];
                 }
-            }
 
-            if (($location->getLatitude() && $location->getLongitude())) {
-                $document = $this->addField($document, 'store', $location->getLatitude().','.$location->getLongitude());
-            }
+                $document = $this->addField($document, 'postcode', $location->getPostcode());
+                $document = $this->addField($document, 'domicile', ($location->getLocationDomicile() ? $locationRepository->getCachedLocationById($container, $location->getLocationDomicile()->getId()) : null));
+                $document = $this->addField($document, 'town', ($location->getLocationTown() ? $locationRepository->getCachedLocationById($container, $location->getLocationTown()->getId()) : null));
+                $document = $this->addField($document, 'latitude', $location->getLatitude());
+                $document = $this->addField($document, 'longitude', $location->getLongitude());
+                $document = $this->addField($document, 'locality', $localityArr);
+                //for Location Area
+                if ($location->getLocationArea()) {
+                    $document = $this->addField($document, 'area', $locationRepository->getCachedLocationById($container, $location->getLocationArea()->getId()));
+                    if ($location->getLocationArea()->getIsSpecialArea()) {
+                        $document = $this->addField($document, 'is_special_area_location', '1');
+                    } else {
+                        $document = $this->addField($document, 'is_special_area_location', '0');
+                    }
+                }
 
-            /* Issuing with multiple Town record along with same Advert Id bcz of MAIN_TOWN_ID is string type "i" adding condition and make it as string */
-            $mainTownId = ($location->getLocationTown() ? $location->getLocationTown()->getId() : null);
+                if (($location->getLatitude() && $location->getLongitude())) {
+                    $document = $this->addField($document, 'store', $location->getLatitude() . ',' . $location->getLongitude());
+                }
+
+                /* Issuing with multiple Town record along with same Advert Id bcz of MAIN_TOWN_ID is string type "i" adding condition and make it as string */
+                $mainTownId = ($location->getLocationTown() ? $location->getLocationTown()->getId() : null);
+            }
         }
 
         if ($mainTownId != '') {

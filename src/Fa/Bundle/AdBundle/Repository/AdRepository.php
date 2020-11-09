@@ -875,6 +875,8 @@ class AdRepository extends EntityRepository
         $document = $this->addField($document, 'upsells', [
             'boost' => $ad->getBoostedAt()
         ]);
+        $document = $this->addField($document, 'is_boosted', $ad->getIsBoosted());
+        $document = $this->addField($document, 'boosted_at', $ad->getBoostedAt());
 
         //ad user business category id
         //shop detail.
@@ -915,8 +917,8 @@ class AdRepository extends EntityRepository
             }
         }
         // Index images
-        $category = $this->getRepository('FaEntityBundle:Category')->getRootNodeByCategory($categoryId);
-        $imagelimitCategoryName = CommonManager::getCategoryClassNameById($category['id']);
+        $category = $this->_em->getRepository('FaEntityBundle:Category')->getRootNodeByCategory($categoryId);
+        $imagelimitCategoryName = CommonManager::getCategoryClassNameById($category->getId());
         $imageLimit = $container->getParameter('fa.image.'.$imagelimitCategoryName.'_upload_limit');
 
         if (isset($adUpsellValues[UpsellRepository::UPSELL_TYPE_ADDITIONAL_PHOTO_VALUE])) {
