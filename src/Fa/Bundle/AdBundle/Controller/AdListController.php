@@ -3857,16 +3857,6 @@ class AdListController extends CoreController
 
         $parameters['businessExposureUsersDetailsWithoutAd'] = $businessExposureUserDetailsWithoutAd;
 
-        if (isset($businessExposureUserDetails) && isset($businessExposureUserDetails['businessUserDetail'])) {
-            $businessUserDetail = $businessExposureUserDetails['businessUserDetail'];
-
-            $parameters['user_profile_url'] = $this->container->get('fa_ad.manager.ad_routing')->getProfilePageUrl($businessUserDetail['user_id']);
-            $parameters['user_company_logo'] = CommonManager::getUserLogo($this->container, $businessUserDetail['company_logo'], $businessUserDetail['user_id'], null, null, true, true, $businessUserDetail['status_id'], $businessUserDetail['user_name']);
-        } else {
-            $parameters['user_profile_url'] = '';
-            $parameters['user_company_logo'] = '';
-        }
-
         return $parameters;
     }
 
