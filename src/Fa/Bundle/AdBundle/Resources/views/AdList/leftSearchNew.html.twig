@@ -259,8 +259,9 @@
         let url = getPageUrl();
         if ($('#fa_left_search_new_item__location_autocomplete').val() != "United Kingdom") {
             let value = $('#fa_left_search_new_item__location').val();
-
-            url = url.replace('/{{ currentLocation }}/', '/'+value+'/');
+            if (! $.isNumeric(value)) {
+                url = url.replace('/{{ currentLocation }}/', '/'+value+'/');
+            }
 
             if ($('#fa_left_search_new_item__distance').val() != 200) {
                 let url_param = 'item__distance=' + $('#fa_left_search_new_item__distance').val();
