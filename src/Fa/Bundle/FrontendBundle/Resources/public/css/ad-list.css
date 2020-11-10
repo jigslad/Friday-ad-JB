@@ -189,7 +189,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 .businessExposureCarousel { margin:30px 0px 50px; }
 #shop-user-item-slider .owl-stage { transform:none !important; }
 .bus-shop-user-item-slider { padding:0px 0px; }
-.bus-shop-user-item-slider .owl-item .item {width:100%;border:0;}
+.bus-shop-user-item-slider .owl-item .item {width:99%;border:0;}
 .bus-shop-user-item-slider .list-img {width:164px;height:123px}
 .bus-shop-user-item-slider .list-img img {max-width:164px;max-height:123px}
 .bus-shop-user-item-slider .list-price {float:none;text-align:left;margin:10px 0 0 0}
