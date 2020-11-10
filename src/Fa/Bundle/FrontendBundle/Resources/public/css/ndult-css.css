@@ -641,7 +641,7 @@ select:hover,select:focus, .ui-selectmenu-button:hover,.ui-selectmenu-button.act
 }
 
 .secondary-btn-1, .secondary-btn-2, .secondary-btn-3, .secondary-btn-4  { padding:8px 10px 8px 10px !important; }
-.recommended-div.listing .recommended-more .right-block {  padding:5px 5px 5px 5px !important; }
+
 .recommended-div.listing.recommended-ad-detail .content-cls-recommend-2 .list-title {
     font-size: 12px !important;
     line-height: 16px !important;
