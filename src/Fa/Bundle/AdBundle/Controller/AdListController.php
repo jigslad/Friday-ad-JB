@@ -980,8 +980,7 @@ class AdListController extends CoreController
         $keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: NULL;
         $recordsPerPage = (isset($data['pager']['limit']) && $data['pager']['limit']) ? $data['pager']['limit']: $this->container->getParameter('fa.search.records.per.page');
 
-        $pagination = $this->getSolrPagination('ad.new', $keywords, $data, $page, $recordsPerPage, 0, true);
-        $ads = $this->formatAds($pagination['pagination']);
+        $pagination = $this->getSolrResult('ad.new', $keywords, $data, $page, $recordsPerPage, 0, true);
 
         if ($page == 1) {
             $featuredData = $this->setDefaultParametersNew($request, $mapFlag, 'finders', array());
@@ -1004,7 +1003,7 @@ class AdListController extends CoreController
             $keywords = (isset($featuredData['search']['keywords']) && $featuredData['search']['keywords']) ? $featuredData['search']['keywords'] : NULL;
             $page = (isset($featuredData['pager']['page']) && $featuredData['pager']['page']) ? $featuredData['pager']['page'] : 1;
 
-            $featuredPagination = $this->getSolrPagination('ad.new', $keywords, $featuredData, 1, 3, 0, true);
+            $featuredPagination = $this->getSolrResult('ad.new', $keywords, $featuredData, 1, 3, 0, true, true);
 
             if (count($featuredPagination['pagination']) < 3) {
                 $topAds = [];
@@ -1021,7 +1020,7 @@ class AdListController extends CoreController
                 $keywords = (isset($featuredData['search']['keywords']) && $featuredData['search']['keywords']) ? $featuredData['search']['keywords'] : NULL;
                 $page = (isset($featuredData['pager']['page']) && $featuredData['pager']['page']) ? $featuredData['pager']['page'] : 1;
 
-                $featuredPagination = $this->getSolrPagination('ad.new', $keywords, $featuredData, 1, 3, 0, true);
+                $featuredPagination = $this->getSolrResult('ad.new', $keywords, $featuredData, 1, 3, 0, true, true);
             }
 
             $featuredAds = $this->formatAds($featuredPagination['pagination']);
@@ -1102,7 +1101,6 @@ class AdListController extends CoreController
         $defaultRadiusPageCount = ($page==0)?1:ceil($resultCount/$recordsPerPage);
         $defaultRadiusLastPageCount = ($resultCount%$recordsPerPage);
 
-        $extendlocation = '';
         $setDefRadius = 1;
         $isBusinessPage = 0;
         if (($currentRoute == 'show_business_user_ads' || $currentRoute == "show_business_user_ads_location" || $currentRoute == "show_business_user_ads_page")) {
@@ -1137,12 +1135,11 @@ class AdListController extends CoreController
         $extendedData = $data;
 
         $extendedResultCount = 0;
-        $extendedAds = [];
-        $mergedPagination = $pagination['pagination'];
         $facetResult = $pagination['facetResult'];
         $extendedFacetResult = [];
         $mergedResultCount = $resultCount;
-        if ($extendRadius) {
+        $mergedresult = $pagination['result'];
+        if (! empty($extendRadius)) {
             // initialize solr search manager service and fetch data based of above prepared search options
             if ($page == $defaultRadiusPageCount) {
                 $extpage = 1;
@@ -1170,20 +1167,21 @@ class AdListController extends CoreController
 
             $extendedResult = $this->getExtendedPagination($extendRadius, $keywords, $extendedData, $extpage, $recordsPerPage, $staticOffset, $findersSearchParams);
 
-            $extendedAds = $this->formatAds($extendedResult['pagination']);
             $extendedResultCount = $extendedResult['resultCount'];
 
             $mergedresult = array_merge($pagination['result'], $extendedResult['result']);
             $mergedResultCount = $resultCount + $extendedResultCount;
-            $this->get('fa.pagination.manager')->init($mergedresult, $page, $recordsPerPage, $mergedResultCount);
-            $mergedPagination = $this->get('fa.pagination.manager')->getSolrPagination();
 
             $extendedFacetResult = $extendedResult['facetResult'];
         }
+        $this->get('fa.pagination.manager')->init($mergedresult, $page, $recordsPerPage, $mergedResultCount);
+        $mergedPagination = $this->get('fa.pagination.manager')->getSolrPagination();
+
+        $mergedAds = $this->formatAds($mergedPagination);
 
         $parameters = [
             'featuredAds'           => $featuredAds,
-            'ads'                   => $ads + $extendedAds,
+            'ads'                   => $mergedAds,
             'resultCount'           => $mergedResultCount,
             'recommendedSlotResult' => $getRecommendedSrchSlotWise,
             'recommendedSlotLimit'  => $this->getRepository('FaCoreBundle:Config')->getSponsoredLimit(),
@@ -1362,7 +1360,7 @@ class AdListController extends CoreController
             if (! empty($newRadius)) {
                 $extendedData['static_filters'] = str_replace("sfield=store d={$currentRadius}}", "sfield=store d={$newRadius}}", $extendedData['static_filters']);
             }
-            $extendedResult = $this->getSolrPagination('ad.new', $keywords, $extendedData, $extpage, $recordsPerPage, $staticOffset, true);
+            $extendedResult = $this->getSolrResult('ad.new', $keywords, $extendedData, $extpage, $recordsPerPage, $staticOffset, true);
 
             $counter++;
             $currentRadius = $newRadius;
@@ -1858,9 +1856,10 @@ class AdListController extends CoreController
      * @param int $recordsPerPage
      * @param int $staticOffset
      * @param bool $exactMatch
+     * @param bool $getPagination
      * @return mixed
      */
-    private function getSolrPagination($solrCoreName, $keywords, $data, $page = 1, $recordsPerPage = 30, $staticOffset = 0, $exactMatch = false)
+    private function getSolrResult($solrCoreName, $keywords, $data, $page = 1, $recordsPerPage = 20, $staticOffset = 0, $exactMatch = false, $getPagination = false)
     {
         $solrSearchManager = $this->get('fa.solrsearch.manager');
 
@@ -1876,9 +1875,13 @@ class AdListController extends CoreController
             $facetResult = [];
         }
 
-        $this->get('fa.pagination.manager')->init($result, $page, $recordsPerPage, $resultCount);
+        $parameters = ['result' => $result, 'resultCount' => $resultCount, 'facetResult' => $facetResult];
+        if ($getPagination) {
+            $this->get('fa.pagination.manager')->init($result, $page, $recordsPerPage, $resultCount);
+            $parameters['pagination'] = $this->get('fa.pagination.manager')->getSolrPagination();
+        }
 
-        return ['result' => $result, 'pagination' => $this->get('fa.pagination.manager')->getSolrPagination(), 'resultCount' => $resultCount, 'facetResult' => $facetResult];
+        return $parameters;
     }
 
     /**
