@@ -14,6 +14,7 @@ namespace Fa\Bundle\AdBundle\Controller;
 use Fa\Bundle\AdBundle\Form\AdLeftSearchNewType;
 use Fa\Bundle\ContentBundle\Repository\SeoToolRepository;
 use Fa\Bundle\EntityBundle\Entity\Entity;
+use Fa\Bundle\EntityBundle\Entity\Location;
 use Fa\Bundle\EntityBundle\Repository\CategoryDimensionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -1384,18 +1385,34 @@ class AdListController extends CoreController
         if (isset($searchParams['sort_field'])) unset($searchParams['sort_field']);
 
         if ($searchParams['item__location'] != LocationRepository::COUNTY_ID) {
+            /** @var Location $location */
             $location = $this->getRepository('FaEntityBundle:Location')->find($searchParams['item__location']);
 
-            $radius = '15';
+            $radius = 15;
             if (! empty($searchParams['item__distance'])) {
                 $radius = $searchParams['item__distance'];
             }
 
-            if (empty($location->getLatitude()) && empty($location->getLongitude())) {
-                $staticFilters = ' AND (town: *\:' . $searchParams['item__location'] . '\,* OR domicile: *\:' . $searchParams['item__location'] . '\,* OR locality: *\:' . $searchParams['item__location'] . '\,*)';
-            } else {
-                $staticFilters = ' AND ({!geofilt pt='.$location->getLatitude().','.$location->getLongitude().' sfield=store d='.$radius.'})';
+            if (!empty($location)) {
+
+                $level = $location->getLvl();
+                $latitude = $location->getLatitude();
+                $longitude = $location->getLongitude();
+                $locationId = $location->getId();
+
+                // Apply Location ID filter Only if:
+                // - Lat/Long is empty OR
+                // - Location Level <= 2
+                if ((empty($latitude) && empty($longitude)) || ($level <= 2)) {
+                    // Warning: Locality check here will be wrong - bcoz Location & Locality are different DB tables.
+                    $staticFilters = " AND (town: *\:{$locationId}\,* OR domicile: *\:{$locationId}\,* OR locality: *\:{$locationId}\,*)";
+                }
+                // Apply Lat/Long & Radius filter.
+                else {
+                    $staticFilters = " AND ({!geofilt pt={$latitude},{$longitude} sfield=store d={$radius}})";
+                }
             }
+
         } else {
             $staticFilters = '';
         }
@@ -1935,7 +1952,7 @@ class AdListController extends CoreController
                     'location'      => $location,
                     'latitude'      => isset($ad['latitude']) ? $ad['latitude'] : null,
                     'longitude'     => isset($ad['longitude']) ? $ad['longitude'] : null,
-                    'last_updated'  => $ad['updated_at'],
+                    'last_updated'  => empty($ad['weekly_refresh_published_at']) ? $ad['published_at'] : $ad['weekly_refresh_published_at'],
                     'aff_icon_cls'  => ($ad['is_affiliate'] && ($ad['ad_source'] != 'paa' || $ad['ad_source'] != 'paa-app' || $ad['ad_source'] != 'admin')) ? CommonManager::getAffiliateClass($ad['ad_source']) : ''
                 ];
 
@@ -3857,16 +3874,6 @@ class AdListController extends CoreController
 
         $parameters['businessExposureUsersDetailsWithoutAd'] = $businessExposureUserDetailsWithoutAd;
 
-        if (isset($businessExposureUserDetails) && isset($businessExposureUserDetails['businessUserDetail'])) {
-            $businessUserDetail = $businessExposureUserDetails['businessUserDetail'];
-
-            $parameters['user_profile_url'] = $this->container->get('fa_ad.manager.ad_routing')->getProfilePageUrl($businessUserDetail['user_id']);
-            $parameters['user_company_logo'] = CommonManager::getUserLogo($this->container, $businessUserDetail['company_logo'], $businessUserDetail['user_id'], null, null, true, true, $businessUserDetail['status_id'], $businessUserDetail['user_name']);
-        } else {
-            $parameters['user_profile_url'] = '';
-            $parameters['user_company_logo'] = '';
-        }
-
         return $parameters;
     }
 
@@ -4162,7 +4169,7 @@ class AdListController extends CoreController
         $solrSearchManager->init('user.shop.detail', $keywords, $data, $page, 24, 0, true);
         $solrResponse = $solrSearchManager->getSolrResponse();
         $result = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponse);
-        
+
         return $result;
     }
 
