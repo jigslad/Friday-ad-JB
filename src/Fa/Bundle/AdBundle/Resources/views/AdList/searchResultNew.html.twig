@@ -284,15 +284,14 @@
                         {% endif %}
                     {% endif %}
 
-                    {# As discussed over slack, featured business section is commented for time being, will take this up again on Monday #}
-                {# {% if businessExposureUsersDetails is defined and businessExposureUsersDetails|length > 0 and resultCount > 0  %}
+                    {#{% if businessExposureUsersDetails is defined and businessExposureUsersDetails|length > 0 and resultCount > 0  %}
                         {% if (adCount == 5 or adCount == 15) and businessExposureUsersDetails is defined and  businessExposureUsersDetails|length > 0 %}
                             {{ include('FaAdBundle:AdList:businessExposureSliderBlockNew.html.twig', {'blockposition': adCount }) }}
                         {% endif %}
-                        {% if adCount == 10 and businessExposureUsersDetails is defined and  businessExposureUsersDetails|length > 0 %}
+                        {% if adCount == 10 and businessExposureUsersDetailsWithoutAd is defined and  businessExposureUsersDetailsWithoutAd|length > 0 %}
                             {{ include('FaAdBundle:AdList:businessExposureSingleBlockNew.html.twig') }}
                         {% endif %}
-                    {% endif %} #}
+                    {% endif %}#}
 
                     {{ include('FaAdBundle:AdList:listDetailNew.html.twig') }}
                 {% endfor %}
@@ -333,10 +332,10 @@
                 {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_PAGINATION_MOBILE') %}
                 {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
             </div>
-        </div>
-        <div class="right-banner">
-            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_RIGHT') %}
-            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
+            <div class="right-banner">
+                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_RIGHT') %}
+                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
+            </div>
         </div>
     </div>
 {% endblock %}

@@ -40,21 +40,20 @@ $(function() {
                     if(!data['results'].length) {
                         $('#category_id_autocomplete_error').show();
                     }
-                    if(jQuery.type(data) == 'object') {
-                        var result = $.map(data['results'], function (item) {
-                            return {
-                                label: item.text,
-                                id: item.id,
-                                text2: item.text2 ? item.text2 : '',
-                                index: item.index,
-                                area_id: item.area_id ? item.area_id : '',
-                                locationBy: item.locationBy ? item.locationBy : '',
-                                latlong: item.latlong ? item.latlong : '',
-                            };
-                        });
-                        cache[term] = result;
-                        response(result);
-                    }
+                    var result = $.map(data['results'], function(item) {
+                        return {
+                            label: item.text,
+                            id: item.id,
+                            text2: item.text2 ? item.text2 : '',
+                            index: item.index,
+                            area_id: item.area_id ? item.area_id : '',
+                            locationBy: item.locationBy ? item.locationBy : '',
+                           	latlong: item.latlong ? item.latlong : '',
+                            slug: item.slug
+                        };
+                    });
+                    cache[ term ] = result;
+                    response(result);
                 }
             });
         },
@@ -76,6 +75,9 @@ $(function() {
           {% if 'location' in field or 'area' in field %}  
                 setTimeout(function(){
                     $("{{ field }}").val(ui.item.id);
+                    if ("{{ field }}" == "#fa_left_search_new_item__location") {
+                        $("{{ field }}").val(ui.item.slug);
+                    }
                     if(ui.item.latlong && ui.item.latlong != '') {
                     	$("{{ field }}"+'_lat_lng').val(ui.item.latlong);
                 	}
@@ -208,11 +210,12 @@ $(function() {
     }).autocomplete('instance')._renderItem = function( ul, item ) {
          var label = item.label;
          var locationBy = item.locationBy;
+         var slug = item.slug;
          if (item.text2) {
             label = label + '<div> in <span>'+ item.text2 +'</span> </div>';
          }
 
-         return $("<li data-custom-text='location_"+locationBy+"_text' >").append(label).appendTo( ul );
+         return $("<li data-custom-text='location_"+locationBy+"_text' data-slug='"+slug+"'>").append(label).appendTo( ul );
     };
 });
 
