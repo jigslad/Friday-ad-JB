@@ -174,7 +174,20 @@
 
     {{ include('FaFrontendBundle::scriptTop.html.twig') }}
     {% block scripttop %}{% endblock %}
-    <link rel="stylesheet" href="{{ asset('build/css/main.css') }}" />
+
+
+    {% if (currentRoute in {0: 'fa_adult_homepage'}) %}
+        <link rel="stylesheet" href="{{ asset('build/css/main.css') }}" />
+    {% else %}
+        {% stylesheets filter='uglifycss' output='bundles/css/compiled/fa-main.css'
+            'bundles/fafrontend/css/main-css.css'
+            'bundles/fafrontend/css/main.css'
+            'bundles/fafrontend/css/covid-edition.css'
+        %}
+            <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
+        {% endstylesheets %}
+    {% endif %}
+
     {% if (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration',4: 'show_draft_ad',5: 'ad_package_purchase',6: 'show_cart',7: 'cybersource_checkout'}) %}
     {% endif %}
     
