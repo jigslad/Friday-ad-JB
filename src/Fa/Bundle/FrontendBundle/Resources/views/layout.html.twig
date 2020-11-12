@@ -176,13 +176,14 @@
     {% block scripttop %}{% endblock %}
 
 
-    {% if (currentRoute in {0: 'fa_adult_homepage'}) %}
+    {% if (currentRoute in {0: 'fa_frontend_homepage'}) %}
         <link rel="stylesheet" href="{{ asset('build/css/main.css') }}" />
     {% else %}
         {% stylesheets filter='uglifycss' output='bundles/css/compiled/fa-main.css'
             'bundles/fafrontend/css/main-css.css'
             'bundles/fafrontend/css/main.css'
             'bundles/fafrontend/css/covid-edition.css'
+            'build/css/main.css'
         %}
             <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
         {% endstylesheets %}
