@@ -62,7 +62,7 @@ class LocalityRepository extends BaseEntityRepository
             //getTown Lat and Long
             $getTown = $this->_em->getRepository('FaEntityBundle:Location')->find($locality->getTownId());
             $localiyName = explode(',', $locality->getLocalityText());
-            $localityArray[] = array('id'=> $locality->getId().','.$locality->getTownId(), 'text' => $locality->getLocalityText(), 'latlong' => $getTown->getLatitude().', '.$getTown->getLongitude());
+            $localityArray[] = array('id'=> $locality->getId().','.$locality->getTownId(), 'text' => $locality->getLocalityText(), 'latlong' => $getTown->getLatitude().', '.$getTown->getLongitude(), 'slug' => $getTown->getUrl());
         }
 
         return $localityArray;

@@ -36,9 +36,13 @@
             });
         }
 
-        let defRadius = 15;
+        let defRadius;
         {% if searchParams.item__distance is defined and searchParams.item__distance is not null %}
-            defRadius = {{ searchParams.item__distance }};
+            {% if searchParams.item__distance|length > 0 %}
+                defRadius = '{{ searchParams.item__distance }}';
+            {% else %}
+                defRadius = 15;
+            {% endif %}
         {% endif %}
 
         $('#distance_slider').noUiSlider({
