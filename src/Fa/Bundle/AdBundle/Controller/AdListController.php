@@ -950,7 +950,9 @@ class AdListController extends CoreController
         $static_filters = '';
         $searchableDimensions = [];
         $root = $category;
-        if ($findersSearchParams['item__category_id'] != 1) {
+        if ($findersSearchParams['item__category_id'] == 1) {
+            $data['static_filters'] .= $static_filters = $this->setCommonFilters($data['search']);
+        } else {
             $searchableDimensions = $this->getRepository('FaEntityBundle:CategoryDimension')->getSearchableDimesionsArrayByCategoryId($category->getId(), $this->container);
             $adRepository = $this->getRepository('FaAdBundle:Ad');
 
@@ -1140,12 +1142,13 @@ class AdListController extends CoreController
         $extendedFacetResult = [];
         $mergedResultCount = $resultCount;
         $mergedresult = $pagination['result'];
-        if (! empty($extendRadius)) {
+
+        if (! empty($extendRadius) && $extendRadius != $findersSearchParams['item__distance']) {
             // initialize solr search manager service and fetch data based of above prepared search options
             if ($page == $defaultRadiusPageCount) {
                 $extpage = 1;
                 $staticOffset = 0;
-            } elseif ($page > $defaultRadiusPageCount && $defaultRadiusPageCount>0 && $page>0) {
+            } elseif ($page > $defaultRadiusPageCount && $page>0) {
                 $extpagediff = $page - $defaultRadiusPageCount;
                 if ($extpagediff<=0) {
                     $extpage = 1;
@@ -1183,7 +1186,7 @@ class AdListController extends CoreController
         $parameters = [
             'featuredAds'           => $featuredAds,
             'ads'                   => $mergedAds,
-            'resultCount'           => $mergedResultCount,
+            'resultCount'           => $resultCount,
             'recommendedSlotResult' => $getRecommendedSrchSlotWise,
             'recommendedSlotLimit'  => $this->getRepository('FaCoreBundle:Config')->getSponsoredLimit(),
             'pagination'            => $mergedPagination,
@@ -1195,7 +1198,8 @@ class AdListController extends CoreController
             'keywords'              => $keywords,
             'extendedResultCount'   => $extendedResultCount,
             'facetResult'           => $facetResult,
-            'rootCategoryId'        => $root->getId()
+            'rootCategoryId'        => $root->getId(),
+            'extendedRadius'        => $extendRadius
          ];
 
         // profile categories other than Services & Adults
@@ -1353,37 +1357,38 @@ class AdListController extends CoreController
      */
     private function getExtendedPagination($newRadius, $keywords, $extendedData, $extpage, $recordsPerPage, $staticOffset, $findersSearchParams)
     {
-        $counter = 0;
         $currentRadius = $findersSearchParams['item__distance'];
+        $location = $this->getRepository('FaEntityBundle:Location')->find($findersSearchParams['item__location']);
+        $extendedResult = [];
 
-        do {
-            unset($extendedResult);
-            if (! empty($newRadius)) {
-                $extendedData['static_filters'] = str_replace("sfield=store d={$currentRadius}}", "sfield=store d={$newRadius}}", $extendedData['static_filters']);
+        if (!empty($location)) {
+
+            $level = $location->getLvl();
+            $latitude = $location->getLatitude();
+            $longitude = $location->getLongitude();
+
+            // Apply Location ID filter Only if:
+            // - Lat/Long is empty OR
+            // - Location Level <= 2
+            if ($level > 2) {
+                if (! empty($newRadius)) {
+                    $extendedData['static_filters'] = str_replace("sfield=store d={$currentRadius}}", "sfield=store d={$newRadius}}", $extendedData['static_filters']);
+                }
+                $extendedData['static_filters'] .= " AND -({!geofilt pt={$latitude},{$longitude} sfield=store d={$currentRadius}})";
+                $extendedResult = $this->getSolrResult('ad.new', $keywords, $extendedData, $extpage, $recordsPerPage, $staticOffset, true);
             }
-            $extendedResult = $this->getSolrResult('ad.new', $keywords, $extendedData, $extpage, $recordsPerPage, $staticOffset, true);
-
-            $counter++;
-            $currentRadius = $newRadius;
-            $newRadius = ($newRadius * 2);
-
-        } while(empty($extendedResult['resultCount']) && $counter < 2);
+        }
 
         return $extendedResult;
     }
 
     /**
      * @param $searchParams
-     * @param $listingFields
-     * @param $adRepository
      * @return string
      */
-    private function setDimensionParams($searchParams, $listingFields, $adRepository)
+    private function setCommonFilters($searchParams)
     {
-        unset($searchParams['item__category_id']);
-        if (isset($searchParams['sort_ord'])) unset($searchParams['sort_ord']);
-        if (isset($searchParams['sort_field'])) unset($searchParams['sort_field']);
-
+        $staticFilters = '';
         if ($searchParams['item__location'] != LocationRepository::COUNTY_ID) {
             /** @var Location $location */
             $location = $this->getRepository('FaEntityBundle:Location')->find($searchParams['item__location']);
@@ -1413,9 +1418,29 @@ class AdListController extends CoreController
                 }
             }
 
-        } else {
-            $staticFilters = '';
         }
+
+        if (array_key_exists('expired_ads', $searchParams) == false) {
+            $staticFilters .= ' AND status_id: ' . EntityRepository::AD_STATUS_LIVE_ID;
+        }
+        $staticFilters .= ' AND -is_blocked_ad: true';
+
+        return $staticFilters;
+    }
+
+    /**
+     * @param $searchParams
+     * @param $listingFields
+     * @param $adRepository
+     * @return string
+     */
+    private function setDimensionParams($searchParams, $listingFields, $adRepository)
+    {
+        unset($searchParams['item__category_id']);
+        if (isset($searchParams['sort_ord'])) unset($searchParams['sort_ord']);
+        if (isset($searchParams['sort_field'])) unset($searchParams['sort_field']);
+
+        $staticFilters = $this->setCommonFilters($searchParams);
         unset($searchParams['item__location']);
         foreach (array_keys($searchParams) as $key) {
             if (preg_match('/\//', $key)) {
@@ -1487,11 +1512,6 @@ class AdListController extends CoreController
                 $staticFilters .= ' AND (' . implode(' OR ', $thisFilter) .')';
             }
         }
-
-        if (array_key_exists('expired_ads', $searchParams) == false) {
-            $staticFilters .= ' AND status_id: ' . EntityRepository::AD_STATUS_LIVE_ID;
-        }
-        $staticFilters .= ' AND -is_blocked_ad: true';
 
         return $staticFilters;
     }

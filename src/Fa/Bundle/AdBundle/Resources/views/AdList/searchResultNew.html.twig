@@ -230,8 +230,18 @@
                     {% endif %}
                 {% endif %}
 
+                {% set setExtendedHeading = 0 %}
+                {% set realAdCnt = (pagination.getCurrentPage()-1)*20 %}
                 {% for ad in ads %}
                     {% set adCount = adCount + 1 %}
+
+                    {% if ((setExtendedHeading==0) and ((realAdCnt + adCount) > resultCount)) %}
+                        <div data-alert="" class="alert-box info radius">
+                            <span class="alert-icon">&nbsp;</span>
+                            We found  {{extendedResultCount}} {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id) }} ads within  {{extendedRadius}} miles of {{ app.request.get('location') | replace({'-':' '}) | title }}
+                        </div>
+                        {% set setExtendedHeading = 1 %}
+                    {% endif %}
 
                     {% if thisDevice == 'mobile' %}
                         {% if (adCount == 2 and resultCount > 2 and bannerStatus) %}
