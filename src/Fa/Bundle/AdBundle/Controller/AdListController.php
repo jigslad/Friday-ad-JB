@@ -1010,10 +1010,11 @@ class AdListController extends CoreController
                 $topAds = [];
                 $featuredData = $this->setDefaultParametersNew($request, $mapFlag, 'finders', array());
 
-                if ($findersSearchParams['item__category_id'] != 1) {
-                    $featuredData['static_filters'] = ' AND category_full_path:' . $category->getFullSlug();
-                } else {
+                if (empty($featuredData['static_filters'])) {
                     $featuredData['static_filters'] = '';
+                }
+                if ($findersSearchParams['item__category_id'] != 1) {
+                    $featuredData['static_filters'] .= ' AND category_full_path:' . $category->getFullSlug();
                 }
                 $featuredData['static_filters'] .= ' AND is_topad:true';
                 $featuredData['static_filters'] .= $static_filters;
