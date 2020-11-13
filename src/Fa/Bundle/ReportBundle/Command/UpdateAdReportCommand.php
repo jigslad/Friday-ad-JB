@@ -414,8 +414,8 @@ EOF
 
             $insertSql = trim($insertSql, ', ');
             $this->executeRawQuery($insertSql, $this->historyEntityManager);
-            $this->historyEntityManager->flush();
-            $this->historyEntityManager->commit();
+            //$this->historyEntityManager->flush();
+            //$this->historyEntityManager->commit();
 
             $this->entityManager->getRepository('FaAdBundle:AdIpAddress')->deleteRecordsByAdIds($adIdArray);
 
