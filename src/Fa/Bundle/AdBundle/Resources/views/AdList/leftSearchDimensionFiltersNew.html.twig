@@ -2,6 +2,11 @@
 {% set dimension_name = attribute(leftFilters.dimensions, dimension_id).name %}
 {% set dimension_slug = attribute(leftFilters.dimensions, dimension_id).dim_slug %}
 
+{% set key_value = false %}
+{% if leftFilters.parent_category is defined and leftFilters.parent_category != '' and leftFilters.parent_category.getId() == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') and leftFilters.entity_selected == true %}
+    {% set key_value = true %}
+{% endif %}
+
 {% if dimension_type == 'choice_checkbox' %}
     <a href="#panel{{ dimension_id }}d" class="clearfix" rel="nofollow" >
         <h5 class="left">{{ dimension_name|trans({}, 'frontend-left-search')}}</h5>
@@ -34,7 +39,11 @@
                         <input type="checkbox" {% if entity.selected is defined and entity.selected == true %} checked="checked" {% endif %} id="fa_left_search_condition_{{ id }}" name="fa_left_search[{{ dimension_name }}]">
                     </span>
                     <label class="mb0" for="fa_left_search_{{ dimension_slug }}">{{ entity.name }} ({{ entity.count }})</label>
-                    <a data-href="{{ entity.slug }}">{{ entity.name }}</a>
+                    {% set entity_href = entity.slug %}
+                    {% if key_value == true %}
+                        {% set entity_href = 'item__' ~ dimension_slug ~ '=' ~ entity.slug %}
+                    {% endif %}
+                    <a data-href="{{ entity_href }}">{{ entity.name }}</a>
                 </li>
                 {% if key >= maxDimensionCount and (key + 1) is divisible by(4) %}
                     </ul>
@@ -79,7 +88,11 @@
                                     {% if key >= maxDimensionCount and key is divisible by(4) %}
                                         <ul class="seller-link dimension-list">
                                     {% endif %}
-                                <li><a {% if entity.selected is defined and entity.selected == true %} class="bold" {% endif %} data-href="{{ entity.slug }}">{{ entity.name }} ({{ entity.count }})</a></li>
+                                {% set entity_href = entity.slug %}
+                                {% if key_value == true %}
+                                    {% set entity_href = 'item__' ~ dimension_slug ~ '=' ~ entity.slug %}
+                                {% endif %}
+                                <li><a {% if entity.selected is defined and entity.selected == true %} class="bold" {% endif %} data-href="{{ entity_href }}">{{ entity.name }} ({{ entity.count }})</a></li>
                                     {% if key >= maxDimensionCount and (key + 1) is divisible by(4) %}
                                         </ul>
                                     {% endif %}
