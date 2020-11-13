@@ -1396,7 +1396,7 @@ class AdListController extends CoreController
             $location = $this->getRepository('FaEntityBundle:Location')->find($searchParams['item__location']);
 
             $radius = 15;
-            if (! empty($searchParams['item__distance'])) {
+            if (isset($searchParams['item__distance'])) {
                 $radius = $searchParams['item__distance'];
             }
 
