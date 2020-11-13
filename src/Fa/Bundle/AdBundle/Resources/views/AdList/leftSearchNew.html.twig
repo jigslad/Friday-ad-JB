@@ -1,5 +1,10 @@
 {% set maxDimensionCount = 12 %}
 
+{% set key_value = false %}
+{% if leftFilters.parent_category is defined and leftFilters.parent_category != '' and leftFilters.parent_category.getId() == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') and leftFilters.entity_selected == true %}
+    {% set key_value = true %}
+{% endif %}
+
 {{ form_start(leftFilters.form, {'attr': {'novalidate': 'novalidate'}}) }}
 {{ form_errors(leftFilters.form) }}
     <div class="search-filters">
@@ -384,7 +389,17 @@
             if (index != -1) {
                 href = href.substring(0, (index + 1));
             } else if (this_url.indexOf('=') != -1) {
-                url_params = set_url_params(url_params.replace('?', ''), this_url, isCheckbox);
+                if ('{{ key_value }}' == '1') {
+                    let this_url_part = this_url.split('=');
+                    let index_part = href.indexOf('/'+this_url_part[1]+'/');
+                    if (index_part != -1) {
+                        href = href.substring(0, (index_part + 1));
+                    } else {
+                        url_params = set_url_params(url_params.replace('?', ''), this_url, isCheckbox);
+                    }
+                } else {
+                    url_params = set_url_params(url_params.replace('?', ''), this_url, isCheckbox);
+                }
             } else {
                 let data_href = '';
                 if (isCheckbox) {

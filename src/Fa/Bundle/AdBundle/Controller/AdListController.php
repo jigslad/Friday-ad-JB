@@ -1702,6 +1702,7 @@ class AdListController extends CoreController
             }
         }
 
+        $dimensionSelected = false;
         $orderedDimensions = [];
         foreach ($dimensions as $dimension) {
             $solrFieldName = $dimensions[$dimension['id']]['solr_field'];
@@ -1731,6 +1732,7 @@ class AdListController extends CoreController
             $paramname = strtolower($dimensions[$dimension['id']]['dim_slug']);
             if (isset($params[$paramname])) {
                 $selected = $params[$paramname];
+                $dimensionSelected = true;
             }
 
             if (! empty($facetArraySet)) {
@@ -1883,7 +1885,8 @@ class AdListController extends CoreController
             'ads_with_images'   => isset($params['ads_with_images']),
             'expired_ads'       => isset($params['expired_ads']),
             'showPriceField'    => $categoryObj->getId() > 1 ? CommonManager::showPriceInSearchFilter($categoryObj->getId(), $this->container) : true,
-            'userTypeTitle'     => $userTypeLabels['header']
+            'userTypeTitle'     => $userTypeLabels['header'],
+            'entity_selected'   => $dimensionSelected
         ];
     }
 
