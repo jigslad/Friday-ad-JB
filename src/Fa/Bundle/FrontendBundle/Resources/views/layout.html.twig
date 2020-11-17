@@ -174,6 +174,11 @@
 
     {{ include('FaFrontendBundle::scriptTop.html.twig') }}
     {% block scripttop %}{% endblock %}
+    {#
+        main-css.css - Common CSS - taken from src/Fa/Bundle/FrontendBundle/Resources/views/main-css.html.twig - moved from src/Fa/Bundle/FrontendBundle/Resources/views/scriptTop.html.twig
+        main.css - Common CSS - taken from src/Fa/Bundle/FrontendBundle/Resources/views/fa-main-css-new.html.twig
+        covid-edition.css - Covid related CSS - Inline CSS
+    #}
 
 
     {% if (currentRoute in {0: 'fa_frontend_homepage'}) %}
@@ -193,9 +198,12 @@
     {% endif %}
     
 	{% if showAdultPages == 1 %}
-
+        <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{{ asset(cached_asset('/build/css/adulcss.css')) }}">
+        {{ include('FaFrontendBundle:Adult:adul-imgs.html.twig') }}
 	{% else %}
-
+        <link rel="stylesheet" href="{{ asset(cached_asset('/build/css/site.css')) }}">
+        {{ include('FaFrontendBundle::site-imgs.html.twig') }}
 	{% endif %}
 
     <script>
@@ -369,7 +377,7 @@
         {% endif %}
 
         {% if (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration',4: 'show_draft_ad',5: 'ad_package_purchase',6: 'show_cart',7: 'cybersource_checkout'}) %}
-{#            {{ include('FaFrontendBundle::layout-css.html.twig') }}#}
+            {{ include('FaFrontendBundle::layout-css.html.twig') }}
         {% endif %}
         {#{ include('FaFrontendBundle::pushNotificationsJs.html.twig') }#}
 
