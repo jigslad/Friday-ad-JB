@@ -3371,4 +3371,12 @@ ul.select2-choices:after, .select2-choice:after {
     background-size: auto !important;
   }
 }
-.top-links .f-dropdown { min-width: 205px !important;width: -moz-fit-content; }
+@media not all and (min-resolution:.001dpcm){
+  @supports (-webkit-appearance:none) {
+    .top-links .f-dropdown {
+      margin-left: -82px;
+      width: -moz-fit-content;
+      min-width: 205px;
+    }
+  }
+}
