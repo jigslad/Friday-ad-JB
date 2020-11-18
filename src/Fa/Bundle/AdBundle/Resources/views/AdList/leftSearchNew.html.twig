@@ -265,7 +265,9 @@
         if ($('#fa_left_search_new_item__location_autocomplete').val() != "United Kingdom") {
             let value = $('#fa_left_search_new_item__location').val();
             if (! $.isNumeric(value)) {
-                url = url.replace('/{{ currentLocation }}/', '/'+value+'/');
+                let locval = value.replace(' ','-');
+                locval = locval.toLowerCase();
+                url = url.replace('/{{ currentLocation }}/', '/'+locval+'/');
             }
 
             if ($('#fa_left_search_new_item__distance').val() != 200) {
