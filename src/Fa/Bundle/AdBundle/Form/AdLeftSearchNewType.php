@@ -95,6 +95,13 @@ class AdLeftSearchNewType extends AbstractType
         ->add('sort_ord', HiddenType::class)
         ->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'preSetData'));
 
+        if (isset($options['data']) && isset($options['data']['isShopPage']) && $options['data']['isShopPage']) {
+            $builder->add('keywords', TextType::class)
+                ->add('item__user_id', HiddenType::class);
+        } else {
+            $builder->add('keywords', HiddenType::class);
+        }
+
         if (isset($options['data']['parentIdArray']) && $options['data']['parentIdArray']) {
             $this->parentIdArray = $options['data']['parentIdArray'];
         }
