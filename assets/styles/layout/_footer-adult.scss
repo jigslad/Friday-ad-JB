@@ -2,12 +2,22 @@
     .footer {
         &__paa-btn {
             &--cta {
-                @extend .purple-btn-color;
+                @extend .purple-btn-color-light-three;
             }
         }
         &__subcribe-btn {
             &--cta {
-                @extend .purple-btn-color;
+                @extend .purple-btn-color-light-three;
+            }
+        }
+        &__link {
+            &:hover {
+                color: $color--ad-light;
+            }
+        }
+        &__form--input {
+            &:focus {
+                border: 1px solid $color--ad-light;
             }
         }
     }

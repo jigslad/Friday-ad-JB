@@ -1,0 +1,72 @@
+.adult {
+    .top-search {
+        display: none;
+        border-top: 1px solid $color--border;
+        border-bottom: 1px solid $color--border;
+        top: 60px;
+        background: $color--white;
+        &__block {
+            &.top-search-center {}
+        }
+        &__input {
+            &--text {
+                border: 1px solid $color--ad-secondary;
+                &:focus {
+                    border: 1px solid $color--ad-secondary;
+                }
+            }
+            &--btn {
+                background-color: $color--ad-secondary;
+                background: url('/public/images/search-white.svg') no-repeat center center, linear-gradient(135deg, #A75BD8 0%, #C60A84 100%) !important;
+                &:hover {
+                    background: url('/public/images/search-white.svg') no-repeat center center, linear-gradient(135deg, #8646ab 0, #9e086b 100%) !important;
+                }
+            }
+        }
+        &__location {
+            &--change {
+                background-image: url('/public/images/adult/adult-location.svg');
+                span {
+                    color: $color--ad-secondary;
+                }
+                &:hover {
+                    color: $color--primary;
+                    span {
+                        color: $color--ad-secondary;
+                    }
+                }
+            }
+        }
+        &__preferences {
+            &--link {
+                background-image: url('/public/images/adult/adult-plus.svg');
+                &:hover {
+                    color: $color--ad-secondary;
+                }
+            }
+        }
+        &__select-location {
+            &--text {
+                border: 1px solid $color--ad-secondary;
+                background-image: url('/public/images/adult/adult-location.svg');
+                &:focus {
+                    border: 1px solid $color--ad-secondary;
+                }
+            }
+            .close-icon {}
+            &--ok {
+                @extend .btn-rounded;
+                background: linear-gradient(135deg, #A75BD8 0%, #C60A84 100%);
+                &:hover {
+                    background: linear-gradient(135deg, #8646ab 0, #9e086b 100%);
+                }
+            }
+            &--cancel {
+                color: $color--ad-secondary;
+            }
+        }
+    }
+    .search-toggle {
+        display: block;
+    }
+}

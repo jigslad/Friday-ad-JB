@@ -306,6 +306,10 @@
     }
     &__checkbox {
         &.sign-me {
+            margin-bottom: 16px;
+            @include media-breakpoint-up(md) {
+                margin-bottom: 0;
+            }
             .footer__checkbox--label {
                 margin-bottom: 6px;
                 display: block;

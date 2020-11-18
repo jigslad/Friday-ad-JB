@@ -7,25 +7,28 @@
 
 /* Brand Colors */
 
-$color--hover:#82C148;
-$color--border:#CBD5D9;
-$color--primary:#212527;
-$color--light-grey:#ACB0B7;
-$color--light-red:#F55E74;
-$color--shadow-grey:#4a4a4a;
-$color--grey: #eaeff0;
-$color--grey10:#313133;
-$color--grey20:#E3E3E3;
-$color--blue:#3300FF;
-$color--green:#91D851;
-$color--light-green:#96e0e3;
-$color--linear-gradient-green:linear-gradient(45deg, #A8DC28 0%, #79D377 100%);
-$color--linear-gradient-light-green:linear-gradient(135deg, #A8DC28 0%, #79D378 100%);
-$color--linear-gradient-light-green-hover:linear-gradient(135deg, #85B021 0%, #60A85E 100%);
+$color--hover:#82C148 !default;
+$color--border:#CBD5D9 !default;
+$color--primary:#212527 !default;
+$color--light-grey:#ACB0B7 !default;
+$color--light-red:#F55E74 !default;
+$color--shadow-grey:#4a4a4a !default;
+$color--grey: #eaeff0 !default;
+$color--grey10:#313133 !default;
+$color--grey20:#E3E3E3 !default;
+$color--grey30:#4d5052 !default;
+$color--blue:#3300FF !default;
+$color--green:#91D851 !default;
+$color--light-green:#96e0e3 !default;
+$color--black: #0f0f0f !default;
+$color--linear-gradient-green:linear-gradient(45deg, #A8DC28 0%, #79D377 100%) !default;
+$color--linear-gradient-light-green:linear-gradient(135deg, #A8DC28 0%, #79D378 100%) !default;
+$color--linear-gradient-light-green-hover:linear-gradient(135deg, #85B021 0%, #60A85E 100%) !default;
 
 /*adult brand*/
 
-$color--ad-secondary:#e62eeb;
+$color--ad-secondary:#9C1F9F !default;
+$color--ad-light:#E62EEB !default;
 
 /*Theme color added*/
 
@@ -50,7 +53,6 @@ $color--grey-20: #333;
 $color--grey-matterhorn: #505050;
 $color--dark-grey: #141414;
 $color--dark-slate-grey: #252525;
-$color--black: #0f0f0f;
 $color--violet-br: #d94267;
 $color--red-bg: #db0037;
 $color--dark-grey-bg: #5f6a72;

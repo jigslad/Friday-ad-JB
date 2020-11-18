@@ -2344,7 +2344,7 @@
         <script src="{{ static_asset_url(asset_url) }}"></script>
         {% endjavascripts %}
     {% endif %}
-    <script type="text/javascript">
+    <script language="javascript" type="text/javascript">
     //<![CDATA[
     {% if mobileDetectManager.is('IE') %}
         $(function(){   
@@ -2368,7 +2368,7 @@
     var headerParallax;
     $(document).ready(function() {
         $('div.homepage-row:even').addClass('white-bg');
-        // getHeaderImage();
+        getHeaderImage();
 
         $('#s2id_fa_top_search_item__category_id').attr('placeholder', 'All');
         
@@ -2434,14 +2434,14 @@
             });
         }
 
-        $(document).foundation({
-            accordion: {
-                multi_expand: true,
-                callback : function (accordion) {
-                    accordionCallback(accordion);
-                }
-            }
-        });
+        // $(document).foundation({
+        //     accordion: {
+        //         multi_expand: true,
+        //         callback : function (accordion) {
+        //             accordionCallback(accordion);
+        //         }
+        //     }
+        // });
     });
 
     $(window).scroll(function() {
@@ -2496,6 +2496,7 @@
     </script>
     <script>
         $(document).ready(function() {
+            //alert("check");
             // owl Slider
             $('#categoryNavSlider').owlCarousel({
                 loop: false,

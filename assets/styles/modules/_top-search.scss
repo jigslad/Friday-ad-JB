@@ -62,10 +62,6 @@
                 background: url('/public/images/search-white.svg') no-repeat center center, linear-gradient(135deg, #A8DC28 0%, #79D378 100%) !important;
             }
         }
-        .close-icon{
-            left: auto;
-            right: 50px;
-        }
     }
     &__location {
         &--change {
@@ -82,7 +78,7 @@
             align-items: center;
             padding-left: 25px;
             margin-left: 16px;
-            a {
+            span {
                 color: $color--hover;
                 padding-left: 6px;
                 cursor: pointer;
@@ -92,9 +88,6 @@
                 span {
                     color: $color--hover;
                 }
-            }
-            &-name {
-                padding-left: 6px;
             }
         }
     }
@@ -168,11 +161,6 @@
             align-items: flex-end;
             color: $color--hover;
             cursor: pointer;
-            background: none;
-            border: 0;
-        }
-        .location-dropdown{
-            left:20px;
         }
     }
 }
