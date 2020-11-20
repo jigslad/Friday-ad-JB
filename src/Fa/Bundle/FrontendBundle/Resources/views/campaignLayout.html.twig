@@ -49,6 +49,9 @@
           %}
         <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}"/>
     {% endstylesheets %}
+
+    {{ include('FaFrontendBundle::gtmCode.html.twig') }}
+
     {% block blockGaCode%}
         {{ include('FaFrontendBundle::gaCode.html.twig') }}
     {% endblock %}

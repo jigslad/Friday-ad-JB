@@ -517,11 +517,6 @@ abstract class AdParser
         if (isset($this->advert['full_data']) && ($force == 'remap' || $force == 'iremap')) {
             $originalJson  = unserialize($this->advert['full_data']);
             $this->mapAdData($originalJson, $this->advert['ref_site_id']);
-            if ($force == 'iremap') {
-                $ad_feed_site = $this->em->getRepository('FaAdFeedBundle:AdFeedSite')->findOneBy(array('id' => $feedAd->getRefSiteId()));
-                $target_dir = $ad_feed_site->getType().'_'.$ad_feed_site->getRefSiteId();
-                $this->parseAdForImage($originalJson, $target_dir);
-            }
 
             if (isset($this->advert['status']) && $this->advert['status'] == 'R') {
                 $feedAd->setStatus('R');
@@ -582,6 +577,10 @@ abstract class AdParser
             // todo: necessary = only if the image_hash is changed.
 
             if (($force == 'all')|| !$feedAd || ($this->advert['image_hash'] != $feedAd->getImageHash())) {
+                $originalJson  = unserialize($this->advert['full_data']);
+                $ad_feed_site = $this->em->getRepository('FaAdFeedBundle:AdFeedSite')->findOneBy(array('id' => $feedAd->getRefSiteId()));
+                $target_dir = $ad_feed_site->getType().'_'.$ad_feed_site->getRefSiteId();
+                $this->parseAdForImage($originalJson, $target_dir);
                 $this->updateImages($ad);
             }
 

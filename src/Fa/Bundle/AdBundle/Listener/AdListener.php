@@ -125,7 +125,14 @@ class AdListener
         }
 
         $adSolrIndex = $this->container->get('fa.ad.solrindex');
-        return $adSolrIndex->update($solrClient, $ad, $this->container, false);
+        $adSolrIndex->update($solrClient, $ad, $this->container, false);
+
+        $solrClientNew = $this->container->get('fa.solr.client.ad.new');
+        if (!$solrClientNew->ping()) {
+            return false;
+        }
+
+        return $adSolrIndex->updateNew($solrClientNew, $ad, $this->container, false);
     }
 
     /**
@@ -145,6 +152,16 @@ class AdListener
         $solr = $solrClient->connect();
         $solr->deleteById($ad->getId());
         $solr->commit(true);
+
+        $solrClientNew = $this->container->get('fa.solr.client.ad.new');
+        if (!$solrClientNew->ping()) {
+            return false;
+        }
+
+        $solrNew = $solrClientNew->connect();
+        $solrNew->deleteById($ad->getId());
+        $solrNew->commit(true);
+
         return true;
     }
 

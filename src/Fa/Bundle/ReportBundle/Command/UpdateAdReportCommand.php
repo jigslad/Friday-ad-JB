@@ -242,7 +242,7 @@ EOF
             $paymentAdIdArray = array_unique($paymentAdIdArray);
             $adminUserIdArray = array_unique($adminUserIdArray);
         }
-        if (count($adIdArray)) {
+        if (!empty($adIdArray)) {
             $this->historyEntityManager->getRepository('FaReportBundle:AdReportDaily')->removeAdReportDailyAdsByIds($adIdArray, $date);
             $this->historyEntityManager->getRepository('FaReportBundle:AdPrintInsertDateReportDaily')->removeAdPrintInsertDateReportDailyAdsByIds($adIdArray, $date);
             $output->writeln('Inserting records in ad_report_daily....', true);
@@ -414,6 +414,8 @@ EOF
 
             $insertSql = trim($insertSql, ', ');
             $this->executeRawQuery($insertSql, $this->historyEntityManager);
+            $this->historyEntityManager->flush();
+            $this->historyEntityManager->commit();
 
             $this->entityManager->getRepository('FaAdBundle:AdIpAddress')->deleteRecordsByAdIds($adIdArray);
 
@@ -428,8 +430,9 @@ EOF
                 $printDatesArray = (isset($adPrintDates[$adId]) ? $adPrintDates[$adId] : array());
                 $printDatesArray = CommonManager::arrayUnique($printDatesArray);
                 foreach ($printDatesArray as $printDates) {
+                    $adReportAdId = isset($adReportIds[$adId])?$adReportIds[$adId]:$adId;
                     $printDateInsertFlag = true;
-                    $insertSql .= '("'.$adId.'", "'.$adReportIds[$adId].'", "'.$printDates['insert_date'].'", "'.$printDates['print_edition_id'].'", '.($action == 'all' ? time() : ($date ? strtotime($date) : (strtotime(date('Y-m-d'))- 24*60*60))).'), ';
+                    $insertSql .= '("'.$adId.'", "'.$adReportAdId.'", "'.$printDates['insert_date'].'", "'.$printDates['print_edition_id'].'", '.($action == 'all' ? time() : ($date ? strtotime($date) : (strtotime(date('Y-m-d'))- 24*60*60))).'), ';
                 }
             }
 

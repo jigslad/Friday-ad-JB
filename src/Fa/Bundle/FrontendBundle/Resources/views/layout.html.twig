@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,target-densityDpi=medium-dpi" />
 
-	{% set blockPageTitle = block('page_title') is defined ? block('page_title')|replace({' in UK': ''})|trim : false %}
+	{% set blockPageTitle = block('page_title') is defined ? block('page_title')|replace({' in UK': ''})|trim : ((otherblockPageTitle is defined)?otherblockPageTitle:false) %}
     {% set blockMetaRobots = block('meta_robots') is defined ? block('meta_robots')|trim : false %}
     {% set blockMetaDescription = block('meta_description') is defined ? block('meta_description')|replace({' in UK': ''})|trim : false %}
     {% set blockMetaKeywords = block('meta_keywords') is defined ? block('meta_keywords')|trim : false %}
@@ -16,8 +16,10 @@
 
     {% set container = fetch_container_instance() %}
     {% set currentRoute = app.request.attributes.get('_route') %}
-    {% set bannerRepository = fetch_repository('FaContentBundle:Banner') %}
-    {% set bannersArray = bannerRepository.getBannersArrayByPage(currentRoute, container) %}
+    {#{% if currentRoute != 'listing_page' %}#}
+        {% set bannerRepository = fetch_repository('FaContentBundle:Banner') %}
+        {% set bannersArray = bannerRepository.getBannersArrayByPage(currentRoute, container) %}
+    {#{% endif %}#}
     {% set blockDimension2 = block('dimension2') is defined ? block('dimension2')|trim : false %}
     {% set pushNotification = block('pushNotification') is defined ? block('pushNotification')|trim : false %}
     {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
@@ -147,12 +149,26 @@
         {% endif %}                
     {% endif %}	
             
-    {% if currentRoute=='fa_adult_homepage' or currentRoute=='fa_new_adult_homepage' %}
+    {% if (currentRoute in {0: 'fa_adult_homepage', 1:'fa_new_adult_homepage'}) %}
     	{% set showAdultPages=1 %}
     {% endif %}
-        
+
+    {% if keywordCategoryIds is defined %}
+        {% if constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') in keywordCategoryIds %}
+            {% set showAdultPages=1 %}
+        {% else %}
+            {% set showAdultPages=0 %}
+        {% endif %}
+    {% endif %}
+
+    {% if (showAdultPages==1 and (currentRoute in {0: 'fa_adult_homepage', 1:'fa_new_adult_homepage', 2:'ad_detail_page', 3:'listing_page', 4:'my_account'})) %}
+        {% set showAdultPages=1 %}
+    {% else %}
+        {% set showAdultPages=0 %}
+    {% endif %}
 
     {{ include('FaFrontendBundle::scriptTop.html.twig') }}
+
     {% block scripttop %}{% endblock %}
     {#
         main-css.css - Common CSS - taken from src/Fa/Bundle/FrontendBundle/Resources/views/main-css.html.twig - moved from src/Fa/Bundle/FrontendBundle/Resources/views/scriptTop.html.twig
@@ -179,7 +195,24 @@
     	<link rel="stylesheet" href="{{ asset('/build/css/site.css') }}?v=1.0.5">
     	{{ include('FaFrontendBundle::site-imgs.html.twig') }}
 	{% endif %}
-    
+
+    <script>
+
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+
+    </script>
+
+    {% if otherblockPageTitle is defined %}
+        <script language="javascript" type="text/javascript">
+            googletag.cmd.push(function() {
+                googletag.pubads().setTargeting('page_type', '{{ otherblockPageTitle }}').setTargeting('adBlocker', false).setTargeting('user_logged', {% if (app.user.getId() is not defined or app.user.getId() is null) %} false {% else %}true{% endif %});
+                googletag.enableServices();
+            });
+        </script>
+    {% else %}
+        {{ include('FaFrontendBundle::gtmCode.html.twig') }}
+    {% endif %}
     {% block blockGaCode%}
         {{ include('FaFrontendBundle::gaCode.html.twig') }}
     {% endblock %}
@@ -255,6 +288,8 @@
     <!-- End TrustBox script -->
 </head>
 <body {% if (showAdultPopup == 1) %} class="transbox" {% endif %}>
+
+
         {% if status_code is not defined %}
             {% set status_code = 200 %}
         {% endif %}

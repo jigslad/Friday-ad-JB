@@ -7,6 +7,7 @@ $(function() {
     $("{{ field }}"+'_autocomplete').autocomplete({
         minLength: 2,
         source: function( request, response ) {
+            $('#category_id_autocomplete_error').hide();
             var term = request.term;
             var rurl = Routing.generate("{{ route }}", { term: {% if 'location' in field %} request.term.replace(/[^a-z0-9\s]/gi, '') {% else %} request.term {% endif %} });
             rurl = rurl.replace(':https','');
@@ -15,6 +16,9 @@ $(function() {
         	{% endif %}
             {% if parent_field is not defined %}
                 if ( term in cache ) {
+                    if(!cache[term].length) {
+                        $('#category_id_autocomplete_error').show();
+                    }
                     response( cache[ term ] );
                     return;
                 }
@@ -33,6 +37,22 @@ $(function() {
                 data: { townId: townId, page_limit: 10, {% if dimension_field is defined %} cd_id: $('{{ dimension_field }}').val(),  {% endif %}},
                 {% endif %}
                 success: function(data) {
+                    if(!data['results'].length) {
+                        $('#category_id_autocomplete_error').show();
+                    }
+                    var result = $.map(data['results'], function(item) {
+                        return {
+                            label: item.text,
+                            id: item.id,
+                            text2: item.text2 ? item.text2 : '',
+                            index: item.index,
+                            area_id: item.area_id ? item.area_id : '',
+                            locationBy: item.locationBy ? item.locationBy : '',
+                           	latlong: item.latlong ? item.latlong : '',
+                        };
+                    });
+                    cache[ term ] = result;
+                    response(result);
                     if(jQuery.type(data) == 'object') {
                         var result = $.map(data['results'], function (item) {
                             return {
@@ -215,6 +235,7 @@ $(document).ready(function(){
     {% endif %}
     
     $("{{ field }}"+'_close').click(function() {
+        $('#category_id_autocomplete_error').hide();
         $("{{ field }}"+'_autocomplete').val('');
         $("{{ field }}").val('');
         $("#fa_top_search_item__area").val('');
@@ -253,6 +274,7 @@ $(document).ready(function(){
     	
         if ($(this).val().length < 1) {
             $("{{ field }}"+'_close').hide();
+            $('#category_id_autocomplete_error').hide();
             $("{{ field }}").val("");
             
             {% if child_field is defined %}
@@ -270,6 +292,7 @@ $(document).ready(function(){
     $("{{ field }}"+'_autocomplete').blur(function() {
         if ($("{{ field }}"+'_autocomplete').val().length == 0) {
             $("{{ field }}"+'_close').hide();
+            $('#category_id_autocomplete_error').hide();
         } else if($("{{ field }}"+'_autocomplete').val().length > 4) {
         	 {% if 'location' in field and 'paa' in field %}
 				//check location is related to area;
@@ -300,6 +323,7 @@ $(document).ready(function(){
     
     if ($("{{ field }}"+'_autocomplete').length > 0 && $("{{ field }}"+'_autocomplete').val().length < 1) {
         $("{{ field }}"+'_close').hide();
+        $('#category_id_autocomplete_error').hide();
     } else {
         $("{{ field }}"+'_close').show();
     }
