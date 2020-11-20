@@ -342,9 +342,10 @@
                     adTypeSelected = true;
                 }
             });
-
-            if(!adTypeSelected){
-                disableNextButton()
+            if(adTypes.length) {
+                if (!adTypeSelected) {
+                    disableNextButton()
+                }
             }
         {% endif %}
         var requiredFieldsUpdated = $(':input[required]:visible');
