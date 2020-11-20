@@ -3060,7 +3060,7 @@ class AdRepository extends EntityRepository
             $solr->deleteByQuery('a_user_id_i:"'.$userId.'"');
             $solr->commit(true);
 
-            $solrClientNew = $this->getContainer()->get('fa.solr.client.ad.new');
+            $solrClientNew = $container->get('fa.solr.client.ad.new');
             if (!$solrClientNew->ping()) {
                 return false;
             }
