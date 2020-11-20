@@ -264,6 +264,7 @@
         let url = getPageUrl();
         if ($('#fa_left_search_new_item__location_autocomplete').val() != "United Kingdom") {
             let value = $('#fa_left_search_new_item__location').val();
+            alert(value);
             if (! $.isNumeric(value)) {
                 let locval = value.replace(' ','-');
                 locval = locval.toLowerCase();
@@ -274,40 +275,38 @@
                 url_param = 'item__distance=' + $('#fa_left_search_new_item__distance').val();
                 if (url.indexOf('?') != -1) {
                     let url_string = url.split('?');
-                    //url = url_string[0];
+                    url = url_string[0];
                     url_string = url_string[1];
 
                     let distance_index = url_string.indexOf('item__distance');
-                    let end_position = '';
-                     if (distance_index != -1) {
-                        let end_position = url_string.indexOf('&', distance_index);
-                        if (end_position == -1) {
-                            end_position = url_string.length;
+                    //let end_position = '';
+                    if (distance_index != -1) {
+                        let distVal = $.urlParamVal('item__distance');
+                        let ambersenExists = url_string.indexOf('&item__distance=');
+                        if (ambersenExists == -1) {
+                            url_string = url_string.replace('&item__distance='+distVal, '');
+                            url += '&' + url_string+'&'+url_param;
+                        } else {
+                            url_string = url_string.replace('item__distance='+distVal, '');
+                            url += '?' + url_string+'&'+url_param;
                         }
-                    }
-                    let search_string = url_string.substring(distance_index, end_position);
-                    url_string = url_string.replace(search_string, '');
-                    if (url_string.length <= 1) {
-                        url += '?' + url_param;
+
                     } else {
-                        url += '&' + url_param;
+                        url += '?' + url_string+'&'+url_param;
                     }
                 } else {
-                    url += '&' + url_param;
+                    url += '?' + url_string+'&'+url_param;
                 }
-            } else {
-                if(url_param!='') {
-                    if (url.indexOf('?') == -1) {
-                        url += '?' + url_param;
-                    } else {
-                        url += '&' + url_param;
-                    }
-                }
-
+                url = url.replace('&&', '&');
             }
 
             window.location.href = url;
         }
+    }
+
+    $.urlParamVal = function(name){
+            var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+            return results[1] || 0;
     }
 
     function set_url_params(url_params, this_url, isCheckbox=true) {
