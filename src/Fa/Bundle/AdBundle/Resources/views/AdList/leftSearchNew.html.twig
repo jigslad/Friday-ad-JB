@@ -296,7 +296,14 @@
                     url += '&' + url_param;
                 }
             } else {
-                url += '?' + url_param;
+                if(url_param!='') {
+                    if (url.indexOf('?') == -1) {
+                        url += '?' + url_param;
+                    } else {
+                        url += '&' + url_param;
+                    }
+                }
+
             }
 
             window.location.href = url;
