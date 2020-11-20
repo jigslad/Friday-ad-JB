@@ -290,8 +290,13 @@
                     } else {
                         url += '&' + url_param;
                     }
-                } else {
-                    url += '?' + url_param;
+            } else {
+                if(url_param!='') {
+                    if (url.indexOf('?') == -1) {
+                        url += '?' + url_param;
+                    } else {
+                        url += '&' + url_param;
+                    }
                 }
             }
 
