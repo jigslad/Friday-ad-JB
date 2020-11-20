@@ -259,7 +259,7 @@
         let url = getPageUrl();
         if ($('#fa_left_search_new_item__location_autocomplete').val() != "United Kingdom") {
             let value = $('#fa_left_search_new_item__location').val();
-            alert(value);
+
             if (! $.isNumeric(value)) {
                 let locval = value.replace(' ','-');
                 locval = locval.toLowerCase();
