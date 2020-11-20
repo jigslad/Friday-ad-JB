@@ -275,8 +275,8 @@
                     let distance_index = url_string.indexOf('item__distance');
                     let end_position = '';
                      if (distance_index != -1) {
-                        let end_position = url_string.indexOf('&', distance_index);
-                        if (end_position == -1) {
+                        let ambersenExists = url_string.indexOf('&', distance_index);
+                        if (ambersenExists == -1) {
                             end_position = url_string.length;
                         }
 
@@ -302,6 +302,11 @@
 
             window.location.href = url;
         }
+    }
+
+    $.urlParamVal = function(name){
+            var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+            return results[1] || 0;
     }
 
     function set_url_params(url_params, this_url, isCheckbox=true) {
