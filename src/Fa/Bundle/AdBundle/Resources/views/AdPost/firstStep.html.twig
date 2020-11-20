@@ -53,7 +53,7 @@
                             {#<i class="fi-arrow-down large element-animation"></i>#}
                             {#</span>#}
                             <span class="textbox-wrapper">
-                                {{ form_row(form.category_id_autocomplete) }}
+                                {{ form_row(form.category_id_autocomplete,{'attr':{'autofocus': true}}) }}
                                 <a href="javascript:void(0);" id="fa_paa_category_select_category_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
                             </span>
                             <span id="category_id_autocomplete_error" class="error" style="display:none">No matching categories found. Try a different search or use the category icons to navigate to find your category.</span>

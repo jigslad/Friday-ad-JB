@@ -54,6 +54,21 @@ $(function() {
                     });
                     cache[ term ] = result;
                     response(result);
+                    if(jQuery.type(data) == 'object') {
+                        var result = $.map(data['results'], function (item) {
+                            return {
+                                label: item.text,
+                                id: item.id,
+                                text2: item.text2 ? item.text2 : '',
+                                index: item.index,
+                                area_id: item.area_id ? item.area_id : '',
+                                locationBy: item.locationBy ? item.locationBy : '',
+                                latlong: item.latlong ? item.latlong : '',
+                            };
+                        });
+                        cache[term] = result;
+                        response(result);
+                    }
                 }
             });
         },
