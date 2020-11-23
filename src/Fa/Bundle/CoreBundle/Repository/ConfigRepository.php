@@ -46,7 +46,7 @@ class ConfigRepository extends EntityRepository
     const LIVE_CAMS_URL = 'https://offers.refchamp.com/?offer=26&uid=03112eb6-8935-4bc9-9591-1f16e8758836';  /*'https://track.1234sd123.com/d936eb00-46a1-4f7b-a8c3-0dface357920';   'https://engine.partylemons.com/?611886259'; */
     const LOCAL_DATING_URL = 'https://reactads.engine.adglare.net/?933883370';
     const SUGAR_BABIES_URL = 'https://engine.voluumtlkrnarketing.com/?820533264';
-
+    const LIVE_WEB_CAMS_URL = 'https://engine.trackingdesks.com/?611886259';
 
     public function getRuleArray()
     {
