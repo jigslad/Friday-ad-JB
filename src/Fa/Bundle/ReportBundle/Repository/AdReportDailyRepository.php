@@ -86,7 +86,7 @@ class AdReportDailyRepository extends EntityRepository
         $qb = $this->createQueryBuilder(self::ALIAS);
 
         if ($isCountQuery) {
-            $qb->select('COUNT( ' . self::ALIAS . '.id) as total_ads');
+            $qb->select('COUNT( ' . AdPrintInsertDateReportDailyRepository::ALIAS . '.print_insert_date) as total_ads');
         } else {
             $qb->select(self::ALIAS . '.id', self::ALIAS . '.ad_id', self::ALIAS . '.print_revenue_gross', self::ALIAS . '.print_edition_ids', self::ALIAS . '.duration_print', self::ALIAS . '.skip_payment_reason')
                 ->distinct(AdPrintInsertDateReportDailyRepository::ALIAS . '.print_insert_date');
