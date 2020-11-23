@@ -3427,8 +3427,11 @@ h1.paa-title{
   width: 300px;
   height: 56px;
   margin-bottom: 8px;
-  border: 4px solid rgba(156, 31, 159,0.3);
+  border: 4px solid rgba(255, 255, 255,0.3);
   border-radius: 8px;
+}
+.textbox-wrapper:focus-within {
+  border: 4px solid rgba(156, 31, 159,0.3);
 }
 #fa_paa_category_select_category_id_autocomplete {
   border: 1px solid #CBD5D9;
