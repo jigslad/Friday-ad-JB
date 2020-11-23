@@ -950,11 +950,12 @@ class AdListController extends CoreController
         $static_filters = '';
         $searchableDimensions = [];
         $root = $category;
-        if ($findersSearchParams['item__category_id'] == 1) {
-            $data['static_filters'] .= $static_filters = $this->setCommonFilters($data['search']);
-        } else {
         $listingFields = array();
         $adRepository = $this->getRepository('FaAdBundle:Ad');
+
+        if ($findersSearchParams['item__category_id'] == 1) {
+            //$data['static_filters'] .= $static_filters = $this->setCommonFilters($data['search']);
+        } else {
             $searchableDimensions = $this->getRepository('FaEntityBundle:CategoryDimension')->getSearchableDimesionsArrayByCategoryId($category->getId(), $this->container);
 
             $root = $this->getRepository('FaEntityBundle:Category')->getRootNodeByCategory($category->getId());
