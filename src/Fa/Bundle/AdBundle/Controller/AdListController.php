@@ -1945,7 +1945,7 @@ class AdListController extends CoreController
                     'ad_img'        => isset($ad['thumbnail_url']) ? $ad['thumbnail_url'] : $this->container->getParameter('fa.static.shared.url').'/bundles/fafrontend/images/no-image-grey.svg',
                     'image_count'   => isset($ad['image_count']) ? $ad['image_count'] : 0,
                     'img_alt'       => '',
-                    'ad_url'        => $ad['ad_detail_url'],
+                    'ad_url'        => isset($ad['ad_detail_url'])?$ad['ad_detail_url']:'',
                     'dimensions'    => $dimensions,
                     'top_ad'        => empty($ad['is_topad']) ? false : true,
                     'urgent_ad'     => empty($ad['is_urgent_ad']) ? false : true,
