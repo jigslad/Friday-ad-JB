@@ -23,11 +23,11 @@
             {% set plusMinusClass = 'fi-minus' %}
             {% set contentActiveClass = 'active' %}
         {% endif %}
-        <a href="{{ '#panel' ~ filterPanelCounter ~ 'b'}}" class="clearfix">
+        <a href="{{ '#panel' ~ filterPanelCounter ~ 'b'}}" rel="index,follow" class="clearfix">
             <h5 class="left">{{ attribute(form, filter).vars.label }}</h5>
             <i class="right {{ plusMinusClass }}"></i>
         </a>
-        <div id="{{ 'panel' ~ filterPanelCounter ~ 'b'}}" class="content {{ contentActiveClass }}">
+        <div id="{{ 'panel' ~ filterPanelCounter ~ 'b'}}" rel="index,follow" class="content {{ contentActiveClass }}">
             <ul class="white-checkbox search-type crawlable-checkbox">
                 {% set dimensionOptions = {} %}
                 {% if sortBy == 'ad_count' %}
