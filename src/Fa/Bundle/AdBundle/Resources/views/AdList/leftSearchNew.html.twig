@@ -290,7 +290,7 @@
                         url += '?' + url_string+'&'+url_param;
                     }
                 } else {
-                    url += '?' + url_string+'&'+url_param;
+                    if($('#fa_left_search_new_item__distance').val()!='' && $('#fa_left_search_new_item__distance').val()!=200) { url += '?' +url_param; }
                 }
                 url = url.replace('&&', '&');
             }
