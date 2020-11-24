@@ -266,7 +266,7 @@
                 url = url.replace('/{{ currentLocation }}/', '/'+locval+'/');
             }
             let url_param = '';
-            if ($('#fa_left_search_new_item__distance').val() != 200) {
+            if ($('#fa_left_search_new_item__distance').val() != '') {
                 url_param = 'item__distance=' + $('#fa_left_search_new_item__distance').val();
                 if (url.indexOf('?') != -1) {
                     let url_string = url.split('?');
@@ -292,9 +292,8 @@
                 } else {
                     if($('#fa_left_search_new_item__distance').val()!='' && $('#fa_left_search_new_item__distance').val()!=200) { url += '?' +url_param; }
                 }
-                url = url.replace('&&', '&');
             }
-
+            url = url.replace('&&', '&');
             window.location.href = url;
         }
     }
