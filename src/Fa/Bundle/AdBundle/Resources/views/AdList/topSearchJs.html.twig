@@ -36,17 +36,17 @@
             });
         }
 
-        let defRadius;
+        {# let defRadius;
         {% if searchParams.item__distance is defined and searchParams.item__distance is not null %}
             {% if searchParams.item__distance|length > 0 %}
                 defRadius = '{{ searchParams.item__distance }}';
             {% else %}
                 defRadius = 15;
             {% endif %}
-        {% endif %}
+        {% endif %} #}
 
         $('#distance_slider').noUiSlider({
-            start: [ defRadius ],
+            //start: [ defRadius ],
             range: {
                 'min': [0, 2],
                 '5%':  [2, 3],
@@ -129,6 +129,7 @@
                  if (!$.isEmptyObject(data)) {
                 	$('#distance_slider').val(data.default_distance);
                     $('#fa_top_search_item__distance').val(data.default_distance);
+                     $('#fa_top_search_default_distance').val(data.default_distance);
                     setAndMoveSliderCaption('distance_slider', 'lower', 'distance', false);                   	
                  } 
              }
