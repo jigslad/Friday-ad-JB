@@ -15,6 +15,7 @@
 	                   {{ form_widget(form.keywords, {'attr': {'placeholder':'Looking for...'|trans({}, 'frontend-header-search') }}) }}
 	                   <a href="javascript:void(0);" rel="nofollow" id="fa_top_search_keywords_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
 	               </div>
+                   {{ form_widget(form.default_distance) }}
 	               <input type="submit" class="button postfix search-icon" value="Go" />
 	                <div class="change-location hide-for-small-only">
 	                    <span class="left">{{ 'in'|trans({}, 'frontend-header-search') }}</span>

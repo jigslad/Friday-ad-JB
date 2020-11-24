@@ -271,7 +271,7 @@
                 url = url.replace('/{{ currentLocation }}/', '/'+locval+'/');
             }
             let url_param = '';
-            if ($('#fa_left_search_new_item__distance').val() != '') {
+            if ($('#fa_left_search_new_item__distance').val() != '' && $('#fa_left_search_new_item__distance').val() == $('#fa_left_search_new_default__distance').val()) {
                 url_param = 'item__distance=' + $('#fa_left_search_new_item__distance').val();
                 if (url.indexOf('?') != -1) {
                     let url_string = url.split('?');
@@ -298,7 +298,7 @@
                         url += '?'+url_string+'&'+url_param;
                     }
                  } else {
-                    url += '?' +url_param; 
+                    url += '?' +url_param;
                 }
             }
             url = url.replace('&&', '&');

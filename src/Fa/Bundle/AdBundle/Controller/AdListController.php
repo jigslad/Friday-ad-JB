@@ -1395,9 +1395,28 @@ class AdListController extends CoreController
             /** @var Location $location */
             $location = $this->getRepository('FaEntityBundle:Location')->find($searchParams['item__location']);
 
-            $radius = 200;
+            /*$radius = 200;
             if (isset($searchParams['item__distance'])) {
                 $radius = $searchParams['item__distance'];
+            }*/
+
+            if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
+                $categoryId = $searchParams['item__category_id'];
+            }
+
+            if (isset($searchParams['item__distance']) && $searchParams['item__distance']) {
+                $radius = $searchParams['item__distance'];
+            } else {
+                $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
+                $radius = ($getDefaultRadius)?$getDefaultRadius:'';
+            }
+            if($radius=='') {
+                if($categoryId!='') {
+                    $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
+                    $radius = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
+                } else {
+                    $radius = CategoryRepository::MAX_DISTANCE;
+                }
             }
 
             if (!empty($location)) {
