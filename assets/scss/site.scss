@@ -189,7 +189,9 @@ a:hover.button, a:focus.button,a:hover.secondary-btn-1, a:focus.secondary-btn-1,
 
 
 
-.top-bar-section .has-dropdown a { padding-left:10px !important; }
+.top-bar-section .has-dropdown a {
+  padding: 0 17px 0 10px !important;
+}
 
 .search-pin { background: url("data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' x='0' y='0' width='21' height='25' viewBox='-469 268 21 25' xml:space='preserve'%3E%3Cstyle type='text/css'%3E .st0%7Bfill:%2391d851;%7D%0A%3C/style%3E%3Ctitle%3Esearch-pin%3C/title%3E%3Cdesc%3ECreated with Sketch.%3C/desc%3E%3Cpath class='st0' d='M-458.5 268c-5.5 0-10 4.3-10 9.6 0.1 7.2 10 15.4 10 15.4 -0.1 0 9.8-7.7 10-15.4C-448.5 272.3-453 268-458.5 268zM-458.5 281.3c-1.8 0-3.3-1.5-3.3-3.3s1.5-3.3 3.3-3.3 3.3 1.5 3.3 3.3S-456.7 281.3-458.5 281.3z'/%3E%3C/svg%3E") no-repeat !important; }
 
@@ -322,7 +324,15 @@ button.signup-fb-btn.expand {
 .individual-upsell-modal-content { padding-top:20px !important}
 
 .paa-back-arrow-pkg, .paa-back-arrow { color: $atag-color !important; } 
-.top-bar-section .has-dropdown > a::after{ right: -10px !important; }
+.top-bar-section .has-dropdown > a::after{
+  border: none;
+  width: 7px;
+  height: 5px;
+  top: 30px;
+  right: -10px !important;
+  margin-right: 18px;
+  background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%227%22%20height%3D%225%22%20viewBox%3D%22-396%20233%207%205%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3Anone%3Bstroke%3A%23A8A8A8%3Bstroke-width%3A2%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Elittle%20arrow%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch%20Beta.%3C/desc%3E%3Cg%20transform%3D%22translate%28-276.000000%2C%20-243.000000%29%22%3E%3Cg%20transform%3D%22translate%28-1.000000%2C%200.000000%29%22%3E%3Cg%20transform%3D%22translate%280.000000%2C%20212.000000%29%22%3E%3Cg%20transform%3D%22translate%28228.000000%2C%2010.000000%29%22%3E%3Cg%20transform%3D%22translate%2850.000000%2C%2022.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-391.7%20233.7l-2%202%20-2-2%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat center center;
+}
 .select2-drop, .ui-autocomplete {  margin-top: 0px !important; }
 .choice-display-flex { display:inline-flex !important; }
 .choice-display-flex label { margin-right:10px !important; line-height:25px !important; }
@@ -797,8 +807,17 @@ footer a:hover, .footer-head:hover, .pkg-includes a {
 } 
 @media only screen and (min-width:760px) and (max-width: 959px) {
 	#home-search .search-btn button { text-indent:unset !important; }
-	.top-bar-section a.tab-cat-link::after { 
+	.top-bar-section a.tab-cat-link::after {
         margin-right: 12px;
+        content: "";
+        display: inline-block;
+        border: 0;
+        width: 7px;
+        height: 5px;
+        top: 28px;
+        right: 0;
+        position: absolute;
+        background: url(/bundles/fafrontend/images/little-arrow.svg) no-repeat center center;
     }
     #left-column .step-text {
         width: 90px !important;
@@ -809,11 +828,19 @@ footer a:hover, .footer-head:hover, .pkg-includes a {
 }
 @media only screen and (min-width:960px) and (max-width: 1151px) {
     .top-bar-section .real-desktop .has-dropdown a {
-    	padding: 0 12px 0px 5px !important;
+      padding: 0 12px 0px 5px !important;
+      font-size: 13px !important;
+      margin-right: 2px;
     }
     #paa_similar_adverts .list-col-2, #paa_similar_adverts .list-distance {
 	    width: 210px !important;
 	}
+    .top-bar-section .real-desktop li:last-child .main_category {
+      padding-right: 15px !important;
+    }
+    .top-bar-section li:not(.has-form).place-item-btn a {
+      padding: 18px 15px !important;
+    }
 }
 @media only screen and (min-width: 1152px) {
     .big-wrapper.choose-list {
