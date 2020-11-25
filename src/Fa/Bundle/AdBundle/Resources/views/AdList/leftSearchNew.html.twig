@@ -266,42 +266,44 @@
                 url = url.replace('/{{ currentLocation }}/', '/'+locval+'/');
             }
             let url_param = '';
-            if ($('#fa_left_search_new_item__distance').val() != 200) {
+            if ($('#fa_left_search_new_item__distance').val() != '') {
                 url_param = 'item__distance=' + $('#fa_left_search_new_item__distance').val();
                 if (url.indexOf('?') != -1) {
                     let url_string = url.split('?');
                     url = url_string[0];
                     url_string = url_string[1];
+                    let url_string_org = url_string;
 
                     let distance_index = url_string.indexOf('item__distance');
                     //let end_position = '';
                     if (distance_index != -1) {
                         let distVal = $.urlParamVal('item__distance');
                         let ambersenExists = url_string.indexOf('&item__distance=');
-                        if (ambersenExists == -1) {
+
+                        if (ambersenExists != -1) {
                             url_string = url_string.replace('&item__distance='+distVal, '');
-                            url += '&' + url_string+'&'+url_param;
                         } else {
                             url_string = url_string.replace('item__distance='+distVal, '');
-                            url += '?' + url_string+'&'+url_param;
                         }
+                    }
 
+                    if(url_string=='') {
+                        url += '?'+url_param;
                     } else {
-                        url += '?' + url_string+'&'+url_param;
+                        url += '?'+url_string+'&'+url_param;
                     }
                 } else {
-                    url += '?' + url_string+'&'+url_param;
+                    url += '?' +url_param;
                 }
-                url = url.replace('&&', '&');
             }
-
+            url = url.replace('&&', '&');
             window.location.href = url;
         }
     }
 
     $.urlParamVal = function(name){
-            var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-            return results[1] || 0;
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        return results[1] || 0;
     }
 
     function set_url_params(url_params, this_url, isCheckbox=true) {
