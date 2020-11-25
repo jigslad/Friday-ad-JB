@@ -70,15 +70,16 @@
             </div>
         </div>
     </div>
-
-    <div class="homepage-row">
-        <div class="row">
-            <div class="columns">
-                <div class="homepage-title">{{'Popular searches'|trans({}, 'frontend-homepage')}}</div>
-                {{ include('FaFrontendBundle:Adult:homePopularSearches.html.twig', {'divId': 'recommended-item-slider', 'ads': ''}) }}
+    {% if seoFields|length and seoFields['popular_search'] is defined and seoFields['popular_search'] and seoFields['seo_tool_id'] is defined and seoFields['seo_tool_id'] %}
+        <div class="homepage-row">
+            <div class="row">
+                <div class="columns">
+                    <div class="homepage-title">{{'Popular searches'|trans({}, 'frontend-homepage')}}</div>
+                    {{ include('FaFrontendBundle:Adult:homePopularSearches.html.twig', {'divId': 'recommended-item-slider', 'ads': '','mapFlag': 0}) }}
+                </div>
             </div>
         </div>
-    </div>
+    {% endif %}
     
     <div class="homepage-row">
         <div class="row">
@@ -123,7 +124,7 @@
         </div>
     </div>
 	{% endif %}
-	
+
     <div class="homepage-row">
         <div class="row">
             <div class="columns">
