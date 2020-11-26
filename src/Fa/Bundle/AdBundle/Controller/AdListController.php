@@ -1185,6 +1185,11 @@ class AdListController extends CoreController
         $mergedPagination = $this->get('fa.pagination.manager')->getSolrPagination();
 
         $mergedAds = $this->formatAds($mergedPagination);
+        if($findersSearchParams['item__category_id'] === 1){
+            if(!isset($findersSearchParams['item__distance'])){
+                $findersSearchParams['item__distance'] = 200;
+            }
+        }
 
         $parameters = [
             'featuredAds'           => $featuredAds,
