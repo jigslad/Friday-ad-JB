@@ -950,13 +950,11 @@ class AdListController extends CoreController
         $static_filters = '';
         $searchableDimensions = [];
         $root = $category;
-        $listingFields = array();
-        $adRepository = $this->getRepository('FaAdBundle:Ad');
-
         if ($findersSearchParams['item__category_id'] == 1) {
-            //$data['static_filters'] .= $static_filters = $this->setCommonFilters($data['search']);
+            $data['static_filters'] .= $static_filters = $this->setCommonFilters($data['search']);
         } else {
             $searchableDimensions = $this->getRepository('FaEntityBundle:CategoryDimension')->getSearchableDimesionsArrayByCategoryId($category->getId(), $this->container);
+            $adRepository = $this->getRepository('FaAdBundle:Ad');
 
             $root = $this->getRepository('FaEntityBundle:Category')->getRootNodeByCategory($category->getId());
             $repository = $this->getRepository('FaAdBundle:' . 'Ad' . str_replace(' ', '', $root->getName()));
@@ -979,8 +977,8 @@ class AdListController extends CoreController
                 $searchableDimensions[$key]['solr_field'] = $solrDimensionFieldName;
                 $searchableDimensions[$key]['dim_slug']   = $nameInLowerCase;
             }
+            $data['static_filters'] .= $static_filters = $this->setDimensionParams($data['search'], $listingFields, $adRepository);
         }
-        $data['static_filters'] .= $static_filters = $this->setDimensionParams($data['search'], $listingFields, $adRepository);
 
         $keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: NULL;
         $recordsPerPage = (isset($data['pager']['limit']) && $data['pager']['limit']) ? $data['pager']['limit']: $this->container->getParameter('fa.search.records.per.page');
@@ -1184,11 +1182,6 @@ class AdListController extends CoreController
         $mergedPagination = $this->get('fa.pagination.manager')->getSolrPagination();
 
         $mergedAds = $this->formatAds($mergedPagination);
-        if($findersSearchParams['item__category_id'] === 1){
-            if(!isset($findersSearchParams['item__distance'])){
-                $findersSearchParams['item__distance'] = 200;
-            }
-        }
 
         $parameters = [
             'featuredAds'           => $featuredAds,
@@ -1400,28 +1393,9 @@ class AdListController extends CoreController
             /** @var Location $location */
             $location = $this->getRepository('FaEntityBundle:Location')->find($searchParams['item__location']);
 
-            /*$radius = 200;
+            $radius = 15;
             if (isset($searchParams['item__distance'])) {
                 $radius = $searchParams['item__distance'];
-            }*/
-
-            if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
-                $categoryId = $searchParams['item__category_id'];
-            }
-
-            if (isset($searchParams['item__distance']) && $searchParams['item__distance']) {
-                $radius = $searchParams['item__distance'];
-            } else {
-                $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
-                $radius = ($getDefaultRadius)?$getDefaultRadius:'';
-            }
-            if($radius=='') {
-                if($categoryId!='') {
-                    $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
-                    $radius = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
-                } else {
-                    $radius = CategoryRepository::MAX_DISTANCE;
-                }
             }
 
             if (!empty($location)) {

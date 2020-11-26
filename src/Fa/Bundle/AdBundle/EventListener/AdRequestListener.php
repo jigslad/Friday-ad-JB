@@ -521,7 +521,8 @@ class AdRequestListener
 
                     $setDefaultRadius = false;
                     $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
-                    if ($request->get('item__distance')) {
+                    $requestDistance = $request->get('item__distance');
+                    if (isset($requestDistance)) {
                         $searchParams['item__distance']  =  $request->get('item__distance');
                     } else {
                         $setDefaultRadius = true;
