@@ -950,12 +950,10 @@ class AdListController extends CoreController
         $static_filters = '';
         $searchableDimensions = [];
         $root = $category;
+
         $listingFields = array();
         $adRepository = $this->getRepository('FaAdBundle:Ad');
-
-        if ($findersSearchParams['item__category_id'] == 1) {
-            //$data['static_filters'] .= $static_filters = $this->setCommonFilters($data['search']);
-        } else {
+        if ($findersSearchParams['item__category_id'] != 1) {
             $searchableDimensions = $this->getRepository('FaEntityBundle:CategoryDimension')->getSearchableDimesionsArrayByCategoryId($category->getId(), $this->container);
 
             $root = $this->getRepository('FaEntityBundle:Category')->getRootNodeByCategory($category->getId());
@@ -981,7 +979,7 @@ class AdListController extends CoreController
             }
         }
         $data['static_filters'] .= $static_filters = $this->setDimensionParams($data['search'], $listingFields, $adRepository);
-        
+
         $keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: NULL;
         $recordsPerPage = (isset($data['pager']['limit']) && $data['pager']['limit']) ? $data['pager']['limit']: $this->container->getParameter('fa.search.records.per.page');
 
@@ -1395,10 +1393,10 @@ class AdListController extends CoreController
             /** @var Location $location */
             $location = $this->getRepository('FaEntityBundle:Location')->find($searchParams['item__location']);
 
-            /*$radius = 200;
-            if (isset($searchParams['item__distance'])) {
+            $radius = 200;
+            if (! empty($searchParams['item__distance'])) {
                 $radius = $searchParams['item__distance'];
-            }*/
+            }
 
             if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
                 $categoryId = $searchParams['item__category_id'];

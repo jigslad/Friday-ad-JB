@@ -271,7 +271,7 @@
                 url = url.replace('/{{ currentLocation }}/', '/'+locval+'/');
             }
             let url_param = '';
-            if ($('#fa_left_search_new_item__distance').val() != '' && $('#fa_left_search_new_item__distance').val() == $('#fa_left_search_new_default__distance').val()) {
+            if ($('#fa_left_search_new_item__distance').val() != '') {
                 url_param = 'item__distance=' + $('#fa_left_search_new_item__distance').val();
                 if (url.indexOf('?') != -1) {
                     let url_string = url.split('?');
@@ -297,7 +297,7 @@
                     } else {
                         url += '?'+url_string+'&'+url_param;
                     }
-                 } else {
+                } else {
                     url += '?' +url_param;
                 }
             }
@@ -307,8 +307,8 @@
     }
 
     $.urlParamVal = function(name){
-            var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-            return results[1] || 0;
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        return results[1] || 0;
     }
 
     function set_url_params(url_params, this_url, isCheckbox=true) {
