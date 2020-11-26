@@ -981,7 +981,7 @@ class AdListController extends CoreController
             }
         }
         $data['static_filters'] .= $static_filters = $this->setDimensionParams($data['search'], $listingFields, $adRepository);
-        
+
         $keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: NULL;
         $recordsPerPage = (isset($data['pager']['limit']) && $data['pager']['limit']) ? $data['pager']['limit']: $this->container->getParameter('fa.search.records.per.page');
 
@@ -1184,6 +1184,11 @@ class AdListController extends CoreController
         $mergedPagination = $this->get('fa.pagination.manager')->getSolrPagination();
 
         $mergedAds = $this->formatAds($mergedPagination);
+        if($findersSearchParams['item__category_id'] === 1){
+            if(!isset($findersSearchParams['item__distance'])){
+                $findersSearchParams['item__distance'] = 200;
+            }
+        }
 
         $parameters = [
             'featuredAds'           => $featuredAds,
@@ -1941,7 +1946,7 @@ class AdListController extends CoreController
                     'ad_img'        => isset($ad['thumbnail_url']) ? $ad['thumbnail_url'] : $this->container->getParameter('fa.static.shared.url').'/bundles/fafrontend/images/no-image-grey.svg',
                     'image_count'   => isset($ad['image_count']) ? $ad['image_count'] : 0,
                     'img_alt'       => '',
-                    'ad_url'        => isset($ad['ad_detail_url'])?$ad['ad_detail_url']:'',
+                    'ad_url'        => $ad['ad_detail_url'],
                     'dimensions'    => $dimensions,
                     'top_ad'        => empty($ad['is_topad']) ? false : true,
                     'urgent_ad'     => empty($ad['is_urgent_ad']) ? false : true,
