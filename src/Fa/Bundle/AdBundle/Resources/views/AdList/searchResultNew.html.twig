@@ -220,6 +220,9 @@
                     {% set slotallocated = slotallocated|merge([1]) %}
                 {% endif %}
                 {% set adCount = 0 %}
+                {% set getPagNum = (app.request.get('page'))?(app.request.get('page')):1 %}
+                {% set realAdCnt = (getPagNum-1)*20 %}
+                {% set setExtendedHeading = 0 %}
 
                 {% for ad in featuredAds %}
                     {{ include('FaAdBundle:AdList:listDetailNew.html.twig', {'isFeatured' : true}) }}
@@ -268,6 +271,13 @@
                         {% endif %}
                     {% endif %}
 
+                    {% if ((realAdCnt > resultCount) and (setExtendedHeading==0)) %}
+                        <div data-alert="" class="alert-box info radius">
+                            <span class="alert-icon">&nbsp;</span>
+                            We found  {{extendedResultCount}} {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id) }} ads within  {{extendedRadius}} miles of {{ app.request.get('location') | replace({'-':' '}) | title }}
+                        </div>
+                        {% set setExtendedHeading = 1 %}
+                    {% endif %}
 
                     {% if displayRecommendedSlot==1 and recommendedSlotsCount > 0 %}
                         {% if adCount== 4  and (recommendedSlotResult[2] is defined and recommendedSlotResult[2]|length >0) %}
