@@ -1189,6 +1189,7 @@ class AdListController extends CoreController
         $parameters = [
             'featuredAds'           => $featuredAds,
             'ads'                   => $mergedAds,
+            'defaultResultCount'    => $resultCount,
             'resultCount'           => $mergedResultCount,
             'recommendedSlotResult' => $getRecommendedSrchSlotWise,
             'recommendedSlotLimit'  => $this->getRepository('FaCoreBundle:Config')->getSponsoredLimit(),
