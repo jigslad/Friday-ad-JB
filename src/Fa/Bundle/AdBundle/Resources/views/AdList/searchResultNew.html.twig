@@ -271,7 +271,7 @@
                         {% endif %}
                     {% endif %}
 
-                    {% if ((realAdCnt > resultCount) and (setExtendedHeading==0)) %}
+                    {% if ((realAdCnt > defaultResultCount) and (setExtendedHeading==0)) %}
                         <div data-alert="" class="alert-box info radius">
                             <span class="alert-icon">&nbsp;</span>
                             We found  {{extendedResultCount}} {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id) }} ads within  {{extendedRadius}} miles of {{ app.request.get('location') | replace({'-':' '}) | title }}
