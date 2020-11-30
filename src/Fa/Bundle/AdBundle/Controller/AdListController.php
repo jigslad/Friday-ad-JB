@@ -1199,6 +1199,7 @@ class AdListController extends CoreController
             'searchParams'          => $findersSearchParams,
             'cookieLocationDetails' => $cookieLocationDetails,
             'keywords'              => $keywords,
+            'extendedRadius'        => $extendRadius,
             'extendedResultCount'   => $extendedResultCount,
             'facetResult'           => $facetResult,
             'rootCategoryId'        => $root->getId()
