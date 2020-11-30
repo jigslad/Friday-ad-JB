@@ -235,7 +235,8 @@
 
                 {% for ad in ads %}
                     {% set adCount = adCount + 1 %}
-
+                    {% set realAdCnt = realAdCnt + 1 %}
+                    
                     {% if thisDevice == 'mobile' %}
                         {% if (adCount == 2 and resultCount > 2 and bannerStatus) %}
                             {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_ABOVE_RESULTS') %}
