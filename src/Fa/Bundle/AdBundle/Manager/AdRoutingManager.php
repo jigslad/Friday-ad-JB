@@ -160,6 +160,11 @@ class AdRoutingManager
         if (isset($search_params['tmpLeafLevelCategoryId'])) {
             unset($search_params['tmpLeafLevelCategoryId']);
         }
+
+        if (isset($search_params['leafLevelCategoryId'])) {
+            unset($search_params['leafLevelCategoryId']);
+        }
+
         if (isset($search_params['item__area'])) {
             unset($search_params['item__area']);
         }
