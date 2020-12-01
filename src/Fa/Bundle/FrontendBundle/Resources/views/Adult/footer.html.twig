@@ -100,6 +100,18 @@
 <script language="javascript" type="text/javascript">
 //<![CDATA[
 
+    document.addEventListener('error', function(e) {
+        var target = $(e.target);
+        if (e.target.nodeName == 'IMG' && $(target).hasClass('ndult-company-logo')) {
+            var parent = $(target).closest('.list-img');
+
+            $(parent).html(
+                $('<div>').addClass('profile-placeholder')
+                    .append($(target).attr('src', '{{ asset('bundles/fafrontend/images/user-no-logo.svg') }}'))
+            );
+        }
+    }, true);
+
     $('#manage-my-ad-id').on('click', function() {
         ga('send', 'event', 'Top Widget', 'MMM');
     });

@@ -511,7 +511,7 @@ class AdultController extends ThirdPartyLoginController
                             'status_id' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID] : null),
                             'user_name' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME] : null),
                             'profile_url' => $adRoutingManager->getProfilePageUrl($businessExposureUser[UserShopDetailSolrFieldMapping::ID]),
-                            'user_logo' => CommonManager::getUserLogo($this->container, $businessExposureUser[UserShopDetailSolrFieldMapping::USER_COMPANY_LOGO_PATH], $businessExposureUser[UserShopDetailSolrFieldMapping::ID], null, null, true, true, $businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID], $businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME])
+                            'user_logo' => CommonManager::getCustomUserLogo($this->container, $businessExposureUser[UserShopDetailSolrFieldMapping::USER_COMPANY_LOGO_PATH], $businessExposureUser[UserShopDetailSolrFieldMapping::ID], null, null, true, true, $businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID], $businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME])
                         );
                     }
                 }
@@ -742,7 +742,11 @@ class AdultController extends ThirdPartyLoginController
         $solrSearchManager = $this->get('fa.solrsearch.manager');
         $solrSearchManager->init('ad', $keywords, $data, $page, $recordsPerPage);
         if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['latitude']) && isset($cookieLocationDetails['longitude'])) {
-            $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocationDetails['latitude'].', '.$cookieLocationDetails['longitude']);
+            if ($location) {
+                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocationDetails['latitude'] . ',' . $cookieLocationDetails['longitude'], 'd' => $distanceRange);
+            } else {
+                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocationDetails['latitude'].','.$cookieLocationDetails['longitude']);
+            }
             $solrSearchManager->setGeoDistQuery($geoDistParams);
         }
         $solrResponse = $solrSearchManager->getSolrResponse();

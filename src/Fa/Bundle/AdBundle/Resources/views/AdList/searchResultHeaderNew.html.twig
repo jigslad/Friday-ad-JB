@@ -1,0 +1,132 @@
+<div class="breadcrumb-area">
+    <div class="row">
+        <div class="columns">
+            <div class="breadcrumb hide-for-small-only">
+                <div class="clearfix">
+                    {% set location_id = null %}
+                    {% if cookieLocationDetails['location'] is defined %}
+                        {% set location_id = cookieLocationDetails['location']|number_format %}
+                    {% endif %}
+                    {% set locality_id = null %}
+                    {% if cookieLocationDetails['locality_id'] is defined %}
+                        {% set locality_id = cookieLocationDetails['locality_id']|number_format %}
+                    {% endif %}
+
+                    {% set homepageLink = '' %}
+                    {% if location_id == 2 %}
+                       {% set homepageLink = 'Homepage' %}
+                    {% else %}
+                        {% set homepageLink = app.request.get('location')|capitalize %}
+                    {% endif %}
+
+                    <a href="{% if location_id and location_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID') %} {{ path('location_home_page', {'location': app.request.get('location')}) }} {% else %}{{ path('fa_frontend_homepage') }} {% endif %}" {% if searchParams is defined and (searchParams.item__category_id is not defined or searchParams.item__category_id is null) %}class="bg-none"{% endif%} {% if locality_id %} rel="nofollow"{% endif%}>{{ homepageLink|trans({}, 'frontend-search-result')}}</a>
+                    {% set searchTerm = null %}
+                    {% set categoryPath = {} %}
+                    {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null and searchParams.item__category_id != 1 %}
+                        {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(searchParams.item__category_id, false, fetch_container_instance()) %}
+                        {% set catCnt = 1 %}
+                        {% if categoryPath|length %}
+                            {% for categoryId, categoryName in categoryPath %}
+                                {% if catCnt == categoryPath|length %}
+                                    <span>{{categoryName}}</span>
+                                {% else %}
+                                    {% set catLinkParam = { 'item__location': location_id, 'item__category_id': categoryId} %}
+                                    {% set catListUrl = container.get('fa_ad.manager.ad_routing').getListingUrl(catLinkParam) %}
+                                    <a href="{{ catListUrl }}">{{ categoryName }}</a>
+                                {% endif %}
+                                {% set searchTerm = 'in '~categoryName %}
+                                {% set catCnt = catCnt + 1 %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_IN_HEADER') %}
+            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_IN_HEADER_TABLET') %}
+            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+            {% if mobileDetectManager.isMobile() %}
+                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_TOP_MOBILE_LEADERBOARD') %}
+                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+            {% endif %}
+            <div class="sortby-area">
+                <div class="clearfix">
+                    {% if seoFields.h1_tag is defined %}
+                        {% set h1Title = seoManager.parseSeoStringForAdList(seoFields.h1_tag, searchParams, cookieLocationDetails)|replace({' in UK': ''})|trim %}
+                        <h1 class="sub-page-head">{{ h1Title }}</h1><span class="no-of-results"> {% if h1Title|length %}-{% endif %} {{'%resultCount% results'|trans({'%resultCount%': resultCount}, 'frontend-search-result')}}</span>
+                    {% elseif app.request.queryString %}
+                        {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null and searchParams.item__category_id != 1 %}
+                            <h1 class="sub-page-head">{{'%resultCount% results in %category%'|trans({'%resultCount%': resultCount, '%category%': fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id)}, 'frontend-search-result')}}</h1>
+                        {% else %}
+                            <h1 class="sub-page-head">{{'%resultCount% results'|trans({'%resultCount%': resultCount}, 'frontend-search-result')}}</h1>
+                        {% endif %}
+                    {% else %}
+                        <h2>{{'%resultCount% results found %searchTerm%'|trans({'%resultCount%': resultCount, '%searchTerm%': searchTerm}, 'frontend-search-result')}}</h2>
+                    {% endif %}
+                    {% if ads|length %}
+                        {% set rootCategoryId = categoryPath|keys|first %}
+                        {% set sortFields = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSortingArray', [fetch_container_instance(), rootCategoryId, searchParams]) %}
+                        <div class="sortby-fields">
+                            <div class="clearfix">
+                                <div class="right">
+                                    <a href="javascript:void(0);" class="list-view {% if not app.request.get('map', false) %}active{% endif %}" {% if app.request.queryString and app.request.queryString != 'map=1' %}rel="nofollow"{% endif %}>{{'List'|trans({}, 'frontend-search-result')}}</a>
+                                    <a href="javascript:void(0);" class="map-view {% if app.request.get('map', false) %}active{% endif %}" rel="nofollow">{{'Map'|trans({}, 'frontend-search-result')}}</a>
+                                </div>
+                                <div class="right hide-for-small-only white-select">
+                                    {% if not app.request.get('map')%}
+                                        <label>{{'Sort by'|trans({}, 'frontend-search-result')}}</label>
+                                        <select class="fa-select-white" name="sort_by" id="sort_by">
+                                            {% for sortFieldKey, sortFieldName in sortFields %}
+                                                <option value="{{sortFieldKey}}" {% if app.request.get('sort_field')~'|'~app.request.get('sort_ord') == sortFieldKey %} selected="selected" {% endif %}>{{sortFieldName}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    {% endif %}
+                                    <label>{{'View'|trans({}, 'frontend-search-result')}}</label>
+                                </div>
+                                <div class="left show-for-small-only sorting-small">
+                                    <a href="javascript:void(0);" rel="nofollow" class="secondary-btn-2 button" onclick="return toggleLeftSearch();">{{'Refine'|trans({}, 'frontend-search-result')}}</a>
+                                    <a href="javascript:void(0);" rel="nofollow" class="secondary-btn-2 button" onclick="return showSortBy();">{{'Sort'|trans({}, 'frontend-search-result')}}</a>
+                                    <div class="sortby-links" style="display:none;" id="sort_options_div">
+                                        {% for sortFieldKey, sortFieldName in sortFields %}
+                                            <a href="javascript:void(0);" rel="nofollow" onclick="return sortBy('{{sortFieldKey}}');" {% if app.request.get('sort_field')~'|'~app.request.get('sort_ord') == sortFieldKey %} class="active" {% endif %}>{{sortFieldName}}</a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="left hide-for-small-only tablet-refine-btn">
+                                    <a href="javascript:void(0);" rel="nofollow" class="secondary-btn-2 button refine-search" onclick="return showLeftSearch(true);">{{'Refine your search'|trans({}, 'frontend-search-result')}}</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="sortby-fields">
+                            <div class="left show-for-small-only sorting-small">
+                                <a href="javascript:void(0);" rel="nofollow" class="secondary-btn-2 button" onclick="return toggleLeftSearch();">{{'Refine'|trans({}, 'frontend-search-result')}}</a>
+                            </div>
+                            <div class="left hide-for-small-only tablet-refine-btn">
+                                <a href="javascript:void(0);" rel="nofollow" class="secondary-btn-2 button refine-search" onclick="return showLeftSearch(true);">{{'Refine your search'|trans({}, 'frontend-search-result')}}</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if ads|length == 0 %}
+                        <div data-alert class="alert-box info radius mt10">
+                            <span class="alert-icon">&nbsp;</span>
+                            Sorry, we haven't found adverts matching your criteria in {{ app.request.get('location')| replace({'-':' '}) | title }}: <span style="font-weight:normal">Try modifying your keyword or filters selected.</span>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% if areaToolTipFlag is defined and areaToolTipFlag %}
+<div class="row top-msg">
+    <div class="columns">
+        <div data-alert="" class="alert-box info radius area-tooltip-alert">
+        <span class="alert-icon">&nbsp;</span>
+        <b>London Areas: </b> See ads that are closer to you by setting your location to a specific area of London (e.g. Camden Town or Westminster) or using your postcode.
+        <a href="javascript:void(0)" class="close">×</a>
+        </div>
+    </div>
+</div>
+{% endif %}
+{#{{ set_variables('searchResult', {'searchAgentData': searchAgentData}) }}#}

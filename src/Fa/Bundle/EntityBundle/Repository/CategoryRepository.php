@@ -153,10 +153,11 @@ class CategoryRepository extends NestedTreeRepository
      * Get children by id.
      *
      * @param string $id
+     * @param string $orderBy
      *
      * @return Object
      */
-    public function getChildrenById($id = null)
+    public function getChildrenById($id = null, $orderBy = null)
     {
         $query = $this->createQueryBuilder(self::ALIAS);
 
@@ -166,7 +167,11 @@ class CategoryRepository extends NestedTreeRepository
             $query->where(self::ALIAS.'.parent = '.$id.' AND '.self::ALIAS.'.status = 1');
         }
 
-        $query->addOrderBy(self::ALIAS.'.name');
+        if (empty($orderBy)) {
+            $query->addOrderBy(self::ALIAS.'.name');
+        } else {
+            $query->addOrderBy(self::ALIAS. '.' .$orderBy);
+        }
 
         $objResources = $query->getQuery()->getArrayResult();
 
@@ -867,7 +872,11 @@ class CategoryRepository extends NestedTreeRepository
         }
         if (count($locationDetails)) {
             if (isset($locationDetails['latitude']) && isset($locationDetails['longitude'])) {
-                $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'].', '.$locationDetails['longitude']);
+                if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
+                    $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'] . ',' . $locationDetails['longitude'], 'd' => 15);
+                } else {
+                    $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'] . ',' . $locationDetails['longitude']);
+                }
                 $container->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
             }
         }
@@ -1116,7 +1125,11 @@ class CategoryRepository extends NestedTreeRepository
             }
             if (!empty($locationDetails)) {
                 if (isset($locationDetails['latitude']) && isset($locationDetails['longitude'])) {
-                    $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'].', '.$locationDetails['longitude']);
+                    if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
+                        $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'].','.$locationDetails['longitude'], 'd' => 15);
+                    } else {
+                        $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'].','.$locationDetails['longitude']);
+                    }
                     $container->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
                 }
             }
@@ -2467,7 +2480,11 @@ class CategoryRepository extends NestedTreeRepository
             //$data['query_filters']['item']['category_id'] = self::ADULT_ID;
             if (!empty($locationDetails)) {
                 if (isset($locationDetails['latitude']) && isset($locationDetails['longitude'])) {
-                    $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'].', '.$locationDetails['longitude']);
+                    if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
+                        $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'] . ',' . $locationDetails['longitude'], 'd' => 15);
+                    } else {
+                        $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'] . ',' . $locationDetails['longitude']);
+                    }
                     $container->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
                 }
             }
@@ -2581,4 +2598,72 @@ class CategoryRepository extends NestedTreeRepository
         
         return $headerCategoryArray;
      }
+
+    /**
+     * Get all categories.
+     *
+     * @param object $container container identifier
+     *
+     * @return array
+     */
+    public function getAllCategories($container = null)
+    {
+        if ($container) {
+            $culture     = CommonManager::getCurrentCulture($container);
+            $tableName   = $this->getCategoryTableName();
+            $cacheKey    = $tableName.'|'.__FUNCTION__.'|'.$culture;
+            $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
+
+            if ($cachedValue !== false) {
+                //return $cachedValue;
+            }
+        }
+
+        $tableName = $this->_em->getClassMetadata('FaEntityBundle:Category')->getTableName();
+        $headerCategoryArray = array();
+        $query = 'SELECT id, name, slug, full_slug, parent_id 
+                FROM '.$tableName.'
+                ORDER BY lvl';
+        $stmt = $this->_em->getConnection()->prepare($query);
+        $stmt->execute();
+        $categories         = $stmt->fetchAll();
+
+        if (count($categories)) {
+            foreach ($categories as $index => $category) {
+                $headerCategoryArray[$category['id']]['name'] = $category['name'];
+                $headerCategoryArray[$category['id']]['id'] = $category['id'];
+                $headerCategoryArray[$category['id']]['slug'] = $category['slug'];
+                $headerCategoryArray[$category['id']]['full_slug'] = $category['full_slug'];
+                $headerCategoryArray[$category['id']]['parent_id'] = $category['parent_id'];
+            }
+        }
+
+        ksort($headerCategoryArray);
+
+        if ($container) {
+            CommonManager::setCacheVersion($container, $cacheKey, $headerCategoryArray, self::CACHE_TTL);
+        }
+
+        return $headerCategoryArray;
+    }
+
+    /**
+     * @param $container
+     * @param $categoryId
+     * @param bool $getParentCategories
+     * @return array
+     */
+    public function getCachedCategoryById($container, $categoryId, $getParentCategories=false)
+    {
+        $categories = CommonManager::getCacheVersion($container, 'category|getAllCategories|en_GB');
+        $returnCategories[] = $category = $categories[$categoryId];
+
+        if ($getParentCategories) {
+            while ($category['parent_id']) {
+                $returnCategories[] = $category = $categories[$category['parent_id']];
+            }
+        }
+
+        return $returnCategories;
+    }
 }

@@ -43,7 +43,7 @@
                             <br />
                             {% if entity.id %}
                                 {% set landingImgUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [fetch_container_instance(), 'uploads/landingpage/'~entity.getFileName()]) %}
-                                <img src="{{landingImgUrl}}?{{ random(1000) }}" width="100px" id="{{ form.file.vars.id }}_img" /><br /><br />
+                                <img src="{{landingImgUrl}}?{{ date().timestamp }}" width="100px" id="{{ form.file.vars.id }}_img" /><br /><br />
                             {% endif %}
                         </div>
                         {% if imagesArray is defined and imagesArray|length %}
@@ -79,7 +79,7 @@
                                                     <br />
                                                     {% if entity.id and landingPageImages[sectionId][image['type']][image['id']]['file_name'] is defined %}
                                                         {% set landingPageImgUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [fetch_container_instance(), landingPageImages[sectionId][image['type']][image['id']]['file_name']]) %}
-                                                        <img src="{{landingPageImgUrl}}?{{ random(1000) }}" width="100px" id="{{ attribute(form, image['field_name']).vars.id }}_img" /><br /><br />
+                                                        <img src="{{landingPageImgUrl}}?{{ date().timestamp }}" width="100px" id="{{ attribute(form, image['field_name']).vars.id }}_img" /><br /><br />
                                                     {% endif %}
                                                 </div>
                                                 <div class="large-4 columns mb10">
@@ -89,7 +89,7 @@
                                                         <br />
                                                         {% if entity.id and landingPageImages[sectionId][image['type']][image['id']]['overlay_file_name'] is defined %}
                                                         {% set landingOverlayImgUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [fetch_container_instance(), landingPageImages[sectionId][image['type']][image['id']]['overlay_file_name']]) %}
-                                                        <img src="{{ landingOverlayImgUrl }}?{{ random(1000) }}" width="100px" id="{{ attribute(form, image['field_name']~'_overlay').vars.id }}_img" /><br /><br />
+                                                        <img src="{{ landingOverlayImgUrl }}?{{ date().timestamp }}" width="100px" id="{{ attribute(form, image['field_name']~'_overlay').vars.id }}_img" /><br /><br />
                                                     {% endif %}
                                                     {% endif %}
                                                 </div>
