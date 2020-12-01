@@ -22,7 +22,7 @@
     {% if not pagination.getNbResults() %}
         noindex, follow
         {% set metaRobotsArray = {0: 'noindex', 1: 'follow'} %}
-    {% elseif 'motors/cars-under-1000' in app.request.uri or 'motors/cars-under-500' in app.request.uri  or 'motors/left-hand-drive-cars/' in app.request.uri %}
+    {% elseif 'motors/cars-under-1000' in app.request.uri or 'motors/cars-under-500' in app.request.uri  or 'motors/left-hand-drive-cars/' in app.request.uri or 'adult-services/escorts/transexual' in app.request.uri %}
         index, follow
         {% set metaRobotsArray = {0: 'index', 1: 'follow'} %}
     {% elseif isClassicCarPage is defined and isClassicCarPage==1 %}
