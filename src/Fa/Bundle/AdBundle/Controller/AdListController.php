@@ -3683,12 +3683,13 @@ class AdListController extends CoreController
         $data['query_sorter'] = array();
         $keywords = null;
         $data['static_filters'] = '';
+
         if (count($searchParams)) {
             $adRepository = $this->getRepository('FaAdBundle:Ad');
 
             $repository = $this->getRepository('FaAdBundle:' . 'Ad' . str_replace(' ', '', $rootCategory->getName()));
             $listingFields = $repository->getAdListingFields();
-            $data['static_filters']  = (isset($searchParams['search']) ? $this->setDimensionParams($searchParams['search'], $listingFields, $adRepository) : array());
+            //$data['static_filters']  = (isset($searchParams['search']) ? $this->setDimensionParams($searchParams['search'], $listingFields, $adRepository) : array());
 
             if(isset($searchParams['query_filters']['item']['distance'])) {
                 $data['query_filters']['item']['distance'] = 200;
@@ -3701,6 +3702,9 @@ class AdListController extends CoreController
         }
 
         $data['static_filters']  .= ' AND user_id: "' . $userId . '" AND -is_blocked_ad: true';
+
+        $data['static_filters'] .= ' AND status_id: ' . EntityRepository::AD_STATUS_LIVE_ID;
+        
         if (!empty($adIds)) {
             $data['static_filters'] .= ' AND -id: ('.implode(' ', $adIds).')';
         }
