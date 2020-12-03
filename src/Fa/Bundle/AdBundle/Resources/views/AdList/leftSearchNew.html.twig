@@ -73,6 +73,16 @@
             </dd>
             {# Category search params - end #}
 
+            {% if rootCategoryId is not null and rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMUNITY_ID') %}
+                {% if leftFilters.orderedDimensions|length %}
+                    {% for dimension_id, entities in leftFilters.orderedDimensions %}
+                        <dd class="accordion-navigation">
+                            {{ include('FaAdBundle:AdList:leftSearchDimensionFiltersNew.html.twig') }}
+                        </dd>
+                    {% endfor %}
+                {% endif %}
+            {% endif %}
+
             {# Static search filters - start #}
             <dd class="accordion-navigation keep-shown {% if not leftFilters.showPriceField %} hide {% endif %}">
                 <a href="#panel2a" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'My budget is from'|trans({}, 'frontend-left-search')}}</h5></a>
@@ -175,12 +185,14 @@
                 </div>
             </dd>
 
-            {% if leftFilters.orderedDimensions|length %}
-                {% for dimension_id, entities in leftFilters.orderedDimensions %}
-                    <dd class="accordion-navigation">
-                    {{ include('FaAdBundle:AdList:leftSearchDimensionFiltersNew.html.twig') }}
-                    </dd>
-                {% endfor %}
+            {% if searchParams.item__category_id is defined and searchParams.item__category_id is not null and rootCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMUNITY_ID') %}
+                {% if leftFilters.orderedDimensions|length %}
+                    {% for dimension_id, entities in leftFilters.orderedDimensions %}
+                        <dd class="accordion-navigation">
+                            {{ include('FaAdBundle:AdList:leftSearchDimensionFiltersNew.html.twig') }}
+                        </dd>
+                    {% endfor %}
+                {% endif %}
             {% endif %}
 
             <dd class="accordion-navigation keep-shown">
