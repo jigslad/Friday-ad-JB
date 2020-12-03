@@ -1570,9 +1570,9 @@ class AdListController extends CoreController
                 if ($categoryObj->getId() != 1 || ($categoryObj->getId() == 1 && $category['id'] != CategoryRepository::ADULT_ID)) {
                     $categories[$key]          = $category;
                     $categories[$key]['count'] = $facetResult['category_ids'][$category['id']];
-                    if (isset($extendedFacetResult) && isset($extendedFacetResult['category_ids']) && isset($extendedFacetResult['category_ids'][$category['id']])) {
+                    /*if (isset($extendedFacetResult) && isset($extendedFacetResult['category_ids']) && isset($extendedFacetResult['category_ids'][$category['id']])) {
                         $categories[$key]['count'] += $extendedFacetResult['category_ids'][$category['id']];
-                    }
+                    }*/
                 }
             }
         }
