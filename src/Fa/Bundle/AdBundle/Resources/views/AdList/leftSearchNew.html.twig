@@ -219,8 +219,21 @@
     </div>
 {{ form_end(leftFilters.form) }}
 <script>
-    function formulate_photo_url() {
+    function getPageUrl() {
         let url = window.location.href;
+        let pageIndex = url.indexOf('/page-');
+
+        if (pageIndex != -1) {
+            let endIndex = url.indexOf('/', pageIndex + 1);
+            let searchString = url.substring(pageIndex, endIndex + 1);
+            url = url.replace(searchString, '/');
+        }
+
+        return url;
+    }
+
+    function formulate_photo_url() {
+        let url = getPageUrl();
         if ($('#fa_left_search_new_item__price_from').val()) {
             let url_string = 'item__price_from=' + $('#fa_left_search_new_item__price_from').val();
             if (url.indexOf('?') != -1) {
@@ -243,24 +256,54 @@
     }
 
     function formulate_location_url() {
-        let url = window.location.href;
+        let url = getPageUrl();
         if ($('#fa_left_search_new_item__location_autocomplete').val() != "United Kingdom") {
-            let value = $('#fa_left_search_new_item__location_autocomplete').val().toLowerCase();
-            value = value.replace(' ', '_');
+            let value = $('#fa_left_search_new_item__location').val();
 
-            url = url.replace('/{{ currentLocation }}/', '/'+value+'/');
-
-            if ($('#fa_left_search_new_item__distance').val() != 200) {
-                let url_string = 'item__distance=' + $('#fa_left_search_new_item__distance').val();
+            if (! $.isNumeric(value)) {
+                let locval = value.replace(' ','-');
+                locval = locval.toLowerCase();
+                url = url.replace('/{{ currentLocation }}/', '/'+locval+'/');
+            }
+            let url_param = '';
+            if ($('#fa_left_search_new_item__distance').val() != '') {
+                url_param = 'item__distance=' + $('#fa_left_search_new_item__distance').val();
                 if (url.indexOf('?') != -1) {
-                    url += '&' + url_string;
+                    let url_string = url.split('?');
+                    url = url_string[0];
+                    url_string = url_string[1];
+                    let url_string_org = url_string;
+
+                    let distance_index = url_string.indexOf('item__distance');
+                    //let end_position = '';
+                    if (distance_index != -1) {
+                        let distVal = $.urlParamVal('item__distance');
+                        let ambersenExists = url_string.indexOf('&item__distance=');
+
+                        if (ambersenExists != -1) {
+                            url_string = url_string.replace('&item__distance='+distVal, '');
+                        } else {
+                            url_string = url_string.replace('item__distance='+distVal, '');
+                        }
+                    }
+
+                    if(url_string=='') {
+                        url += '?'+url_param;
+                    } else {
+                        url += '?'+url_string+'&'+url_param;
+                    }
                 } else {
-                    url += '?' + url_string;
+                    url += '?' +url_param;
                 }
             }
-
+            url = url.replace('&&', '&');
             window.location.href = url;
         }
+    }
+
+    $.urlParamVal = function(name){
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        return results[1] || 0;
     }
 
     function set_url_params(url_params, this_url, isCheckbox=true) {
@@ -301,7 +344,7 @@
     $(document).ready(function() {
 
         $('a[data-parent-href]').each(function() {
-            let href = window.location.href;
+            let href = getPageUrl();
             let this_url = $(this).attr('data-parent-href');
             if (href.indexOf('#')) {
                 let _var = href.split('#');
@@ -330,7 +373,7 @@
         });
 
         $('a[data-href]').each(function() {
-            let href = window.location.href;
+            let href = getPageUrl();
             let this_url = $(this).attr('data-href');
             if (href.indexOf('#')) {
                 let _var = href.split('#');
@@ -420,7 +463,7 @@
         });
 
         $('a[data-location-href]').each(function() {
-            let href = window.location.href;
+            let href = getPageUrl();
 
             let new_url = href.replace('/{{ currentLocation }}/', '/'+$(this).attr('data-location-href')+'/');
             $(this).attr('href', new_url);
@@ -442,7 +485,7 @@
 
         $('.clear_filter').each(function() {
             if ($(this).closest('.towns-list').length) {
-                let url = window.location.href;
+                let url = getPageUrl();
 
                 url = url.replace('/{{ currentLocation }}/', '/uk/');
 
