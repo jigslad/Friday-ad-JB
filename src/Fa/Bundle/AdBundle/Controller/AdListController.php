@@ -984,15 +984,6 @@ class AdListController extends CoreController
                 $searchableDimensions[$key]['dim_slug']   = $nameInLowerCase;
             }
 
-        } else {
-            if(!isset($findersSearchParams['item__distance'])){
-                if($findersSearchParams['item__location'] == LocationRepository::LONDON_TOWN_ID) {
-                    $findersSearchParams['item__distance'] = CategoryRepository::LONDON_DISTANCE;
-                } else {
-                    $findersSearchParams['item__distance'] = 200;
-                }
-
-            }
         }
         $data['static_filters'] .= $static_filters = $this->setDimensionParams($data['search'], $listingFields, $adRepository);
 
@@ -1213,6 +1204,17 @@ class AdListController extends CoreController
             }
         }
 
+        if ($findersSearchParams['item__category_id'] == 1) {
+            if(!isset($findersSearchParams['item__distance'])){
+                if($findersSearchParams['item__location'] == LocationRepository::LONDON_TOWN_ID) {
+                    $findersSearchParams['item__distance'] = CategoryRepository::LONDON_DISTANCE;
+                } else {
+                    $findersSearchParams['item__distance'] = CategoryRepository::MAX_DISTANCE;
+                }
+
+            }
+        }
+
         $parameters = [
             'featuredAds'           => $featuredAds,
             'ads'                   => $mergedAds,
@@ -1423,7 +1425,11 @@ class AdListController extends CoreController
             /** @var Location $location */
             $location = $this->getRepository('FaEntityBundle:Location')->find($searchParams['item__location']);
 
-            $radius = 200;
+            $radius = CategoryRepository::MAX_DISTANCE;
+            if($searchParams['item__location']['item__location'] == LocationRepository::LONDON_TOWN_ID) {
+                $radius = CategoryRepository::LONDON_DISTANCE;
+            }
+
             if (! empty($searchParams['item__distance'])) {
                 $radius = $searchParams['item__distance'];
             }
