@@ -950,6 +950,11 @@ class AdListController extends CoreController
         $static_filters = '';
         $searchableDimensions = [];
         $root = $category;
+        if (isset($data['query_filters']['item']['setDefaultRadius']) && $data['query_filters']['item']['setDefaultRadius']==1 && (isset($data['search']['item__location']) && $data['search']['item__location']==831)) {
+            $data['search']['item__distance'] = CategoryRepository::LONDON_DISTANCE;
+            $data['query_filters']['item']['distance']= CategoryRepository::LONDON_DISTANCE;
+            $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'.CategoryRepository::LONDON_DISTANCE;;
+        }
 
         $listingFields = array();
         $adRepository = $this->getRepository('FaAdBundle:Ad');
@@ -1122,6 +1127,14 @@ class AdListController extends CoreController
             $setDefRadius = 0;
         }
 
+        $areaToolTipFlag = false;
+        if (!$request->cookies->has('frontend_area_alert_tooltip') && $requestlocation != null && strtolower($requestlocation) == LocationRepository::LONDON_TXT) {
+            $response = new Response();
+            $response->headers->setCookie(new Cookie('frontend_area_alert_tooltip', $requestlocation, time() + (365*24*60*60*1000), '/', null, false, false));
+            $response->sendHeaders();
+            $areaToolTipFlag = true;
+        }
+
         $extendRadius = '';
         if ($setDefRadius && $isBusinessPage==0) {
             if (isset($findersSearchParams['item__category_id']) && $findersSearchParams['item__category_id']) {
@@ -1207,7 +1220,8 @@ class AdListController extends CoreController
             'extendedRadius'        => $extendRadius,
             'extendedResultCount'   => $extendedResultCount,
             'facetResult'           => $facetResult,
-            'rootCategoryId'        => $root->getId()
+            'rootCategoryId'        => $root->getId(),
+            'areaToolTipFlag'       => $areaToolTipFlag
          ];
 
         // profile categories other than Services & Adults
@@ -1569,9 +1583,9 @@ class AdListController extends CoreController
                 if ($categoryObj->getId() != 1 || ($categoryObj->getId() == 1 && $category['id'] != CategoryRepository::ADULT_ID)) {
                     $categories[$key]          = $category;
                     $categories[$key]['count'] = $facetResult['category_ids'][$category['id']];
-                    if (isset($extendedFacetResult) && isset($extendedFacetResult['category_ids']) && isset($extendedFacetResult['category_ids'][$category['id']])) {
+                    /*if (isset($extendedFacetResult) && isset($extendedFacetResult['category_ids']) && isset($extendedFacetResult['category_ids'][$category['id']])) {
                         $categories[$key]['count'] += $extendedFacetResult['category_ids'][$category['id']];
-                    }
+                    }*/
                 }
             }
         }
@@ -3695,12 +3709,13 @@ class AdListController extends CoreController
         $data['query_sorter'] = array();
         $keywords = null;
         $data['static_filters'] = '';
+
         if (count($searchParams)) {
             $adRepository = $this->getRepository('FaAdBundle:Ad');
 
             $repository = $this->getRepository('FaAdBundle:' . 'Ad' . str_replace(' ', '', $rootCategory->getName()));
             $listingFields = $repository->getAdListingFields();
-            $data['static_filters']  = (isset($searchParams['search']) ? $this->setDimensionParams($searchParams['search'], $listingFields, $adRepository) : array());
+            //$data['static_filters']  = (isset($searchParams['search']) ? $this->setDimensionParams($searchParams['search'], $listingFields, $adRepository) : array());
 
             if(isset($searchParams['query_filters']['item']['distance'])) {
                 $data['query_filters']['item']['distance'] = 200;
@@ -3713,6 +3728,9 @@ class AdListController extends CoreController
         }
 
         $data['static_filters']  .= ' AND user_id: "' . $userId . '" AND -is_blocked_ad: true';
+
+        $data['static_filters'] .= ' AND status_id: ' . EntityRepository::AD_STATUS_LIVE_ID;
+        
         if (!empty($adIds)) {
             $data['static_filters'] .= ' AND -id: ('.implode(' ', $adIds).')';
         }
