@@ -984,6 +984,15 @@ class AdListController extends CoreController
                 $searchableDimensions[$key]['dim_slug']   = $nameInLowerCase;
             }
 
+        } else {
+            if(!isset($findersSearchParams['item__distance'])){
+                if($findersSearchParams['item__location'] == LocationRepository::LONDON_TOWN_ID) {
+                    $findersSearchParams['item__distance'] = CategoryRepository::LONDON_DISTANCE;
+                } else {
+                    $findersSearchParams['item__distance'] = 200;
+                }
+
+            }
         }
         $data['static_filters'] .= $static_filters = $this->setDimensionParams($data['search'], $listingFields, $adRepository);
 
