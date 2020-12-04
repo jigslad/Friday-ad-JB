@@ -1147,7 +1147,9 @@ class AdListController extends CoreController
                 }
             }
         }
-
+        if (!empty($extendRadius) && $data['search']['item__location']== LocationRepository::LONDON_TOWN_ID) {
+            $extendRadius =  CategoryRepository::MAX_DISTANCE;
+        }
         if ($request->attributes->get('customized_page')) {
             list($keywords, $data) = $this->handleCustomizedUrl($data, $request);
         }
