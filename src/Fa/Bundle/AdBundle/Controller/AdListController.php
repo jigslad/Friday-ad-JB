@@ -1425,10 +1425,6 @@ class AdListController extends CoreController
                 $radius = CategoryRepository::LONDON_DISTANCE;
             }
 
-            if (! empty($searchParams['item__distance'])) {
-                $radius = $searchParams['item__distance'];
-            }
-
             if (!empty($location)) {
 
                 $level = $location->getLvl();
