@@ -1674,47 +1674,47 @@ class AdListController extends CoreController
                 );
             }
         } else {
-            foreach ($facetResult['town'] as $town => $count) {}
+            foreach ($facetResult['town'] as $town => $count) {
+                if (!empty($town)) {
+                    $town = get_object_vars(json_decode($town));
 
-            if (! empty($town)) {
-                $town = get_object_vars(json_decode($town));
+                    $newData = $data;
+                    if ($town['id'] != $searchParams['item__location']) {
+                        if ($newData['static_filters']) {
+                            $staticFilters = explode(' AND ', $newData['static_filters']);
+                            $newStaticFilters = '';
 
-                $newData = $data;
-                if($town['id'] != $searchParams['item__location']) {
-                    if ($newData['static_filters']) {
-                        $staticFilters = explode(' AND ', $newData['static_filters']);
-                        $newStaticFilters = '';
-
-                        foreach ($staticFilters as $staticFilter) {
-                            if (!empty($staticFilter) && strpos($staticFilter, 'town') === false) {
-                                $newStaticFilters .= ' AND ' . $staticFilter;
+                            foreach ($staticFilters as $staticFilter) {
+                                if (!empty($staticFilter) && strpos($staticFilter, 'town') === false) {
+                                    $newStaticFilters .= ' AND ' . $staticFilter;
+                                }
                             }
-                        }
-                        $newStaticFilters .= ' AND (town:*parent_id\"\:' . $town['parent_id'] . '\,* OR locality:*parent_id\"\:' . $town['parent_id'] . '\,* OR domicile:*parent_id\"\:' . $town['parent_id'] . '\,* ) AND -(town:*\"id\"\:' . $town['id'] . '\,* OR locality:*\"id\"\:' . $town['id'] . '\,* OR domicile:*\"id\"\:' . $town['id'] . '\,*)';
+                            $newStaticFilters .= ' AND (town:*parent_id\"\:' . $town['parent_id'] . '\,* OR locality:*parent_id\"\:' . $town['parent_id'] . '\,* OR domicile:*parent_id\"\:' . $town['parent_id'] . '\,* ) AND -(town:*\"id\"\:' . $town['id'] . '\,* OR locality:*\"id\"\:' . $town['id'] . '\,* OR domicile:*\"id\"\:' . $town['id'] . '\,*)';
 
-                        $newData['static_filters'] = $newStaticFilters;
-                        $newData['facet_fields'] = array(
-                            'town' => array('min_count' => 1),
-                            'area' => array('min_count' => 1),
-                            'locality' => array('min_count' => 1)
-                        );
-                    }
-                }
-
-                $solrSearchManager->init('ad.new', $keywords, $newData, 1, 1, 0, true);
-                $solrResponse = $solrSearchManager->getSolrResponse();
-                $facetDimResult = $solrSearchManager->getSolrResponseFacetFields($solrResponse);
-                if (! empty($facetDimResult)) {
-                    $facetDimResult = $facetDimResult['town'];
-                    foreach ($facetDimResult as $jsonValue => $facetCount) {
-                        $town = get_object_vars(json_decode($jsonValue));
-                        if($town['id'] != $searchParams['item__location']) {
-                            $locationFacets[] = array(
-                                'id' => $town['id'],
-                                'name' => $town['name'],
-                                'slug' => $town['slug'],
-                                'count' => $facetCount
+                            $newData['static_filters'] = $newStaticFilters;
+                            $newData['facet_fields'] = array(
+                                'town' => array('min_count' => 1),
+                                'area' => array('min_count' => 1),
+                                'locality' => array('min_count' => 1)
                             );
+                        }
+                    }
+
+                    $solrSearchManager->init('ad.new', $keywords, $newData, 1, 1, 0, true);
+                    $solrResponse = $solrSearchManager->getSolrResponse();
+                    $facetDimResult = $solrSearchManager->getSolrResponseFacetFields($solrResponse);
+                    if (!empty($facetDimResult)) {
+                        $facetDimResult = $facetDimResult['town'];
+                        foreach ($facetDimResult as $jsonValue => $facetCount) {
+                            $town = get_object_vars(json_decode($jsonValue));
+                            if ($town['id'] != $searchParams['item__location']) {
+                                $locationFacets[] = array(
+                                    'id' => $town['id'],
+                                    'name' => $town['name'],
+                                    'slug' => $town['slug'],
+                                    'count' => $facetCount
+                                );
+                            }
                         }
                     }
                 }
