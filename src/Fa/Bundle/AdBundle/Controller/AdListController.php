@@ -1657,23 +1657,25 @@ class AdListController extends CoreController
                 $town = get_object_vars(json_decode($town));
 
                 $newData = $data;
-                if ($newData['static_filters']) {
-                    $staticFilters = explode(' AND ', $newData['static_filters']);
-                    $newStaticFilters = '';
+                if($town['id'] != $searchParams['item__location']) {
+                    if ($newData['static_filters']) {
+                        $staticFilters = explode(' AND ', $newData['static_filters']);
+                        $newStaticFilters = '';
 
-                    foreach ($staticFilters as $staticFilter) {
-                        if (! empty($staticFilter) && strpos($staticFilter, 'town') === false) {
-                            $newStaticFilters .= ' AND '.$staticFilter;
+                        foreach ($staticFilters as $staticFilter) {
+                            if (!empty($staticFilter) && strpos($staticFilter, 'town') === false) {
+                                $newStaticFilters .= ' AND ' . $staticFilter;
+                            }
                         }
-                    }
-                    $newStaticFilters .= ' AND (town:*parent_id\"\:'.$town['parent_id'].'\,* OR locality:*parent_id\"\:'.$town['parent_id'].'\,* OR domicile:*parent_id\"\:'.$town['parent_id'].'\,* ) AND -(town:*\"id\"\:'.$town['id'].'\,* OR locality:*\"id\"\:'.$town['id'].'\,* OR domicile:*\"id\"\:'.$town['id'].'\,*)';
+                        $newStaticFilters .= ' AND (town:*parent_id\"\:' . $town['parent_id'] . '\,* OR locality:*parent_id\"\:' . $town['parent_id'] . '\,* OR domicile:*parent_id\"\:' . $town['parent_id'] . '\,* ) AND -(town:*\"id\"\:' . $town['id'] . '\,* OR locality:*\"id\"\:' . $town['id'] . '\,* OR domicile:*\"id\"\:' . $town['id'] . '\,*)';
 
-                    $newData['static_filters'] = $newStaticFilters;
-                    $newData['facet_fields'] = array(
-                        'town' => array('min_count' => 1),
-                        'area' => array('min_count' => 1),
-                        'locality' => array('min_count' => 1)
-                    );
+                        $newData['static_filters'] = $newStaticFilters;
+                        $newData['facet_fields'] = array(
+                            'town' => array('min_count' => 1),
+                            'area' => array('min_count' => 1),
+                            'locality' => array('min_count' => 1)
+                        );
+                    }
                 }
 
                 $solrSearchManager->init('ad.new', $keywords, $newData, 1, 1, 0, true);
@@ -1683,13 +1685,14 @@ class AdListController extends CoreController
                     $facetDimResult = $facetDimResult['town'];
                     foreach ($facetDimResult as $jsonValue => $facetCount) {
                         $town = get_object_vars(json_decode($jsonValue));
-
-                        $locationFacets[] = array(
-                            'id'    => $town['id'],
-                            'name'  => $town['name'],
-                            'slug'  => $town['slug'],
-                            'count' => $facetCount
-                        );
+                        if($town['id'] != $searchParams['item__location']) {
+                            $locationFacets[] = array(
+                                'id' => $town['id'],
+                                'name' => $town['name'],
+                                'slug' => $town['slug'],
+                                'count' => $facetCount
+                            );
+                        }
                     }
                 }
             }
