@@ -1545,8 +1545,11 @@ class AdListController extends CoreController
 
         $adTypes = [];
         if (in_array('type_id', array_column($dimensions, 'solr_field'))) {
-            $adTypesResult = $this->getRepository('FaEntityBundle:Entity')->getEntitiesByCategoryDimensionId(EntityRepository::AD_TYPE_ID);
-
+            foreach ($dimensions as $dimension) {
+                if($dimension['solr_field'] === 'type_id'){
+                    $adTypesResult = $this->getRepository('FaEntityBundle:Entity')->getEntitiesByCategoryDimensionId($dimension['id']);
+                }
+            }
             $adTypes = [];
             foreach ($adTypesResult as $adType) {
                 $adTypes[$adType->getId()] = [
@@ -1758,8 +1761,9 @@ class AdListController extends CoreController
                             'selected' => $isSelected
                         );
                     } else {
-                        if ($dimension['id'] == EntityRepository::AD_TYPE_ID) {
+                        if ($dimension['solr_field'] =='type_id' ) {
                             $isSelected = false;
+                            $dimensionEntity = $this->getRepository('FaEntityBundle:Entity')->findBy(array('category_dimension' => $dimension['id']));
                             if (! empty($selected)) {
                                 if (is_array($selected)) {
                                     if (in_array($jsonValue, $selected)) {
