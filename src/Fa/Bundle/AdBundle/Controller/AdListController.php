@@ -950,6 +950,11 @@ class AdListController extends CoreController
         $static_filters = '';
         $searchableDimensions = [];
         $root = $category;
+        if (isset($data['query_filters']['item']['setDefaultRadius']) && $data['query_filters']['item']['setDefaultRadius']==1 && (isset($data['search']['item__location']) && $data['search']['item__location']==831)) {
+            $data['search']['item__distance'] = CategoryRepository::LONDON_DISTANCE;
+            $data['query_filters']['item']['distance']= CategoryRepository::LONDON_DISTANCE;
+            $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'.CategoryRepository::LONDON_DISTANCE;;
+        }
 
         $listingFields = array();
         $adRepository = $this->getRepository('FaAdBundle:Ad');
