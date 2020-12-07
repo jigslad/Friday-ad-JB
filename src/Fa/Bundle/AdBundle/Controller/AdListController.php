@@ -1220,7 +1220,7 @@ class AdListController extends CoreController
             'recommendedSlotLimit'  => $this->getRepository('FaCoreBundle:Config')->getSponsoredLimit(),
             'pagination'            => $mergedPagination,
             'adFavouriteIds'        => $adFavouriteIds,
-            'leftFilters'           => $this->getLeftFilters($category, $root, $facetResult, $mergedResultCount, $searchableDimensions, $findersSearchParams, $data, $extendedFacetResult),
+            'leftFilters'           => $this->getLeftFilters($category, $root, $facetResult, $resultCount, $searchableDimensions, $findersSearchParams, $data, $extendedFacetResult),
             'currentLocation'       => $requestlocation,
             'searchParams'          => $findersSearchParams,
             'cookieLocationDetails' => $cookieLocationDetails,
@@ -1641,10 +1641,10 @@ class AdListController extends CoreController
         } else {
             $tradeFacets = $facetResult['is_trade_ad'];
 
-            if (! empty($extendedFacetResult['is_trade_ad'])) {
+            /* if (! empty($extendedFacetResult['is_trade_ad'])) {
                 $tradeFacets["false"] += $extendedFacetResult['is_trade_ad']["false"];
                 $tradeFacets["true"] += $extendedFacetResult['is_trade_ad']["true"];
-            }
+            } */
         }
 
         $userTypeLabels = $this->getRepository('FaAdBundle:Ad')->getLeftSearchLabelForUserType($rootCategory->getId());
@@ -1774,9 +1774,9 @@ class AdListController extends CoreController
                             $key = 'name';
                         }
 
-                        if (isset($extendedFacetSet[$solrFieldName]) && isset($extendedFacetSet[$solrFieldName][$entityValue[$key]])) {
+                        /*if (isset($extendedFacetSet[$solrFieldName]) && isset($extendedFacetSet[$solrFieldName][$entityValue[$key]])) {
                             $facetCount += $extendedFacetSet[$solrFieldName][$entityValue[$key]];
-                        }
+                        }*/
 
                         $isSelected = false;
                         if (! empty($selected)) {
@@ -1812,9 +1812,9 @@ class AdListController extends CoreController
                                 }
                             }
 
-                            if (isset($extendedFacetSet[$solrFieldName]) && isset($extendedFacetSet[$solrFieldName][$jsonValue])) {
+                            /*if (isset($extendedFacetSet[$solrFieldName]) && isset($extendedFacetSet[$solrFieldName][$jsonValue])) {
                                 $facetCount += $extendedFacetSet[$solrFieldName][$jsonValue];
-                            }
+                            }*/
 
                             if (isset($adTypes[$jsonValue])) {
                                 $orderedDimensions[$dimension['id']][$jsonValue] = array(
