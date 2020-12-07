@@ -1423,8 +1423,26 @@ class AdListController extends CoreController
             $location = $this->getRepository('FaEntityBundle:Location')->find($searchParams['item__location']);
 
             $radius = CategoryRepository::MAX_DISTANCE;
-            if($searchParams['item__location'] == LocationRepository::LONDON_TOWN_ID) {
-                $radius = CategoryRepository::LONDON_DISTANCE;
+            if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
+                $categoryId = $searchParams['item__category_id'];
+            }
+            if (isset($searchParams['item__distance']) && $searchParams['item__distance']) {
+                $radius = $searchParams['item__distance'];
+            } else {
+                if($searchParams['item__location'] == LocationRepository::LONDON_TOWN_ID) {
+                    $radius = CategoryRepository::LONDON_DISTANCE;
+                } else {
+                    $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
+                    $radius = ($getDefaultRadius)?$getDefaultRadius:'';
+                }
+            }
+            if($radius=='') {
+                if($categoryId!='') {
+                    $rootCategoryId = $this->em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
+                    $radius = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
+                } else {
+                    $radius = CategoryRepository::MAX_DISTANCE;
+                }
             }
 
             if (!empty($location)) {
