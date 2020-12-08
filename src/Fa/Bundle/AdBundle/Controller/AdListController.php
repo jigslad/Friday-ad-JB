@@ -2165,7 +2165,7 @@ class AdListController extends CoreController
             if($facetdata['search']['item__location'] == LocationRepository::LONDON_TOWN_ID) {
                 $radius = CategoryRepository::LONDON_DISTANCE;
             } else {
-                $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($facetdata, $this->container);
+                $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($facetdata['search'], $this->container);
                 $radius = ($getDefaultRadius)?$getDefaultRadius:'';
             }
         }
