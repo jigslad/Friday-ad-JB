@@ -2154,39 +2154,15 @@ class AdListController extends CoreController
             $data['query_filters']['item']['distance'] = 0;
             $data['query_filters']['item']['location'] = $key."|0";
         }*/
-        $radius = CategoryRepository::MAX_DISTANCE;
-        $categoryId = '';
-        if (isset($facetdata['search']['item__category_id']) && $facetdata['search']['item__category_id']) {
-            $categoryId = $facetdata['search']['item__category_id'];
-        }
-        if (isset($facetdata['search']['item__distance']) && $facetdata['search']['item__distance']) {
-            $radius = $facetdata['search']['item__distance'];
-        } else {
-            if($facetdata['search']['item__location'] == LocationRepository::LONDON_TOWN_ID) {
-                $radius = CategoryRepository::LONDON_DISTANCE;
-            } else {
-                $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($facetdata, $this->container);
-                $radius = ($getDefaultRadius)?$getDefaultRadius:'';
-            }
-        }
-        if($radius=='') {
-            if($categoryId!='') {
-                $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
-                $radius = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
-            } else {
-                $radius = CategoryRepository::MAX_DISTANCE;
-            }
-        }
-
         if (isset($facetdata['search']['item__distance'])) {
             $facetdata['query_filters']['item']['location'] = $key.'|'.((isset($facetdata['search']['item__distance']))?($facetdata['search']['item__distance']):'');
         } else {
-            $facetdata['query_filters']['item']['location'] = $key.'|'.$radius;
+            $facetdata['query_filters']['item']['location'] = $key;
         }
         $page               = 1;
         $recordsPerPage     = 2;
         $solrSearchManager = $this->get('fa.solrsearch.manager');
-        $solrSearchManager->init('ad.new', $keywords, $facetdata, $page, $recordsPerPage, 0, true);
+        $solrSearchManager->init('ad', $keywords, $facetdata, $page, $recordsPerPage, 0, true);
         $solrResponse = $solrSearchManager->getSolrResponse();
 
         $resultCount = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($solrResponse);
