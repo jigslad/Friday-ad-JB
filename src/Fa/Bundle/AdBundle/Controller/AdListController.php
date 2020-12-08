@@ -1730,7 +1730,7 @@ class AdListController extends CoreController
                     $facetDimResult = $facetDimResult['town'];
                     foreach ($facetDimResult as $jsonValue => $facetCount) {
                         $town = get_object_vars(json_decode($jsonValue));
-                        if(!in_array($locationFacetsIds, $town['id'])) {
+                        if(!in_array($town['id'], $locationFacetsIds)) {
                             $locationFacetsIds[] = $town['id'];
                             $locationFacets[] = array(
                                 'id' => $town['id'],
@@ -1824,7 +1824,7 @@ class AdListController extends CoreController
                         foreach ($facetDimResult as $jsonValue => $facetCount) {
                             $town = get_object_vars(json_decode($jsonValue));
 
-                            if ($town['id'] != $searchParams['item__location'] && !in_array($locationFacetsIds, $town['id'])) {
+                            if ($town['id'] != $searchParams['item__location'] && !in_array($town['id'], $locationFacetsIds)) {
                                 $locationFacetsIds[] = $town['id'];
                                 $locationFacets[] = array(
                                     'id' => $town['id'],
