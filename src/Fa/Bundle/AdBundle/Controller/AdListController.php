@@ -1417,7 +1417,7 @@ class AdListController extends CoreController
         unset($searchParams['item__category_id']);
         if (isset($searchParams['sort_ord'])) unset($searchParams['sort_ord']);
         if (isset($searchParams['sort_field'])) unset($searchParams['sort_field']);
-
+        $staticFilters = '';
         if ($searchParams['item__location'] != LocationRepository::COUNTY_ID) {
             /** @var Location $location */
             $location = $this->getRepository('FaEntityBundle:Location')->find($searchParams['item__location']);
