@@ -92,7 +92,7 @@
                             <span>&pound;</span>
                             {{ form_widget(leftFilters.form.item__price_to, {'attr': {'class': 'white-field'}}) }}
                         </li>
-                        <li><button class="budget-go-btn" type="button" onclick="formulate_photo_url();"></button></li>
+                        <li><button class="budget-go-btn" type="button" onclick="formulate_price_url();"></button></li>
                     </ul>
                 </div>
             </dd>
@@ -244,7 +244,7 @@
         return url;
     }
 
-    function formulate_photo_url() {
+    function formulate_price_url() {
         let url = getPageUrl();
         if ($('#fa_left_search_new_item__price_from').val()) {
             let url_string = 'item__price_from=' + $('#fa_left_search_new_item__price_from').val();
@@ -253,6 +253,9 @@
             } else {
                 url += '?' + url_string;
             }
+        }
+        else {
+            url = removeURLParameter(url,'item__price_from');
         }
 
         if ($('#fa_left_search_new_item__price_to').val()) {
@@ -263,9 +266,32 @@
                 url += '?' + url_string;
             }
         }
-
+        else {
+            url = removeURLParameter(url,'item__price_to');
+        }
         window.location.href = url;
     }
+    function removeURLParameter(url, parameter) {
+        //prefer to use l.search if you have a location/link object
+        var urlparts = url.split('?');
+        if (urlparts.length >= 2) {
+
+            var prefix = encodeURIComponent(parameter) + '=';
+            var pars = urlparts[1].split(/[&;]/g);
+
+            //reverse iteration as may be destructive
+            for (var i = pars.length; i-- > 0;) {
+                //idiom for string.startsWith
+                if (pars[i].lastIndexOf(prefix, 0) !== -1) {
+                    pars.splice(i, 1);
+                }
+            }
+
+            return urlparts[0] + (pars.length > 0 ? '?' + pars.join('&') : '');
+        }
+        return url;
+    }
+
 
     function formulate_location_url() {
         let url = getPageUrl();
