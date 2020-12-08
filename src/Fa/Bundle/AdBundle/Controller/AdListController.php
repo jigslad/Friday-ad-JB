@@ -1423,6 +1423,7 @@ class AdListController extends CoreController
             $location = $this->getRepository('FaEntityBundle:Location')->find($searchParams['item__location']);
 
             $radius = CategoryRepository::MAX_DISTANCE;
+            $categoryId = '';
             if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
                 $categoryId = $searchParams['item__category_id'];
             }
@@ -1432,13 +1433,13 @@ class AdListController extends CoreController
                 if($searchParams['item__location'] == LocationRepository::LONDON_TOWN_ID) {
                     $radius = CategoryRepository::LONDON_DISTANCE;
                 } else {
-                    $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
+                    $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
                     $radius = ($getDefaultRadius)?$getDefaultRadius:'';
                 }
             }
             if($radius=='') {
                 if($categoryId!='') {
-                    $rootCategoryId = $this->em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
+                    $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
                     $radius = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
                 } else {
                     $radius = CategoryRepository::MAX_DISTANCE;
@@ -1664,6 +1665,30 @@ class AdListController extends CoreController
         ];
 
         $locationFacets = [];
+        $radius = CategoryRepository::MAX_DISTANCE;
+        $categoryId = '';
+        if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
+            $categoryId = $searchParams['item__category_id'];
+        }
+        if (isset($searchParams['item__distance']) && $searchParams['item__distance']) {
+            $radius = $searchParams['item__distance'];
+        } else {
+            if($searchParams['item__location'] == LocationRepository::LONDON_TOWN_ID) {
+                $radius = CategoryRepository::LONDON_DISTANCE;
+            } else {
+                $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
+                $radius = ($getDefaultRadius)?$getDefaultRadius:'';
+            }
+        }
+        if($radius=='') {
+            if($categoryId!='') {
+                $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
+                $radius = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
+            } else {
+                $radius = CategoryRepository::MAX_DISTANCE;
+            }
+        }
+
         if ($searchParams['item__location'] == 2) {
             $eLocationFacets = [];
             if (isset($extendedFacetResult['town'])) {
@@ -1703,7 +1728,23 @@ class AdListController extends CoreController
                             $newStaticFilters .= ' AND '.$staticFilter;
                         }
                     }
-                    $newStaticFilters .= ' AND (town:*parent_id\"\:'.$town['parent_id'].'\,* OR locality:*parent_id\"\:'.$town['parent_id'].'\,* OR domicile:*parent_id\"\:'.$town['parent_id'].'\,* ) AND -(town:*\"id\"\:'.$town['id'].'\,* OR locality:*\"id\"\:'.$town['id'].'\,* OR domicile:*\"id\"\:'.$town['id'].'\,*)';
+
+                    if (!empty($town)) {
+                        $latitude = $town['latitude'];
+                        $longitude = $town['longitude'];
+                        $locationId = $town['id'];
+
+                        $locDetail = $this->getRepository('FaEntityBundle:Location')->find($locationId);
+                        $level = $locDetail->getLvl();
+
+                        if ((empty($latitude) && empty($longitude)) || ($level <= 2)) {
+                            $newStaticFilters .= " AND (town: *\:{$locationId}\,* OR domicile: *\:{$locationId}\,* OR locality: *\:{$locationId}\,*)";
+                        } else {
+                            $newStaticFilters .= " AND ({!geofilt pt={$latitude},{$longitude} sfield=store d={$radius}})";
+                        }
+                    }
+
+                    //$newStaticFilters .= ' AND (town:*parent_id\"\:'.$town['parent_id'].'\,* OR locality:*parent_id\"\:'.$town['parent_id'].'\,* OR domicile:*parent_id\"\:'.$town['parent_id'].'\,* ) AND -(town:*\"id\"\:'.$town['id'].'\,* OR locality:*\"id\"\:'.$town['id'].'\,* OR domicile:*\"id\"\:'.$town['id'].'\,*)';
 
                     $newData['static_filters'] = $newStaticFilters;
                     $newData['facet_fields'] = array(
