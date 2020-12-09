@@ -1743,7 +1743,6 @@ class AdListController extends CoreController
             }
         } else {
             foreach ($facetResult['town'] as $town => $count) {
-
                 if (!empty($town)) {
                     $town = get_object_vars(json_decode($town));
 
@@ -3877,7 +3876,7 @@ class AdListController extends CoreController
         $data['static_filters']  .= ' AND user_id: "' . $userId . '" AND -is_blocked_ad: true';
 
         $data['static_filters'] .= ' AND status_id: ' . EntityRepository::AD_STATUS_LIVE_ID;
-        
+
         if (!empty($adIds)) {
             $data['static_filters'] .= ' AND -id: ('.implode(' ', $adIds).')';
         }
