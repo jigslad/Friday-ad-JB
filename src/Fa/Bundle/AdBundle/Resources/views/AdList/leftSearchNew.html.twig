@@ -501,7 +501,22 @@
                         }
                     }
                 } else {
-                    href += this_url + '/';
+                    parentul = this.closest('ul ')
+                    replaceurltext = 0
+                    for (var i = 0; i < parentul.childNodes.length; i++) {
+                        childli = parentul.childNodes[i]
+                        for (var j = 0; j < childli.childNodes.length; j++) {
+                            if(childli.childNodes[j].classList.contains('bold')){
+                                replaceurltext = childli.childNodes[j].dataset.href
+                            }
+                        }
+                    }
+                    if(replaceurltext){
+                        href = href.replace(replaceurltext, this_url);
+                    }
+                    else {
+                        href += this_url + '/';
+                    }
                 }
             }
 
