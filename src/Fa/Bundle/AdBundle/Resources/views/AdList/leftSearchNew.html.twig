@@ -442,7 +442,7 @@
             }
 
             let index = href.indexOf('/'+this_url+'/');
-            if (index != -1) {
+            if (index != -1 && isCheckbox == false) {
                 href = href.substring(0, (index + 1));
             } else if (this_url.indexOf('=') != -1) {
                 url_params = set_url_params(url_params.replace('?', ''), this_url, isCheckbox);
@@ -488,7 +488,8 @@
                                  url_params = '?' + url_params;
                              }
                         }
-                    } else {
+                    }
+                    else {
                         if ($(this).closest('ul').find('li').length > 1 && $(this).closest('ul').find('span.checked').length) {
                             data_href = $(this).closest('ul').find('span.checked').closest('li').find('a').attr('data-href');
                         }
@@ -497,7 +498,17 @@
                             let name = $(this).closest('ul').find('li').find('label').attr('for').replace('fa_left_search_', '');
                             url_params = set_url_params(url_params.replace('?', ''), 'item__' + name + '=' + this_url);
                         } else {
-                            href += this_url + '/';
+                            if(this_url == 'for-sale'){
+                                if(url_params.indexOf('item__ad_type_id') != -1){
+                                    url_params.replace('item__ad_type_id=1','')
+                                }
+                                else{
+                                    url_params += '?item__ad_type_id=1'
+                                }
+                            }
+                            else{
+                                href += this_url + '/';
+                            }
                         }
                     }
                 } else {
@@ -524,6 +535,7 @@
                 url_params = '';
             }
             $(this).attr('href', href + url_params);
+            console.log($(this).attr('herf'))
         });
 
         $('a[data-location-href]').each(function() {
