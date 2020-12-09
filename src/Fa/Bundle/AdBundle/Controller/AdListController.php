@@ -1689,7 +1689,7 @@ class AdListController extends CoreController
 
 
                     foreach ($staticFilters as $staticFilter) {
-                        if (!empty($staticFilter) && strpos($staticFilter, 'town') === false) {
+                        if (!empty($staticFilter) && strpos($staticFilter, 'town') === false && strpos($staticFilter, 'sfield=store') === false) {
                             $newStaticFilters .= ' AND ' . $staticFilter;
                         }
                     }
@@ -1753,7 +1753,7 @@ class AdListController extends CoreController
                         $staticFilters = explode(' AND ', $newData['static_filters']);
 
                         foreach ($staticFilters as $staticFilter) {
-                            if (!empty($staticFilter) && strpos($staticFilter, 'town') === false) {
+                            if (!empty($staticFilter) && strpos($staticFilter, 'town') === false && strpos($staticFilter, 'sfield=store') === false) {
                                 $newStaticFilters .= ' AND ' . $staticFilter;
                             }
                         }
