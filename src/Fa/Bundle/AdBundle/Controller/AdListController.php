@@ -1764,24 +1764,6 @@ class AdListController extends CoreController
                     else {
                         if ($dimension['solr_field'] =='type_id' ) {
                             $isSelected = false;
-                            $entityDimensions = $this->getRepository('FaEntityBundle:Entity')->findBy(array('category_dimension' => $dimension['id']));
-                            foreach ($entityDimensions as $entityDimension){
-                                if (!property_exists($facetArraySet,$entityDimension->getId()))
-                                {
-                                    $newDataCount = $data;
-                                    $newDataCount['search']['item__ad_type_id'][0] = $entityDimension->getId();
-                                    $newDataCount['query_filters']['item']['ad_type_id'][0] = $entityDimension->getId();
-                                    $newDataCount['query_filters']['item']['ad_type'][0] = $entityDimension->getId();
-                                    $newDataCount['static_filters'] = str_replace($jsonValue,(string)$entityDimension->getId(),$newDataCount['static_filters']);
-                                    $newSolrData = $this->getSolrResult('ad.new', $keywords, $newDataCount, 1, 2, 0, true);
-                                    $orderedDimensions[$dimension['id']][$entityDimension->getId()] = array(
-                                        'name' => $adTypes[$entityDimension->getId()]['name'],
-                                        'slug' => $adTypes[$entityDimension->getId()]['slug'],
-                                        'count' => $newSolrData['resultCount'],
-                                        'selected' => false
-                                    );
-                                }
-                            }
                             if (! empty($selected)) {
                                 if (is_array($selected)) {
                                     if (in_array($jsonValue, $selected)) {
@@ -1805,6 +1787,24 @@ class AdListController extends CoreController
                                     'count' => $facetCount,
                                     'selected' => $isSelected
                                 );
+                            }
+                            $entityDimensions = $this->getRepository('FaEntityBundle:Entity')->findBy(array('category_dimension' => $dimension['id']));
+                            foreach ($entityDimensions as $entityDimension){
+                                if (!property_exists($facetArraySet,$entityDimension->getId()))
+                                {
+                                    $newDataCount = $data;
+                                    $newDataCount['search']['item__ad_type_id'][0] = $entityDimension->getId();
+                                    $newDataCount['query_filters']['item']['ad_type_id'][0] = $entityDimension->getId();
+                                    $newDataCount['query_filters']['item']['ad_type'][0] = $entityDimension->getId();
+                                    $newDataCount['static_filters'] = str_replace($jsonValue,(string)$entityDimension->getId(),$newDataCount['static_filters']);
+                                    $newSolrData = $this->getSolrResult('ad.new', $keywords, $newDataCount, 1, 2, 0, true);
+                                    $orderedDimensions[$dimension['id']][$entityDimension->getId()] = array(
+                                        'name' => $adTypes[$entityDimension->getId()]['name'],
+                                        'slug' => $adTypes[$entityDimension->getId()]['slug'],
+                                        'count' => $newSolrData['resultCount'],
+                                        'selected' => false
+                                    );
+                                }
                             }
                         }
                     }
