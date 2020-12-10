@@ -2001,13 +2001,25 @@ class AdListController extends CoreController
                                 );
                             }
                         } else {
-                            if ($dimension['id'] == EntityRepository::AD_TYPE_ID) {
+                            if ($dimension['dim_slug'] == 'ad_type') {
+                                $isSelected = false;
+                                if (! empty($selected)) {
+                                    if (is_array($selected)) {
+                                        if (in_array($jsonValue, $selected)) {
+                                            $isSelected = true;
+                                        }
+                                    } else {
+                                        if ($selected == $jsonValue) {
+                                            $isSelected = true;
+                                        }
+                                    }
+                                }
                                 if (isset($adTypes[$jsonValue])) {
                                     $orderedDimensions[$dimension['id']][$jsonValue] = array(
                                         'name' => $adTypes[$jsonValue]['name'],
                                         'slug' => $adTypes[$jsonValue]['slug'],
                                         'count' => $facetCount,
-                                        'selected' => false
+                                        'selected' => $isSelected
                                     );
                                 }
                             }
