@@ -122,19 +122,9 @@ class AdLeftSearchNewType extends AbstractType
 
         $searchLocation = isset($searchParams['item__location'])?$searchParams['item__location']:((!empty($cookieLocationDet) && isset($cookieLocationDet->town_id))?$cookieLocationDet->town_id:2);
 
-        $isLocality = 0;$getLocLvl = 0;
-        if (strpos($searchLocation,',') !== false) {
-            $localityTown = explode(',', $searchParams['item__location']);
-            $searchLocation     = $localityTown[0];
-            $isLocality = 1;
-        }
-        if($isLocality) {
-            $selLocationArray = $this->em->getRepository('FaEntityBundle:Locality')->find($searchLocation);
-        } else {
-            $selLocationArray = $this->em->getRepository('FaEntityBundle:Location')->find($searchLocation);
-            if(!empty($selLocationArray)) { $getLocLvl = $selLocationArray->getLvl(); }
-        }
-
+        $selLocationArray = $this->em->getRepository('FaEntityBundle:Location')->find($searchLocation);
+        if(!empty($selLocationArray)) { $getLocLvl = $selLocationArray->getLvl(); }
+        
         if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
             $categoryId = $searchParams['item__category_id'];
         }
