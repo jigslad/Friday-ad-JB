@@ -247,26 +247,16 @@
     function formulate_price_url() {
         let url = getPageUrl();
         if ($('#fa_left_search_new_item__price_from').val()) {
+            let url_string = 'item__price_from=' + $('#fa_left_search_new_item__price_from').val();
             url = updateQueryStringParameter(url,'item__price_from',$('#fa_left_search_new_item__price_from').val())
-            // let url_string = 'item__price_from=' + $('#fa_left_search_new_item__price_from').val();
-            // if (url.indexOf('?') != -1) {
-            //     url += '&' + url_string;
-            // } else {
-            //     url += '?' + url_string;
-            // }
         }
         else {
             url = removeURLParameter(url,'item__price_from');
         }
 
         if ($('#fa_left_search_new_item__price_to').val()) {
+            let url_string = '&item__price_to=' + $('#fa_left_search_new_item__price_to').val();
             url = updateQueryStringParameter(url,'item__price_to',$('#fa_left_search_new_item__price_to').val())
-            // let url_string = '&item__price_to=' + $('#fa_left_search_new_item__price_to').val();
-            // if (url.indexOf('?') != -1) {
-            //     url += '&' + url_string;
-            // } else {
-            //     url += '?' + url_string;
-            // }
         }
         else {
             url = removeURLParameter(url,'item__price_to');
