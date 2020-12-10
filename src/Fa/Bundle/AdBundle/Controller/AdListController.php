@@ -1453,10 +1453,10 @@ class AdListController extends CoreController
                 //$latitude = $location->getLatitude();
                 //$longitude = $location->getLongitude();
                 //$locationId = $location->getId();
-                $level = $location['lvl'];
+                $level = (isset($location['locality_id']) && $location['locality_id']!='')?5:$location['lvl'];
                 $latitude = $location['latitude'];
                 $longitude = $location['longitude'];
-                $locationId = isset($location['locality_id'])?$location['locality_id']:$location['town_id'];
+                $locationId = (isset($location['locality_id']) && $location['locality_id']!='')?$location['locality_id']:$location['town_id'];
 
                 // Apply Location ID filter Only if:
                 // - Lat/Long is empty OR
