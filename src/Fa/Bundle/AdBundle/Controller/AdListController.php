@@ -17,7 +17,7 @@ use Fa\Bundle\EntityBundle\Entity\Entity;
 use Fa\Bundle\EntityBundle\Entity\Location;
 use Fa\Bundle\EntityBundle\Repository\CategoryDimensionRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundleController\Controller;
 use Fa\Bundle\CoreBundle\Controller\CoreController;
 use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -1420,7 +1420,8 @@ class AdListController extends CoreController
         $staticFilters = '';
         if ($searchParams['item__location'] != LocationRepository::COUNTY_ID) {
             /** @var Location $location */
-            $location = $this->getRepository('FaEntityBundle:Location')->find($searchParams['item__location']);
+            //$location = $this->getRepository('FaEntityBundle:Location')->find($searchParams['item__location']);
+            $location = $this->getRepository('FaEntityBundle:Location')->getCookieValue($searchParams['item__location'],$this->container);
 
             $radius = CategoryRepository::MAX_DISTANCE;
             $categoryId = '';
@@ -1448,10 +1449,14 @@ class AdListController extends CoreController
 
             if (!empty($location)) {
 
-                $level = $location->getLvl();
-                $latitude = $location->getLatitude();
-                $longitude = $location->getLongitude();
-                $locationId = $location->getId();
+                //$level = $location->getLvl();
+                //$latitude = $location->getLatitude();
+                //$longitude = $location->getLongitude();
+                //$locationId = $location->getId();
+                $level = $location['lvl'];
+                $latitude = $location['latitude'];
+                $longitude = $location['longitude'];
+                $locationId = isset($location['locality_id'])?$location['locality_id']:$location['town_id'];
 
                 // Apply Location ID filter Only if:
                 // - Lat/Long is empty OR
