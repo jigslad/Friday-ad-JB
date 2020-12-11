@@ -428,9 +428,9 @@ class AdRoutingManager
      */
     public function getCategoryUrlById($locationId, $categoryId)
     {
-        //$location = $this->em->getRepository('FaEntityBundle:Location')->getSlugById($locationId, $this->container);
+        $location = $this->em->getRepository('FaEntityBundle:Location')->getSlugById($locationId, $this->container);
         return $this->router->generate('listing_page', array(
-            'location' => $locationId,
+            'location' => $location,
             'page_string' => $this->em->getRepository('FaEntityBundle:Category')->find($categoryId)->getFullSlug()
         ), true);
     }
@@ -463,7 +463,7 @@ class AdRoutingManager
     {
         $location = null;
         if (isset($search_params['item__location']) && $search_params['item__location'] != '') {
-            /*if (preg_match('/^\d+$/', $search_params['item__location'])) {
+            if (preg_match('/^\d+$/', $search_params['item__location'])) {
                 $location = $this->em->getRepository('FaEntityBundle:Location')->getSlugById($search_params['item__location'], $this->container);
             } elseif (preg_match('/^([\d]+,[\d]+)$/', $search_params['item__location'])) {
                 $localityTown = explode(',', $search_params['item__location']);
@@ -488,9 +488,7 @@ class AdRoutingManager
                         $location = $this->em->getRepository('FaEntityBundle:Location')->getSlugByName($search_params['item__location'], 2, $this->container);
                     }
                 }
-            }*/
-            $locDetail = $this->em->getRepository('FaEntityBundle:Location')->getCookieValue($search_params['item__location'],$this->container);
-            $location = (isset($locDetail['slug']) && $locDetail['slug']!='')?$locDetail['slug']:'';
+            }
         }
         if ((isset($search_params['item__area']) && $search_params['item__area'] != '')) {
             $location = $this->em->getRepository('FaEntityBundle:Location')->getSlugById($search_params['item__area'], $this->container);
@@ -648,9 +646,7 @@ class AdRoutingManager
                 $locationString = $this->em->getRepository('FaEntityBundle:Location')->getSlugForDetailAd($ad[AdSolrFieldMapping::DOMICILE_ID][0], $this->container);
             }
         } elseif ($adId && $locationId) {
-            //$locationString = $this->em->getRepository('FaEntityBundle:Location')->getSlugForDetailAd($locationId, $this->container);
-            $locDetail = $this->em->getRepository('FaEntityBundle:Location')->getCookieValue($locationId,$this->container);
-            $locationString = (isset($locDetail['slug']) && $locDetail['slug']!='')?$locDetail['slug']:'';
+            $locationString = $this->em->getRepository('FaEntityBundle:Location')->getSlugForDetailAd($locationId, $this->container);
         } elseif ($ad) {
             //check for location.
             $domicileTownArray = $this->em->getRepository('FaAdBundle:AdLocation')->getIdArrayByAdId($ad->getId());
