@@ -48,7 +48,7 @@ class LocalityRepository extends BaseEntityRepository
      *
      * @return array
      */
-    public function getLocalitiesArrayByTerm($term)
+    public function getLocalitiesArrayByTerm($term, $container =null)
     {
         $localities = $this->getBaseQueryBuilder()
         ->andWhere(self::ALIAS.'.locality_text LIKE :term')
@@ -60,9 +60,12 @@ class LocalityRepository extends BaseEntityRepository
         $localityArray = array();
         foreach ($localities as $locality) {
             //getTown Lat and Long
+            $townSlug = '';
             $getTown = $this->_em->getRepository('FaEntityBundle:Location')->find($locality->getTownId());
             $localiyName = explode(',', $locality->getLocalityText());
-            $localityArray[] = array('id'=> $locality->getId().','.$locality->getTownId(), 'text' => $locality->getLocalityText(), 'latlong' => $getTown->getLatitude().', '.$getTown->getLongitude());
+            $getTownArray = $this->_em->getRepository('FaEntityBundle:Location')->getCookieValue($locality->getId().','.$locality->getTownId(), $container);
+            if(!empty($getTownArray)) { $townSlug = $getTownArray['slug']; } else { $townSlug = $getTown->getUrl(); }
+            $localityArray[] = array('id'=> $locality->getId().','.$locality->getTownId(), 'text' => $locality->getLocalityText(), 'latlong' => $getTown->getLatitude().', '.$getTown->getLongitude(), 'slug' => $townSlug);
         }
 
         return $localityArray;

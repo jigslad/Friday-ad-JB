@@ -519,10 +519,12 @@ class AdRequestListener
                         $searchParams['item__location'] = $locationId;
                     }
 
+                    $setDefaultRadius = false;
                     $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
                     if ($request->get('item__distance')) {
                         $searchParams['item__distance']  =  $request->get('item__distance');
                     } else {
+                        $setDefaultRadius = true;
                         $searchParams['item__distance']  =  ($getDefaultRadius)?$getDefaultRadius:'';
                     }
                     /*if (($catObj['id'] == CategoryRepository::MOTORS_ID) || ($parent['id'] == CategoryRepository::MOTORS_ID)) {
@@ -540,7 +542,7 @@ class AdRequestListener
                     }
 
                     if (isset($searchParams['item__distance'])) {
-                        $request->attributes->set('finders', array_merge($queryParams, array('item__distance' => $searchParams['item__distance'])));
+                        $request->attributes->set('finders', array_merge($queryParams, array('item__distance' => $searchParams['item__distance'], 'setDefaultRadius' => $setDefaultRadius)));
                         $queryParams = $request->attributes->get('finders');
                     }
 

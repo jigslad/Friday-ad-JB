@@ -3,7 +3,7 @@
     {% set aff_desc_cls = ' list-desc-short' %}
 {% endif %}
 <div class="listing {% if ad.top_ad and isFeatured is defined %} {{ 'featured' }} {% elseif ad.urgent_ad %} {{ 'urgent' }} {% endif %} {% if ad.boosted_ad %} {{ 'boosted_ad' }} {% endif %}">
-    <a id="listing_{{ ad.ad_id }}" href="{{ ad.ad_url }}"></a>
+    <a id="listing_{{ad.ad_id}}" href="{{ ad.ad_url }}"  class="tricky-link">{% if ad.ad_title is defined %}{{trim_text(ad.ad_title, 80)|raw}}{% endif %}</a>
     <div class="featured-ribbon">featured</div>
     <div class="urgent-ribbon">urgent</div>
     <div class="clearfix">

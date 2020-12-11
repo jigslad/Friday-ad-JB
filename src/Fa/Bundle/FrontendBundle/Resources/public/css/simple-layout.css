@@ -1023,4 +1023,4 @@ footer a:hover, .footer-head:hover, .pkg-includes a {
     #paa_similar_adverts .list-col-2, #paa_similar_adverts .list-distance {
         width: 240px !important;
     }
-}
+}.top-links .f-dropdown { min-width: 205px !important;width: -moz-fit-content; }
