@@ -1757,12 +1757,13 @@ class AdListController extends CoreController
 
                     $newData = $data;
                     $newStaticFilters = '';
-                    if ($newData['static_filters']) {
-                        $staticFilters = explode(' AND ', $newData['static_filters']);
-
-                        foreach ($staticFilters as $staticFilter) {
-                            if (!empty($staticFilter) && strpos($staticFilter, 'town') === false && strpos($staticFilter, 'sfield=store') === false) {
-                                $newStaticFilters .= ' AND ' . $staticFilter;
+                    if ($town['id'] != $searchParams['item__location']) {
+                        if ($newData['static_filters']) {
+                            $staticFilters = explode(' AND ', $newData['static_filters']);
+                            foreach ($staticFilters as $staticFilter) {
+                                if (!empty($staticFilter) && strpos($staticFilter, 'town') === false && strpos($staticFilter, 'sfield=store') === false) {
+                                    $newStaticFilters .= ' AND ' . $staticFilter;
+                                }
                             }
                         }
                     }
@@ -1947,12 +1948,14 @@ class AdListController extends CoreController
                                     $newDataCount['query_filters']['item']['ad_type'][0] = $entityDimension->getId();
                                     $newDataCount['static_filters'] = str_replace($jsonValue,(string)$entityDimension->getId(),$newDataCount['static_filters']);
                                     $newSolrData = $this->getSolrResult('ad.new', $keywords, $newDataCount, 1, 2, 0, true);
-                                    $orderedDimensions[$dimension['id']][$entityDimension->getId()] = array(
-                                        'name' => $adTypes[$entityDimension->getId()]['name'],
-                                        'slug' => $adTypes[$entityDimension->getId()]['slug'],
-                                        'count' => $newSolrData['resultCount'],
-                                        'selected' => false
-                                    );
+                                    if($newSolrData['resultCount']) {
+                                        $orderedDimensions[$dimension['id']][$entityDimension->getId()] = array(
+                                            'name' => $adTypes[$entityDimension->getId()]['name'],
+                                            'slug' => $adTypes[$entityDimension->getId()]['slug'],
+                                            'count' => $newSolrData['resultCount'],
+                                            'selected' => false
+                                        );
+                                    }
                                 }
                             }
                         }
@@ -3916,7 +3919,7 @@ class AdListController extends CoreController
         $data['static_filters']  .= ' AND user_id: "' . $userId . '" AND -is_blocked_ad: true';
 
         $data['static_filters'] .= ' AND status_id: ' . EntityRepository::AD_STATUS_LIVE_ID;
-        
+
         if (!empty($adIds)) {
             $data['static_filters'] .= ' AND -id: ('.implode(' ', $adIds).')';
         }
