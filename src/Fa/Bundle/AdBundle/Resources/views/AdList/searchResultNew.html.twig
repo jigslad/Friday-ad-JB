@@ -217,6 +217,9 @@
                     {% set slotallocated = slotallocated|merge([1]) %}
                 {% endif %}
                 {% set adCount = 0 %}
+                {% set getPagNum = (app.request.get('page'))?(app.request.get('page')):1 %}
+                {% set realAdCnt = (getPagNum-1)*20 %}
+                {% set setExtendedHeading = 0 %}
 
                 {% for ad in featuredAds %}
                     {{ include('FaAdBundle:AdList:listDetailNew.html.twig', {'isFeatured' : true}) }}
@@ -232,7 +235,8 @@
 
                 {% for ad in ads %}
                     {% set adCount = adCount + 1 %}
-
+                    {% set realAdCnt = realAdCnt + 1 %}
+                    
                     {% if thisDevice == 'mobile' %}
                         {% if (adCount == 2 and resultCount > 2 and bannerStatus) %}
                             {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_ABOVE_RESULTS') %}
@@ -255,6 +259,13 @@
                         {% endif %}
                     {% endif %}
 
+                    {% if ((realAdCnt > resultCount) and (setExtendedHeading==0)) %}
+                        <div data-alert="" class="alert-box info radius">
+                            <span class="alert-icon">&nbsp;</span>
+                            We found  {{extendedResultCount}} {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id) }} ads within  {{extendedRadius}} miles of {{ app.request.get('location') | replace({'-':' '}) | title }}
+                        </div>
+                        {% set setExtendedHeading = 1 %}
+                    {% endif %}
 
                     {% if displayRecommendedSlot==1 and recommendedSlotsCount > 0 %}
                         {% if adCount== 4  and (recommendedSlotResult[2] is defined and recommendedSlotResult[2]|length >0) %}
@@ -281,15 +292,14 @@
                         {% endif %}
                     {% endif %}
 
-                    {# As discussed over slack, featured business section is commented for time being, will take this up again on Monday #}
-                {# {% if businessExposureUsersDetails is defined and businessExposureUsersDetails|length > 0 and resultCount > 0  %}
+                    {% if businessExposureUsersDetails is defined and businessExposureUsersDetails|length > 0 and resultCount > 0  %}
                         {% if (adCount == 5 or adCount == 15) and businessExposureUsersDetails is defined and  businessExposureUsersDetails|length > 0 %}
                             {{ include('FaAdBundle:AdList:businessExposureSliderBlockNew.html.twig', {'blockposition': adCount }) }}
                         {% endif %}
-                        {% if adCount == 10 and businessExposureUsersDetails is defined and  businessExposureUsersDetails|length > 0 %}
+                        {% if adCount == 10 and businessExposureUsersDetailsWithoutAd is defined and  businessExposureUsersDetailsWithoutAd|length > 0 %}
                             {{ include('FaAdBundle:AdList:businessExposureSingleBlockNew.html.twig') }}
                         {% endif %}
-                    {% endif %} #}
+                    {% endif %}
 
                     {{ include('FaAdBundle:AdList:listDetailNew.html.twig') }}
                 {% endfor %}
@@ -330,10 +340,10 @@
                 {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_PAGINATION_MOBILE') %}
                 {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
             </div>
-        </div>
-        <div class="right-banner">
-            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_RIGHT') %}
-            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
+            <div class="right-banner">
+                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_RIGHT') %}
+                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
+            </div>
         </div>
     </div>
 {% endblock %}

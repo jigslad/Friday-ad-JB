@@ -107,6 +107,12 @@ class AdRoutingManager
         if(isset($search_params['hide_distance_block'])) {
             unset($search_params['hide_distance_block']);
         }
+
+        if(isset($search_params['item__distance'])) {
+            if ($search_params['item__distance'] == CategoryRepository::LONDON_DISTANCE) {
+                unset($search_params['item__distance']);
+            }
+        }
         
         if(isset($search_params['default_distance'])) {
             unset($search_params['default_distance']);
@@ -160,6 +166,11 @@ class AdRoutingManager
         if (isset($search_params['tmpLeafLevelCategoryId'])) {
             unset($search_params['tmpLeafLevelCategoryId']);
         }
+
+        if (isset($search_params['leafLevelCategoryId'])) {
+            unset($search_params['leafLevelCategoryId']);
+        }
+
         if (isset($search_params['item__area'])) {
             unset($search_params['item__area']);
         }

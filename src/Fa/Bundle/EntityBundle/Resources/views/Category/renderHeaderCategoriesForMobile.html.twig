@@ -97,6 +97,13 @@
                                         		<a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" >Escort Alternative</a>
                             	            {% endif %}
                                 		</li>
+                                        <li class="last-level">
+                                            {% if thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox %}
+                                                <a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_WEB_CAMS_URL') }}" rel="nofollow" target="_blank" >Live Sex Cams</a>
+                                            {% else %}
+                                                <a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup(0,'live-web-cams');" >Live Sex Cams</a>
+                                            {% endif %}
+                                        </li>
                                         {# <li class="last-level">
                                             {% if (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox) or (app.request.cookies.has('is_over_18')) %}
                                                 <a href="https://engine.partylemons.com/?414907182" rel="nofollow" target="_blank" >MILF Hookups</a>
