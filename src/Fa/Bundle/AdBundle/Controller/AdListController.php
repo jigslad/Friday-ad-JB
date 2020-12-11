@@ -1948,12 +1948,14 @@ class AdListController extends CoreController
                                     $newDataCount['query_filters']['item']['ad_type'][0] = $entityDimension->getId();
                                     $newDataCount['static_filters'] = str_replace($jsonValue,(string)$entityDimension->getId(),$newDataCount['static_filters']);
                                     $newSolrData = $this->getSolrResult('ad.new', $keywords, $newDataCount, 1, 2, 0, true);
-                                    $orderedDimensions[$dimension['id']][$entityDimension->getId()] = array(
-                                        'name' => $adTypes[$entityDimension->getId()]['name'],
-                                        'slug' => $adTypes[$entityDimension->getId()]['slug'],
-                                        'count' => $newSolrData['resultCount'],
-                                        'selected' => false
-                                    );
+                                    if($newSolrData['resultCount']) {
+                                        $orderedDimensions[$dimension['id']][$entityDimension->getId()] = array(
+                                            'name' => $adTypes[$entityDimension->getId()]['name'],
+                                            'slug' => $adTypes[$entityDimension->getId()]['slug'],
+                                            'count' => $newSolrData['resultCount'],
+                                            'selected' => false
+                                        );
+                                    }
                                 }
                             }
                         }
