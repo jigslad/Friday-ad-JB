@@ -72,9 +72,11 @@
                                                          {% elseif staticTxtCnt == 0 and categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
                                                 				{% if (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox) or (app.request.cookies.has('is_over_18')) %}
                                                             		<div class="large-8 columns inside-top-category-menu"><a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" >Escort Alternative</a></div>
+                                                                    <div class="large-8 columns inside-top-category-menu"><a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_WEB_CAMS_URL') }}" rel="nofollow" target="_blank" >Live Sex Cams</a></div>
                                                                     {# <div class="large-8 columns inside-top-category-menu"><a href="https://engine.partylemons.com/?414907182" rel="nofollow" target="_blank" >MILF Hookups</a></div> #}
                                                             	{% else %}
                                                             		<div class="large-8 columns inside-top-category-menu"><a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup(0,'live-cams');" >Escort Alternative</a> </div>
+                                                                    <div class="large-8 columns inside-top-category-menu"><a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup(0,'live-web-cams');" >Live Sex Cams</a></div>
                                                                     {#<div class="large-8 columns inside-top-category-menu"><a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" >MILF Hookups</a></div> #}
                                                 	            {% endif %}
                                                 				{% set staticTxtCnt = 1 %}
@@ -166,9 +168,11 @@
                                              {% elseif staticTxtCnt == 0 and categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
                                             	{% if (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox) or (app.request.cookies.has('is_over_18')) %}
                                             		<div class="large-6 columns"><a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" >Escort Alternative</a></div>
+                                                    <div class="large-6 columns"><a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_WEB_CAMS_URL') }}" rel="nofollow" target="_blank" >Live Sex Cams</a></div>
                                                     {# <div class="large-6 columns"><a href="https://engine.partylemons.com/?414907182" rel="nofollow" target="_blank" >MILF Hookups</a></div> #}
                                             	{% else %}
                                             		<div class="large-6 columns"><a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup(0,'live-cams');" >Escort Alternative</a></div>
+                                                    <div class="large-6 columns"><a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup(0,'live-web-cams');" >Live Sex Cams</a></div>
                                                     {# <div class="large-6 columns"><a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" >MILF Hookups</a></div> #}
                                             	{% endif %}
                                             	{% set staticTxtCnt = 1 %}
@@ -285,6 +289,13 @@
                                         		<a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" >Escort Alternative</a>
                             	            {% endif %}
                                 		</li>
+                                        <li class="last-level">
+                                            {% if thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox %}
+                                                <a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_WEB_CAMS_URL') }}" rel="nofollow" target="_blank" >Live Sex Cams</a>
+                                            {% else %}
+                                                <a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup(0,'live-web-cams');" >Live Sex Cams</a>
+                                            {% endif %}
+                                        </li>
                                         {# <li class="last-level">
                                             {% if (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox) or (app.request.cookies.has('is_over_18')) %}
                                                 <a href="https://engine.partylemons.com/?414907182" rel="nofollow" target="_blank" >MILF Hookups</a>
@@ -408,7 +419,9 @@ function showAdultPopup(modify = 0,elem = null)
     if(elem!=null) {
     	if(elem=='live-cams') {
     	    redrctlink = "{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}";
-    	} 
+    	} else if(elem=='live-web-cams') {
+            redrctlink = "{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_WEB_CAMS_URL') }}";
+        }
     }
     $.ajax({
         type: "POST",

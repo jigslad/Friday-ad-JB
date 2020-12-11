@@ -794,7 +794,7 @@ class SolrSearchManager
     {
         if (count($filters)) {
             if ($this->solrCoreName == 'ad.new') {
-                if (isset($filters['item']['distance'])) {
+                /*if (isset($filters['item']['distance'])) {
                     $serviceName = 'fa.ad.solrsearch';
                     if ($this->container->has($serviceName)) {
                         $serviceObj = $this->container->get($serviceName);
@@ -806,7 +806,7 @@ class SolrSearchManager
                             $this->geoDistQuery = $serviceObj->getGeoDistQuery();
                         }
                     }
-                }
+                }*/
             } else {
                 foreach (array_keys($filters) as $service) {
                     $filters[$service] = array_filter($filters[$service], array($this, 'filterEmptyValues'));

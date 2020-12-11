@@ -872,6 +872,8 @@ class AdRepository extends EntityRepository
         $document = $this->addField($document, 'upsells', [
             'boost' => $ad->getBoostedAt()
         ]);
+        $document = $this->addField($document, 'is_boosted', $ad->getIsBoosted());
+        $document = $this->addField($document, 'boosted_at', $ad->getBoostedAt());
 
         //ad user business category id
         //shop detail.
@@ -912,13 +914,10 @@ class AdRepository extends EntityRepository
             }
         }
         // Index images
-        $imageLimit = 0;
+        $category = $this->_em->getRepository('FaEntityBundle:Category')->getRootNodeByCategory($categoryId);
+        $imagelimitCategoryName = CommonManager::getCategoryClassNameById($category->getId());
+        $imageLimit = $container->getParameter('fa.image.'.$imagelimitCategoryName.'_upload_limit');
 
-        if (count($allParentCategories)) {
-            $category = $allParentCategories[count($allParentCategories) - 2];
-            $imagelimitCategoryName = CommonManager::getCategoryClassNameById($category['id']);
-            $imageLimit = $container->getParameter('fa.image.'.$imagelimitCategoryName.'_upload_limit');
-        }
         if (isset($adUpsellValues[UpsellRepository::UPSELL_TYPE_ADDITIONAL_PHOTO_VALUE])) {
             $imageLimit = $adUpsellValues[UpsellRepository::UPSELL_TYPE_ADDITIONAL_PHOTO_VALUE];
         }
@@ -3058,7 +3057,7 @@ class AdRepository extends EntityRepository
             $solr->deleteByQuery('a_user_id_i:"'.$userId.'"');
             $solr->commit(true);
 
-            $solrClientNew = $this->getContainer()->get('fa.solr.client.ad.new');
+            $solrClientNew = $container->get('fa.solr.client.ad.new');
             if (!$solrClientNew->ping()) {
                 return false;
             }
