@@ -137,6 +137,9 @@ class CategoryRepository extends NestedTreeRepository
     const MAX_DISTANCE = 200;
     const LONDON_DISTANCE = 30;
 
+    const KEYWORD_DEFAULT = 5;
+    const KEYWORD_EXTENDED = 15;
+
     private $categoryCountArray = array();
 
     /**
