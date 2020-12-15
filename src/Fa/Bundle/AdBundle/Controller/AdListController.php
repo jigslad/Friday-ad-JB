@@ -950,11 +950,6 @@ class AdListController extends CoreController
         $static_filters = '';
         $searchableDimensions = [];
         $root = $category;
-        if (isset($data['query_filters']['item']['setDefaultRadius']) && $data['query_filters']['item']['setDefaultRadius']==1 && (isset($data['search']['item__location']) && $data['search']['item__location']==831)) {
-            $data['search']['item__distance'] = CategoryRepository::LONDON_DISTANCE;
-            $data['query_filters']['item']['distance']= CategoryRepository::LONDON_DISTANCE;
-            $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'.CategoryRepository::LONDON_DISTANCE;;
-        }
 
         $listingFields = array();
         $adRepository = $this->getRepository('FaAdBundle:Ad');
@@ -989,6 +984,16 @@ class AdListController extends CoreController
 
         $keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: NULL;
         $recordsPerPage = (isset($data['pager']['limit']) && $data['pager']['limit']) ? $data['pager']['limit']: $this->container->getParameter('fa.search.records.per.page');
+
+        if (isset($data['query_filters']['item']['setDefaultRadius']) && $data['query_filters']['item']['setDefaultRadius']==1 && (isset($data['search']['item__location']) && $data['search']['item__location']==831)) {
+            $data['search']['item__distance'] = CategoryRepository::LONDON_DISTANCE;
+            $data['query_filters']['item']['distance']= CategoryRepository::LONDON_DISTANCE;
+            $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'.CategoryRepository::LONDON_DISTANCE;;
+        } elseif($keywords) {
+            $data['search']['item__distance'] = CategoryRepository::KEYWORD_DEFAULT;
+            $data['query_filters']['item']['distance']= CategoryRepository::KEYWORD_DEFAULT;
+            $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'.CategoryRepository::KEYWORD_DEFAULT;;
+        }
 
         $pagination = $this->getSolrResult('ad.new', $keywords, $data, $page, $recordsPerPage, 0, true);
 
@@ -1136,6 +1141,7 @@ class AdListController extends CoreController
         }
 
         $extendRadius = '';
+        $extendlocation = '';
         if ($setDefRadius && $isBusinessPage==0) {
             if (isset($findersSearchParams['item__category_id']) && $findersSearchParams['item__category_id']) {
                 $parentCategoryIds = array_keys($this->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($findersSearchParams['item__category_id'], false, $this->container));
@@ -1150,9 +1156,15 @@ class AdListController extends CoreController
                 }
             }
         }
+
         if (!empty($extendRadius) && $data['search']['item__location']== LocationRepository::LONDON_TOWN_ID) {
             $extendRadius =  CategoryRepository::MAX_DISTANCE;
         }
+
+        if($keywords) {
+            $extendRadius = CategoryRepository::KEYWORD_EXTENDED;
+        }
+
         if ($request->attributes->get('customized_page')) {
             list($keywords, $data) = $this->handleCustomizedUrl($data, $request);
         }
@@ -1440,6 +1452,8 @@ class AdListController extends CoreController
             } else {
                 if($searchParams['item__location'] == LocationRepository::LONDON_TOWN_ID) {
                     $radius = CategoryRepository::LONDON_DISTANCE;
+                } elseif(isset($searchParams['keywords']) && $searchParams['keywords']) {
+                    $radius = CategoryRepository::KEYWORD_DEFAULT;
                 } else {
                     $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
                     $radius = ($getDefaultRadius)?$getDefaultRadius:'';
@@ -1598,8 +1612,11 @@ class AdListController extends CoreController
 
         $adTypes = [];
         if (in_array('type_id', array_column($dimensions, 'solr_field'))) {
-            $adTypesResult = $this->getRepository('FaEntityBundle:Entity')->getEntitiesByCategoryDimensionId(EntityRepository::AD_TYPE_ID);
-
+            foreach ($dimensions as $dimension) {
+                if($dimension['solr_field'] === 'type_id'){
+                    $adTypesResult = $this->getRepository('FaEntityBundle:Entity')->getEntitiesByCategoryDimensionId($dimension['id']);
+                }
+            }
             $adTypes = [];
             foreach ($adTypesResult as $adType) {
                 $adTypes[$adType->getId()] = [
@@ -1679,13 +1696,13 @@ class AdListController extends CoreController
         $locationFacets = [];
         $locationFacetsIds = [];
         if ($searchParams['item__location'] == 2) {
-            $eLocationFacets = [];
+            /*$eLocationFacets = [];
             if (isset($extendedFacetResult['town'])) {
                 foreach ($extendedFacetResult['town'] as $town => $count) {
                     $town = get_object_vars(json_decode($town));
                     $eLocationFacets[$town['id']] = $count;
                 }
-            }
+            }*/
 
             foreach ($facetResult['town'] as $town => $count) {
                 $town = get_object_vars(json_decode($town));
@@ -1733,9 +1750,9 @@ class AdListController extends CoreController
                 );
 
 
-                $solrSearchManager->init('ad.new', $keywords, $newData, 1, 1, 0, true);
+                /*$solrSearchManager->init('ad.new', $keywords, $newData, 1, 1, 0, true);
                 $solrResponse = $solrSearchManager->getSolrResponse();
-                $facetTownCount = $solrSearchManager->getSolrResponseDocsCount($solrResponse);
+                $facetTownCount = $solrSearchManager->getSolrResponseDocsCount($solrResponse); */
 
                 if(!in_array($town['id'], $locationFacetsIds)) {
                     $locationFacetsIds[] = $town['id'];
@@ -1743,7 +1760,7 @@ class AdListController extends CoreController
                         'id' => $town['id'],
                         'name' => $town['name'],
                         'slug' => $town['slug'],
-                        'count' => $facetTownCount
+                        'count' => $count
                     );
                 }
 
@@ -1767,7 +1784,6 @@ class AdListController extends CoreController
             }
         } else {
             foreach ($facetResult['town'] as $town => $count) {
-
                 if (!empty($town)) {
                     $town = get_object_vars(json_decode($town));
 
@@ -1793,6 +1809,8 @@ class AdListController extends CoreController
                         }
                         if (isset($searchParams['item__distance']) && $searchParams['item__distance']) {
                             $radius = $searchParams['item__distance'];
+                        } elseif($keywords) {
+                            $radius = CategoryRepository::KEYWORD_DEFAULT;
                         } else {
                             if ($town['id'] == LocationRepository::LONDON_TOWN_ID) {
                                 $radius = CategoryRepository::LONDON_DISTANCE;
@@ -1838,9 +1856,9 @@ class AdListController extends CoreController
                     );
 
 
-                    $solrSearchManager->init('ad.new', $keywords, $newData, 1, 1, 0, true);
+                    /*$solrSearchManager->init('ad.new', $keywords, $newData, 1, 1, 0, true);
                     $solrResponse = $solrSearchManager->getSolrResponse();
-                    $facetTownCount = $solrSearchManager->getSolrResponseDocsCount($solrResponse);
+                    $facetTownCount = $solrSearchManager->getSolrResponseDocsCount($solrResponse);*/
 
                     if(!in_array($town['id'], $locationFacetsIds)) {
                         $locationFacetsIds[] = $town['id'];
@@ -1848,7 +1866,7 @@ class AdListController extends CoreController
                             'id' => $town['id'],
                             'name' => $town['name'],
                             'slug' => $town['slug'],
-                            'count' => $facetTownCount
+                            'count' => $count
                         );
                     }
 
@@ -1937,8 +1955,9 @@ class AdListController extends CoreController
                             'count' => $facetCount,
                             'selected' => $isSelected
                         );
-                    } else {
-                        if ($dimension['id'] == EntityRepository::AD_TYPE_ID) {
+                    }
+                    else {
+                        if ($dimension['solr_field'] =='type_id' ) {
                             $isSelected = false;
                             if (! empty($selected)) {
                                 if (is_array($selected)) {
@@ -1963,6 +1982,24 @@ class AdListController extends CoreController
                                     'count' => $facetCount,
                                     'selected' => $isSelected
                                 );
+                            }
+                            $entityDimensions = $this->getRepository('FaEntityBundle:Entity')->findBy(array('category_dimension' => $dimension['id']));
+                            foreach ($entityDimensions as $entityDimension){
+                                if (!property_exists($facetArraySet,$entityDimension->getId()))
+                                {
+                                    $newDataCount = $data;
+                                    $newDataCount['search']['item__ad_type_id'][0] = $entityDimension->getId();
+                                    $newDataCount['query_filters']['item']['ad_type_id'][0] = $entityDimension->getId();
+                                    $newDataCount['query_filters']['item']['ad_type'][0] = $entityDimension->getId();
+                                    $newDataCount['static_filters'] = str_replace($jsonValue,(string)$entityDimension->getId(),$newDataCount['static_filters']);
+                                    $newSolrData = $this->getSolrResult('ad.new', $keywords, $newDataCount, 1, 2, 0, true);
+                                    $orderedDimensions[$dimension['id']][$entityDimension->getId()] = array(
+                                        'name' => $adTypes[$entityDimension->getId()]['name'],
+                                        'slug' => $adTypes[$entityDimension->getId()]['slug'],
+                                        'count' => $newSolrData['resultCount'],
+                                        'selected' => false
+                                    );
+                                }
                             }
                         }
                     }
@@ -2277,6 +2314,8 @@ class AdListController extends CoreController
         }
         if (isset($facetdata['search']['item__distance']) && $facetdata['search']['item__distance']) {
             $radius = $facetdata['search']['item__distance'];
+        } elseif($keywords) {
+            $radius = CategoryRepository::KEYWORD_DEFAULT;
         } else {
             if($facetdata['search']['item__location'] == LocationRepository::LONDON_TOWN_ID) {
                 $radius = CategoryRepository::LONDON_DISTANCE;
@@ -3913,7 +3952,7 @@ class AdListController extends CoreController
         $data['static_filters']  .= ' AND user_id: "' . $userId . '" AND -is_blocked_ad: true';
 
         $data['static_filters'] .= ' AND status_id: ' . EntityRepository::AD_STATUS_LIVE_ID;
-        
+
         if (!empty($adIds)) {
             $data['static_filters'] .= ' AND -id: ('.implode(' ', $adIds).')';
         }

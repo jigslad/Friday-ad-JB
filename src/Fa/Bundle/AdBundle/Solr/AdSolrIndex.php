@@ -148,6 +148,8 @@ class AdSolrIndex implements AdSolrFieldMapping
                 if (!$isBatchUpdate) {
                     $updateResponse = $solr->commit(true);
                     return $updateResponse;
+                } else {
+                    $solr->commit(true);
                 }
 
                 return true;
