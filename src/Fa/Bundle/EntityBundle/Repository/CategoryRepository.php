@@ -2342,6 +2342,8 @@ class CategoryRepository extends NestedTreeRepository
 
         if($searchLocation == LocationRepository::LONDON_TOWN_ID) {
             return self::LONDON_DISTANCE;
+        } elseif(isset($searchParams['keywords']) && $searchParams['keywords']!='') {
+            return self::KEYWORD_DEFAULT;
         } else {
             if ($searchLocation != 2) {
                 $selLocationArray = $this->_em->getRepository('FaEntityBundle:Location')->find($searchLocation);

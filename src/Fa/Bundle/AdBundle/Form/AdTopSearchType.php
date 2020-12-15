@@ -144,12 +144,10 @@ class AdTopSearchType extends AbstractType
 
         $isLocality = 0;$getLocLvl = 0;
         if (strpos($searchLocation,',') !== false) {
-            $localityTown = explode(',', $searchParams['item__location']);
-            $searchLocation     = $localityTown[0];
             $isLocality = 1;
         }
         if($isLocality) {
-            $selLocationArray = $this->em->getRepository('FaEntityBundle:Locality')->find($searchLocation);
+            $getLocLvl = 5;
         } else {
             $selLocationArray = $this->em->getRepository('FaEntityBundle:Location')->find($searchLocation);
             if(!empty($selLocationArray)) { $getLocLvl = $selLocationArray->getLvl(); }
