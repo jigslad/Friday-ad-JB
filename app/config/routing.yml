@@ -202,7 +202,7 @@ fa_new_adult_homepage:
 
 listing_page:
     path: /{location}/{page_string}/
-    defaults: { _controller: 'FaAdBundle:AdList:searchResultNew'}
+    defaults: { _controller: 'FaAdBundle:AdList:searchResult'}
     host: '%fa.main.host%'
     schemes:  [https]
     requirements:
@@ -211,7 +211,7 @@ listing_page:
 
 old_listing_page:
     path: /ads/{location}/{page_string}/
-    defaults: { _controller: 'FaAdBundle:AdList:searchResult'}
+    defaults: { _controller: 'FaAdBundle:AdList:searchResultNew'}
     host: '%fa.main.host%'
     schemes:  [https]
     requirements:
