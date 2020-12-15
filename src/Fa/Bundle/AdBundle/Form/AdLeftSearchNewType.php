@@ -126,10 +126,11 @@ class AdLeftSearchNewType extends AbstractType
         if (strpos($searchLocation,',') !== false) {
             $isLocality = 1;
         }
+        $selLocationArray = $this->em->getRepository('FaEntityBundle:Location')->getCookieValue($searchLocation, $this->container);
+
         if($isLocality) {
             $getLocLvl = 5;
         } else {
-            $selLocationArray = $this->em->getRepository('FaEntityBundle:Location')->find($searchLocation);
             if(!empty($selLocationArray)) { $getLocLvl = $selLocationArray->getLvl(); }
         }
 
@@ -177,7 +178,7 @@ class AdLeftSearchNewType extends AbstractType
                 'data' => $defDistance,
             )
         );
-        $this->addLocationAutoSuggestField($form,$searchLocation);
+        $this->addLocationAutoSuggestField($form,$selLocationArray);
     }
     
     /**
@@ -185,15 +186,15 @@ class AdLeftSearchNewType extends AbstractType
      *
      * @param object $form Form instance.
      */
-    protected function addLocationAutoSuggestField($form,$searchLocation)
+    protected function addLocationAutoSuggestField($form,$selLocationArray)
     {
-        /*$searchLocationId = $searchLocationText = '';
+        $searchLocationId = $searchLocationText = '';
         if(!empty($selLocationArray)) {
-            $searchLocationId = $selLocationArray->getId();
-            $searchLocationText = $selLocationArray->getName();
-        } */
+            $searchLocationId = $selLocationArray['location'];
+            $searchLocationText = $selLocationArray['location_text'];
+        }
         
-        $form->add('item__location', HiddenType::class, array('data'=>$searchLocationId,'empty_data'=>$searchLocation));
+        $form->add('item__location', HiddenType::class, array('data'=>$searchLocationId,'empty_data'=>$searchLocationId));
         $form->add('item__location_autocomplete', TextType::class, array(/** @Ignore */'label' => false,'data'=>$searchLocationText,'empty_data'=>$searchLocationText));
         $form->add('item__area', HiddenType::class);
     }
