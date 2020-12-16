@@ -117,7 +117,7 @@
                             <div class="mt20 mb20" style="color: #a4a4a4;">
                                 We will use your data to help us create your account. Please take a look at our <a href="/privacy-policy/" target="_blank">Privacy Policy</a> for more information about how we use your data.
                             </div>
-                            {{ form_widget(form.Register, {'attr': {'class':'primary-btn-1 button expand'}}) }}
+                            {{ form_widget(form.Register, {'attr': {'class':'secondary-btn-1 paa-next-btn button expand'}}) }}
                         {{ form_end(form) }}
                     </div>
                 </div>
@@ -345,4 +345,39 @@
     }
 //]]>
 </script>
+    <script>
+        var requiredFields = $(':input[required]:visible');
+        requiredFields.keyup(function (){
+            enableDisableThirdNextButton()
+        });
+        requiredFields.change(function (){
+            enableDisableThirdNextButton()
+        });
+        $(document).ready(function(){
+            $('#fa_paa_registration_Register').addClass('disabled');
+            enableDisableThirdNextButton()
+        });
+        function enableDisableThirdNextButton(){
+            $('#fa_paa_registration_Register').removeClass('disabled');
+            var requiredFieldsupdated = $(':input[required]:visible');
+            requiredFieldsupdated.each(function( index, element ) {
+                var listarray = [
+                    'fa_paa_registration_is_email_alert_enabled',
+                    'fa_paa_registration_is_third_party_email_alert_enabled',
+                    'fa_paa_registration_user_roles_0',
+                    'fa_paa_registration_user_roles_1',
+                    'fa_paa_registration_phone'
+                ];
+
+                if($.inArray( element.id, listarray ) == -1){
+
+                // }
+                // if(element.id != 'fa_paa_registration_phone') {
+                    if (!element.value) {
+                        $('#fa_paa_registration_Register').addClass('disabled');
+                    }
+                }
+            });
+        }
+    </script>
 {% endblock %}
