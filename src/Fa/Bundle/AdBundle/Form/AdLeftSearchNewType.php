@@ -188,7 +188,7 @@ class AdLeftSearchNewType extends AbstractType
      */
     protected function addLocationAutoSuggestField($form,$selLocationArray)
     {
-        $searchLocationId = $searchLocationText = '';
+        $searchLocationSlug = $searchLocationText = '';
         if(!empty($selLocationArray)) {
             $searchLocationSlug = $selLocationArray['slug'];
             $searchLocationText = $selLocationArray['location_text'];
