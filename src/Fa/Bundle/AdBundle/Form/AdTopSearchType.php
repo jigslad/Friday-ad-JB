@@ -152,7 +152,7 @@ class AdTopSearchType extends AbstractType
         if($isLocality) {
             $getLocLvl = 5;
         } else {
-            if(!empty($selLocationArray)) { $getLocLvl = $selLocationArray->getLvl(); }
+            if(!empty($selLocationArray)) { $getLocLvl = $selLocationArray['lvl']; }
         }
         
         if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {

@@ -775,7 +775,10 @@ class AdRepository extends EntityRepository
         $document = $this->addField($document, 'status_id', ($ad->getStatus() ? $ad->getStatus()->getId() : null));
         $document = $this->addField($document, 'type_id', ($ad->getType() ? $ad->getType()->getId() : null));
 
-        $allParentCategories = $this->_em->getRepository('FaEntityBundle:Category')->getCachedCategoryById($container, $categoryId, true);
+        //$allParentCategories = $this->_em->getRepository('FaEntityBundle:Category')->getCachedCategoryById($container, $categoryId, true);
+        $allParentCategories = $this->_em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayDetById($categoryId, false, $container);
+        $parentCategories = $allParentCategories;
+        array_pop($parentCategories);
 
         foreach ($allParentCategories as $category) {
             $document = $this->addField($document, 'category_ids', $category['id']);
