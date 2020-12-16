@@ -17,7 +17,6 @@ use Fa\Bundle\EntityBundle\Entity\Entity;
 use Fa\Bundle\EntityBundle\Entity\Location;
 use Fa\Bundle\EntityBundle\Repository\CategoryDimensionRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundleController\Controller;
 use Fa\Bundle\CoreBundle\Controller\CoreController;
 use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -994,7 +993,20 @@ class AdListController extends CoreController
             $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'.CategoryRepository::KEYWORD_DEFAULT;;
         }
 
-        $pagination = $this->getSolrResult('ad.new', $keywords, $data, $page, $recordsPerPage, 0, true);
+        $this->get('fa.solrsearch.manager')->init('ad.new', $keywords, $data, $page, $recordsPerPage, 0, true);
+        $solrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
+
+        // fetch result set from solr
+        $result      = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponse);
+        $resultCount = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($solrResponse);
+        $facetResult = $this->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
+
+        $defaultRadiusPageCount = ($page==0)?1:ceil($resultCount/$recordsPerPage);
+        $defaultRadiusLastPageCount = ($resultCount%$recordsPerPage);
+
+        $facetResult = get_object_vars($facetResult);
+
+        //$pagination = $this->getSolrResult('ad.new', $keywords, $data, $page, $recordsPerPage, 0, true);
 
         if ($page == 1) {
             $featuredData = $this->setDefaultParametersNew($request, $mapFlag, 'finders', array());
@@ -1108,7 +1120,7 @@ class AdListController extends CoreController
         }
         $adFavouriteIds = $this->getRepository('FaAdBundle:AdFavorite')->getFavoriteAdByUserId($userId, $this->container);
 
-        $resultCount = $pagination['resultCount'];
+        //$resultCount = $pagination['resultCount'];
         $defaultRadiusPageCount = ($page==0)?1:ceil($resultCount/$recordsPerPage);
         $defaultRadiusLastPageCount = ($resultCount%$recordsPerPage);
 
@@ -1170,11 +1182,55 @@ class AdListController extends CoreController
         }
 
         $extendedResultCount = 0;
-        $facetResult = $pagination['facetResult'];
+        //$facetResult = $pagination['facetResult'];
         $extendedFacetResult = [];
-        $mergedResultCount = $resultCount;
-        $mergedresult = $pagination['result'];
-        if (! empty($extendRadius)) {
+        //$mergedResultCount = $resultCount;
+        //$mergedresult = $pagination['result'];
+
+        $extendedResult = array();
+        $extpage =0;
+        $staticOffset = 0;
+
+        if ($extendlocation) {
+            // initialize solr search manager service and fetch data based of above prepared search options
+            if ($page == $defaultRadiusPageCount) {
+                $extpage = 1;
+                $staticOffset = 0;
+            } elseif ($page > $defaultRadiusPageCount && $defaultRadiusPageCount>0 && $page>0) {
+                $extpagediff = $page - $defaultRadiusPageCount;
+                if ($extpagediff<=0) {
+                    $extpage = 1;
+                } else {
+                    $extpage = $extpagediff;
+                }
+                $staticOffset = ($extpagediff>0)?((($extpage)*$recordsPerPage) - $defaultRadiusLastPageCount):0;
+            } elseif ($page > $defaultRadiusPageCount && $page>0) {
+                $extpagediff = $page;
+                if ($extpagediff<=0) {
+                    $extpage = 1;
+                } else {
+                    $extpage = $extpagediff;
+                }
+                $staticOffset = ($extpagediff>0)?((($extpage-1)*$recordsPerPage) - $defaultRadiusLastPageCount):0;
+            } else {
+                $extpage =1;
+                $staticOffset = 0;
+            }
+            $this->get('fa.solrsearch.manager')->init('ad.new', $keywords, $extendedData, $extpage, $recordsPerPage, $staticOffset, true);
+            $extendedSolrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
+            $extendedResult      = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($extendedSolrResponse);
+            $extendedResultCount = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($extendedSolrResponse);
+        }
+
+        $mergedresult = array_merge($result, $extendedResult);
+        $mergedResultCount = $resultCount + $extendedResultCount;
+
+        $this->get('fa.pagination.manager')->init($mergedresult, $page, $recordsPerPage, $mergedResultCount);
+        $pagination = $this->get('fa.pagination.manager')->getSolrPagination();
+
+        $mergedAds = $this->formatAds($pagination);
+
+        /*if (! empty($extendRadius)) {
             // initialize solr search manager service and fetch data based of above prepared search options
             if ($page == $defaultRadiusPageCount) {
                 $extpage = 1;
@@ -1212,7 +1268,8 @@ class AdListController extends CoreController
         $this->get('fa.pagination.manager')->init($mergedresult, $page, $recordsPerPage, $mergedResultCount);
         $mergedPagination = $this->get('fa.pagination.manager')->getSolrPagination();
 
-        $mergedAds = $this->formatAds($mergedPagination);
+        $mergedAds = $this->formatAds($mergedPagination);*/
+
 
         if ($findersSearchParams['item__category_id'] == 1) {
             if(!isset($findersSearchParams['item__distance'])){
@@ -1233,7 +1290,7 @@ class AdListController extends CoreController
             'resultCount'           => $resultCount,
             'recommendedSlotResult' => $getRecommendedSrchSlotWise,
             'recommendedSlotLimit'  => $this->getRepository('FaCoreBundle:Config')->getSponsoredLimit(),
-            'pagination'            => $mergedPagination,
+            'pagination'            => $pagination,
             'adFavouriteIds'        => $adFavouriteIds,
             'leftFilters'           => $this->getLeftFilters($category, $root, $facetResult, $resultCount, $searchableDimensions, $findersSearchParams, $data, $extendedFacetResult),
             'currentLocation'       => $requestlocation,
@@ -2209,7 +2266,7 @@ class AdListController extends CoreController
 
             if (is_object($jsonObject)) {
                 $location = get_object_vars($jsonObject);
-                $location = $location['location_text'];
+                $location = $location = isset($location['location_text'])?$location['location_text']:(isset($location['name'])?$location['name']:'');
             }
         }
 
