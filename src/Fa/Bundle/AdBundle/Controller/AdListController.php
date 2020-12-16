@@ -1719,7 +1719,7 @@ class AdListController extends CoreController
                         }
                     }
                 }
-                if ($town['id'] != LocationRepository::COUNTY_ID) {
+                if (isset($town['id']) && $town['id'] != LocationRepository::COUNTY_ID) {
                     /** @var Location $location */
                     $location = $this->getRepository('FaEntityBundle:Location')->find($town['id']);
                     $radius = CategoryRepository::MAX_DISTANCE;
@@ -1750,7 +1750,7 @@ class AdListController extends CoreController
                 $solrResponse = $solrSearchManager->getSolrResponse();
                 $facetTownCount = $solrSearchManager->getSolrResponseDocsCount($solrResponse); */
 
-                if(!in_array($town['id'], $locationFacetsIds)) {
+                if(isset($town['id']) && !in_array($town['id'], $locationFacetsIds)) {
                     $locationFacetsIds[] = $town['id'];
                     $locationFacets[] = array(
                         'id' => $town['id'],
@@ -1794,7 +1794,7 @@ class AdListController extends CoreController
                             }
                         }
                     }
-                    if ($town['id'] != LocationRepository::COUNTY_ID) {
+                    if (isset($town['id']) && $town['id'] != LocationRepository::COUNTY_ID) {
                         /** @var Location $location */
                         $location = $this->getRepository('FaEntityBundle:Location')->find($town['id']);
 
@@ -1856,7 +1856,7 @@ class AdListController extends CoreController
                     $solrResponse = $solrSearchManager->getSolrResponse();
                     $facetTownCount = $solrSearchManager->getSolrResponseDocsCount($solrResponse);*/
 
-                    if(!in_array($town['id'], $locationFacetsIds)) {
+                    if(isset($town['id']) && !in_array($town['id'], $locationFacetsIds)) {
                         $locationFacetsIds[] = $town['id'];
                         $locationFacets[] = array(
                             'id' => $town['id'],
@@ -2209,7 +2209,7 @@ class AdListController extends CoreController
 
             if (is_object($jsonObject)) {
                 $location = get_object_vars($jsonObject);
-                $location = $location['name'];
+                $location = $location['location_text'];
             }
         }
 
