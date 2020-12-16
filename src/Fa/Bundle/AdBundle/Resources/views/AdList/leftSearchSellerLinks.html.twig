@@ -19,15 +19,15 @@
                     {% endif %}
                     {% if choice.label == 'Private Seller' %}
                         {% set choiceLabel = userTypeLabels['private_user'] %}
-                        {% if isTradeAdCount['false'] is defined %}
-                            {% set choiceLabel = choiceLabel ~ ' (' ~ isTradeAdCount['false'] ~ ')' %}
+                        {% if facetResult.is_trade_ad.false is defined %}
+                            {% set choiceLabel = choiceLabel ~ ' (' ~ facetResult.is_trade_ad.false ~ ')' %}
                         {% else %}
                             {% set choiceLabel = choiceLabel ~ ' (0)' %}
                         {% endif %}
                     {% else %}
                         {% set choiceLabel = userTypeLabels['business_user'] %}
-                        {% if isTradeAdCount['true'] is defined %}
-                            {% set choiceLabel = choiceLabel ~ ' (' ~ isTradeAdCount['true'] ~ ')' %}
+                        {% if facetResult.is_trade_ad.true is defined %}
+                            {% set choiceLabel = choiceLabel ~ ' (' ~ facetResult.is_trade_ad.true ~ ')' %}
                         {% else %}
                             {% set choiceLabel = choiceLabel ~ ' (0)' %}
                         {% endif %}

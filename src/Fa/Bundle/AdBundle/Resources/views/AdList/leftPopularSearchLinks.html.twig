@@ -7,7 +7,7 @@
             <dd class="accordion-navigation">
                 <a href="javascript:void(0);" rel="nofollow" ><h5>{{'Popular Searches'|trans({}, 'frontend-left--popular-search')}}</h5></a>
                 <div class="content active clearfix">
-                    <ul class="seller-link">
+                    <ul class=class="seller-link""seller-link">
                         {% for popularSearch in popularSearchArray %}
                             <li><a href="{{ seoToolPopularSearchRepository.getPopularSearchUrl(popularSearch['url'], cookieLocationDetails, mapFlag, container) }}">{{ popularSearch['title'] }}</a></li>
                         {% endfor %}
