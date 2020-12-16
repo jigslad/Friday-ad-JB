@@ -131,7 +131,7 @@ class AdLeftSearchNewType extends AbstractType
         if($isLocality) {
             $getLocLvl = 5;
         } else {
-            if(!empty($selLocationArray)) { $getLocLvl = $selLocationArray->getLvl(); }
+            if(!empty($selLocationArray)) { $getLocLvl = $selLocationArray['lvl']; }
         }
 
         if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
@@ -190,11 +190,11 @@ class AdLeftSearchNewType extends AbstractType
     {
         $searchLocationId = $searchLocationText = '';
         if(!empty($selLocationArray)) {
-            $searchLocationId = $selLocationArray['location'];
+            $searchLocationSlug = $selLocationArray['slug'];
             $searchLocationText = $selLocationArray['location_text'];
         }
         
-        $form->add('item__location', HiddenType::class, array('data'=>$searchLocationId,'empty_data'=>$searchLocationId));
+        $form->add('item__location', HiddenType::class, array('data'=>$searchLocationSlug,'empty_data'=>$searchLocationSlug));
         $form->add('item__location_autocomplete', TextType::class, array(/** @Ignore */'label' => false,'data'=>$searchLocationText,'empty_data'=>$searchLocationText));
         $form->add('item__area', HiddenType::class);
     }

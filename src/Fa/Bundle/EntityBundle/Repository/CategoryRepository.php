@@ -2680,4 +2680,52 @@ class CategoryRepository extends NestedTreeRepository
 
         return $returnCategories;
     }
+
+    public function getCategoryPathArrayDetById($categoryId, $rootFlag = false, $container = null)
+    {
+        if ($container) {
+            $culture     = CommonManager::getCurrentCulture($container);
+            $tableName   = $this->getCategoryTableName();
+            $cacheKey    = $tableName.'|'.__FUNCTION__.'|'.$categoryId.'_'.$rootFlag.'_'.$culture;
+            $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
+
+            if ($cachedValue !== false) {
+                return $cachedValue;
+            }
+        }
+
+        $categoryPathArray = array();
+
+        if ($categoryId) {
+            $categoryObj = $this->find($categoryId);
+
+            if ($categoryObj) {
+                $categories = $this->getPath($categoryObj);
+
+                foreach ($categories as $category) {
+                    if ($rootFlag && $category->getStatus() ==1) {
+                        $categoryPathArray[$category->getId()]['name'] = $category->getName();
+                        $categoryPathArray[$category->getId()]['id'] = $category->getId();
+                        $categoryPathArray[$category->getId()]['slug'] = $category->getSlug();
+                        $categoryPathArray[$category->getId()]['full_slug'] = $category->getFullSlug();
+                        $categoryPathArray[$category->getId()]['parent_id'] = $category->getParent()->getId();
+                    } else {
+                        if ($category->getLvl() > 0 && $category->getStatus() ==1) {
+                            $categoryPathArray[$category->getId()]['name'] = $category->getName();
+                            $categoryPathArray[$category->getId()]['id'] = $category->getId();
+                            $categoryPathArray[$category->getId()]['slug'] = $category->getSlug();
+                            $categoryPathArray[$category->getId()]['full_slug'] = $category->getFullSlug();
+                            $categoryPathArray[$category->getId()]['parent_id'] = $category->getParent()->getId();
+                        }
+                    }
+                }
+            }
+        }
+
+        if ($container) {
+            CommonManager::setCacheVersion($container, $cacheKey, $categoryPathArray);
+        }
+
+        return $categoryPathArray;
+    }
 }
