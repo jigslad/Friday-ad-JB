@@ -1757,17 +1757,17 @@ class AdListController extends CoreController
 
                     $newData = $data;
                     $newStaticFilters = '';
-                    if ($town['id'] != $searchParams['item__location']) {
-                        if ($newData['static_filters']) {
-                            $staticFilters = explode(' AND ', $newData['static_filters']);
 
-                            foreach ($staticFilters as $staticFilter) {
-                                if (!empty($staticFilter) && strpos($staticFilter, 'town') === false && strpos($staticFilter, 'sfield=store') === false) {
-                                    $newStaticFilters .= ' AND ' . $staticFilter;
-                                }
+                    if ($newData['static_filters']) {
+                        $staticFilters = explode(' AND ', $newData['static_filters']);
+
+                        foreach ($staticFilters as $staticFilter) {
+                            if (!empty($staticFilter) && strpos($staticFilter, 'town') === false && strpos($staticFilter, 'sfield=store') === false) {
+                                $newStaticFilters .= ' AND ' . $staticFilter;
                             }
                         }
                     }
+
                     if ($town['id'] != LocationRepository::COUNTY_ID) {
                         /** @var Location $location */
                         $location = $this->getRepository('FaEntityBundle:Location')->find($town['id']);
