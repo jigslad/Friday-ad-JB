@@ -356,7 +356,7 @@
     {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) %}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     {% endif %}
-    {{ include('FaAdBundle:AdList:leftSearchJs.html.twig') }}
+    {{ include('FaAdBundle:AdList:leftSearchJsNew.html.twig') }}
     {{ include('FaAdBundle:AdList:listJsNew.html.twig', {'searchParams' : searchParams}) }}
 {#    {{ include('FaAdBundle:Ad:upgradeJs.html.twig', {'paymentTransactionJs' : paymentTransactionJs }) }}#}
 
