@@ -137,6 +137,9 @@ class CategoryRepository extends NestedTreeRepository
     const MAX_DISTANCE = 200;
     const LONDON_DISTANCE = 30;
 
+    const KEYWORD_DEFAULT = 5;
+    const KEYWORD_EXTENDED = 15;
+
     private $categoryCountArray = array();
 
     /**
@@ -2339,6 +2342,8 @@ class CategoryRepository extends NestedTreeRepository
 
         if($searchLocation == LocationRepository::LONDON_TOWN_ID) {
             return self::LONDON_DISTANCE;
+        } elseif((isset($searchParams['keywords']) && $searchParams['keywords']!='') && ($searchLocation != 2)) {
+            return self::KEYWORD_DEFAULT;
         } else {
             if ($searchLocation != 2) {
                 $selLocationArray = $this->_em->getRepository('FaEntityBundle:Location')->find($searchLocation);
@@ -2674,5 +2679,53 @@ class CategoryRepository extends NestedTreeRepository
         }
 
         return $returnCategories;
+    }
+
+    public function getCategoryPathArrayDetById($categoryId, $rootFlag = false, $container = null)
+    {
+        if ($container) {
+            $culture     = CommonManager::getCurrentCulture($container);
+            $tableName   = $this->getCategoryTableName();
+            $cacheKey    = $tableName.'|'.__FUNCTION__.'|'.$categoryId.'_'.$rootFlag.'_'.$culture;
+            $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
+
+            if ($cachedValue !== false) {
+                return $cachedValue;
+            }
+        }
+
+        $categoryPathArray = array();
+
+        if ($categoryId) {
+            $categoryObj = $this->find($categoryId);
+
+            if ($categoryObj) {
+                $categories = $this->getPath($categoryObj);
+
+                foreach ($categories as $category) {
+                    if ($rootFlag && $category->getStatus() ==1) {
+                        $categoryPathArray[$category->getId()]['name'] = $category->getName();
+                        $categoryPathArray[$category->getId()]['id'] = $category->getId();
+                        $categoryPathArray[$category->getId()]['slug'] = $category->getSlug();
+                        $categoryPathArray[$category->getId()]['full_slug'] = $category->getFullSlug();
+                        $categoryPathArray[$category->getId()]['parent_id'] = $category->getParent()->getId();
+                    } else {
+                        if ($category->getLvl() > 0 && $category->getStatus() ==1) {
+                            $categoryPathArray[$category->getId()]['name'] = $category->getName();
+                            $categoryPathArray[$category->getId()]['id'] = $category->getId();
+                            $categoryPathArray[$category->getId()]['slug'] = $category->getSlug();
+                            $categoryPathArray[$category->getId()]['full_slug'] = $category->getFullSlug();
+                            $categoryPathArray[$category->getId()]['parent_id'] = $category->getParent()->getId();
+                        }
+                    }
+                }
+            }
+        }
+
+        if ($container) {
+            CommonManager::setCacheVersion($container, $cacheKey, $categoryPathArray);
+        }
+
+        return $categoryPathArray;
     }
 }
