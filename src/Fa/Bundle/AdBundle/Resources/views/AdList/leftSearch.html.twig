@@ -105,20 +105,19 @@
                       <label>{{'Nearby towns'|trans({}, 'frontend-left-search')}}:</label>
                       <ul>
                           {% for townId, count in locationFacets %}
-                              {% set queryParams = {'fa_left_search' : searchParams|merge({'item__location': count.id })} %}
+                              {% set queryParams = {'fa_left_search' : searchParams|merge({'item__location': townId })} %}
                               {% if customized_url|length and customized_url['target_url'] != '' %}
                                   {% set listurl = container.get('fa_ad.manager.ad_routing').getCustomListingUrl(queryParams['fa_left_search'], customized_url['target_url'], true) %}
                               {% else %}
                                   {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams['fa_left_search']) %}
                               {% endif %}
-                              <li><a href="{{ listurl }}" {% if queryParams.fa_left_search.item__distance is defined and queryParams.fa_left_search.item__distance != 0 %} rel="nofollow" {% endif %} >{{ count.name}} ({{ count.count }})</a></li>
+                              <li><a href="{{ listurl }}" {% if queryParams.fa_left_search.item__distance is defined and queryParams.fa_left_search.item__distance != 0 %} rel="nofollow" {% endif %} >{{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Location', townId) }} ({{ count }})</a></li>
                           {% endfor %}
                       </ul>
                   </div>
               {% endif %}
             </div>
         </dd>
-
 
         {% if isShopPage is not defined or (isShopPage is defined and not isShopPage) %}
             {% if attribute(form, 'item__is_trade_ad') is defined %}
