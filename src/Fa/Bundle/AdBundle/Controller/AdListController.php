@@ -1401,7 +1401,7 @@ class AdListController extends CoreController
             }
         }
 
-        if ($pagination['resultCount'] && !in_array($currentRoute, array('show_business_user_ads', 'show_business_user_ads_location', 'show_business_user_ads_page'))) {
+        if ($resultCount && !in_array($currentRoute, array('show_business_user_ads', 'show_business_user_ads_location', 'show_business_user_ads_page'))) {
             // profile categories other than Services & Adults
             if (!in_array($root->getId(), array(CategoryRepository::ADULT_ID, CategoryRepository::SERVICES_ID))) {
                 $shopParameters = $this->getShopUserBySearchCriteriaNew($data, $request);
