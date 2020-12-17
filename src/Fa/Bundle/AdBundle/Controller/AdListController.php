@@ -1757,12 +1757,14 @@ class AdListController extends CoreController
 
                     $newData = $data;
                     $newStaticFilters = '';
-                    if ($newData['static_filters']) {
-                        $staticFilters = explode(' AND ', $newData['static_filters']);
+                    if ($town['id'] != $searchParams['item__location']) {
+                        if ($newData['static_filters']) {
+                            $staticFilters = explode(' AND ', $newData['static_filters']);
 
-                        foreach ($staticFilters as $staticFilter) {
-                            if (!empty($staticFilter) && strpos($staticFilter, 'town') === false && strpos($staticFilter, 'sfield=store') === false) {
-                                $newStaticFilters .= ' AND ' . $staticFilter;
+                            foreach ($staticFilters as $staticFilter) {
+                                if (!empty($staticFilter) && strpos($staticFilter, 'town') === false && strpos($staticFilter, 'sfield=store') === false) {
+                                    $newStaticFilters .= ' AND ' . $staticFilter;
+                                }
                             }
                         }
                     }
