@@ -1815,12 +1815,14 @@ class AdListController extends CoreController
 
                 if(isset($town['id']) && !in_array($town['id'], $locationFacetsIds)) {
                     $locationFacetsIds[] = $town['id'];
-                    $locationFacets[] = array(
-                        'id' => $town['id'],
-                        'name' => $town['name'],
-                        'slug' => $town['slug'],
-                        'count' => $count
-                    );
+                    if(isset($searchParams['item__location']) && $town['id'] != $searchParams['item__location']) {
+                        $locationFacets[] = array(
+                            'id' => $town['id'],
+                            'name' => $town['name'],
+                            'slug' => $town['slug'],
+                            'count' => $count
+                        );
+                    }
                 }
 
                 /*$facetDimResult = $solrSearchManager->getSolrResponseFacetFields($solrResponse);
@@ -1921,12 +1923,14 @@ class AdListController extends CoreController
 
                     if(isset($town['id']) && !in_array($town['id'], $locationFacetsIds)) {
                         $locationFacetsIds[] = $town['id'];
-                        $locationFacets[] = array(
-                            'id' => $town['id'],
-                            'name' => $town['name'],
-                            'slug' => $town['slug'],
-                            'count' => $count
-                        );
+                        if(isset($searchParams['item__location']) && $town['id'] != $searchParams['item__location']) {
+                            $locationFacets[] = array(
+                                'id' => $town['id'],
+                                'name' => $town['name'],
+                                'slug' => $town['slug'],
+                                'count' => $count
+                            );
+                        }
                     }
 
                     /*$facetDimResult = $solrSearchManager->getSolrResponseFacetFields($solrResponse);
