@@ -17,6 +17,7 @@ use Fa\Bundle\EntityBundle\Entity\Entity;
 use Fa\Bundle\EntityBundle\Entity\Location;
 use Fa\Bundle\EntityBundle\Repository\CategoryDimensionRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundleController\Controller;
 use Fa\Bundle\CoreBundle\Controller\CoreController;
 use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -388,7 +389,7 @@ class AdListController extends CoreController
         if (isset($data['search']['item__location'])) {
             $locationResult = $this->getRepository('FaEntityBundle:Location')->find($data['search']['item__location']);
         }
-        
+
         if (!empty($facetResult)) {
             $locationFacets = $this->getLocationFacetForSearchResult($facetResult, $data);
         }
@@ -942,12 +943,18 @@ class AdListController extends CoreController
         if ($findersSearchParams['item__category_id'] != 1) {
             $data['static_filters'] .= ' AND category_full_path:' . $category->getFullSlug();
         }
-
+        /* To maintain the working of the featured ads as in live, taking the condition off, can uncomment it when we do not want to duplicate the data */
+        /* $data['static_filters'] .= ' AND -is_topad:true'; */
         $page = $data['pager']['page'];
 
         $static_filters = '';
         $searchableDimensions = [];
         $root = $category;
+        if (isset($data['query_filters']['item']['setDefaultRadius']) && $data['query_filters']['item']['setDefaultRadius']==1 && (isset($data['search']['item__location']) && $data['search']['item__location']==831)) {
+            $data['search']['item__distance'] = CategoryRepository::LONDON_DISTANCE;
+            $data['query_filters']['item']['distance']= CategoryRepository::LONDON_DISTANCE;
+            $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'.CategoryRepository::LONDON_DISTANCE;;
+        }
 
         $listingFields = array();
         $adRepository = $this->getRepository('FaAdBundle:Ad');
@@ -1120,7 +1127,7 @@ class AdListController extends CoreController
         }
         $adFavouriteIds = $this->getRepository('FaAdBundle:AdFavorite')->getFavoriteAdByUserId($userId, $this->container);
 
-        //$resultCount = $pagination['resultCount'];
+        $resultCount = $pagination['resultCount'];
         $defaultRadiusPageCount = ($page==0)?1:ceil($resultCount/$recordsPerPage);
         $defaultRadiusLastPageCount = ($resultCount%$recordsPerPage);
 
@@ -1560,9 +1567,9 @@ class AdListController extends CoreController
             'item__price_from',
             'item__price_to',
             'item__ad_type_id',
-            'ads_with_images',
+            'items_with_photo',
             'expired_ads',
-            'is_trade_ad',
+            'item__is_trade_ad',
             'item__distance',
             'map',
             'keywords'
@@ -1591,11 +1598,11 @@ class AdListController extends CoreController
               $staticFilters .= ' AND price : [' . $searchItem . ' TO *]';
             } else if ($searchKey == 'item__price_to') {
                 $staticFilters .= ' AND price : [* TO ' . $searchItem . ']';
-            } else if ($searchKey == 'ads_with_images') {
+            } else if ($searchKey == 'items_with_photo') {
                 $staticFilters .= ' AND image_count : [1 TO *]';
             } else if ($searchKey == 'expired_ads') {
                 $staticFilters .= ' AND status_id : ' . EntityRepository::AD_STATUS_EXPIRED_ID;
-            } else if ($searchKey == 'is_trade_ad') {
+            } else if ($searchKey == 'item__is_trade_ad') {
                 $staticFilters .= ' AND is_trade_ad : ' . $searchItem;
             } else if ($searchKey == 'item__ad_type_id') {
                 if (is_array($searchItem)) {
@@ -1734,13 +1741,13 @@ class AdListController extends CoreController
         $userTypes = [
             0 => [
                 'title' => $userTypeLabels['private_user'],
-                'url_param' => 'is_trade_ad=0',
+                'url_param' => 'item__is_trade_ad=0',
                 'count' => empty($tradeFacets) ? 0 : intval($tradeFacets["false"]),
                 'selected' => isset($params['is_trade_ad']) && $params['is_trade_ad'][0] == '0' ? true : false
             ],
             1 => [
                 'title' => $userTypeLabels['business_user'],
-                'url_param' => 'is_trade_ad=1',
+                'url_param' => 'is_tritem__is_trade_adade_ad=1',
                 'count' => empty($tradeFacets) ? 0 : intval($tradeFacets["true"]),
                 'selected' => isset($params['is_trade_ad']) && $params['is_trade_ad'][0] == '1' ? true : false
             ]
@@ -1842,12 +1849,13 @@ class AdListController extends CoreController
 
                     $newData = $data;
                     $newStaticFilters = '';
-                    if ($newData['static_filters']) {
-                        $staticFilters = explode(' AND ', $newData['static_filters']);
-
-                        foreach ($staticFilters as $staticFilter) {
-                            if (!empty($staticFilter) && strpos($staticFilter, 'town') === false && strpos($staticFilter, 'sfield=store') === false) {
-                                $newStaticFilters .= ' AND ' . $staticFilter;
+                    if ($town['id'] != $searchParams['item__location']) {
+                        if ($newData['static_filters']) {
+                            $staticFilters = explode(' AND ', $newData['static_filters']);
+                            foreach ($staticFilters as $staticFilter) {
+                                if (!empty($staticFilter) && strpos($staticFilter, 'town') === false && strpos($staticFilter, 'sfield=store') === false) {
+                                    $newStaticFilters .= ' AND ' . $staticFilter;
+                                }
                             }
                         }
                     }
@@ -2046,12 +2054,14 @@ class AdListController extends CoreController
                                     $newDataCount['query_filters']['item']['ad_type'][0] = $entityDimension->getId();
                                     $newDataCount['static_filters'] = str_replace($jsonValue,(string)$entityDimension->getId(),$newDataCount['static_filters']);
                                     $newSolrData = $this->getSolrResult('ad.new', $keywords, $newDataCount, 1, 2, 0, true);
-                                    $orderedDimensions[$dimension['id']][$entityDimension->getId()] = array(
-                                        'name' => $adTypes[$entityDimension->getId()]['name'],
-                                        'slug' => $adTypes[$entityDimension->getId()]['slug'],
-                                        'count' => $newSolrData['resultCount'],
-                                        'selected' => false
-                                    );
+                                    if($newSolrData['resultCount']) {
+                                        $orderedDimensions[$dimension['id']][$entityDimension->getId()] = array(
+                                            'name' => $adTypes[$entityDimension->getId()]['name'],
+                                            'slug' => $adTypes[$entityDimension->getId()]['slug'],
+                                            'count' => $newSolrData['resultCount'],
+                                            'selected' => false
+                                        );
+                                    }
                                 }
                             }
                         }
@@ -2100,13 +2110,25 @@ class AdListController extends CoreController
                                 );
                             }
                         } else {
-                            if ($dimension['id'] == EntityRepository::AD_TYPE_ID) {
+                            if ($dimension['dim_slug'] == 'ad_type') {
+                                $isSelected = false;
+                                if (! empty($selected)) {
+                                    if (is_array($selected)) {
+                                        if (in_array($jsonValue, $selected)) {
+                                            $isSelected = true;
+                                        }
+                                    } else {
+                                        if ($selected == $jsonValue) {
+                                            $isSelected = true;
+                                        }
+                                    }
+                                }
                                 if (isset($adTypes[$jsonValue])) {
                                     $orderedDimensions[$dimension['id']][$jsonValue] = array(
                                         'name' => $adTypes[$jsonValue]['name'],
                                         'slug' => $adTypes[$jsonValue]['slug'],
                                         'count' => $facetCount,
-                                        'selected' => false
+                                        'selected' => $isSelected
                                     );
                                 }
                             }
@@ -2140,7 +2162,7 @@ class AdListController extends CoreController
             'locationFacets'    => $locationFacets,
             'orderedDimensions' => $orderedDimensions,
             'dimensions'        => $dimensions,
-            'ads_with_images'   => isset($params['ads_with_images']),
+            'items_with_photo'   => isset($params['items_with_photo']),
             'expired_ads'       => isset($params['expired_ads']),
             'showPriceField'    => $categoryObj->getId() > 1 ? CommonManager::showPriceInSearchFilter($categoryObj->getId(), $this->container) : true,
             'userTypeTitle'     => $userTypeLabels['header']
@@ -2749,7 +2771,7 @@ class AdListController extends CoreController
             $form->submit($bindSearchParams);
         }
         $parameters = array('form' => $form->createView(), 'locationFacets' => $request->get('locationFacets'), 'facetResult' => $request->get('facetResult', 'facetResult'), 'basicParams' => $basicParams, 'isShopPage' => $isShopPage, 'cookieLocationDetails' => $request->get('cookieLocationDetails'));
-        
+
         return $this->render('FaAdBundle:AdList:leftSearch.html.twig', $parameters);
     }
 

@@ -56,17 +56,21 @@
           {% set childCatCount = 1 %}
           <div class="search-cat-sub-list">
               <ul>
-                  <li><label>{{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id) }}</label></li>
+                  {% if searchParams.item__category_id == 1 %}
+                      <li><label>All Categories </label></li>
+                  {% else %}
+                    <li><label>{{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id) }}</label></li>
+                  {% endif %}
                   {% if childCategories|length > 0 %}
                       {% for childCategoryId, childCategoryName in childCategories %}
                           {% set adCount = 0 %}
-                          {% if facetResult.a_category_id_i[childCategoryId] is defined %}
-                              {% set adCount = facetResult.a_category_id_i[childCategoryId] %}
+                          {% if facetResult.category_ids[childCategoryId] is defined %}
+                              {% set adCount = facetResult.category_ids[childCategoryId] %}
                           {% else %}
                               {% set nestedChildrenCategories = fetch_repository('FaEntityBundle:Category').getNestedLeafChildrenIdsByCategoryId(childCategoryId, fetch_container_instance()) %}
                               {% for nestedCategoryId in nestedChildrenCategories %}
-                                  {% if facetResult.a_category_id_i[nestedCategoryId] is defined %}
-                                      {% set adCount =  adCount + facetResult.a_category_id_i[nestedCategoryId] %}
+                                  {% if facetResult.category_ids[nestedCategoryId] is defined %}
+                                      {% set adCount =  adCount + facetResult.category_ids[nestedCategoryId] %}
                                   {% endif %}
                               {% endfor %}
                           {% endif %}
