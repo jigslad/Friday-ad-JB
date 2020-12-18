@@ -1554,7 +1554,7 @@ class AdListController extends CoreController
         } else {
             $staticFilters = '';
         }
-        //unset($searchParams['item__location']);
+        unset($searchParams['item__location']);
         foreach (array_keys($searchParams) as $key) {
             if (preg_match('/\//', $key)) {
                 unset($searchParams[$key]);
@@ -1762,7 +1762,7 @@ class AdListController extends CoreController
             $locationFacetsIds = [];
             foreach ($locationFacetArr as $jsonValue => $facetCount) {
                 $town = get_object_vars(json_decode($jsonValue));
-                if(!in_array($town['id'], $locationFacetsIds)) {
+                if(isset($town['id']) && !in_array($town['id'], $locationFacetsIds)) {
                     $locationFacetsIds[] = $town['id'];
                     $locationFacets[] = array(
                         'id' => $town['id'],
@@ -4020,7 +4020,7 @@ class AdListController extends CoreController
 
             $repository = $this->getRepository('FaAdBundle:' . 'Ad' . str_replace(' ', '', $rootCategory->getName()));
             $listingFields = $repository->getAdListingFields();
-            //$data['static_filters']  = (isset($searchParams['search']) ? $this->setDimensionParams($searchParams['search'], $listingFields, $adRepository) : array());
+            $data['static_filters']  = (isset($searchParams['search']) ? $this->setDimensionParams($searchParams['search'], $listingFields, $adRepository) : array());
 
             if(isset($searchParams['query_filters']['item']['distance'])) {
                 $data['query_filters']['item']['distance'] = 200;
