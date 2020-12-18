@@ -2488,10 +2488,10 @@ class CategoryRepository extends NestedTreeRepository
             $data                 = array();
             $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
 
+            $radius = self::MAX_DISTANCE;
+
             if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
                 $location = $this->getRepository('FaEntityBundle:Location')->getCookieValue($locationId, $container);
-
-                $radius = self::MAX_DISTANCE;
 
                 if ($distance) {
                     $radius = $distance;
@@ -2514,7 +2514,7 @@ class CategoryRepository extends NestedTreeRepository
             if (!empty($locationDetails)) {
                 if (isset($locationDetails['latitude']) && isset($locationDetails['longitude'])) {
                     if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
-                        $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'] . ',' . $locationDetails['longitude'], 'd' => 15);
+                        $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'] . ',' . $locationDetails['longitude'], 'd' => $radius);
                     } else {
                         $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'] . ',' . $locationDetails['longitude']);
                     }
@@ -2524,7 +2524,7 @@ class CategoryRepository extends NestedTreeRepository
             $data['facet_fields'] = array('a_category_id_i' => array('limit' => '5000'),'a_parent_category_lvl_1_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_2_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_3_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_4_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_5_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_6_id_i' => array('limit' => '5000'));
             
             // initialize solr search manager service and fetch data based of above prepared search options
-            $container->get('fa.solrsearch.manager')->init('ad', '', $data);
+            $container->get('fa.solrsearch.manager')->init('ad.new', '', $data);
             $solrResponse = $container->get('fa.solrsearch.manager')->getSolrResponse();
             
             // fetch result set from solr
