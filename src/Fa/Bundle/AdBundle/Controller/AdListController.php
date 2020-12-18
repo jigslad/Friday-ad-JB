@@ -2388,7 +2388,7 @@ class AdListController extends CoreController
         $locationId = $key;
         if(CommonManager::isJSON($key)) {
             $townKey = json_decode($key);
-            $locationId = $townKey['id'];
+            $locationId = $townKey->id;
         }
         $facetdata['search']['item__location'] = $locationId;
         /*if(isset($data['search']['item__distance'])) {
@@ -2425,9 +2425,9 @@ class AdListController extends CoreController
         }
 
         if (isset($facetdata['search']['item__distance'])) {
-            $facetdata['query_filters']['item']['location'] = $key.'|'.((isset($facetdata['search']['item__distance']))?($facetdata['search']['item__distance']):'');
+            $facetdata['query_filters']['item']['location'] = $locationId.'|'.((isset($facetdata['search']['item__distance']))?($facetdata['search']['item__distance']):'');
         } else {
-            $facetdata['query_filters']['item']['location'] = $key.'|'.$radius;
+            $facetdata['query_filters']['item']['location'] = $locationId.'|'.$radius;
         }
         $page               = 1;
         $recordsPerPage     = 2;
