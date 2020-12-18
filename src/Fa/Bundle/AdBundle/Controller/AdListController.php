@@ -2388,7 +2388,7 @@ class AdListController extends CoreController
         $locationId = $key;
         if(CommonManager::isJSON($key)) {
             $townKey = json_decode($key);
-            $locationId = $townKey->id;
+            $locationId = isset($townKey->id)?$townKey->id:2;
         }
         $facetdata['search']['item__location'] = $locationId;
         /*if(isset($data['search']['item__distance'])) {
