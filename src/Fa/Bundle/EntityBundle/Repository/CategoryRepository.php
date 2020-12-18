@@ -2491,7 +2491,7 @@ class CategoryRepository extends NestedTreeRepository
             $radius = self::MAX_DISTANCE;
 
             if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
-                $location = $this->getRepository('FaEntityBundle:Location')->getCookieValue($locationId, $container);
+                $location = $em->getRepository('FaEntityBundle:Location')->getCookieValue($locationId, $container);
 
                 if ($distance) {
                     $radius = $distance;
@@ -2501,7 +2501,10 @@ class CategoryRepository extends NestedTreeRepository
                         /*} elseif(isset($searchParams['keywords']) && $searchParams['keywords']) {
                             $radius = CategoryRepository::KEYWORD_DEFAULT;*/
                     } else {
-                        $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
+                        $searchParams['item__location'] = $locationId;
+                        $searchParams['item__category_id'] = CategoryRepository::ADULT_ID;
+
+                        $getDefaultRadius = $em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
                         $radius = ($getDefaultRadius) ? $getDefaultRadius : '';
                     }
                 }
@@ -2529,7 +2532,8 @@ class CategoryRepository extends NestedTreeRepository
             
             // fetch result set from solr
             $result = $container->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
-            $categoryCountArray = get_object_vars($result['a_parent_category_lvl_1_id_i']) + get_object_vars($result['a_parent_category_lvl_2_id_i']) + get_object_vars($result['a_parent_category_lvl_3_id_i']) + get_object_vars($result['a_parent_category_lvl_4_id_i']) + get_object_vars($result['a_parent_category_lvl_5_id_i']) + get_object_vars($result['a_parent_category_lvl_6_id_i']);
+            $categoryCountArray = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($solrResponse);
+            //$categoryCountArray = get_object_vars($result['a_parent_category_lvl_1_id_i']) + get_object_vars($result['a_parent_category_lvl_2_id_i']) + get_object_vars($result['a_parent_category_lvl_3_id_i']) + get_object_vars($result['a_parent_category_lvl_4_id_i']) + get_object_vars($result['a_parent_category_lvl_5_id_i']) + get_object_vars($result['a_parent_category_lvl_6_id_i']);
             $leafLevelCategoryCount = get_object_vars($result['a_category_id_i']);
             
             $this->categoryCountArray = $categoryCountArray;
