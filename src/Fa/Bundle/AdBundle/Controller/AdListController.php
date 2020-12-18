@@ -1764,12 +1764,14 @@ class AdListController extends CoreController
                 $town = get_object_vars(json_decode($jsonValue));
                 if(isset($town['id']) && !in_array($town['id'], $locationFacetsIds)) {
                     $locationFacetsIds[] = $town['id'];
-                    $locationFacets[] = array(
-                        'id' => $town['id'],
-                        'name' => $town['name'],
-                        'slug' => $town['slug'],
-                        'count' => $facetCount
-                    );
+                    if($town['id']!=$data['search']['item__location']) {
+                        $locationFacets[] = array(
+                            'id' => $town['id'],
+                            'name' => $town['name'],
+                            'slug' => $town['slug'],
+                            'count' => $facetCount
+                        );
+                    }
                 }
             }
         }
@@ -2398,7 +2400,13 @@ class AdListController extends CoreController
         if (isset($facetdata['facet_fields']) && isset($facetdata['facet_fields'])) {
             unset($facetdata['facet_fields']);
         }
-        $facetdata['search']['item__location'] = $key;
+
+        $locationId = $key;
+        if(CommonManager::isJSON($key)) {
+            $townKey = json_decode($key);
+            $locationId = $townKey['id'];
+        }
+        $facetdata['search']['item__location'] = $locationId;
         /*if(isset($data['search']['item__distance'])) {
     		$data['search']['item__distance'] = 0;
     	}
