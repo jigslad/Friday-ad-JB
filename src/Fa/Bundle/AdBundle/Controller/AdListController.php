@@ -390,7 +390,7 @@ class AdListController extends CoreController
         }
 
         if (!empty($facetResult)) {
-            $locationFacets = $this->getLocationFacetForSearchResult($facetResult, $data);
+           // $locationFacets = $this->getLocationFacetForSearchResult($facetResult, $data);
         }
         
 
@@ -978,7 +978,7 @@ class AdListController extends CoreController
             }
 
         }
-        //$data['static_filters'] .= $static_filters = $this->setDimensionParams($data['search'], $listingFields, $adRepository);
+        $data['static_filters'] .= $static_filters = $this->setDimensionParams($data['search'], $listingFields, $adRepository);
 
         $keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: NULL;
         $recordsPerPage = (isset($data['pager']['limit']) && $data['pager']['limit']) ? $data['pager']['limit']: $this->container->getParameter('fa.search.records.per.page');
@@ -1527,7 +1527,7 @@ class AdListController extends CoreController
                 }
             }
 
-            if (!empty($location)) {
+            /*if (!empty($location)) {
 
                 //$level = $location->getLvl();
                 //$latitude = $location->getLatitude();
@@ -1549,12 +1549,12 @@ class AdListController extends CoreController
                 else {
                     $staticFilters = " AND ({!geofilt pt={$latitude},{$longitude} sfield=store d={$radius}})";
                 }
-            }
+            }*/
 
         } else {
             $staticFilters = '';
         }
-        unset($searchParams['item__location']);
+        //unset($searchParams['item__location']);
         foreach (array_keys($searchParams) as $key) {
             if (preg_match('/\//', $key)) {
                 unset($searchParams[$key]);
@@ -1753,17 +1753,33 @@ class AdListController extends CoreController
         ];
 
         $locationFacets = [];
+        $locationFacetArr = [];
         if (!empty($facetResult)) {
-            $locationFacets = $this->getLocationFacetForSearchResult($facetResult, $data);
+            $locationFacetArr = $this->getLocationFacetForSearchResult($facetResult, $data);
         }
 
+        if (!empty($locationFacetArr)) {
+            $locationFacetsIds = [];
+            foreach ($locationFacetArr as $jsonValue => $facetCount) {
+                $town = get_object_vars(json_decode($jsonValue));
+                if(!in_array($town['id'], $locationFacetsIds)) {
+                    $locationFacetsIds[] = $town['id'];
+                    $locationFacets[] = array(
+                        'id' => $town['id'],
+                        'name' => $town['name'],
+                        'slug' => $town['slug'],
+                        'count' => $facetCount
+                    );
+                }
+            }
+        }
 
-        if (isset($data['search']['item__location']) && $data['search']['item__location'] != LocationRepository::COUNTY_ID && (!isset($data['search']['item__distance']) || (isset($data['search']['item__distance']) && $data['search']['item__distance'] >= 0 && $data['search']['item__distance'] <= CategoryRepository::MAX_DISTANCE))) {
+        /*if (isset($data['search']['item__location']) && $data['search']['item__location'] != LocationRepository::COUNTY_ID && (!isset($data['search']['item__distance']) || (isset($data['search']['item__distance']) && $data['search']['item__distance'] >= 0 && $data['search']['item__distance'] <= CategoryRepository::MAX_DISTANCE))) {
             if (isset($locationFacets[$data['search']['item__location']])) {
                 unset($locationFacets[$data['search']['item__location']]);
             }
             $locationFacets = array_slice(array_unique($locationFacets), 0, 5, true);
-        }
+        }*/
 
 
         /*$locationFacetsIds = [];
@@ -2357,7 +2373,7 @@ class AdListController extends CoreController
         if (!empty($locationFacets) && !empty($data)) {
             $getCount = [];
             foreach ($locationFacets as $facetKey=>$facet) {
-                if ($facetKey == 'a_l_town_id_txt' || $facetKey == 'a_l_area_id_txt') {
+                if ($facetKey == 'a_l_town_id_txt' || $facetKey == 'a_l_area_id_txt' || $facetKey == 'town' || $facetKey == 'area') {
                     $facetResult = get_object_vars($facet);
                     if (!empty($facetResult)) {
                         foreach ($facetResult as $key=>$res) {
