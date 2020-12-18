@@ -2342,8 +2342,8 @@ class CategoryRepository extends NestedTreeRepository
 
         if($searchLocation == LocationRepository::LONDON_TOWN_ID) {
             return self::LONDON_DISTANCE;
-        } elseif((isset($searchParams['keywords']) && $searchParams['keywords']!='') && ($searchLocation != 2)) {
-            return self::KEYWORD_DEFAULT;
+        /*} elseif((isset($searchParams['keywords']) && $searchParams['keywords']!='') && ($searchLocation != 2)) {
+            return self::KEYWORD_DEFAULT;*/
         } else {
             if ($searchLocation != 2) {
                 $selLocationArray = $this->_em->getRepository('FaEntityBundle:Location')->find($searchLocation);
@@ -2455,7 +2455,7 @@ class CategoryRepository extends NestedTreeRepository
      *
      * @return array
      */
-    public function getAdultHeaderCategories($container = null, $locationDetails = array())
+    public function getAdultHeaderCategories($container = null, $locationDetails = array(), $distance = null)
     {
         $em = $container->get('doctrine')->getManager();
         $locationSlug = null;
@@ -2487,9 +2487,28 @@ class CategoryRepository extends NestedTreeRepository
             }
             $data                 = array();
             $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
+
             if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
-                $data['query_filters']['item']['location'] = $locationId.'|15';
+                $location = $this->getRepository('FaEntityBundle:Location')->getCookieValue($locationId, $container);
+
+                $radius = self::MAX_DISTANCE;
+
+                if ($distance) {
+                    $radius = $distance;
+                } else {
+                    if ($locationId == LocationRepository::LONDON_TOWN_ID) {
+                        $radius = self::LONDON_DISTANCE;
+                        /*} elseif(isset($searchParams['keywords']) && $searchParams['keywords']) {
+                            $radius = CategoryRepository::KEYWORD_DEFAULT;*/
+                    } else {
+                        $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
+                        $radius = ($getDefaultRadius) ? $getDefaultRadius : '';
+                    }
+                }
+
+                $data['query_filters']['item']['location'] = $locationId.'|'.$radius;
             }
+
             $data['static_filters'] = ' AND ('.AdSolrFieldMapping::ROOT_CATEGORY_ID.':'.CategoryRepository::ADULT_ID.' OR '.AdSolrFieldMapping::CATEGORY_ID.':'.CategoryRepository::ADULT_ID.')';
             //$data['query_filters']['item']['category_id'] = self::ADULT_ID;
             if (!empty($locationDetails)) {
