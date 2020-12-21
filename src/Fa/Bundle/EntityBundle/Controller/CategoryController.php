@@ -252,8 +252,12 @@ class CategoryController extends CoreController
                 }
             }
         }
-        
-        $headerCategories = $this->getRepository('FaEntityBundle:Category')->getAdultHeaderCategories($this->container, $locationDetails);
+
+        $distance = '';
+        if (isset($searchParams['item__distance'])) {
+            $distance = $searchParams['item__distance'];
+        }
+        $headerCategories = $this->getRepository('FaEntityBundle:Category')->getAdultHeaderCategories($this->container, $locationDetails, $distance);
         
         if (!isset($locationDetails['location'])) {
             $locationDetails['location'] = null;

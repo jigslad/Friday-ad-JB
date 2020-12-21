@@ -987,11 +987,12 @@ class AdListController extends CoreController
             $data['search']['item__distance'] = CategoryRepository::LONDON_DISTANCE;
             $data['query_filters']['item']['distance']= CategoryRepository::LONDON_DISTANCE;
             $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'.CategoryRepository::LONDON_DISTANCE;;
-        } elseif($keywords) {
+        }
+        /* elseif($keywords) {
             $data['search']['item__distance'] = CategoryRepository::KEYWORD_DEFAULT;
             $data['query_filters']['item']['distance']= CategoryRepository::KEYWORD_DEFAULT;
             $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'.CategoryRepository::KEYWORD_DEFAULT;;
-        }
+        } */
 
         $this->get('fa.solrsearch.manager')->init('ad.new', $keywords, $data, $page, $recordsPerPage, 0, true);
         $solrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
@@ -1173,9 +1174,9 @@ class AdListController extends CoreController
             $extendRadius =  CategoryRepository::MAX_DISTANCE;
         }
 
-        if($keywords && isset($data['search']['item__location']) && $data['search']['item__location']!=2) {
+        /*if($keywords && isset($data['search']['item__location']) && $data['search']['item__location']!=2) {
             $extendRadius = CategoryRepository::KEYWORD_EXTENDED;
-        }
+        }*/
 
         if ($request->attributes->get('customized_page')) {
             list($keywords, $data) = $this->handleCustomizedUrl($data, $request);
@@ -1281,8 +1282,8 @@ class AdListController extends CoreController
             if(!isset($findersSearchParams['item__distance'])){
                 if($findersSearchParams['item__location'] == LocationRepository::LONDON_TOWN_ID) {
                     $findersSearchParams['item__distance'] = CategoryRepository::LONDON_DISTANCE;
-                } elseif($keywords && isset($data['search']['item__location']) && $data['search']['item__location']!=2) {
-                    $findersSearchParams['item__distance'] = CategoryRepository::KEYWORD_DEFAULT;
+                /*} elseif($keywords && isset($data['search']['item__location']) && $data['search']['item__location']!=2) {
+                    $findersSearchParams['item__distance'] = CategoryRepository::KEYWORD_DEFAULT;*/
                 } else {
                     $findersSearchParams['item__distance'] = CategoryRepository::MAX_DISTANCE;
                 }
@@ -1511,8 +1512,8 @@ class AdListController extends CoreController
             } else {
                 if($searchParams['item__location'] == LocationRepository::LONDON_TOWN_ID) {
                     $radius = CategoryRepository::LONDON_DISTANCE;
-                } elseif(isset($searchParams['keywords']) && $searchParams['keywords']) {
-                    $radius = CategoryRepository::KEYWORD_DEFAULT;
+                /*} elseif(isset($searchParams['keywords']) && $searchParams['keywords']) {
+                    $radius = CategoryRepository::KEYWORD_DEFAULT;*/
                 } else {
                     $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
                     $radius = ($getDefaultRadius)?$getDefaultRadius:'';
@@ -2421,8 +2422,8 @@ class AdListController extends CoreController
         }
         if (isset($facetdata['search']['item__distance']) && $facetdata['search']['item__distance']) {
             $radius = $facetdata['search']['item__distance'];
-        } elseif($keywords) {
-            $radius = CategoryRepository::KEYWORD_DEFAULT;
+        /*} elseif($keywords) {
+            $radius = CategoryRepository::KEYWORD_DEFAULT;*/
         } else {
             if($facetdata['search']['item__location'] == LocationRepository::LONDON_TOWN_ID) {
                 $radius = CategoryRepository::LONDON_DISTANCE;

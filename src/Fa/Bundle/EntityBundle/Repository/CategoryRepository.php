@@ -895,8 +895,10 @@ class CategoryRepository extends NestedTreeRepository
 
         // fetch result set from solr
         $result = $container->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
-        $categoryCountArray = get_object_vars($result['a_parent_category_lvl_1_id_i']) + get_object_vars($result['a_parent_category_lvl_2_id_i']) + get_object_vars($result['a_parent_category_lvl_3_id_i']) + get_object_vars($result['a_parent_category_lvl_4_id_i']) + get_object_vars($result['a_parent_category_lvl_5_id_i']) + get_object_vars($result['a_parent_category_lvl_6_id_i']);
-        $leafLevelCategoryCount = get_object_vars($result['a_category_id_i']);
+        //$categoryCountArray = $container->get('fa.solrsearch.manager')->getSolrResponseDocsCount($solrResponse);
+        $categoryCountArray = $leafLevelCategoryCount =  get_object_vars($result['category_ids']);
+            //$categoryCountArray = get_object_vars($result['a_parent_category_lvl_1_id_i']) + get_object_vars($result['a_parent_category_lvl_2_id_i']) + get_object_vars($result['a_parent_category_lvl_3_id_i']) + get_object_vars($result['a_parent_category_lvl_4_id_i']) + get_object_vars($result['a_parent_category_lvl_5_id_i']) + get_object_vars($result['a_parent_category_lvl_6_id_i']);
+        //$leafLevelCategoryCount = get_object_vars($result['a_category_id_i']);
 
         $this->categoryCountArray = $categoryCountArray;
 
@@ -1146,8 +1148,10 @@ class CategoryRepository extends NestedTreeRepository
 
             // fetch result set from solr
             $result = $container->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
-            $categoryCountArray = get_object_vars($result['a_parent_category_lvl_1_id_i']) + get_object_vars($result['a_parent_category_lvl_2_id_i']) + get_object_vars($result['a_parent_category_lvl_3_id_i']) + get_object_vars($result['a_parent_category_lvl_4_id_i']) + get_object_vars($result['a_parent_category_lvl_5_id_i']) + get_object_vars($result['a_parent_category_lvl_6_id_i']);
-            $leafLevelCategoryCount = get_object_vars($result['a_category_id_i']);
+            //$categoryCountArray = $container->get('fa.solrsearch.manager')->getSolrResponseDocsCount($solrResponse);
+            //$categoryCountArray = get_object_vars($result['a_parent_category_lvl_1_id_i']) + get_object_vars($result['a_parent_category_lvl_2_id_i']) + get_object_vars($result['a_parent_category_lvl_3_id_i']) + get_object_vars($result['a_parent_category_lvl_4_id_i']) + get_object_vars($result['a_parent_category_lvl_5_id_i']) + get_object_vars($result['a_parent_category_lvl_6_id_i']);
+            //$leafLevelCategoryCount = get_object_vars($result['a_category_id_i']);
+            $categoryCountArray = $leafLevelCategoryCount =  get_object_vars($result['category_ids']);
 
             $this->categoryCountArray = $categoryCountArray;
         }
@@ -2342,8 +2346,8 @@ class CategoryRepository extends NestedTreeRepository
 
         if($searchLocation == LocationRepository::LONDON_TOWN_ID) {
             return self::LONDON_DISTANCE;
-        } elseif((isset($searchParams['keywords']) && $searchParams['keywords']!='') && ($searchLocation != 2)) {
-            return self::KEYWORD_DEFAULT;
+        /*} elseif((isset($searchParams['keywords']) && $searchParams['keywords']!='') && ($searchLocation != 2)) {
+            return self::KEYWORD_DEFAULT;*/
         } else {
             if ($searchLocation != 2) {
                 $selLocationArray = $this->_em->getRepository('FaEntityBundle:Location')->find($searchLocation);
@@ -2455,7 +2459,7 @@ class CategoryRepository extends NestedTreeRepository
      *
      * @return array
      */
-    public function getAdultHeaderCategories($container = null, $locationDetails = array())
+    public function getAdultHeaderCategories($container = null, $locationDetails = array(), $distance = null)
     {
         $em = $container->get('doctrine')->getManager();
         $locationSlug = null;
@@ -2472,7 +2476,7 @@ class CategoryRepository extends NestedTreeRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
             
             if ($cachedValue !== false) {
-                return $cachedValue;
+                //return $cachedValue;
             }
         }
         
@@ -2487,31 +2491,57 @@ class CategoryRepository extends NestedTreeRepository
             }
             $data                 = array();
             $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
+
+            $radius = self::MAX_DISTANCE;
+
             if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
-                $data['query_filters']['item']['location'] = $locationId.'|15';
+                $location = $em->getRepository('FaEntityBundle:Location')->getCookieValue($locationId, $container);
+
+                if ($distance) {
+                    $radius = $distance;
+                } else {
+                    if ($locationId == LocationRepository::LONDON_TOWN_ID) {
+                        $radius = self::LONDON_DISTANCE;
+                        /*} elseif(isset($searchParams['keywords']) && $searchParams['keywords']) {
+                            $radius = CategoryRepository::KEYWORD_DEFAULT;*/
+                    } else {
+                        $searchParams['item__location'] = $locationId;
+                        $searchParams['item__category_id'] = CategoryRepository::ADULT_ID;
+
+                        $getDefaultRadius = $em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
+                        $radius = ($getDefaultRadius) ? $getDefaultRadius : '';
+                    }
+                }
+
+                $data['query_filters']['item']['location'] = $locationId.'|'.$radius;
             }
-            $data['static_filters'] = ' AND ('.AdSolrFieldMapping::ROOT_CATEGORY_ID.':'.CategoryRepository::ADULT_ID.' OR '.AdSolrFieldMapping::CATEGORY_ID.':'.CategoryRepository::ADULT_ID.')';
+
+            //$data['static_filters'] = ' AND ('.AdSolrFieldMapping::ROOT_CATEGORY_ID.':'.CategoryRepository::ADULT_ID.' OR '.AdSolrFieldMapping::CATEGORY_ID.':'.CategoryRepository::ADULT_ID.')';
+            $data['static_filters'] = ' AND (category_ids:'.CategoryRepository::ADULT_ID.')';
             //$data['query_filters']['item']['category_id'] = self::ADULT_ID;
             if (!empty($locationDetails)) {
                 if (isset($locationDetails['latitude']) && isset($locationDetails['longitude'])) {
                     if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
-                        $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'] . ',' . $locationDetails['longitude'], 'd' => 15);
+                        $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'] . ',' . $locationDetails['longitude'], 'd' => $radius);
                     } else {
                         $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'] . ',' . $locationDetails['longitude']);
                     }
                     $container->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
                 }
             }
-            $data['facet_fields'] = array('a_category_id_i' => array('limit' => '5000'),'a_parent_category_lvl_1_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_2_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_3_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_4_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_5_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_6_id_i' => array('limit' => '5000'));
+            //$data['facet_fields'] = array('a_category_id_i' => array('limit' => '5000'),'a_parent_category_lvl_1_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_2_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_3_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_4_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_5_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_6_id_i' => array('limit' => '5000'));
             
             // initialize solr search manager service and fetch data based of above prepared search options
-            $container->get('fa.solrsearch.manager')->init('ad', '', $data);
+            $container->get('fa.solrsearch.manager')->init('ad.new', '', $data);
             $solrResponse = $container->get('fa.solrsearch.manager')->getSolrResponse();
             
             // fetch result set from solr
             $result = $container->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
-            $categoryCountArray = get_object_vars($result['a_parent_category_lvl_1_id_i']) + get_object_vars($result['a_parent_category_lvl_2_id_i']) + get_object_vars($result['a_parent_category_lvl_3_id_i']) + get_object_vars($result['a_parent_category_lvl_4_id_i']) + get_object_vars($result['a_parent_category_lvl_5_id_i']) + get_object_vars($result['a_parent_category_lvl_6_id_i']);
-            $leafLevelCategoryCount = get_object_vars($result['a_category_id_i']);
+            echo '<pre>';print_r($result);
+            //$categoryCountArray = $container->get('fa.solrsearch.manager')->getSolrResponseDocsCount($solrResponse);
+            //$categoryCountArray = get_object_vars($result['a_parent_category_lvl_1_id_i']) + get_object_vars($result['a_parent_category_lvl_2_id_i']) + get_object_vars($result['a_parent_category_lvl_3_id_i']) + get_object_vars($result['a_parent_category_lvl_4_id_i']) + get_object_vars($result['a_parent_category_lvl_5_id_i']) + get_object_vars($result['a_parent_category_lvl_6_id_i']);
+            //$leafLevelCategoryCount = get_object_vars($result['a_category_id_i']);
+            $categoryCountArray = $leafLevelCategoryCount =  get_object_vars($result['category_ids']);
             
             $this->categoryCountArray = $categoryCountArray;
             $this->leafLevelCategoryCount = $leafLevelCategoryCount;
