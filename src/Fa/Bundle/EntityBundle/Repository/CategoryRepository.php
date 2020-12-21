@@ -895,7 +895,7 @@ class CategoryRepository extends NestedTreeRepository
 
         // fetch result set from solr
         $result = $container->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
-        $categoryCountArray = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($solrResponse);
+        $categoryCountArray = $container->get('fa.solrsearch.manager')->getSolrResponseDocsCount($solrResponse);
         //$categoryCountArray = get_object_vars($result['a_parent_category_lvl_1_id_i']) + get_object_vars($result['a_parent_category_lvl_2_id_i']) + get_object_vars($result['a_parent_category_lvl_3_id_i']) + get_object_vars($result['a_parent_category_lvl_4_id_i']) + get_object_vars($result['a_parent_category_lvl_5_id_i']) + get_object_vars($result['a_parent_category_lvl_6_id_i']);
         $leafLevelCategoryCount = get_object_vars($result['a_category_id_i']);
 
@@ -1147,7 +1147,7 @@ class CategoryRepository extends NestedTreeRepository
 
             // fetch result set from solr
             $result = $container->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
-            $categoryCountArray = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($solrResponse);
+            $categoryCountArray = $container->get('fa.solrsearch.manager')->getSolrResponseDocsCount($solrResponse);
             //$categoryCountArray = get_object_vars($result['a_parent_category_lvl_1_id_i']) + get_object_vars($result['a_parent_category_lvl_2_id_i']) + get_object_vars($result['a_parent_category_lvl_3_id_i']) + get_object_vars($result['a_parent_category_lvl_4_id_i']) + get_object_vars($result['a_parent_category_lvl_5_id_i']) + get_object_vars($result['a_parent_category_lvl_6_id_i']);
             $leafLevelCategoryCount = get_object_vars($result['a_category_id_i']);
 
@@ -2535,7 +2535,7 @@ class CategoryRepository extends NestedTreeRepository
             
             // fetch result set from solr
             $result = $container->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
-            $categoryCountArray = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($solrResponse);
+            $categoryCountArray = $container->get('fa.solrsearch.manager')->getSolrResponseDocsCount($solrResponse);
             //$categoryCountArray = get_object_vars($result['a_parent_category_lvl_1_id_i']) + get_object_vars($result['a_parent_category_lvl_2_id_i']) + get_object_vars($result['a_parent_category_lvl_3_id_i']) + get_object_vars($result['a_parent_category_lvl_4_id_i']) + get_object_vars($result['a_parent_category_lvl_5_id_i']) + get_object_vars($result['a_parent_category_lvl_6_id_i']);
             $leafLevelCategoryCount = get_object_vars($result['a_category_id_i']);
             
