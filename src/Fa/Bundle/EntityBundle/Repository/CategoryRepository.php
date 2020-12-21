@@ -2536,7 +2536,7 @@ class CategoryRepository extends NestedTreeRepository
             $result = $container->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
             //$categoryCountArray = get_object_vars($result['a_parent_category_lvl_1_id_i']) + get_object_vars($result['a_parent_category_lvl_2_id_i']) + get_object_vars($result['a_parent_category_lvl_3_id_i']) + get_object_vars($result['a_parent_category_lvl_4_id_i']) + get_object_vars($result['a_parent_category_lvl_5_id_i']) + get_object_vars($result['a_parent_category_lvl_6_id_i']);
             //$leafLevelCategoryCount = get_object_vars($result['a_category_id_i']);
-            $categoryCountArray = $leafLevelCategoryCount =  isset($result['category_ids')?get_object_vars($result['category_ids']):array();
+            $categoryCountArray = $leafLevelCategoryCount =  isset($result['category_ids'])?get_object_vars($result['category_ids']):array();
             
             $this->categoryCountArray = $categoryCountArray;
             $this->leafLevelCategoryCount = $leafLevelCategoryCount;
