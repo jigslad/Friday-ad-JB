@@ -2474,7 +2474,7 @@ class CategoryRepository extends NestedTreeRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
             
             if ($cachedValue !== false) {
-                return $cachedValue;
+                //return $cachedValue;
             }
         }
         
@@ -2514,7 +2514,8 @@ class CategoryRepository extends NestedTreeRepository
                 $data['query_filters']['item']['location'] = $locationId.'|'.$radius;
             }
 
-            $data['static_filters'] = ' AND ('.AdSolrFieldMapping::ROOT_CATEGORY_ID.':'.CategoryRepository::ADULT_ID.' OR '.AdSolrFieldMapping::CATEGORY_ID.':'.CategoryRepository::ADULT_ID.')';
+            //$data['static_filters'] = ' AND ('.AdSolrFieldMapping::ROOT_CATEGORY_ID.':'.CategoryRepository::ADULT_ID.' OR '.AdSolrFieldMapping::CATEGORY_ID.':'.CategoryRepository::ADULT_ID.')';
+            $data['static_filters'] = ' AND (category_ids:'.CategoryRepository::ADULT_ID.')';
             //$data['query_filters']['item']['category_id'] = self::ADULT_ID;
             if (!empty($locationDetails)) {
                 if (isset($locationDetails['latitude']) && isset($locationDetails['longitude'])) {
@@ -2526,7 +2527,7 @@ class CategoryRepository extends NestedTreeRepository
                     $container->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
                 }
             }
-            $data['facet_fields'] = array('a_category_id_i' => array('limit' => '5000'),'a_parent_category_lvl_1_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_2_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_3_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_4_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_5_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_6_id_i' => array('limit' => '5000'));
+            //$data['facet_fields'] = array('a_category_id_i' => array('limit' => '5000'),'a_parent_category_lvl_1_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_2_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_3_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_4_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_5_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_6_id_i' => array('limit' => '5000'));
             
             // initialize solr search manager service and fetch data based of above prepared search options
             $container->get('fa.solrsearch.manager')->init('ad.new', '', $data);
