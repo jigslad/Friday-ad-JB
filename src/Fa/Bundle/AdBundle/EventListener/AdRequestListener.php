@@ -525,7 +525,7 @@ class AdRequestListener
                         $searchParams['item__distance']  =  $request->get('item__distance');
                     } else {
                         $setDefaultRadius = true;
-                        $searchParams['item__distance']  =  ($getDefaultRadius)?$getDefaultRadius:'';
+                        $searchParams['item__distance']  =  ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
                     }
                     /*if (($catObj['id'] == CategoryRepository::MOTORS_ID) || ($parent['id'] == CategoryRepository::MOTORS_ID)) {
                         $queryParams['item__distance']  =  $request->get('item__distance') == '' ? CategoryRepository::MOTORS_DISTANCE : $request->get('item__distance');
@@ -641,7 +641,7 @@ class AdRequestListener
                     if ($request->get('item__distance')) {
                         $queryParams['item__distance']  =  $request->get('item__distance');
                     } else {
-                        $queryParams['item__distance']  =  ($getDefaultRadius)?$getDefaultRadius:'';
+                        $queryParams['item__distance']  =  ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
                     }
 
                     /* if (($catObj['id'] == CategoryRepository::MOTORS_ID) || ($parent['id'] == CategoryRepository::MOTORS_ID)) {
@@ -652,7 +652,14 @@ class AdRequestListener
 
                     $request->attributes->set('finders', array_merge($queryParams, array('item__category_id' => $catObj['id'], 'item__location' => $locationId)));
                 } else {
-                    $queryParams['item__distance'] = isset($queryParams['item__distance']) && $queryParams['item__distance'] != null ? $queryParams['item__distance'] : CategoryRepository::OTHERS_DISTANCE;
+                    $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($queryParams, $this->container);
+                    if ($request->get('item__distance')) {
+                        $queryParams['item__distance']  =  $request->get('item__distance');
+                    } else {
+                        $queryParams['item__distance']  =  ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
+                    }
+
+                    //$queryParams['item__distance'] = isset($queryParams['item__distance']) && $queryParams['item__distance'] != null ? $queryParams['item__distance'] : CategoryRepository::OTHERS_DISTANCE;
                     $request->attributes->set('finders', array_merge($queryParams, array('item__location' => $locationId)));
                 }
 

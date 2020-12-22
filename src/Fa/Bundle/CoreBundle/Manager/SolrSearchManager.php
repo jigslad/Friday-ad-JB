@@ -291,8 +291,8 @@ class SolrSearchManager
         }
 
         if ($this->geoDistQuery && count($this->geoDistQuery)) {
-            $distance = (isset($this->geoDistQuery['d']))?$this->geoDistQuery['d']:200;
-            $query->addFilterQuery('{!geofilt pt='.$this->geoDistQuery['pt'].' sfield=store d='.$distance.'}&sort=geodist()+asc');
+            //$distance = (isset($this->geoDistQuery['d']))?$this->geoDistQuery['d']:200;
+            //$query->addFilterQuery('{!geofilt pt='.$this->geoDistQuery['pt'].' sfield=store d='.$distance.'}&sort=geodist()+asc');
             /*if ($this->getSolrCoreName() == 'ad') {
                 $query->addField(\Fa\Bundle\AdBundle\Solr\AdSolrFieldMapping::AWAY_FROM_LOCATION.', '.$fields);
             } elseif ($this->getSolrCoreName() == 'ad.view.counter') {
@@ -793,8 +793,8 @@ class SolrSearchManager
     protected function addFilters($filters = array())
     {
         if (count($filters)) {
-            if ($this->solrCoreName == 'ad.new') {
-                /*if (isset($filters['item']['distance'])) {
+            /*if ($this->solrCoreName == 'ad.new') {
+                if (isset($filters['item']['distance'])) {
                     $serviceName = 'fa.ad.solrsearch';
                     if ($this->container->has($serviceName)) {
                         $serviceObj = $this->container->get($serviceName);
@@ -806,26 +806,28 @@ class SolrSearchManager
                             $this->geoDistQuery = $serviceObj->getGeoDistQuery();
                         }
                     }
-                }*/
-            } else {
+                }
+            } else {*/
                 foreach (array_keys($filters) as $service) {
                     $filters[$service] = array_filter($filters[$service], array($this, 'filterEmptyValues'));
                     if (count($filters[$service])) {
                         $serviceName = 'fa.' . str_replace('item', 'ad', $service) . '.solrsearch';
                         if ($this->container->has($serviceName)) {
-                            $serviceObj = $this->container->get($serviceName);
+                            if(isset($filters[$service]['location']) || isset($filters[$service]['distance'])) {
+                                $serviceObj = $this->container->get($serviceName);
 
-                            $serviceObj->init($this->solrCoreName, $this->getQuery());
-                            $serviceObj->addFilters($filters[$service]);
-                            $this->setQuery($serviceObj->getQuery());
+                                $serviceObj->init($this->solrCoreName, $this->getQuery());
+                                $serviceObj->addFilters($filters[$service]);
+                                $this->setQuery($serviceObj->getQuery());
 
-                            if (count($serviceObj->getGeoDistQuery())) {
-                                $this->geoDistQuery = $serviceObj->getGeoDistQuery();
+                                if (count($serviceObj->getGeoDistQuery())) {
+                                    $this->geoDistQuery = $serviceObj->getGeoDistQuery();
+                                }
                             }
                         }
                     }
                 }
-            }
+           // }
         }
     }
 

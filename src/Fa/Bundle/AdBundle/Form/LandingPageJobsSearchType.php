@@ -133,7 +133,7 @@ class LandingPageJobsSearchType extends AbstractType
             $defDistance = $searchParams['item__distance'];
         } else {
             $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
-            $defDistance = ($getDefaultRadius)?$getDefaultRadius:'';
+            $defDistance = ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
         }
 
         $form->add(

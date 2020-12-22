@@ -142,15 +142,7 @@ class AdLeftSearchNewType extends AbstractType
             $defDistance = $searchParams['item__distance'];
         } else {
             $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
-            $defDistance = ($getDefaultRadius)?$getDefaultRadius:'';
-        }
-        if($defDistance=='') {
-            if($categoryId!='') {
-                $rootCategoryId = $this->em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
-                $defDistance = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
-            } else {
-                $defDistance = CategoryRepository::MAX_DISTANCE;
-            }
+            $defDistance = ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
         }
 
         if($searchLocation == 2 || $getLocLvl==2) {
