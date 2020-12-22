@@ -983,11 +983,16 @@ class AdListController extends CoreController
         $keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: NULL;
         $recordsPerPage = (isset($data['pager']['limit']) && $data['pager']['limit']) ? $data['pager']['limit']: $this->container->getParameter('fa.search.records.per.page');
 
-        if (isset($data['query_filters']['item']['setDefaultRadius']) && $data['query_filters']['item']['setDefaultRadius']==1 && (isset($data['search']['item__location']) && $data['search']['item__location']==831)) {
-            $data['search']['item__distance'] = CategoryRepository::LONDON_DISTANCE;
-            $data['query_filters']['item']['distance']= CategoryRepository::LONDON_DISTANCE;
-            $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'.CategoryRepository::LONDON_DISTANCE;;
+        $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($data['search'], $this->container);
+        $radius = ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
+
+        if($data['search']['item__location']!=LocationRepository::COUNTY_ID) {
+            $data['search']['item__distance'] = $radius;
+            $data['query_filters']['item']['distance']= $radius;
+            $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'.$radius;
         }
+
+
         /* elseif($keywords) {
             $data['search']['item__distance'] = CategoryRepository::KEYWORD_DEFAULT;
             $data['query_filters']['item']['distance']= CategoryRepository::KEYWORD_DEFAULT;
@@ -1172,11 +1177,9 @@ class AdListController extends CoreController
 
         if (!empty($extendRadius) && $data['search']['item__location']== LocationRepository::LONDON_TOWN_ID) {
             $extendRadius =  CategoryRepository::MAX_DISTANCE;
-        }
-
-        /*if($keywords && isset($data['search']['item__location']) && $data['search']['item__location']!=2) {
+        } elseif ($keywords && isset($data['search']['item__location']) && $data['search']['item__location']!=2) {
             $extendRadius = CategoryRepository::KEYWORD_EXTENDED;
-        }*/
+        }
 
         if ($request->attributes->get('customized_page')) {
             list($keywords, $data) = $this->handleCustomizedUrl($data, $request);
@@ -1510,22 +1513,8 @@ class AdListController extends CoreController
             if (isset($searchParams['item__distance']) && $searchParams['item__distance']) {
                 $radius = $searchParams['item__distance'];
             } else {
-                if($searchParams['item__location'] == LocationRepository::LONDON_TOWN_ID) {
-                    $radius = CategoryRepository::LONDON_DISTANCE;
-                /*} elseif(isset($searchParams['keywords']) && $searchParams['keywords']) {
-                    $radius = CategoryRepository::KEYWORD_DEFAULT;*/
-                } else {
                     $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
-                    $radius = ($getDefaultRadius)?$getDefaultRadius:'';
-                }
-            }
-            if($radius=='') {
-                if($categoryId!='') {
-                    $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
-                    $radius = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
-                } else {
-                    $radius = CategoryRepository::MAX_DISTANCE;
-                }
+                    $radius = ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
             }
 
             /*if (!empty($location)) {
@@ -2422,23 +2411,9 @@ class AdListController extends CoreController
         }
         if (isset($facetdata['search']['item__distance']) && $facetdata['search']['item__distance']) {
             $radius = $facetdata['search']['item__distance'];
-        /*} elseif($keywords) {
-            $radius = CategoryRepository::KEYWORD_DEFAULT;*/
         } else {
-            if($facetdata['search']['item__location'] == LocationRepository::LONDON_TOWN_ID) {
-                $radius = CategoryRepository::LONDON_DISTANCE;
-            } else {
-                $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($facetdata['search'], $this->container);
-                $radius = ($getDefaultRadius)?$getDefaultRadius:'';
-            }
-        }
-        if($radius=='') {
-            if($categoryId!='') {
-                $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
-                $radius = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
-            } else {
-                $radius = CategoryRepository::MAX_DISTANCE;
-            }
+            $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($facetdata['search'], $this->container);
+            $radius = ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
         }
 
         if (isset($facetdata['search']['item__distance'])) {
