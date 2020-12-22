@@ -689,16 +689,7 @@ class DefaultController extends ThirdPartyLoginController
             } 
 
             $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($srchParam, $this->container);
-            $defDistance = ($getDefaultRadius)?$getDefaultRadius:'';
-            
-            if($defDistance=='') {
-                if($categoryId!='') {
-                    $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
-                    $defDistance = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
-                } else {
-                    $defDistance = CategoryRepository::MAX_DISTANCE;
-                }
-            }
+            $defDistance = ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
             
             if (!empty($cookieValue)) {
                 $location['id'] = $cookieValue['location'];

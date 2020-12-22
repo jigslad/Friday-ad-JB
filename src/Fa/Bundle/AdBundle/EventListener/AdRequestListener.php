@@ -525,7 +525,7 @@ class AdRequestListener
                         $searchParams['item__distance']  =  $request->get('item__distance');
                     } else {
                         $setDefaultRadius = true;
-                        $searchParams['item__distance']  =  ($getDefaultRadius)?$getDefaultRadius:'';
+                        $searchParams['item__distance']  =  ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
                     }
                     /*if (($catObj['id'] == CategoryRepository::MOTORS_ID) || ($parent['id'] == CategoryRepository::MOTORS_ID)) {
                         $queryParams['item__distance']  =  $request->get('item__distance') == '' ? CategoryRepository::MOTORS_DISTANCE : $request->get('item__distance');
@@ -641,7 +641,7 @@ class AdRequestListener
                     if ($request->get('item__distance')) {
                         $queryParams['item__distance']  =  $request->get('item__distance');
                     } else {
-                        $queryParams['item__distance']  =  ($getDefaultRadius)?$getDefaultRadius:'';
+                        $queryParams['item__distance']  =  ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
                     }
 
                     /* if (($catObj['id'] == CategoryRepository::MOTORS_ID) || ($parent['id'] == CategoryRepository::MOTORS_ID)) {
