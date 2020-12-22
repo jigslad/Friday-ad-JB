@@ -813,7 +813,7 @@ class SolrSearchManager
                     if (count($filters[$service])) {
                         $serviceName = 'fa.' . str_replace('item', 'ad', $service) . '.solrsearch';
                         if ($this->container->has($serviceName)) {
-                            if(isset($filters[$service]['location']) || isset($filters[$service]['distance'])) {
+                           /* if(isset($filters[$service]['location']) || isset($filters[$service]['distance'])) { */
                                 $serviceObj = $this->container->get($serviceName);
 
                                 $serviceObj->init($this->solrCoreName, $this->getQuery());
@@ -823,7 +823,7 @@ class SolrSearchManager
                                 if (count($serviceObj->getGeoDistQuery())) {
                                     $this->geoDistQuery = $serviceObj->getGeoDistQuery();
                                 }
-                            }
+                            //}
                         }
                     }
                 }
