@@ -843,7 +843,7 @@ class CategoryRepository extends NestedTreeRepository
      *
      * @return array
      */
-    public function getFooterCategories($container = null, $locationDetails = array())
+    public function getFooterCategories($container = null, $locationDetails = array(), $searchParams =array())
     {
         $em = $container->get('doctrine')->getManager();
         if ($container) {
@@ -872,9 +872,12 @@ class CategoryRepository extends NestedTreeRepository
             $locationId = $em->getRepository('FaEntityBundle:Locality')->getColumnBySlug('id', $locationSlug, $container);
         }
         $data                 = array();
-        if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
-            $data['query_filters']['item']['location'] = $locationId.'|15';
+
+        $radius = $em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $container);
+        if ($locationId) {
+            $data['query_filters']['item']['location'] = $locationId.'|'.$radius;
         }
+
         if (count($locationDetails)) {
             if (isset($locationDetails['latitude']) && isset($locationDetails['longitude'])) {
                 if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
@@ -2557,7 +2560,8 @@ class CategoryRepository extends NestedTreeRepository
         $stmt->execute();
         $categories         = $stmt->fetchAll();
         $categoryClassArray = $this->getHeaderAdultCategoryClassArray();
-        
+        $categoryId1 = $categoryId2 = $categoryId3 = $categoryId4 = $categoryId5 = $categoryId6 = '';
+
         if (count($categories)) {
             
             foreach ($categories as $index => $category) {
