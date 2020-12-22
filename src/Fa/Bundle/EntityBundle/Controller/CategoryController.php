@@ -90,7 +90,7 @@ class CategoryController extends CoreController
             }
         }
 
-        $headerCategories = $this->getRepository('FaEntityBundle:Category')->getHeaderCategories($this->container, $locationDetails);
+        $headerCategories = $this->getRepository('FaEntityBundle:Category')->getHeaderCategories($this->container, $locationDetails,$searchParams);
 
         if (!isset($locationDetails['location'])) {
             $locationDetails['location'] = null;
