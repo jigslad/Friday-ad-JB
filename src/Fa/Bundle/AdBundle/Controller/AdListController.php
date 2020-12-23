@@ -1177,8 +1177,8 @@ class AdListController extends CoreController
 
         if (!empty($extendRadius) && $data['search']['item__location']== LocationRepository::LONDON_TOWN_ID) {
             $extendRadius =  CategoryRepository::MAX_DISTANCE;
-        /*} elseif ($keywords && isset($data['search']['item__location']) && $data['search']['item__location']!=2) {
-            $extendRadius = CategoryRepository::KEYWORD_EXTENDED;*/
+        } elseif ($keywords && isset($data['search']['item__location']) && $data['search']['item__location']!=2) {
+            $extendRadius = CategoryRepository::KEYWORD_EXTENDED;
         }
 
         if ($request->attributes->get('customized_page')) {
