@@ -113,23 +113,27 @@
                                   {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams['fa_left_search']) %}
                               {% endif %}
                               {% if key == (maxDimensionCount) %}
-                      </ul>
-                      <div class="see-more clearfix">
-                          <a href="javascript:void(0);" rel="nofollow" onclick="$('#locationLHSFilters').foundation('reveal', 'open');">See more</a>
-                          <a href="javascript:void(0);" rel="nofollow" class="right clear_filter" id="{{ key }}_clear">{{ 'Clear'|trans({}, 'frontend-left-search') }}</a>
-                      </div>
-                          <div class="reveal-modal" id="locationLHSFilters" data-reveal>
-                              <a class="close-reveal-modal">&times;</a>
-                              <div>
-                                  <h5 class="modal-title">Showing Towns</h5>
-                                  <div class="modal-content dimension-modal">
-                                      <div class="dimension-content">
-                                          <div class="clearfix">
-                                              {% endif %}
+                                  </ul>
+                                  <div class="see-more clearfix">
+                                      <a href="javascript:void(0);" rel="nofollow" onclick="$('#locationLHSFilters').foundation('reveal', 'open');">See more</a>
+                                      <a href="javascript:void(0);" rel="nofollow" class="right clear_filter" id="{{ key }}_clear">{{ 'Clear'|trans({}, 'frontend-left-search') }}</a>
+                                  </div>
+                                  <div class="reveal-modal" id="locationLHSFilters" data-reveal>
+                                      <a class="close-reveal-modal">&times;</a>
+                                      <div>
+                                          <h5 class="modal-title">Showing Towns</h5>
+                                          <div class="modal-content dimension-modal">
+                                              <div class="dimension-content">
+                                                  <div class="clearfix">
+                              {% endif %}
                               {% if key >= maxDimensionCount and key is divisible by(4) %}
-                              <ul class="seller-link dimension-list">
-                                  {% endif %}
-                                  <li><a href="{{ listurl }}" {% if queryParams.fa_left_search.item__distance is defined and queryParams.fa_left_search.item__distance != 0 %} rel="nofollow" {% endif %} >{{ location.name}} ({{ location.count }})</a></li>
+                                    <ul class="seller-link dimension-list">
+                              {% endif %}
+                                  <li>
+                                      <a href="{{ listurl }}" {% if queryParams.fa_left_search.item__distance is defined and queryParams.fa_left_search.item__distance != 0 %} rel="nofollow" {% endif %} >
+                                          {{ location.name}} ({{ location.count }})
+                                      </a>
+                                  </li>
                                   {% if key >= maxDimensionCount and (key + 1) is divisible by(4) %}
                               </ul>
                               {% endif %}
