@@ -388,7 +388,7 @@ class AdListController extends CoreController
         if (isset($data['search']['item__location'])) {
             $locationResult = $this->getRepository('FaEntityBundle:Location')->find($data['search']['item__location']);
         }
-
+        
         if (!empty($facetResult)) {
            // $locationFacets = $this->getLocationFacetForSearchResult($facetResult, $data);
         }
@@ -1285,10 +1285,12 @@ class AdListController extends CoreController
             if(!isset($findersSearchParams['item__distance'])){
                 if($findersSearchParams['item__location'] == LocationRepository::LONDON_TOWN_ID) {
                     $findersSearchParams['item__distance'] = CategoryRepository::LONDON_DISTANCE;
+                    $findersSearchParams['default_distance'] = true;
                 /*} elseif($keywords && isset($data['search']['item__location']) && $data['search']['item__location']!=2) {
                     $findersSearchParams['item__distance'] = CategoryRepository::KEYWORD_DEFAULT;*/
                 } else {
                     $findersSearchParams['item__distance'] = CategoryRepository::MAX_DISTANCE;
+                    $findersSearchParams['default_distance'] = true;
                 }
 
             }
@@ -1890,9 +1892,11 @@ class AdListController extends CoreController
                             $radius = $searchParams['item__distance'];
                         } elseif($keywords) {
                             $radius = CategoryRepository::KEYWORD_DEFAULT;
+                            $searchParams['item__distance'] = false;
                         } else {
                             if ($town['id'] == LocationRepository::LONDON_TOWN_ID) {
                                 $radius = CategoryRepository::LONDON_DISTANCE;
+
                             } else {
                                 $newSearchParams['item__category_id'] = isset($searchParams['item__category_id']) ? $searchParams['item__category_id'] : '';
                                 $newSearchParams['item__distance'] = isset($searchParams['item__distance']) ? $searchParams['item__distance'] : '';

@@ -101,18 +101,50 @@
               
               
               {% if locationFacets is defined and locationFacets|length > 0 %}
+                  {% set maxDimensionCount = 12 %}
                   <div class="towns-list">
                       <label>{{'Nearby towns'|trans({}, 'frontend-left-search')}}:</label>
                       <ul>
-                          {% for townId, count in locationFacets %}
-                              {% set queryParams = {'fa_left_search' : searchParams|merge({'item__location': count.id })} %}
+                          {% for key, location in locationFacets %}
+                              {% set queryParams = {'fa_left_search' : searchParams|merge({'item__location': location.id })} %}
                               {% if customized_url|length and customized_url['target_url'] != '' %}
                                   {% set listurl = container.get('fa_ad.manager.ad_routing').getCustomListingUrl(queryParams['fa_left_search'], customized_url['target_url'], true) %}
                               {% else %}
                                   {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams['fa_left_search']) %}
                               {% endif %}
-                              <li><a href="{{ listurl }}" {% if queryParams.fa_left_search.item__distance is defined and queryParams.fa_left_search.item__distance != 0 %} rel="nofollow" {% endif %} >{{ count.name}} ({{ count.count }})</a></li>
-                          {% endfor %}
+                              {% if key == (maxDimensionCount) %}
+                                  </ul>
+                                  <div class="see-more clearfix">
+                                      <a href="javascript:void(0);" rel="nofollow" onclick="$('#locationLHSFilters').foundation('reveal', 'open');">See more</a>
+                                      <a href="javascript:void(0);" rel="nofollow" class="right clear_filter" id="{{ key }}_clear">{{ 'Clear'|trans({}, 'frontend-left-search') }}</a>
+                                  </div>
+                                  <div class="reveal-modal" id="locationLHSFilters" data-reveal>
+                                      <a class="close-reveal-modal">&times;</a>
+                                      <div>
+                                          <h5 class="modal-title">Showing Towns</h5>
+                                          <div class="modal-content dimension-modal">
+                                              <div class="dimension-content">
+                                                  <div class="clearfix">
+                              {% endif %}
+                              {% if key >= maxDimensionCount and key is divisible by(4) %}
+                                    <ul class="seller-link dimension-list">
+                              {% endif %}
+                                  <li>
+                                      <a href="{{ listurl }}" {% if queryParams.fa_left_search.item__distance is defined and queryParams.fa_left_search.item__distance != 0 %} rel="nofollow" {% endif %} >
+                                          {{ location.name}} ({{ location.count }})
+                                      </a>
+                                  </li>
+                                  {% if key >= maxDimensionCount and (key + 1) is divisible by(4) %}
+                              </ul>
+                              {% endif %}
+                              {% if key > maxDimensionCount and key == (locationFacets|length - 1) %}
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      {% endif %}
+                           {% endfor %}
                       </ul>
                   </div>
               {% endif %}
