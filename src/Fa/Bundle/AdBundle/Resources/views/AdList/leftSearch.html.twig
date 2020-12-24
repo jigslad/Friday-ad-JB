@@ -22,6 +22,7 @@
 {% set customized_url = app.request.get('customized_url')  %}
 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 {{ form_errors(form) }}
+    <div class="search-filters">
     <dl class="accordion" data-accordion>
         {% if isShopPage is defined and isShopPage %}
             <dd class="accordion-navigation keep-shown">
@@ -70,8 +71,8 @@
               </ul>
             </div>
         </dd>
-		
-        <dd class="accordion-navigation keep-shown">       
+
+        <dd class="accordion-navigation keep-shown">
             <a href="#panel3a" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Distance I\'m happy to travel'|trans({}, 'frontend-left-search')}}</h5></a>
         	<div class="content active clearfix">
                <ul class="distance-search clearfix" id="distance-left-search" style="display:none">
@@ -98,8 +99,8 @@
                   <ul class="distance-search distance-left-search clearfix">
                     <li id="distance-error-placeholder"><small class="error" style="display:none"></small></li>
                   </ul>
-              
-              
+
+
               {% if locationFacets is defined and locationFacets|length > 0 %}
                   {% set maxDimensionCount = 12 %}
                   <div class="towns-list">
@@ -181,7 +182,7 @@
                 </ul>
             </div>
         </dd>
-        
+
         {% if isShopPage is not defined or (isShopPage is defined and not isShopPage) %}
             <dd class="accordion-navigation keep-shown">
                 <div class="content active label-inline">
@@ -200,6 +201,7 @@
             {% do attribute(form, 'expired_ads').setRendered %}
         {% endif %}
     </dl>
+    </div>
 {{ form_end(form) }}
 <div id="left_search_dimension_modal" class="reveal-modal" data-reveal></div>
 <div id="removeSavedSearch" class="reveal-modal tiny" data-reveal>
