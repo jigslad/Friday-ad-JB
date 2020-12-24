@@ -137,9 +137,22 @@ class AdTopSearchType extends AbstractType
         
         $searchLocation = isset($searchParams['item__location'])?$searchParams['item__location']:((!empty($cookieLocationDet) && isset($cookieLocationDet->town_id))?$cookieLocationDet->town_id:2);         
         
-        if($searchLocation!=2) {
+        /*if($searchLocation!=2) {
             $selLocationArray = $this->em->getRepository('FaEntityBundle:Location')->find($searchLocation);
             if(!empty($selLocationArray)) { $getLocLvl = $selLocationArray->getLvl(); }
+        }*/
+
+        $isLocality = 0;$getLocLvl = 0;
+        if (strpos($searchLocation,',') !== false) {
+            $isLocality = 1;
+        }
+
+        $selLocationArray = $this->em->getRepository('FaEntityBundle:Location')->getCookieValue($searchLocation, $this->container);
+
+        if($isLocality) {
+            $getLocLvl = 5;
+        } else {
+            if(!empty($selLocationArray)) { $getLocLvl = $selLocationArray['lvl']; }
         }
         
         if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
@@ -149,15 +162,7 @@ class AdTopSearchType extends AbstractType
             $defDistance = $searchParams['item__distance'];
         } else {
             $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
-            $defDistance = ($getDefaultRadius)?$getDefaultRadius:'';
-        }
-        if($defDistance=='') {
-            if($categoryId!='') {
-                $rootCategoryId = $this->em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
-                $defDistance = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
-            } else {
-                $defDistance = CategoryRepository::MAX_DISTANCE;
-            }
+            $defDistance = ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
         }
                     
         $form->add(
@@ -170,7 +175,7 @@ class AdTopSearchType extends AbstractType
             )
             );
         
-        $this->addLocationAutoSuggestField($event->getForm(),$searchLocation);
+        $this->addLocationAutoSuggestField($event->getForm(),$selLocationArray);
     }
 
     /**
@@ -178,10 +183,16 @@ class AdTopSearchType extends AbstractType
      *
      * @param object $form Form instance.
      */
-    protected function addLocationAutoSuggestField($form,$searchLocation)
+    protected function addLocationAutoSuggestField($form,$selLocationArray)
     {
-        $form->add('item__location', HiddenType::class, array('data'=>$searchLocation,'empty_data'=>$searchLocation));
-        $form->add('item__location_autocomplete', TextType::class, array(/** @Ignore */'label' => false));
+        $searchLocationId = $searchLocationText = '';
+        if(!empty($selLocationArray)) {
+            $searchLocationId = $selLocationArray['location'];
+            $searchLocationText = $selLocationArray['location_text'];
+        }
+
+        $form->add('item__location', HiddenType::class, array('data'=>$searchLocationId,'empty_data'=>$searchLocationId));
+        $form->add('item__location_autocomplete', TextType::class, array(/** @Ignore */'label' => false,'data'=>$searchLocationText,'empty_data'=>$searchLocationText));
         $form->add('item__area', HiddenType::class);
     }
 
