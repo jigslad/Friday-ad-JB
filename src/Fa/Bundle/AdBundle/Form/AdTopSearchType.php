@@ -174,7 +174,15 @@ class AdTopSearchType extends AbstractType
                 'data' => $defDistance,
             )
             );
-        
+        $form->add(
+            'default_distance',
+            HiddenType::class,
+            array(
+                'mapped' => false,
+                'empty_data' => $defDistance,
+                'data' => $defDistance,
+            )
+        );
         $this->addLocationAutoSuggestField($event->getForm(),$selLocationArray);
     }
 

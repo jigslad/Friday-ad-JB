@@ -1285,8 +1285,8 @@ class AdListController extends CoreController
             if(!isset($findersSearchParams['item__distance'])){
                 if($findersSearchParams['item__location'] == LocationRepository::LONDON_TOWN_ID) {
                     $findersSearchParams['item__distance'] = CategoryRepository::LONDON_DISTANCE;
-                /*} elseif($keywords && isset($data['search']['item__location']) && $data['search']['item__location']!=2) {
-                    $findersSearchParams['item__distance'] = CategoryRepository::KEYWORD_DEFAULT;*/
+                } elseif($keywords && isset($data['search']['item__location']) && $data['search']['item__location']!=2) {
+                    $findersSearchParams['item__distance'] = CategoryRepository::KEYWORD_DEFAULT;
                 } else {
                     $findersSearchParams['item__distance'] = CategoryRepository::MAX_DISTANCE;
                 }
