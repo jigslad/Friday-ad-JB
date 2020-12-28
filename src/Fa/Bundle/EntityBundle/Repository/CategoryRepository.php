@@ -2372,7 +2372,7 @@ class CategoryRepository extends NestedTreeRepository
             return self::LONDON_DISTANCE;
         } elseif((isset($searchParams['keywords']) && $searchParams['keywords']!='') && ($searchLocation != 2)) {
             return self::KEYWORD_DEFAULT;
-        } elseif($searchLocation==2 || ($getLocLvl <=2 && $categoryId<=1)) {
+        } elseif($searchLocation==2 || ($getLocLvl <=2 && $categoryId<=1) || $categoryId<=1) {
             return self::MAX_DISTANCE;
         } else {
             if ($categoryId) {

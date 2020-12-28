@@ -97,7 +97,11 @@
         $('#top_search_location_ok').click(function(e) {
         	setDistance();
         });
-                
+
+        if($('#fa_top_search_default_distance').val()!='') {
+            setDistance();
+        }
+
         $('#price_slider').val([$('#fa_top_search_item__price_from').val(), $('#fa_top_search_item__price_to').val()]);
         //setDistanceByCategoryId('', true);
 		//setDistance();
@@ -129,6 +133,7 @@
                  if (!$.isEmptyObject(data)) {
                 	$('#distance_slider').val(data.default_distance);
                     $('#fa_top_search_item__distance').val(data.default_distance);
+                     $('#fa_top_search_default_distance').val(data.default_distance);
                     setAndMoveSliderCaption('distance_slider', 'lower', 'distance', false);                   	
                  } 
              }
