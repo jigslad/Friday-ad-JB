@@ -1313,7 +1313,8 @@ class AdListController extends CoreController
             'extendedResultCount'   => $extendedResultCount,
             'facetResult'           => $facetResult,
             'rootCategoryId'        => $root->getId(),
-            'areaToolTipFlag'       => $areaToolTipFlag
+            'areaToolTipFlag'       => $areaToolTipFlag,
+            'searchAgentData'        => array('sorter' => $data['sorter'], 'search' => $data['search']),
          ];
 
         // profile categories other than Services & Adults
