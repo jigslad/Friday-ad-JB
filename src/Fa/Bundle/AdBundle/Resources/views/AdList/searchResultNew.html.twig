@@ -202,8 +202,7 @@
                     {{ include('FaAdBundle:AdList:saveSearch.html.twig') }}
                 {% endif %}
 {#                {{ include('FaAdBundle:AdList:leftSearchNew.html.twig') }}#}
-                {{ render(controller('FaAdBundle:AdList:leftSearch', { 'searchParams': searchParams is defined ? searchParams : {} , 'locationFacets': leftFilters.locationFacets, 'facetResult': facetResult, 'searchQueryString': app.request.queryString, 'customized_url': customized_url, 'cookieLocationDetails': cookieLocationDetails is defined ? cookieLocationDetails : {} , 'userTypes': leftFilters.user_types} )) }}
-
+                {{ render(controller('FaAdBundle:AdList:leftSearch', { 'searchParams': searchParams is defined ? searchParams : {} , 'locationFacets': leftFilters.locationFacets, 'facetResult': facetResult, 'searchQueryString': app.request.queryString, 'customized_url': customized_url, 'cookieLocationDetails': cookieLocationDetails is defined ? cookieLocationDetails : {} , 'leftFilters': leftFilters} )) }}
                 {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_FILTERBOX') %}
                 {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
             </div>
