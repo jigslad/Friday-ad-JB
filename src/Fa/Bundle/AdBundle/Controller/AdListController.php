@@ -2781,7 +2781,7 @@ class AdListController extends CoreController
             }
             $form->submit($bindSearchParams);
         }
-        $parameters = array('form' => $form->createView(), 'locationFacets' => $request->get('locationFacets'), 'facetResult' => $request->get('facetResult', 'facetResult'), 'basicParams' => $basicParams, 'isShopPage' => $isShopPage, 'cookieLocationDetails' => $request->get('cookieLocationDetails'), 'userTypes' => $request->get('userTypes'));
+        $parameters = array('form' => $form->createView(), 'locationFacets' => $request->get('locationFacets'), 'facetResult' => $request->get('facetResult', 'facetResult'), 'basicParams' => $basicParams, 'isShopPage' => $isShopPage, 'cookieLocationDetails' => $request->get('cookieLocationDetails'), 'leftFilters' => $request->get('leftFilters'));
 
         return $this->render('FaAdBundle:AdList:leftSearch.html.twig', $parameters);
     }

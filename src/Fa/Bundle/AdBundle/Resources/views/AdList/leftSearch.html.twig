@@ -174,7 +174,7 @@
                     <li>
                         {% set itemsWithPhoto = fetch_repository('FaEntityBundle:CategoryDimension').getDimensionFacetBySearchParams('id', searchParams|merge({'items_with_photo': 1}), {}, fetch_container_instance(), false, null, null, false, {}, true) %}
                         {{ form_widget(attribute(form, 'items_with_photo')) }}
-                        <label class="mb0" for="{{ attribute(form, 'items_with_photo').vars.id }}">{{ attribute(form, 'items_with_photo').vars.label }}{% if itemsWithPhoto and itemsWithPhoto|length %} ({{ itemsWithPhoto|length }}){% endif %}</label>
+                        <label class="mb0" for="{{ attribute(form, 'items_with_photo').vars.id }}">{{ attribute(form, 'items_with_photo').vars.label }}{% if leftFilters and leftFilters.image_count %} ({{ leftFilters.image_count }}){% endif %}</label>
                         {% set queryParams = searchParams|merge({'items_with_photo': 1}) %}
                         {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
                         <a href="{{ listurl }}" rel="nofollow" class="crowable_checkbox_link" onclick="return false;">{{ attribute(form, 'items_with_photo').vars.label }}</a>
