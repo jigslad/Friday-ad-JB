@@ -202,7 +202,7 @@
                     {{ include('FaAdBundle:AdList:saveSearch.html.twig') }}
                 {% endif %}
 {#                {{ include('FaAdBundle:AdList:leftSearchNew.html.twig') }}#}
-                {{ render(controller('FaAdBundle:AdList:leftSearch', { 'searchParams': searchParams is defined ? searchParams : {} , 'locationFacets': leftFilters.locationFacets, 'facetResult': facetResult, 'searchQueryString': app.request.queryString, 'customized_url': customized_url, 'cookieLocationDetails': cookieLocationDetails is defined ? cookieLocationDetails : {}} )) }}
+                {{ render(controller('FaAdBundle:AdList:leftSearch', { 'searchParams': searchParams is defined ? searchParams : {} , 'locationFacets': leftFilters.locationFacets, 'facetResult': facetResult, 'searchQueryString': app.request.queryString, 'customized_url': customized_url, 'cookieLocationDetails': cookieLocationDetails is defined ? cookieLocationDetails : {} , 'userTypes': leftFilters.user_types} )) }}
 
                 {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_FILTERBOX') %}
                 {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
@@ -240,7 +240,7 @@
                 {% for ad in ads %}
                     {% set adCount = adCount + 1 %}
                     {% set realAdCnt = realAdCnt + 1 %}
-                    
+
                     {% if thisDevice == 'mobile' %}
                         {% if (adCount == 2 and resultCount > 2 and bannerStatus) %}
                             {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_ABOVE_RESULTS') %}
