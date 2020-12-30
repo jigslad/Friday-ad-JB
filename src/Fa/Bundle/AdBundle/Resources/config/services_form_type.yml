@@ -125,6 +125,12 @@ services:
         tags:
             - { name: form.type, alias: fa_left_search }
 
+    fa_ad.form.type.ad_left_search_new:
+        class: Fa\Bundle\AdBundle\Form\AdLeftSearchNewType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_left_search_new }
+
     fa_ad.form.type.ad_left_search_dimension:
         class: Fa\Bundle\AdBundle\Form\AdLeftSearchDimensionType
         arguments: ['@service_container', '@request_stack']

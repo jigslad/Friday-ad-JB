@@ -163,7 +163,7 @@ class AdultHomePageSearchType extends AbstractType
         );
         
         $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
-        $defDistance = ($getDefaultRadius)?$getDefaultRadius:'';
+        $defDistance = ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
         $distanceArray = $this->em->getRepository('FaEntityBundle:Location')->getDistanceOptionsArray($this->container);
         $distanceArray = str_replace('Select distance','Distance',$distanceArray);
 

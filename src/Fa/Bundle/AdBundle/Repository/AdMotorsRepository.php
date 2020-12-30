@@ -140,6 +140,79 @@ class AdMotorsRepository extends EntityRepository
     }
 
     /**
+     * @param $ad
+     * @param $container
+     * @return object|\SolrInputDocument
+     */
+    public function getSolrDocumentNew($ad, $container)
+    {
+        $document = new \SolrInputDocument($ad);
+
+        $document = $this->_em->getRepository('FaAdBundle:Ad')->getSolrDocumentNew($ad, $document, $container);
+
+        $categoryId = ($ad->getCategory() ? $ad->getCategory()->getId() : null);
+        // get for sale object
+        $adMotor = $this->findOneBy(array('ad' => $ad->getId()));
+
+        if ($adMotor) {
+            $listingDimensions = $this->getAdListingFields();
+            $entityRepository = $this->_em->getRepository('FaEntityBundle:Entity');
+            $adRepository = $this->_em->getRepository('FaAdBundle:Ad');
+
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'make'), $entityRepository->getCachedEntityById($container, $adMotor->getMakeId()));
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'model'), $entityRepository->getCachedEntityById($container, $adMotor->getModelId()));
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'manufacturer'), $entityRepository->getCachedEntityById($container, $adMotor->getManufacturerId()));
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'part_manufacturer'), $entityRepository->getCachedEntityById($container, $adMotor->getPartManufacturerId()));
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'fuel_type'), $entityRepository->getCachedEntityById($container, $adMotor->getFuelTypeId()));
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'colour'), $entityRepository->getCachedEntityById($container, $adMotor->getColourId()));
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'body_type'), $entityRepository->getCachedEntityById($container, $adMotor->getBodyTypeId()));
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'transmission'), $entityRepository->getCachedEntityById($container, $adMotor->getTransmissionId()));
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'berth'), $entityRepository->getCachedEntityById($container, $adMotor->getBerthId()));
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'part_of_vehicle'), $entityRepository->getCachedEntityById($container, $adMotor->getPartOfVehicleId()));
+
+            $metaData = ($adMotor->getMetaData() ? unserialize($adMotor->getMetaData()) : null);
+            if ($metaData && count($metaData)) {
+                $document = $this->addField($document, 'meta_values', $adMotor->getMetaData());
+
+                if (isset($metaData['condition_id'])) {
+                    $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'condition'), $entityRepository->getCachedEntityById($container, $metaData['condition_id'], $adRepository));
+                }
+                if (isset($metaData['number_of_stalls_id'])) {
+                    $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'no_of_stalls'), $entityRepository->getCachedEntityById($container, $metaData['number_of_stalls_id'], $adRepository));
+                }
+                if (isset($metaData['living_accommodation_id'])) {
+                    $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'living_accommodation'), $entityRepository->getCachedEntityById($container, $metaData['living_accommodation_id'], $adRepository));
+                }
+                if (isset($metaData['tonnage_id'])) {
+                    $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'tonnage'), $entityRepository->getCachedEntityById($container, $metaData['tonnage_id'], $adRepository));
+                }
+                if (isset($metaData['mileage'])) {
+                    $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'mileage', false), ['name' => $metaData['mileage'], 'listing_class' => $adRepository->getListingClass('mileage')]);
+                    $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'mileage_range', false), ['name' => CommonManager::getMileageRangeByValue($metaData['mileage']), 'listing_class' => $adRepository->getListingClass('mileage_range')]);
+                }
+                if (isset($metaData['reg_year'])) {
+                    $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'reg_year', false), ['name' => $metaData['reg_year'], 'listing_class' => $adRepository->getListingClass('reg_year')]);
+                }
+                if (isset($metaData['boat_length'])) {
+                    $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'boat_length', false), ['name' => $metaData['boat_length'], 'listing_class' => $adRepository->getListingClass('base_length')]);
+                }
+                if (isset($metaData['engine_size'])) {
+                    $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'engine_size', false), ['name' => floatval($metaData['engine_size']), 'listing_class' => $adRepository->getListingClass('engine_size')]);
+                    $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'engine_size_range', false), ['name' => CommonManager::getEngineSizeRangeByValue($metaData['engine_size']), 'listing_class' => $adRepository->getListingClass('engine_size_range')]);
+                }
+            }
+        }
+
+        // update keyword search fields.
+        $keywordSearch = $this->_em->getRepository('FaAdBundle:Ad')->getKeywordSearchArray($ad, $categoryId, $adMotor, $container);
+        if (count($keywordSearch)) {
+            $document = $this->addField($document, 'keyword_search', implode(',', $keywordSearch));
+        }
+
+        return $document;
+    }
+
+    /**
      * Get ad vertical data array.
      *
      * @param object $adId Ad id.
@@ -187,6 +260,14 @@ class AdMotorsRepository extends EntityRepository
     private function addField($document, $field, $value)
     {
         if ($value != null) {
+            if (is_array($value)) {
+                $value = (string) json_encode($value);
+            }
+
+            if (!is_string($value)) {
+                $value = (string) $value;
+            }
+
             $document->addField($field, $value);
         }
 

@@ -469,7 +469,7 @@ class AdSolrSearch extends SolrSearch
                 }
             } elseif ($latitude && $longitude && (isset($locationData[1]) && $locationData[1]==0 && $locationData[1]!='')) {
                 $pt = $latitude.','.$longitude;
-                $d  = 0.8000; // convert miles to km
+                $d  = 200*0.8000; // convert miles to km
                 
                 if ($startDistance) {
                     $sd  = ($startDistance * 1.60934);
@@ -494,6 +494,7 @@ class AdSolrSearch extends SolrSearch
                 $this->geoDistQuery['sfield'] = 'store';
                 $this->geoDistQuery['pt'] = $latitude.','.$longitude;
             }
+            if($distance==null) { $this->geoDistQuery['d'] = 200; }
         }
     }
 

@@ -145,7 +145,7 @@ class AdRouteListener
                 $landingPageParams['item__distance'] = $topSearchParams['item__distance'];
             } else {
                 $getDefaultRadius = $routeManager->getDefaultRadiusBySearchParams($topSearchParams, $this->container);
-                $landingPageParams['item__distance'] = ($getDefaultRadius)?$getDefaultRadius:'';
+                $landingPageParams['item__distance'] = ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
             }
 
             // Compare array for basic search with category and location only, if both same then redirect to landing page.

@@ -1582,7 +1582,7 @@ class CommonManager
             $imageBaseUrl = $container->getParameter('fa.static.aws.url');
         }
         
-        $imageUrl = $imageBaseUrl.'/'.$newImageUrl;
+        $imageUrl = $imageBaseUrl.'/'.$newImageUrl.'?'.time();
         
         return $imageUrl; 
     }
@@ -3796,5 +3796,9 @@ HTML;
             $imgRelPath = $imagePath . '/' . $adId . '_' . $imageHash . ($size ? '_' . $size : '') . '.jpg';
         }
         return $imgRelPath;
+    }
+
+    public static function isJSON($string){
+        return is_string($string) && is_array(json_decode($string, true)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;
     }
 }
