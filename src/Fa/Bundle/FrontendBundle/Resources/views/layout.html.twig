@@ -161,7 +161,7 @@
         {% endif %}
     {% endif %}
 
-    {% if (showAdultPages==1 and (currentRoute in {0: 'fa_adult_homepage', 1:'fa_new_adult_homepage', 2:'ad_detail_page', 3:'listing_page', 4:'my_account'})) %}
+    {% if (showAdultPages==1 and (currentRoute in {0: 'fa_adult_homepage', 1:'fa_new_adult_homepage', 2:'ad_detail_page', 3:'listing_page', 4:'my_account', 5:'manage_my_ads_active', 6:'manage_my_ads_inactive', 7:'dashboard_home', 8:'ajax_manage_my_ads_get_status' })) %}
         {% set showAdultPages=1 %}
     {% else %}
         {% set showAdultPages=0 %}
@@ -289,7 +289,7 @@
 </head>
 <body {% if (showAdultPopup == 1) %} class="transbox" {% endif %}>
 
-
+currentRoute=={{ currentRoute }}
         {% if status_code is not defined %}
             {% set status_code = 200 %}
         {% endif %}

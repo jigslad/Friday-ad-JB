@@ -227,9 +227,16 @@ class AdEditType extends AdPostType
         $data['user_id']      = $ad->getUser()->getId();
         $data['category_id']  = $ad->getCategory()->getId();
         $data['ad_status_id'] = $ad->getStatus()->getId();
+        $adIdArray[] = $adId = $ad->getId();
         $adPostManager = $this->container->get('fa_ad.manager.ad_post');
         if (in_array($ad->getStatus()->getId(), $this->getDirectSaveInEditAdStatus())) {
-            $adPostManager->saveAd($data, $ad->getId(), true);
+            $adExistsModerate = $this->em->getRepository('FaAdBundle:AdModerate')->findByAdIdAndModerationQueueFilter($ad->getId(), array(AdModerateRepository::MODERATION_QUEUE_STATUS_SEND));
+            $adUserPackageExists = $this->em->getRepository('FaAdBundle:AdUserPackage')->getAdActiveModerationPackageArrayByAdId($adIdArray);
+            if ($adExistsModerate && $adUserPackageExists) {
+                $adPostManager->sendAdForModeration($ad, $data);
+            } else {
+                $adPostManager->saveAd($data, $ad->getId(), true);
+            }
         } else {
             $adPostManager->sendAdForModeration($ad, $data);
         }

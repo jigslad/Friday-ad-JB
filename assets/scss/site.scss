@@ -473,10 +473,6 @@ button.signup-fb-btn.expand {
     border: 0px !important;
     border-bottom: 1px solid $form-border-color !important;
 }
-.manage-item-list .adEditBlock1 a {
-	color: $white !important;
-}
-
 
 /* other css */
 .nav-bg.homepage-nav { background: rgba(255,255,255,1) !important; }
@@ -584,6 +580,23 @@ footer a:hover, .footer-head:hover, .pkg-includes a {
 #left_search .crawlable-checkbox li {
 	display: flex !important;
 }
+.modal-content h5 { font-weight: normal !important; font-family:"Poppins-Regular" !important; }
+#category_autocomplete_div .textbox-wrapper input {
+  height: 48px !important;
+}
+.fancybox-close {
+  height: 26px !important;
+  background-size: cover !important;
+  background-position: top !important;
+}
+.shop-video-box img {
+  height: 100% !important;
+}
+.blockMsg h1 {
+  font-size: 28px !important;
+  line-height: 36px !important;
+}
+
 @media only screen and (min-width: 760px) {
 	#package_purchase_form .equalizer-inner, #package_purchase_form .pkg-columns {
 	    display: grid !important;

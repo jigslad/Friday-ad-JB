@@ -222,6 +222,7 @@
         {{ set_variables('profileImageUploadStylesheets', {'loaded':'true'}) }}
         {{ block('imageUploadStylesheets') }}
     {% endif %}
+    <link href="/build/css/sponsored-slots.css" rel="stylesheet">
     <link href="/bundles/faad/css/zutoLoanCalc.css" rel="stylesheet">
     {# CSS for ad details - taken from src/Fa/Bundle/AdBundle/Resources/views/Ad/showAd-css.html.twig #}
     {% stylesheets filter='uglifycss' output='bundles/css/compiled/show-ad.css'
@@ -618,7 +619,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="upgradeBasicAdToFeaturedModal" class="reveal-modal tiny remove-item-modal upgrade-modal" data-reveal></div>
+                                <div id="upgradeBasicAdToFeaturedModal" class="reveal-modal medium remove-item-modal upgrade-modal" data-reveal></div>
                             {% endif %}
 
                             <div class="clearfix">

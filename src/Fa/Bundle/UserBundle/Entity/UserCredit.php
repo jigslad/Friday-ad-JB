@@ -103,6 +103,13 @@ class UserCredit
      * @ORM\Column(name="status", type="boolean", nullable=true, options={"default" = 1})
      */
     private $status;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="total_credit", type="integer", length=10, nullable=true, options={"default" = 0} )
+     */
+    private $total_credit;
 
     /**
      * Get id
@@ -338,5 +345,28 @@ class UserCredit
     public function getStatus()
     {
         return $this->status;
+    }
+    
+    /**
+     * Set total_credit.
+     *
+     * @param string $total_credit
+     * @return UserCredit
+     */
+    public function setTotalCredit($total_credit)
+    {
+        $this->total_credit = $total_credit;
+        
+        return $this;
+    }
+    
+    /**
+     * Get total_credit.
+     *
+     * @return string
+     */
+    public function getTotalCredit()
+    {
+        return $this->total_credit;
     }
 }

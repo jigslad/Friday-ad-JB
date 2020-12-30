@@ -115,16 +115,17 @@ class UserCreditRepository extends EntityRepository
         if (count($shopPackageCredits)) {
             foreach ($shopPackageCredits as $shopPackageCredit) {
                 if ($shopPackageCredit->getCredit() && $shopPackageCredit->getCategory() && $shopPackageCredit->getPackageSrNo()) {
-                    $expiresAt = CommonManager::getTimeStampFromEndDate(date('Y-m-d', CommonManager::getTimeFromDuration($shopPackageCredit->getDuration())));
-
+                    $expiresAt = CommonManager::getTimeStampFromEndDate(date('Y-m-d', CommonManager::getTimeFromDuration($shopPackageCredit->getDuration())));                    
+                    $shopCreditCnt = $shopPackageCredit->getCredit();                     
                     $userCredit = new UserCredit();
                     $userCredit->setUser($user);
                     $userCredit->setCategory($shopPackageCredit->getCategory());
-                    $userCredit->setCredit($shopPackageCredit->getCredit());
+                    $userCredit->setCredit($shopCreditCnt);
                     $userCredit->setPackageSrNo($shopPackageCredit->getPackageSrNo());
                     $userCredit->setPaidUserOnly($shopPackageCredit->getPaidUserOnly());
                     $userCredit->setStatus(1);
                     $userCredit->setExpiresAt($expiresAt);
+                    $userCredit->setTotalCredit($shopCreditCnt);
                     $this->_em->persist($userCredit);
                 }
             }
@@ -222,6 +223,21 @@ class UserCreditRepository extends EntityRepository
         $activeUserCredits = $qb->getQuery()->getOneOrNullResult();
 
         return ($activeUserCredits['total_credit'] ? $activeUserCredits['total_credit'] : 0);
+    }
+    
+    public function getActiveFeaturedCreditForUser($userId)
+    {
+        $qb = $this->createQueryBuilder(self::ALIAS)
+        ->andWhere(self::ALIAS.'.user = '.$userId)
+        ->andWhere(self::ALIAS.'.status = 1')
+        ->andWhere(self::ALIAS.'.credit > 0')
+        ->andWhere('FIND_IN_SET(6, '.self::ALIAS.'.package_sr_no) > 0 or FIND_IN_SET(3, '.self::ALIAS.'.package_sr_no) > 0')
+        ->andWhere(self::ALIAS.'.expires_at IS NULL OR '.self::ALIAS.'.expires_at > '.time())
+        ->setMaxResults(1);
+        
+        $activeUserCredits = $qb->getQuery()->getOneOrNullResult();
+        
+        return $activeUserCredits;
     }
 
     /**

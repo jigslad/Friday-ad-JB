@@ -5,7 +5,8 @@
 {% set userLogo = null %}
 {% if (userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') or userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION')) %}
     {% set userSiteObj = userSiteRepository.findOneBy({'user': app.user.getId()}) %}
-    {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), (userSiteObj ? userSiteObj.getPath() : null), app.user.getId(), null, null, true, true, app.user.getStatus().getId(), app.user.getProfileName()]) %}
+    {% set userSiteImageObj = fetch_repository('FaUserBundle:UserSiteImage').findOneBy({'user_site': userSiteObj.getId()}) %}
+    {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), (userSiteImageObj ? userSiteImageObj.getPath() : null), app.user.getId(), null, null, true, true, app.user.getStatus().getId(), app.user.getProfileName()]) %}
 {% endif %}
 {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}
     {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), app.user.getImage(), app.user.getId(), null, null, true, false, app.user.getStatus().getId(), app.user.getProfileName()]) %}
