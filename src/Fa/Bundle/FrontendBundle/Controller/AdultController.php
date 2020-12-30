@@ -965,8 +965,9 @@ class AdultController extends ThirdPartyLoginController
         }
 
         $location = $request->get('location');
+        $distance = $request->get('distance');
         $locationDetails = $this->getRepository('FaEntityBundle:Location')->getLocationDetailForHeaderCategories($this->container, $request, $location);
-        $parameters['headerCategories'] = $this->getRepository('FaEntityBundle:Category')->getAdultHeaderCategories($this->container, $locationDetails);
+        $parameters['headerCategories'] = $this->getRepository('FaEntityBundle:Category')->getAdultHeaderCategories($this->container, $locationDetails, $distance);
         $parameters['footerDetails'] = $this->getAdultFooterCategories();
         $parameters['footerStaticBlock'] = $this->getAdultFooterStaticBlock($request);
 

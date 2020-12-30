@@ -775,12 +775,15 @@ class AdRepository extends EntityRepository
         $document = $this->addField($document, 'status_id', ($ad->getStatus() ? $ad->getStatus()->getId() : null));
         $document = $this->addField($document, 'type_id', ($ad->getType() ? $ad->getType()->getId() : null));
 
-        $allParentCategories = $this->_em->getRepository('FaEntityBundle:Category')->getCachedCategoryById($container, $categoryId, true);
+        //$allParentCategories = $this->_em->getRepository('FaEntityBundle:Category')->getCachedCategoryById($container, $categoryId, true);
+        $allParentCategories = $this->_em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayDetById($categoryId, false, $container);
 
+        $catFullSlugString = '';
         foreach ($allParentCategories as $category) {
             $document = $this->addField($document, 'category_ids', $category['id']);
             $document = $this->addField($document, 'category_names', $category['name']);
             $document = $this->addField($document, 'category_full_path', $category['full_slug']);
+            $catFullSlugString = $category['full_slug'];
         }
 
         $document = $this->addField($document, 'price', $ad->getPrice());
@@ -859,8 +862,8 @@ class AdRepository extends EntityRepository
         $document = $this->addField($document, 'weekly_refresh_at', $ad->getWeeklyRefreshAt());
         $document = $this->addField($document, 'weekly_refresh_count', $ad->getManualRefresh());
 
-        $categoryString = explode('/', $allParentCategories[0]['full_slug']);
-        $categoryString = isset($categoryString[1]) ? $categoryString[1] : $categoryString[0];
+        $categoryString = explode('/', $catFullSlugString);
+        $categoryString = isset($categoryString[1]) ? $categoryString[1] : (isset($categoryString[0])?$categoryString[0]:'');
 
         // Weekly refresh at & created at
         if ($ad->getWeeklyRefreshAt() && $ad->getPublishedAt() && $ad->getWeeklyRefreshAt() > $ad->getPublishedAt()) {

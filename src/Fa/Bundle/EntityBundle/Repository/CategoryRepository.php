@@ -137,6 +137,9 @@ class CategoryRepository extends NestedTreeRepository
     const MAX_DISTANCE = 200;
     const LONDON_DISTANCE = 30;
 
+    const KEYWORD_DEFAULT = 5;
+    const KEYWORD_EXTENDED = 15;
+
     private $categoryCountArray = array();
 
     /**
@@ -840,7 +843,7 @@ class CategoryRepository extends NestedTreeRepository
      *
      * @return array
      */
-    public function getFooterCategories($container = null, $locationDetails = array())
+    public function getFooterCategories($container = null, $locationDetails = array(), $searchParams =array())
     {
         $em = $container->get('doctrine')->getManager();
         if ($container) {
@@ -869,9 +872,12 @@ class CategoryRepository extends NestedTreeRepository
             $locationId = $em->getRepository('FaEntityBundle:Locality')->getColumnBySlug('id', $locationSlug, $container);
         }
         $data                 = array();
-        if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
-            $data['query_filters']['item']['location'] = $locationId.'|15';
+
+        $radius = $em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $container);
+        if ($locationId) {
+            $data['query_filters']['item']['location'] = $locationId.'|'.$radius;
         }
+
         if (count($locationDetails)) {
             if (isset($locationDetails['latitude']) && isset($locationDetails['longitude'])) {
                 if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
@@ -1090,7 +1096,7 @@ class CategoryRepository extends NestedTreeRepository
      *
      * @return array
      */
-    public function getHeaderCategories($container = null, $locationDetails = array())
+    public function getHeaderCategories($container = null, $locationDetails = array(), $searchParams =array())
     {
         $em = $container->get('doctrine')->getManager();
         if ($container) {
@@ -1107,7 +1113,7 @@ class CategoryRepository extends NestedTreeRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                return $cachedValue;
+                //return $cachedValue;
             }
         }
 
@@ -1120,15 +1126,19 @@ class CategoryRepository extends NestedTreeRepository
             if (!$locationId) {
                 $locationId = $em->getRepository('FaEntityBundle:Locality')->getColumnBySlug('id', $locationSlug, $container);
             }
+
+            $radius = self::MAX_DISTANCE;
+            $radius = $this->getDefaultRadiusBySearchParams($searchParams,$container);
+
             $data                 = array();
             $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
             if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
-                $data['query_filters']['item']['location'] = $locationId.'|15';
+                $data['query_filters']['item']['location'] = $locationId.'|'.$radius;
             }
             if (!empty($locationDetails)) {
                 if (isset($locationDetails['latitude']) && isset($locationDetails['longitude'])) {
                     if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
-                        $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'].','.$locationDetails['longitude'], 'd' => 15);
+                        $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'].','.$locationDetails['longitude'], 'd' => $radius);
                     } else {
                         $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'].','.$locationDetails['longitude']);
                     }
@@ -1162,6 +1172,7 @@ class CategoryRepository extends NestedTreeRepository
         $stmt->execute();
         $categories         = $stmt->fetchAll();
         $categoryClassArray = $this->getHeaderCategoryClassArray();
+        $categoryId1 = $categoryId2 = $categoryId3 = $categoryId4 = $categoryId5 = $categoryId6 = '';
 
         if (count($categories)) {
             foreach ($categories as $index => $category) {
@@ -1182,7 +1193,7 @@ class CategoryRepository extends NestedTreeRepository
                     }
                     $headerCategoryArray[$category['id']] = $categoryArray;
                     $categoryId1 = $category['id'];
-                } elseif (($category['lvl'] == 2 || ($category['lvl'] == 3 && $category['include_as_main_category_in_header'] == 1)) && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'])) {
+                } elseif ($categoryId1!='' && ($category['lvl'] == 2 || ($category['lvl'] == 3 && $category['include_as_main_category_in_header'] == 1)) && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'])) {
                     $headerCategoryArray[$categoryId1]['children'][$category['id']] = $categoryArray;
                     $categoryId2 = $category['id'];
                 } elseif ($category['lvl'] == 3 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'])) {
@@ -2326,7 +2337,10 @@ class CategoryRepository extends NestedTreeRepository
     {
         $setRadius = 1;
         $categoryId = 0;
-        $getLocLvl = '';
+        $getLocLvl = 0;
+        $selLocationArray = array();
+        $isLocality = 0;
+
         $cookieLocationDet = $cookieLocation  = array();
         
         $cookieLocation  = $container->get('request_stack')->getCurrentRequest()->cookies->get('location');
@@ -2337,42 +2351,42 @@ class CategoryRepository extends NestedTreeRepository
         
         $searchLocation = isset($searchParams['item__location'])?$searchParams['item__location']:((!empty($cookieLocationDet) && isset($cookieLocationDet->town_id))?$cookieLocationDet->town_id:2);
 
-        if($searchLocation == LocationRepository::LONDON_TOWN_ID) {
-            return self::LONDON_DISTANCE;
+        if (strpos($searchLocation,',') !== false) {
+            $isLocality = 1;
+        }
+        $selLocationArray = $this->_em->getRepository('FaEntityBundle:Location')->getCookieValue($searchLocation, $container);
+
+        if($isLocality) {
+            $getLocLvl = 5;
         } else {
-            if ($searchLocation != 2) {
-                $selLocationArray = $this->_em->getRepository('FaEntityBundle:Location')->find($searchLocation);
-                if (!empty($selLocationArray)) {
-                    $getLocLvl = $selLocationArray->getLvl();
-                }
-            }
+            if(!empty($selLocationArray)) { $getLocLvl = $selLocationArray['lvl']; }
+        }
 
-            if ((isset($searchParams['item__location']) && $searchParams['item__location'] == 2) || !isset($searchParams['item__location']) || $getLocLvl == 2) {
-                $setRadius = 0;
-            } elseif (isset($searchParams['item__distance']) && $searchParams['item__distance']) {
-                $setRadius = 0;
-            }
+        if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
+            $categoryId = $searchParams['item__category_id'];
+        }
 
-            if ($setRadius) {
-                if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
-                    $categoryId = $searchParams['item__category_id'];
-                }
+        if (isset($searchParams['item__distance']) && $searchParams['item__distance']) {
+            return $searchParams['item__distance'];
+        } elseif($searchLocation == LocationRepository::LONDON_TOWN_ID) {
+            return self::LONDON_DISTANCE;
+        /*} elseif((isset($searchParams['keywords']) && $searchParams['keywords']!='') && ($searchLocation != 2)) {
+            return self::KEYWORD_DEFAULT;*/
+        } elseif($searchLocation==2 || ($getLocLvl <=2 && $categoryId<=1)) {
+            return self::MAX_DISTANCE;
+        } else {
+            if ($categoryId) {
+                $parentCategoryIds = array_keys($this->_em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId, false, $container));
+                $locationRadius = $this->_em->getRepository('FaAdBundle:LocationRadius')->getSingleLocationRadiusByCategoryIds($parentCategoryIds);
 
-                if ($categoryId) {
-                    $parentCategoryIds = array_keys($this->_em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId, false, $container));
-                    $locationRadius = $this->_em->getRepository('FaAdBundle:LocationRadius')->getSingleLocationRadiusByCategoryIds($parentCategoryIds);
-
-                    if ($locationRadius) {
-                        return $locationRadius['defaultRadius'];
-                    } else {
-                        $rootCategoryId = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $container);
-                        return ($rootCategoryId == CategoryRepository::MOTORS_ID) ? CategoryRepository::MOTORS_DISTANCE : CategoryRepository::OTHERS_DISTANCE;
-                    }
+                if ($locationRadius) {
+                    return $locationRadius['defaultRadius'];
                 } else {
-                    return null;
+                    $rootCategoryId = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $container);
+                    return ($rootCategoryId == CategoryRepository::MOTORS_ID) ? CategoryRepository::MOTORS_DISTANCE : CategoryRepository::OTHERS_DISTANCE;
                 }
             } else {
-                return null;
+                return self::MAX_DISTANCE;
             }
         }
 
@@ -2450,7 +2464,7 @@ class CategoryRepository extends NestedTreeRepository
      *
      * @return array
      */
-    public function getAdultHeaderCategories($container = null, $locationDetails = array())
+    public function getAdultHeaderCategories($container = null, $locationDetails = array(), $distance = null)
     {
         $em = $container->get('doctrine')->getManager();
         $locationSlug = null;
@@ -2467,7 +2481,7 @@ class CategoryRepository extends NestedTreeRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
             
             if ($cachedValue !== false) {
-                return $cachedValue;
+                //return $cachedValue;
             }
         }
         
@@ -2482,31 +2496,52 @@ class CategoryRepository extends NestedTreeRepository
             }
             $data                 = array();
             $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
+
+            $radius = self::MAX_DISTANCE;
+
             if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
-                $data['query_filters']['item']['location'] = $locationId.'|15';
+                $location = $em->getRepository('FaEntityBundle:Location')->getCookieValue($locationId, $container);
+
+                if ($distance) {
+                    $radius = $distance;
+                } else {
+
+                    $searchParams['item__location'] = $locationId;
+                    $searchParams['item__category_id'] = CategoryRepository::ADULT_ID;
+
+                    $getDefaultRadius = $em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $container);
+                    $radius = ($getDefaultRadius) ? $getDefaultRadius : self::MAX_DISTANCE;
+
+                }
+
+                $data['query_filters']['item']['location'] = $locationId.'|'.$radius;
             }
-            $data['static_filters'] = ' AND ('.AdSolrFieldMapping::ROOT_CATEGORY_ID.':'.CategoryRepository::ADULT_ID.' OR '.AdSolrFieldMapping::CATEGORY_ID.':'.CategoryRepository::ADULT_ID.')';
+
+            //$data['static_filters'] = ' AND ('.AdSolrFieldMapping::ROOT_CATEGORY_ID.':'.CategoryRepository::ADULT_ID.' OR '.AdSolrFieldMapping::CATEGORY_ID.':'.CategoryRepository::ADULT_ID.')';
+            $data['static_filters'] = ' AND (category_ids:'.CategoryRepository::ADULT_ID.')';
             //$data['query_filters']['item']['category_id'] = self::ADULT_ID;
             if (!empty($locationDetails)) {
                 if (isset($locationDetails['latitude']) && isset($locationDetails['longitude'])) {
                     if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
-                        $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'] . ',' . $locationDetails['longitude'], 'd' => 15);
+                        $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'] . ',' . $locationDetails['longitude'], 'd' => $radius);
                     } else {
                         $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'] . ',' . $locationDetails['longitude']);
                     }
                     $container->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
                 }
             }
-            $data['facet_fields'] = array('a_category_id_i' => array('limit' => '5000'),'a_parent_category_lvl_1_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_2_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_3_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_4_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_5_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_6_id_i' => array('limit' => '5000'));
-            
+            //$data['facet_fields'] = array('a_category_id_i' => array('limit' => '5000'),'a_parent_category_lvl_1_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_2_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_3_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_4_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_5_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_6_id_i' => array('limit' => '5000'));
+            $data['facet_fields'] = array('category_ids' => array('limit' => '5000'));
+
             // initialize solr search manager service and fetch data based of above prepared search options
-            $container->get('fa.solrsearch.manager')->init('ad', '', $data);
+            $container->get('fa.solrsearch.manager')->init('ad.new', '', $data);
             $solrResponse = $container->get('fa.solrsearch.manager')->getSolrResponse();
             
             // fetch result set from solr
             $result = $container->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
-            $categoryCountArray = get_object_vars($result['a_parent_category_lvl_1_id_i']) + get_object_vars($result['a_parent_category_lvl_2_id_i']) + get_object_vars($result['a_parent_category_lvl_3_id_i']) + get_object_vars($result['a_parent_category_lvl_4_id_i']) + get_object_vars($result['a_parent_category_lvl_5_id_i']) + get_object_vars($result['a_parent_category_lvl_6_id_i']);
-            $leafLevelCategoryCount = get_object_vars($result['a_category_id_i']);
+            //$categoryCountArray = get_object_vars($result['a_parent_category_lvl_1_id_i']) + get_object_vars($result['a_parent_category_lvl_2_id_i']) + get_object_vars($result['a_parent_category_lvl_3_id_i']) + get_object_vars($result['a_parent_category_lvl_4_id_i']) + get_object_vars($result['a_parent_category_lvl_5_id_i']) + get_object_vars($result['a_parent_category_lvl_6_id_i']);
+            //$leafLevelCategoryCount = get_object_vars($result['a_category_id_i']);
+            $categoryCountArray = $leafLevelCategoryCount =  isset($result['category_ids'])?get_object_vars($result['category_ids']):array();
             
             $this->categoryCountArray = $categoryCountArray;
             $this->leafLevelCategoryCount = $leafLevelCategoryCount;
@@ -2525,7 +2560,8 @@ class CategoryRepository extends NestedTreeRepository
         $stmt->execute();
         $categories         = $stmt->fetchAll();
         $categoryClassArray = $this->getHeaderAdultCategoryClassArray();
-        
+        $categoryId1 = $categoryId2 = $categoryId3 = $categoryId4 = $categoryId5 = $categoryId6 = '';
+
         if (count($categories)) {
             
             foreach ($categories as $index => $category) {
@@ -2674,5 +2710,53 @@ class CategoryRepository extends NestedTreeRepository
         }
 
         return $returnCategories;
+    }
+
+    public function getCategoryPathArrayDetById($categoryId, $rootFlag = false, $container = null)
+    {
+        if ($container) {
+            $culture     = CommonManager::getCurrentCulture($container);
+            $tableName   = $this->getCategoryTableName();
+            $cacheKey    = $tableName.'|'.__FUNCTION__.'|'.$categoryId.'_'.$rootFlag.'_'.$culture;
+            $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
+
+            if ($cachedValue !== false) {
+                return $cachedValue;
+            }
+        }
+
+        $categoryPathArray = array();
+
+        if ($categoryId) {
+            $categoryObj = $this->find($categoryId);
+
+            if ($categoryObj) {
+                $categories = $this->getPath($categoryObj);
+
+                foreach ($categories as $category) {
+                    if ($rootFlag && $category->getStatus() ==1) {
+                        $categoryPathArray[$category->getId()]['name'] = $category->getName();
+                        $categoryPathArray[$category->getId()]['id'] = $category->getId();
+                        $categoryPathArray[$category->getId()]['slug'] = $category->getSlug();
+                        $categoryPathArray[$category->getId()]['full_slug'] = $category->getFullSlug();
+                        $categoryPathArray[$category->getId()]['parent_id'] = $category->getParent()->getId();
+                    } else {
+                        if ($category->getLvl() > 0 && $category->getStatus() ==1) {
+                            $categoryPathArray[$category->getId()]['name'] = $category->getName();
+                            $categoryPathArray[$category->getId()]['id'] = $category->getId();
+                            $categoryPathArray[$category->getId()]['slug'] = $category->getSlug();
+                            $categoryPathArray[$category->getId()]['full_slug'] = $category->getFullSlug();
+                            $categoryPathArray[$category->getId()]['parent_id'] = $category->getParent()->getId();
+                        }
+                    }
+                }
+            }
+        }
+
+        if ($container) {
+            CommonManager::setCacheVersion($container, $cacheKey, $categoryPathArray);
+        }
+
+        return $categoryPathArray;
     }
 }
