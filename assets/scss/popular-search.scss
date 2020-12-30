@@ -54,6 +54,8 @@
   align-items: center;
   margin: 0px 0px 5px 0px;
   cursor: pointer;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .popular-search--link {
   padding: 0px 4px;
