@@ -107,6 +107,12 @@ class AdRoutingManager
         if(isset($search_params['hide_distance_block'])) {
             unset($search_params['hide_distance_block']);
         }
+
+        if(isset($search_params['item__distance'])) {
+            if ($search_params['item__distance'] == CategoryRepository::LONDON_DISTANCE) {
+                unset($search_params['item__distance']);
+            }
+        }
         
         if(isset($search_params['default_distance'])) {
             unset($search_params['default_distance']);
@@ -160,6 +166,11 @@ class AdRoutingManager
         if (isset($search_params['tmpLeafLevelCategoryId'])) {
             unset($search_params['tmpLeafLevelCategoryId']);
         }
+
+        if (isset($search_params['leafLevelCategoryId'])) {
+            unset($search_params['leafLevelCategoryId']);
+        }
+
         if (isset($search_params['item__area'])) {
             unset($search_params['item__area']);
         }
@@ -729,6 +740,23 @@ class AdRoutingManager
         }
 
         return $adId;
+    }
+
+    /**
+     * @param $categoryString
+     * @param $locationString
+     * @param $adString
+     * @param $adId
+     * @return mixed
+     */
+    public function getAdDetailUrlByDetails($categoryString, $locationString, $adString, $adId)
+    {
+        return $this->router->generate('ad_detail_page', array(
+            'location'        => $locationString,
+            'ad_string'       => $adString,
+            'category_string' => $categoryString,
+            'id'              => $adId,
+        ), true);
     }
 
     /**

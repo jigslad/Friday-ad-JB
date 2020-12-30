@@ -59,6 +59,12 @@ class AdSolrIndex implements AdSolrFieldMapping
                 return false;
             }
         }
+        $solrClientNew = $container->get('fa.solr.client.ad.new');
+        if (!$solrClientNew->ping()) {
+            return false;
+        }
+
+        $this->updateNew($solrClientNew, $ad, $container, $isBatchUpdate);
 
         return false;
     }
@@ -102,6 +108,54 @@ class AdSolrIndex implements AdSolrFieldMapping
 
                 return true;
             } catch (\Exception $e) {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Update solr index by add/update ad document to solr.
+     *
+     * @param object $solrClient Solr client.
+     * @param object $ad Ad object.
+     * @param object $container Container
+     * @param boolean $isBatchUpdate Used to identify batch update.
+     *
+     * @return Apache_Solr_Document or boolean
+     */
+    public function updateNew($solrClient, $ad, $container, $isBatchUpdate = false)
+    {
+        $solr = null;
+        if ($solrClient !== false) {
+            $solr = $solrClient->connect();
+        }
+
+        if ($solr && $ad && $ad->getCategory()) {
+            $root = $container->get('doctrine')->getManager()->getRepository('FaEntityBundle:Category')->getRootNodeByCategory($ad->getCategory()->getId());
+
+            try {
+                $repository = $container->get('doctrine')->getManager()->getRepository('FaAdBundle:'.'Ad'.str_replace(' ', '', $root->getName()));
+
+                $document       = $repository->getSolrDocumentNew($ad, $container);
+                if (empty($document)) {
+                    return false;
+                }
+
+                $updateResponse = $solr->addDocument($document);
+
+                if (!$isBatchUpdate) {
+                    $updateResponse = $solr->commit(true);
+                    return $updateResponse;
+                } else {
+                    $solr->commit(true);
+                }
+
+                return true;
+            } catch (\Exception $e) {
+                //echo $e->getMessage();
+                file_put_contents('/var/www/html/newfriday-ad/web/uploads/indexing-logs.log', $e->getMessage().PHP_EOL, FILE_APPEND);
                 return false;
             }
         }

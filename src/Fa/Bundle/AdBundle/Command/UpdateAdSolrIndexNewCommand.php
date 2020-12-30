@@ -22,11 +22,11 @@ use Fa\Bundle\AdBundle\Repository\AdLocationRepository;
 /**
  * This command is used to add/update/delete solr index for ads.
  *
- * @author Chaitra Bhat <chaitra.bhat@fridaymediagroup.com>
- * @copyright 2020 Friday Media Group Ltd
+ * @author Samir Amrutya <samiram@aspl.in>
+ * @copyright 2014 Friday Media Group Ltd
  * @version 1.0
  */
-class UpdateAdSolrIndexCommand extends ContainerAwareCommand
+class UpdateAdSolrIndexNewCommand extends ContainerAwareCommand
 {
     /**
      * Configure.
@@ -34,18 +34,20 @@ class UpdateAdSolrIndexCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-        ->setName('fa:update:ad-solr-index')
+        ->setName('fa:update:ad-solr-index-new')
         ->setDescription("Update solr index for ads.")
         ->addArgument('action', InputArgument::REQUIRED, 'add or update or delete')
         ->addOption('memory_limit', null, InputOption::VALUE_OPTIONAL, 'Memory limit of script execution', null)
         ->addOption('status', null, InputOption::VALUE_OPTIONAL, 'Ad status', 'A')
         ->addOption('id', null, InputOption::VALUE_OPTIONAL, 'Ad ids', null)
+        ->addOption('start_from', null, InputOption::VALUE_OPTIONAL, 'Start Offset for main command', 0)
         ->addOption('offset', null, InputOption::VALUE_OPTIONAL, 'Offset of the query', null)
         ->addOption('category', null, InputOption::VALUE_OPTIONAL, 'Category name', null)
         ->addOption('update_type', null, InputOption::VALUE_OPTIONAL, 'Update type', null)
         ->addOption('user_id', null, InputOption::VALUE_OPTIONAL, 'User id', null)
         ->addOption('town_id', null, InputOption::VALUE_OPTIONAL, 'Town id', null)
         ->addOption('last_days', null, InputOption::VALUE_OPTIONAL, 'add or update for last few days only', null)
+        ->addOption('boosted_only', null, InputOption::VALUE_OPTIONAL, 'Only Boosted ads', null)
         ->setHelp(
             <<<EOF
 Cron: To be setup to run at mid-night.
@@ -55,12 +57,12 @@ Actions:
 - Can be run to add/update/delete specific ad information to solr index
 
 Command:
- - php app/console fa:update:ad-solr-index --status="A" add
- - php app/console fa:update:ad-solr-index --status="A" --id="xxxx" update
- - php app/console fa:update:ad-solr-index --status="A" --id="xxxx" add
- - php app/console fa:update:ad-solr-index --id="xxxx" delete
-   php app/console fa:update:ad-solr-index --town_id="xxxx" update
-   php app/console fa:update:ad-solr-index --category="For Sale" --status="A" add
+ - php app/console fa:update:ad-solr-index-new --status="A" add
+ - php app/console fa:update:ad-solr-index-new --status="A" --id="xxxx" update
+ - php app/console fa:update:ad-solr-index-new --status="A" --id="xxxx" add
+ - php app/console fa:update:ad-solr-index-new --id="xxxx" delete
+   php app/console fa:update:ad-solr-index-new --town_id="xxxx" update
+   php app/console fa:update:ad-solr-index-new --category="For Sale" --status="A" add
 EOF
         );
     }
@@ -78,7 +80,7 @@ EOF
 
         echo "Command Started At: ".date('Y-m-d H:i:s', time())."\n";
 
-        $solrClient = $this->getContainer()->get('fa.solr.client.ad');
+        $solrClient = $this->getContainer()->get('fa.solr.client.ad.new');
         if (!$solrClient->ping()) {
             $output->writeln('Solr service is not available. Please start it.', true);
             return false;
@@ -86,6 +88,8 @@ EOF
 
         //get arguments passed in command
         $action = $input->getArgument('action');
+
+        exec('nohup'.' '.$this->getContainer()->getParameter('fa.php.path').' '.$this->getContainer()->getParameter('project_path').'/console fa:cache:entities  >/dev/null &');
 
         //get options passed in command
         $ids      = $input->getOption('id');
@@ -96,6 +100,7 @@ EOF
         $lastDays = $input->getOption('last_days');
         $userId = $input->getOption('user_id');
         $townId = $input->getOption('town_id');
+        $boostedAd = $input->getOption('boosted_only');
 
         $categoryIds = array();
 
@@ -174,8 +179,11 @@ EOF
                 $searchParam['ad']['town_id'] = $townId;
             }
 
+            if (! empty($boostedAd)) {
+                $searchParam['ad']['boosted_at'] = 'IS NOT NULL';
+            }
 
-            //$searchParam['ad']['is_blocked_ad'] = 0;
+            $searchParam['ad']['is_blocked_ad'] = 0;
 
             if (isset($offset)) {
                 $this->updateSolrIndexWithOffset($solrClient, $searchParam, $input, $output);
@@ -193,17 +201,6 @@ EOF
 
             $solr->commit(true);
             //$solr->optimize();
-
-            $solrClientNew = $this->getContainer()->get('fa.solr.client.ad.new');
-            if (!$solrClientNew->ping()) {
-                $output->writeln('Solr service is not available. Please start it.', true);
-                return false;
-            }
-            $solrNew = $solrClientNew->connect();
-            if ($ids && is_array($ids)) {
-                $solrNew->deleteByIds($ids);
-            }
-            $solrNew->commit(true);
 
             if ($ids && is_array($ids)) {
                 $output->writeln('Solr index removed for ad id: '.join(',', $ids), true);
@@ -226,8 +223,12 @@ EOF
         $idsNotFound = array();
         $idsFound    = array();
         $qb          = $this->getAdQueryBuilder($searchParam);
-        $step        = 1000;
+        $step        = 200;
         $offset      = $input->getOption('offset');
+
+        if (isset($searchParam['ad']['boosted_at'])) {
+            $qb->andWhere(AdRepository::ALIAS . '.boosted_at IS NOT NULL AND ' . AdRepository::ALIAS . '.boosted_at > 0');
+        }
 
         $qb->setFirstResult($offset);
         $qb->setMaxResults($step);
@@ -237,7 +238,7 @@ EOF
         $adSolrIndex = $this->getContainer()->get('fa.ad.solrindex');
         foreach ($ads as $ad) {
             $idsFound[] = $ad->getId();
-            if ($adSolrIndex->update($solrClient, $ad, $this->getContainer(), true)) {
+            if ($adSolrIndex->updateNew($solrClient, $ad, $this->getContainer(), true)) {
                 $output->writeln('Solr index updated for ad id: '.$ad->getId(), true);
             } else {
                 $output->writeln('Solr index not updated for ad id: '.$ad->getId(), true);
@@ -252,20 +253,7 @@ EOF
         if (count($idsNotFound) > 0) {
             $solr->deleteByIds($idsNotFound);
         }
-
         $solr->commit(true);
-
-        $solrClientNew = $this->getContainer()->get('fa.solr.client.ad.new');
-        if (!$solrClientNew->ping()) {
-            $output->writeln('Solr service is not available. Please start it.', true);
-            return false;
-        }
-        $solrNew = $solrClientNew->connect();
-        if (count($idsNotFound) > 0) {
-            $solrNew->deleteByIds($idsNotFound);
-        }
-        $solrNew->commit(true);
-
         $output->writeln('Memory Allocated: '.((memory_get_peak_usage(true) / 1024) / 1024).' MB', true);
     }
 
@@ -280,12 +268,16 @@ EOF
     protected function updateSolrIndex($solrClient, $searchParam, $input, $output)
     {
         $count     = $this->getAdCount($searchParam);
-        $step      = 1000;
+        $step      = 200;
         $stat_time = time();
 
         $output->writeln('SCRIPT START TIME '.date('d-m-Y H:i:s', $stat_time), true);
         $output->writeln('Total ads : '.$count, true);
-        for ($i = 0; $i <= $count;) {
+
+        $startFrom = $input->getOption("start_from");
+        $startFrom = $startFrom ? $startFrom : 0;
+        $batchSize = 0;
+        for ($i = $startFrom; $i <= $count;) {
             if ($i == 0) {
                 $low = 0;
             } else {
@@ -295,6 +287,10 @@ EOF
             $i              = ($i + $step);
             $commandOptions = null;
             foreach ($input->getOptions() as $option => $value) {
+                if ($option == 'start_from') {
+                    continue;
+                }
+
                 if ($value) {
                     $commandOptions .= ' --'.$option.'="'.$value.'"';
                 }
@@ -308,17 +304,43 @@ EOF
             if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
                 $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
             }
-            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:update:ad-solr-index '.$commandOptions.' '.$input->getArgument('action');
+            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:update:ad-solr-index-new '.$commandOptions.' '.$input->getArgument('action');
             $output->writeln($command, true);
-            passthru($command, $returnVar);
+//            passthru($command, $returnVar);
+            $this->command_in_background($command);
+            sleep(7);
+            $batchSize++;
 
-            if ($returnVar !== 0) {
-                $output->writeln('Error occurred during subtask', true);
+            // After triggering every 10 items, wait for 2 mins
+            if ($batchSize >= 10) {
+                $output->writeln('Waiting for 2 mins', true);
+                sleep(120);
+                $batchSize = 0;
             }
+
+//            if ($returnVar !== 0) {
+//                $output->writeln('Error occurred during subtask', true);
+//            }
         }
 
         $output->writeln('SCRIPT END TIME '.date('d-m-Y H:i:s', time()), true);
         $output->writeln('TIME TAKEN TO EXECUTE SCRIPT '.((time() - $stat_time) / 60), true);
+    }
+
+    /**
+     * Run the given command in background.
+     *
+     * @param $command
+     */
+    function command_in_background($command)
+    {
+        $outputBuffer = null;
+
+        try {
+            exec("{$command} > /dev/null 2>&1 &", $outputBuffer, $exitCode);
+        } catch (\Exception $e) {
+            sleep(3);
+        }
     }
 
     /**
@@ -366,6 +388,11 @@ EOF
     protected function getAdCount($searchParam)
     {
         $qb = $this->getAdQueryBuilder($searchParam);
+
+        if (isset($searchParam['ad']['boosted_at'])) {
+            $qb->andWhere(AdRepository::ALIAS . '.boosted_at IS NOT NULL AND ' . AdRepository::ALIAS . '.boosted_at > 0');
+        }
+
         $qb->select('COUNT('.$qb->getRootAlias().'.id)');
 
         return $qb->getQuery()->getSingleScalarResult();

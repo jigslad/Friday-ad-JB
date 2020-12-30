@@ -865,3 +865,12 @@ footer a:hover, .footer-head:hover, .pkg-includes a {
   color: #f74d4d;
   line-height: 15px;
 }
+@media not all and (min-resolution:.001dpcm){
+  @supports (-webkit-appearance:none) {
+    .top-links .f-dropdown {
+      margin-left: -82px;
+      width: -moz-fit-content;
+      min-width: 210px !important;
+    }
+  }
+}

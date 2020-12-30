@@ -126,7 +126,7 @@ class LandingPagePropertySearchType extends AbstractType
         }
         
         $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
-        $defDistance = ($getDefaultRadius)?$getDefaultRadius:'';
+        $defDistance = ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
 
         $form->add(
             'item__distance',

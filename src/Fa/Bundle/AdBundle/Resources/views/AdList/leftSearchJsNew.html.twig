@@ -2,28 +2,28 @@
 //<![CDATA[
     $(window).on('load', function() {
         bindDatePickerEvent();
-        bindFloatFieldKeyupEvnet('fa_left_search_item__price_from');
-        bindFloatFieldKeyupEvnet('fa_left_search_item__price_to');
-        bindFloatFieldKeyupEvnet('fa_left_search_item_motors__boat_length_from');
-        bindFloatFieldKeyupEvnet('fa_left_search_item_motors__boat_length_to');
+        bindFloatFieldKeyupEvnet('fa_left_search_new_item__price_from');
+        bindFloatFieldKeyupEvnet('fa_left_search_new_item__price_to');
+        bindFloatFieldKeyupEvnet('fa_left_search_new_item_motors__boat_length_from');
+        bindFloatFieldKeyupEvnet('fa_left_search_new_item_motors__boat_length_to');
         bindSeeMoreLinkEvents();
 
         var qryItemDistance = getUrlVars()['item__distance'];
 
-        if($('#fa_left_search_item__location').val()==2) {
-        	$('#fa_left_search_item__location_autocomplete').val('United Kingdom');
+        if($('#fa_left_search_new_item__location').val()==2) {
+        	$('#fa_left_search_new_item__location_autocomplete').val('United Kingdom');
         } 
 
-        if($('#fa_left_search_default_distance').val()!='') {
+        if($('#fa_left_search_new_default_distance').val()!='') {
         	setDefDistance();
         } 
 		
         if(qryItemDistance != undefined) {     	 	
     		$('#distance-left-search').show();
-    		$('#fa_left_search_hide_distance_block').val(0);
+    		$('#fa_left_search_new_hide_distance_block').val(0);
         }
 
-        if($('#fa_left_search_hide_distance_block').val()==1) {
+        if($('#fa_left_search_new_hide_distance_block').val()==1) {
             $('#distance-left-search').hide();
         } else {
         	$('#distance-left-search').show();
@@ -38,7 +38,7 @@
                     $(this).val('');
                 });
                 datesContainer.hide();
-                setLocaionCookieByLeftSearchLocationChange($.trim($('#fa_left_search_item__location').val()));
+                setLocaionCookieByLeftSearchLocationChange($.trim($('#fa_left_search_new_item__location').val()));
             }
         });
 
@@ -57,22 +57,22 @@
             $(this).find('input[type="checkbox"]').trigger('click');
         });*/
 
-        $('form[name="fa_left_search"]').submit(function(event){
-            /*if($('#fa_left_search_item__distance').val()=='') {
-                $('#fa_left_search_item__distance-button').css("border", "solid 1px red");
+        /*$('form[name="fa_left_search_new"]').submit(function(event){
+            if($('#fa_left_search_new_item__distance').val()=='') {
+                $('#fa_left_search_new_item__distance-button').css("border", "solid 1px red");
                 $('#distance-error-placeholder small').show();
                 $('#distance-error-placeholder small').html('Please select your distance');
                 event.preventDefault();
-            } else if($('#fa_left_search_item__location_autocomplete').val() =='') {
+            } else if($('#fa_left_search_new_item__location_autocomplete').val() =='') {
                 $('#distance-error-placeholder small').show();
                 $('#distance-error-placeholder small').html('Please choose a valid town or postal code');
-                $('#fa_left_search_item__location_autocomplete').css("border", "solid 1px red");
+                $('#fa_left_search_new_item__location_autocomplete').css("border", "solid 1px red");
                 event.preventDefault();
             } else {
                 $('#distance-error-placeholder small').hide();
-            }*/
+            }
             
-        });
+        });*/
 
         $('#left_search .accordion-navigation .content').each(function(){
             if (!$(this).parent().hasClass('keep-shown')) {
@@ -88,19 +88,19 @@
 
         $('#left_search .accordion-navigation .clear_filter').click(function() {
             var filterName = this.id.replace('_clear', '');
-            $('input[type="checkbox"][name="fa_left_search\['+filterName+'\]\[\]"]').removeAttr('checked');
-            $('input[type="checkbox"][name="fa_left_search\['+filterName+'\]\[\]"]').parent().removeClass('checked');
+            $('input[type="checkbox"][name="fa_left_search_new\['+filterName+'\]\[\]"]').removeAttr('checked');
+            $('input[type="checkbox"][name="fa_left_search_new\['+filterName+'\]\[\]"]').parent().removeClass('checked');
 
-            setLocaionCookieByLeftSearchLocationChange($.trim($('#fa_left_search_item__location').val()));
+            setLocaionCookieByLeftSearchLocationChange($.trim($('#fa_left_search_new_item__location').val()));
         });
 
         $('.budget-go-btn, #left_search .accordion-navigation input[type="checkbox"]').click(function(e) {
-            setLocaionCookieByLeftSearchLocationChange($.trim($('#fa_left_search_item__location').val()));
+            setLocaionCookieByLeftSearchLocationChange($.trim($('#fa_left_search_new_item__location').val()));
         });
 
-        $('#fa_left_search_item__price_from, #fa_left_search_item__price_to, #fa_left_search_item__location_autocomplete').keyup(function(e) {
+        $('#fa_left_search_new_item__price_from, #fa_left_search_new_item__price_to, #fa_left_search_new_item__location_autocomplete').keyup(function(e) {
             if (parseInt(e.keyCode) == 13) {
-                setLocaionCookieByLeftSearchLocationChange($.trim($('#fa_left_search_item__location').val()));
+                setLocaionCookieByLeftSearchLocationChange($.trim($('#fa_left_search_new_item__location').val()));
             }
         });
 
@@ -112,25 +112,25 @@
     });
  
     function setDefDistance() {
-    	var defdist = $('#fa_left_search_default_distance').val();
-    	$('#fa_left_search_item__distance option[value=""]').attr("selected", null);
+    	var defdist = $('#fa_left_search_new_default_distance').val();
+    	$('#fa_left_search_new_item__distance option[value=""]').attr("selected", null);
     	var qryItemDistance = getUrlVars()['item__distance'];
 
     	if(qryItemDistance != undefined) {     	 	
-    		$('#fa_left_search_item__distance option[value="'+qryItemDistance+'"]').attr("selected", "selected");
+    		$('#fa_left_search_new_item__distance option[value="'+qryItemDistance+'"]').attr("selected", "selected");
     		$('#distance-left-search').show();
-    		$('#fa_left_search_hide_distance_block').val(0);
+    		$('#fa_left_search_new_hide_distance_block').val(0);
         } else {
-    		$('#fa_left_search_item__distance option[value="'+defdist+'"]').attr("selected", "selected");
+    		$('#fa_left_search_new_item__distance option[value="'+defdist+'"]').attr("selected", "selected");
         }
-    	$('#fa_left_search_item__distance').selectmenu().selectmenu('refresh',true);
+    	$('#fa_left_search_new_item__distance').selectmenu().selectmenu('refresh',true);
     	
     }
 
     function clearModalDimensionAllCheckboxes(filterName)
     {
-        $('input[type="checkbox"][name="fa_left_search_dimension\['+filterName+'\]\[\]"]').removeAttr('checked');
-        $('input[type="checkbox"][name="fa_left_search_dimension\['+filterName+'\]\[\]"]').parent().removeClass('checked');
+        $('input[type="checkbox"][name="fa_left_search_new_dimension\['+filterName+'\]\[\]"]').removeAttr('checked');
+        $('input[type="checkbox"][name="fa_left_search_new_dimension\['+filterName+'\]\[\]"]').parent().removeClass('checked');
     }
 
     function closeDimensionModal()
@@ -141,19 +141,19 @@
     function closeDimensionModalAndSubmitForm()
     {
         closeDimensionModal();
-        $('form[name="fa_left_search_dimension"]').submit();
+        //$('form[name="fa_left_search_new_dimension"]').submit();
     }
 
     function setLocaionCookieByLeftSearchLocationChange(searchLocation)
     {
     	var qryItemDistance = getUrlVars()['item__distance'];
     	{% if isShopPage is defined and isShopPage %}
-    	    $('form[name="fa_left_search"]').submit()
+    	    //$('form[name="fa_left_search_new"]').submit()
     	{% else %}
     	   /* if (searchLocation && searchLocation != 2) {*/
-    	    	var catId = $('#fa_left_search_item__category_id').val();
-    	    	var distanceId = $('#fa_left_search_item__distance').val();
-    	    	var defaultDist = $('#fa_left_search_default_distance').val();
+    	    	var catId = $('#fa_left_search_new_item__category_id').val();
+    	    	var distanceId = $('#fa_left_search_new_item__distance').val();
+    	    	var defaultDist = $('#fa_left_search_new_default_distance').val();
     	    	
                 $.ajax({
                      type: "post",
@@ -162,21 +162,21 @@
                      data: {'location': searchLocation, 'catId' : catId },
                      success: function(data) {
                          if (!$.isEmptyObject(data)) {
-                        	$('#fa_left_search_default_distance').val(data.default_distance);
+                        	$('#fa_left_search_new_default_distance').val(data.default_distance);
                         	
 							
                         	if(qryItemDistance == undefined && searchLocation != 2 && defaultDist == distanceId) {
-                        		$('#fa_left_search_item__distance').val(data.default_distance);
-                        		$('#fa_left_search_item__distance option[value="'+data.default_distance+'"]').attr("selected", "selected");
+                        		$('#fa_left_search_new_item__distance').val(data.default_distance);
+                        		$('#fa_left_search_new_item__distance option[value="'+data.default_distance+'"]').attr("selected", "selected");
                                 $('#distance-left-search').show();
-                                $('#fa_left_search_hide_distance_block').val(0);
+                                $('#fa_left_search_new_hide_distance_block').val(0);
                         	} else if(distanceId != data.default_distance) {
-                                $('#fa_left_search_item__distance option[value="'+distanceId+'"]').attr("selected", "selected");
+                                $('#fa_left_search_new_item__distance option[value="'+distanceId+'"]').attr("selected", "selected");
                                 $('#distance-left-search').show();
-                                $('#fa_left_search_hide_distance_block').val(0);
+                                $('#fa_left_search_new_hide_distance_block').val(0);
                              } else {
                                  if(distanceId == data.default_distance) {
-                                	 $('#fa_left_search_item__distance option[value="'+data.default_distance+'"]').attr("selected", "selected");
+                                	 $('#fa_left_search_new_item__distance option[value="'+data.default_distance+'"]').attr("selected", "selected");
                                  } else {
                                 	 setDefDistance();
                                  }                
@@ -184,16 +184,16 @@
 
                             if(data.slug=='uk') { $('#distance-left-search').hide(); }
                             else { $('#distance-left-search').show(); }
-                            $('form[name="fa_left_search"]').submit();
+                            //$('form[name="fa_left_search_new"]').submit();
                          } else {
                              $('#distance-error-placeholder small').html('Please choose a valid town or postal code');
-                            $('#fa_left_search_item__location_autocomplete').css("border", "solid 1px red");
+                            $('#fa_left_search_new_item__location_autocomplete').css("border", "solid 1px red");
                          }
                      }
                  });
             /*} else {
                 document.cookie="location=;expires=Wed; 01 Jan 1970; path=/";
-                $('form[name="fa_left_search"]').submit()
+                $('form[name="fa_left_search_new"]').submit()
             }*/
     	{% endif %}
     }
@@ -225,7 +225,7 @@
                 return date.valueOf() < now.valueOf() ? 'disabled' : '';
             }
         }).on('changeDate', function(ev){
-            //setLocaionCookieByLeftSearchLocationChange($.trim($('#fa_left_search_item__location').val()));
+            //setLocaionCookieByLeftSearchLocationChange($.trim($('#fa_left_search_new_item__location').val()));
         });
 
         $('.datepicker-icon').click(function(e){
@@ -307,6 +307,5 @@
 
 //]]>
 </script>
-{#{ include('FaCoreBundle::autoSuggestField.html.twig', {'field' : '#fa_left_search_item__location', 'jsonField' : '#fa_left_search_item__location_json', 'placeHolder': 'Type postal code or town'|trans, 'route' : 'town_ajax_find_town_by_term', 'maximumSelectionSize': 1, 'selectOnBlur': 'true'}) }#}
-{{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_left_search_item__location', 'placeHolder': 'Type postal code or town'|trans, 'route' : 'town_ajax_find_town_by_term', 'displayOnlyTown' : 'true'}) }}
+{{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_left_search_new_item__location', 'placeHolder': 'Type postal code or town'|trans, 'route' : 'town_ajax_find_town_by_term', 'displayOnlyTown' : 'true'}) }}
 
