@@ -675,11 +675,15 @@ class DefaultController extends ThirdPartyLoginController
             $cookieValue = $this->getRepository('FaEntityBundle:Location')->getCookieValue($request->get('location'), $this->container, false, $request->get('location_area'));
             $locationByValue = $this->getRepository('FaEntityBundle:Location')->getArrayByTownId($request->get('location'), $this->container);
             $categoryId = $request->get('catId');
+            $keywords = $request->get('keywords');
             
             if($categoryId != '') {
                 $srchParam['item__category_id'] = $categoryId;
             }
-            
+            if($keywords != '') {
+                $srchParam['keywords'] = $keywords;
+            }
+
             if (!empty($cookieValue)) {
                 $srchParam['item__location']   = $cookieValue['location'];
             } elseif (!empty($locationByValue)) {
