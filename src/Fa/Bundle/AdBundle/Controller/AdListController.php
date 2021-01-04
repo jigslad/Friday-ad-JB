@@ -80,6 +80,7 @@ class AdListController extends CoreController
                     $bindSearchParams['item__category_id'] =  $parent['id'];
                 }
             }
+            if($bindSearchParams['item__category_id'] ==1) { $bindSearchParams['item__category_id'] = ''; }
             $form->submit($bindSearchParams);
         }
 
@@ -2278,7 +2279,7 @@ class AdListController extends CoreController
                     'location'      => $location,
                     'latitude'      => isset($ad['latitude']) ? $ad['latitude'] : null,
                     'longitude'     => isset($ad['longitude']) ? $ad['longitude'] : null,
-                    'last_updated'  => empty($ad['weekly_refresh_published_at']) ? $ad['published_at'] : $ad['weekly_refresh_published_at'],
+                    'last_updated'  => !empty($ad['weekly_refresh_published_at']) ? $ad['weekly_refresh_published_at'] : (isset($ad['published_at'])?$ad['published_at']:''),
                     'aff_icon_cls'  => ($ad['is_affiliate'] && ($ad['ad_source'] != 'paa' || $ad['ad_source'] != 'paa-app' || $ad['ad_source'] != 'admin')) ? CommonManager::getAffiliateClass($ad['ad_source']) : ''
                 ];
 
