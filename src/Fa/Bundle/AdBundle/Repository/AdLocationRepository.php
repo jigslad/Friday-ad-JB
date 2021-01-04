@@ -157,14 +157,17 @@ class AdLocationRepository extends EntityRepository
                 }
 
                 $document = $this->addField($document, 'postcode', $location->getPostcode());
-                $document = $this->addField($document, 'domicile', ($location->getLocationDomicile() ? $locationRepository->getCachedLocationById($container, $location->getLocationDomicile()->getId()) : null));
-                $document = $this->addField($document, 'town', ($location->getLocationTown() ? $locationRepository->getCachedLocationById($container, $location->getLocationTown()->getId()) : null));
+                //$document = $this->addField($document, 'domicile', ($location->getLocationDomicile() ? $locationRepository->getCachedLocationById($container, $location->getLocationDomicile()->getId()) : null));
+                //$document = $this->addField($document, 'town', ($location->getLocationTown() ? $locationRepository->getCachedLocationById($container, $location->getLocationTown()->getId()) : null));
+                $document = $this->addField($document, 'domicile', ($location->getLocationDomicile() ? $locationRepository->getArrayByTownId($location->getLocationDomicile()->getId()): null));
+                $document = $this->addField($document, 'town', ($location->getLocationTown() ? $locationRepository->getArrayByTownId($location->getLocationTown()->getId()):null));
                 $document = $this->addField($document, 'latitude', $location->getLatitude());
                 $document = $this->addField($document, 'longitude', $location->getLongitude());
                 $document = $this->addField($document, 'locality', $localityArr);
                 //for Location Area
                 if ($location->getLocationArea()) {
-                    $document = $this->addField($document, 'area', $locationRepository->getCachedLocationById($container, $location->getLocationArea()->getId()));
+                    //$document = $this->addField($document, 'area', $locationRepository->getCachedLocationById($container, $location->getLocationArea()->getId()));
+                    $document = $this->addField($document, 'area', $locationRepository->getArrayByTownId($location->getLocationArea()->getId()));
                     if ($location->getLocationArea()->getIsSpecialArea()) {
                         $document = $this->addField($document, 'is_special_area_location', '1');
                     } else {
@@ -182,7 +185,8 @@ class AdLocationRepository extends EntityRepository
         }
 
         if ($mainTownId != '') {
-            $mainTownArr = $locationRepository->getCachedLocationById($container, $mainTownId);
+            //$mainTownArr = $locationRepository->getCachedLocationById($container, $mainTownId);
+            $mainTownArr = $locationRepository->getArrayByTownId($mainTownId);
             $mainTownName = $mainTownArr['slug'];
 
             $document = $this->addField($document, 'main_town', $mainTownArr);
