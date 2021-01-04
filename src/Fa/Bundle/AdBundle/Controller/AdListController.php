@@ -1285,8 +1285,8 @@ class AdListController extends CoreController
             if(!isset($findersSearchParams['item__distance'])){
                 if($findersSearchParams['item__location'] == LocationRepository::LONDON_TOWN_ID) {
                     $findersSearchParams['item__distance'] = CategoryRepository::LONDON_DISTANCE;
-                /*} elseif($keywords && isset($data['search']['item__location']) && $data['search']['item__location']!=2) {
-                    $findersSearchParams['item__distance'] = CategoryRepository::KEYWORD_DEFAULT;*/
+                } elseif($keywords && isset($data['search']['item__location']) && $data['search']['item__location']!=2) {
+                    $findersSearchParams['item__distance'] = CategoryRepository::KEYWORD_DEFAULT;
                 } else {
                     $findersSearchParams['item__distance'] = CategoryRepository::MAX_DISTANCE;
                 }
@@ -1744,8 +1744,10 @@ class AdListController extends CoreController
 
         $locationFacets = [];
         $locationFacetArr = [];
+        $isSetDefaultDistance = 0;
         if (!empty($facetResult)) {
-            $locationFacetArr = $this->getLocationFacetForSearchResult($facetResult, $data);
+            if(isset($searchParams['default_distance']) && $searchParams['default_distance']==1) { $isSetDefaultDistance = 1; }
+            $locationFacetArr = $this->getLocationFacetForSearchResult($facetResult, $data, $isSetDefaultDistance);
         }
 
         if (!empty($locationFacetArr)) {
@@ -2344,7 +2346,7 @@ class AdListController extends CoreController
      * @param $data
      * @return array
      */
-    private function getLocationFacetForSearchResult($locationFacets, $data)
+    private function getLocationFacetForSearchResult($locationFacets, $data, $isSetDefaultDistance=0)
     {
         if (!empty($locationFacets) && !empty($data)) {
             $getCount = [];
@@ -2354,7 +2356,7 @@ class AdListController extends CoreController
                     if (!empty($facetResult)) {
                         foreach ($facetResult as $key=>$res) {
                             //get Facet Count for Nearby Town
-                            $getCount[$key] = $this->getFacetCountForNearbyTown($key, $data);
+                            $getCount[$key] = $this->getFacetCountForNearbyTown($key, $data, $isSetDefaultDistance);
                         }
                     }
                 }
@@ -2368,7 +2370,7 @@ class AdListController extends CoreController
      * @param $facetdata
      * @return mixed
      */
-    private function getFacetCountForNearbyTown($key, $facetdata)
+    private function getFacetCountForNearbyTown($key, $facetdata, $isSetDefaultDistance=0)
     {
         $keywords       = (isset($facetdata['search']['keywords']) && $facetdata['search']['keywords']) ? $facetdata['search']['keywords']: null;
         if (isset($facetdata['facet_fields']) && isset($facetdata['facet_fields'])) {
@@ -2381,6 +2383,11 @@ class AdListController extends CoreController
             $locationId = isset($townKey->id)?$townKey->id:2;
         }
         $facetdata['search']['item__location'] = $locationId;
+
+        if($locationId==LocationRepository::LONDON_TOWN_ID && $isSetDefaultDistance==1)
+        {
+            $facetdata['search']['item__distance'] =  CategoryRepository::LONDON_DISTANCE;
+        }
         /*if(isset($data['search']['item__distance'])) {
     		$data['search']['item__distance'] = 0;
     	}

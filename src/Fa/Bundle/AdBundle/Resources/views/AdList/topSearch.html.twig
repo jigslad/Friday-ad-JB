@@ -16,6 +16,7 @@
 	                   <a href="javascript:void(0);" rel="nofollow" id="fa_top_search_keywords_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
 	               </div>
 	               <input type="submit" class="button postfix search-icon" value="Go" />
+                   {{ form_widget(form.default_distance) }}
 	                <div class="change-location hide-for-small-only">
 	                    <span class="left">{{ 'in'|trans({}, 'frontend-header-search') }}</span>
                         <span id="header_search_editable_location_span">United Kingdom</span>
