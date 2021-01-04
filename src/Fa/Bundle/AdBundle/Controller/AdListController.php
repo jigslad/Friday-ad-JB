@@ -1177,7 +1177,7 @@ class AdListController extends CoreController
 
         if (!empty($extendRadius) && $data['search']['item__location']== LocationRepository::LONDON_TOWN_ID) {
             $extendRadius =  CategoryRepository::MAX_DISTANCE;
-        } elseif ($keywords && isset($data['search']['item__location']) && $data['search']['item__location']!=2) {
+        } elseif (isset($data['search']['item__location']) && $data['search']['item__location']!=2 && $data['search']['item__category_id'] <= 1) {
             $extendRadius = CategoryRepository::KEYWORD_EXTENDED;
         }
 
@@ -1281,11 +1281,11 @@ class AdListController extends CoreController
         $mergedAds = $this->formatAds($mergedPagination);*/
 
 
-        if ($findersSearchParams['item__category_id'] == 1) {
+        if ($findersSearchParams['item__category_id'] <= 1) {
             if(!isset($findersSearchParams['item__distance'])){
                 if($findersSearchParams['item__location'] == LocationRepository::LONDON_TOWN_ID) {
                     $findersSearchParams['item__distance'] = CategoryRepository::LONDON_DISTANCE;
-                } elseif($keywords && isset($data['search']['item__location']) && $data['search']['item__location']!=2) {
+                } elseif(isset($data['search']['item__location']) && $data['search']['item__location']!=2) {
                     $findersSearchParams['item__distance'] = CategoryRepository::KEYWORD_DEFAULT;
                 } else {
                     $findersSearchParams['item__distance'] = CategoryRepository::MAX_DISTANCE;
