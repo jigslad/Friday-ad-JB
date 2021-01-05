@@ -146,6 +146,7 @@ class AdLeftSearchType extends AbstractType
         $categoryId   = '';$getLocLvl = 0;
         //$searchParams = $this->request->get('searchParams');
         $searchParams = $this->searchParams;
+        $qryItemDistance = $this->request->get('item__distance');
         
         $cookieLocation = $this->request->cookies->get('location');
         if(!empty($cookieLocation)) {
@@ -162,8 +163,13 @@ class AdLeftSearchType extends AbstractType
             $categoryId = $searchParams['item__category_id'];
         }
 
-        if (isset($searchParams['item__distance']) && $searchParams['item__distance']) {
-            $defDistance = $searchParams['item__distance'];
+        unset($searchParams['item__distance']);
+        if($qryItemDistance) {
+              $searchParams['item__distance'] = $qryItemDistance;
+        }
+
+        if ($qryItemDistance) {
+            $defDistance = $qryItemDistance;
         } else {
             $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
             $defDistance = ($getDefaultRadius) ? $getDefaultRadius : CategoryRepository::MAX_DISTANCE;
