@@ -99,9 +99,9 @@ class AdRoutingManager
      */
     public function getListingUrl($search_params, $page = null, $submitted = false, $categories = null, $fromCommandLine = false, $parentFullSlug = null, $secondLevelParentFullSlug = null)
     {
-        if(isset($search_params['default_distance'])){
+        /*if(isset($search_params['default_distance'])){
             unset($search_params['item__distance']);
-        }
+        }*/
         $location    = null;
         $page_string = null;
         $user_slug = null;
@@ -114,11 +114,11 @@ class AdRoutingManager
             unset($search_params['hide_distance_block']);
         }
 
-        if(isset($search_params['item__distance'])) {
+        /*if(isset($search_params['item__distance'])) {
             if ($search_params['item__distance'] == CategoryRepository::LONDON_DISTANCE) {
                 unset($search_params['item__distance']);
             }
-        }
+        }*/
         
         if(isset($search_params['default_distance'])) {
             unset($search_params['default_distance']);
@@ -132,12 +132,12 @@ class AdRoutingManager
 
         $getDefaultRadius = '';
        
-        if (!isset($search_params['item__distance']) && $fromCommandLine == false) {
+        /*if (!isset($search_params['item__distance']) && $fromCommandLine == false) {
             $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($search_params, $this->container);
             if ($getDefaultRadius) {
                 $search_params['item__distance'] = $getDefaultRadius;
             }
-        }
+        }*/
 
         if (!$fromCommandLine) {
             $cookieLocationDetails = json_decode($this->container->get('request_stack')->getCurrentRequest()->cookies->get('location'), true);
@@ -159,9 +159,9 @@ class AdRoutingManager
             if(!empty($selLocationArray)) { $getLocLvl = $selLocationArray[0]->getLvl(); }
         }
             
-        if($location=='uk' || $getLocLvl==2) {
+        /*if($location=='uk' || $getLocLvl==2) {
             unset($search_params['item__distance']);
-        }
+        }*/
 
         if (isset($search_params['item__user_id']) && $search_params['item__user_id'] != '') {
             $shopUserId = $search_params['item__user_id'];
@@ -186,9 +186,9 @@ class AdRoutingManager
             unset($search_params['item__location']);
             unset($search_params['item__location_autocomplete']);
 
-            if (isset($search_params['item__distance']) && ($search_params['item__distance'] == $getDefaultRadius || $search_params['item__distance'] == CategoryRepository::MAX_DISTANCE)) {
+            /*if (isset($search_params['item__distance']) && ($search_params['item__distance'] == $getDefaultRadius || $search_params['item__distance'] == CategoryRepository::MAX_DISTANCE)) {
                 unset($search_params['item__distance']);
-            }
+            }*/
 
             $query = http_build_query(array_map(array($this, 'removeBlankElement'), $search_params));
 
@@ -297,9 +297,9 @@ class AdRoutingManager
             //$categoryLvl  = $this->container->get('fa.entity.cache.manager')->getEntityLvlById('FaEntityBundle:Category', $categoryId);
         }
 
-        if (isset($search_params['item__location']) && $search_params['item__location'] == 2) {
+        /*if (isset($search_params['item__location']) && $search_params['item__location'] == 2) {
             unset($search_params['item__distance']);
-        }
+        }*/
 
         // Commented by Sagar
         /*if (isset($secondLevelParentId) && ( ($secondLevelParentId == CategoryRepository::COMMERCIALVEHICLES_ID && ($categoryLvl == 3 || $categoryLvl == 4)) || ($secondLevelParentId == CategoryRepository::CARS_ID && ($categoryLvl == 3 || $categoryLvl == 4)))) {
@@ -378,7 +378,7 @@ class AdRoutingManager
         $pageString = $pageString == '' ? 'search' : $pageString;
         $searchDistance = '';
         
-        if ((isset($search_params['search_param']['item__distance']))) {
+        /*if ((isset($search_params['search_param']['item__distance']))) {
             $searchDistance = $search_params['search_param']['item__distance'];
             if ($getDefaultRadius!='' && $getDefaultRadius==$search_params['search_param']['item__distance']) {
                 unset($search_params['search_param']['item__distance']);
@@ -387,7 +387,7 @@ class AdRoutingManager
             }
 
             //unset($search_params['search_param']['item__distance']);
-        }
+        }*/
         
         $query = http_build_query(array_map(array($this, 'removeBlankElement'), $search_params['search_param']));
 
