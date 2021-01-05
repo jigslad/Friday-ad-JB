@@ -1356,7 +1356,7 @@ input[type="text"].door-no{width:40px}
 .fa-slider .owl-next{right:0;top:0;}
 .fa-slider .list-img{text-align:center}
 .fa-slider .list-img img{position: relative;top: 50%;-webkit-transform: translateY(-50%);-o-transform: translateY(-50%);transform:translateY(-50%);}
-.fa-slider h3{font-size:16px;line-height:21px;margin:4px 0 15px;height:45px;overflow:hidden}
+.fa-slider h3{font-size:16px;line-height:21px;margin:4px 0 15px;height:48px;overflow:hidden}
 .fa-slider .owl-item .item:hover h3{color:#a8dc28}
 .fa-slider .list-dimensions{width:50%;line-height:normal;overflow:hidden;margin:0;}
 .fa-slider .list-dimensions span{display:block}
@@ -1629,7 +1629,7 @@ input[type="text"].door-no{width:40px}
 .white-bg.other-latest-items .fa-slider .owl-item .item, .white-bg .homepage-more-items, .white-bg .other-ways-box{background:#efefef}
 .other-latest-items .fa-slider .owl-item .item{padding:0}
 .other-latest-items .fa-slider .list-price{width:100%;float:none;text-align:left;padding:10px 0 0 12px}
-.other-latest-items .fa-slider h3{width:100%;height:45px;float:none;padding:0 12px}
+.other-latest-items .fa-slider h3{width:100%;height:48px;float:none;padding:0 12px}
 .other-latest-items #latest-item-slider .owl-prev, .other-latest-items #latest-item-slider .owl-next{height:286px}
 .saved-payment-sources ul, .saved-payment-sources li{border:none;box-shadow:none;}
 .saved-payment-sources li{padding:0 0 22px;font-size:14px}
