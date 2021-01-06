@@ -168,9 +168,9 @@ class AdultController extends ThirdPartyLoginController
         $featureAds  = $this->getAdultFeatureAds($request, $cookieLocationDetails);
 
         $seoFields = [];
-        $seoPageRules = $seoToolRepository->getSeoRulesKeyValueArray(SeoToolRepository::HOME_PAGE, $this->container);
-        if (! empty($seoPageRules[SeoToolRepository::HOME_PAGE.'_global'])) {
-            $seoPageRule = $seoPageRules[SeoToolRepository::HOME_PAGE.'_global'];
+        $seoPageRules = $seoToolRepository->getSeoRulesKeyValueArray(SeoToolRepository::ADULT_HOME_PAGE, $this->container);
+        if (! empty($seoPageRules[SeoToolRepository::ADULT_HOME_PAGE.'_global'])) {
+            $seoPageRule = $seoPageRules[SeoToolRepository::ADULT_HOME_PAGE.'_global'];
             if (! empty($seoPageRule)) {
                 $seoManager = $this->container->get('fa.seo.manager');
                 $seoFields = CommonManager::getSeoFields($seoPageRule);
@@ -211,7 +211,8 @@ class AdultController extends ThirdPartyLoginController
             'topSearchForm' => $this->getTopSearchForm($request),
             'adultCategories' => $adultCategories['values'],
             'adultCategoriesConstants' => $adultCategories['constants'],
-            'locationId' => $locationId
+            'locationId' => $locationId,
+            'cookieLocationDetails' => $cookieLocationDetails
         );
         return $this->renderWithTwigParameters('FaFrontendBundle:Adult:indexNew.html.twig', $parameters, $request);
     }
