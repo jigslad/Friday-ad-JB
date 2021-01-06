@@ -32,6 +32,7 @@ class SeoToolRepository extends EntityRepository
     const ALIAS = 'st';
 
     const HOME_PAGE          = 'hp';
+    const ADULT_HOME_PAGE    = 'ahp';
     const ADVERT_DETAIL_PAGE = 'adp';
     const ADVERT_IMG_ALT     = 'aia';
     const ADVERT_LIST_PAGE   = 'alp';
@@ -69,6 +70,7 @@ class SeoToolRepository extends EntityRepository
         $pageArray[self::HOME_PAGE]          = $translator->trans('Home page');
         $pageArray[self::ADVERT_IMG_ALT]     = $translator->trans('Advert image alt');
         $pageArray[self::ADVERT_LIST_PAGE] = $translator->trans('Advert list page');
+        $pageArray[self::ADULT_HOME_PAGE]          = $translator->trans('Adult Home page');
 
         return $pageArray;
     }
@@ -107,8 +109,8 @@ class SeoToolRepository extends EntityRepository
             self::ADVERT_DETAIL_PAGE => $translator->trans('Advert detail page'),
             self::ADVERT_IMG_ALT => $translator->trans('Advert image alt'),
             self::ADVERT_LIST_PAGE => $translator->trans('Advert list page'),
+            self::ADULT_HOME_PAGE =>$translator->trans('Adult Home page'),
         );
-
         return $pageNameArray;
     }
 
@@ -238,7 +240,7 @@ class SeoToolRepository extends EntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                return $cachedValue;
+//                return $cachedValue;
             }
         }
 
@@ -420,6 +422,7 @@ class SeoToolRepository extends EntityRepository
                     foreach ($parentCategories as $parentCategoryId) {
                         if (isset($seoRuleArray[$page.'_'.$parentCategoryId])) {
                             $seoRule = $seoRuleArray[$page.'_'.$parentCategoryId];
+                            $seoRule['popular_search'] = false;
                             break;
                         }
                     }
