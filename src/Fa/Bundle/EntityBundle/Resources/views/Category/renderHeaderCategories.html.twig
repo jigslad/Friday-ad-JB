@@ -195,7 +195,7 @@
 <dl class="accordion show-for-small-only" data-accordion>
     {% if headerCategories|length %}
     {% cache 'header|menu|'~location_id~'front/header_menu_mobile' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0) 86400 %}
-    <dd class="accordion-navigation">
+    <dd class="accordion-navigation ">
         <a href="#cat-mob-menu">MENU</a>
         <div id="cat-mob-menu" class="content active">
             <ul class="show-for-small-only">
@@ -279,7 +279,7 @@
                                              </ul>
                                          {% endif %}
                                          </li>
-                                         
+
                                     {% endfor %}
                                     {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
                                     	<li class="last-level">
@@ -328,28 +328,6 @@
         </div>
     </dd>
     {% endcache %}
-{% endif %}
-
-{% if app.user %}
-    {% set messageRepository = fetch_repository('FaMessageBundle:Message') %}
-    {% set totalUnreadMsg = messageRepository.getMessageCount(app.user.getId(), 'all', fetch_container_instance()) %}
-    <dd class="accordion-navigation">
-        <a href="#db-mob-menu">MY DASHBOARD</a>
-        <div id="db-mob-menu" class="content">
-            <ul class="db-menu-mobile">
-                <li><a href="{{ path('dashboard_home') }}" class="home-icon">{{ 'Dashboard home'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                <li><a href="{{ path('user_ad_message_all') }}" class="messages-icon">{{ 'Messages'|trans({}, 'frontend-header-usermenu') }}{% if totalUnreadMsg > 0 %}&nbsp;<span class="notification-digit">({{totalUnreadMsg}})</span>{% endif %}</a></li>
-                <li><a href="{{ path('user_review_list') }}" class="reviews-icon">{{ 'Reviews'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                <li><a href="{{ path('manage_my_ads_active') }}" id="manage-my-ad-id" class="manage-item-icon">{{'Manage my ads'|trans({}, 'frontend-header-usermenu')}}</a></li>
-                <li><a href="{{ path('my_profile') }}" class="manage-profile-icon">{{ 'Edit profile'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                <li><a href="{{ path('my_orders') }}" class="orders-icon">{{ 'Orders'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                <li><a href="{{ path('my_favourite') }}" class="my-favourites-icon">{{ 'My favourites'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                <li><a href="{{ path('list_search_agent') }}" id="saved-search-header-id" class="saved-searches-icon">{{'Alerts and searches'|trans({}, 'frontend-header-usermenu')}}</a></li>
-                <li><a href="{{ path('my_purchases') }}" id="shop-header-id" class="purchase-icon">{{ 'Purchases'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                <li><a href="{{ path('my_account') }}" id="account-header-id" class="account-icon">{{ 'Account'|trans({}, 'frontend-header-usermenu') }}</a></li>
-            </ul>
-        </div>
-    </dd>
 {% endif %}
 </dl>
 </div>
