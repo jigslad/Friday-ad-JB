@@ -4542,8 +4542,7 @@ class AdListController extends CoreController
     {
         if ($request->isXmlHttpRequest()) {
             $searchParams = unserialize($request->get('searchParams'));
-            $facetResult  = $this->getRepository('FaEntityBundle:Category')->getCategoryFacetBySearchParams($searchParams, $this->container);
-
+            $facetResult = unserialize($request->get('facetResult'));
             $parameters = array('searchParams' => $searchParams, 'facetResult' => $facetResult);
             return $this->render('FaAdBundle:AdList:leftSearchCategoryLinksMobile.html.twig', $parameters);
         }
