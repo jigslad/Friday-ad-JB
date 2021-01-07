@@ -695,7 +695,7 @@ class DefaultController extends ThirdPartyLoginController
             if($distance != '') {
                 $defDistance = $distance;
             } else {
-                $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($srchParam, $this->container);
+                $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParamsOnly($srchParam, $this->container);
                 $defDistance = ($getDefaultRadius) ? $getDefaultRadius : CategoryRepository::MAX_DISTANCE;
             }
             

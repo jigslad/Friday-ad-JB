@@ -125,7 +125,9 @@
         var catId = $('#fa_top_search_item__category_id').val();
     	var searchLocation = $('#fa_top_search_item__location').val();
     	searchLocation = (searchLocation)?searchLocation:2;
-        var distance = $('#fa_top_search_item__distance').val();
+        var qryItemDistance = getUrlVars()['item__distance'];
+        var distance = (qryItemDistance != undefined)?qryItemDistance:'';
+
         $.ajax({
              type: "post",
              dataType: "json",
@@ -222,6 +224,19 @@
         }
      
     });
+
+    function getUrlVars()
+    {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for(var i = 0; i < hashes.length; i++)
+        {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    }
 //]]>
 </script>
 
