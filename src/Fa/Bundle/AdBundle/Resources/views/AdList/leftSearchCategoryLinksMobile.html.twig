@@ -55,14 +55,14 @@
                       {% for childCategoryId, childCategoryName in childCategories %}
                           {% set adCount = 0 %}
                           {% set isLeafCategory = false %}
-                          {% if facetResult.a_category_id_i[childCategoryId] is defined %}
-                              {% set adCount = facetResult.a_category_id_i[childCategoryId] %}
+                          {% if facetResult.category_ids[childCategoryId] is defined %}
+                              {% set adCount = facetResult.category_ids[childCategoryId] %}
                               {% set isLeafCategory = true %}
                           {% else %}
                               {% set nestedChildrenCategories = fetch_repository('FaEntityBundle:Category').getNestedLeafChildrenIdsByCategoryId(childCategoryId, fetch_container_instance()) %}
                               {% for nestedCategoryId in nestedChildrenCategories %}
-                                  {% if facetResult.a_category_id_i[nestedCategoryId] is defined %}
-                                      {% set adCount =  adCount + facetResult.a_category_id_i[nestedCategoryId] %}
+                                  {% if facetResult.category_ids[nestedCategoryId] is defined %}
+                                      {% set adCount =  adCount + facetResult.category_ids[nestedCategoryId] %}
                                   {% endif %}
                               {% endfor %}
                           {% endif %}
