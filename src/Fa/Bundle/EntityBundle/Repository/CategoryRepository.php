@@ -1173,9 +1173,6 @@ class CategoryRepository extends NestedTreeRepository
             // fetch result set from solr
 
             $result = $container->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
-            echo 'results===<pre>'; print_r($result); echo '</pre>';
-
-            //echo 'result===<pre>';print_r($result);
             $categoryCountArray = $leafLevelCategoryCount =  isset($result['category_ids'])?get_object_vars($result['category_ids']):array();
 
             $this->categoryCountArray = $categoryCountArray;
