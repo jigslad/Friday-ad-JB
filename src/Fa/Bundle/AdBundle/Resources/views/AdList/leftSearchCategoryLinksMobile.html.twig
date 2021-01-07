@@ -18,7 +18,7 @@
                         {% endfor %}
                         {% if adCount > 0 %}
                             {% set queryParams = categorySearchParams|merge({'item__category_id': categoryId}) %}
-                            <li><a href="javascript:void(0)" onClick="loadChildrenCategories('{{array_serialize(queryParams)|escape('js')}}')">{{ categoryName }} ({{ adCount }})</a></li>
+                            <li><a href="javascript:void(0)" onClick="loadChildrenCategories('{{array_serialize(queryParams)|escape('js')}}','{{array_serialize(facetResult)|escape('js')}}')">{{ categoryName }} ({{ adCount }})</a></li>
                         {% endif %}
                     {% endfor %}
                 </ul>
@@ -38,7 +38,7 @@
                           {% set parentCategoryId = '' %}
                       {% endif %}
                       {% set queryParams = categorySearchParams|merge({'item__category_id': parentCategoryId}) %}
-                      <a href="javascript:void(0)" onClick="loadChildrenCategories('{{array_serialize(queryParams)|escape('js')}}')">{{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id) }}</a>
+                      <a href="javascript:void(0)" onClick="loadChildrenCategories('{{array_serialize(queryParams)|escape('js')}}','{{array_serialize(facetResult)|escape('js')}}')">{{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id) }}</a>
                   </li>
               </ul>
           </div>
@@ -73,13 +73,13 @@
                                   {% if isLeafCategory %}
                                       <li class="hide more_result"><a href="{{ listurl }}">{{ childCategoryName }} ({{ adCount }})</a></li>
                                   {% else %}
-                                    <li class="hide more_result"><a href="javascript:void(0)" onClick="loadChildrenCategories('{{array_serialize(queryParams)|escape('js')}}')">{{ childCategoryName }} ({{ adCount }})</a></li>
+                                    <li class="hide more_result"><a href="javascript:void(0)" onClick="loadChildrenCategories('{{array_serialize(queryParams)|escape('js')}}','{{array_serialize(facetResult)|escape('js')}}')">{{ childCategoryName }} ({{ adCount }})</a></li>
                                   {% endif %}
                               {% else %}
                                   {% if isLeafCategory %}
                                       <li><a href="{{ listurl }} {% if app.request.get('searchQueryString') %}rel="nofollow"{% endif %}">{{ childCategoryName }} ({{ adCount }})</a></li>
                                   {% else %}
-                                      <li><a href="javascript:void(0)" onClick="loadChildrenCategories('{{array_serialize(queryParams)|escape('js')}}')">{{ childCategoryName }} ({{ adCount }})</a></li>
+                                      <li><a href="javascript:void(0)" onClick="loadChildrenCategories('{{array_serialize(queryParams)|escape('js')}}','{{array_serialize(facetResult)|escape('js')}}')">{{ childCategoryName }} ({{ adCount }})</a></li>
                                   {% endif %}
                               {% endif %}
                               {% set childCatCount = childCatCount + 1 %}

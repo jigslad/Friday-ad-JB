@@ -260,12 +260,12 @@
         }
     }
 
-    function loadChildrenCategories(searchParams)
+    function loadChildrenCategories(searchParams,facetResult)
     {
         $.ajax({
             type: "post",
             url: "{{ path('ad_left_search_load_children_categories_ajax') }}",
-            data: {'searchParams' : searchParams},
+            data: {'searchParams' : searchParams,'facetResult' : facetResult },
             success: function(data) {
                 $('#left_cat_mobile').html(data);
                 bindSeeMoreLinkEvents(true);
