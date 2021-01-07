@@ -1124,12 +1124,15 @@ class CategoryRepository extends NestedTreeRepository
         if (is_array($this->categoryCountArray) && count($this->categoryCountArray)) {
             $categoryCountArray = $this->categoryCountArray;
         } else {
-            $category = $em->getRepository('FaEntityBundle:Category')->findOneBy(['id' => $searchParams['item__category_id']]);
+            if(isset($searchParams['item__category_id'])) {
+                $category = $em->getRepository('FaEntityBundle:Category')->findOneBy(['id' => $searchParams['item__category_id']]);
+            }
+
             $data                 = array();
             if (empty($data['static_filters'])) {
                 $data['static_filters'] = '';
             }
-            if ($searchParams['item__category_id'] != 1) {
+            if (isset($searchParams['item__category_id']) && $searchParams['item__category_id'] != 1) {
                 $data['static_filters'] .= ' AND category_full_path:' . $category->getFullSlug();
             }
 
