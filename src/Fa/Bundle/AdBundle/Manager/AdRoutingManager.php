@@ -71,6 +71,9 @@ class AdRoutingManager
      */
     public function getCustomListingUrl($search_params, $custom_url, $isNearByLocation = false)
     {
+        if(isset($search_params['default_distance'])){
+            unset($search_params['item__distance']);
+        }
         if (isset($search_params['item__location']) && $search_params['item__location'] == 2) {
             $location = 'uk';
         } else {
@@ -108,6 +111,12 @@ class AdRoutingManager
             unset($search_params['hide_distance_block']);
         }
 
+        /*if(isset($search_params['item__distance'])) {
+            if ($search_params['item__distance'] == CategoryRepository::LONDON_DISTANCE) {
+                unset($search_params['item__distance']);
+            }
+        }*/
+        
         if(isset($search_params['default_distance'])) {
             unset($search_params['default_distance']);
         }
@@ -126,7 +135,7 @@ class AdRoutingManager
                 unset($search_params['item__distance']);
             }
         }
-       
+
         /*if (!isset($search_params['item__distance']) && $fromCommandLine == false) {
             if ($getDefaultRadius) {
                 $search_params['item__distance'] = $getDefaultRadius;

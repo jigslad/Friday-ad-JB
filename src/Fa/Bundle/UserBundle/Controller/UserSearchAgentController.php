@@ -71,6 +71,9 @@ class UserSearchAgentController extends CoreController
                     if (isset($searchParams['search']['keywords']) && $searchParams['search']['keywords']) {
                         $searchAgentName = $searchParams['search']['keywords'];
                     }
+                    if($searchParams['search']['item__category_id'] == 1){
+                        unset($searchParams['search']['item__category_id']);
+                    }
                     if (isset($searchParams['search']['item__category_id']) && $searchParams['search']['item__category_id']) {
                         if (isset($searchParams['search']['keywords']) && $searchParams['search']['keywords']) {
                             $searchAgentName .= ' in ';

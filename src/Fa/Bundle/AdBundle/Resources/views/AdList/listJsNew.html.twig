@@ -189,7 +189,7 @@ var callFromGlobal = '';
         $.ajax({
             type: "POST",
             url : '{{ path('save_search_agent') }}',
-            data : {'searchParams': '{{array_serialize(searchParams)|escape('js')}}', 'redirectUrl': '{{app.request.getUri()}}', 'userId': userId},
+            data : {'searchParams': '{{array_serialize(searchAgentData)|escape('js')}}', 'redirectUrl': '{{app.request.getUri()}}', 'userId': userId},
         })
         .always(function(response) {
             unblockPage();

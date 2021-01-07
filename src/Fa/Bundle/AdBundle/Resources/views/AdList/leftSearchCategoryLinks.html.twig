@@ -1,6 +1,6 @@
 {% set container = fetch_container_instance() %}
 {% set getNoFollowLink = fetch_repository('FaEntityBundle:Category').getCategoryNoFollowLink(app.request.get('searchQueryString')) %}
-{% if searchParams.item__category_id is not defined or searchParams.item__category_id == '' %}
+{% if searchParams.item__category_id is not defined or searchParams.item__category_id == '' or searchParams.item__category_id == 1 %}
     <dd class="accordion-navigation keep-shown">
         <a href="#panel0a" rel="nofollow" class="clearfix"><h5 class="left">{{ 'Categories'|trans({}, 'frontend-left-search')}}</h5></a>
         {% set mainCategories = fetch_repository('FaEntityBundle:Category').getCategoryByLevelArray(1, fetch_container_instance()) %}
@@ -21,8 +21,8 @@
                         {% set adCount = 0 %}
                         {% set nestedChildrenCategories = fetch_repository('FaEntityBundle:Category').getNestedLeafChildrenIdsByCategoryId(categoryId, fetch_container_instance()) %}
                         {% for nestedCategoryId in nestedChildrenCategories %}
-                            {% if facetResult.a_category_id_i[nestedCategoryId] is defined %}
-                                {% set adCount =  adCount + facetResult.a_category_id_i[nestedCategoryId] %}
+                            {% if facetResult.category_ids[nestedCategoryId] is defined %}
+                                {% set adCount =  adCount + facetResult.category_ids[nestedCategoryId] %}
                             {% endif %}
                         {% endfor %}
                         {% if adCount > 0 %}

@@ -1316,7 +1316,8 @@ class AdListController extends CoreController
             'extendedResultCount'   => $extendedResultCount,
             'facetResult'           => $facetResult,
             'rootCategoryId'        => $root->getId(),
-            'areaToolTipFlag'       => $areaToolTipFlag
+            'areaToolTipFlag'       => $areaToolTipFlag,
+            'searchAgentData'        => array('sorter' => $data['sorter'], 'search' => $data['search']),
          ];
 
         // profile categories other than Services & Adults
@@ -2774,8 +2775,8 @@ class AdListController extends CoreController
             }
             $form->submit($bindSearchParams);
         }
-        $parameters = array('form' => $form->createView(), 'locationFacets' => $request->get('locationFacets'), 'facetResult' => $request->get('facetResult', 'facetResult'), 'basicParams' => $basicParams, 'isShopPage' => $isShopPage, 'cookieLocationDetails' => $request->get('cookieLocationDetails'));
-        
+        $parameters = array('form' => $form->createView(), 'locationFacets' => $request->get('locationFacets'), 'facetResult' => $request->get('facetResult', 'facetResult'), 'basicParams' => $basicParams, 'isShopPage' => $isShopPage, 'cookieLocationDetails' => $request->get('cookieLocationDetails'), 'leftFilters' => $request->get('leftFilters'));
+
         return $this->render('FaAdBundle:AdList:leftSearch.html.twig', $parameters);
     }
 
