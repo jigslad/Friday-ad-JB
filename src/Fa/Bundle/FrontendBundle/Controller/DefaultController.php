@@ -675,13 +675,13 @@ class DefaultController extends ThirdPartyLoginController
             $cookieValue = $this->getRepository('FaEntityBundle:Location')->getCookieValue($request->get('location'), $this->container, false, $request->get('location_area'));
             $locationByValue = $this->getRepository('FaEntityBundle:Location')->getArrayByTownId($request->get('location'), $this->container);
             $categoryId = $request->get('catId');
-            $keywords = $request->get('keywords');
+            $distance = $request->get('distance');
             
             if($categoryId != '') {
                 $srchParam['item__category_id'] = $categoryId;
             }
-            if($keywords != '') {
-                $srchParam['keywords'] = $keywords;
+            if($distance != '') {
+                $srchParam['item__distance'] = $distance;
             }
 
             if (!empty($cookieValue)) {
@@ -690,10 +690,14 @@ class DefaultController extends ThirdPartyLoginController
                 $srchParam['item__location']   = $locationByValue['location'];
             } elseif (strtolower($request->get('location')) == 'uk' || strtolower($request->get('location')) == 'united kingdom') {
                 $srchParam['item__location']   = 2;
-            } 
+            }
 
-            $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($srchParam, $this->container);
-            $defDistance = ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
+            if($distance != '') {
+                $defDistance = $distance;
+            } else {
+                $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($srchParam, $this->container);
+                $defDistance = ($getDefaultRadius) ? $getDefaultRadius : CategoryRepository::MAX_DISTANCE;
+            }
             
             if (!empty($cookieValue)) {
                 $location['id'] = $cookieValue['location'];

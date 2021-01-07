@@ -2759,4 +2759,61 @@ class CategoryRepository extends NestedTreeRepository
 
         return $categoryPathArray;
     }
+
+    public function getDefaultRadiusBySearchParamsOnly($searchParams, $container = null)
+    {
+        $setRadius = 1;
+        $categoryId = 0;
+        $getLocLvl = 0;
+        $selLocationArray = array();
+        $isLocality = 0;
+
+        $cookieLocationDet = $cookieLocation  = array();
+
+        $cookieLocation  = $container->get('request_stack')->getCurrentRequest()->cookies->get('location');
+
+        if(!empty($cookieLocation)) {
+            $cookieLocationDet = json_decode($cookieLocation);
+        }
+
+        $searchLocation = isset($searchParams['item__location'])?$searchParams['item__location']:((!empty($cookieLocationDet) && isset($cookieLocationDet->town_id))?$cookieLocationDet->town_id:2);
+
+        if (strpos($searchLocation,',') !== false) {
+            $isLocality = 1;
+        }
+        $selLocationArray = $this->_em->getRepository('FaEntityBundle:Location')->getCookieValue($searchLocation, $container);
+
+        if($isLocality) {
+            $getLocLvl = 5;
+        } else {
+            if(!empty($selLocationArray)) { $getLocLvl = $selLocationArray['lvl']; }
+        }
+
+        if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
+            $categoryId = $searchParams['item__category_id'];
+        }
+
+        if($searchLocation == LocationRepository::LONDON_TOWN_ID) {
+            return self::LONDON_DISTANCE;
+        } elseif($searchLocation==2) {
+            return self::MAX_DISTANCE;
+        } elseif($categoryId <= 1 && $searchLocation != 2) {
+            return self::KEYWORD_DEFAULT;
+        } else {
+            if ($categoryId) {
+                $parentCategoryIds = array_keys($this->_em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId, false, $container));
+                $locationRadius = $this->_em->getRepository('FaAdBundle:LocationRadius')->getSingleLocationRadiusByCategoryIds($parentCategoryIds);
+
+                if ($locationRadius) {
+                    return $locationRadius['defaultRadius'];
+                } else {
+                    $rootCategoryId = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $container);
+                    return ($rootCategoryId == CategoryRepository::MOTORS_ID) ? CategoryRepository::MOTORS_DISTANCE : CategoryRepository::OTHERS_DISTANCE;
+                }
+            } else {
+                return self::MAX_DISTANCE;
+            }
+        }
+
+    }
 }

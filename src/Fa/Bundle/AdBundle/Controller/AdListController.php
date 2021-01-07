@@ -80,6 +80,7 @@ class AdListController extends CoreController
                     $bindSearchParams['item__category_id'] =  $parent['id'];
                 }
             }
+            if($bindSearchParams['item__category_id'] ==1) { $bindSearchParams['item__category_id'] = ''; }
             $form->submit($bindSearchParams);
         }
 
@@ -983,8 +984,12 @@ class AdListController extends CoreController
         $keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: NULL;
         $recordsPerPage = (isset($data['pager']['limit']) && $data['pager']['limit']) ? $data['pager']['limit']: $this->container->getParameter('fa.search.records.per.page');
 
-        $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($data['search'], $this->container);
-        $radius = ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
+        if(isset($findersSearchParams['item__distance']) && $findersSearchParams['item__distance']) {
+            $radius = $findersSearchParams['item__distance'];
+        } else {
+            $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($data['search'], $this->container);
+            $radius = ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
+        }
 
         if($data['search']['item__location']!=LocationRepository::COUNTY_ID) {
             $data['search']['item__distance'] = $radius;
@@ -1281,7 +1286,7 @@ class AdListController extends CoreController
         $mergedAds = $this->formatAds($mergedPagination);*/
 
 
-        if ($findersSearchParams['item__category_id'] <= 1) {
+        /*if ($findersSearchParams['item__category_id'] <= 1) {
             if(!isset($findersSearchParams['item__distance'])){
                 if($findersSearchParams['item__location'] == LocationRepository::LONDON_TOWN_ID) {
                     $findersSearchParams['item__distance'] = CategoryRepository::LONDON_DISTANCE;
@@ -1292,7 +1297,7 @@ class AdListController extends CoreController
                 }
 
             }
-        }
+        }*/
 
         $parameters = [
             'featuredAds'           => $featuredAds,
@@ -2258,7 +2263,7 @@ class AdListController extends CoreController
                     'location'      => $location,
                     'latitude'      => isset($ad['latitude']) ? $ad['latitude'] : null,
                     'longitude'     => isset($ad['longitude']) ? $ad['longitude'] : null,
-                    'last_updated'  => empty($ad['weekly_refresh_published_at']) ? $ad['published_at'] : $ad['weekly_refresh_published_at'],
+                    'last_updated'  => !empty($ad['weekly_refresh_published_at']) ? $ad['weekly_refresh_published_at'] : (isset($ad['published_at'])?$ad['published_at']:''),
                     'aff_icon_cls'  => ($ad['is_affiliate'] && ($ad['ad_source'] != 'paa' || $ad['ad_source'] != 'paa-app' || $ad['ad_source'] != 'admin')) ? CommonManager::getAffiliateClass($ad['ad_source']) : ''
                 ];
 
@@ -2716,7 +2721,7 @@ class AdListController extends CoreController
         }
 
         $formManager = $this->get('fa.formmanager');
-        $form = $formManager->createForm(AdLeftSearchType::class, array('isShopPage' => $isShopPage, 'parentIdArray' => $parentIdArray), array('method' => 'GET', 'action' => ($isShopPage ? $this->generateUrl('shop_user_ad_left_search_result') : $this->generateUrl('ad_left_search_result'))));
+        $form = $formManager->createForm(AdLeftSearchType::class, array('isShopPage' => $isShopPage, 'parentIdArray' => $parentIdArray, 'searchParams' => $searchParams), array('method' => 'GET', 'action' => ($isShopPage ? $this->generateUrl('shop_user_ad_left_search_result') : $this->generateUrl('ad_left_search_result'))));
 
         foreach ($searchParams as $key => $val) {
             if (in_array($key, array('keywords', 'item__price_from', 'item__price_to', 'item__distance', 'item__category_id', 'item__location', 'item__is_trade_ad', 'item__user_id'))) {
