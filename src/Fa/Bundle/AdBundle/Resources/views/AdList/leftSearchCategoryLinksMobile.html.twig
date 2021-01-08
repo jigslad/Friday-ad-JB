@@ -57,8 +57,8 @@
                   </li>
                   {% if childCategories|length > 0 %}
                       {% for childCategoryId, childCategoryName in childCategories %}
-                          {% if(facetResult.category_ids[categoryId] is defined) %}
-                              {% set adCount = facetResult.category_ids[categoryId] %}
+                          {% if(facetResult.category_ids[childCategoryId] is defined) %}
+                              {% set adCount = facetResult.category_ids[childCategoryId] %}
                           {% else %}
                               {% set adCount = 0 %}
                           {% endif %}
