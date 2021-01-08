@@ -71,8 +71,15 @@ class AdRoutingManager
      */
     public function getCustomListingUrl($search_params, $custom_url, $isNearByLocation = false)
     {
-        if(isset($search_params['default_distance'])){
+        /*if(isset($search_params['default_distance'])){
             unset($search_params['item__distance']);
+        }*/
+        $getDefaultRadius = '';
+        $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParamsOnly($search_params, $this->container);
+        if(isset($search_params['item__distance'])) {
+            if ($search_params['item__distance'] == $getDefaultRadius) {
+                 unset($search_params['item__distance']);
+            }
         }
         if (isset($search_params['item__location']) && $search_params['item__location'] == 2) {
             $location = 'uk';
@@ -97,7 +104,7 @@ class AdRoutingManager
      *
      * @return boolean|string
      */
-    public function getListingUrl($search_params, $page = null, $submitted = false, $categories = null, $fromCommandLine = false, $parentFullSlug = null, $secondLevelParentFullSlug = null)
+    public function getListingUrl($search_params, $page = null, $submitted = false, $categories = null, $fromCommandLine = false, $parentFullSlug = null, $secondLevelParentFullSlug = null,$isNearByTown = false)
     {
         /*if(isset($search_params['default_distance'])){
             unset($search_params['item__distance']);
@@ -130,8 +137,27 @@ class AdRoutingManager
             unset($search_params['keyword_category_id']);
         }
 
+        $setDefRadiusForLocation = 0;
+        if($isNearByTown) {
+            $defSrchParams = $this->container->get('request_stack')->getCurrentRequest()->attributes->get('searchParams');
+            $getDefaultRadiusForDefSrchparams = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParamsOnly($defSrchParams, $this->container);
+            if(isset($defSrchParams['item__distance'])) {
+                 if ($defSrchParams['item__distance'] == $getDefaultRadiusForDefSrchparams) {
+                   $setDefRadiusForLocation = 1;
+                 }
+            }
+        }
         $getDefaultRadius = '';
-       
+        $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParamsOnly($search_params, $this->container);
+        if(isset($search_params['item__distance']) && $search_params['item__distance'] != $getDefaultRadius && $isNearByTown && $setDefRadiusForLocation) {
+            $search_params['item__distance'] = $getDefaultRadius;
+        } else {
+            if(isset($search_params['item__distance'])) {
+                if ($search_params['item__distance'] == $getDefaultRadius) {
+                    unset($search_params['item__distance']);
+                }
+            }
+        }
         /*if (!isset($search_params['item__distance']) && $fromCommandLine == false) {
             $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($search_params, $this->container);
             if ($getDefaultRadius) {
