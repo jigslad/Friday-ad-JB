@@ -1562,9 +1562,9 @@ class AdListController extends CoreController
             'item__price_from',
             'item__price_to',
             'item__ad_type_id',
-            'ads_with_images',
+            'items_with_photo',
             'expired_ads',
-            'is_trade_ad',
+            'item__is_trade_ad',
             'item__distance',
             'map',
             'keywords'
@@ -1593,11 +1593,11 @@ class AdListController extends CoreController
               $staticFilters .= ' AND price : [' . $searchItem . ' TO *]';
             } else if ($searchKey == 'item__price_to') {
                 $staticFilters .= ' AND price : [* TO ' . $searchItem . ']';
-            } else if ($searchKey == 'ads_with_images') {
+            } else if ($searchKey == 'items_with_photo') {
                 $staticFilters .= ' AND image_count : [1 TO *]';
             } else if ($searchKey == 'expired_ads') {
                 $staticFilters .= ' AND status_id : ' . EntityRepository::AD_STATUS_EXPIRED_ID;
-            } else if ($searchKey == 'is_trade_ad') {
+            } else if ($searchKey == 'item__is_trade_ad') {
                 $staticFilters .= ' AND is_trade_ad : ' . $searchItem;
             } else if ($searchKey == 'item__ad_type_id') {
                 if (is_array($searchItem)) {
@@ -1736,13 +1736,13 @@ class AdListController extends CoreController
         $userTypes = [
             0 => [
                 'title' => $userTypeLabels['private_user'],
-                'url_param' => 'is_trade_ad=0',
+                'url_param' => 'item__is_trade_ad=0',
                 'count' => empty($tradeFacets) ? 0 : intval($tradeFacets["false"]),
                 'selected' => isset($params['is_trade_ad']) && $params['is_trade_ad'][0] == '0' ? true : false
             ],
             1 => [
                 'title' => $userTypeLabels['business_user'],
-                'url_param' => 'is_trade_ad=1',
+                'url_param' => 'item__is_trade_ad=1',
                 'count' => empty($tradeFacets) ? 0 : intval($tradeFacets["true"]),
                 'selected' => isset($params['is_trade_ad']) && $params['is_trade_ad'][0] == '1' ? true : false
             ]
@@ -2171,7 +2171,7 @@ class AdListController extends CoreController
             'locationFacets'    => $locationFacets,
             'orderedDimensions' => $orderedDimensions,
             'dimensions'        => $dimensions,
-            'ads_with_images'   => isset($params['ads_with_images']),
+            'items_with_photo'   => isset($params['items_with_photo']),
             'expired_ads'       => isset($params['expired_ads']),
             'showPriceField'    => $categoryObj->getId() > 1 ? CommonManager::showPriceInSearchFilter($categoryObj->getId(), $this->container) : true,
             'userTypeTitle'     => $userTypeLabels['header']
