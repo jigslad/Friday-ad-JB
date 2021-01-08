@@ -395,7 +395,7 @@ class AdRoutingManager
         $pageString = $pageString == '' ? 'search' : $pageString;
         $searchDistance = '';
         
-        if ((isset($search_params['search_param']['item__distance']))) {
+        /*if ((isset($search_params['search_param']['item__distance']))) {
             $searchDistance = $search_params['search_param']['item__distance'];
             if ($getDefaultRadius!='' && $getDefaultRadius==$search_params['search_param']['item__distance']) {
                 unset($search_params['search_param']['item__distance']);
