@@ -890,18 +890,21 @@ class CategoryRepository extends NestedTreeRepository
         }
 
         $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
-        $data['facet_fields'] = array('a_category_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_1_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_2_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_3_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_4_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_5_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_6_id_i' => array('limit' => '5000'));
+        //$data['facet_fields'] = array('a_parent_category_lvl_1_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_2_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_3_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_4_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_5_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_6_id_i' => array('limit' => '5000'));
+        $data['facet_fields'] = array('category_ids' => array('limit' => '5000'));
 
         // initialize solr search manager service and fetch data based of above prepared search options
-        $container->get('fa.solrsearch.manager')->init('ad', '', $data);
+        $container->get('fa.solrsearch.manager')->init('ad.new', '', $data);
         $solrResponse = $container->get('fa.solrsearch.manager')->getSolrResponse();
 
         // fetch result set from solr
         $result = $container->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
-        $categoryCountArray = get_object_vars($result['a_parent_category_lvl_1_id_i']) + get_object_vars($result['a_parent_category_lvl_2_id_i']) + get_object_vars($result['a_parent_category_lvl_3_id_i']) + get_object_vars($result['a_parent_category_lvl_4_id_i']) + get_object_vars($result['a_parent_category_lvl_5_id_i']) + get_object_vars($result['a_parent_category_lvl_6_id_i']);
-        $leafLevelCategoryCount = get_object_vars($result['a_category_id_i']);
+        //$categoryCountArray = get_object_vars($result['a_parent_category_lvl_1_id_i']) + get_object_vars($result['a_parent_category_lvl_2_id_i']) + get_object_vars($result['a_parent_category_lvl_3_id_i']) + get_object_vars($result['a_parent_category_lvl_4_id_i']) + get_object_vars($result['a_parent_category_lvl_5_id_i']) + get_object_vars($result['a_parent_category_lvl_6_id_i']);
+        //$leafLevelCategoryCount = get_object_vars($result['a_category_id_i']);
+        $categoryCountArray = $leafLevelCategoryCount =  isset($result['category_ids'])?get_object_vars($result['category_ids']):array();
 
         $this->categoryCountArray = $categoryCountArray;
+        $this->leafLevelCategoryCount = $leafLevelCategoryCount;
 
         $footerCategoryArray = array();
 
@@ -1121,20 +1124,38 @@ class CategoryRepository extends NestedTreeRepository
         if (is_array($this->categoryCountArray) && count($this->categoryCountArray)) {
             $categoryCountArray = $this->categoryCountArray;
         } else {
+            /*if(isset($searchParams['item__category_id'])) {
+                $category = $em->getRepository('FaEntityBundle:Category')->findOneBy(['id' => $searchParams['item__category_id']]);
+            }*/
+
+            $data                 = array();
+            if (empty($data['static_filters'])) {
+                $data['static_filters'] = '';
+            }
+            /*if (isset($searchParams['item__category_id']) && $searchParams['item__category_id'] != 1) {
+                $data['static_filters'] .= ' AND category_full_path:' . $category->getFullSlug();
+            }*/
+
             $locationId = $em->getRepository('FaEntityBundle:Location')->getIdBySlug($locationSlug, $container);
 
             if (!$locationId) {
                 $locationId = $em->getRepository('FaEntityBundle:Locality')->getColumnBySlug('id', $locationSlug, $container);
             }
 
-            $radius = self::MAX_DISTANCE;
-            $radius = $this->getDefaultRadiusBySearchParams($searchParams,$container);
 
-            $data                 = array();
-            $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
-            if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
+            $defradius = $this->getDefaultRadiusBySearchParams($searchParams,$container);
+            $radius = ($defradius)?$defradius:self::MAX_DISTANCE;
+
+
+            if($locationId && $locationId != LocationRepository::COUNTY_ID) {
+                $data['search']['item__distance'] = $radius;
+                $data['query_filters']['item']['distance']= $radius;
                 $data['query_filters']['item']['location'] = $locationId.'|'.$radius;
             }
+
+            $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
+            $data['query_filters']['item']['is_blocked_ad'] = 0;
+
             if (!empty($locationDetails)) {
                 if (isset($locationDetails['latitude']) && isset($locationDetails['longitude'])) {
                     if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
@@ -1145,18 +1166,20 @@ class CategoryRepository extends NestedTreeRepository
                     $container->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
                 }
             }
-            $data['facet_fields'] = array('a_category_id_i' => array('limit' => '5000'),'a_parent_category_lvl_1_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_2_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_3_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_4_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_5_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_6_id_i' => array('limit' => '5000'));
+            //$data['facet_fields'] = array('a_parent_category_lvl_1_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_2_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_3_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_4_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_5_id_i' => array('limit' => '5000'), 'a_parent_category_lvl_6_id_i' => array('limit' => '5000'));
+            $data['facet_fields'] = array('category_ids' => array('limit' => '5000'));
 
             // initialize solr search manager service and fetch data based of above prepared search options
-            $container->get('fa.solrsearch.manager')->init('ad', '', $data);
+            $container->get('fa.solrsearch.manager')->init('ad.new', '', $data);
             $solrResponse = $container->get('fa.solrsearch.manager')->getSolrResponse();
 
             // fetch result set from solr
+
             $result = $container->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
-            $categoryCountArray = get_object_vars($result['a_parent_category_lvl_1_id_i']) + get_object_vars($result['a_parent_category_lvl_2_id_i']) + get_object_vars($result['a_parent_category_lvl_3_id_i']) + get_object_vars($result['a_parent_category_lvl_4_id_i']) + get_object_vars($result['a_parent_category_lvl_5_id_i']) + get_object_vars($result['a_parent_category_lvl_6_id_i']);
-            $leafLevelCategoryCount = get_object_vars($result['a_category_id_i']);
+            $categoryCountArray = $leafLevelCategoryCount =  isset($result['category_ids'])?get_object_vars($result['category_ids']):array();
 
             $this->categoryCountArray = $categoryCountArray;
+            $this->leafLevelCategoryCount = $leafLevelCategoryCount;
         }
 
         $tableName = $this->_em->getClassMetadata('FaEntityBundle:Category')->getTableName();
