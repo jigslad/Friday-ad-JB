@@ -161,13 +161,15 @@
 {% endblock %}
 
 {% block scripttop %}
-    {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) or (seoFields|length and seoFields['popular_search'] is defined and seoFields['popular_search'] and seoFields['seo_tool_id'] is defined and seoFields['seo_tool_id']) %}
-        {# CSS for owl carousel - taken from Fa/Bundle/AdBundle/Resources/views/AdList/owl-carousel-2-css.html.twig and inline CSS for listing page #}
-        {% stylesheets filter='uglifycss' output='bundles/css/compiled/search-result.css'
-            'bundles/fafrontend/css/ad-list.css'
-        %}
-            <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
-        {% endstylesheets %}
+    {% if seoFields is not null %}
+        {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) or (seoFields|length and seoFields['popular_search'] is defined and seoFields['popular_search'] and seoFields['seo_tool_id'] is defined and seoFields['seo_tool_id']) %}
+            {# CSS for owl carousel - taken from Fa/Bundle/AdBundle/Resources/views/AdList/owl-carousel-2-css.html.twig and inline CSS for listing page #}
+            {% stylesheets filter='uglifycss' output='bundles/css/compiled/search-result.css'
+                'bundles/fafrontend/css/ad-list.css'
+            %}
+                <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
+            {% endstylesheets %}
+        {% endif %}
     {% endif %}
     <style>
         #fa_left_search_new_item__distance-button {
