@@ -187,6 +187,7 @@
                          $('#header_search_editable_location_span').html(data.text);
                          if (id == 'top_search_location_ok') {
                         	 $('#fa_top_search_leafLevelCategoryId').val($('#fa_top_search_tmpLeafLevelCategoryId').val());
+                             $('#fa_top_search_keyword_category_id').val($('#fa_top_search_tmpLeafLevelCategoryId').val());
                              $('form[name="fa_top_search"]').submit();
                          } else if (id == 'top_search_location_homepage_ok') {
                              if (!topSearchKeywords && !topSearchCategoryId) {
@@ -216,6 +217,7 @@
                 $('#header_search_editable_location_a').show();
                 $('#header_search_editable_location_span').show();
                 $('#fa_top_search_leafLevelCategoryId').val($('#fa_top_search_tmpLeafLevelCategoryId').val());
+                $('#fa_top_search_keyword_category_id').val($('#fa_top_search_tmpLeafLevelCategoryId').val());
                 $('form[name="fa_top_search"]').submit();
             } else if (id == 'top_search_location_homepage_ok') {
                 if (!topSearchKeywords && !topSearchCategoryId) {
