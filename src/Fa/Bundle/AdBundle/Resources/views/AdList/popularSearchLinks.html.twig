@@ -3,6 +3,7 @@
 {% set popularSearchArray = seoToolPopularSearchRepository.getPopularSearchArrayBySeoToolId(seoFields['seo_tool_id'], container) %}
 {% if popularSearchArray|length %}
     <link rel="stylesheet" href="{{ asset('build/css/popularSearch.css') }}?v=1.0.1" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <div class="popular-search {{ popularSearchArray|length == 1 ? 'min-keywords': ''}} {{ showAdultPages == 1 ? 'adult' : ''}}">
         <ul class="popular-search--block">
             <li class="popular-search--title">{{'Popular Searches'|trans({}, 'frontend-left--popular-search')}}:</li>
