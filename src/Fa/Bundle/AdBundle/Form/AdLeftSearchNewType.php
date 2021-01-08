@@ -145,7 +145,7 @@ class AdLeftSearchNewType extends AbstractType
             $defDistance = ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
         }
 
-        if($searchLocation == 2 || $getLocLvl==2) {
+        if($searchLocation <= 2 || $getLocLvl<=2) {
             $form->add('hide_distance_block', HiddenType::class,array('mapped' => false,'empty_data' => 1,'data'=>1));
         } else {
             $form->add('hide_distance_block', HiddenType::class,array('mapped' => false,'empty_data' => 0,'data'=>0));
