@@ -1886,7 +1886,6 @@ class AdListController extends CoreController
                         }
                     }
                     if (isset($town['id']) && $town['id'] != LocationRepository::COUNTY_ID) {
-                        /** @var Location $location */
                         $location = $this->getRepository('FaEntityBundle:Location')->find($town['id']);
 
                         $radius = CategoryRepository::MAX_DISTANCE;
