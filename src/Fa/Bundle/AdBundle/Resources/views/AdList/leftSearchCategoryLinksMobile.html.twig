@@ -9,13 +9,17 @@
                 <ul>
                     <li><label>{{ 'All Categories'|trans({}, 'frontend-left-search') }}</label></li>
                     {% for categoryId, categoryName in mainCategories %}
-                        {% set adCount = 0 %}
-                        {% set nestedChildrenCategories = fetch_repository('FaEntityBundle:Category').getNestedLeafChildrenIdsByCategoryId(categoryId, fetch_container_instance()) %}
-                        {% for nestedCategoryId in nestedChildrenCategories %}
-                            {% if facetResult.category_ids[nestedCategoryId] is defined %}
-                                {% set adCount =  adCount + facetResult.category_ids[nestedCategoryId] %}
-                            {% endif %}
-                        {% endfor %}
+                        {% if(facetResult.category_ids[categoryId] is defined) %}
+                            {% set adCount = facetResult.category_ids[categoryId] %}
+                        {% else %}
+                            {% set adCount = 0 %}
+                        {% endif %}
+{#                        {% set nestedChildrenCategories = fetch_repository('FaEntityBundle:Category').getNestedLeafChildrenIdsByCategoryId(categoryId, fetch_container_instance()) %}#}
+{#                        {% for nestedCategoryId in nestedChildrenCategories %}#}
+{#                            {% if facetResult.category_ids[nestedCategoryId] is defined %}#}
+{#                                {% set adCount =  adCount + facetResult.category_ids[nestedCategoryId] %}#}
+{#                            {% endif %}#}
+{#                        {% endfor %}#}
                         {% if adCount > 0 %}
                             {% set queryParams = categorySearchParams|merge({'item__category_id': categoryId}) %}
                             <li><a href="javascript:void(0)" onClick="loadChildrenCategories('{{array_serialize(queryParams)|escape('js')}}','{{array_serialize(facetResult)|escape('js')}}')">{{ categoryName }} ({{ adCount }})</a></li>
@@ -53,18 +57,22 @@
                   </li>
                   {% if childCategories|length > 0 %}
                       {% for childCategoryId, childCategoryName in childCategories %}
-                          {% set adCount = 0 %}
-                          {% set isLeafCategory = false %}
+                          {% if(facetResult.category_ids[categoryId] is defined) %}
+                              {% set adCount = facetResult.category_ids[categoryId] %}
+                          {% else %}
+                              {% set adCount = 0 %}
+                          {% endif %}
                           {% if facetResult.category_ids[childCategoryId] is defined %}
-                              {% set adCount = facetResult.category_ids[childCategoryId] %}
+{#                              {% set adCount = facetResult.category_ids[childCategoryId] %}#}
                               {% set isLeafCategory = true %}
                           {% else %}
-                              {% set nestedChildrenCategories = fetch_repository('FaEntityBundle:Category').getNestedLeafChildrenIdsByCategoryId(childCategoryId, fetch_container_instance()) %}
-                              {% for nestedCategoryId in nestedChildrenCategories %}
-                                  {% if facetResult.category_ids[nestedCategoryId] is defined %}
-                                      {% set adCount =  adCount + facetResult.category_ids[nestedCategoryId] %}
-                                  {% endif %}
-                              {% endfor %}
+                              {% set isLeafCategory = false %}
+{#                              {% set nestedChildrenCategories = fetch_repository('FaEntityBundle:Category').getNestedLeafChildrenIdsByCategoryId(childCategoryId, fetch_container_instance()) %}#}
+{#                              {% for nestedCategoryId in nestedChildrenCategories %}#}
+{#                                  {% if facetResult.category_ids[nestedCategoryId] is defined %}#}
+{#                                      {% set adCount =  adCount + facetResult.category_ids[nestedCategoryId] %}#}
+{#                                  {% endif %}#}
+{#                              {% endfor %}#}
                           {% endif %}
                           {% if adCount > 0 %}
                               {% set queryParams = categorySearchParams|merge({'item__category_id': childCategoryId}) %}
