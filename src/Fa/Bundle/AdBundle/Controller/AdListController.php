@@ -17,7 +17,6 @@ use Fa\Bundle\EntityBundle\Entity\Entity;
 use Fa\Bundle\EntityBundle\Entity\Location;
 use Fa\Bundle\EntityBundle\Repository\CategoryDimensionRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundleController\Controller;
 use Fa\Bundle\CoreBundle\Controller\CoreController;
 use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -390,7 +389,7 @@ class AdListController extends CoreController
         if (isset($data['search']['item__location'])) {
             $locationResult = $this->getRepository('FaEntityBundle:Location')->find($data['search']['item__location']);
         }
-        
+
         if (!empty($facetResult)) {
            // $locationFacets = $this->getLocationFacetForSearchResult($facetResult, $data);
         }
@@ -1165,7 +1164,7 @@ class AdListController extends CoreController
                 $parentCategoryIds = array_keys($this->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($findersSearchParams['item__category_id'], false, $this->container));
                 $locationRadius = $this->getRepository('FaAdBundle:LocationRadius')->getSingleLocationRadiusByCategoryIds($parentCategoryIds);
                 if ($locationRadius) {
-                    $findersSearchParams['item__distance'] = $data['search']['item__distance'] = $data['query_filters']['item']['distance'] = $locationRadius['defaultRadius'];
+                    $data['search']['item__distance'] = $data['query_filters']['item']['distance'] = $locationRadius['defaultRadius'];
                     $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'. (isset($data['search']['item__distance']) ? $data['search']['item__distance'] : '');
                     if ($locationRadius['extendedRadius']>0 && $locationRadius['extendedRadius'] > $locationRadius['defaultRadius']) {
                         $extendlocation = $data['search']['item__location'].'|'. (isset($locationRadius['extendedRadius']) ? $locationRadius['extendedRadius']: '').'|'. (isset($data['search']['item__distance']) ? $data['search']['item__distance'] : '');
@@ -1175,7 +1174,7 @@ class AdListController extends CoreController
 
                 if (!isset($data['search']['item__distance'])) {
                     $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($findersSearchParams['item__category_id'], $this->container);
-                    $findersSearchParams['item__distance'] = $data['search']['item__distance'] = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
+                    $data['search']['item__distance'] = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
                     $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'. ((isset($data['search']['item__distance']) ? $data['search']['item__distance'] : ''));
                 }
             }
@@ -1317,7 +1316,8 @@ class AdListController extends CoreController
             'extendedResultCount'   => $extendedResultCount,
             'facetResult'           => $facetResult,
             'rootCategoryId'        => $root->getId(),
-            'areaToolTipFlag'       => $areaToolTipFlag
+            'areaToolTipFlag'       => $areaToolTipFlag,
+            'searchAgentData'        => array('sorter' => $data['sorter'], 'search' => $data['search']),
          ];
 
         // profile categories other than Services & Adults
@@ -1562,9 +1562,9 @@ class AdListController extends CoreController
             'item__price_from',
             'item__price_to',
             'item__ad_type_id',
-            'ads_with_images',
+            'items_with_photo',
             'expired_ads',
-            'is_trade_ad',
+            'item__is_trade_ad',
             'item__distance',
             'map',
             'keywords'
@@ -1593,11 +1593,11 @@ class AdListController extends CoreController
               $staticFilters .= ' AND price : [' . $searchItem . ' TO *]';
             } else if ($searchKey == 'item__price_to') {
                 $staticFilters .= ' AND price : [* TO ' . $searchItem . ']';
-            } else if ($searchKey == 'ads_with_images') {
+            } else if ($searchKey == 'items_with_photo') {
                 $staticFilters .= ' AND image_count : [1 TO *]';
             } else if ($searchKey == 'expired_ads') {
                 $staticFilters .= ' AND status_id : ' . EntityRepository::AD_STATUS_EXPIRED_ID;
-            } else if ($searchKey == 'is_trade_ad') {
+            } else if ($searchKey == 'item__is_trade_ad') {
                 $staticFilters .= ' AND is_trade_ad : ' . $searchItem;
             } else if ($searchKey == 'item__ad_type_id') {
                 if (is_array($searchItem)) {
@@ -1736,13 +1736,13 @@ class AdListController extends CoreController
         $userTypes = [
             0 => [
                 'title' => $userTypeLabels['private_user'],
-                'url_param' => 'is_trade_ad=0',
+                'url_param' => 'item__is_trade_ad=0',
                 'count' => empty($tradeFacets) ? 0 : intval($tradeFacets["false"]),
                 'selected' => isset($params['is_trade_ad']) && $params['is_trade_ad'][0] == '0' ? true : false
             ],
             1 => [
                 'title' => $userTypeLabels['business_user'],
-                'url_param' => 'is_trade_ad=1',
+                'url_param' => 'item__is_trade_ad=1',
                 'count' => empty($tradeFacets) ? 0 : intval($tradeFacets["true"]),
                 'selected' => isset($params['is_trade_ad']) && $params['is_trade_ad'][0] == '1' ? true : false
             ]
@@ -2170,7 +2170,7 @@ class AdListController extends CoreController
             'locationFacets'    => $locationFacets,
             'orderedDimensions' => $orderedDimensions,
             'dimensions'        => $dimensions,
-            'ads_with_images'   => isset($params['ads_with_images']),
+            'items_with_photo'   => isset($params['items_with_photo']),
             'expired_ads'       => isset($params['expired_ads']),
             'showPriceField'    => $categoryObj->getId() > 1 ? CommonManager::showPriceInSearchFilter($categoryObj->getId(), $this->container) : true,
             'userTypeTitle'     => $userTypeLabels['header']
@@ -2775,8 +2775,8 @@ class AdListController extends CoreController
             }
             $form->submit($bindSearchParams);
         }
-        $parameters = array('form' => $form->createView(), 'locationFacets' => $request->get('locationFacets'), 'facetResult' => $request->get('facetResult', 'facetResult'), 'basicParams' => $basicParams, 'isShopPage' => $isShopPage, 'cookieLocationDetails' => $request->get('cookieLocationDetails'));
-        
+        $parameters = array('form' => $form->createView(), 'locationFacets' => $request->get('locationFacets'), 'facetResult' => $request->get('facetResult', 'facetResult'), 'basicParams' => $basicParams, 'isShopPage' => $isShopPage, 'cookieLocationDetails' => $request->get('cookieLocationDetails'), 'leftFilters' => $request->get('leftFilters'));
+
         return $this->render('FaAdBundle:AdList:leftSearch.html.twig', $parameters);
     }
 
@@ -4523,8 +4523,7 @@ class AdListController extends CoreController
     {
         if ($request->isXmlHttpRequest()) {
             $searchParams = unserialize($request->get('searchParams'));
-            $facetResult  = $this->getRepository('FaEntityBundle:Category')->getCategoryFacetBySearchParams($searchParams, $this->container);
-
+            $facetResult = unserialize($request->get('facetResult'));
             $parameters = array('searchParams' => $searchParams, 'facetResult' => $facetResult);
             return $this->render('FaAdBundle:AdList:leftSearchCategoryLinksMobile.html.twig', $parameters);
         }

@@ -470,7 +470,7 @@ class CategoryRepository extends NestedTreeRepository
             $childrens = $this->getBaseQueryBuilder(self::ALIAS)
                          ->where(self::ALIAS.'.parent = '.$id)
                          ->andWhere(self::ALIAS.'.status = 1')
-                         ->orderBy(self::ALIAS.'.name', 'asc')
+                         ->orderBy(self::ALIAS.'.id', 'asc')
                          ->getQuery()->getArrayResult();
 
             foreach ($childrens as $children) {
