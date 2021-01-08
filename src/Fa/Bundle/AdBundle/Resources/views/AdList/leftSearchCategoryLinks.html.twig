@@ -18,13 +18,17 @@
                 <ul>
                     <li><label>{{ 'All Categories'|trans({}, 'frontend-left-search') }}</label></li>
                     {% for categoryId, categoryName in mainCategories %}
-                        {% set adsCount = 0 %}
-                        {% set nestedChildrenCategories = fetch_repository('FaEntityBundle:Category').getNestedLeafChildrenIdsByCategoryId(categoryId, fetch_container_instance()) %}
-                        {% for nestedCategoryId in nestedChildrenCategories %}
-                            {% if facetResult.category_ids[nestedCategoryId] is defined %}
-                                {% set adsCount =  adsCount + facetResult.category_ids[nestedCategoryId] %}
-                            {% endif %}
-                        {% endfor %}
+                        {% if(facetResult.category_ids[categoryId] is defined) %}
+                            {% set adsCount = facetResult.category_ids[categoryId] %}
+                        {% else %}
+                            {% set adsCount = 0 %}
+                        {% endif %}
+{#                        {% set nestedChildrenCategories = fetch_repository('FaEntityBundle:Category').getNestedLeafChildrenIdsByCategoryId(categoryId, fetch_container_instance()) %}#}
+{#                        {% for nestedCategoryId in nestedChildrenCategories %}#}
+{#                            {% if facetResult.category_ids[nestedCategoryId] is defined %}#}
+{#                                {% set adsCount =  adsCount + facetResult.category_ids[nestedCategoryId] %}#}
+{#                            {% endif %}#}
+{#                        {% endfor %}#}
                         {% if adsCount > 0 %}
                             {% set queryParams = {'fa_left_search' : searchParams|merge({'item__category_id': categoryId})} %}
                             {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams['fa_left_search'], null, false, null, false, parentFullSlug, secondLevelParentFullSlug) %}

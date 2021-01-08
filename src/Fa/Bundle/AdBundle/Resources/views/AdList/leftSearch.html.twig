@@ -111,7 +111,7 @@
                               {% if customized_url|length and customized_url['target_url'] != '' %}
                                   {% set listurl = container.get('fa_ad.manager.ad_routing').getCustomListingUrl(queryParams['fa_left_search'], customized_url['target_url'], true) %}
                               {% else %}
-                                  {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams['fa_left_search']) %}
+                                  {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams['fa_left_search'], null, false, null, false, null, null,true) %}
                               {% endif %}
                               {% if key == (maxDimensionCount) %}
                                   </ul>
