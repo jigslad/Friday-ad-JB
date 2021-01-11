@@ -152,7 +152,6 @@
             </div>
         </dd>
 
-
         {% if isShopPage is not defined or (isShopPage is defined and not isShopPage) %}
             {% if attribute(form, 'item__is_trade_ad') is defined %}
                 {% if searchParams.item__category_id is not defined or (searchParams.item__category_id is defined and searchParams.item__category_id is not null and (rootCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID') and rootCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID'))) %}

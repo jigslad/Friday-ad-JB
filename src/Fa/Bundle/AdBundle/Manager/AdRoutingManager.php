@@ -106,9 +106,6 @@ class AdRoutingManager
      */
     public function getListingUrl($search_params, $page = null, $submitted = false, $categories = null, $fromCommandLine = false, $parentFullSlug = null, $secondLevelParentFullSlug = null,$isNearByTown = false)
     {
-        /*if(isset($search_params['default_distance'])){
-            unset($search_params['item__distance']);
-        }*/
         $location    = null;
         $page_string = null;
         $user_slug = null;
@@ -121,12 +118,6 @@ class AdRoutingManager
             unset($search_params['hide_distance_block']);
         }
 
-        /*if(isset($search_params['item__distance'])) {
-            if ($search_params['item__distance'] == CategoryRepository::LONDON_DISTANCE) {
-                unset($search_params['item__distance']);
-            }
-        }*/
-        
         if(isset($search_params['default_distance'])) {
             unset($search_params['default_distance']);
         }
