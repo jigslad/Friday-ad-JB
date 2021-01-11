@@ -2118,6 +2118,7 @@ class AdListController extends CoreController
                 $facetDimResult = $solrSearchManager->getSolrResponseFacetFields($solrResponse);
                 if (! empty($facetDimResult)) {
                     $facetDimResult = $facetDimResult[$solrFieldName];
+                    $facetResult[$dimension['solr_field']] = $facetDimResult;
                     foreach ($facetDimResult as $jsonValue => $facetCount) {
                         $value = json_decode($jsonValue);
 
