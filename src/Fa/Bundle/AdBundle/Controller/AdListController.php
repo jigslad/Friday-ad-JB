@@ -1585,7 +1585,9 @@ class AdListController extends CoreController
             }
 
             if (is_array($searchParams[$diffKey])) {
-                $searchParams[$solrDimensionFieldName][] = $searchParams[$diffKey][0];
+                foreach ($searchParams[$diffKey] as $diffKeyItem){
+                    $searchParams[$solrDimensionFieldName][] = $diffKeyItem;
+                }
             } elseif (strpos($searchParams[$diffKey], '___') !== false) {
                 $searchParams[$solrDimensionFieldName] = array_merge($searchParams[$solrDimensionFieldName], explode('___', $searchParams[$diffKey]));
             } else {
