@@ -9,8 +9,8 @@
 {% set nonCrawlableDimensionValues = fetch_repository('FaEntityBundle:Entity').nonCrawlableDimensionValues() %}
 {% set dimensionFacetResult = fetch_repository('FaEntityBundle:CategoryDimension').getDimensionFacetBySearchParams(filter, dimensionParams, selectedValues, fetch_container_instance(), true, null, null, false, cookieLocationDetails) %}
 {% set dimensionFacetName = leftFilters.dimensions[dimensionId].solr_field %}
-{% if(facetResult[dimensionFacetName]) is defined %}
-    {% set dimensionFacetResultNew =  facetResult[dimensionFacetName] %}
+{% if(leftFilters.orderedDimensions[dimensionId]) is defined %}
+    {% set dimensionFacetResultNew =  leftFilters.orderedDimensions[dimensionId] %}
 {% endif %}
 
 {% set extraLabel = '' %}
@@ -19,7 +19,7 @@
 {% elseif 'number_of_bedrooms_id' in filter %}
     {% set extraLabel = ' bedroom' %}
 {% endif %}
-{% if dimensionFacetResultNew is defined and get_object_vars(dimensionFacetResultNew)|length > 0 %}
+
 {% if dimensionFacetResult is defined and dimensionFacetResult|length > 0 %}
     <dd class="accordion-navigation">
         {% set plusMinusClass = 'fi-plus' %}
@@ -64,7 +64,7 @@
                         {% set adCount = 0 %}
                         {% if dimensionFacetResultNew is defined %}
                             {% if dimensionFacetResultNew[child.vars.value] is defined %}
-                                {% set adCount = attribute(dimensionFacetResultNew, child.vars.value) %}
+                                {% set adCount = attribute(dimensionFacetResultNew, child.vars.value).count %}
                             {% endif %}
                         {% elseif attribute(dimensionFacetResult, child.vars.value) is defined %}
                             {% set adCount = attribute(dimensionFacetResult, child.vars.value) %}
@@ -95,5 +95,4 @@
             </div>
         </div>
     </dd>
-{% endif %}
 {% endif %}
