@@ -129,6 +129,7 @@ class AdTopSearchType extends AbstractType
         $getDefaultRadius = $cookieLocationDet = array(); 
         
         $searchParams = $this->request->get('searchParams');
+        $qryItemDistance = $this->request->get('item__distance');
         $cookieLocation = $this->request->cookies->get('location');
 
         if(!empty($cookieLocation)) {
@@ -158,11 +159,17 @@ class AdTopSearchType extends AbstractType
         if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
             $categoryId = $searchParams['item__category_id'];
         }
-        if (isset($searchParams['item__distance']) && $searchParams['item__distance']) {
-            $defDistance = $searchParams['item__distance'];
+
+        unset($searchParams['item__distance']);
+        if($qryItemDistance) {
+            $searchParams['item__distance'] = $qryItemDistance;
+        }
+
+        if ($qryItemDistance) {
+            $defDistance = $qryItemDistance;
         } else {
-            $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
-            $defDistance = ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
+            $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParamsOnly($searchParams, $this->container);
+            $defDistance = ($getDefaultRadius) ? $getDefaultRadius : CategoryRepository::MAX_DISTANCE;
         }
                     
         $form->add(
@@ -174,7 +181,15 @@ class AdTopSearchType extends AbstractType
                 'data' => $defDistance,
             )
             );
-        
+        $form->add(
+            'default_distance',
+            HiddenType::class,
+            array(
+                'mapped' => false,
+                'empty_data' => $defDistance,
+                'data' => $defDistance,
+            )
+        );
         $this->addLocationAutoSuggestField($event->getForm(),$selLocationArray);
     }
 

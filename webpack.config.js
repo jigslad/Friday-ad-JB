@@ -31,6 +31,7 @@ Encore
     .addStyleEntry('css/sponsored-slots', './assets/scss/sponsored-slots.scss')
     .addStyleEntry('css/upgrade-featured', './assets/scss/upgrade-featured.scss')
     .addStyleEntry('css/upsell-featured', './assets/scss/upsell-featured.scss')
+    .addStyleEntry('css/popularSearch', './assets/scss/popular-search.scss')
     // .addEntry('app', './assets/js/app.js')
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
