@@ -389,7 +389,7 @@ class AdListController extends CoreController
         if (isset($data['search']['item__location'])) {
             $locationResult = $this->getRepository('FaEntityBundle:Location')->find($data['search']['item__location']);
         }
-        
+
         if (!empty($facetResult)) {
            // $locationFacets = $this->getLocationFacetForSearchResult($facetResult, $data);
         }
@@ -1319,6 +1319,13 @@ class AdListController extends CoreController
             'areaToolTipFlag'       => $areaToolTipFlag,
             'searchAgentData'        => array('sorter' => $data['sorter'], 'search' => $data['search']),
          ];
+        foreach($parameters['facetResult'] as $key => $val) {
+            foreach($val as $keyNew => $valNew) {
+                if(CommonManager::isJSON($keyNew)){
+                    $parameters['facetResult'][$key][json_decode($keyNew)->id] = $valNew;
+                }
+            }
+        }
 
         // profile categories other than Services & Adults
         if (!in_array($root->getId(), array(CategoryRepository::ADULT_ID, CategoryRepository::SERVICES_ID))) {
@@ -1578,7 +1585,9 @@ class AdListController extends CoreController
             }
 
             if (is_array($searchParams[$diffKey])) {
-                $searchParams[$solrDimensionFieldName][] = $searchParams[$diffKey][0];
+                foreach ($searchParams[$diffKey] as $diffKeyItem){
+                    $searchParams[$solrDimensionFieldName][] = $diffKeyItem;
+                }
             } elseif (strpos($searchParams[$diffKey], '___') !== false) {
                 $searchParams[$solrDimensionFieldName] = array_merge($searchParams[$solrDimensionFieldName], explode('___', $searchParams[$diffKey]));
             } else {
@@ -1875,7 +1884,6 @@ class AdListController extends CoreController
 
                     $newData = $data;
                     $newStaticFilters = '';
-
                     if ($newData['static_filters']) {
                         $staticFilters = explode(' AND ', $newData['static_filters']);
 
@@ -2112,6 +2120,7 @@ class AdListController extends CoreController
                 $facetDimResult = $solrSearchManager->getSolrResponseFacetFields($solrResponse);
                 if (! empty($facetDimResult)) {
                     $facetDimResult = $facetDimResult[$solrFieldName];
+                    $facetResult[$dimension['solr_field']] = $facetDimResult;
                     foreach ($facetDimResult as $jsonValue => $facetCount) {
                         $value = json_decode($jsonValue);
 

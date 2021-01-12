@@ -118,12 +118,6 @@ class AdRoutingManager
             unset($search_params['hide_distance_block']);
         }
 
-        /*if(isset($search_params['item__distance'])) {
-            if ($search_params['item__distance'] == CategoryRepository::LONDON_DISTANCE) {
-                unset($search_params['item__distance']);
-            }
-        }*/
-        
         if(isset($search_params['default_distance'])) {
             unset($search_params['default_distance']);
         }
@@ -156,6 +150,7 @@ class AdRoutingManager
             }
         }
         /*if (!isset($search_params['item__distance']) && $fromCommandLine == false) {
+            $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($search_params, $this->container);
             if ($getDefaultRadius) {
                 $search_params['item__distance'] = $getDefaultRadius;
             }
