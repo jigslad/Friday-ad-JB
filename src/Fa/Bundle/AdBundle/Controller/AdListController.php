@@ -1319,13 +1319,6 @@ class AdListController extends CoreController
             'areaToolTipFlag'       => $areaToolTipFlag,
             'searchAgentData'        => array('sorter' => $data['sorter'], 'search' => $data['search']),
          ];
-        foreach($parameters['facetResult'] as $key => $val) {
-            foreach($val as $keyNew => $valNew) {
-                if(CommonManager::isJSON($keyNew)){
-                    $parameters['facetResult'][$key][json_decode($keyNew)->id] = $valNew;
-                }
-            }
-        }
 
         // profile categories other than Services & Adults
         if (!in_array($root->getId(), array(CategoryRepository::ADULT_ID, CategoryRepository::SERVICES_ID))) {
