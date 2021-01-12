@@ -323,6 +323,7 @@
         {% endif %}
         {% if categoryName == 'property' %}
             var rentTypes = $('[id^="fa_paa_second_step_{{ categoryName }}_rent_per_id_"]');
+            if(rentTypes.length){
             var rentTypeSelected = false;
             rentTypes.each(function (index, element){
                 if(element.checked) {
@@ -332,6 +333,7 @@
 
             if(!rentTypeSelected){
                 disableNextButton()
+            }
             }
         {% endif %}
         {% if categoryName == 'community' %}
