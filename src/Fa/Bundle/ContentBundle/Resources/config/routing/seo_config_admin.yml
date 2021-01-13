@@ -99,39 +99,39 @@ admin_validate_redirects:
     defaults: { _controller: "FaContentBundle:SeoConfigAdmin:validateRedirects" }
 
 admin_seo_config_datatable:
-    path: /data-table/data
+    path: /data-tle/data
     defaults: { _controller: "FaContentBundle:SeoConfigAdmin:dataTableConfig" }
 
 admin_seo_config_redirects_datatable:
-    path: /data-table/redirect-data
+    path: /data-tle/redirect-data
     defaults: { _controller: "FaContentBundle:SeoConfigAdmin:dataTableRedirectConfig" }
 
 admin_seo_config_datatable_delete:
-    path: /data-table/delete
+    path: /data-tle/delete
     defaults: { _controller: "FaContentBundle:SeoConfigAdmin:removeRule" }
 
 admin_seo_config_datatable_edit:
-    path: /data-table/edit
+    path: /data-tle/edit
     defaults: { _controller: "FaContentBundle:SeoConfigAdmin:editRule" } 
     
 admin_seo_config_datatable_redirectdelete:
-    path: /data-table/redirectdelete
+    path: /data-tle/redirectdelete
     defaults: { _controller: "FaContentBundle:SeoConfigAdmin:redirectremoveRule" }
 
 admin_seo_config_datatable_redirectedit:
-    path: /data-table/redirectedit
+    path: /data-tle/redirectedit
     defaults: { _controller: "FaContentBundle:SeoConfigAdmin:redirecteditRule" }
     
 admin_seo_config_motors_redirects_datatable:
-    path: /data-table/motors-redirect-data
+    path: /data-tle/motors-redirect-data
     defaults: { _controller: "FaContentBundle:SeoConfigAdmin:dataTableMotorsRedirectConfig" }
 
 admin_seo_config_datatable_motors_redirect_delete:
-    path: /data-table/motors-redirect-delete
+    path: /data-tle/motors-redirect-delete
     defaults: { _controller: "FaContentBundle:SeoConfigAdmin:motorsRedirectRemove" }
 
 admin_seo_config_datatable_motors_redirect_edit:
-    path: /data-table/motors-redirect-edit
+    path: /data-tle/motors-redirect-edit
     defaults: { _controller: "FaContentBundle:SeoConfigAdmin:motorsRedirectEdit" }
 
 seo_config_motors_redirects:
