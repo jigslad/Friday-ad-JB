@@ -37,7 +37,10 @@ class CategoryRepository extends NestedTreeRepository
 
     const ALIAS = 'c';
     const CACHE_TTL = 86400;
-
+    
+    const ALL_ID = 1; // Very Important - Do not remove.
+    const CATEGORY_ROOT_SLUG = 'category-root';
+    
     const FOR_SALE_ID  = 2;
     const MOTORS_ID    = 444;
     const JOBS_ID      = 500;

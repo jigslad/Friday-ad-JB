@@ -88,9 +88,15 @@
     {% endif %}
 
     <title>{% block title %}{% if blockPageTitle %}{{blockPageTitle|raw}}{% else %}{{'Friday-Ad'|trans}}{% endif %}{% endblock %}</title>
-    {% if blockMetaRobots and (not app.request.get('advertgone') or app.request.get('expired_ads')) %}
-        <meta name="robots" content="{{blockMetaRobots}}" />
+    {% set seoConfigRepository = fetch_repository('FaContentBundle:SeoConfig') %}
+    {% set metaRobots = seoConfigRepository.getMetaRobots(app.request.uri) %}
+    {% if metaRobots is not null %}
+        <meta name="robots" content="{{metaRobots}}" />
     {% endif %}
+{#    Old code For meta robots#}
+{#    {% if blockMetaRobots and (not app.request.get('advertgone') or app.request.get('expired_ads')) %}#}
+{#        <meta name="robots" content="{{blockMetaRobots}}" />#}
+{#    {% endif %}#}
     {% if blockMetaDescription %}
         <meta name="description" content="{{blockMetaDescription|raw}}" />
     {% endif %}

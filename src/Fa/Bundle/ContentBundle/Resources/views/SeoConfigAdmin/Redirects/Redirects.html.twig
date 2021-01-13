@@ -1,0 +1,45 @@
+<div id="RedirectDiv">
+    <b>Add Redirects</b>
+    <i class="fi-info" title="Added URLs will be redirects to corresponding URL"></i>
+    <br>
+    <i>Eg: &lt;from_url_segment&gt;:&lt;to_url_segment&gt;:&lt;replace_type&gt;</i>
+    <br>
+    <i>&lt;replace_type&gt; can be 'location' or 'category'. Default value will be 'category'</i>
+    <div style="font-size: 15px; font-style: oblique; margin-top: 10px;">
+        <div>article:list-all-adverts >> will convert &lt;domain&gt;/article_types?param=1 to &lt;domain&gt;/list-all-adverts_types?param=1</div>
+        <div>article:list-all-adverts:full >> will convert &lt;domain&gt;/article_types?param=1 to &lt;domain&gt;/list-all-adverts</div>
+    </div>
+    <div>
+        Click <a href="{{ path('admin_validate_redirects_view') }}" target="_blank">here</a> to upload & check the redirect status.
+    </div>
+    <div class="status-toggle">
+        <button type="button" data-on="Enabled" data-off="Disabled" data-toggle-handle="redirects" class="">-</button>
+    </div>
+    <div class="select">
+        <table id="redirects" style="width: 100%" data-rule="redirects" class="dataTable display">
+            <thead>
+            <tr>
+                <th>From</th>
+                <th>To</th>
+                <th>Type</th>
+                <th class="action">Action</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+
+    <button class="bulk-upload-button" data-toggle-handle="redirects" data-tab="Redirects">Bulk Upload</button>
+
+    {#                            <div class="select">#}
+    {#                                <table id="url_right_trim" style="width: 100%" data-rule="url_right_trim" class="dataTable display">#}
+    {#                                    <thead>#}
+    {#                                    <tr>#}
+    {#                                        <th>From</th>#}
+    {#                                        <th class="action">Action</th>#}
+    {#                                    </tr>#}
+    {#                                    </thead>#}
+    {#                                </table>#}
+    {#                            </div>#}
+
+    {#                            <button class="bulk-upload-button" data-toggle-handle="url_right_trim" data-tab="url_right_trim">Bulk Upload</button>#}
+</div>

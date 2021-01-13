@@ -1,0 +1,55 @@
+{% set maxDim = ((configs['max_dim_rules']['data']|slice(4,-4))|split('+')) %}
+{% set maxLocation = maxDim.0|split(':') %}
+{% set maxCategory = maxDim.1|split(':') %}
+{% set maxFilter = maxDim.2|split(':') %}
+<div id="MaxDimRuleDiv" style="margin: 65px 5px">
+    <div class="row">
+        <div class="status-toggle">
+            <button type="button" data-on="Enabled" data-off="Disabled" data-toggle-handle="max_dim_rules" class="">-</button>
+        </div>
+        <b>Add Max Dim Rules</b>
+        <br>
+        <i>For Internal Urls exceeding the below 'conditions' will not have href tags.</i>
+        <br>
+        <div>
+            Available Keywords: location, category, filter
+        </div>
+        <i>Understanding a URL:&nbsp;&nbsp; "/uk/for-sale/Fashion/male/"  - Has 1 Location, 2 Categories & 1 filter</i>
+{#    <br> <br>#}
+{#    <div class="select">#}
+{#        <select id="MaxDimRules" multiple class="multi-select" data-prediction="off">#}
+{#        </select>#}
+{#    </div>#}
+    </div>
+    <hr>
+    <div class="row">
+        <div class="large-3 columns">
+            Location
+            <select id="max-dim-location">
+                {% for i in range(1, 1) %}
+                    <option value="{{ i }}" {{ (maxLocation.1 == i) ? 'selected' : ''}}>{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="large-3 columns">
+            Category
+            <select id="max-dim-category">
+                {% for i in range(1, 4) %}
+                    <option value="{{ i }}" {{ (maxCategory.1 == i) ? 'selected' : ''}}>{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="large-3 columns">
+            filter
+            <select id="max-dim-filter">
+                {% for i in range(1, 4) %}
+                    <option value="{{ i }}" {{ (maxFilter.1 == i) ? 'selected' : ''}}>{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="large-3 columns">
+            <button type="button" onclick="update_MaxDimRulesNew();" style="float: right;" >Update Max Dim Rules</button>
+        </div>
+    </div>
+{#    <button type="button" onclick="update_MaxDimRules();" style="float: right; width: 300px;">Update Max Dim Rules</button>#}
+</div>

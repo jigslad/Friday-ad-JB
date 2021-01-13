@@ -175,7 +175,7 @@ class AdListController extends CoreController
         if ($pageUrl) {
             $objSeoToolOverride = $this->getRepository('FaContentBundle:SeoToolOverride')->findSeoRuleByPageUrl($pageUrl, $findersSearchParams, $this->container);
         }
-        
+
         //get SEO Source URL for classic-car
         if (strpos($pageUrl, 'motors/classic-cars') !== false && !$request->query->has('item_motors__reg_year')) {
             $getClassicCarRegYear = $this->getRepository('FaContentBundle:SeoTool')->findSeoSourceUrlMotorRegYear('motors/classic-cars/');
@@ -183,7 +183,7 @@ class AdListController extends CoreController
                 $findersSearchParams['item_motors__reg_year'] = $getClassicCarRegYear;
             }
         }
-        
+
         $isClassicCarPage = 0;
         if (strpos($pageUrl, 'motors/cars') !== false && isset($findersSearchParams['item_motors__reg_year'])) {
             $allUnder25Yrs = 1;
@@ -195,7 +195,7 @@ class AdListController extends CoreController
                     break;
                 }
             }
-            
+
             if ($allUnder25Yrs==1) {
                 $isClassicCarPage = 1;
             }
@@ -211,12 +211,12 @@ class AdListController extends CoreController
             if (!$cookieLocationDetails) {
                 $cookieLocationDetails = array();
             }
-            
+
             $cookieValue = '';
-            
+
             if ($requestlocation != null && $requestlocation != 'uk' && (!isset($cookieLocationDetails['slug']) || $cookieLocationDetails['slug'] != $requestlocation || $requestlocation == LocationRepository::LONDON_TXT)) {
                 $cookieValue = $this->getRepository('FaEntityBundle:Location')->getCookieValue($requestlocation, $this->container, true);
-                
+
                 if (count($cookieValue) && count($cookieValue) !== count(array_intersect($cookieValue, $cookieLocationDetails))) {
                     $response = new Response();
                     $cookieValue = json_encode($cookieValue);
@@ -238,7 +238,7 @@ class AdListController extends CoreController
                 ));
             }
         }
-        
+
         $transactionJsArr = [];
         //check session for upgrade Payment has been done successfully
         if ($this->container->get('session')->has('payment_success_for_upgrade') && $this->container->get('session')->has('payment_success_for_upgrade') != '') {
@@ -266,7 +266,7 @@ class AdListController extends CoreController
         } else {
             $cookieLocationDetails = json_decode($request->cookies->get('location'), true);
         }
-       
+
         //check view alert tip for location area
         $areaToolTipFlag = false;
         if (!$request->cookies->has('frontend_area_alert_tooltip') && $requestlocation != null && strtolower($requestlocation) == LocationRepository::LONDON_TXT) {
@@ -277,7 +277,6 @@ class AdListController extends CoreController
         }
 
         $mapFlag = $request->get('map', false);
-
         $data    = $this->setDefaultParameters($request, $mapFlag, 'finders', $cookieLocationDetails);
 
         $extendlocation = '';

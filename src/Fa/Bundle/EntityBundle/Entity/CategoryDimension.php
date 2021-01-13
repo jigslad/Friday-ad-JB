@@ -123,6 +123,15 @@ class CategoryDimension
     private $ord;
 
     /**
+     * Is Not crawlable
+     *
+     * @var boolean
+     *
+     * @ORM\Column(name="is_not_crawlable", type="boolean", options={"default" = 0})
+     */
+    private $is_not_crawlable;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -350,5 +359,28 @@ class CategoryDimension
     public function getOrd()
     {
         return $this->ord;
+    }
+
+    /**
+     * get is Not Crawlable
+     *
+     * @return boolean
+     */
+    public function getIsNotCrawlable()
+    {
+        return $this->is_not_crawlable;
+    }
+
+    /**
+     * set is Not Crawlable
+     *
+     * @param integer $is_searchable
+     *
+     * @return \Fa\Bundle\EntityBundle\Entity\CategoryDimension
+     */
+    public function setIsNotCrawlable($is__not_crawlable)
+    {
+        $this->is_not_crawlable = $is__not_crawlable;
+        return $this;
     }
 }

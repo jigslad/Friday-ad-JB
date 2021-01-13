@@ -1,0 +1,151 @@
+seo_config_admin:
+    path:     /
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:index" }
+
+seo_config_unnecessary_params:
+    path:     /un-necessary-query-params/save
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:unnecessaryQueryParams" }
+
+seo_config_url_rght_trim:
+    path:     /url-right-trim/save
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:URLRightTrim" }
+
+seo_config_unnecessary_odata_params:
+    path:     /un-necessary-odata-params/save
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:unnecessaryODataParams" }
+
+seo_config_category_alias:
+    path:     /category-alias/save
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:categoryAlias" }
+
+seo_config_filter_alias:
+    path:     /filter-alias/save
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:filterAlias" }
+
+seo_config_location_alias:
+    path:     /location-alias/save
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:locationAlias" }
+
+seo_config_region_alias:
+    path:     /region-alias/save
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:regionAlias" }
+
+seo_config_all_category_alias:
+    path:     /all-category-alias/save
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:allCategoryAlias" }
+
+seo_config_for_sale_exclusions:
+    path:     /for-sale-exclusions/save
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:forSaleExclusions" }
+
+seo_config_suggest:
+    path:     /suggest
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:suggest" }
+
+seo_config_status_toggle:
+    path:     /status-toggle
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:statusToggle" }
+
+seo_config_meta_robots:
+    path:     /meta-robots/save
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:metaRobots" }
+
+seo_config_max_dim_rules:
+    path:     /max-dim-rules/save
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:maxDimRules" }
+
+seo_config_redirects:
+    path:     /redirects/save
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:redirects" }
+
+seo_tool_sitemap_stat:
+    path:     /sitemap/stat
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:sitemapStat" }
+
+seo_tool_sitemap_update:
+    path:     /sitemap/action
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:sitemapUpdate" }
+
+homepage_category_settings:
+    path: /category-settings
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:categorySettings" }
+
+header_keyword_search_settings:
+    path: /header-keyword-search/settings
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:keywordSearchSettings" }
+
+crawl_settings:
+    path: /crawl-settings
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:crawlSettings" }
+
+lhs_filter_category_order:
+    path: /lhs-filter/category-order
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:categoryDimension" }
+
+lhs_filter_category_order_save:
+    path: /lhs-filter/category-order/save
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:LHSFilterOrder" }
+
+admin_validate_redirects_view:
+    path: /validate-redirects
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:validateRedirectsView" }
+
+admin_validate_redirects_upload:
+    path: /validate-redirects/upload
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:validateRedirectsUpload" }
+
+admin_validate_redirects:
+    path: /validate-redirects/verify
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:validateRedirects" }
+
+admin_seo_config_datatable:
+    path: /data-tle/data
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:dataTableConfig" }
+
+admin_seo_config_redirects_datatable:
+    path: /data-tle/redirect-data
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:dataTableRedirectConfig" }
+
+admin_seo_config_datatable_delete:
+    path: /data-tle/delete
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:removeRule" }
+
+admin_seo_config_datatable_edit:
+    path: /data-tle/edit
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:editRule" } 
+    
+admin_seo_config_datatable_redirectdelete:
+    path: /data-tle/redirectdelete
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:redirectremoveRule" }
+
+admin_seo_config_datatable_redirectedit:
+    path: /data-tle/redirectedit
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:redirecteditRule" }
+    
+admin_seo_config_motors_redirects_datatable:
+    path: /data-tle/motors-redirect-data
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:dataTableMotorsRedirectConfig" }
+
+admin_seo_config_datatable_motors_redirect_delete:
+    path: /data-tle/motors-redirect-delete
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:motorsRedirectRemove" }
+
+admin_seo_config_datatable_motors_redirect_edit:
+    path: /data-tle/motors-redirect-edit
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:motorsRedirectEdit" }
+
+seo_config_motors_redirects:
+    path:     /motors/redirects/save
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:motorsRedirects" }
+
+lhs_filter_category_status_update:
+    path: /lhs-filter/category-status/save
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:LHSFilterCategoryStatusUpdate" }
+
+crawl_category_dimension_status_update:
+    path: /crawl/category-status/save
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:crawlCategoryDimensionStatusUpdate" }
+
+seo_dimension_list:
+    path: /crawl/category-filter
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:getCategoryDimension" }

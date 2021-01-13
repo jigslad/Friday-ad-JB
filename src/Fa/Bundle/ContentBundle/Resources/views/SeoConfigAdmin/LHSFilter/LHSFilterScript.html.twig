@@ -1,0 +1,166 @@
+<script type="text/javascript">
+    $(document).ready(function() {
+        initFilter();
+        get_lhs_date(1);
+        initSorting()
+    });
+    function initFilter(){
+        $("#filter-category-btn").click(function() {
+            var level1 = $('#filter-category-1').children("option:selected").val();
+            var level2 = $('#filter-category-2').children("option:selected").val();
+            var level3 = $('#filter-category-3').children("option:selected").val();
+            var level4 = $('#filter-category-4').children("option:selected").val();
+            if(level4 !=1){
+                get_lhs_date(level4);
+            }
+            else if(level3 !=1){
+                get_lhs_date(level3);
+            }
+            else if(level2 !=1){
+                get_lhs_date(level2);
+            }
+            else {
+                get_lhs_date(level1);
+            }
+        });
+        $('#filter-category-1').change(function () {
+            var level1 = $('#filter-category-1').children("option:selected").val();
+            if ((level1 != 1)) {
+                blockPage();
+                getCategoryByLevel(level1).then((result) => {
+                    $('#filter-category-2').empty();
+                    $('#filter-category-2').append("<option value='1'>Select Category</option>");
+                    $('#filter-category-3').empty();
+                    $('#filter-category-3').append("<option value='1'>Select Category</option>");
+                    $('#filter-category-4').empty();
+                    $('#filter-category-4').append("<option value='1'>Select Category</option>");
+                    result.forEach(function(item, index){
+                        $('#filter-category-2').append("<option value='"+ item.id +"'>" + item.text + "</option>");
+                    });
+                });
+                unblockPage();
+            } else {
+                blockPage();
+                getCategoryByLevel(level1).then((result) => {
+                    $('#filter-category-1').empty();
+                    $('#filter-category-1').append("<option value='1'>Select Category</option>");
+                    $('#filter-category-2').empty();
+                    $('#filter-category-2').append("<option value='1'>Select Category</option>");
+                    $('#filter-category-3').empty();
+                    $('#filter-category-3').append("<option value='1'>Select Category</option>");
+                    $('#filter-category-4').empty();
+                    $('#filter-category-4').append("<option value='1'>Select Category</option>");
+                    result.forEach(myFunction);
+                    function myFunction(item) {
+                        $('#filter-category-1').append("<option value='"+ item.id +"'>" + item.text + "</option>");
+                    }
+                });
+                unblockPage();
+            }
+        }).change();
+        $('#filter-category-2').change(function () {
+            var level1 = $('#filter-category-1').children("option:selected").val();
+            var level2 = $('#filter-category-2').children("option:selected").val();
+            if(level2 != 0) {
+                if (level2 != level1) {
+                    blockPage();
+                    getCategoryByLevel(level2).then((result) => {
+                        $('#filter-category-4').empty();
+                        $('#filter-category-4').append("<option value='1'>Select Category</option>");
+                        $('#filter-category-3').empty();
+                        $('#filter-category-3').append("<option value='1'>Select Category</option>");
+                        result.forEach(function(item, index){
+                            $('#filter-category-3').append("<option value='"+ item.id +"'>" + item.text + "</option>");
+                        });
+                    });
+                    unblockPage();
+                }
+            }
+        }).change();
+        $('#filter-category-3').change(function () {
+            var level2 = $('#filter-category-2').children("option:selected").val();
+            var level3 = $('#filter-category-3').children("option:selected").val();
+            if(level3 != 0) {
+                if (level3 != level2) {
+                    blockPage();
+                    getCategoryByLevel(level3).then((result) => {
+                        $('#filter-category-4').empty();
+                        $('#filter-category-4').append("<option value='1'>Select Category</option>");
+                        result.forEach(function(item, index){
+                            $('#filter-category-4').append("<option value='"+ item.id +"'>" + item.text + "</option>");
+                        });
+                    });
+                    unblockPage();
+                }
+            }
+        }).change();
+    }
+    function getCategoryByLevel(categoryId) {
+         return jQuery.ajax({
+            type: "POST",
+            url: "{{ path('category_ajax_get_node_json') }}",
+            data: {
+                id: categoryId,
+            }
+        });
+    }
+    function get_lhs_date(categoryId) {
+        blockPage();
+        $.ajax({
+            type: "POST",
+            url: "{{path('seo_dimension_list')}}",
+            data: {
+                category_id: categoryId,
+            }
+        })
+        .done(function(response) {
+            if(response){
+                $("#dimension-list-body tr").remove();
+                $.each(response, function(i, item) {
+                    $("#dimension-list-body").append(
+                        '<tr data-dimension-id="'+item.id+'">' +
+                        '<td class="priority">'+item.id+'</td>' +
+                        '<td class="name">'+item.name+'</td>'+
+                        '<td class="category">'+item.category.name+'</td>'+
+                        '<td class="action">' +  (item.is_searchable == 1 ? '<a class="btn active">Enabled</a>' : '<a class="btn">Disabled</a>') + '</td></tr>'
+                    );
+                });
+                unblockPage();
+            }
+
+            initSorting();
+        });
+    }
+    function initSorting() {
+        // Enable/Disable button in table rows.
+        $('#dimension-list .action a.btn').click(function() {
+            $(this).toggleClass('active');
+            var is_active = $(this).hasClass('active');
+            var dim_id = $(this).parents('tr').data('dimension-id');
+            update_dimension(dim_id,is_active);
+            if (is_active) {
+                $(this).html('Enabled');
+                $(this).parents('tr').addClass('active');
+            } else  {
+                $(this).html('Disabled');
+                $(this).parents('tr').removeClass('active');
+            }
+        });
+    }
+    function update_dimension(dimension,status){
+         blockPage();
+        $.ajax({
+            type: "POST",
+            url: "{{path('lhs_filter_category_status_update')}}",
+            data: {
+                data: {
+                    'dimension' : dimension,
+                    'status'    : ((status) ? 1 : 0),
+                }
+            }
+        })
+        .done(function(data) {
+            unblockPage();
+        });
+    }
+</script>

@@ -1,0 +1,450 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set queryParams = app.request.query.all %}
+
+{% block content %}
+    <style type="text/css">
+        .seo_config_div {
+            width:80%;
+            margin:auto;
+            text-align:center;
+        }
+        .tabs-content>div {
+            margin: 25px 5px;
+        }
+        .multi-select{
+            margin-right: 10px;
+            margin-top: 10px;
+            width: 100%
+        }
+        .tabs-content>.tab:not(.active) {
+            display: none;
+        }
+        .select2-input, .select2-search-field {
+            width: 90% !important;
+        }
+        .change-notify.saved {
+            border-color: green !important;
+            border: 1px solid;
+        }
+        .change-notify.unsaved {
+            border-color: red !important;
+            border: 1px solid;
+        }
+        .status-toggle {
+            float: right;
+        }
+        .status-toggle button.on {
+            background-color: green;
+        }
+        .status-toggle button.off {
+            background-color: #de4b4b;
+        }
+        .tab-menu {
+            margin-top: 5px;
+        }
+        .category-dimension-types .select2-container {
+            width: 40%;
+        }
+        .crawl-settings-clone, .crawl-settings {
+            border: solid 1px #eee;
+            padding: 5px 7px;
+            border-bottom-width: 2px;
+            border-bottom-color: #9e9595;
+            margin-bottom: 15px;
+        }
+        .crawl-settings-wrapper section {
+            float: right;
+        }
+        .crawl-settings-wrapper section span {
+            /*margin-left: 10px;*/
+            padding: 8px;
+            cursor: pointer;
+        }
+        .crawl-settings-clone {
+            display: none;
+        }
+        .crawl-settings .fa {
+            width: 25px;
+            height: 25px;
+            padding: 5px 5px;
+        }
+        .crawl-settings .fa:hover {
+            background: #eee;
+        }
+        .ui-sortable tr {
+            cursor:pointer;
+        }
+
+        .ui-sortable tr:hover {
+            background: rgba(251, 229, 207, 0.45);
+        }
+        .btn:not(.active) {
+            color: #fff;
+            background-color: #5bc0de;
+            border-color: #46b8da;
+        }
+        .btn.active {
+            color: #fff;
+            background-color: #5cb85c;
+            border-color: #4cae4c;
+        }
+        .btn {
+            display: inline-block;
+            padding: 6px 12px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            width: 90px;
+        }
+        a.btn:hover {
+            color: #fff;
+        }
+        .filter-order-category .select2-container {
+            width: 350px;
+        }
+        .row {
+            max-width: 93.5em;
+        }
+        .datatable-action-list .fa.hidden {
+            display: none;
+        }
+        .datatable-action-list .fa {
+            cursor: pointer;
+            padding: 5px;
+            margin: 5px;
+        }
+        .datatable-action-list .fa:hover {
+            background: #eee;
+            color: orange;
+        }
+        .datatable-action-list .fa.fi-trash:hover {
+            color: red;
+        }
+        .datatable-action-list .fa.fi-save:hover {
+            color: green;
+        }
+        tr.deleted td {
+            text-decoration: line-through;
+        }
+        .dataTables_wrapper {
+            width: 100%;
+        }
+
+        table[data-rule] th.action {
+            width: 100px !important;
+        }
+    </style>
+<div class="seo_config_div">
+    {{ include('FaAdminBundle:Default:listSearchHeading.html.twig') }}
+
+    {% set fullData = (shortList is defined and shortList) ? false : true %}
+
+    <div class="row">
+        <div class="columns">
+            <div class="outline">
+
+                {# Tab Control #}
+                <ul class="tab-menu clearfix">
+                    <li class="active">
+                        <a href="javascript:" data-tab="#GeneralTab">General</a>
+                    </li>                    
+                    <li>
+                        <a href="javascript:" data-tab="#MetaTagsTab">Meta Tags</a>
+                    </li>
+                    <li>
+                        <a href="javascript:" data-tab="#MaxDimRuleTab">Max Dims</a>
+                    </li>
+                    <li>
+                        <a href="javascript:" data-tab="#RedirectTab">Redirects</a>
+                    </li>
+{#                    <li>#}
+{#                        <a href="javascript:" data-tab="#MotorsRedirectTab">Motors Redirect</a>#}
+{#                    </li>#}
+                    <li>
+                        <a href="javascript:" data-tab="#CrawlTab">Crawl Settings</a>
+                    </li>
+                    
+                    <li>
+                        <a href="javascript:" data-tab="#LHSFilterTab">LHS Filters</a>
+                    </li>
+                </ul>
+                {#<ul class="tab-menu clearfix">
+                    <li>
+                        <a href="javascript:" data-tab="#SitemapTab">Sitemap</a>
+                    </li>
+                    <li>
+                        <a href="javascript:" data-tab="#ExclusionsTab">Exclusions</a>
+                    </li>
+                    <li>
+                        <a href="javascript:" data-tab="#FiltersTab">Filters</a>
+                    </li>
+                    <li>
+                        <a href="javascript:" data-tab="#LegacyLocationRegionTab">Location & Regions</a>
+                    </li>
+                    <li>
+                        <a href="javascript:" data-tab="#LegacyCategoryTab">Categories</a>
+                    </li>
+                </ul>#}
+
+                {# Tab Content #}
+                <div class="tabs-content">
+
+                    <div id="GeneralTab" class="tab active">
+                        {{ include('FaContentBundle:SeoConfigAdmin/General:General.html.twig') }}
+                    </div>
+
+                    {#<div id="FiltersTab" class="tab">
+
+                        <div id="FilterAliasDiv" style="margin: 65px 5px">
+                            <b>Add Filter Aliases</b>
+                            <i class="fi-info" title="For added values, URL with Legacy_Filter are redirected to its corresponding New_Filter URL"></i>
+                            <br>
+                            <span>Data Format: <i>&lt;Legacy_Filter&gt;:&lt;New_Filter&gt;</i></span>
+                            <br>
+                            <i>Note: Do not add Main or Sub Category as Filter</i>
+                            <div class="status-toggle">
+                                <button type="button" data-on="Enabled" data-off="Disabled" data-toggle-handle="filter_alias" class="">-</button>
+                            </div>
+                            <div class="select">
+                                <table id="filter_alias" style="width: 100%" data-rule="filter_alias" class="dataTable display">
+                                    <thead>
+                                    <tr>
+                                        <th>Legacy</th>
+                                        <th>New</th>
+                                        <th class="action">Action</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+
+                            <button class="bulk-upload-button" data-toggle-handle="filter_alias" data-tab="Filter Aliases">Bulk Upload</button>
+                        </div>
+
+                    </div>
+
+                    <div id="LegacyLocationRegionTab" class="tab">
+
+                        <div id="RegionAliasDiv" style="margin: 65px 5px">
+                            <b>Add Region Aliases</b>
+                            <i class="fi-info" title="For added values, URL with Legacy_Region are redirected to its corresponding New_Region URL"></i>
+                            <br>
+                            <span>Data Format: <i>&lt;Legacy_Region&gt;:&lt;New_Region&gt;</i></span>
+                            <div class="status-toggle">
+                                <button type="button" data-on="Enabled" data-off="Disabled" class="">-</button>
+                            </div>
+                            <div class="select">
+                                <table id="region_alias" style="width: 100%" data-rule="region_alias" class="dataTable display">
+                                    <thead>
+                                    <tr>
+                                        <th>Legacy</th>
+                                        <th>New</th>
+                                        <th class="action">Action</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+
+                            <button class="bulk-upload-button" data-toggle-handle="region_alias" data-tab="Regions">Bulk Upload</button>
+                        </div>
+
+                        <div id="LocationAliasDiv" style="margin: 65px 5px">
+                            <b>Add Location Aliases</b>
+                            <i class="fi-info" title="For added values, URL with Legacy_Location are redirected to its corresponding New_Location URL"></i>
+                            <br>
+                            <span>Data Format: <i>&lt;Legacy_Location&gt;:&lt;New_Location&gt;</i></span>
+                            <div class="status-toggle">
+                                <button type="button" data-on="Enabled" data-off="Disabled" data-toggle-handle="location_alias" class="">-</button>
+                            </div>
+                            <div class="select">
+                                <table id="location_alias" style="width: 100%" data-rule="location_alias" class="dataTable display">
+                                    <thead>
+                                    <tr>
+                                        <th>Legacy</th>
+                                        <th>New</th>
+                                        <th class="action">Action</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+
+                            <button class="bulk-upload-button" data-toggle-handle="location_alias" data-tab="Locations">Bulk Upload</button>
+                        </div>
+
+                    </div>
+
+                    <div id="LegacyCategoryTab" class="tab">
+
+                        <div id="MainCategoryAliasDiv" style="margin: 65px 5px">
+                            <b>Add Main Category Aliases</b>
+                            <i class="fi-info" title="For added values, URL with Legacy_Category are redirected to its corresponding New_Category URL"></i>
+                            <br>
+                            <span>Data Format: <i>&lt;Legacy_Category&gt;:&lt;New_Category&gt;</i></span>
+                            <div class="status-toggle">
+                                <button type="button" data-on="Enabled" data-off="Disabled" data-toggle-handle="category_alias" class="">-</button>
+                            </div>
+                            <div class="select">
+                                <table id="category_alias" style="width: 100%" data-rule="category_alias" class="dataTable display">
+                                    <thead>
+                                    <tr>
+                                        <th>Legacy</th>
+                                        <th>New</th>
+                                        <th class="action">Action</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+
+                            <button class="bulk-upload-button" data-toggle-handle="category_alias" data-tab="Categories">Bulk Upload</button>
+                        </div>
+
+                        <div id="CategoryAliasDiv" style="margin: 65px 5px">
+                            <b>Add Sub Category Aliases</b>
+                            <i class="fi-info" title="For added values, URL with Legacy_Category are redirected to its corresponding New_Category URL"></i>
+                            <br>
+                            <i>Note: Add Categories Other than Main categories</i>
+                            <br>
+                            <span>Data Format: <i>&lt;Legacy_Category&gt;:&lt;New_Category&gt;</i></span>
+                            <div class="status-toggle">
+                                <button type="button" data-on="Enabled" data-off="Disabled" data-toggle-handle="all_category_alias" class="">-</button>
+                            </div>
+                            <div class="select">
+                                <table id="all_category_alias" style="width: 100%" data-rule="all_category_alias" class="dataTable display">
+                                    <thead>
+                                    <tr>
+                                        <th>Legacy</th>
+                                        <th>New</th>
+                                        <th class="action">Action</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+
+                            <button class="bulk-upload-button" data-toggle-handle="all_category_alias" data-tab="Sub Categories">Bulk Upload</button>
+
+                        </div>
+
+                    </div>
+
+                    <div id="ExclusionsTab" class="tab">
+
+                        <div id="ExclusionsDiv" style="margin: 65px 5px">
+                            <b>Add Categories for 'for-sale' exclusions</b>
+                            <i class="fi-info" title="For added Categories, the URL will not be generated with postfix - 'for-sale'"></i>
+                            <br>
+                            <i>Note: Add only Top Level categories</i>
+                            <br>
+                            <div class="status-toggle">
+                                <button type="button" data-on="Enabled" data-off="Disabled" data-toggle-handle="for_sale_exclusion" class="">-</button>
+                            </div>
+                            <div class="select">
+                                <select id="ForSaleExclusions" multiple class="multi-select" data-type="category" data-separator="" data-conditions="lvl=1">
+                                </select>
+                            </div>
+
+                            <button type="button" onclick="update_ForSaleExclusions();" style="float: right; width: 300px;">Update For Sale Exclusions</button>
+                        </div>
+
+                    </div>#}
+
+                    <div id="MetaTagsTab" class="tab">
+                        {{ include('FaContentBundle:SeoConfigAdmin/MetaTags:MetaTags.html.twig') }}
+                    </div>
+
+                    <div id="MaxDimRuleTab" class="tab">
+                        {{ include('FaContentBundle:SeoConfigAdmin/MaxDimRule:MaxDimRule.html.twig') }}
+                    </div>
+
+                    <div id="RedirectTab" class="tab">
+                        {{ include('FaContentBundle:SeoConfigAdmin/Redirects:Redirects.html.twig') }}
+                        {{ include('FaContentBundle:SeoConfigAdmin/MotorsRedirect:MotorsRedirect.html.twig') }}
+                    </div>
+
+{#                    <div id="MotorsRedirectTab" class="tab">#}
+{#                        {{ include('FaContentBundle:SeoConfigAdmin/MotorsRedirect:MotorsRedirect.html.twig') }}#}
+{#                    </div>#}
+
+                    {#<div id="SitemapTab" class="tab">
+
+                        <div id="SitemapDiv">
+                            <b>Sitemap</b>
+                            <i class="fi-info" title="Gives sitemap info"></i>
+                            <br>
+                            <a href="{{ path('sitemap_path', {'file': 'sitemap_index'}) }}" style="float: right;">Current Files</a>
+                            <br>
+                            <label for="sitemap-status">Current Status</label>
+                            <br>
+                            <code id="sitemap-status" style="font-size: 12px">Not Running</code>
+                            <br><br>
+                            <code id="sitemap-files" style="font-size: 12px">No Files</code>
+
+                            <br><br><br><br>
+                            <button type="button" onclick="sitemapStat();" style="float: right; width: 155px;">Refresh Stat</button>
+                            <button type="button" onclick="sitemapAction('restart');" style="float: right; width: 155px; margin-right: 5px">Restart</button>
+                            <button type="button" onclick="sitemapAction('resume');" style="float: right; width: 155px; margin-right: 5px">Resume</button>
+                        </div>
+                    </div>#}
+
+                    <div id="CrawlTab" class="tab">
+                        {{ include('FaContentBundle:SeoConfigAdmin/Crawl:CrawlNew.html.twig') }}
+                    </div>
+
+                    <div id="LHSFilterTab" class="tab">
+                        {{ include('FaContentBundle:SeoConfigAdmin/LHSFilter:LHSFilter.html.twig') }}
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="bulk-upload" class="reveal-modal large" data-reveal>
+        <a class="close-reveal-modal">Back</a>
+        <h5 class="modal-title">Bulk Upload: <span id="model-info"></span></h5>
+        <div class="modal-content remove-modal">
+            <div class="mt20">
+                <div class="">
+                    <div id="table-wrapper">
+                        <div id="table-scroll">
+                            <div>
+                                <label>Upload CSV File:</label>
+                                <input type="file" accept=".csv" style="width: auto !important;" id="mapping_file">
+                            </div>
+                            <br>
+                            <div>OR</div>
+                            <br>
+                            <textarea placeholder="Paste the data here, separated by new-lines." rows="15" id="bulk-text"></textarea>
+                            <input type="hidden" id="upload-type" value="">
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top: 25px !important;">
+                    <div class="columns large-6">
+                        <button type="button" class="button secondary-btn-4 thin-btn expand mb0" onclick="javascript:closeRevealModel('#bulk-upload');">Cancel</button>
+                    </div>
+                    <div class="columns large-6">
+                        <button type="button" class="button thin-btn expand mb0" id="upload">Upload</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+    {{ include('FaContentBundle:SeoConfigAdmin:SeoConfigCommonScript.html.twig') }}
+    {{ include('FaContentBundle:SeoConfigAdmin/General:GeneralScript.html.twig') }}
+    {{ include('FaContentBundle:SeoConfigAdmin/MetaTags:MetaTagsScript.html.twig') }}
+    {{ include('FaContentBundle:SeoConfigAdmin/MaxDimRule:MaxDimRuleScript.html.twig') }}
+    {{ include('FaContentBundle:SeoConfigAdmin/Redirects:RedirectsScript.html.twig') }}
+    {{ include('FaContentBundle:SeoConfigAdmin/MotorsRedirect:MotorsRedirectScript.html.twig') }}
+    {{ include('FaContentBundle:SeoConfigAdmin/Crawl:CrawlNewScript.html.twig') }}
+    {{ include('FaContentBundle:SeoConfigAdmin/LHSFilter:LHSFilterScript.html.twig') }}
+{% endblock %}

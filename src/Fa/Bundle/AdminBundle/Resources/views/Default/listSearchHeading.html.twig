@@ -1,8 +1,20 @@
 <div class="row">
     <div class="columns">
         <h1 class="left">{{ heading }}</h1>
-        {% if isAddNew is not defined %}
+{# {% if isAddNew is not defined %}
             {% if fa_resource_authorization_manager.isGranted(addNewRoute) %} <a href="{{ path(addNewRoute) }}" class="right tiny button add_user_btn">{{ 'Add New'|trans({}, 'messages') }}</a> {% endif %}
+        {% endif %}#}
+        
+        {% if isAddNew is not defined and addNewRoute is defined %}
+            {% if fa_resource_authorization_manager.isGranted(addNewRoute) %}
+                {% if routeParams is defined %}
+                    <a href="{{ path(addNewRoute, routeParams) }}"
+                       class="right tiny button add_user_btn">{{ 'Add New'|trans({}, 'messages') }}</a>
+                {% else %}
+                    <a href="{{ path(addNewRoute) }}"
+                       class="right tiny button add_user_btn">{{ 'Add New'|trans({}, 'messages') }}</a>
+                {% endif %}
+            {% endif %}
         {% endif %}
     </div>
 </div>
