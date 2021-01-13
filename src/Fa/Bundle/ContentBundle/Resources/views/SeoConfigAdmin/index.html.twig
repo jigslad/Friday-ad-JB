@@ -153,9 +153,9 @@
                     <li>
                         <a href="javascript:" data-tab="#MetaTagsTab">Meta Tags</a>
                     </li>
-                    <li>
+                    {#<li>
                         <a href="javascript:" data-tab="#MaxDimRuleTab">Max Dims</a>
-                    </li>
+                    </li>#}
                     <li>
                         <a href="javascript:" data-tab="#RedirectTab">Redirects</a>
                     </li>
@@ -352,9 +352,9 @@
                         {{ include('FaContentBundle:SeoConfigAdmin/MetaTags:MetaTags.html.twig') }}
                     </div>
 
-                    <div id="MaxDimRuleTab" class="tab">
+                    {#<div id="MaxDimRuleTab" class="tab">
                         {{ include('FaContentBundle:SeoConfigAdmin/MaxDimRule:MaxDimRule.html.twig') }}
-                    </div>
+                    </div>#}
 
                     <div id="RedirectTab" class="tab">
                         {{ include('FaContentBundle:SeoConfigAdmin/Redirects:Redirects.html.twig') }}
@@ -442,7 +442,7 @@
     {{ include('FaContentBundle:SeoConfigAdmin:SeoConfigCommonScript.html.twig') }}
     {{ include('FaContentBundle:SeoConfigAdmin/General:GeneralScript.html.twig') }}
     {{ include('FaContentBundle:SeoConfigAdmin/MetaTags:MetaTagsScript.html.twig') }}
-    {{ include('FaContentBundle:SeoConfigAdmin/MaxDimRule:MaxDimRuleScript.html.twig') }}
+    {#{{ include('FaContentBundle:SeoConfigAdmin/MaxDimRule:MaxDimRuleScript.html.twig') }}#}
     {{ include('FaContentBundle:SeoConfigAdmin/Redirects:RedirectsScript.html.twig') }}
     {{ include('FaContentBundle:SeoConfigAdmin/MotorsRedirect:MotorsRedirectScript.html.twig') }}
     {{ include('FaContentBundle:SeoConfigAdmin/Crawl:CrawlNewScript.html.twig') }}

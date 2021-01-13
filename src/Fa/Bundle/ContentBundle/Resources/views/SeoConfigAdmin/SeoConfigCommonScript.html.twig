@@ -11,7 +11,6 @@
             $('a[data-tab=#{{ app.request.get('tab') }}]').click();
         {% endif %}
         $("#ForSaleExclusions").select2({placeholder: "Add Categories"});
-        $("#MaxDimRules").select2({placeholder: "Add Max Dim Rules", formatSelection: maxDimTemplate});
         $("#entity-list").select2({placeholder: "Add Entities"});
         $('.bulk-upload-button').click(function () {
             var parent = $(this).parent();
@@ -82,7 +81,7 @@
     }
     window.setTimeout(function () {
         addNewItemEvent('ForSaleExclusions');
-        addNewItemEvent('MaxDimRules');
+        // addNewItemEvent('MaxDimRules');
         addNewItemEvent('entity-list');
 
         $("select[data-keep-order]").each(function(){
@@ -700,21 +699,7 @@
                 $(select).parent().find('.select2-container').removeClass('unsaved').addClass('saved')
             });
     }
-    function update_MaxDimRules() {
-        var select = $('#MaxDimRules');
-        blockPage();
-        $.ajax({
-            type: "POST",
-            url: "{{path('seo_config_max_dim_rules')}}",
-            data: {
-                "data": getData($(select).select2('data'))
-            }
-        })
-            .done(function() {
-                unblockPage();
-                $(select).parent().find('.select2-container').removeClass('unsaved').addClass('saved')
-            });
-    }
+
     function sitemapStat() {
         blockPage();
         $.ajax({
@@ -762,16 +747,6 @@
         var split = (data.text).split(':');
         return split.join(' <span style="color: green;">>></span> ');
     }
-    function maxDimTemplate(data) {
-        var split = (data.text).split('+');
-        var out = [];
 
-        $.each(split, function (key, value) {
-            var detail = value.split(':');
-            out.push(detail[0] + ' ' + detail[1]);
-        });
-
-        return out.join(' <span style="color: green;">+</span> ');
-    }
 
 </script>
