@@ -1244,8 +1244,8 @@ class CommonManager
      */
     public static function sendErrorMail($container, $subject, $exceptionMessage, $stackTrace)
     {
-        $transport = \Swift_SmtpTransport::newInstance("192.168.206.2", 25);
-        $mailer = \Swift_Mailer::newInstance($transport);
+        //$transport = \Swift_SmtpTransport::newInstance("192.168.206.2", 25);
+        //$mailer = \Swift_Mailer::newInstance($transport);
         $message = \Swift_Message::newInstance()
         ->setSubject($subject)
         ->setSender($container->getParameter('mailer_sender_email'))
@@ -1260,7 +1260,8 @@ class CommonManager
             ),
             'text/html'
         );
-        return $mailer->send($message);
+        return $container->get('mailer')->send($message);
+        //return $mailer->send($message);
     }
 
     /**
