@@ -1,3 +1,4 @@
+@import 'global';
 ul.fourlocationlist { margin: 10px auto 0px auto;text-align:center; }
 ul.fourlocationlist li { display:inline; list-style-type: none; }
 ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
