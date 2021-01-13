@@ -1,5 +1,5 @@
 {% extends 'FaFrontendBundle::layout.html.twig' %}
-
+{% set otherblockPageTitle = '410_page' %}
 {% block page_title %}
     Page Gone | Friday-Ad
 {% endblock %}
@@ -19,6 +19,11 @@
 {% endblock %}
 
 {% block dimension2 %}
+    <!-- Google TAG Manager -->
+    <script>
+        let dataLayerPageType = '_410_page';
+    </script>
+    <!-- Google TAG Manager -->
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     {% if app.user.getId() is not defined or app.user.getId() is null %}

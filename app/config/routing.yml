@@ -189,13 +189,28 @@ show_business_user_ads_location:
         page_string: '.+'
         
 fa_adult_homepage:
-    path:     /adult-services/
+    path:     /adult-services-old/
     host: '%fa.main.host%'
     schemes:  [https]
     defaults: { _controller: FaFrontendBundle:Adult:index }
 
+fa_new_adult_homepage:
+    path:     /adult-services/
+    host: '%fa.main.host%'
+    schemes:  [https]
+    defaults: { _controller: FaFrontendBundle:Adult:indexNew }
+
 listing_page:
     path: /{location}/{page_string}/
+    defaults: { _controller: 'FaAdBundle:AdList:searchResultNew'}
+    host: '%fa.main.host%'
+    schemes:  [https]
+    requirements:
+        location: '^(?:(?!admin\/)([A-Za-z0-9_-]+))'
+        page_string: '.+'
+
+old_listing_page:
+    path: /ads/{location}/{page_string}/
     defaults: { _controller: 'FaAdBundle:AdList:searchResult'}
     host: '%fa.main.host%'
     schemes:  [https]

@@ -13,9 +13,9 @@
         	{% if app.request.attributes.get('_route') != 'my_account_newsletter'  and app.request.attributes.get('_route') != 'newsletter_feedback' and app.request.attributes.get('_route') != 'newsletter_feedback_success' %}
             	<div class="clearfix"></div>
                 {{ render(controller('FaUserBundle:Newsletter:footerNewsletter')) }}
-            {% endif %}    
-            <div class="clearfix"></div>       
-            <h6 class="footer-head">{{ 'Find us on'|trans({}, 'frontend-footer') }}:</h6>
+            {% endif %}
+            <div class="clearfix"></div>
+            <h6 class="footer-head footer-h-new">{{ 'Find us on'|trans({}, 'frontend-footer') }}:</h6>
             <div class="footer-icons">
                 <a href="{{container.getParameter('fa.footer.facebook.page.link')}}" class="facebook" target="_blank" title="{{ 'Facebook'|trans({}, 'frontend-footer') }}">{{ 'Facebook'|trans({}, 'frontend-footer') }}</a>
                 <a href="{{container.getParameter('fa.footer.twitter.page.link')}}" class="twitter" target="_blank" title="{{ 'Twitter'|trans({}, 'frontend-footer') }}">{{ 'Twitter'|trans({}, 'frontend-footer') }}</a>
@@ -55,6 +55,20 @@
 
     <div class="fad-logo">
         <span>F-Ad</span>
+    </div>
+    <div class="text-center gray-text pb30 hide-for-small-only">
+        <p>
+            <img src="{{ asset('bundles/fafrontend/images/Copyright.svg') }}">
+            Friday Media Group Ltd, London Road, Sayers Common, West Sussex, BN6 9HS - Copyright 2020
+        </p>
+    </div>
+    <div class="text-center gray-text pb30 show-for-small-only">
+        <p>
+            <img src="{{ asset('bundles/fafrontend/images/Copyright.svg') }}">
+            Friday Media Group Ltd <br />
+            London Road, Sayers Common, <br />
+            West Sussex, BN6 9HS - Copyright 2020
+        </p>
     </div>
 
     {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_PIXEL_TRACKING_DESKTOP') %}

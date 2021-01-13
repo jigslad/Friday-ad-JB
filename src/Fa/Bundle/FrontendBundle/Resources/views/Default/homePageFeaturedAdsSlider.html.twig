@@ -1,6 +1,8 @@
 <div class="owl-carousel fa-slider" id="{{ divId }}" data-equalizer>
     {% set categoryBadgeArray = categoryRepository.getCategoryBadgeClassArray() %}
+    {% set adCounter = 0 %}
     {% for featureAd in featureAds %}
+        {% set adCounter = adCounter + 1 %}
         {% set adCategoryId = attribute(featureAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::CATEGORY_ID')) %}
         {% set rootCategoryId = attribute(featureAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::ROOT_CATEGORY_ID')) %}
         {% set rootCategoryName =  staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [rootCategoryId, true]) %}
@@ -15,6 +17,7 @@
         {% if seoRule['image_alt'] is defined %}
             {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], featureAd]) %}
         {% endif %}
+
         <div class="item" data-equalizer-watch>
             {% if categoryBadgeArray[rootCategoryId] is defined %}
                 <span class="fa-slider-badge {{categoryBadgeArray[rootCategoryId]}}">Category</span>

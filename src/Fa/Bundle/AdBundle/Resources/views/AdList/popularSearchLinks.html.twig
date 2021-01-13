@@ -1,0 +1,73 @@
+{% set container = fetch_container_instance() %}
+{% set seoToolPopularSearchRepository = fetch_repository('FaContentBundle:SeoToolPopularSearch') %}
+{% set popularSearchArray = seoToolPopularSearchRepository.getPopularSearchArrayBySeoToolId(seoFields['seo_tool_id'], container) %}
+{% if popularSearchArray|length %}
+    <link rel="stylesheet" href="{{ asset('build/css/popularSearch.css') }}?v=1.0.1" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <div class="popular-search {{ popularSearchArray|length == 1 ? 'min-keywords': ''}} {{ showAdultPages == 1 ? 'adult' : ''}}">
+        <ul class="popular-search--block">
+            <li class="popular-search--title">{{'Popular Searches'|trans({}, 'frontend-left--popular-search')}}:</li>
+            <!---loop starts-->
+            {% for popularSearch in popularSearchArray %}
+                <li class="popular-search--item">
+                    <a href="{{ seoToolPopularSearchRepository.getPopularSearchUrl(popularSearch['url'], cookieLocationDetails, mapFlag, container) }}" class="popular-search--link">
+                        {{ popularSearch['title'] }}
+                    </a>
+                </li>
+            {% endfor %}
+            <!---loops end-->
+        </ul>
+        <div class="popular-search--toggle" id="toggleSearch"></div>
+    </div>
+    <div class="popular-search-mobile {{ showAdultPages == 1 ? 'adult' : ''}}">
+        <ul class="popular-search--block owl-carousel" id="popularSearchSlider">
+            <!---loop starts-->
+            {% for popularSearch in popularSearchArray %}
+                <li class="popular-search--item">
+                    <a href="{{ seoToolPopularSearchRepository.getPopularSearchUrl(popularSearch['url'], cookieLocationDetails, mapFlag, container) }}" class="popular-search--link">
+                        {{ popularSearch['title'] }}
+                    </a>
+                </li>
+            {% endfor %}
+            <!---loops end-->
+        </ul>
+    </div>
+{% endif %}
+<script>
+    $(document).ready(function() {
+        $(window).resize(function() {
+            function pupularSearchToggle() {
+                $('#toggleSearch').click(function (e) {
+                    $(this).toggleClass('arrow-rotate-icon');
+                    $('.popular-search').toggleClass("toggleSearchShow");
+                });
+            }
+
+            var div_height = $('.popular-search--block').height();
+            var vertical_div_top_position = $('.popular-search--block').offset().top;
+            var lastchild_height = $('.popular-search--block').children('li:last-child').height();
+            var vertical_lastchild_top_position = $('.popular-search--block').children('li:last-child').offset().top;
+            var vertical_lastchild_bottom_position = lastchild_height + vertical_lastchild_top_position;
+            var real_height = vertical_lastchild_bottom_position - vertical_div_top_position;
+            if (real_height > div_height) {
+                $('#toggleSearch').css('visibility', 'visible');
+                pupularSearchToggle();
+            } else {
+                $('#toggleSearch').css('visibility', 'hidden');
+            }
+        });
+        
+        $('#popularSearchSlider').owlCarousel({
+            margin: 0,
+            navigation: false,
+            pagination: false,
+            responsive: true,
+            responsiveRefreshRate: 100,
+            lazyLoad: true,
+            scrollPerPage: false,
+            loop: false,
+            autoWidth: true,
+            mouseDrag: true,
+        });
+    });
+</script>

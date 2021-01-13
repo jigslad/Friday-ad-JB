@@ -90,13 +90,13 @@ class UserImageController extends CoreController
                 //upload original image.
                 $uploadedFile->move($orgImagePath, $orgImageName);
                 $dimension = getimagesize($imagePath.DIRECTORY_SEPARATOR.$orgImageName);
-                $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, 90, 'ImageMagickManager');
-                $origImage->loadFile($imagePath.DIRECTORY_SEPARATOR.$orgImageName);
-                $origImage->save($imagePath.DIRECTORY_SEPARATOR.$userId.'_original.jpg', 'image/jpeg');
-                unlink($imagePath.DIRECTORY_SEPARATOR.$orgImageName);
+                //$origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, 90, 'ImageMagickManager');
+                //$origImage->loadFile($imagePath.DIRECTORY_SEPARATOR.$orgImageName);
+                //$origImage->save($imagePath.DIRECTORY_SEPARATOR.$userId.'_original.jpg', 'image/jpeg');
+                //unlink($imagePath.DIRECTORY_SEPARATOR.$orgImageName);
 
                 $userImageManager = new UserImageManager($this->container, $userId, $orgImagePath, $isCompany);
-                $userImageManager->saveOriginalJpgImage($userId.'_original.jpg');
+                $userImageManager->saveOriginalJpgImage($orgImageName);
                 sleep(1);
 
                 return new Response();
@@ -451,13 +451,13 @@ class UserImageController extends CoreController
                     }
                     
                     $awsImagePath = $this->container->getParameter('fa.static.aws.url').DIRECTORY_SEPARATOR.$orgImageName;
-                    $orgawsurl = $awsImagePath.DIRECTORY_SEPARATOR.$userId.'_org.jpg';
+                    $orgawsurl = $awsImagePath.DIRECTORY_SEPARATOR.$userId.'_org.jpg?'.time();
                     $orglocalimg = $orgImagePath.DIRECTORY_SEPARATOR.$userId.'_org.jpg';
                     file_put_contents($orglocalimg, file_get_contents($orgawsurl));
-                    $originalawsurl = $awsImagePath.DIRECTORY_SEPARATOR.$userId.'_original.jpg';
+                    $originalawsurl = $awsImagePath.DIRECTORY_SEPARATOR.$userId.'_original.jpg?'.time();
                     $originallocalimg = $orgImagePath.DIRECTORY_SEPARATOR.$userId.'_original.jpg';
                     file_put_contents($originallocalimg, file_get_contents($originalawsurl));
-                    $awsurl = $awsImagePath.DIRECTORY_SEPARATOR.$userId.'.jpg';
+                    $awsurl = $awsImagePath.DIRECTORY_SEPARATOR.$userId.'.jpg?'.time();
                     $localimg = $orgImagePath.DIRECTORY_SEPARATOR.$userId.'.jpg';
                     file_put_contents($localimg, file_get_contents($awsurl));
                     $fileExistsInAws = 1;

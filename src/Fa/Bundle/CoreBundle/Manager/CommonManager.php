@@ -871,6 +871,71 @@ class CommonManager
     }
 
     /**
+     * Get user logo for adult featured advertisers.
+     *
+     * @param object  $container   Container identifier.
+     * @param string  $path        Path of user logo.
+     * @param integer $userId      User id.
+     * @param string  $imageWidth  Image width.
+     * @param string  $imageHeight Image height.
+     * @param boolean $appendTime  Append time to user image url.
+     * @param boolean $isCompany   Company flag.
+     * @param integer $userStatus  User status id.
+     * @param string  $userName    User profile name.
+     *
+     * @return string|boolean
+     */
+    public static function getCustomUserLogo($container, $path, $userId, $imageWidth = "88", $imageHeight = '88', $appendTime = false, $isCompany = false, $userStatus = null, $userName = null)
+    {
+        if (!$userStatus) {
+            $userStatus = $container->get('doctrine')->getManager()->getRepository('FaUserBundle:User')->getUserStatus($userId, $container);
+        }
+
+        if (!$userName) {
+            $userName = $container->get('doctrine')->getManager()->getRepository('FaUserBundle:User')->getUserProfileName($userId, $container);
+        }
+
+        $userName .= ' - Friday-Ad';
+
+        $imagePath = null;
+
+        if ($userId) {
+            if (!is_numeric($userId)) {
+                if (is_file($container->get('kernel')->getRootDir().'/../web/uploads/tmp/'.$userId.'.jpg')) {
+                    if ($isCompany) {
+                        return '<img src="'.$container->getParameter('fa.static.shared.url').'/uploads/tmp/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).'" alt="'.$userName.'"  />';
+                    } else {
+                        return '<span style="background-image: url('.$container->getParameter('fa.static.shared.url').'/uploads/tmp/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).')" title="'.$userName.'" />';
+                    }
+                } else {
+                    $noImageName = 'user-icon.svg';
+                    if ($isCompany) {
+                        $noImageName = 'user-no-logo.svg';
+                    }
+                    if (!$imageWidth && !$imageHeight) {
+                        return ($isCompany ? '<div class="profile-placeholder">' : '').'<img src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.'" alt="'.$userName.'" '.(!$isCompany ? 'class="pvt-no-img"':null).' />'.($isCompany ? '</div>' : '');
+                    } else {
+                        return ($isCompany ? '<div class="profile-placeholder">' : '').'<img src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.'" width="'.$imageWidth.'" height="'.$imageHeight.'" alt="'.$userName.'" '.(!$isCompany ? 'class="pvt-no-img"':null).' />'.($isCompany ? '</div>' : '');
+                    }
+                }
+            } else {
+                $imagePath  = $container->get('kernel')->getRootDir().'/../web/'.$path.'/'.$userId.'.jpg';
+            }
+        }
+
+        if (($imageWidth==null && $imageHeight== null) || ($imageWidth =='' && $imageHeight=='') || ($imageWidth ==0 || $imageHeight==0)) {
+            $newImagePath = $container->getParameter('fa.static.aws.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null);
+        } else {
+            $newImagePath = $container->getParameter('fa.static.aws.url').'/'.$path.'/'.$userId.'_'.$imageWidth.'X'.$imageHeight.'.jpg'.($appendTime ? '?'.time() : null);
+        }
+        if ($isCompany) {
+            return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img class="ndult-company-logo" src="'.$newImagePath.'" width="'.$imageWidth.'" height="'.$imageHeight.'" alt="'.$userName.'" />';
+        } else {
+            return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<span style="background-image: url('.$newImagePath.')" title="'.$userName.'"></span>';
+        }
+    }
+
+    /**
      * Get user logo.
      *
      * @param object  $container   Container identifier.
@@ -1179,6 +1244,8 @@ class CommonManager
      */
     public static function sendErrorMail($container, $subject, $exceptionMessage, $stackTrace)
     {
+        $transport = \Swift_SmtpTransport::newInstance("192.168.206.2", 25);
+        $mailer = \Swift_Mailer::newInstance($transport);
         $message = \Swift_Message::newInstance()
         ->setSubject($subject)
         ->setSender($container->getParameter('mailer_sender_email'))
@@ -1193,7 +1260,7 @@ class CommonManager
             ),
             'text/html'
         );
-        return $container->get('mailer')->send($message);
+        return $mailer->send($message);
     }
 
     /**
@@ -1445,7 +1512,12 @@ class CommonManager
         } else {
             $imageUrl = $container->getParameter('fa.static.shared.url').'/'.$imagePath.'/'.$adId.'_'.$imageHash.($size ? '_'.$size : '').'.jpg';
         }
-        return $imageUrl;
+        if(self::does_url_exists($imageUrl)) {
+            $adImageUrl   = $imageUrl;
+        } else {
+            $adImageUrl = $container->getParameter('fa.static.shared.url').'/bundles/fafrontend/images/no-image-grey.svg';
+        }
+        return $adImageUrl;
     }
 
     /**
@@ -1512,7 +1584,7 @@ class CommonManager
             $imageBaseUrl = $container->getParameter('fa.static.aws.url');
         }
         
-        $imageUrl = $imageBaseUrl.'/'.$newImageUrl;
+        $imageUrl = $imageBaseUrl.'/'.$newImageUrl.'?'.time();
         
         return $imageUrl; 
     }
@@ -2808,10 +2880,10 @@ HTML;
      *
      * @param string $string String to search for phone number.
      * @param string $type   Flag either 'hide' or 'remove'.
-     *
+     * @param string $suffix   Flag either 'AdDeatils' or 'Profile'.
      * @return string
      */
-    public static function hideOrRemovePhoneNumber($string, $type, $suffix = null)
+    public static function hideOrRemovePhoneNumber($string, $type,$pagetype, $suffix = null)
     {
         if ($type == 'remove') {
             return preg_replace("~(((\+44\s?\d{4}|\(?0\d{4}\)?)\s?\d{3}\s?\d{3})|((\+44\s?\d{3}|\(?0\d{3}\)?)\s?\d{3}\s?\d{4})|((\+44\s?\d{2}|\(?0\d{2}\)?)\s?\d{4}\s?\d{4}))(\s?\#(\d{4}|\d{3}))?~", '', $string);
@@ -2822,7 +2894,16 @@ HTML;
             if (isset($matches[0]) && count($matches[0])) {
                 foreach ($matches[0] as $index => $phoneNumber) {
                     $phoneNumberToBeReplaced[$index] = $phoneNumber;
-                    $string = preg_replace('/'.preg_quote($phoneNumber, '/').'/', '<span id="span_contact_number_full_desc_'.$suffix.$index.'" style="display:none;">#phoneNumberToBeReplaced'.$index.'</span><span id="span_contact_number_part_desc_'.$suffix.$index.'">'.substr($phoneNumber, 0, -2).'...<a href="javascript:toggleContactNumberForDesc(\''.$suffix.$index.'\');">(click to reveal full phone number)</a></span>', $string, 1);
+                    if($pagetype == 'Profile') {
+                        $GaClass = 'ga-callNowBusinessDesc';
+                    }
+                    elseif ($pagetype == 'AdDetails') {
+                        $GaClass = 'ga-callNowAdDesc';
+                    }
+                    else{
+                        $GaClass = '';
+                    }
+                    $string = preg_replace('/'.preg_quote($phoneNumber, '/').'/', '<span id="span_contact_number_full_desc_'.$suffix.$index.'" style="display:none;">#phoneNumberToBeReplaced'.$index.'</span><span id="span_contact_number_part_desc_'.$suffix.$index.'">'.substr($phoneNumber, 0, -2).'...<a class="'.$GaClass.'" href="javascript:toggleContactNumberForDesc(\''.$suffix.$index.'\');">(click to reveal full phone number)</a></span>', $string, 1);
                 }
                 foreach ($phoneNumberToBeReplaced as $index => $phoneNumber) {
                     $string = str_replace('#phoneNumberToBeReplaced'.$index, $phoneNumber, $string);
@@ -2842,7 +2923,7 @@ HTML;
      *
      * @return string
      */
-    public static function hideOrRemoveEmail($adId, $string, $type, $suffix = null)
+    public static function hideOrRemoveEmail($adId, $string, $type,$pagetype, $suffix = null)
     {
         if ($type == 'remove') {
             return preg_replace("~[_a-zA-Z0-9-+]+(\.[_a-zA-Z0-9-+]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})~", '', $string);
@@ -2851,7 +2932,17 @@ HTML;
 
             if (isset($matches[0]) && count($matches[0])) {
                 foreach ($matches[0] as $index => $email) {
-                    $string = str_replace($email, '<a href="javascript:contactSeller(\''.$adId.'\', \'Email contact click (Description)\');">click to contact</a>', $string);
+                    // datalayer discription class removed
+                    // jan confirm on 01/07/2020 FFR-4634
+                    $gaclass = '';
+                    if($pagetype = 'AdDetails') {
+                        $gaclass= 'ga-emailDescriptionAd';
+                    }
+                    elseif ($pagetype = 'Profile') {
+                        $gaclass= 'ga-emailDescriptionBusiness';
+                    }
+                    $string = str_replace($email, '<a class="'.$gaclass.'" href="javascript:contactSeller(\''.$adId.'\', \'Email contact click (Description)\', \'Email\');">click to contact</a>', $string);
+//                    $string = str_replace($email, '<a href="javascript:contactSeller(\''.$adId.'\', \'Email contact click (Description)\');">click to contact</a>', $string);
                 }
             }
 
@@ -4075,5 +4166,9 @@ HTML;
             $imgRelPath = $imagePath . '/' . $adId . '_' . $imageHash . ($size ? '_' . $size : '') . '.jpg';
         }
         return $imgRelPath;
+    }
+
+    public static function isJSON($string){
+        return is_string($string) && is_array(json_decode($string, true)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;
     }
 }

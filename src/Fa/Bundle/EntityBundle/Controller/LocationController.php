@@ -236,7 +236,7 @@ class LocationController extends CoreController
             $townArray['more']    = false;
             $townArray['results'] = $this->getRepository('FaEntityBundle:Location')->getTownsArrayByTerm($request->get('term'));
             if (count($townArray['results']) < 5) {
-                $localityArray['results'] = $this->getRepository('FaEntityBundle:Locality')->getLocalitiesArrayByTerm($request->get('term'));
+                $localityArray['results'] = $this->getRepository('FaEntityBundle:Locality')->getLocalitiesArrayByTerm($request->get('term'), $this->container);
                 $townArray['results'] = $townArray['results'] + $localityArray['results'];
                 
                 //get all areas based on user suggestion

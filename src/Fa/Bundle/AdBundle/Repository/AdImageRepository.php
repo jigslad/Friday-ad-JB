@@ -353,6 +353,53 @@ class AdImageRepository extends EntityRepository
     }
 
     /**
+     * Returns ad solr document object.
+     *
+     * @param object  $container  Container
+     * @param object  $ad         Ad object.
+     * @param mixed   $document   Solr document object.
+     * @param integer $imageLimit Image limit.
+     *
+     * @return Apache_Solr_Document
+     */
+    public function getSolrDocumentNew($container, $ad, $document = null, $imageLimit = 0)
+    {
+        /**
+         * @var AdImage[] $images
+         */
+        if (!$document) {
+            $document = new \SolrInputDocument($ad);
+        }
+
+        $images = $this->findBy(array('ad' => $ad->getId(), 'status' => 1), array('ord' => 'ASC'), $imageLimit);
+        $indexableImages = [];
+
+        foreach ($images as $key => $image) {
+            $smallImage = CommonManager::getAdImageUrl($container, $ad->getId(), $image->getPath(), $image->getHash(), '300X225', $image->getAws(), ($image->getImageName()=='' ? $image->getHash() : $image->getImageName()));
+            if ($smallImage != $container->getParameter('fa.static.shared.url').'/bundles/fafrontend/images/no-image-grey.svg') {
+                $indexableImages[$key] = [
+                    'small' => $smallImage,
+                    'original' => CommonManager::getAdImageUrl($container, $ad->getId(), $image->getPath(), $image->getHash(), null, $image->getAws(), ($image->getImageName() == '' ? $image->getHash() : $image->getImageName())),
+                    'medium' => CommonManager::getAdImageUrl($container, $ad->getId(), $image->getPath(), $image->getHash(), '800X600', $image->getAws(), ($image->getImageName() == '' ? $image->getHash() : $image->getImageName())),
+                    'order' => $image->getOrd(),
+                    'img_alt' => ''
+                ];
+                if ($key == 0) {
+                    $this->addField($document, 'thumbnail_url', $indexableImages[0]['small']);
+                }
+                $document = $this->addField($document, 'images', $indexableImages[$key]);
+            }
+
+        }
+
+        // Store total images counter.
+        $document = $this->addField($document, 'image_count', count($indexableImages));
+
+
+        return $document;
+    }
+
+    /**
      * Add field to solr document.
      *
      * @param object $document Solr document object.
@@ -364,6 +411,14 @@ class AdImageRepository extends EntityRepository
     private function addField($document, $field, $value)
     {
         if ($value !== null) {
+            if (is_array($value)) {
+                $value = (string) json_encode($value);
+            }
+
+            if (!is_string($value)) {
+                $value = (string) $value;
+            }
+
             $document->addField($field, $value);
         }
 
@@ -439,7 +494,7 @@ class AdImageRepository extends EntityRepository
                     if (isset($ad[AdSolrFieldMapping::PATH][$imgNo])) {
                         return CommonManager::getAdImageUrl($container, $ad[AdSolrFieldMapping::ID], $ad[AdSolrFieldMapping::PATH][$imgNo], $ad[AdSolrFieldMapping::HASH][$imgNo], $size, $ad[AdSolrFieldMapping::AWS][$imgNo], $ad[AdSolrFieldMapping::IMAGE_NAME][$imgNo]);
                     } else {
-                        return null;
+                        return $container->getParameter('fa.static.url').'/fafrontend/images/no-image-grey.svg';
                     }
                 }
             }

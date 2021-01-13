@@ -36,22 +36,22 @@
                     </div>
                     <div class="login-right">
                     <div class="mobile-block-reg">
-                    	 {% if facebookLoginUrl %} 
-                    <div class="text-center mb20">
-                        <a href="javascript:fbLoginPopup('{{ facebookLoginUrl }}');" class="button special signup-fb-btn">
-                            <span class="fb-icon"></span> 
-                            <span class="btn-text">{{ 'Sign In with Facebook'|trans({}, 'frontend') }}</span>
-                        </a>
-                    </div>
-                    {% endif %}
-                    {% if googleLoginUrl %}
-                    <div class="text-center mb20">
-                        <a href="javascript:googleLoginPopup('{{ googleLoginUrl }}');" class="button special signup-google-btn">
-                            <span class="google-icon"></span> 
-                            <span class="btn-text">{{ 'Sign In with Google'|trans({}, 'frontend') }}</span>
-                        </a>
-                    </div>
-                    {% endif %}
+                        {% if facebookLoginUrl %}
+                            <div class="text-center mb20">
+                                <a href="javascript:fbLoginPopup('{{ facebookLoginUrl }}');" class="button special signup-fb-btn ga-facebookLogin">
+                                    <span class="fb-icon ga-facebookLogin"></span>
+                                    <span class="btn-text ga-facebookLogin">{{ 'Sign In with Facebook'|trans({}, 'frontend') }}</span>
+                                </a>
+                            </div>
+                        {% endif %}
+                        {% if googleLoginUrl %}
+                            <div class="text-center mb20">
+                                <a href="javascript:googleLoginPopup('{{ googleLoginUrl }}');" class="button special signup-google-btn ga-googleLogin">
+                                    <span class="google-icon ga-googleLogin"></span>
+                                    <span class="btn-text ga-googleLogin">{{ 'Sign In with Google'|trans({}, 'frontend') }}</span>
+                                </a>
+                            </div>
+                        {% endif %}
                         <span class="signup-ins">
                             {{'We won\'t post anything <b>without your permission.</b>'|trans({}, 'frontend-login')|raw}}{{ include('FaAdBundle:AdPost:paaToolTipHelp.html.twig', {'paaBlockSlug': 'registration-login-help'}) }}
                         </span>
@@ -103,6 +103,6 @@
     	ga('set', 'dimension9', 'logged in');
     {% endif %}
     ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Login_Or_Register'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %}});
-//]]>
+    //]]>
 </script>
 {% endblock %}

@@ -59,6 +59,10 @@ class CyberSourceCheckoutAdminController extends CoreController implements Resou
         $formManager = $this->get('fa.formmanager');
         $form        = $formManager->createForm(CyberSourceCheckoutType::class, array('cartUser' => $adUserObj));
 
+        $expire = date('D, d M Y H:i:s', time() + (86400 * 180)); // 3 months from now
+        header("Set-cookie: PHPSESSID=".$request->cookies->get('PHPSESSID')."; expires=".$expire."; path=/; HttpOnly; SameSite=None; Secure");
+
+
         if ('POST' === $request->getMethod()) {
             $form->handleRequest($request);
 
@@ -123,6 +127,7 @@ class CyberSourceCheckoutAdminController extends CoreController implements Resou
 
                         // Remove session for cart id
                         $this->container->get('session')->remove('cart_id');
+                        sleep(5);
 
                         //send ads for moderation
                         //$this->getRepository('FaAdBundle:AdModerate')->sendAdsForModeration($paymentId, $this->container);

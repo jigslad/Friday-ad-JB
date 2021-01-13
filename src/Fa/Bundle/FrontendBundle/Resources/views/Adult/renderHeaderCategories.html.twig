@@ -19,7 +19,7 @@
 			         {% for categoryId, categoryArray in headerCategories %}
 			            {% set linkParam = { 'item__location': location_id, 'item__category_id': categoryId} %}		                
 			             {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
-                        	{% set listurl = path('fa_adult_homepage') %}
+                        	{% set listurl = path('fa_new_adult_homepage') %}
                         {% else %}
                             {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['full_slug']) %}
                         {% endif %}
@@ -58,10 +58,11 @@
                                                             {% endif %}
                                                          {% elseif staticTxtCnt == 0 and categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
                                                 				{% if (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox) or (app.request.cookies.has('is_over_18')) %}
-                                                            		<div class="large-8 columns inside-top-category-menu"><a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" >Live Sex Cams</a></div>
-                                                            	    <div class="large-8 columns inside-top-category-menu"><a href="https://engine.partylemons.com/?414907182" rel="nofollow" target="_blank" >MILF Hookups</a></div>
+                                                            		<div class="large-8 columns inside-top-category-menu"><a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" >Escort Alternative</a></div>
+                                                                    <div class="large-8 columns inside-top-category-menu"><a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_WEB_CAMS_URL') }}" rel="nofollow" target="_blank">Live Sex Cams</a></div>
+                                                            	    {# <div class="large-8 columns inside-top-category-menu"><a href="https://engine.partylemons.com/?414907182" rel="nofollow" target="_blank" >MILF Hookups</a></div> #}
                                                 				{# {% else %}
-                                                            		<div class="large-8 columns inside-top-category-menu"><a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup(0,'live-cams');" >Live Sex Cams</a> </div>
+                                                            		<div class="large-8 columns inside-top-category-menu"><a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup(0,'live-cams');" >Hook Ups</a> </div>
                                                             		<div class="large-8 columns inside-top-category-menu"><a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup(0,'live-cams');" >MILF Hookups</a> </div> #}
                                                 	            {% endif %}
                                                 				{% set staticTxtCnt = 1 %}
@@ -92,7 +93,7 @@
         {% for categoryId, categoryArray in headerCategories %}
         {% set linkParam = { 'item__location': location_id, 'item__category_id': categoryId} %}
         {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
-            {% set listurl = path('fa_adult_homepage') %}
+            {% set listurl = path('fa_new_adult_homepage') %}
         {% else %} 
             {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['full_slug']) %}
         {% endif %}
@@ -124,21 +125,22 @@
                                         {% for k in 0..colCounter[i]-1 %}
                                             {% if subCategoryArray[ctr] is defined %}
                                                 {% if categoryArray['children'][subCategoryArray[ctr]]['is_static'] is defined and categoryArray['children'][subCategoryArray[ctr]]['is_static'] %}
-                                                    <div class="large-6 columns"><a href="{{ categoryArray['children'][subCategoryArray[ctr]]['link_url'] }}">{{ categoryArray['children'][subCategoryArray[ctr]]['link_text'] }}</a></div>
+                                                    <div class="large-6 columns"><a class="ga-navSubCategory" href="{{ categoryArray['children'][subCategoryArray[ctr]]['link_url'] }}">{{ categoryArray['children'][subCategoryArray[ctr]]['link_text'] }}</a></div>
                                                 {% else %}
                                                     {% if secondLevelCategoryArray['is_static'] is defined and secondLevelCategoryArray['is_static'] %}
                                                         {% set listurl1 = secondLevelCategoryArray['link_url'] %}
                                                     {% else %}
                                                         {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['children'][subCategoryArray[ctr]]['full_slug']) %}
                                                     {% endif %}
-                                                    <div class="large-6 columns"><a href="{{ listurl1 }}">{{categoryArray['children'][subCategoryArray[ctr]]['name']}}</a></div>
+                                                    <div class="large-6 columns"><a class="ga-navSubCategory" href="{{ listurl1 }}">{{categoryArray['children'][subCategoryArray[ctr]]['name']}}</a></div>
                                                 {% endif %}
                                              {% elseif staticTxtCnt == 0 and categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
                                             	{% if (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox) or (app.request.cookies.has('is_over_18')) %}
-                                            		<div class="large-6 columns live-cam-url"><a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" >Live Sex Cams</a></div>
-                                            	    <div class="large-6 columns live-cam-url"><a href="https://engine.partylemons.com/?414907182" rel="nofollow" target="_blank">MILF Hookups</a></div>
+                                            		<div class="large-6 columns live-cam-url"><a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" >Escort Alternative</a></div>
+                                                    <div class="large-6 columns live-cam-url"><a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_WEB_CAMS_URL') }}" rel="nofollow" target="_blank" >Live Sex Cams</a></div>
+                                            	    {# <div class="large-6 columns live-cam-url"><a href="https://engine.partylemons.com/?414907182" rel="nofollow" target="_blank">MILF Hookups</a></div> #}
                                             	{# {% else %}
-                                            		<div class="large-6 columns live-cam-url"><a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup(0,'live-cams');">Live Sex Cams</a></div>
+                                            		<div class="large-6 columns live-cam-url"><a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup(0,'live-cams');">Hook Ups</a></div>
                                             		<div class="large-6 columns live-cam-url"><a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup(0,'live-cams');" >MILF Hookups</a></div> #}
                                             	{% endif %}
                                             	{% set staticTxtCnt = 1 %}
@@ -165,7 +167,7 @@
     {% if headerCategories|length %}
     {# {% cache 'header|menu|'~location_id~'front/header_menu_mobile' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0) 86400 %} #}
     <dd class="accordion-navigation">
-        <a href="#cat-mob-menu ga-ahpCatDropdown">MENU</a>
+        <a href="#cat-mob-menu" class="ga-ahpCatDropdown">MENU</a>
         <div id="cat-mob-menu" class="content active">
             <ul class="show-for-small-only">               
                 {% for categoryId, categoryArray in headerCategories %}
@@ -245,12 +247,13 @@
                                  
                             {% endfor %}
                         	<li class="last-level">
-                        		{% if thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox %}
-                            		<a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" ><span class="mob-adult mob-adul-menu-icons">&nbsp;</span>Live Sex Cams</a>
-                            		<a href="https://engine.partylemons.com/?414907182" rel="nofollow" target="_blank" ><span class="mob-adult mob-adul-menu-icons">&nbsp;</span>MILF Hookups</a>
-                        		{# {% else %}
-                            		<a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" ><span class="mob-adult mob-adul-menu-icons">&nbsp;</span>Live Sex Cams</a>
-                            		<a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" ><span class="mob-adult mob-adul-menu-icons">&nbsp;</span>MILF Hookups</a> #}
+                        		{% if (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox) or (app.request.cookies.has('is_over_18')) %}
+                            		<a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" ><span class="mob-adult mob-adul-menu-icons">&nbsp;</span>Escort Alternative</a>
+                                    <a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_WEB_CAMS_URL') }}" rel="nofollow" target="_blank" ><span class="mob-adult mob-adul-menu-icons">&nbsp;</span>Live Sex Cams</a>
+                                    {# <a href="https://engine.partylemons.com/?414907182" rel="nofollow" target="_blank" ><span class="mob-adult mob-adul-menu-icons">&nbsp;</span>MILF Hookups</a> #}
+                                {# {% else %}
+                                    <a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" ><span class="mob-adult mob-adul-menu-icons">&nbsp;</span>Hook Ups</a>
+                                    <a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" ><span class="mob-adult mob-adul-menu-icons">&nbsp;</span>MILF Hookups</a> #}
                 	            {% endif %}
                     		</li>
                         {% endif %}
@@ -259,28 +262,6 @@
         </div>
     </dd>
    {# {% endcache %} #}
-{% endif %}
-
-{% if app.user %}
-    {% set messageRepository = fetch_repository('FaMessageBundle:Message') %}
-    {% set totalUnreadMsg = messageRepository.getMessageCount(app.user.getId(), 'all', fetch_container_instance()) %}
-    <dd class="accordion-navigation">
-        <a href="#db-mob-menu">MY DASHBOARD</a>
-        <div id="db-mob-menu" class="content">
-            <ul class="db-menu-mobile">
-                <li><a href="{{ path('dashboard_home') }}" class="home-icon">{{ 'Dashboard home'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                <li><a href="{{ path('user_ad_message_all') }}" class="messages-icon">{{ 'Messages'|trans({}, 'frontend-header-usermenu') }}{% if totalUnreadMsg > 0 %}&nbsp;<span class="notification-digit">({{totalUnreadMsg}})</span>{% endif %}</a></li>
-                <li><a href="{{ path('user_review_list') }}" class="reviews-icon">{{ 'Reviews'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                <li><a href="{{ path('manage_my_ads_active') }}" id="manage-my-ad-id" class="manage-item-icon">{{'Manage my ads'|trans({}, 'frontend-header-usermenu')}}</a></li>
-                <li><a href="{{ path('my_profile') }}" class="manage-profile-icon">{{ 'Edit profile'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                <li><a href="{{ path('my_orders') }}" class="orders-icon">{{ 'Orders'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                <li><a href="{{ path('my_favourite') }}" class="my-favourites-icon">{{ 'My favourites'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                <li><a href="{{ path('list_search_agent') }}" id="saved-search-header-id" class="saved-searches-icon">{{'Alerts and searches'|trans({}, 'frontend-header-usermenu')}}</a></li>
-                <li><a href="{{ path('my_purchases') }}" id="shop-header-id" class="purchase-icon">{{ 'Purchases'|trans({}, 'frontend-header-usermenu') }}</a></li>
-                <li><a href="{{ path('my_account') }}" id="account-header-id" class="account-icon">{{ 'Account'|trans({}, 'frontend-header-usermenu') }}</a></li>
-            </ul>
-        </div>
-    </dd>
 {% endif %}
 </dl>
 </div>
@@ -350,7 +331,9 @@ function showAdultPopup(modify = 0,elem = null)
     if(elem!=null) {
     	if(elem=='live-cams') {
     	    redrctlink = "{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}";
-    	} 
+        } else if(elem=='live-web-cams') {
+            redrctlink = "{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_WEB_CAMS_URL') }}";
+        }
     }
     $.ajax({
         type: "POST",
