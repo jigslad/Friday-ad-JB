@@ -2793,7 +2793,7 @@ class CategoryRepository extends NestedTreeRepository
 
         $cookieLocationDet = $cookieLocation  = array();
 
-        $cookieLocation  = $container->get('request_stack')->getCurrentRequest()->cookies->get('location');
+        $cookieLocation  = (!empty($_COOKIE))?$container->get('request_stack')->getCurrentRequest()->cookies->get('location'):array();
 
         if(!empty($cookieLocation)) {
             $cookieLocationDet = json_decode($cookieLocation);
