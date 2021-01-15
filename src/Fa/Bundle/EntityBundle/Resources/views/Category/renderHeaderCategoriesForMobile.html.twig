@@ -90,13 +90,13 @@
                                          
                                     {% endfor %}
                                     {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
-                                    	<li class="last-level">
+                                    	{#<li class="last-level">
                                     		{% if thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox %}
                                         		<a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" >Escort Alternative</a>
                                             {% else %}
                                         		<a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" >Escort Alternative</a>
                             	            {% endif %}
-                                		</li>
+                                		</li>#}
                                         <li class="last-level">
                                             {% if thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox %}
                                                 <a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_WEB_CAMS_URL') }}" rel="nofollow" target="_blank" >Live Sex Cams</a>
