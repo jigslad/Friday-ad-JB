@@ -131,7 +131,7 @@ class AdRoutingManager
         $setDefRadiusForLocation = 0;
         if($isNearByTown) {
             $defSrchParams = $this->container->get('request_stack')->getCurrentRequest()->attributes->get('searchParams');
-            $getDefaultRadiusForDefSrchparams = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParamsOnly($defSrchParams, $this->container);
+            $getDefaultRadiusForDefSrchparams = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParamsOnly($defSrchParams, $this->container, $fromCommandLine);
             if(isset($defSrchParams['item__distance'])) {
                  if ($defSrchParams['item__distance'] == $getDefaultRadiusForDefSrchparams) {
                    $setDefRadiusForLocation = 1;
@@ -139,7 +139,7 @@ class AdRoutingManager
             }
         }
         $getDefaultRadius = '';
-        $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParamsOnly($search_params, $this->container);
+        $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParamsOnly($search_params, $this->container, $fromCommandLine);
         if(isset($search_params['item__distance']) && $search_params['item__distance'] != $getDefaultRadius && $isNearByTown && $setDefRadiusForLocation) {
             $search_params['item__distance'] = $getDefaultRadius;
         } else {
