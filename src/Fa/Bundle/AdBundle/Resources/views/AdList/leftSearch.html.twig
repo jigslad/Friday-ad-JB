@@ -22,6 +22,7 @@
 {% set customized_url = app.request.get('customized_url')  %}
 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 {{ form_errors(form) }}
+    <div class="search-filters">
     <dl class="accordion" data-accordion>
         {% if isShopPage is defined and isShopPage %}
             <dd class="accordion-navigation keep-shown">
@@ -70,8 +71,8 @@
               </ul>
             </div>
         </dd>
-		
-        <dd class="accordion-navigation keep-shown">       
+
+        <dd class="accordion-navigation keep-shown">
             <a href="#panel3a" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Distance I\'m happy to travel'|trans({}, 'frontend-left-search')}}</h5></a>
         	<div class="content active clearfix">
                <ul class="distance-search clearfix" id="distance-left-search" style="display:none">
@@ -98,21 +99,53 @@
                   <ul class="distance-search distance-left-search clearfix">
                     <li id="distance-error-placeholder"><small class="error" style="display:none"></small></li>
                   </ul>
-              
-              
+
+
               {% if locationFacets is defined and locationFacets|length > 0 %}
+                  {% set maxDimensionCount = 12 %}
                   <div class="towns-list">
                       <label>{{'Nearby towns'|trans({}, 'frontend-left-search')}}:</label>
                       <ul>
-                          {% for townId, count in locationFacets %}
-                              {% set queryParams = {'fa_left_search' : searchParams|merge({'item__location': townId })} %}
+                          {% for key, location in locationFacets %}
+                              {% set queryParams = {'fa_left_search' : searchParams|merge({'item__location': location.id })} %}
                               {% if customized_url|length and customized_url['target_url'] != '' %}
                                   {% set listurl = container.get('fa_ad.manager.ad_routing').getCustomListingUrl(queryParams['fa_left_search'], customized_url['target_url'], true) %}
                               {% else %}
-                                  {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams['fa_left_search']) %}
+                                  {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams['fa_left_search'], null, false, null, false, null, null,true) %}
                               {% endif %}
-                              <li><a href="{{ listurl }}" {% if queryParams.fa_left_search.item__distance is defined and queryParams.fa_left_search.item__distance != 0 %} rel="nofollow" {% endif %} >{{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Location', townId) }} ({{ count }})</a></li>
-                          {% endfor %}
+                              {% if key == (maxDimensionCount) %}
+                                  </ul>
+                                  <div class="see-more clearfix">
+                                      <a href="javascript:void(0);" rel="nofollow" onclick="$('#locationLHSFilters').foundation('reveal', 'open');">See more</a>
+                                      <a href="javascript:void(0);" rel="nofollow" class="right clear_filter" id="{{ key }}_clear">{{ 'Clear'|trans({}, 'frontend-left-search') }}</a>
+                                  </div>
+                                  <div class="reveal-modal" id="locationLHSFilters" data-reveal>
+                                      <a class="close-reveal-modal">&times;</a>
+                                      <div>
+                                          <h5 class="modal-title">Showing Towns</h5>
+                                          <div class="modal-content dimension-modal">
+                                              <div class="dimension-content">
+                                                  <div class="clearfix">
+                              {% endif %}
+                              {% if key >= maxDimensionCount and key is divisible by(4) %}
+                                    <ul class="seller-link dimension-list">
+                              {% endif %}
+                                  <li>
+                                      <a href="{{ listurl }}" {% if queryParams.fa_left_search.item__distance is defined and queryParams.fa_left_search.item__distance != 0 %} rel="nofollow" {% endif %} >
+                                          {{ location.name}} ({{ location.count }})
+                                      </a>
+                                  </li>
+                                  {% if key >= maxDimensionCount and (key + 1) is divisible by(4) %}
+                              </ul>
+                              {% endif %}
+                              {% if key > maxDimensionCount and key == (locationFacets|length - 1) %}
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      {% endif %}
+                           {% endfor %}
                       </ul>
                   </div>
               {% endif %}
@@ -140,7 +173,7 @@
                     <li>
                         {% set itemsWithPhoto = fetch_repository('FaEntityBundle:CategoryDimension').getDimensionFacetBySearchParams('id', searchParams|merge({'items_with_photo': 1}), {}, fetch_container_instance(), false, null, null, false, {}, true) %}
                         {{ form_widget(attribute(form, 'items_with_photo')) }}
-                        <label class="mb0" for="{{ attribute(form, 'items_with_photo').vars.id }}">{{ attribute(form, 'items_with_photo').vars.label }}{% if itemsWithPhoto and itemsWithPhoto|length %} ({{ itemsWithPhoto|length }}){% endif %}</label>
+                        <label class="mb0" for="{{ attribute(form, 'items_with_photo').vars.id }}">{{ attribute(form, 'items_with_photo').vars.label }}{% if leftFilters and leftFilters.image_count %} ({{ leftFilters.image_count }}){% endif %}</label>
                         {% set queryParams = searchParams|merge({'items_with_photo': 1}) %}
                         {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
                         <a href="{{ listurl }}" rel="nofollow" class="crowable_checkbox_link" onclick="return false;">{{ attribute(form, 'items_with_photo').vars.label }}</a>
@@ -148,7 +181,7 @@
                 </ul>
             </div>
         </dd>
-        
+
         {% if isShopPage is not defined or (isShopPage is defined and not isShopPage) %}
             <dd class="accordion-navigation keep-shown">
                 <div class="content active label-inline">
@@ -167,6 +200,7 @@
             {% do attribute(form, 'expired_ads').setRendered %}
         {% endif %}
     </dl>
+    </div>
 {{ form_end(form) }}
 <div id="left_search_dimension_modal" class="reveal-modal" data-reveal></div>
 <div id="removeSavedSearch" class="reveal-modal tiny" data-reveal>
@@ -192,3 +226,8 @@
         </div>
     </div>
 </div>
+<style>
+    #fa_left_search_item__distance-button{
+        width: 100%!important;
+    }
+</style>

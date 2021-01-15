@@ -9,7 +9,8 @@
                 {{ form_errors(form) }}
                 <div class="top-search__input">
                     {{ form_widget(form.keywords, {'attr': {'placeholder':'Looking for...'|trans({}, 'frontend-header-search'), 'class':'top-search__input--text' }}) }}
-                    <button class="top-search__input--btn" type="submit"></button>
+                    <button class="top-search__input--btn" type="submit" value="Go"></button>
+                    {{ form_widget(form.default_distance) }}
                     <a rel="nofollow" id="fa_top_search_keywords_close" class="close-icon"></a>
                     <!-- Search dropdown Content starts-->
                     <div id="fa_top_search_keywords_list"></div>
@@ -93,7 +94,7 @@
 {% if searchParams.item__distance is defined and searchParams.item__distance is not null %}
   <script language="javascript" type="text/javascript">
     $(document).ready(function(){
-        $('#distance_slider').val({{ searchParams.item__distance }});
+        //$('#distance_slider').val({{ searchParams.item__distance }});
     });
   </script>
 {% endif %}

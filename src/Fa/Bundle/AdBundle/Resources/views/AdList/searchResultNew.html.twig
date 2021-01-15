@@ -161,17 +161,22 @@
 {% endblock %}
 
 {% block scripttop %}
-    {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) %}
-        {# CSS for owl carousel - taken from Fa/Bundle/AdBundle/Resources/views/AdList/owl-carousel-2-css.html.twig and inline CSS for listing page #}
-        {% stylesheets filter='uglifycss' output='bundles/css/compiled/search-result.css'
-            'bundles/fafrontend/css/ad-list.css'
-        %}
-            <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
-        {% endstylesheets %}
+    {% if seoFields is not null %}
+        {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) or (seoFields|length and seoFields['popular_search'] is defined and seoFields['popular_search'] and seoFields['seo_tool_id'] is defined and seoFields['seo_tool_id']) %}
+            {# CSS for owl carousel - taken from Fa/Bundle/AdBundle/Resources/views/AdList/owl-carousel-2-css.html.twig and inline CSS for listing page #}
+            {% stylesheets filter='uglifycss' output='bundles/css/compiled/search-result.css'
+                'bundles/fafrontend/css/ad-list.css'
+            %}
+                <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
+            {% endstylesheets %}
+        {% endif %}
     {% endif %}
     <style>
         #fa_left_search_new_item__distance-button {
             width: 100% !important;
+        }
+        .crawlable-checkbox li a{
+            display: none;
         }
     </style>
 {% endblock %}
@@ -198,12 +203,15 @@
                 {% if isShopPage is not defined %}
                     {{ include('FaAdBundle:AdList:saveSearch.html.twig') }}
                 {% endif %}
-                {{ include('FaAdBundle:AdList:leftSearchNew.html.twig') }}
-
+{#                {{ include('FaAdBundle:AdList:leftSearchNew.html.twig') }}#}
+                {{ render(controller('FaAdBundle:AdList:leftSearch', { 'searchParams': searchParams is defined ? searchParams : {} , 'locationFacets': leftFilters.locationFacets, 'facetResult': facetResult, 'searchQueryString': app.request.queryString, 'customized_url': customized_url, 'cookieLocationDetails': cookieLocationDetails is defined ? cookieLocationDetails : {} , 'leftFilters': leftFilters} )) }}
                 {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_FILTERBOX') %}
                 {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
             </div>
             <div id="listingDiv" class="large-18 columns">
+                {% if seoFields|length and seoFields['popular_search'] is defined and seoFields['popular_search'] and seoFields['seo_tool_id'] is defined and seoFields['seo_tool_id'] %}
+                    {{ include('FaAdBundle:AdList:popularSearchLinks.html.twig', {'mapFlag': 0}) }}
+                {% endif %}
 
                 {% if resultCount > 0 %}
                     {% if isShopPage is not defined %}
@@ -217,6 +225,9 @@
                     {% set slotallocated = slotallocated|merge([1]) %}
                 {% endif %}
                 {% set adCount = 0 %}
+                {% set getPagNum = (app.request.get('page'))?(app.request.get('page')):1 %}
+                {% set realAdCnt = (getPagNum-1)*20 %}
+                {% set setExtendedHeading = 0 %}
 
                 {% for ad in featuredAds %}
                     {{ include('FaAdBundle:AdList:listDetailNew.html.twig', {'isFeatured' : true}) }}
@@ -232,6 +243,7 @@
 
                 {% for ad in ads %}
                     {% set adCount = adCount + 1 %}
+                    {% set realAdCnt = realAdCnt + 1 %}
 
                     {% if thisDevice == 'mobile' %}
                         {% if (adCount == 2 and resultCount > 2 and bannerStatus) %}
@@ -255,6 +267,13 @@
                         {% endif %}
                     {% endif %}
 
+                    {% if ((realAdCnt > resultCount) and (setExtendedHeading==0)) %}
+                        <div data-alert="" class="alert-box info radius">
+                            <span class="alert-icon">&nbsp;</span>
+                            We found  {{extendedResultCount}} {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id) | replace({'Category_root':''}) }} ads within  {{extendedRadius}} miles of {{ app.request.get('location') | replace({'-':' '}) | title }}
+                        </div>
+                        {% set setExtendedHeading = 1 %}
+                    {% endif %}
 
                     {% if displayRecommendedSlot==1 and recommendedSlotsCount > 0 %}
                         {% if adCount== 4  and (recommendedSlotResult[2] is defined and recommendedSlotResult[2]|length >0) %}
@@ -281,14 +300,14 @@
                         {% endif %}
                     {% endif %}
 
-                    {#{% if businessExposureUsersDetails is defined and businessExposureUsersDetails|length > 0 and resultCount > 0  %}
+                    {% if businessExposureUsersDetails is defined and businessExposureUsersDetails|length > 0 and resultCount > 0  %}
                         {% if (adCount == 5 or adCount == 15) and businessExposureUsersDetails is defined and  businessExposureUsersDetails|length > 0 %}
                             {{ include('FaAdBundle:AdList:businessExposureSliderBlockNew.html.twig', {'blockposition': adCount }) }}
                         {% endif %}
                         {% if adCount == 10 and businessExposureUsersDetailsWithoutAd is defined and  businessExposureUsersDetailsWithoutAd|length > 0 %}
                             {{ include('FaAdBundle:AdList:businessExposureSingleBlockNew.html.twig') }}
                         {% endif %}
-                    {% endif %}#}
+                    {% endif %}
 
                     {{ include('FaAdBundle:AdList:listDetailNew.html.twig') }}
                 {% endfor %}
@@ -338,10 +357,10 @@
 {% endblock %}
 
 {% block scriptbottom %}
-    {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) %}
+    {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) or (seoFields|length and seoFields['popular_search'] is defined and seoFields['popular_search'] and seoFields['seo_tool_id'] is defined and seoFields['seo_tool_id']) %}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     {% endif %}
-    {{ include('FaAdBundle:AdList:leftSearchJsNew.html.twig') }}
+    {{ include('FaAdBundle:AdList:leftSearchJs.html.twig') }}
     {{ include('FaAdBundle:AdList:listJsNew.html.twig', {'searchParams' : searchParams}) }}
     {#{{ include('FaAdBundle:Ad:upgradeJs.html.twig', {'paymentTransactionJs' : paymentTransactionJs }) }}#}
 

@@ -226,15 +226,27 @@ class TiAdRequestListener
 
                     $parent   = $this->getFirstLevelParent($catObj['id']);
 
-                    if (($catObj['id'] == CategoryRepository::MOTORS_ID) || ($parent['id'] == CategoryRepository::MOTORS_ID)) {
+                    /*if (($catObj['id'] == CategoryRepository::MOTORS_ID) || ($parent['id'] == CategoryRepository::MOTORS_ID)) {
                         $queryParams['item__distance']  =  $request->get('item__distance') == '' ? 30 : $request->get('item__distance');
                     } else {
                         $queryParams['item__distance']  =  $request->get('item__distance') == '' ? 15 : $request->get('item__distance');
+                    }*/
+                    $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($queryParams, $this->container);
+                    if ($request->get('item__distance')) {
+                        $queryParams['item__distance']  =  $request->get('item__distance');
+                    } else {
+                        $queryParams['item__distance']  =  ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
                     }
 
                     $request->attributes->set('finders', array_merge($queryParams, array('item__category_id' => $catObj['id'], 'item__location' => $locationId)));
                 } else {
-                    $queryParams['item__distance'] = isset($queryParams['item__distance']) && $queryParams['item__distance'] != null ? $queryParams['item__distance'] : 15;
+                    $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($queryParams, $this->container);
+                    if ($request->get('item__distance')) {
+                        $queryParams['item__distance']  =  $request->get('item__distance');
+                    } else {
+                        $queryParams['item__distance']  =  ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
+                    }
+                    //$queryParams['item__distance'] = isset($queryParams['item__distance']) && $queryParams['item__distance'] != null ? $queryParams['item__distance'] : 15;
                     $request->attributes->set('finders', array_merge($queryParams, array('item__location' => $locationId)));
                 }
 

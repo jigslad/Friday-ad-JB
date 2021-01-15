@@ -185,6 +185,7 @@
                 if(!$('#'+idClicked).hasClass('disabled')) {
                     $('#'+idClicked).attr('disabled', true);
                 }
+                $('#fa_top_search_keyword_category_id').val($('#fa_top_search_tmpLeafLevelCategoryId').val());
                 $("form[name='"+parentForm+"']").submit();
             }
         }

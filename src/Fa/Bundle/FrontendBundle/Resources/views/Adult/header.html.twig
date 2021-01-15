@@ -140,7 +140,7 @@
     </div>
     <!--Top navigation END-->
     <!--Main navigation Starts-->
-   <div id="sticky_nav_top">
+    <div id="sticky_nav_top" class="{% if currentRoute in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step'} %} show-for-small-only {% endif %}">
     <div class="main-navigation {% if currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'listing_page', 3: 'landing_page_category_location', 4: 'landing_page_category'} %}homepage-nav{% endif %}">
         <div class="row">
             <div class="container">
@@ -218,7 +218,7 @@
         </ul>
     </section>
     {% if status_code == 200 %}
-     {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'cybersource_checkout', 3: 'fa_adult_homepage', 4: 'fa_new_adult_homepage'} %}
+        {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'cybersource_checkout' ,3: 'ad_post_fourth_step',4: 'fa_adult_homepage', 5: 'fa_new_adult_homepage'} %}
             {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {} } )) }}
         {% endif %} 
     {% endif %}

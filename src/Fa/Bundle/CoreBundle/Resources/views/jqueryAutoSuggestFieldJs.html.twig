@@ -41,6 +41,7 @@ $(function() {
                     if(!data['results'].length) {
                         $('#category_id_autocomplete_error').show();
                     }
+                    if(jQuery.type(data) == 'object') {
                     var result = $.map(data['results'], function(item) {
                         return {
                             label: item.text,
@@ -55,6 +56,7 @@ $(function() {
                     });
                     cache[ term ] = result;
                     response(result);
+                    }
                 }
             });
         },
@@ -180,9 +182,6 @@ $(function() {
             {# {% if 'location' in field and submitFormAfterSelect is not defined and not mobileDetectManager.isMobile() and not mobileDetectManager.isTablet()%} #}
             {% if 'location' in field and submitFormAfterSelect is not defined %}
                 bindShowMapOnChangeLocationEvent();
-            {% endif %}
-            {% if 'category_id' in field and not mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
-                onSelectAutoSuggestCategory();
             {% endif %}
         },
         close: function( event, ui ) { 

@@ -443,7 +443,11 @@ function showAdultPopup(modify = 0,elem = null)
     if(elem!=null) {
     	if(elem=='live-cams') {
     	    redrctlink = "{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}";
-    	} 
+    	} else if(elem=='live-web-cams') {
+            redrctlink = "{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_WEB_CAMS_URL') }}";
+        } else if(elem=='hookups') {
+            redrctlink = "https://engine.upsidedownrightside.com/?462388332";
+        }
     }
     $.ajax({
         type: "POST",
