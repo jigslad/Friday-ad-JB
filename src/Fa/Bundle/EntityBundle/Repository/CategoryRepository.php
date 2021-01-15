@@ -2786,7 +2786,7 @@ class CategoryRepository extends NestedTreeRepository
         return $categoryPathArray;
     }
 
-    public function getDefaultRadiusBySearchParamsOnly($searchParams, $container = null)
+    public function getDefaultRadiusBySearchParamsOnly($searchParams, $container = null, $fromCommandLine=false)
     {
         $setRadius = 1;
         $categoryId = 0;
@@ -2796,8 +2796,9 @@ class CategoryRepository extends NestedTreeRepository
 
         $cookieLocationDet = $cookieLocation  = array();
 
-        $cookieLocation  = (!empty($_COOKIE))?$container->get('request_stack')->getCurrentRequest()->cookies->get('location'):array();
-
+        if (!$fromCommandLine) {
+            $cookieLocation = $container->get('request_stack')->getCurrentRequest()->cookies->get('location');
+        }
         if(!empty($cookieLocation)) {
             $cookieLocationDet = json_decode($cookieLocation);
         }
