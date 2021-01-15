@@ -140,8 +140,10 @@
     </div>
     <!--Top navigation END-->
     <!--Main navigation Starts-->
-    <div id="sticky_nav_top" class="{% if currentRoute in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step'} %} show-for-small-only {% endif %}">
-    <div class="main-navigation {% if currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'listing_page', 3: 'landing_page_category_location', 4: 'landing_page_category'} %}homepage-nav{% endif %}">
+    {% if currentRoute in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step'} %}
+        {% set paaPageClass = 'show-mobile'%}
+    {% endif %}
+    <div class="main-navigation {% if currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'listing_page', 3: 'landing_page_category_location', 4: 'landing_page_category'} %}homepage-nav{% endif %} {{ paaPageClass is defined ? paaPageClass : '' }}">
         <div class="row">
             <div class="container">
                 <div class="main-navigation__block">
