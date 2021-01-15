@@ -350,7 +350,7 @@ class ThirdPartyLoginController extends CoreController
                         $orgImageName = $tempUserId.'.jpg';
 
                         $dimension = getimagesize($imagePath.DIRECTORY_SEPARATOR.$orgImageName);
-                        $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, 90, 'ImageMagickManager');
+                        $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, 90, 'GDManager');
                         $origImage->loadFile($imagePath.DIRECTORY_SEPARATOR.$orgImageName);
                         $origImage->save($imagePath.DIRECTORY_SEPARATOR.$tempUserId.'_original.jpg', 'image/jpeg');
 
