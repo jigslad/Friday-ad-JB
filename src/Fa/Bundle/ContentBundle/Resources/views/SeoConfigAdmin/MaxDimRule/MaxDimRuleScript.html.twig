@@ -1,10 +1,37 @@
 <script type="text/javascript">
     $(document).ready(function() {
+        $("#MaxDimRules").select2({placeholder: "Add Max Dim Rules", formatSelection: maxDimTemplate});
         {% if configs['max_dim_rules'] is defined %}
             var maxDimRul = {{ configs['max_dim_rules']['data']|raw }};
             loadSelect2Data('#MaxDimRules', JSON.parse(maxDimRul), 1);
         {% endif %}
     });
+    function maxDimTemplate(data) {
+        var split = (data.text).split('+');
+        var out = [];
+
+        $.each(split, function (key, value) {
+            var detail = value.split(':');
+            out.push(detail[0] + ' ' + detail[1]);
+        });
+
+        return out.join(' <span style="color: green;">+</span> ');
+    }
+    function update_MaxDimRules() {
+        var select = $('#MaxDimRules');
+        blockPage();
+        $.ajax({
+            type: "POST",
+            url: "{{path('seo_config_max_dim_rules')}}",
+            data: {
+                "data": getData($(select).select2('data'))
+            }
+        })
+            .done(function() {
+                unblockPage();
+                $(select).parent().find('.select2-container').removeClass('unsaved').addClass('saved')
+            });
+    }
     function update_MaxDimRulesNew() {
         var location = $('#max-dim-location').children("option:selected").val();
         var category = $('#max-dim-category').children("option:selected").val();
