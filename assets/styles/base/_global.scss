@@ -278,3 +278,9 @@ textarea {
         display: none;
     }
 }
+.show-large-device {
+    display: none;
+    @include media-breakpoint-up(md) {
+        display: block;
+    }
+}

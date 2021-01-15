@@ -325,6 +325,12 @@
             }
         }
         &__item {
+            &.show-large-device {
+                display: none;
+                @include media-breakpoint-up(md) {
+                    display: block;
+                }
+            }
             @include media-breakpoint-up(md) {
                 &:first-child {
                     margin-right: 40px;

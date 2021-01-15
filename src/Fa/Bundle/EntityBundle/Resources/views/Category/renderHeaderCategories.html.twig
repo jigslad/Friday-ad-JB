@@ -4,12 +4,15 @@
 {% if status_code is not defined %}
     {% set status_code = 200 %}
 {% endif %}
+{% if currentRoute in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step'} %}
+    {% set paaPageClass = 'show-large-device'%}
+{% endif %}
 <div class="nav-mobile">
     <div class="nav-dropdown">
         <ul class="menu-accordion show-accordion ">
             {% if headerCategories|length %}
-                {% cache 'header|menu|'~location_id~'front/header_menu_mobile' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0) 86400 %}
-                    <li id="cat-mob-menu" class="main-menu__item categories">
+{#                {% cache 'header|menu|'~location_id~'front/header_menu_mobile' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0) 86400 %}#}
+                    <li id="cat-mob-menu" class="main-menu__item categories {{ paaPageClass is defined ? paaPageClass : '' }}">
                         <a href="#" class="main-menu__link accordion-link">Browse by Categores</a>
                         <ul class="nav-dropdown__block">
                             {% for categoryId, categoryArray in headerCategories %}
@@ -175,7 +178,7 @@
                             {% endfor %}
                         </ul>
                     </li>
-                {% endcache %}
+{#                {% endcache %}#}
             {% endif %}
 
             {% if app.user %}
@@ -238,7 +241,7 @@
                     </ul>
                 </li>
             {% endif %}
-            <li class="main-menu__item basket-notify">
+            <li class="main-menu__item basket-notify {{ paaPageClass is defined ? paaPageClass : '' }}">
                 <a href="#" class="main-menu__link">
                     Basket
                     <span class="notify-badge"></span>
@@ -260,24 +263,24 @@
                 <a href="{{ path('location_home_page', {'location': 'contact-us'}) }}" id="contact-header-id" class="main-menu__link">Contact us</a>
             </li>
         </ul>
-        <div class="main-menu__item goPaAdBtn">
+        <div class="main-menu__item goPaAdBtn {{ paaPageClass is defined ? paaPageClass : '' }}">
             <a href="{{ path('ad_post_first_step') }}" class="main-menu__link ga-PAAbutton btn-rounded">Place an ad</a>
         </div>
     </div>
 </div>
 {#{% cache 'header|menu|'~location_id|replace({' ':''})~'front/header_menu_tablet' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0 ) (staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isBot', [container]) ? 600 : 86400) %}#}
     <ul class="main-menu__list">
-        <li class="main-menu__item">
-            {% if status_code == 200 %}
-                {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'cybersource_checkout'} %}
-                    <a href="#!" class="main-menu__link search-icon" id="topSearch">
-                        <span>Search</span>
-                    </a>
-                    {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {} } )) }}
-                {% endif %}
+        {% if status_code == 200 %}
+            {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'cybersource_checkout'} %}
+                <li class="main-menu__item {{ paaPageClass is defined ? paaPageClass : '' }}">
+                <a href="#!" class="main-menu__link search-icon" id="topSearch">
+                    <span>Search</span>
+                </a>
+                {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {} } )) }}
+                </li>
             {% endif %}
-        </li>
-        <li class="main-menu__item post-btn ga-buttonPAA" >
+        {% endif %}
+        <li class="main-menu__item post-btn ga-buttonPAA {{ paaPageClass is defined ? paaPageClass : '' }}" >
             <a href="{{ path('ad_post_first_step') }}" class="main-menu__link post-icon ga-buttonPAA" title="{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}">
                 <span>Post</span>
             </a>
