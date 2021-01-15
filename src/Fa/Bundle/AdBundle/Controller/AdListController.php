@@ -1566,9 +1566,26 @@ class AdListController extends CoreController
             'item__is_trade_ad',
             'item__distance',
             'map',
-            'keywords'
+            'keywords',
+            'utm_campaign',
+            'utm_medium',
+            'utm_source',
+            'dm_t'
         ];
         $diffKeys = array_diff(array_keys($searchParams), $staticKeys);
+
+        if(isset($searchParams['utm_campaign'])) {
+            unset($searchParams['utm_campaign']);
+        }
+        if(isset($searchParams['utm_medium'])) {
+            unset($searchParams['utm_medium']);
+        }
+        if(isset($searchParams['utm_source'])) {
+            unset($searchParams['utm_source']);
+        }
+        if(isset($searchParams['dm_t'])) {
+            unset($searchParams['dm_t']);
+        }
 
         foreach ($diffKeys as $diffKey) {
             $solrDimensionFieldName = $adRepository->getSolrFieldName($listingFields, $this->getDimensionName($diffKey));
