@@ -1,0 +1,26 @@
+{% block search_html %}
+<div class="row">
+    <div class="columns">        
+        <div class="row outline">
+            <div class="large-7 columns" style="padding: 0;">
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                {{ form_errors(form) }}
+               	<div class="large-3 columns">
+                   {{ form_widget(form.user__category_id, {'attr': {'class':'form-control', 'placeholder': 'Category'|trans }}) }}
+               	</div>
+               	<div class="large-7 columns">
+                    {{ form_widget(form.user__user_email, {'attr': {'class':'form-control', 'placeholder': 'Email Address'|trans }}) }}
+                </div>
+                <div class="large-2 columns">
+                    {{ form_widget(form.search, {'attr': {'class':'small button'}}) }}
+                </div>
+                {{ form_end(form) }}
+            </div>
+            <div class="large-5 columns" style="padding: 0;">
+                {% set sortField = {'user_id': 'User ID'|trans, 'date_of_next_renewal': 'Date of next renewal'|trans, 'user_boost_overide': 'Override amount'|trans} %}
+                {{ sortable_combo('boost_override_admin', sortField) }}                
+            </div>
+       </div>        
+    </div>
+</div>
+{% endblock %}
