@@ -53,6 +53,16 @@
                var eventLabel = categoryPath + ' - Yes';
                ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
                //GA Analytics code end
+               //GTM Analytics code end
+               window.dataLayer = window.dataLayer || []
+               dataLayer.push({
+
+                   'event' : 'PAA Category Selection',
+                   'eventCategory':  'PAA - Step 1',
+                   'eventAction': 'Category icon click',
+                   'eventLabel': eventLabel
+               });
+               //GTM Analytics code end
            } else {
                $('#fa_paa_category_select_reg_no').val('');
                $('#fa_paa_category_select_reg_no').trigger('focus');
@@ -77,6 +87,16 @@
                regLookupResult = ' - No';
                ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
                //GA Analytics code end
+               //GTM Analytics code end
+               window.dataLayer = window.dataLayer || []
+               dataLayer.push({
+
+                   'event' : 'PAA Category Selection',
+                   'eventCategory':  'PAA - Step 1',
+                   'eventAction': 'Category icon click',
+                   'eventLabel': eventLabel
+               });
+               //GTM Analytics code end
            }
            $('#add_vehicle_msg').html('{{ "Add your vehicle details:"|trans({}, 'frontend-paa-second-step')}}');
         }
@@ -298,7 +318,7 @@
                     category_id = $('#fa_paa_category_select_category_4').val();
                 }
                 var route       = Routing.generate('ad_vrm_lookup_ajax', { 'vrm': regNo });
-        
+                route = route.replace(':https','');
                 $('#lookup_vehicle').html('{{ "Loading..."|trans({}, 'frontend-paa')}}');
                 $.ajax({
                     type: 'post',

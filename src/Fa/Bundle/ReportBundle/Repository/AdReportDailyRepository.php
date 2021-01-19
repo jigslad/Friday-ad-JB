@@ -196,7 +196,7 @@ class AdReportDailyRepository extends EntityRepository
         }
 
         if ($isPrintPublishedFlag) {
-            $qb->andWhere('(' . AdPrintInsertDateReportDailyRepository::ALIAS . '.print_insert_date BETWEEN ' . $finalStartDate . ' AND  ' . $finalEndDate . ')');
+            $qb->andWhere('(' . self::ALIAS . '.print_insert_date BETWEEN ' . $finalStartDate . ' AND  ' . $finalEndDate . ')');
             $printPackageArray = CommonManager::getEntityRepository($container, 'FaPromotionBundle:Package')->getPrintPackagesArray();
             $qb->andWhere(self::ALIAS . '.package_id in (' . implode(',', $printPackageArray) . ')');
         } elseif (isset($searchParams['date_filter_type'])) {
@@ -474,14 +474,15 @@ class AdReportDailyRepository extends EntityRepository
             $adId = array($adId);
         }
 
-        if (count($adId)) {
+        if (!empty($adId)) {
             $qb->andWhere(self::ALIAS . '.ad_id IN (:adId)')
                 ->setParameter('adId', $adId);
         }
-
+        $qb->groupBy(self::ALIAS.'.ad_id');
+        $qb->orderBy(self::ALIAS.'.id', 'DESC');
         $adReportIds = $qb->getQuery()->getArrayResult();
         $adReportIdsArr = array();
-        if (count($adReportIds)) {
+        if (!empty($adReportIds)) {
             foreach ($adReportIds as $adReportId) {
                 $adReportIdsArr[$adReportId['ad_id']] = $adReportId['id'];
             }
@@ -490,4 +491,38 @@ class AdReportDailyRepository extends EntityRepository
         return $adReportIdsArr;
     }
 
+    /** getRecentAdByCategory
+     *  find one last created ad by category from history
+     * @param $category
+     * @return mixed
+     */
+    private function getRecentAdByCategory($category){
+        $adList = $this->createQueryBuilder(self::ALIAS)
+            ->andWhere(self::ALIAS.'.category_id = (:catId)')
+            ->setParameter('catId', $category)
+            ->setMaxResults(1)
+            ->orderBy(self::ALIAS.'.created_at', 'DESC')
+            ->getQuery()->getArrayResult();
+        if (count($adList)) {
+            return $adList[0];
+        }
+        return null;
+    }
+
+    /** getRecentAdByCategoryArray
+     * find one last created ad by category list from history
+     * @param $categoryList
+     * @return array
+     */
+    public function getRecentAdByCategoryArray($categoryList){
+
+        $recentAd = $recentAdByCatArr = array();
+        foreach ($categoryList as $category){
+            $recentAdByCatArr = $this->getRecentAdByCategory($category);
+            if(!empty($recentAdByCatArr)) {
+                $recentAd[$category] = $recentAdByCatArr['ad_id'];
+            }
+        }
+        return $recentAd;
+    }
 }

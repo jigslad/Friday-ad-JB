@@ -170,6 +170,7 @@
                     if ($('#item_detail_link_'+key).children('a').length < 1) {
                         var item_title = $('#item_detail_link_'+key).html();
                         var item_url   = Routing.generate('ad_detail_page_by_id', {'id':key});
+                        item_url = item_url.replace(':https','');
                         $('#item_detail_link_'+key).html('<a href="'+item_url+'" target="_blank">'+item_title+'</a>');
                     }
                 }*/
@@ -200,6 +201,13 @@
                         {
                             if(result.error == "")
                             {
+                                window.dataLayer = window.dataLayer || []
+                                dataLayer.push({
+                                    'event' : 'Options',
+                                    'eventCategory':  'Options',
+                                    'eventAction': 'Boost Button',
+                                    'eventLabel': adIdToBoost+' - '+result.gaStr
+                                });
                                 ga('send','event','MMA','Boost Button', result.gaStr);
                             }
                         },
@@ -303,9 +311,17 @@
 
 function socialShare(adId, url, socialSite)
 {
+    window.dataLayer = window.dataLayer || []
+    dataLayer.push({
+
+        'event' : 'Options',
+        'eventCategory':  'Options',
+        'eventAction': socialSite+'(profile)',
+        'eventLabel': adId
+    });
   if (socialSite == 'Facebook') {
     ga('send', 'event', 'Options', socialSite+' (profile)', adId);
-    openWindow(url, 'fb-share', '500', '300');
+      openWindow(url, 'fb-share', '500', '300');
     OneSignal.push(["sendTags", {'Facebook': 'share'}]);
   } else if (socialSite == 'Twitter') {
     ga('send', 'event', 'Options', socialSite+' (profile)', adId);
@@ -322,7 +338,43 @@ function socialShare(adId, url, socialSite)
     openWindow(url, 'email-share', '800', '600');
   }
 }
+function convertUserToBusiness(user,category)
+{
+    $.ajax({
+        type: "POST",
+        url: "{{path('convert_user_to_business')}}",
+        data: {userId:user, businessCategoryId:category }
+    })
+        .done(function(response) {
+            window.location="{{ path('user_package_choose_profile') }}";
+        });
+}
 </script>
+{% if ga_transaction.ID is defined %}
+    <!-- Google Tag Manager Start -->
+    <script>
+        var transactionstring = '{{ ga_transaction.ID }}';
+        var transactionarray = transactionstring.split('-');
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+            "transactionId": '{{ ga_transaction.ID }}',
+            "transactionTotal": {{ ga_transaction.Revenue }},
+            "transactionTax": {{ ga_transaction.Tax }},
+            "transactionProducts": [
+                {% for item in ga_transaction.items %}
+                {
+                    'sku': '{{ item.SKU }}',
+                    'name': '{{ item.Name }}',
+                    'category': '{{ item.Category }}',
+                    'price': {{ item.Price }},
+                    'quantity': {{ item.Quantity }},
+                },
+                {% endfor %}
+            ]
+        });
+    </script>
+    <!-- Google Tag Manager End -->
+{% endif %}
 {% endblock %}
 
 {% block pushNotification %}

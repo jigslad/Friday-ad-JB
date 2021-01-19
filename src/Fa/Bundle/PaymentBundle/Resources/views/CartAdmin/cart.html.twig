@@ -132,7 +132,7 @@
                                             {% endif %}
                                             <div class="clearfix code-field {% if cartValue['discount_values'] is defined and cartValue['discount_values']|length %}promo-disable{% endif %}" {% if cartValue['discount_values'] is not defined and currentDevice == 'M' %} style="display:none;"{% endif %} id="discount_code_input_div">
                                                 <input type="text" class="white-field" name="discount_code" id="discount_code" placeholder="{{'Insert promotional code'|trans({}, 'frontend-cart')}}" />
-                                                <button class="secondary-btn-3 button expand" onclick="return applyDiscountcode();">{{'Apply'|trans({}, 'frontend-cart')}}</button>
+                                                <button class="secondary-btn-1 button expand" onclick="return applyDiscountcode();">{{'Apply'|trans({}, 'frontend-cart')}}</button>
                                             </div>
                                         </div>
                                     {% endif %}

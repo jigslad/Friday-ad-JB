@@ -38,8 +38,8 @@
                         {# {{ form_errors(form) }} #}
                             {{ include('FaAdBundle:AdPost:fourthStepAdultFields.html.twig') }}
                             <div class="small-wrapper">
-                                {{ form_widget(form.preview, {'attr': {'class':'secondary-btn-2 expand'}}) }}
-                                {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand'}}) }}
+                                {{ form_widget(form.preview, {'attr': {'class':'paa-preview-btn secondary-btn-2 expand'}}) }}
+                                {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 paa-next-btn expand'}}) }}
                             </div>
                         {{ form_end(form) }}
                     </div>
@@ -78,6 +78,7 @@
 <script src="{{ asset_url('fafrontend/js/jquery.equalizer.min.js') }}"></script>
 {{ include('FaAdBundle:AdPost:paaLocationJs.html.twig') }}
 {{ include('FaAdBundle:AdPost:fourthStepCommonJs.html.twig') }}
+{{ include('FaAdBundle:AdPost:fourthStepCtaButtonJs.html.twig', {'categoryName' : 'adult'}) }}
 <script language="javascript" type="text/javascript">
 //<![CDATA[
    $(document).ready(function(){ 
@@ -311,19 +312,20 @@
                       if (isPaypalVerifiedEmail) {
                           $('#paypal_email_verify_status').addClass('success-icon');
                           $('#paypal_email_verify_status').show('inline-block');
+                          $('#paypal_err_id').html("");
                           $('#fa_paa_fourth_step_adult_paypal_email, #fa_paa_fourth_step_adult_paypal_first_name, #fa_paa_fourth_step_adult_paypal_last_name').removeClass('error');
                       } else {
                           $('#paypal_email_verify_status').addClass('error-icon');
                           if ($('#fa_paa_fourth_step_adult_paypal_email').is(':visible') && $('#fa_paa_fourth_step_adult_paypal_email').val().length) {
                               if (showMessage) {
                                   $('#fa_paa_fourth_step_adult_paypal_email, #fa_paa_fourth_step_adult_paypal_first_name, #fa_paa_fourth_step_adult_paypal_last_name').addClass('error');
-                                  $("<small class='error'>{{'Paypal account is not verified.'|trans({}, 'frontend-paa-fourth-step')}}</small>").insertBefore('#paypal_text_id');
+                                  $("<small class='error'>{{'PayPal account is not verified.'|trans({}, 'frontend-paa-fourth-step')}}</small>").insertBefore('#paypal_text_id');
                                   $('#paypal_email_verify_status').show('inline-block');
                               }
                           } else {
                               if (showMessage) {
                                   $('#fa_paa_fourth_step_adult_paypal_email, #fa_paa_fourth_step_adult_paypal_first_name, #fa_paa_fourth_step_adult_paypal_last_name').addClass('error');
-                                  $("<small class='error'>{{'Paypal account is not verified.'|trans({}, 'frontend-paa-fourth-step')}}</small>").insertBefore('#paypal_text_id');
+                                  $("<small class='error'>{{'PayPal account is not verified.'|trans({}, 'frontend-paa-fourth-step')}}</small>").insertBefore('#paypal_text_id');
                                   $('#paypal_email_verify_status').show('inline-block');
                               }
                           }

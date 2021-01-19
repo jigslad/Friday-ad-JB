@@ -62,29 +62,37 @@ class AdRouteListener
             $routeManager = $this->container->get('fa_ad.manager.ad_routing');
             $url = $routeManager->getListingUrl($topSearchParams, $request->get('page'), true);
             $event->setResponse(new RedirectResponse($url));
-        } elseif ($currentRoute == 'ad_left_search_result' || $currentRoute == 'shop_user_ad_left_search_result') {
+        }
+        elseif ($currentRoute == 'ad_left_search_result' || $currentRoute == 'shop_user_ad_left_search_result') {
             $routeManager = $this->container->get('fa_ad.manager.ad_routing');
             $url = $routeManager->getListingUrl($request->get('fa_left_search'), $request->get('page'), true);
             $event->setResponse(new RedirectResponse($url));
-        } elseif ($currentRoute == 'ad_left_search_dimension_result') {
+        }
+        elseif ($currentRoute == 'ad_left_search_dimension_result') {
             $routeManager = $this->container->get('fa_ad.manager.ad_routing');
             $url = $routeManager->getListingUrl($request->get('fa_left_search_dimension'), $request->get('page'), true);
             $event->setResponse(new RedirectResponse($url));
-        } elseif ($currentRoute == 'ad_landing_page_search_result') {
+        }
+        elseif ($currentRoute == 'ad_landing_page_search_result') {
             $routeManager = $this->container->get('fa_ad.manager.ad_routing');
             if ($request->get('fa_landing_page_property_search') && count($request->get('fa_landing_page_property_search'))) {
                 $url = $routeManager->getListingUrl($request->get('fa_landing_page_property_search'), $request->get('page'));
                 $event->setResponse(new RedirectResponse($url));
-            } elseif ($request->get('fa_landing_page_jobs_search') && count($request->get('fa_landing_page_jobs_search'))) {
+            }
+            elseif ($request->get('fa_landing_page_jobs_search') && count($request->get('fa_landing_page_jobs_search'))) {
                 $url = $routeManager->getListingUrl($request->get('fa_landing_page_jobs_search'), $request->get('page'));
                 $event->setResponse(new RedirectResponse($url));
-            } elseif ($request->get('fa_landing_page_adult_search') && count($request->get('fa_landing_page_adult_search'))) {
+            }
+            elseif ($request->get('fa_landing_page_adult_search') && count($request->get('fa_landing_page_adult_search'))) {
                 $adultSearchParams = $request->get('fa_landing_page_adult_search');
-                $adultSearchParams = array_map('trim', $adultSearchParams);
+                if(!is_array($adultSearchParams)){
+                    $adultSearchParams = array_map('trim', $adultSearchParams);
+                }
                 $adultSearchParams = array_filter($adultSearchParams);
                 $url = $routeManager->getListingUrl($adultSearchParams, $request->get('page'));
                 $event->setResponse(new RedirectResponse($url));
-            } elseif ($request->get('fa_landing_page_car_search') && count($request->get('fa_landing_page_car_search'))) {
+            }
+            elseif ($request->get('fa_landing_page_car_search') && count($request->get('fa_landing_page_car_search'))) {
                 $carSearchParams = $request->get('fa_landing_page_car_search');
                 if (isset($carSearchParams['item_motors__body_type_id'])) {
                     if ($carSearchParams['item_motors__body_type_id'] == EntityRepository::THREE_DOOR_HATCHBACK_ID) {
@@ -94,6 +102,15 @@ class AdRouteListener
                     }
                 }
                 $url = $routeManager->getListingUrl($carSearchParams, $request->get('page'));
+                $event->setResponse(new RedirectResponse($url));
+            }
+            elseif ($request->get('fa_adult_home_page_search') && count($request->get('fa_adult_home_page_search'))) {
+                $adultSearchParams = $request->get('fa_adult_home_page_search');
+                if(!is_array($adultSearchParams)){
+                    $adultSearchParams = array_map('trim', $adultSearchParams);
+                }
+                $adultSearchParams = array_filter($adultSearchParams);
+                $url = $routeManager->getListingUrl($adultSearchParams, $request->get('page'));
                 $event->setResponse(new RedirectResponse($url));
             }
         }
@@ -128,7 +145,7 @@ class AdRouteListener
                 $landingPageParams['item__distance'] = $topSearchParams['item__distance'];
             } else {
                 $getDefaultRadius = $routeManager->getDefaultRadiusBySearchParams($topSearchParams, $this->container);
-                $landingPageParams['item__distance'] = ($getDefaultRadius)?$getDefaultRadius:'';
+                $landingPageParams['item__distance'] = ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
             }
 
             // Compare array for basic search with category and location only, if both same then redirect to landing page.

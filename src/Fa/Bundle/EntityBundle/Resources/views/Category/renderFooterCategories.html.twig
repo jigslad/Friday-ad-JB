@@ -1,5 +1,5 @@
 {% set container = fetch_container_instance() %}
-{% cache 'home|page|'~location_id~'front/home_page_footer' (staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isBot', [container]) ? 600 : 1800) %}
+{# {% cache 'home|page|'~location_id~'front/home_page_footer' (staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isBot', [container]) ? 600 : 1800) %} #}
 {% set getNoFollowLink = fetch_repository('FaEntityBundle:Category').getCategoryNoFollowLink(app.request.get('searchQueryString')) %}
 <div class="large-18 columns">
 {% if footerCategories|length %}
@@ -7,7 +7,11 @@
         <div class="category-links">
             {% if categoryArray['category_name'] is defined %}
                 <div class="row">
+                {% if categoryArray['category_id'] == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+                    {% set listurl = path('fa_new_adult_homepage') %}
+                {% else %}
                     {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['category_full_slug']) %}
+                {% endif %}    
                     <div class="columns">
                         <h6 class="footer-head">
                             <a href="{{ listurl }}" {% if getNoFollowLink  %}rel="nofollow"{% endif %} >{{categoryArray['category_name']}}</a>
@@ -68,5 +72,13 @@
         </div>
     {% endfor %}
 {% endif %}
+    <div class="mt30 mb20">
+        <!-- TrustBox widget - Mini -->
+        <div class="trustpilot-widget" data-locale="en-GB" data-template-id="53aa8807dec7e10d38f59f32" data-businessunit-id="46e343710000640005014c08" data-style-height="95px" data-style-width="180px" data-theme="dark">
+            <a href="https://uk.trustpilot.com/review/www.friday-ad.co.uk" target="_blank" rel="noopener">Trustpilot</a>
+        </div>
+        <!-- End TrustBox widget -->
+    </div>
 </div>
-{% endcache %}
+
+{# {% endcache %} #}

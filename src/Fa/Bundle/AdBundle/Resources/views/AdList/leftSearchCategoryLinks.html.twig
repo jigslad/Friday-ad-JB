@@ -1,6 +1,6 @@
 {% set container = fetch_container_instance() %}
 {% set getNoFollowLink = fetch_repository('FaEntityBundle:Category').getCategoryNoFollowLink(app.request.get('searchQueryString')) %}
-{% if searchParams.item__category_id is not defined or searchParams.item__category_id == '' %}
+{% if searchParams.item__category_id is not defined or searchParams.item__category_id == '' or searchParams.item__category_id == 1 %}
     <dd class="accordion-navigation keep-shown">
         <a href="#panel0a" rel="nofollow" class="clearfix"><h5 class="left">{{ 'Categories'|trans({}, 'frontend-left-search')}}</h5></a>
         {% set mainCategories = fetch_repository('FaEntityBundle:Category').getCategoryByLevelArray(1, fetch_container_instance()) %}
@@ -18,17 +18,21 @@
                 <ul>
                     <li><label>{{ 'All Categories'|trans({}, 'frontend-left-search') }}</label></li>
                     {% for categoryId, categoryName in mainCategories %}
-                        {% set adCount = 0 %}
-                        {% set nestedChildrenCategories = fetch_repository('FaEntityBundle:Category').getNestedLeafChildrenIdsByCategoryId(categoryId, fetch_container_instance()) %}
-                        {% for nestedCategoryId in nestedChildrenCategories %}
-                            {% if facetResult.a_category_id_i[nestedCategoryId] is defined %}
-                                {% set adCount =  adCount + facetResult.a_category_id_i[nestedCategoryId] %}
-                            {% endif %}
-                        {% endfor %}
-                        {% if adCount > 0 %}
+                        {% if(facetResult.category_ids[categoryId] is defined) %}
+                            {% set adsCount = facetResult.category_ids[categoryId] %}
+                        {% else %}
+                            {% set adsCount = 0 %}
+                        {% endif %}
+{#                        {% set nestedChildrenCategories = fetch_repository('FaEntityBundle:Category').getNestedLeafChildrenIdsByCategoryId(categoryId, fetch_container_instance()) %}#}
+{#                        {% for nestedCategoryId in nestedChildrenCategories %}#}
+{#                            {% if facetResult.category_ids[nestedCategoryId] is defined %}#}
+{#                                {% set adsCount =  adsCount + facetResult.category_ids[nestedCategoryId] %}#}
+{#                            {% endif %}#}
+{#                        {% endfor %}#}
+                        {% if adsCount > 0 %}
                             {% set queryParams = {'fa_left_search' : searchParams|merge({'item__category_id': categoryId})} %}
                             {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams['fa_left_search'], null, false, null, false, parentFullSlug, secondLevelParentFullSlug) %}
-                            <li><a href="{{ listurl }}" {% if app.request.get('searchQueryString') or getNoFollowLink %}rel="nofollow"{% endif %}>{{ categoryName }} ({{ adCount }})</a></li>
+                            <li><a href="{{ listurl }}" {% if app.request.get('searchQueryString') or getNoFollowLink %}rel="nofollow"{% endif %}>{{ categoryName }} ({{ adsCount }})</a></li>
                         {% endif %}
                     {% endfor %}
                 </ul>
@@ -56,35 +60,39 @@
           {% set childCatCount = 1 %}
           <div class="search-cat-sub-list">
               <ul>
-                  <li><label>{{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id) }}</label></li>
+                  {% if searchParams.item__category_id == 1 %}
+                      <li><label>All Categories </label></li>
+                  {% else %}
+                    <li><label>{{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id) }}</label></li>
+                  {% endif %}
                   {% if childCategories|length > 0 %}
                       {% for childCategoryId, childCategoryName in childCategories %}
-                          {% set adCount = 0 %}
-                          {% if facetResult.a_category_id_i[childCategoryId] is defined %}
-                              {% set adCount = facetResult.a_category_id_i[childCategoryId] %}
+                          {% set adsCount = 0 %}
+                          {% if facetResult.category_ids[childCategoryId] is defined %}
+                              {% set adsCount = facetResult.category_ids[childCategoryId] %}
                           {% else %}
                               {% set nestedChildrenCategories = fetch_repository('FaEntityBundle:Category').getNestedLeafChildrenIdsByCategoryId(childCategoryId, fetch_container_instance()) %}
                               {% for nestedCategoryId in nestedChildrenCategories %}
-                                  {% if facetResult.a_category_id_i[nestedCategoryId] is defined %}
-                                      {% set adCount =  adCount + facetResult.a_category_id_i[nestedCategoryId] %}
+                                  {% if facetResult.category_ids[nestedCategoryId] is defined %}
+                                      {% set adsCount =  adsCount + facetResult.category_ids[nestedCategoryId] %}
                                   {% endif %}
                               {% endfor %}
                           {% endif %}
-                          {% if adCount > 0 %}
+                          {% if adsCount > 0 %}
                               {% set queryParams = {'fa_left_search' : searchParams|merge({'item__category_id': childCategoryId})} %}
                               {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams['fa_left_search'], null, false, categoryPath|keys, false, parentFullSlug, secondLevelParentFullSlug) %}
                               {% if  childCatCount > showCatsCount %}
-                                  <li class="hide more_result"><a href="{{ listurl }}" {% if getNoFollowLink  %}rel="nofollow"{% endif %} >{{ childCategoryName }} ({{ adCount }})</a></li>
+                                  <li class="hide more_result"><a href="{{ listurl }}" {% if getNoFollowLink  %}rel="nofollow"{% endif %} >{{ childCategoryName }} ({{ adsCount }})</a></li>
                               {% else %}
                                 {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams['fa_left_search'], null, false, categoryPath|keys, false, parentFullSlug, secondLevelParentFullSlug) %}
-                                  <li><a href="{{ listurl }}" {% if app.request.get('searchQueryString') or getNoFollowLink  %}rel="nofollow"{% endif %}>{{ childCategoryName }} ({{ adCount }})</a></li>
+                                  <li><a href="{{ listurl }}" {% if app.request.get('searchQueryString') or getNoFollowLink  %}rel="nofollow"{% endif %}>{{ childCategoryName }} ({{ adsCount }})</a></li>
                               {% endif %}
                               {% set childCatCount = childCatCount + 1 %}
                           {% endif %}
                       {% endfor %}
                   {% endif %}
                   {% if searchParams.item__category_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
-                  	<li><a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank">Live Sex Cams</a> </li>
+                  	<li><a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank">Hook Ups</a> </li>
                    {% endif %}
               </ul>
               {% if (childCatCount - 1) > showCatsCount %}

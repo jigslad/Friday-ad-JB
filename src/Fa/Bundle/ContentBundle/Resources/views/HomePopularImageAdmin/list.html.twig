@@ -23,7 +23,8 @@
                         <tr class="gradeX">
                             <td>
                                 {% if homePopularImage.file_name %}
-                                    <img src="{{ shared_url(homePopularImage.path~'/'~homePopularImage.file_name) }}?{{ random(1000) }}" width="100px" />
+                                    {% set homePopularImgUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSharedImageUrl', [fetch_container_instance(), homePopularImage.path, homePopularImage.file_name]) %}
+                                    <img src="{{ homePopularImgUrl }}?{{ date().timestamp }}" width="100px" />
                                 {% endif %}
                             </td>
                             <td>

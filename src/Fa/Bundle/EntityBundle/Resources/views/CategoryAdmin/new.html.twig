@@ -1,16 +1,10 @@
 {% extends 'FaAdminBundle::layout.html.twig' %}
 {% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
-
+{% set container = fetch_container_instance() %}
 {% block content -%}
 
 {{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
-<style>
-ul.creative_tabs { list-style: none;display: inline-flex;margin-left: 0px; }
-li.creative_tab { margin-right: 10px;background: #eee;padding: 2px 15px;color:#3278b4}
-.tabs-ouline { margin-top:20px; margin-bottom:20px; padding:10px; border:1px solid #ddd}
-#recommended_slot_searchlist_fields_main_div h4 { margin-top:20px; }
-.creative_tab_content { padding-top:20px }
-</style>
+    {{ include('FaEntityBundle:CategoryAdmin:new-css.html.twig') }}
 <div class="row">
     <div class="columns">
         <div class="panel">
@@ -132,8 +126,8 @@ li.creative_tab { margin-right: 10px;background: #eee;padding: 2px 15px;color:#3
                                         </ul>
 
                                     {% endif %}
-                                   
-                                    <div class="tabs-content creative_tab_content" style="display:{{(i%3==1)?'block':'none'}}" id="Creative{{creativeCnt}}_{{slotCnt}}" data-recommended="{{i}}">   
+                                    {% set styleblock = (i%3==1)?'block':'none' %}
+                                    <div class="tabs-content creative_tab_content" style="display:{{styleblock}}" id="Creative{{creativeCnt}}_{{slotCnt}}" data-recommended="{{i}}">   
                                         <div class="row">
                                             <div class="large-2 columns">
                                                 {{ form_label(form['recommended_slot_searchlist_title_'~i]) }}
@@ -163,7 +157,8 @@ li.creative_tab { margin-right: 10px;background: #eee;padding: 2px 15px;color:#3
 
                                             <div class="large-5 columns">
                                                 {% if form['recommended_slot_searchlist_slot_filename_'~i].vars.value is not empty %}
-                                                    <img src="{{shared_url('uploads/category_recommended_slots/'~form['recommended_slot_searchlist_slot_filename_'~i].vars.value)}}?{{ random(1000) }}" width="100px" />
+                                                    {% set crsimageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getOtherImageUrl', [container, 'category_recommended_slots', form['recommended_slot_searchlist_slot_filename_'~i].vars.value]) %}
+                                                    <img src="{{ crsimageUrl }}?{{ date().timestamp }}" width="100px" />
                                                 {% endif %}
                                             </div>
                                         </div>

@@ -1,5 +1,5 @@
 {% extends 'FaAdminBundle::layout.html.twig' %}
-
+{% set otherblockPageTitle = '403_page' %}
 {% block content %}
     <div class="text-center">
         <div class="bg-img403"></div>
@@ -10,6 +10,11 @@
 {% endblock %}
 
 {% block dimension2 %}
+    <!-- Google TAG Manager -->
+    <script>
+        let dataLayerPageType = '_403_page';
+    </script>
+    <!-- Google TAG Manager -->
 <script language="javascript" type="text/javascript">
 //<![CDATA[
    {% if app.user.getId() is not defined or app.user.getId() is null %}

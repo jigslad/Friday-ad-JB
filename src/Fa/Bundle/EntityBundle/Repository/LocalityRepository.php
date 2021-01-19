@@ -48,7 +48,7 @@ class LocalityRepository extends BaseEntityRepository
      *
      * @return array
      */
-    public function getLocalitiesArrayByTerm($term)
+    public function getLocalitiesArrayByTerm($term, $container =null)
     {
         $localities = $this->getBaseQueryBuilder()
         ->andWhere(self::ALIAS.'.locality_text LIKE :term')
@@ -60,9 +60,12 @@ class LocalityRepository extends BaseEntityRepository
         $localityArray = array();
         foreach ($localities as $locality) {
             //getTown Lat and Long
+            $townSlug = '';
             $getTown = $this->_em->getRepository('FaEntityBundle:Location')->find($locality->getTownId());
             $localiyName = explode(',', $locality->getLocalityText());
-            $localityArray[] = array('id'=> $locality->getId().','.$locality->getTownId(), 'text' => $locality->getLocalityText(), 'latlong' => $getTown->getLatitude().', '.$getTown->getLongitude());
+            $getTownArray = $this->_em->getRepository('FaEntityBundle:Location')->getCookieValue($locality->getId().','.$locality->getTownId(), $container);
+            if(!empty($getTownArray)) { $townSlug = $getTownArray['slug']; } else { $townSlug = $getTown->getUrl(); }
+            $localityArray[] = array('id'=> $locality->getId().','.$locality->getTownId(), 'text' => $locality->getLocalityText(), 'latlong' => $getTown->getLatitude().', '.$getTown->getLongitude(), 'slug' => $townSlug);
         }
 
         return $localityArray;
@@ -317,5 +320,62 @@ class LocalityRepository extends BaseEntityRepository
         }
 
         return $isDuplicateName;
+    }
+
+    /**
+     * @param $container
+     * @return mixed
+     */
+    public function getAllLocalities($container)
+    {
+        if ($container) {
+            $culture     = CommonManager::getCurrentCulture($container);
+            $cacheKey    = $this->getTableName().'|'.__FUNCTION__.'|'.$culture;
+            $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
+
+            if ($cachedValue !== false) {
+                return $cachedValue;
+            }
+        }
+
+        $query = $this->createQueryBuilder(self::ALIAS);
+
+        $objResources = $query->getQuery()->getArrayResult();
+
+        $locationDetails = [];
+        foreach ($objResources as $location) {
+            $locationDetails[$location['id']]['name']           = $location['name'];
+            $locationDetails[$location['id']]['slug']           = $location['url'];
+            $locationDetails[$location['id']]['locality_text']  = $location['locality_text'];
+            $locationDetails[$location['id']]['town_id']        = $location['town_id'];
+        }
+
+        if ($container) {
+            CommonManager::setCacheVersion($container, $cacheKey, $locationDetails);
+        }
+
+        return $locationDetails;
+    }
+
+    /**
+     * @param $container
+     * @param $id
+     * @return array
+     */
+    public function getCachedLocalityById($container, $id)
+    {
+        if (! empty($id)) {
+            $localities = CommonManager::getCacheVersion($container, 'locality|getAllLocalities|en_GB');
+
+            return [
+                'id'            => $id,
+                'name'          => $localities[$id]['name'],
+                'slug'          => $localities[$id]['slug'],
+                'locality_text' => $localities[$id]['locality_text'],
+                'town_id'       => $localities[$id]['town_id']
+            ];
+        } else {
+            return [];
+        }
     }
 }

@@ -48,4 +48,16 @@ ajax_covid_set_session_data:
     defaults: { _controller: "FaFrontendBundle:Default:ajaxCovidSetSessionData" }
     options:
         expose: true
+
+ajax_get_ethnicity_json:
+    path:     /ajax/get/dimensions/ethnicity
+    defaults: { _controller: "FaFrontendBundle:Adult:ajaxGetEthnicity" }
+    options:
+        expose: true
+
+ajax_get_services_json:
+    path:     /ajax/get/dimensions/services
+    defaults: { _controller: "FaFrontendBundle:Adult:ajaxGetServices" }
+    options:
+        expose: true
         

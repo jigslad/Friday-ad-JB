@@ -11,6 +11,7 @@
 
 namespace Fa\Bundle\AdBundle\Repository;
 
+use SimpleXMLElement;
 use Doctrine\ORM\EntityRepository;
 use Fa\Bundle\UserBundle\Repository\UserRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
@@ -753,6 +754,201 @@ class AdRepository extends EntityRepository
     }
 
     /**
+     * @param $ad
+     * @param null $document
+     * @param null $container
+     * @return object|\SolrInputDocument|null
+     */
+    public function getSolrDocumentNew($ad, $document = null, $container = null)
+    {
+        if (!$document) {
+            $document = new \SolrInputDocument($ad);
+        }
+
+        $categoryObj    = ($ad->getCategory() ? $ad->getCategory() : null);
+        $categoryId     = ($categoryObj ? $categoryObj->getId() : null);
+        $categoryLevel  = ($categoryObj ? $categoryObj->getLvl() : null);
+        $adUpsellValues = $this->_em->getRepository('FaAdBundle:AdUserPackageUpsell')->getAdPackageUpsellValueArray($ad->getId(), $categoryId, $container);
+
+        $document = $this->addField($document, 'id', $ad->getId());
+        $document = $this->addField($document, 'user_id', ($ad->getUser() ? $ad->getUser()->getId() : null));
+        $document = $this->addField($document, 'status_id', ($ad->getStatus() ? $ad->getStatus()->getId() : null));
+        $document = $this->addField($document, 'type_id', ($ad->getType() ? $ad->getType()->getId() : null));
+
+        //$allParentCategories = $this->_em->getRepository('FaEntityBundle:Category')->getCachedCategoryById($container, $categoryId, true);
+        $allParentCategories = $this->_em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayDetById($categoryId, false, $container);
+
+        $catFullSlugString = '';
+        foreach ($allParentCategories as $category) {
+            $document = $this->addField($document, 'category_ids', $category['id']);
+            $document = $this->addField($document, 'category_names', $category['name']);
+            $document = $this->addField($document, 'category_full_path', $category['full_slug']);
+            $catFullSlugString = $category['full_slug'];
+        }
+
+        $document = $this->addField($document, 'price', $ad->getPrice());
+        $document = $this->addField($document, 'use_privacy_number', $ad->getUsePrivacyNumber());
+        $document = $this->addField($document, 'privacy_number', $ad->getPrivacyNumber());
+        $document = $this->addField($document, 'user_phone_number', $ad->getPhone());
+        $document = $this->addField($document, 'title', $ad->getTitle());
+        $document = $this->addField($document, 'description', $ad->getDescription());
+        $document = $this->addField($document, 'has_video', $ad->getHasVideo());
+        $document = $this->addField($document, 'renewed_at', $ad->getRenewedAt());
+        $document = $this->addField($document, 'expires_at', $ad->getExpiresAt());
+        $document = $this->addField($document, 'sold_at', $ad->getSoldAt());
+        $document = $this->addField($document, 'sold_price', $ad->getSoldPrice());
+        $document = $this->addField($document, 'created_at', $ad->getCreatedAt());
+        $document = $this->addField($document, 'published_at', $ad->getPublishedAt());
+        $document = $this->addField($document, 'updated_at', $ad->getUpdatedAt());
+        $document = $this->addField($document, 'personalized_title', $ad->getPersonalizedTitle());
+        $document = $this->addField($document, 'qty', $ad->getQty());
+        $document = $this->addField($document, 'qty_sold', $ad->getQtySold());
+        $document = $this->addField($document, 'delivery_method_option', $ad->getDeliveryMethodOption() ? [
+            'id' => $ad->getDeliveryMethodOption()->getId(),
+            'name' => $ad->getDeliveryMethodOption()->getName()] : null);
+        $document = $this->addField($document, 'postage_price', $ad->getPostagePrice());
+        $document = $this->addField($document, 'payment_method_option', $ad->getPaymentMethodId() ? $ad->getPaymentMethodId() : null);
+        $document = $this->addField($document, 'youtube_video_url', $ad->getYoutubeVideoUrl());
+        $document = $this->addField($document, 'is_blocked_ad', $ad->getIsBlockedAd());
+
+        if ($ad->getIsNew() != null) {
+            $document = $this->addField($document, 'is_new', ($ad->getIsNew() ? $ad->getIsNew() : '0'));
+        }
+
+        if ($ad->getIsTradeAd() != null || $ad->getIsTradeAd() == 0) {
+            $document = $this->addField($document, 'is_trade_ad', ($ad->getIsTradeAd() ? $ad->getIsTradeAd() : '0'));
+        }
+
+        // Is top ad
+        if ($ad->isTopAd($container)) {
+            $document = $this->addField($document, 'is_topad', 1);
+        }
+
+        // Is highlight ad
+        if ($ad->isUrgentAd($container)) {
+            $document = $this->addField($document, 'is_urgent_ad', 1);
+        }
+
+        // Is home page featured ad
+        if ($ad->isHomeFeaturedAd($container)) {
+            $document = $this->addField($document, 'is_homepage_feature_ad', 1);
+        }
+
+        if ($ad->getAffiliate()) {
+            $this->addField($document, 'is_affiliate', 1);
+        } else {
+            $this->addField($document, 'is_affiliate', '0');
+        }
+
+        if ($ad->getIsFeedAd()) {
+            $this->addField($document, 'is_feed_ad', 1);
+        } else {
+            $this->addField($document, 'is_feed_ad', '0');
+        }
+
+        if ($ad->getAdRef()) {
+            $this->addField($document, 'ad_ref', $ad->getAdRef());
+        }
+
+        if ($ad->getTrackBackUrl()) {
+            $this->addField($document, 'track_back_url', $ad->getTrackBackUrl());
+        }
+
+        if ($ad->getSource()) {
+            $this->addField($document, 'ad_source', $ad->getSource());
+        }
+
+        // Weekly refresh at
+        $document = $this->addField($document, 'weekly_refresh_at', $ad->getWeeklyRefreshAt());
+        $document = $this->addField($document, 'weekly_refresh_count', $ad->getManualRefresh());
+
+        $categoryString = explode('/', $catFullSlugString);
+        $categoryString = isset($categoryString[1]) ? $categoryString[1] : (isset($categoryString[0])?$categoryString[0]:'');
+
+        // Weekly refresh at & created at
+        if ($ad->getWeeklyRefreshAt() && $ad->getPublishedAt() && $ad->getWeeklyRefreshAt() > $ad->getPublishedAt()) {
+            $document = $this->addField($document, 'weekly_refresh_published_at', $ad->getWeeklyRefreshAt());
+        } else {
+            $document = $this->addField($document, 'weekly_refresh_published_at', $ad->getPublishedAt());
+        }
+
+        $document = $this->addField($document, 'upsells', [
+            'boost' => $ad->getBoostedAt()
+        ]);
+        $document = $this->addField($document, 'is_boosted', $ad->getIsBoosted());
+        $document = $this->addField($document, 'boosted_at', $ad->getBoostedAt());
+
+        //ad user business category id
+        //shop detail.
+        if ($ad->getUser() && $ad->getUser()->getBusinessCategoryId()) {
+            $document = $this->addField($document, 'ad_user_business_category', $ad->getUser()->getBusinessCategoryId());
+        }
+
+        //shop detail.
+        if ($ad->getUser() && !in_array($ad->getUser()->getBusinessCategoryId(), array(CategoryRepository::ADULT_ID, CategoryRepository::SERVICES_ID))) {
+            $hasProfileExposureFlag  = false;
+            $hasProfileExposureMiles = '-1';
+            $profileExposurePackageCatId = null;
+            $userPackagePurchasedAt = null;
+            $userActivePackage = $this->_em->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($ad->getUser());
+            if ($userActivePackage) {
+                $userUpsells = $this->_em->getRepository('FaUserBundle:UserUpsell')->getUserUpsellArrayWithValue($ad->getUser()->getId());
+                foreach ($userUpsells as $upsellId => $upsellValue) {
+                    if (in_array($upsellId, $this->_em->getRepository('FaPromotionBundle:Upsell')->getProfileExposureUpsellIdsIdsArray())) {
+                        $hasProfileExposureFlag  = true;
+                        $hasProfileExposureMiles = (!$upsellValue['upsell_value'] ? '0' : $upsellValue['upsell_value']);
+                        $profileExposurePackageCatId = $upsellValue['package_category_id'];
+                        $userPackagePurchasedAt = ($userActivePackage->getUpdatedAt() ? $userActivePackage->getUpdatedAt() : $userActivePackage->getCreatedAt());
+                        break;
+                    }
+                }
+            }
+
+            if ($hasProfileExposureFlag) {
+                $document = $this->addField($document, 'has_profile_exposure', 1);
+                $document = $this->addField($document, 'profile_exposure_miles', $hasProfileExposureMiles);
+                $document = $this->addField($document, 'shop_package_category', $profileExposurePackageCatId);
+                $document = $this->addField($document, 'shop_package_purchased_at', $userPackagePurchasedAt);
+            } else {
+                $document = $this->addField($document, 'has_profile_exposure', 0);
+                $document = $this->addField($document, 'profile_exposure_miles', null);
+                $document = $this->addField($document, 'shop_package_category', null);
+                $document = $this->addField($document, 'shop_package_purchased_at', $userPackagePurchasedAt);
+            }
+        }
+        // Index images
+        $category = $this->_em->getRepository('FaEntityBundle:Category')->getRootNodeByCategory($categoryId);
+        $imagelimitCategoryName = CommonManager::getCategoryClassNameById($category->getId());
+        $imageLimit = $container->getParameter('fa.image.'.$imagelimitCategoryName.'_upload_limit');
+
+        if (isset($adUpsellValues[UpsellRepository::UPSELL_TYPE_ADDITIONAL_PHOTO_VALUE])) {
+            $imageLimit = $adUpsellValues[UpsellRepository::UPSELL_TYPE_ADDITIONAL_PHOTO_VALUE];
+        }
+        $document = $this->_em->getRepository('FaAdBundle:AdImage')->getSolrDocumentNew($container, $ad, $document, $imageLimit);
+
+        // Index locations
+        $document = $this->_em->getRepository('FaAdBundle:AdLocation')->getSolrDocumentNew($ad, $document, $container, $categoryString);
+
+        return $document;
+    }
+
+    /**
+     * @param $listingFields
+     * @param $thisField
+     * @param $suffix_id
+     * @return string
+     */
+    public function getSolrFieldName($listingFields, $thisField, $suffix_id=true)
+    {
+        $field = 'dim_';
+        if (in_array(($suffix_id ? strtoupper($thisField).'_ID' : strtoupper($thisField)), $listingFields)) {
+            $field .= 'list_';
+        }
+
+        return $field.$thisField;
+    }
+
+    /**
      * Add field to solr document.
      *
      * @param object $document Solr document object.
@@ -764,6 +960,14 @@ class AdRepository extends EntityRepository
     private function addField($document, $field, $value)
     {
         if ($value != null) {
+            if (is_array($value)) {
+                $value = (string) json_encode($value);
+            }
+
+            if (!is_string($value)) {
+                $value = strval($value);
+            }
+
             $document->addField($field, $value);
         }
 
@@ -1179,11 +1383,11 @@ class AdRepository extends EntityRepository
             if ($cookieLocation && $cookieLocation != CommonManager::COOKIE_DELETED) {
                 $cookieLocation = get_object_vars(json_decode($cookieLocation));
                 if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
-                    $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
+                    $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].','.$cookieLocation['longitude']);
 
                     // Sort by nearest first if location is set
                     if ($sortBy && $sortBy == 'geodist') {
-                        $data['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
+                        //$data['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
                     }
                 }
             }
@@ -1595,7 +1799,8 @@ class AdRepository extends EntityRepository
                         $adDetailAndDimensionFields[$key][$adDetailFieldLabel] = $fieldValue.$unit;
                     }
                 }
-            } elseif (array_key_exists($adDetailField, $metaDataValues) && $adDetailField != 'RATES_ID') {
+            }
+            elseif (array_key_exists($adDetailField, $metaDataValues) && $adDetailField != 'RATES_ID') {
                 if ($repositoryName) {
                     $fieldValues = explode(',', $metaDataValues[$adDetailField]);
                     if (count($fieldValues) > 1) {
@@ -1651,7 +1856,19 @@ class AdRepository extends EntityRepository
                 }
             }
         }
-
+        if(isset($adDetailAndDimensionFields['detail']['Ethnicity '])){
+            $link = new SimpleXMLElement($adDetailAndDimensionFields['detail']['Category']);
+            $nlink = $link['href'].$adDetailAndDimensionFields['detail']['Ethnicity '].'/';
+            $nlink = explode('/',$nlink);
+            if($nlink[1] === 'app_dev.php'){
+                $nlink[2] = 'uk';
+            }
+            else {
+                $nlink[1] = 'uk';
+            }
+            $nlink = implode('/',$nlink);
+            $adDetailAndDimensionFields['detail']['Ethnicity '] = '<a href="'.$nlink.'">'.$adDetailAndDimensionFields['detail']['Ethnicity '].'</a>';
+        }
         return $adDetailAndDimensionFields;
     }
 
@@ -2015,6 +2232,8 @@ class AdRepository extends EntityRepository
      */
     public function getListingClass($adListFieldName)
     {
+        $adListFieldName = strtoupper($adListFieldName);
+
         $adListingFieldClass['REG_YEAR'] = 'reg-year';
         $adListingFieldClass['MILEAGE'] = 'mileage';
         $adListingFieldClass['ENGINE_SIZE'] = 'engine';
@@ -2840,6 +3059,14 @@ class AdRepository extends EntityRepository
 
             $solr->deleteByQuery('a_user_id_i:"'.$userId.'"');
             $solr->commit(true);
+
+            $solrClientNew = $container->get('fa.solr.client.ad.new');
+            if (!$solrClientNew->ping()) {
+                return false;
+            }
+            $solrNew = $solrClientNew->connect();
+            $solrNew->deleteByQuery('user_id:'.$userId);
+            $solrNew->commit(true);
         }
     }
     
@@ -4145,6 +4372,26 @@ class AdRepository extends EntityRepository
 
         $container->get('fa.mail.manager')->send($user->getEmail(), 'ad_expires_tomorrow', $parameters, CommonManager::getCurrentCulture($container));
     }
+    
+    public function sendExpireTomorrowFreeAlertEmail($ad, $container)
+    {
+        $user        = $ad->getUser();
+        $entityCache = $container->get('fa.entity.cache.manager');
+        $editAdURL   = $container->get('router')->generate('fa_frontend_homepage', array(), true);
+        
+        $parameters = array(
+            'user_first_name'          => $user->getFirstName(),
+            'user_last_name'           => $user->getLastName(),
+            'text_ad_title'            => $ad->getTitle(),
+            'text_ad_category'         => $entityCache->getEntityNameById('FaEntityBundle:Category', $ad->getCategory()->getId()),
+            'text_ad_description'      => $ad->getDescription(),
+            'url_ad_main_photo'        => $this->getMainImageThumbUrlFromAd($ad, $container),
+            'url_ad_mark_sold'         => $container->get('router')->generate('manage_my_ads_mark_as_sold', array('adId' => $ad->getId()), true),
+            'url_ad_upsell'            => $container->get('router')->generate('ad_promote', array('type' => 'all', 'adId' => $ad->getId()), true),
+        );
+        
+        $container->get('fa.mail.manager')->send($user->getEmail(), 'ad_expires_tomorrow_free', $parameters, CommonManager::getCurrentCulture($container));
+    }
 
     /**
      *  Send ad expiration alert before one day user wise.
@@ -4186,6 +4433,42 @@ class AdRepository extends EntityRepository
 
             $container->get('fa.mail.manager')->send($user->getEmail(), 'ad_expires_tomorrow', $parameters, CommonManager::getCurrentCulture($container));
             $this->_em->getRepository('FaEmailBundle:EmailQueue')->removeFromEmailQueue('ad_expires_tomorrow', $user, $emailQueueIds);
+        }
+    }
+    
+    public function sendExpireTomorrowFreeAlertEmailByUser($user, $container)
+    {
+        $entityCache = $container->get('fa.entity.cache.manager');
+        $ads = array();
+        $emailQueueIds = array();
+        $emailQueues = $this->_em->getRepository('FaEmailBundle:EmailQueue')->findBy(array('user' => $user->getId(), 'identifier' => 'ad_expires_tomorrow_free', 'status' => 1));
+        foreach ($emailQueues as $emailQueue) {
+            $emailQueueIds[] = $emailQueue->getId();
+            $ad = $emailQueue->getAd();
+            $ads[] = array(
+                'text_ad_title'            => $ad->getTitle(),
+                'text_ad_category'         => $entityCache->getEntityNameById('FaEntityBundle:Category', $ad->getCategory()->getId()),
+                'text_ad_description'      => $ad->getDescription(),
+                'url_ad_main_photo'        => $this->getMainImageThumbUrlFromAd($ad, $container),
+                'url_ad_mark_sold'         => $container->get('router')->generate('manage_my_ads_mark_as_sold', array('adId' => $ad->getId()), true),
+                'url_ad_upsell'            => $container->get('router')->generate('ad_promote', array('type' => 'all', 'adId' => $ad->getId()), true),
+                'url_ad_view'               => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $ad->getId()), true),
+                'url_ad_preview'            => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $ad->getId()), true),
+                
+            );
+            //send push notifications
+            CommonManager::sendPushNotificationMessage('Your ad expires tomorrow. Repost it today!', 'Expires-tomorrow', $container->get('router')->generate('ad_promote', array('type' => 'renew', 'adId' => $ad->getId()), true), $user, $container);
+        }
+        if (!empty($ads)) {
+            $parameters = array(
+                'user_first_name'          => $user->getFirstName(),
+                'user_last_name'           => $user->getLastName(),
+                'ads' => $ads,
+                'total_ads' => (count($ads) - 1),
+            );
+            
+            $container->get('fa.mail.manager')->send($user->getEmail(), 'ad_expires_tomorrow_free', $parameters, CommonManager::getCurrentCulture($container));
+            $this->_em->getRepository('FaEmailBundle:EmailQueue')->removeFromEmailQueue('ad_expires_tomorrow_free', $user, $emailQueueIds);
         }
     }
 
@@ -4338,14 +4621,19 @@ class AdRepository extends EntityRepository
             $privateUserAdPostLimitRules = $this->_em->getRepository('FaCoreBundle:ConfigRule')->getPrivateUserAdPostLimit($categoryId, $container);
             $privateUserAdParams['adCategoryId'] = $categoryId;
             $privateUserAdParams['privateUserAdPostLimitRules'] = $privateUserAdPostLimitRules;
+            $subCategory = $this->_em->getRepository('FaEntityBundle:Category')->getCategoryArraySimpleById($privateUserAdPostLimitRules['configRuleCategoryId']);
+            array_push($subCategory,$privateUserAdPostLimitRules['configRuleCategoryId']);
+            $freePackage = $this->_em->getRepository('FaPromotionBundle:package')->getAllFreePacckage();
 
             $query = $this->createQueryBuilder(self::ALIAS)
             ->select('COUNT(DISTINCT '.self::ALIAS.'.id) as ad_cnt')
-            ->innerJoin(self::ALIAS.'.user', UserRepository::ALIAS, 'WITH', self::ALIAS.'.user = '.UserRepository::ALIAS.'.id')
             ->andWhere(self::ALIAS.'.status IN (:adStatus)')
             ->setParameter('adStatus', array(BaseEntityRepository::AD_STATUS_LIVE_ID, BaseEntityRepository::AD_STATUS_IN_MODERATION_ID))
-            ->andWhere($this->getRepositoryAlias().'.user = :userId')
+            ->andWhere(self::ALIAS.'.user = :userId')
             ->setParameter('userId', $userId)
+            ->leftJoin('FaAdBundle:AdUserPackage', AdUserPackageRepository::ALIAS, 'WITH', self::ALIAS.'.id ='.AdUserPackageRepository::ALIAS.'.ad_id')
+            ->andWhere(AdUserPackageRepository::ALIAS.'.package IN (:free_ad_package)')
+            ->setParameter('free_ad_package', $freePackage)
             ->setMaxResults(1);
 
             if (isset($privateUserAdPostLimitRules['configRuleCategoryId']) && $privateUserAdPostLimitRules['configRuleCategoryId']) {
@@ -4353,7 +4641,6 @@ class AdRepository extends EntityRepository
                 $query->andWhere($this->getRepositoryAlias().'.category IN (:adCategories)')
                     ->setParameter('adCategories', $adCategories);
             }
-
             $totalAds = 0;
             $userAd = $query->getQuery()->getOneOrNullResult();
             $totalAds += $userAd['ad_cnt'];
@@ -4569,6 +4856,14 @@ class AdRepository extends EntityRepository
             
             $solr->deleteByQuery('id:"'.$adId.'"');
             $solr->commit(true);
+
+            $solrClientNew = $this->getContainer()->get('fa.solr.client.ad.new');
+            if (!$solrClientNew->ping()) {
+                return false;
+            }
+            $solrNew = $solrClientNew->connect();
+            $solrNew->deleteByQuery('id:"'.$adId.'"');
+            $solrNew->commit(true);
         }
     }
 
@@ -4725,5 +5020,60 @@ class AdRepository extends EntityRepository
         }
        
         return $arrResources;
+    }
+    
+    /** getRecentAdByCategory
+     *  find one last created ad by category from history
+     * @param $category
+     * @return mixed
+     */
+    private function getRecentAdByCategory($category, $searchParams){
+        $townId= $adId = null;
+        $townIds = isset($searchParams['item__location'])?$searchParams['item__location']:null;
+        if($townIds && $townIds!=2) {
+            $explodetownIds = explode(',',$townIds);
+            $townId = $explodetownIds[0];
+        }
+
+        $dayBeforeStartDate = CommonManager::getTimeStampFromStartDate(date('Y-m-d', strtotime('-1 day')));
+
+        $query = $this->createQueryBuilder(self::ALIAS)
+        ->select(self::ALIAS.'.id')
+        ->andWhere(self::ALIAS.'.category IN (:catId)')
+        ->setParameter('catId', $category)
+        ->andWhere('IDENTITY('.self::ALIAS.'.status) ='.BaseEntityRepository::AD_STATUS_LIVE_ID)
+        ->andWhere('(' . self::ALIAS . '.created_at <= ' . $dayBeforeStartDate . ' AND '. self::ALIAS . '.updated_at <= ' . $dayBeforeStartDate . ')')
+        ->andWhere(self::ALIAS.'.is_blocked_ad=0');
+
+        if ($townId) {
+            $location = $this->_em->getRepository('FaEntityBundle:Location')->find($townId); 
+            if (!empty($location)) {
+                $query->leftJoin(self::ALIAS.'.ad_locations', AdLocationRepository::ALIAS);
+                $query->leftJoin(AdLocationRepository::ALIAS.'.location_town', LocationRepository::ALIAS);
+                $query->andWhere('IDENTITY('.AdLocationRepository::ALIAS.'.location_town) IS NOT NULL');
+                $query->andWhere(AdLocationRepository::ALIAS.'.location_town in ('.$townId.')'); 
+            }
+        }
+        $query->orderBy(self::ALIAS.'.id', 'DESC');
+        $query->groupBy(self::ALIAS.'.category');
+        $adList = $query->getQuery()->getArrayResult();
+
+        $adIds = [];
+        if (!empty($adList)) {
+            foreach($adList as $ad) {
+                $adIds[] = $ad['id'];
+            }
+        }
+        return $adIds;
+    }
+    
+    /** getRecentAdByCategoryArray
+     * find one last created ad by category list from history
+     * @param $categoryList
+     * @return array
+     */
+    public function getRecentAdByCategoryArray($categoryList, $searchParams){
+        
+        return $this->getRecentAdByCategory($categoryList, $searchParams);
     }
 }

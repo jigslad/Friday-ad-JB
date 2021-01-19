@@ -28,13 +28,10 @@
                         {#<div class="left cat-name-wrap">
                             <span>{{ 'Category'|trans({}, 'frontend-paa-second-step') }}:</span> {{ categoryPathArray|last('<span class="seperator"></span>')|raw }}
                         </div>#}
-                        <div class=" left cat-name-wrap media-object" style="display: inline-flex;">
+                        <div class=" left cat-name-wrap media-object" style="display: inline-flex;">                            
                             <div class="media-object-section">
-                                <span>{{ 'Category'|trans({}, 'frontend-paa-second-step') }}:</span>
-                            </div>
-
-                            <div class="media-object-section">
-                                <p>{{ categoryPathArray|slice((categoryPathArray|length-2),categoryPathArray|length)|join('<span class="seperator"></span>')|raw }}</p>
+                                <div class="breadcrumb">
+		    <div class="clearfix category-text">{{ categoryPathArray|slice((categoryPathArray|length-2),categoryPathArray|length)|join('<span class="separator"></span>')|raw }}</div></div>
                             </div>
                         </div>
                         <div class="right">
@@ -50,7 +47,7 @@
                             {% endif %}
                         {% endif %}
                         <div class="small-wrapper">
-                            {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand'}}) }}
+                            {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 paa-next-btn expand'}}) }}
                         </div>
                     {{ form_end(form) }}
                 </div>
@@ -156,6 +153,7 @@
                 if (regNoFieldsData['cw_vehicle_cat_id'] == carsId || regNoFieldsData['cw_vehicle_cat_id'] == comVehicleId) {
                     if (regNoFieldsData['model_id'] && regNoFieldsData['cw_model_id'] && regNoFieldsData['model_id'] != regNoFieldsData['cw_model_id']) {
                         var changeCategoryRoute = Routing.generate('ad_post_change_to_carweb_category', { 'category_id': regNoFieldsData['cw_model_id'], 'r_no' : regNo});
+                        changeCategoryRoute  = changeCategoryRoute.replace(':https','');
                         msg = msg.replace('MAKE-MODEL', '<b>'+regNoFieldsData['make']+' '+regNoFieldsData['model']+' ('+regNoFieldsData['vehicle_cat']+') </b>');
                         msg = msg.replace('CARWEB-MAKE-MODEL', '<b>'+regNoFieldsData['cw_make']+' '+regNoFieldsData['cw_model']+' ('+regNoFieldsData['cw_vehicle_cat']+')</b>');
                         msg = msg.replace('CARWEB-MAKEMODEL-CHANGED', regNoFieldsData['cw_make']+' '+regNoFieldsData['cw_model']+' ('+regNoFieldsData['cw_vehicle_cat']+')');
@@ -166,6 +164,7 @@
                 } else if (regNoFieldsData['cw_vehicle_cat_id'] == motorbikesId) {
                     if (regNoFieldsData['model_id'] && regNoFieldsData['cw_motorbike_id']) {
                         var changeCategoryRoute = Routing.generate('ad_post_change_to_carweb_category', { 'category_id': regNoFieldsData['cw_motorbike_id'], 'r_no' : regNo});
+                        changeCategoryRoute  = changeCategoryRoute.replace(':https','');
                         msg = msg.replace('MAKE-MODEL', '<b>'+regNoFieldsData['make']+' '+regNoFieldsData['model']+' ('+regNoFieldsData['vehicle_cat']+')</b>');
                         msg = msg.replace('CARWEB-MAKE-MODEL', '<b>'+regNoFieldsData['cw_motorbike']+'</b>');
                         msg = msg.replace('CARWEB-MAKEMODEL-CHANGED', regNoFieldsData['cw_motorbike']);
@@ -178,6 +177,7 @@
                 if (regNoFieldsData['cw_vehicle_cat_id'] == carsId || regNoFieldsData['cw_vehicle_cat_id'] == comVehicleId) {
                     if (regNoFieldsData['motorbike_id'] && regNoFieldsData['cw_model_id']) {
                         var changeCategoryRoute = Routing.generate('ad_post_change_to_carweb_category', { 'category_id': regNoFieldsData['cw_model_id'], 'r_no' : regNo});
+                        changeCategoryRoute  = changeCategoryRoute.replace(':https','');
                         msg = msg.replace('MAKE-MODEL', '<b>'+regNoFieldsData['motorbike']+'</b>');
                         msg = msg.replace('CARWEB-MAKE-MODEL', '<b>'+regNoFieldsData['cw_make']+' '+regNoFieldsData['cw_model']+' ('+regNoFieldsData['cw_vehicle_cat']+')</b>');
                         msg = msg.replace('CARWEB-MAKEMODEL-CHANGED', regNoFieldsData['cw_make']+' '+regNoFieldsData['cw_model']+' ('+regNoFieldsData['cw_vehicle_cat']+')');
@@ -188,6 +188,7 @@
                 } else if (regNoFieldsData['cw_vehicle_cat_id'] == motorbikesId) {
                     if (regNoFieldsData['motorbike_id'] && regNoFieldsData['cw_motorbike_id'] && regNoFieldsData['motorbike_id'] != regNoFieldsData['cw_motorbike_id']) {
                         var changeCategoryRoute = Routing.generate('ad_post_change_to_carweb_category', { 'category_id': regNoFieldsData['cw_motorbike_id'], 'r_no' : regNo});
+                        changeCategoryRoute  = changeCategoryRoute.replace(':https','');
                         msg = msg.replace('MAKE-MODEL', '<b>'+regNoFieldsData['motorbike']+'</b>');
                         msg = msg.replace('CARWEB-MAKE-MODEL', '<b>'+regNoFieldsData['cw_motorbike']+'</b>');
                         msg = msg.replace('CARWEB-MAKEMODEL-CHANGED', regNoFieldsData['cw_motorbike']);
@@ -238,7 +239,7 @@
             if (regNo) {
                 var category_id = "{{ attribute(first_step_data, 'category_id') }}"
                 var route       = Routing.generate('ad_vrm_lookup_ajax', { 'vrm': regNo });
-    
+                route = route.replace(':https','');
                 $('#lookup_vehicle').html('{{ "Loading..."|trans({}, 'frontend-paa')}}');
                 $.ajax({
                     type: 'post',

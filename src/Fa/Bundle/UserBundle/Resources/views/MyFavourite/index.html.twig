@@ -18,6 +18,7 @@
     function removeFromFavorite(id)
     {
         var route = Routing.generate('ad_remove_from_favorite', { 'adId': id });
+        route = route.replace(':https','');
         blockPage();
         $.ajax({
             type: "POST",

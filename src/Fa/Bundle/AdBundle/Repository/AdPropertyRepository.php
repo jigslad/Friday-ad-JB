@@ -130,6 +130,71 @@ class AdPropertyRepository extends EntityRepository
     }
 
     /**
+     * @param $ad
+     * @param $container
+     * @return object|\SolrInputDocument
+     */
+    public function getSolrDocumentNew($ad, $container)
+    {
+        $document = new \SolrInputDocument($ad);
+
+        $document = $this->_em->getRepository('FaAdBundle:Ad')->getSolrDocumentNew($ad, $document, $container);
+
+        $categoryId = ($ad->getCategory() ? $ad->getCategory()->getId() : null);
+        // get property object
+        $adProperty = $this->findOneBy(array('ad' => $ad->getId()));
+
+        if ($adProperty) {
+            $listingDimensions = $this->getAdListingFields();
+            $entityRepository = $this->_em->getRepository('FaEntityBundle:Entity');
+            $adRepository = $this->_em->getRepository('FaAdBundle:Ad');
+
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'number_of_bedrooms'), $entityRepository->getCachedEntityById($container, $adProperty->getNumberOfBedroomsId()));
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'room_size'), $entityRepository->getCachedEntityById($container, $adProperty->getRoomSizeId()));
+            $metaData = ($adProperty->getMetaData() ? unserialize($adProperty->getMetaData()) : null);
+
+            if ($metaData && count($metaData)) {
+                $document = $this->addField($document, 'meta_values', $adProperty->getMetaData());
+                if (isset($metaData['number_of_bathrooms_id'])) {
+                    $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'number_of_bedrooms'), $entityRepository->getCachedEntityById($container, $metaData['number_of_bathrooms_id']));
+                }
+
+                if (isset($metaData['furnishing_id'])) {
+                    $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'furnishing'), $entityRepository->getCachedEntityById($container, $metaData['furnishing_id']));
+                }
+
+                if (isset($metaData['rent_per_id'])) {
+                    $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'rent_per'), $entityRepository->getCachedEntityById($container, $metaData['rent_per_id']));
+                }
+
+                if (isset($metaData['date_available'])) {
+                    $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'date_available', false), $metaData['date_available']);
+                    $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'date_available_int', false), CommonManager::getTimeStampFromStartDate($metaData['date_available']));
+                }
+
+                if (isset($metaData['number_of_rooms_available_id'])) {
+                    $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'number_of_rooms_available'), $entityRepository->getCachedEntityById($container, $metaData['number_of_rooms_available_id']));
+                }
+            }
+            // add amenities.
+            $amenitiesIds = explode(',', $adProperty->getAmenitiesId());
+            if (count($amenitiesIds)) {
+                foreach ($amenitiesIds as $amenityId) {
+                    $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'amenities'), $entityRepository->getCachedEntityById($container, $amenityId));
+                }
+            }
+        }
+
+        // update keyword search fields.
+        $keywordSearch = $this->_em->getRepository('FaAdBundle:Ad')->getKeywordSearchArray($ad, $categoryId, $adProperty, $container);
+        if (count($keywordSearch)) {
+            $document = $this->addField($document, 'keyword_search', implode(',', $keywordSearch));
+        }
+
+        return $document;
+    }
+
+    /**
      * Add field to solr document.
      *
      * @param object $document Solr document object.
@@ -141,6 +206,14 @@ class AdPropertyRepository extends EntityRepository
     private function addField($document, $field, $value)
     {
         if ($value != null) {
+            if (is_array($value)) {
+                $value = (string) json_encode($value);
+            }
+
+            if (!is_string($value)) {
+                $value = (string) $value;
+            }
+
             $document->addField($field, $value);
         }
 

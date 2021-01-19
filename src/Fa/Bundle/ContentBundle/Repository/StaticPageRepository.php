@@ -137,7 +137,7 @@ class StaticPageRepository extends EntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                //return $cachedValue;
+                return $cachedValue;
             }
         }
 
@@ -145,7 +145,7 @@ class StaticPageRepository extends EntityRepository
         ->select(self::ALIAS.'.title', self::ALIAS.'.description')
         ->where(self::ALIAS.'.status = 1')
         ->andWhere(StaticPageRepository::ALIAS.'.type IN (:type)')
-         ->setParameter('type', array(StaticPageRepository::STATIC_BLOCK_TYPE_ID, StaticPageRepository::STATIC_BLOCK_GA_CODE_ID))
+        ->setParameter('type', array(StaticPageRepository::STATIC_BLOCK_TYPE_ID, StaticPageRepository::STATIC_BLOCK_GA_CODE_ID))
         ->andWhere(self::ALIAS.'.slug = :slug')
         ->setParameter('slug', $slug)
         ->getQuery()
@@ -167,6 +167,53 @@ class StaticPageRepository extends EntityRepository
             $staticBlockDetailArray['description'] = $container->get('fa.banner.manager')->parseStaticBlockCode($staticBlockDetailArray['description'], $extraParams);
         }
         
+
+        return $staticBlockDetailArray;
+    }
+
+    public function getStaticBlockGTMDetailArray($slug, $container = null, $ad = null, $facetResult=null)
+    {
+        if ($container) {
+            $culture     = CommonManager::getCurrentCulture($container);
+            $tableName   = $this->getStaticPageTableName();
+            $cacheKey    = $tableName.'|'.__FUNCTION__.'|'.$slug.'_'.$culture;
+            $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
+
+            if ($cachedValue !== false) {
+                //return $cachedValue;
+            }
+        }
+
+        $staticBlockDetailArray = $this->getBaseQueryBuilder()
+            ->select(self::ALIAS.'.title', self::ALIAS.'.description')
+            ->where(self::ALIAS.'.status = 1')
+            ->andWhere(StaticPageRepository::ALIAS.'.type IN (:type)')
+            ->setParameter('type', array(StaticPageRepository::STATIC_BLOCK_TYPE_ID, StaticPageRepository::STATIC_BLOCK_GA_CODE_ID))
+            ->andWhere(self::ALIAS.'.slug = :slug')
+            ->setParameter('slug', $slug)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if ($container) {
+            CommonManager::setCacheVersion($container, $cacheKey, $staticBlockDetailArray);
+        }
+
+        if ($staticBlockDetailArray['description']!='') {
+            $extraParams = array();
+            $cookieValue = $container->get('request_stack')->getCurrentRequest()->cookies->get('location');
+            if (!empty($cookieValue)) {
+                $extraParams = array_merge($extraParams, array('cookieValues'=>$cookieValue));
+            }
+            if ($ad) {
+                $extraParams = array_merge($extraParams, array('ad'=>$ad));
+            }
+            if ($facetResult) {
+                $extraParams = array_merge($extraParams, array('facetResult'=>$facetResult));
+            }
+
+            $staticBlockDetailArray['description'] = $container->get('fa.banner.manager')->parseStaticBlockGTMCode($staticBlockDetailArray['description'], $extraParams);
+        }
+
 
         return $staticBlockDetailArray;
     }
@@ -205,5 +252,39 @@ class StaticPageRepository extends EntityRepository
         }
 
         return $staticPages;
+    }
+
+
+    /**
+     * Get static page link array.
+     *
+     * @param object $container Container identifier.
+     *
+     * @return array
+     */
+    public function getStaticPagesForMobileFooter($container = null)
+    {
+        if ($container) {
+            $culture     = CommonManager::getCurrentCulture($container);
+            $tableName   = $this->getStaticPageTableName();
+            $cacheKey    = $tableName.'|'.__FUNCTION__.'|'.$culture;
+            $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
+
+            if ($cachedValue !== false) {
+                return $cachedValue;
+            }
+        }
+
+        $mobileStaticPages = $this->getBaseQueryBuilder()
+            ->where(self::ALIAS.'.status = 1')
+            ->andWhere(self::ALIAS.'.type = '.self::STATIC_PAGE_TYPE_ID)
+            ->andWhere(self::ALIAS.'.include_in_mobile_footer = 1')
+            ->getQuery()
+            ->getArrayResult();
+
+        if ($container) {
+            CommonManager::setCacheVersion($container, $cacheKey, $mobileStaticPages);
+        }
+        return $mobileStaticPages;
     }
 }

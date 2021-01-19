@@ -26,7 +26,7 @@
             </div>
         {% elseif field == 'contract_type_id' %}
             <div class="paa-bdr-box">
-                <h3 class="text-center">{{ attribute(form, field).vars.label }}<br><span style="font-family: 'Asap',sans-serif;font-size: 14px;color: #4a4a4a;">({{ 'Select at least one'|trans({}, 'frontend-paa-second-step') }})</span></h3>
+                <h3 class="text-center">{{ attribute(form, field).vars.label }}<br><span style="font-size: 14px;color: #212527;">({{ 'Select at least one'|trans({}, 'frontend-paa-second-step') }})</span></h3>
 
                 <ul class="paa-features clearfix fa-equalizer" id="{{ field }}_equalizer">
                     {% set selectedValues = attribute(form, field).vars.data %}

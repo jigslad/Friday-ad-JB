@@ -1,0 +1,19 @@
+<div class="owl-carousel fa-slider" id="featured_advertisers_slider" data-equalizer>
+    {% for businessExposureUsersDetail in businessExposureUsersDetails %}
+        {% set adUserId = businessExposureUsersDetail['user_id'] %}
+        {% set shopName = businessExposureUsersDetail['user_name'] %}
+        {% set profilePageUrl = businessExposureUsersDetail['profile_url'] %}
+        <div class="item" data-equalizer-watch>
+            <a class="tricky-link" href="{{ profilePageUrl }}">&nbsp;{# {{ shopName }} #}</a>
+            {% set userCompanyLogo = businessExposureUsersDetail['user_logo'] %}
+            {% set userName = businessExposureUsersDetail['user_name'] %}
+            <div class="list-img">
+                {{ userCompanyLogo|raw }}
+            </div>
+            <h3>
+               {{ shopName }}
+            </h3>
+        </div>
+    {% endfor %}
+</div>
+    

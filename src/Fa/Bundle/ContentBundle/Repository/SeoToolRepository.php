@@ -32,6 +32,7 @@ class SeoToolRepository extends EntityRepository
     const ALIAS = 'st';
 
     const HOME_PAGE          = 'hp';
+    const ADULT_HOME_PAGE    = 'ahp';
     const ADVERT_DETAIL_PAGE = 'adp';
     const ADVERT_IMG_ALT     = 'aia';
     const ADVERT_LIST_PAGE   = 'alp';
@@ -69,6 +70,7 @@ class SeoToolRepository extends EntityRepository
         $pageArray[self::HOME_PAGE]          = $translator->trans('Home page');
         $pageArray[self::ADVERT_IMG_ALT]     = $translator->trans('Advert image alt');
         $pageArray[self::ADVERT_LIST_PAGE] = $translator->trans('Advert list page');
+        $pageArray[self::ADULT_HOME_PAGE]          = $translator->trans('Adult Home page');
 
         return $pageArray;
     }
@@ -107,8 +109,8 @@ class SeoToolRepository extends EntityRepository
             self::ADVERT_DETAIL_PAGE => $translator->trans('Advert detail page'),
             self::ADVERT_IMG_ALT => $translator->trans('Advert image alt'),
             self::ADVERT_LIST_PAGE => $translator->trans('Advert list page'),
+            self::ADULT_HOME_PAGE =>$translator->trans('Adult Home page'),
         );
-
         return $pageNameArray;
     }
 
@@ -238,7 +240,7 @@ class SeoToolRepository extends EntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                return $cachedValue;
+//                return $cachedValue;
             }
         }
 
@@ -340,6 +342,51 @@ class SeoToolRepository extends EntityRepository
     }
 
     /**
+     * Get active seo page rule detail for array of ad solr objects.
+     *
+     * @param object  $ads        array of Ad solr obj.
+     * @param string  $page       Page code.
+     * @param object  $container  Container identifier.
+     *
+     * @return array
+     */
+    public function getSeoPageRuleDetailForAds($ads, $page, $container = null)
+    {
+        $seoRuleArray = $this->getSeoRulesKeyValueArray($page, $container);
+        $imageAlts = [];
+
+        foreach ($ads as $adSolrObj) {
+            $adSolrObj = get_object_vars($adSolrObj);
+            $seoRule = null;
+            $categoryId = (isset($adSolrObj[AdSolrFieldMapping::CATEGORY_ID]) ? $adSolrObj[AdSolrFieldMapping::CATEGORY_ID] : null);
+            $categoryLevel = (isset($adSolrObj[AdSolrFieldMapping::CATEGORY_LEVEL]) ? ($adSolrObj[AdSolrFieldMapping::CATEGORY_LEVEL] - 1) : 0);
+
+            if (isset($seoRuleArray[$page . '_' . $categoryId])) {
+                $seoRule = $seoRuleArray[$page . '_' . $categoryId];
+            } else {
+                for ($i = $categoryLevel; $i >= 1; $i--) {
+                    $parentConst = 'a_parent_category_lvl_' . $i . '_id_i';
+                    $parentCategoryId = (isset($adSolrObj[$parentConst]) ? $adSolrObj[$parentConst] : null);
+                    if (isset($seoRuleArray[$page . '_' . $parentCategoryId])) {
+                        $seoRule = $seoRuleArray[$page . '_' . $parentCategoryId];
+                        break;
+                    }
+                }
+            }
+
+            if (!$seoRule && isset($seoRuleArray[$page . '_global'])) {
+                $seoRule = $seoRuleArray[$page . '_global'];
+            }
+
+            if (! empty($seoRule['image_alt'])) {
+                $imageAlts[$adSolrObj[AdSolrFieldMapping::ID]] = CommonManager::getAdImageAlt($container, $seoRule['image_alt'], $adSolrObj);
+            }
+        }
+
+        return $imageAlts;
+    }
+
+    /**
      * Get active seo page rule detail by category id for search result.
      *
      * @param string  $page       Page code.
@@ -375,6 +422,7 @@ class SeoToolRepository extends EntityRepository
                     foreach ($parentCategories as $parentCategoryId) {
                         if (isset($seoRuleArray[$page.'_'.$parentCategoryId])) {
                             $seoRule = $seoRuleArray[$page.'_'.$parentCategoryId];
+                            $seoRule['popular_search'] = false;
                             break;
                         }
                     }

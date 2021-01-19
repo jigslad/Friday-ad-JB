@@ -18,10 +18,7 @@
 {% use "FaCoreBundle:GoogleMap:renderLocationUsingCircle.html.twig" %}
 
 {% block body -%}
-<style>
-.select2-container.custom_select { width:100% !important; }
-.custom_select_options.select2-drop.select2-with-searchbox { min-width:300px !important; }
-</style>
+    {{ include('FaAdBundle:AdEdit:animals-css.html.twig') }}
     <div class="posting-bg">
         {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
         <div class="row d-board-main">
@@ -53,7 +50,7 @@
                                         {{ include('FaAdBundle:AdEdit:animalsFields.html.twig') }}
                                     {% endif %}
                                     <div class="small-wrapper">
-                                        {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand  mt30'}}) }}
+                                        {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 paa-next-btn expand  mt30'}}) }}
                                     </div>
                                 {{ form_end(form) }}
                             </div>

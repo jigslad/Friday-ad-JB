@@ -95,7 +95,7 @@ class LandingPageController extends CoreController
             $distance = '';
             if (isset($searchParams['item__category_id']) && !isset($searchParams['item__distance'])) {
                 $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
-                $distance = ($getDefaultRadius)?$getDefaultRadius:'';
+                $distance = ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
                 //if($distance) { $searchParams['item__distance'] = $distance; }
             }
 
@@ -244,7 +244,7 @@ class LandingPageController extends CoreController
             $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'.$data['search']['item__distance'];
 
             if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['latitude']) && isset($cookieLocationDetails['longitude'])) {
-                $data['query_sorter']['item']['geodist'] = 'asc';
+                //$data['query_sorter']['item']['geodist'] = 'asc';
             }
         }
 
@@ -340,7 +340,11 @@ class LandingPageController extends CoreController
         }
         $this->get('fa.solrsearch.manager')->init('ad', null, $data, 1, $adLimit);
         if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['latitude']) && isset($cookieLocationDetails['longitude'])) {
-            $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocationDetails['latitude'].', '.$cookieLocationDetails['longitude']);
+            if (isset($data['search']['item__location']) && $data['search']['item__location'] != LocationRepository::COUNTY_ID) {
+                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocationDetails['latitude'] . ',' . $cookieLocationDetails['longitude'], 'd' => $searchDistance);
+            } else {
+                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocationDetails['latitude'].','.$cookieLocationDetails['longitude']);
+            }
             $this->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
         }
 
@@ -502,12 +506,9 @@ class LandingPageController extends CoreController
         $this->get('fa.searchfilters.manager')->init($this->getRepository('FaAdBundle:Ad'), $this->getRepositoryTable('FaAdBundle:Ad'), 'search', $data);
         $data = $this->get('fa.searchfilters.manager')->getFiltersData();
 
-        $getDefaultRadius = '';
-        if ($searchParams['item__category_id']!='') {
-            $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
-        }
+        $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
 
-        if (isset($data['search']['item__location']) && $data['search']['item__location'] != LocationRepository::COUNTY_ID) {
+        if (isset($data['search']['item__location'])) {
             $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'.$getDefaultRadius;
         }
 

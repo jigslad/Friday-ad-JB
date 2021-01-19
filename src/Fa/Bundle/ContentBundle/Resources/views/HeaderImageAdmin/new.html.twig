@@ -17,7 +17,8 @@
                    <span class="help-block">{{ 'Allowed image extensions are jpg, png, svg and gif.'|trans({}, 'messages') }}</span>
                    <span class="help-block">{{ '<b>Dimensions for Image</b>:<br /><b>Large screen</b>: 2000px x 610px<br /><b>Medium screens</b>: 1151px x 610px<br /><b>Small screens</b>: 760px x 427px'|trans({}, 'messages')|raw }}</span>
                    {% if entity.id %}
-                       <img src="{{shared_url(entity.getPath()~'/'~entity.getFileName())}}?{{ random(1000) }}" width="100px" /><br /><br />
+                   	   {% set headerImgUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSharedImageUrl', [fetch_container_instance(), entity.getPath(), entity.getFileName()]) %}
+                       <img src="{{headerImgUrl}}?{{ date().timestamp }}" width="100px" /><br /><br />
                    {% endif %}
                </div>
                <div class="form-group{% if form.phone_file.vars.errors|length %} has-error{% endif %}">
@@ -27,7 +28,8 @@
                    <span class="help-block">{{ 'Allowed image extensions are jpg, png, svg and gif.'|trans({}, 'messages') }}</span>
                    <span class="help-block">{{ '<b>Dimension for Image</b>: 428px x 613px'|trans({}, 'messages')|raw }}</span>
                    {% if entity.id and entity.phonefilename != '' %}
-                   		<img src="{{shared_url(entity.getPath()~'/'~entity.getPhoneFileName())}}?{{ random(1000) }}" width="100px" />
+                   		{% set headerPhoneImgUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSharedImageUrl', [fetch_container_instance(), entity.getPath(), entity.getPhoneFileName()]) %}
+                   		<img src="{{headerPhoneImgUrl}}?{{ date().timestamp }}" width="100px" />
                    		<span>
                        		<a href="{{ path('header_right_image_delete_admin', {'id': entity.id}) }}" onclick="javascript:return confirm('Do you want to proceed deleting this image?')"><i class="fi-trash"></i> Delete</a>
                        	</span><br /><br />

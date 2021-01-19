@@ -28,6 +28,7 @@
         // Stop form from submitting normally
         event.preventDefault();
         var route = Routing.generate('ajax_report_user', { 'replyId': '{{app.request.get('replyId')}}' });
+        route = route.replace(':https','');
         $.ajax({
             type: "POST",
             url: route,

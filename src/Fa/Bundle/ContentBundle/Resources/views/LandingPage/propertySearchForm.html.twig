@@ -4,7 +4,7 @@
 {% set property_for_rent_id = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_FOR_RENT_ID') %}
 {% set property_share_id    = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_SHARE_ID') %}
 
-<h3 class="homepage-title">{{ 'Find a property'|trans({}, 'frontend-landing-page') }} </h3>
+<div class="homepage-title">{{ 'Find a property'|trans({}, 'frontend-landing-page') }} </div>
 
 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 {{ form_errors(form) }}
