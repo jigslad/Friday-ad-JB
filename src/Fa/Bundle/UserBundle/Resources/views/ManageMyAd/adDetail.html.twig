@@ -95,7 +95,7 @@
                 {% if ad.status_id is defined and ad.status_id is not null %}
                 	{% if ad.status_id == adStatusSold %}
                         {% set statusClass = 'successCls' %}
-                        {% set statusText = 'Successful' %}
+                        {% set statusText = 'Sold' %}
                     {% elseif ad.status_id == adStatusRejectedWithReason or ad.status_id == adStatusRejected %}
                     	{% set statusClass = 'rejectedCls' %}
                     	{% set statusText = 'Rejected' %}
@@ -241,7 +241,7 @@
                                 
                 {% if (adPackageArray[adId] is defined and adPackageArray[adId]['price'] <=0)  and ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') and ((adPackageArray[adId] is defined and adPackageArray[adId]['price'] == 0) or adPackageArray[adId] is not defined) %}
                      {% if ((userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) and upgradePackagesCount > 1) or (userRoleId != constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
-                        <div class="right-manage-buttons adEditBlock1"><a class="secondary-btn-2 thin-btn expand button" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'promote'}) }}">{{'Upgrade'|trans({}, 'frontend-manage-my-ad')}}</a></div>
+                        <div class="right-manage-buttons adEditBlock1"><a class="secondary-btn-1 thin-btn expand button" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'promote'}) }}">{{'Upgrade'|trans({}, 'frontend-manage-my-ad')}}</a></div>
                      {% endif %}
                 {% endif %}
                 
@@ -327,7 +327,7 @@
                 {% if ad.status_id is defined and ad.status_id is not null %}
                 	{% if ad.status_id == adStatusSold %}
                         {% set statusClass = 'successCls' %}
-                        {% set statusText = 'Successful' %}
+                        {% set statusText = 'Sold' %}
                     {% elseif ad.status_id == adStatusRejectedWithReason or ad.status_id == adStatusRejected %}
                     	{% set statusClass = 'rejectedCls' %}
                     	{% set statusText = 'Rejected' %}
@@ -406,7 +406,7 @@
                 
                 {% if (adPackageArray[adId] is defined and adPackageArray[adId]['price'] <=0)  and ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') and ((adPackageArray[adId] is defined and adPackageArray[adId]['price'] == 0) or adPackageArray[adId] is not defined) %}
                      {% if ((userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) and upgradePackagesCount > 1) or (userRoleId != constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
-                        <div class="right-manage-buttons adUpgradeBlock"><a class="secondary-btn-2 thin-btn expand button" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'promote'}) }}">{{'Upgrade'|trans({}, 'frontend-manage-my-ad')}}</a></div>
+                        <div class="right-manage-buttons adUpgradeBlock"><a class="secondary-btn-1 thin-btn expand button" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'promote'}) }}">{{'Upgrade'|trans({}, 'frontend-manage-my-ad')}}</a></div>
                      {% endif %}
 
                 {% endif %}
