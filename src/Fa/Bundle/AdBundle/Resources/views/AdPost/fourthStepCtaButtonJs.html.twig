@@ -31,13 +31,29 @@
         $('#fa_paa_fourth_step_{{ categoryName }}_save').removeClass('disabled');
         $('#fa_paa_fourth_step_{{ categoryName }}_preview').removeClass('disabled');
         if($('#fa_paa_fourth_step_{{ categoryName }}_gender_id') .length != 0) {
-            if (!$('#fa_paa_fourth_step_{{ categoryName }}_gender_id').val()) {
-                disableNextButton()
+            if ($('#element_toggle_gender_id_target').css('display') == 'block'){
+                if (!$('#fa_paa_fourth_step_{{ categoryName }}_gender_id').val()) {
+                    var genderTypes = $('[id^="fa_paa_fourth_step_{{ categoryName }}_gender_id_"]');
+                    if(genderTypes.length){
+                        var genderTypeSelected = false;
+                        genderTypes.each(function (index, element){
+                            if(element.checked) {
+                                genderTypeSelected = true;
+                            }
+                        });
+
+                        if(!genderTypeSelected){
+                            disableNextButton()
+                        }
+                    }
+                }
             }
         }
         if($('#fa_paa_fourth_step_{{ categoryName }}_species_id') .length != 0) {
-            if (!$('#fa_paa_fourth_step_{{ categoryName }}_species_id').val()) {
-                disableNextButton()
+            if ($('#element_toggle_species_id_target').css('display') == 'block'){
+                if (!$('#fa_paa_fourth_step_{{ categoryName }}_species_id').val()) {
+                    disableNextButton()
+                }
             }
         }
         var requiredFieldsUpdated = $(':input[required]:visible');
