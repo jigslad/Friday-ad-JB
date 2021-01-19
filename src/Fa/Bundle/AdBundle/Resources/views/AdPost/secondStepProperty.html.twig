@@ -25,7 +25,7 @@
                             {% endif %}
                         {% endif %}
                         <div class="small-wrapper">
-                            {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand'}}) }}
+                            {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 paa-next-btn expand'}}) }}
                         </div>
                     {{ form_end(form) }}
                 </div>
@@ -63,6 +63,7 @@
                    $('#'+choiceId).addClass('active');
                    $("input[name='fa_paa_second_step_property["+field+"]'][value='"+selectedId+"']").attr('checked', true);
                }
+               enableDisableNextButton();
            });
         }
     //]]>

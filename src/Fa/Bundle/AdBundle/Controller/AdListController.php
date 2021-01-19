@@ -80,6 +80,7 @@ class AdListController extends CoreController
                     $bindSearchParams['item__category_id'] =  $parent['id'];
                 }
             }
+            if($bindSearchParams['item__category_id'] ==1) { $bindSearchParams['item__category_id'] = ''; }
             $form->submit($bindSearchParams);
         }
 
@@ -388,7 +389,7 @@ class AdListController extends CoreController
         if (isset($data['search']['item__location'])) {
             $locationResult = $this->getRepository('FaEntityBundle:Location')->find($data['search']['item__location']);
         }
-        
+
         if (!empty($facetResult)) {
            // $locationFacets = $this->getLocationFacetForSearchResult($facetResult, $data);
         }
@@ -983,8 +984,12 @@ class AdListController extends CoreController
         $keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: NULL;
         $recordsPerPage = (isset($data['pager']['limit']) && $data['pager']['limit']) ? $data['pager']['limit']: $this->container->getParameter('fa.search.records.per.page');
 
-        $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($data['search'], $this->container);
-        $radius = ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
+        if(isset($findersSearchParams['item__distance']) && $findersSearchParams['item__distance']) {
+            $radius = $findersSearchParams['item__distance'];
+        } else {
+            $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($data['search'], $this->container);
+            $radius = ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
+        }
 
         if($data['search']['item__location']!=LocationRepository::COUNTY_ID) {
             $data['search']['item__distance'] = $radius;
@@ -1159,7 +1164,7 @@ class AdListController extends CoreController
                 $parentCategoryIds = array_keys($this->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($findersSearchParams['item__category_id'], false, $this->container));
                 $locationRadius = $this->getRepository('FaAdBundle:LocationRadius')->getSingleLocationRadiusByCategoryIds($parentCategoryIds);
                 if ($locationRadius) {
-                    $findersSearchParams['item__distance'] = $data['search']['item__distance'] = $data['query_filters']['item']['distance'] = $locationRadius['defaultRadius'];
+                    $data['search']['item__distance'] = $data['query_filters']['item']['distance'] = $locationRadius['defaultRadius'];
                     $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'. (isset($data['search']['item__distance']) ? $data['search']['item__distance'] : '');
                     if ($locationRadius['extendedRadius']>0 && $locationRadius['extendedRadius'] > $locationRadius['defaultRadius']) {
                         $extendlocation = $data['search']['item__location'].'|'. (isset($locationRadius['extendedRadius']) ? $locationRadius['extendedRadius']: '').'|'. (isset($data['search']['item__distance']) ? $data['search']['item__distance'] : '');
@@ -1169,7 +1174,7 @@ class AdListController extends CoreController
 
                 if (!isset($data['search']['item__distance'])) {
                     $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($findersSearchParams['item__category_id'], $this->container);
-                    $findersSearchParams['item__distance'] = $data['search']['item__distance'] = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
+                    $data['search']['item__distance'] = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
                     $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'. ((isset($data['search']['item__distance']) ? $data['search']['item__distance'] : ''));
                 }
             }
@@ -1177,8 +1182,8 @@ class AdListController extends CoreController
 
         if (!empty($extendRadius) && $data['search']['item__location']== LocationRepository::LONDON_TOWN_ID) {
             $extendRadius =  CategoryRepository::MAX_DISTANCE;
-        /*} elseif ($keywords && isset($data['search']['item__location']) && $data['search']['item__location']!=2) {
-            $extendRadius = CategoryRepository::KEYWORD_EXTENDED;*/
+        } elseif (isset($data['search']['item__location']) && $data['search']['item__location']!=2 && $data['search']['item__category_id'] <= 1) {
+            $extendRadius = CategoryRepository::KEYWORD_EXTENDED;
         }
 
         if ($request->attributes->get('customized_page')) {
@@ -1281,18 +1286,18 @@ class AdListController extends CoreController
         $mergedAds = $this->formatAds($mergedPagination);*/
 
 
-        if ($findersSearchParams['item__category_id'] == 1) {
+        /*if ($findersSearchParams['item__category_id'] <= 1) {
             if(!isset($findersSearchParams['item__distance'])){
                 if($findersSearchParams['item__location'] == LocationRepository::LONDON_TOWN_ID) {
                     $findersSearchParams['item__distance'] = CategoryRepository::LONDON_DISTANCE;
-                /*} elseif($keywords && isset($data['search']['item__location']) && $data['search']['item__location']!=2) {
-                    $findersSearchParams['item__distance'] = CategoryRepository::KEYWORD_DEFAULT;*/
+                } elseif(isset($data['search']['item__location']) && $data['search']['item__location']!=2) {
+                    $findersSearchParams['item__distance'] = CategoryRepository::KEYWORD_DEFAULT;
                 } else {
                     $findersSearchParams['item__distance'] = CategoryRepository::MAX_DISTANCE;
                 }
 
             }
-        }
+        }*/
 
         $parameters = [
             'featuredAds'           => $featuredAds,
@@ -1311,7 +1316,8 @@ class AdListController extends CoreController
             'extendedResultCount'   => $extendedResultCount,
             'facetResult'           => $facetResult,
             'rootCategoryId'        => $root->getId(),
-            'areaToolTipFlag'       => $areaToolTipFlag
+            'areaToolTipFlag'       => $areaToolTipFlag,
+            'searchAgentData'        => array('sorter' => $data['sorter'], 'search' => $data['search']),
          ];
 
         // profile categories other than Services & Adults
@@ -1556,9 +1562,9 @@ class AdListController extends CoreController
             'item__price_from',
             'item__price_to',
             'item__ad_type_id',
-            'ads_with_images',
+            'items_with_photo',
             'expired_ads',
-            'is_trade_ad',
+            'item__is_trade_ad',
             'item__distance',
             'map',
             'keywords'
@@ -1587,11 +1593,11 @@ class AdListController extends CoreController
               $staticFilters .= ' AND price : [' . $searchItem . ' TO *]';
             } else if ($searchKey == 'item__price_to') {
                 $staticFilters .= ' AND price : [* TO ' . $searchItem . ']';
-            } else if ($searchKey == 'ads_with_images') {
+            } else if ($searchKey == 'items_with_photo') {
                 $staticFilters .= ' AND image_count : [1 TO *]';
             } else if ($searchKey == 'expired_ads') {
                 $staticFilters .= ' AND status_id : ' . EntityRepository::AD_STATUS_EXPIRED_ID;
-            } else if ($searchKey == 'is_trade_ad') {
+            } else if ($searchKey == 'item__is_trade_ad') {
                 $staticFilters .= ' AND is_trade_ad : ' . $searchItem;
             } else if ($searchKey == 'item__ad_type_id') {
                 if (is_array($searchItem)) {
@@ -1730,13 +1736,13 @@ class AdListController extends CoreController
         $userTypes = [
             0 => [
                 'title' => $userTypeLabels['private_user'],
-                'url_param' => 'is_trade_ad=0',
+                'url_param' => 'item__is_trade_ad=0',
                 'count' => empty($tradeFacets) ? 0 : intval($tradeFacets["false"]),
                 'selected' => isset($params['is_trade_ad']) && $params['is_trade_ad'][0] == '0' ? true : false
             ],
             1 => [
                 'title' => $userTypeLabels['business_user'],
-                'url_param' => 'is_trade_ad=1',
+                'url_param' => 'item__is_trade_ad=1',
                 'count' => empty($tradeFacets) ? 0 : intval($tradeFacets["true"]),
                 'selected' => isset($params['is_trade_ad']) && $params['is_trade_ad'][0] == '1' ? true : false
             ]
@@ -1744,8 +1750,10 @@ class AdListController extends CoreController
 
         $locationFacets = [];
         $locationFacetArr = [];
+        $isSetDefaultDistance = 0;
         if (!empty($facetResult)) {
-            $locationFacetArr = $this->getLocationFacetForSearchResult($facetResult, $data);
+            if(isset($searchParams['default_distance']) && $searchParams['default_distance']==1) { $isSetDefaultDistance = 1; }
+            $locationFacetArr = $this->getLocationFacetForSearchResult($facetResult, $data, $isSetDefaultDistance);
         }
 
         if (!empty($locationFacetArr)) {
@@ -2162,7 +2170,7 @@ class AdListController extends CoreController
             'locationFacets'    => $locationFacets,
             'orderedDimensions' => $orderedDimensions,
             'dimensions'        => $dimensions,
-            'ads_with_images'   => isset($params['ads_with_images']),
+            'items_with_photo'   => isset($params['items_with_photo']),
             'expired_ads'       => isset($params['expired_ads']),
             'showPriceField'    => $categoryObj->getId() > 1 ? CommonManager::showPriceInSearchFilter($categoryObj->getId(), $this->container) : true,
             'userTypeTitle'     => $userTypeLabels['header']
@@ -2256,7 +2264,7 @@ class AdListController extends CoreController
                     'location'      => $location,
                     'latitude'      => isset($ad['latitude']) ? $ad['latitude'] : null,
                     'longitude'     => isset($ad['longitude']) ? $ad['longitude'] : null,
-                    'last_updated'  => empty($ad['weekly_refresh_published_at']) ? $ad['published_at'] : $ad['weekly_refresh_published_at'],
+                    'last_updated'  => !empty($ad['weekly_refresh_published_at']) ? $ad['weekly_refresh_published_at'] : (isset($ad['published_at'])?$ad['published_at']:''),
                     'aff_icon_cls'  => ($ad['is_affiliate'] && ($ad['ad_source'] != 'paa' || $ad['ad_source'] != 'paa-app' || $ad['ad_source'] != 'admin')) ? CommonManager::getAffiliateClass($ad['ad_source']) : ''
                 ];
 
@@ -2344,7 +2352,7 @@ class AdListController extends CoreController
      * @param $data
      * @return array
      */
-    private function getLocationFacetForSearchResult($locationFacets, $data)
+    private function getLocationFacetForSearchResult($locationFacets, $data, $isSetDefaultDistance=0)
     {
         if (!empty($locationFacets) && !empty($data)) {
             $getCount = [];
@@ -2354,7 +2362,7 @@ class AdListController extends CoreController
                     if (!empty($facetResult)) {
                         foreach ($facetResult as $key=>$res) {
                             //get Facet Count for Nearby Town
-                            $getCount[$key] = $this->getFacetCountForNearbyTown($key, $data);
+                            $getCount[$key] = $this->getFacetCountForNearbyTown($key, $data, $isSetDefaultDistance);
                         }
                     }
                 }
@@ -2368,7 +2376,7 @@ class AdListController extends CoreController
      * @param $facetdata
      * @return mixed
      */
-    private function getFacetCountForNearbyTown($key, $facetdata)
+    private function getFacetCountForNearbyTown($key, $facetdata, $isSetDefaultDistance=0)
     {
         $keywords       = (isset($facetdata['search']['keywords']) && $facetdata['search']['keywords']) ? $facetdata['search']['keywords']: null;
         if (isset($facetdata['facet_fields']) && isset($facetdata['facet_fields'])) {
@@ -2381,6 +2389,11 @@ class AdListController extends CoreController
             $locationId = isset($townKey->id)?$townKey->id:2;
         }
         $facetdata['search']['item__location'] = $locationId;
+
+        if($locationId==LocationRepository::LONDON_TOWN_ID && $isSetDefaultDistance==1)
+        {
+            $facetdata['search']['item__distance'] =  CategoryRepository::LONDON_DISTANCE;
+        }
         /*if(isset($data['search']['item__distance'])) {
     		$data['search']['item__distance'] = 0;
     	}
@@ -2709,7 +2722,7 @@ class AdListController extends CoreController
         }
 
         $formManager = $this->get('fa.formmanager');
-        $form = $formManager->createForm(AdLeftSearchType::class, array('isShopPage' => $isShopPage, 'parentIdArray' => $parentIdArray), array('method' => 'GET', 'action' => ($isShopPage ? $this->generateUrl('shop_user_ad_left_search_result') : $this->generateUrl('ad_left_search_result'))));
+        $form = $formManager->createForm(AdLeftSearchType::class, array('isShopPage' => $isShopPage, 'parentIdArray' => $parentIdArray, 'searchParams' => $searchParams), array('method' => 'GET', 'action' => ($isShopPage ? $this->generateUrl('shop_user_ad_left_search_result') : $this->generateUrl('ad_left_search_result'))));
 
         foreach ($searchParams as $key => $val) {
             if (in_array($key, array('keywords', 'item__price_from', 'item__price_to', 'item__distance', 'item__category_id', 'item__location', 'item__is_trade_ad', 'item__user_id'))) {
@@ -2762,8 +2775,8 @@ class AdListController extends CoreController
             }
             $form->submit($bindSearchParams);
         }
-        $parameters = array('form' => $form->createView(), 'locationFacets' => $request->get('locationFacets'), 'facetResult' => $request->get('facetResult', 'facetResult'), 'basicParams' => $basicParams, 'isShopPage' => $isShopPage, 'cookieLocationDetails' => $request->get('cookieLocationDetails'));
-        
+        $parameters = array('form' => $form->createView(), 'locationFacets' => $request->get('locationFacets'), 'facetResult' => $request->get('facetResult', 'facetResult'), 'basicParams' => $basicParams, 'isShopPage' => $isShopPage, 'cookieLocationDetails' => $request->get('cookieLocationDetails'), 'leftFilters' => $request->get('leftFilters'));
+
         return $this->render('FaAdBundle:AdList:leftSearch.html.twig', $parameters);
     }
 
@@ -4510,8 +4523,7 @@ class AdListController extends CoreController
     {
         if ($request->isXmlHttpRequest()) {
             $searchParams = unserialize($request->get('searchParams'));
-            $facetResult  = $this->getRepository('FaEntityBundle:Category')->getCategoryFacetBySearchParams($searchParams, $this->container);
-
+            $facetResult = unserialize($request->get('facetResult'));
             $parameters = array('searchParams' => $searchParams, 'facetResult' => $facetResult);
             return $this->render('FaAdBundle:AdList:leftSearchCategoryLinksMobile.html.twig', $parameters);
         }

@@ -247,16 +247,26 @@
     function formulate_price_url() {
         let url = getPageUrl();
         if ($('#fa_left_search_new_item__price_from').val()) {
-            let url_string = 'item__price_from=' + $('#fa_left_search_new_item__price_from').val();
             url = updateQueryStringParameter(url,'item__price_from',$('#fa_left_search_new_item__price_from').val())
+            // let url_string = 'item__price_from=' + $('#fa_left_search_new_item__price_from').val();
+            // if (url.indexOf('?') != -1) {
+            //     url += '&' + url_string;
+            // } else {
+            //     url += '?' + url_string;
+            // }
         }
         else {
             url = removeURLParameter(url,'item__price_from');
         }
 
         if ($('#fa_left_search_new_item__price_to').val()) {
-            let url_string = '&item__price_to=' + $('#fa_left_search_new_item__price_to').val();
             url = updateQueryStringParameter(url,'item__price_to',$('#fa_left_search_new_item__price_to').val())
+            // let url_string = '&item__price_to=' + $('#fa_left_search_new_item__price_to').val();
+            // if (url.indexOf('?') != -1) {
+            //     url += '&' + url_string;
+            // } else {
+            //     url += '?' + url_string;
+            // }
         }
         else {
             url = removeURLParameter(url,'item__price_to');
@@ -264,7 +274,6 @@
         url = url.replace(/%20/g, "");
         window.location.href = url;
     }
-
     function removeURLParameter(url, parameter) {
         //prefer to use l.search if you have a location/link object
         var urlparts = url.split('?');
@@ -285,7 +294,6 @@
         }
         return url;
     }
-
     function updateQueryStringParameter(uri, key, value) {
         var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
         var separator = uri.indexOf('?') !== -1 ? "&" : "?";
@@ -296,7 +304,6 @@
             return uri + separator + key + "=" + value;
         }
     }
-
     function formulate_location_url() {
         let url = getPageUrl();
         if ($('#fa_left_search_new_item__location_autocomplete').val() != "United Kingdom") {
