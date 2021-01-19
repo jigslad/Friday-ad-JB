@@ -69,6 +69,8 @@ class AdLeftSearchType extends AbstractType
      */
     protected $parentIdArray;
 
+    protected $searchParams;
+
     /**
      * Constructor.
      *
@@ -90,6 +92,8 @@ class AdLeftSearchType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $this->searchParams = $options['data']['searchParams'];
+
         $builder
         ->add('item__price_from', TextType::class, array(/** @Ignore */'label' => false))
         ->add('item__price_to', TextType::class, array(/** @Ignore */'label' => false))
@@ -140,7 +144,9 @@ class AdLeftSearchType extends AbstractType
         $rootCategoryId = null;
 
         $categoryId   = '';$getLocLvl = 0;
-        $searchParams = $this->request->get('searchParams');
+        //$searchParams = $this->request->get('searchParams');
+        $searchParams = $this->searchParams;
+        $qryItemDistance = $this->request->get('item__distance');
         
         $cookieLocation = $this->request->cookies->get('location');
         if(!empty($cookieLocation)) {
@@ -156,22 +162,20 @@ class AdLeftSearchType extends AbstractType
         if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
             $categoryId = $searchParams['item__category_id'];
         }
-        if (isset($searchParams['item__distance']) && $searchParams['item__distance']) {
-            $defDistance = $searchParams['item__distance'];
+
+        unset($searchParams['item__distance']);
+        if($qryItemDistance) {
+              $searchParams['item__distance'] = $qryItemDistance;
+        }
+
+        if ($qryItemDistance) {
+            $defDistance = $qryItemDistance;
         } else {
             $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
-            $defDistance = ($getDefaultRadius)?$getDefaultRadius:'';
-        }       
-        if($defDistance=='') {
-            if($categoryId!='') {
-                $rootCategoryId = $this->em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
-                $defDistance = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
-            } else {
-                $defDistance = CategoryRepository::MAX_DISTANCE;
-            }
-       }  
-       
-       if($searchLocation == 2 || $getLocLvl==2) {                      
+            $defDistance = ($getDefaultRadius) ? $getDefaultRadius : CategoryRepository::MAX_DISTANCE;
+        }
+
+       if($searchLocation == 2 || $getLocLvl==2) {
            $form->add('hide_distance_block', HiddenType::class,array('mapped' => false,'empty_data' => 1,'data'=>1));
         } else {            
            $form->add('hide_distance_block', HiddenType::class,array('mapped' => false,'empty_data' => 0,'data'=>0));

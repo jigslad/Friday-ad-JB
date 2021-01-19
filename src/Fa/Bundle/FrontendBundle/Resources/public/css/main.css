@@ -1848,7 +1848,7 @@ footer .fad-logo span {
     text-indent: -9999px;
     vertical-align: middle;
     display: inline-block;
-    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%22100%22%20height%3D%2240%22%20viewBox%3D%220%200%20100%2040%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23212527%3B%7D%0D%0A%3C/style%3E%3Ctitle%3EFAD%20footer%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch%20Beta.%3C/desc%3E%3Cg%20transform%3D%22translate%28-670.000000%2C%20-948.000000%29%22%3E%3Cg%20transform%3D%22translate%28-7.000000%2C%205.000000%29%22%3E%3Cg%20transform%3D%22translate%28677.000000%2C%20943.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M62.8%2021.5l3.1-9.2H66l3%209.2H62.8M68.4%208.6h-7.5v2.5l2%200.2%20-5.5%2015.1c-0.2%200.6-0.4%200.8-1%200.9l-1.1%200.1v2.7h8.1v-2.8l-2.2%200%200.8-2.7h7.9l0.7%201.9c0.2%200.7%200.1%200.8-0.6%200.9l-1.1%200.1v2.7h8.7v-2.8l-2.4-0.2h0L68.4%208.6M86.3%2027.1V11.7h2.4c3.6%200%206.6%201.7%206.6%207.5%200%205.2-2.4%207.9-6.1%207.9H86.3M88.9%208.6h-8.8v2.7l1.9%200.1v15.1c0%200.6-0.3%200.8-0.9%200.9l-1%200.1v2.7h9c5.4%200%2010.3-3%2010.3-11.5C99.4%2011.9%2095.4%208.6%2088.9%208.6M43.2%2022c-1.6%200-2.8-1.2-2.8-2.7%200-1.5%201.3-2.7%202.8-2.7%201.6%200%202.8%201.2%202.8%202.7C46.1%2020.8%2044.8%2022%2043.2%2022M13%2030.2v-2.4l1-0.1c0.6-0.1%200.9-0.3%200.9-0.9V11.6L13%2011.5V8.6h16.1v5.5l-3.1%200.2v-1.3c0-0.6-0.3-0.8-1.2-0.8h-5.6v5.5h8.1v3.1h-8.1v6.6l3.1%200.1v2.5H13M34.3%200H0v39.4h34.3c1.7%200%203.2-0.9%204-2.2L50.8%2022c1.4-1.6%201.3-3.9%200-5.5l-12.9-15C36.9%200.5%2035.6%200%2034.3%200%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat
+    background: url(/bundles/fafrontend/images/Fad-footer.svg) no-repeat
 }
 
 .footer-head {
@@ -2123,7 +2123,6 @@ footer .fad-logo span {
     color: #212527;
     position: absolute;
     left: 0;
-    top: 112px
 }
 
 .step-to-complete span {
@@ -4438,7 +4437,8 @@ li.step-complete .step-text {
     z-index: 1;
     left: 0;
     top: 0;
-    text-indent: -9999px
+    text-indent: -9999px;
+    color: transparent
 }
 
 .outside-tricky {
@@ -15150,7 +15150,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
     }
     .nav-bg .search-icon {
         top: 17px;
-        right: 9px;
+        right: 60px;
         position: absolute
     }
     .nav-bg .search-icon a {
@@ -15166,7 +15166,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
     }
     .top-bar .name h1,
     .top-bar .name a.logo {
-        margin: 0 auto;
+        margin: 0 auto 0 5px;
         width: 177px;
         display: block
     }
@@ -15188,7 +15188,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
     .top-bar .toggle-topbar.menu-icon {
         margin-top: 0;
         top: 8px;
-        right: auto
+        right: 5px;
     }
     .top-bar .toggle-topbar.menu-icon a {
         padding: 10px;
@@ -18033,7 +18033,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
     }
     .nav-bg .search-icon {
         top: 17px;
-        right: 9px;
+        right: 60px;
         position: absolute
     }
     .nav-bg .search-icon a {
@@ -18049,7 +18049,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
     }
     .top-bar .name h1,
     .top-bar .name a.logo {
-        margin: 0 auto;
+        margin: 0 auto 0 5px;
         width: 177px;
         display: block
     }
@@ -18071,7 +18071,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
     .top-bar .toggle-topbar.menu-icon {
         margin-top: 0;
         top: 8px;
-        right: auto
+        right: 5px;
     }
     .top-bar .toggle-topbar.menu-icon a {
         padding: 10px;
@@ -21107,7 +21107,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
     }
     .nav-bg .search-icon {
         top: 17px;
-        right: 9px;
+        right: 60px;
         position: absolute
     }
     .nav-bg .search-icon a {
@@ -21123,7 +21123,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
     }
     .top-bar .name h1,
     .top-bar .name a.logo {
-        margin: 0 auto;
+        margin: 0 auto 0 5px;
         width: 177px;
         display: block
     }
@@ -21145,7 +21145,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
     .top-bar .toggle-topbar.menu-icon {
         margin-top: 0;
         top: 8px;
-        right: auto
+        right: 5px;
     }
     .top-bar .toggle-topbar.menu-icon a {
         padding: 10px;
@@ -23994,7 +23994,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
     }
     .nav-bg .search-icon {
         top: 17px;
-        right: 9px;
+        right: 60px;
         position: absolute
     }
     .nav-bg .search-icon a {
@@ -24010,7 +24010,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
     }
     .top-bar .name h1,
     .top-bar .name a.logo {
-        margin: 0 auto;
+        margin: 0 auto 0 5px;
         width: 177px;
         display: block
     }
@@ -24032,7 +24032,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
     .top-bar .toggle-topbar.menu-icon {
         margin-top: 0;
         top: 8px;
-        right: auto
+        right: 5px;
     }
     .top-bar .toggle-topbar.menu-icon a {
         padding: 10px;
@@ -27068,7 +27068,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
     }
     .nav-bg .search-icon {
         top: 17px;
-        right: 9px;
+        right: 60px;
         position: absolute
     }
     .nav-bg .search-icon a {
@@ -27084,7 +27084,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
     }
     .top-bar .name h1,
     .top-bar .name a.logo {
-        margin: 0 auto;
+        margin: 0 auto 0 5px;
         width: 177px;
         display: block
     }
@@ -27106,7 +27106,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
     .top-bar .toggle-topbar.menu-icon {
         margin-top: 0;
         top: 8px;
-        right: auto
+        right: 5px;
     }
     .top-bar .toggle-topbar.menu-icon a {
         padding: 10px;
@@ -30142,7 +30142,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
     }
     .nav-bg .search-icon {
         top: 17px;
-        right: 9px;
+        right: 60px;
         position: absolute
     }
     .nav-bg .search-icon a {
@@ -30158,7 +30158,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
     }
     .top-bar .name h1,
     .top-bar .name a.logo {
-        margin: 0 auto;
+        margin: 0 auto 0 5px;
         width: 177px;
         display: block
     }
@@ -30180,7 +30180,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
     .top-bar .toggle-topbar.menu-icon {
         margin-top: 0;
         top: 8px;
-        right: auto
+        right: 5px;
     }
     .top-bar .toggle-topbar.menu-icon a {
         padding: 10px;
@@ -38592,7 +38592,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
     }
     .nav-bg .search-icon {
         top: 17px;
-        right: 9px;
+        right: 60px;
         position: absolute
     }
     .nav-bg .search-icon a {
@@ -38608,7 +38608,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
     }
     .top-bar .name h1,
     .top-bar .name a.logo {
-        margin: 0 auto;
+        margin: 0 auto 0 5px;
         width: 177px;
         display: block
     }
@@ -38630,7 +38630,7 @@ table.responsive-card-table tr:nth-of-type(2n) {
     .top-bar .toggle-topbar.menu-icon {
         margin-top: 0;
         top: 8px;
-        right: auto
+        right: 5px;
     }
     .top-bar .toggle-topbar.menu-icon a {
         padding: 10px;

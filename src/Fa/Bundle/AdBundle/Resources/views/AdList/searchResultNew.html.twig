@@ -1,0 +1,490 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% set container = fetch_container_instance() %}
+{% set seoManager = container.get('fa.seo.manager') %}
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+
+{% set thisDevice = 'desktop' %}
+{% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+    {% set thisDevice = 'mobile' %}
+{% endif %}
+
+{% set recommendedSlotsCount = recommendedSlotResult|length %}
+{% if (recommendedSlotsCount > 0) and (resultCount > recommendedSlotLimit|number_format) %}
+    {% set displayRecommendedSlot = 1 %}
+{% else %}
+    {% set displayRecommendedSlot = 0 %}
+{% endif %}
+
+{% set businessExposureUsersCount = (businessExposureUsersDetails is defined )?(businessExposureUsersDetails|length) :0%}
+
+{% block meta_robots %}
+    {% set metaRobotsArray = {} %}
+    {% if not pagination.getNbResults() %}
+        noindex, follow
+        {% set metaRobotsArray = {0: 'noindex', 1: 'follow'} %}
+    {% elseif 'motors/cars-under-1000' in app.request.uri or 'motors/cars-under-500' in app.request.uri  or 'motors/left-hand-drive-cars/' in app.request.uri %}
+        index, follow
+        {% set metaRobotsArray = {0: 'index', 1: 'follow'} %}
+    {% elseif isClassicCarPage is defined and isClassicCarPage==1 %}
+        index, follow
+        {% set metaRobotsArray = {0: 'index', 1: 'follow'} %}
+    {% elseif 'item__distance=0' in app.request.queryString %}
+        noindex, follow
+        {% set metaRobotsArray = {0: 'noindex', 1: 'follow'} %}
+    {% elseif selCatNoIndex==1 or selCatNoFollow==1 %}
+        {{selNoIndex}}, {{ selNoFollow }}
+        {% set metaRobotsArray = {0: selNoIndex, 1: selNoFollow} %}
+    {% elseif 'item__distance=0' not in app.request.queryString %}
+        {% if customized_url|length %}
+            {% if seoFields.meta_robots is defined %}
+                {{seoFields.meta_robots}}
+                {% set metaRobotsArray = seoFields.meta_robots|split(', ') %}
+            {% else %}
+                index, follow
+                {% set metaRobotsArray = {0: 'index', 1: 'follow'} %}
+            {% endif %}
+        {% else %}
+            {% if isUrlIndexable == false %}
+                noindex, follow
+                {% set metaRobotsArray = {0: 'noindex', 1: 'follow'} %}
+            {% else %}
+                {% if seoFields.meta_robots is defined %}
+                    {{seoFields.meta_robots}}
+                    {% set metaRobotsArray = seoFields.meta_robots|split(', ') %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% endif %}
+    {{ set_variables('metaRobots', {'metaRobotsArray': metaRobotsArray}) }}
+{% endblock %}
+
+{% block page_title %}
+    {% if seoFields.page_title is defined %}
+        {{ seoManager.parseSeoStringForAdList(seoFields.page_title, searchParams, cookieLocationDetails) }}
+    {% elseif app.request.queryString %}
+        {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null and searchParams.item__category_id != 1 %}
+            {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id)}} | Friday-Ad
+        {% else %}
+            Friday-Ad
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block meta_description %}
+    {% if seoFields.meta_description is defined %}
+        {{ seoManager.parseSeoStringForAdList(seoFields.meta_description, searchParams, cookieLocationDetails) }}
+    {% elseif app.request.queryString %}
+        {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+            {{'%resultCount% results in %category%'|trans({'%resultCount%': resultCount, '%category%': fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id)}, 'frontend-search-result')}}
+        {% else %}
+            {{'%resultCount% results'|trans({'%resultCount%': resultCount}, 'frontend-search-result')}}
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block meta_keywords %}
+    {% if seoFields.meta_keywords is defined %}
+        {{ seoManager.parseSeoStringForAdList(seoFields.meta_keywords, searchParams, cookieLocationDetails) }}
+    {% elseif app.request.queryString %}
+        no-keywords
+    {% endif %}
+{% endblock %}
+
+{% block canonical_url %}
+    {% set metaRobotsArray = get_variables('metaRobots').metaRobotsArray %}
+    {% if not metaRobotsArray|length or (metaRobotsArray|length and metaRobotsArray[0] is defined and metaRobotsArray[0] != 'noindex') or (metaRobotsArray|length and metaRobotsArray[0] is defined and metaRobotsArray[0] == 'index' and metaRobotsArray[1] is defined and metaRobotsArray[1] != 'nofollow') %}
+        {% if seoFields.canonical_url is defined %}
+            {% set seoCanonicalUrl = replace_case_insensitive('{Location}', app.request.get('location'), seoFields.canonical_url) %}
+            {{ seoManager.parseSeoStringForAdList(seoCanonicalUrl, searchParams, cookieLocationDetails,true) }}
+        {% else %}
+            {{ app.request.uri|replace({('?'~app.request.queryString) : ''})}}
+        {% endif %}
+    {% else %}
+        {{ app.request.uri|replace({('?'~app.request.queryString) : ''})}}
+    {% endif %}
+{% endblock %}
+
+{% block breadcrumb_script %}
+    {% set location_id = null %}
+    {% if cookieLocationDetails['location'] is defined %}
+        {% set location_id = cookieLocationDetails['location'] %}
+    {% endif %}
+    {% set locality_id = null %}
+    {% if cookieLocationDetails['locality_id'] is defined %}
+        {% set locality_id = cookieLocationDetails['locality_id'] %}
+    {% endif %}
+
+    {% if location_id and location_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID') %}
+        {% set HomePagePath = container.getParameter('base_url')~path('location_home_page', {'location': app.request.get('location')}) %}
+    {% else %}
+        {% set HomePagePath =  container.getParameter('base_url')~path('fa_frontend_homepage') %}
+    {% endif %}
+
+    {% set locationName = '' %}
+    {% if location_id == 2 %}
+        {% set locationName = 'Homepage' %}
+    {% else %}
+        {% set locationName = app.request.get('location')|capitalize %}
+    {% endif %}
+
+    <script type="application/ld+json">
+	{
+  		"@context": "https://schema.org",
+  		"@type": "BreadcrumbList",
+  		"itemListElement": [{
+    	"@type": "ListItem",
+    	"position": 1,
+    	"name": "{{locationName}}",
+    	"item": "{{HomePagePath}}"
+  	},
+    {% set categoryPath = {} %}
+    {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+        {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(searchParams.item__category_id, false, fetch_container_instance()) %}
+        {% if categoryPath|length > 0 %}
+        {% set breadcrumbCatCnt = 2 %}
+        {% for categoryId, categoryName in categoryPath %}
+        {% set catLinkParam = { 'item__location': location_id, 'item__category_id': categoryId} %}
+        {% set catListUrl = container.getParameter('base_url')~container.get('fa_ad.manager.ad_routing').getListingUrl(catLinkParam) %}
+{
+    	"@type": "ListItem",
+    	"position": {{breadcrumbCatCnt}},
+    	"name": "{{categoryName}}",
+    	"item": "{{catListUrl}}"
+  	}{% if breadcrumbCatCnt <= categoryPath|length %},{% endif %}
+        {% set breadcrumbCatCnt = breadcrumbCatCnt + 1 %}
+        {% endfor %}
+        {% endif %}
+        {% endif %}
+     ]
+	}
+</script>
+{% endblock %}
+
+{% block scripttop %}
+    {% if seoFields is not null %}
+        {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) or (seoFields|length and seoFields['popular_search'] is defined and seoFields['popular_search'] and seoFields['seo_tool_id'] is defined and seoFields['seo_tool_id']) %}
+            {# CSS for owl carousel - taken from Fa/Bundle/AdBundle/Resources/views/AdList/owl-carousel-2-css.html.twig and inline CSS for listing page #}
+            {% stylesheets filter='uglifycss' output='bundles/css/compiled/search-result.css'
+                'bundles/fafrontend/css/ad-list.css'
+            %}
+                <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
+            {% endstylesheets %}
+        {% endif %}
+    {% endif %}
+    <style>
+        #fa_left_search_new_item__distance-button {
+            width: 100% !important;
+        }
+        .crawlable-checkbox li a{
+            display: none;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    {% if displayRecommendedSlot is defined and displayRecommendedSlot==1 %}
+        {# CSS for recommended slots - taken from src/Fa/Bundle/AdBundle/Resources/views/AdList/recommended_slot_css.html.twig #}
+        {% stylesheets filter='uglifycss' output='bundles/css/compiled/recommended-slots.css'
+            'bundles/fafrontend/css/recommended-slots.css'
+        %}
+            <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}" />
+        {% endstylesheets %}
+    {% endif %}
+
+    {{ include('FaAdBundle:AdList:searchResultHeaderNew.html.twig') }}
+    {% set bannerStatus = true %}
+    <div class="banner-wrapper clearfix">
+        <div class="left-banner">
+            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_LEFT') %}
+            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
+        </div>
+        <div class="row relative results-main banner-mid-column">
+            <div class="large-6 columns" id="left_search">
+                {% if isShopPage is not defined %}
+                    {{ include('FaAdBundle:AdList:saveSearch.html.twig') }}
+                {% endif %}
+{#                {{ include('FaAdBundle:AdList:leftSearchNew.html.twig') }}#}
+                {{ render(controller('FaAdBundle:AdList:leftSearch', { 'searchParams': searchParams is defined ? searchParams : {} , 'locationFacets': leftFilters.locationFacets, 'facetResult': facetResult, 'searchQueryString': app.request.queryString, 'customized_url': customized_url, 'cookieLocationDetails': cookieLocationDetails is defined ? cookieLocationDetails : {} , 'leftFilters': leftFilters} )) }}
+                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_FILTERBOX') %}
+                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+            </div>
+            <div id="listingDiv" class="large-18 columns">
+                {% if seoFields|length and seoFields['popular_search'] is defined and seoFields['popular_search'] and seoFields['seo_tool_id'] is defined and seoFields['seo_tool_id'] %}
+                    {{ include('FaAdBundle:AdList:popularSearchLinks.html.twig', {'mapFlag': 0}) }}
+                {% endif %}
+
+                {% if resultCount > 0 %}
+                    {% if isShopPage is not defined %}
+                        {{ include('FaAdBundle:AdList:saveSearch.html.twig') }}
+                    {% endif %}
+                {% endif %}
+
+                {% set slotallocated = [] %}
+                {% if displayRecommendedSlot==1 and recommendedSlotsCount > 0 and resultCount > 0 and (recommendedSlotResult[1] is defined and recommendedSlotResult[1]|length >0) %}
+                    {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 1 }) }}
+                    {% set slotallocated = slotallocated|merge([1]) %}
+                {% endif %}
+                {% set adCount = 0 %}
+                {% set getPagNum = (app.request.get('page'))?(app.request.get('page')):1 %}
+                {% set realAdCnt = (getPagNum-1)*20 %}
+                {% set setExtendedHeading = 0 %}
+
+                {% for ad in featuredAds %}
+                    {{ include('FaAdBundle:AdList:listDetailNew.html.twig', {'isFeatured' : true}) }}
+                {% endfor %}
+
+                {% if thisDevice == 'mobile' %}
+                    {% if (featuredAds|length >= 2) %}
+                        {% set bannerStatus = false %}
+                        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_ABOVE_RESULTS') %}
+                        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                    {% endif %}
+                {% endif %}
+
+                {% for ad in ads %}
+                    {% set adCount = adCount + 1 %}
+                    {% set realAdCnt = realAdCnt + 1 %}
+
+                    {% if thisDevice == 'mobile' %}
+                        {% if (adCount == 2 and resultCount > 2 and bannerStatus) %}
+                            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_ABOVE_RESULTS') %}
+                            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                        {% endif %}
+                    {% endif %}
+
+                    {% if thisDevice != 'mobile' and adCount == 5 and resultCount > 5 %}
+                        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_IN_RESULTS_TOP') %}
+                        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                    {% endif %}
+
+                    {% if adCount == 10 and resultCount > 10 %}
+                        {% if thisDevice == 'mobile' %}
+                            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_IN_RESULTS') %}
+                            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                        {% else %}
+                            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_IN_RESULTS_BOTTOM') %}
+                            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                        {% endif %}
+                    {% endif %}
+
+                    {% if ((realAdCnt > resultCount) and (setExtendedHeading==0)) %}
+                        <div data-alert="" class="alert-box info radius">
+                            <span class="alert-icon">&nbsp;</span>
+                            We found  {{extendedResultCount}} {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id) | replace({'Category_root':''}) }} ads within  {{extendedRadius}} miles of {{ app.request.get('location') | replace({'-':' '}) | title }}
+                        </div>
+                        {% set setExtendedHeading = 1 %}
+                    {% endif %}
+
+                    {% if displayRecommendedSlot==1 and recommendedSlotsCount > 0 %}
+                        {% if adCount== 4  and (recommendedSlotResult[2] is defined and recommendedSlotResult[2]|length >0) %}
+                            {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 2 }) }}
+                            {% set slotallocated = slotallocated|merge([2]) %}
+                        {% elseif adCount== 7  and (recommendedSlotResult[3] is defined and recommendedSlotResult[3]|length >0) %}
+                            {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 3 }) }}
+                            {% set slotallocated = slotallocated|merge([3]) %}
+                        {% elseif adCount== 10  and (recommendedSlotResult[4] is defined and recommendedSlotResult[4]|length >0) %}
+                            {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 4 }) }}
+                            {% set slotallocated = slotallocated|merge([4]) %}
+                        {% elseif adCount== 13  and (recommendedSlotResult[5] is defined and recommendedSlotResult[5]|length >0) %}
+                            {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 5 }) }}
+                            {% set slotallocated = slotallocated|merge([5]) %}
+                        {% elseif adCount== 16  and (recommendedSlotResult[6] is defined and recommendedSlotResult[6]|length >0) %}
+                            {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 6 }) }}
+                            {% set slotallocated = slotallocated|merge([6]) %}
+                        {% elseif adCount== 18  and (recommendedSlotResult[7] is defined and recommendedSlotResult[7]|length >0) %}
+                            {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 7 }) }}
+                            {% set slotallocated = slotallocated|merge([7]) %}
+                        {% elseif adCount== 20  and (recommendedSlotResult[8] is defined and recommendedSlotResult[8]|length >0) %}
+                            {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 8 }) }}
+                            {% set slotallocated = slotallocated|merge([8]) %}
+                        {% endif %}
+                    {% endif %}
+
+                    {% if businessExposureUsersDetails is defined and businessExposureUsersDetails|length > 0 and resultCount > 0  %}
+                        {% if (adCount == 5 or adCount == 15) and businessExposureUsersDetails is defined and  businessExposureUsersDetails|length > 0 %}
+                            {{ include('FaAdBundle:AdList:businessExposureSliderBlockNew.html.twig', {'blockposition': adCount }) }}
+                        {% endif %}
+                        {% if adCount == 10 and businessExposureUsersDetailsWithoutAd is defined and  businessExposureUsersDetailsWithoutAd|length > 0 %}
+                            {{ include('FaAdBundle:AdList:businessExposureSingleBlockNew.html.twig') }}
+                        {% endif %}
+                    {% endif %}
+
+                    {{ include('FaAdBundle:AdList:listDetailNew.html.twig') }}
+                {% endfor %}
+
+                {% if pagination.getNbPages() == pagination.getCurrentPage() %}
+                    {% set toPage = pagination.getNbResults() %}
+                {% else %}
+                    {% set toPage = pagination.getCurrentPage() * pagination.getMaxPerPage() %}
+                {% endif %}
+                {% set fromPage = 0 %}
+                {% if pagination.getNbResults() %}
+                    {% set fromPage = ((pagination.getCurrentPage() - 1) * pagination.getMaxPerPage()) %}
+                {% endif %}
+                {% set totalAdsOnPage = (toPage - fromPage) %}
+
+                <span id="createAlertBlockSpan">
+                    {{ include('FaAdBundle:AdList:createAlertBlock.html.twig', {'form':createAlertBlock.form}) }}
+                </span>
+
+                <div class="pagination-centered">
+                    {{ include('FaFrontendBundle:Default:googlePager.html.twig', {'pagination': pagination, 'addToEndPage': 1, 'seoPager': true}) }}
+                </div>
+
+                {% if (adCount > 3) %}
+                    {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_RESULTS') %}
+                    {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+
+                    {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_BELOW_RESULTS') %}
+                    {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                {% endif %}
+
+                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_PAGINATION_DESKTOP') %}
+                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+
+                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_PAGINATION_TABLET') %}
+                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+
+                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_PAGINATION_MOBILE') %}
+                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+            </div>
+            <div class="right-banner">
+                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_RIGHT') %}
+                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+    {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) or (seoFields|length and seoFields['popular_search'] is defined and seoFields['popular_search'] and seoFields['seo_tool_id'] is defined and seoFields['seo_tool_id']) %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    {% endif %}
+    {{ include('FaAdBundle:AdList:leftSearchJs.html.twig') }}
+    {{ include('FaAdBundle:AdList:listJsNew.html.twig', {'searchParams' : searchParams}) }}
+    {#{{ include('FaAdBundle:Ad:upgradeJs.html.twig', {'paymentTransactionJs' : paymentTransactionJs }) }}#}
+
+    {% set catSrchText = null %}
+    {% if get_variables('SrchCatDetails') is not null and get_variables('SrchCatDetails').catSrchString is defined %}
+        {% set catSrchText = get_variables('SrchCatDetails').catSrchString %}
+    {% endif %}
+    <script language="javascript" type="text/javascript">
+        //<![CDATA[
+        $('#fa_left_search_new_item__category_id').val({{ searchParams.item__category_id }})
+        let href = window.location.href;
+        if (href.indexOf('?') == -1) {
+            $('.map-view').attr('href', href + '?map=1');
+        } else {
+            $('.map-view').attr('href', href + '&map=1');
+        }
+
+        $(document).on("click", '.unsaved-item', function(event) {
+            ga('send', 'event', 'Top Widget', 'Like');
+        });
+
+        $(document).on("click", '.saved-item', function(event) {
+            ga('send', 'event', 'Top Widget', 'Unlike');
+        });
+
+        {% if userLiveBasicAd is defined and userLiveBasicAd and userLiveBasicAd|length %}
+        ga('send', 'event', 'Search Results', 'Upgrade', 'View', { nonInteraction: true });
+        {% endif %}
+
+        {% if successPaymentModalbox is defined and successPaymentModalbox %}
+        $('#upgradeSuccessPaymentModal').foundation('reveal', 'open');
+        {% endif %}
+
+        $(window).scroll(function () {
+            if ($("#banner_placeholder_2_4").length) {
+                var rightBannerOffset = $(".right-banner").offset().top;
+                var rightBannerPos = rightBannerOffset - $(window).scrollTop();
+
+                if (rightBannerPos < 0) {
+                    $("#banner_placeholder_2_4").addClass("fixed-banner");
+                } else if (rightBannerPos > 0) {
+                    $("#banner_placeholder_2_4").removeClass("fixed-banner");
+                }
+
+                var footerOffset = $("#footer_tag").offset().top;
+                var footerPos = footerOffset - $(window).scrollTop();
+
+                if (parseInt(footerPos) <= 630) {
+                    $("#banner_placeholder_2_4").removeClass("fixed-banner");
+                }
+            }
+        });
+
+        function visitUserProfileOrAd(eventCategory, eventAction, eventLabel) {
+            window.dataLayer = window.dataLayer || []
+            dataLayer.push({
+                'event' : 'Position',
+                'eventCategory':  eventCategory,
+                'eventAction': eventAction,
+                'eventLabel': eventLabel
+            });
+            ga('send', 'event', eventCategory, eventAction, eventLabel);
+        }
+
+        function gaSendForRecommendedSlotSearch(url, domain, title,slotindex,creativeOrd) {
+            ga('send', 'event', 'Search List Page', 'Recommended external ads', 'Slot'+slotindex + "-Creative"+ creativeOrd +"-{{ catSrchText|trim('-') }}-" + domain + "-" + title);
+            window.open(url, '_blank');
+        }
+
+        //]]>
+    </script>
+    <!-- Google TAG Manager Start -->
+    {# Location @Jigar Lad #}
+    {% if cookieLocationDetails.town_id is defined and cookieLocationDetails.town_id is not null %}
+        {# Location and Group @Jigar Lad #}
+        {% set locationReposetry = fetch_repository('FaEntityBundle:Location') %}
+        {% set town = locationReposetry.find(cookieLocationDetails.town_id)%}
+        {% set country = locationReposetry.getCountyByTownId(cookieLocationDetails.town_id)%}
+        {% set locationGroupReposetry = fetch_repository('FaEntityBundle:LocationGroup') %}
+        {% set locationGroup = locationGroupReposetry.getLocationGroupByLocation(cookieLocationDetails.town_id)%}
+    {% else %}
+        {% set town = ''%}
+        {% set country = 'UK' %}
+        {% set locationGroup = '' %}
+    {% endif %}
+
+    <script>
+        if (performance.navigation.type == 1) {
+            var searchResultMethod = 'Refresh';
+        } else {
+            {% if (app.request.headers.get('referer') is null) or (app.request.headers.get('referer') == '') %}
+            var searchResultMethod = 'Landed';
+            {% else %}
+            {% set urlEnd = app.request.headers.get('referer')|split('/')|slice(0,-1)|last|split('-') %}
+            {% if ('page' not in urlEnd) and (urlEnd|length > 2) %}
+            var searchResultMethod = 'Ad Details';
+            {% elseif app.request.get('keywords') is defined and app.request.get('keywords') is not null %}
+            var searchResultMethod = 'Site Search';
+            {% elseif app.request.get('cat_full_slug') is defined %}
+            var searchResultMethod = 'Category Click';
+            {% else %}
+            var searchResultMethod = 'Other';
+            {% endif %}
+            {% endif %}
+        }
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({
+            "searchResults":{
+                "county": '{{ country }}',
+                "town": "{{ (cookieLocationDetails.town  is defined ? cookieLocationDetails.town : '')|raw }}",
+                "locationGroup": "{{ (locationGroup.name is defined ? locationGroup.name : locationGroup)|raw }}",
+                "searchKeyword": '{{ app.request.get('keywords')|raw }}',
+                "searchResultMethod": searchResultMethod, //described below
+                "noOfResults": {{resultCount}},
+                "radius": '{{ searchParams.item__distance is defined ? searchParams.item__distance : 'default' }}',
+                "popularSearch": {{ seoFields.popular_search is defined ? 'true' : 'false' }}
+            }
+        });
+    </script>
+    <!-- Google TAG Manager End -->
+{% endblock %}
+
+{% block pushNotification %}
+    {% if paymentTransactionJs['ga_transaction'] is defined and paymentTransactionJs['ga_transaction'].PAYMENT_ID is defined %}
+        OneSignal.push(["sendTags", {'PAA_process': 'ad_placed'}]);
+    {% endif %}
+{% endblock %}

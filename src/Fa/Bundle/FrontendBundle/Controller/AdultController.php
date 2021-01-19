@@ -168,9 +168,9 @@ class AdultController extends ThirdPartyLoginController
         $featureAds  = $this->getAdultFeatureAds($request, $cookieLocationDetails);
 
         $seoFields = [];
-        $seoPageRules = $seoToolRepository->getSeoRulesKeyValueArray(SeoToolRepository::HOME_PAGE, $this->container);
-        if (! empty($seoPageRules[SeoToolRepository::HOME_PAGE.'_global'])) {
-            $seoPageRule = $seoPageRules[SeoToolRepository::HOME_PAGE.'_global'];
+        $seoPageRules = $seoToolRepository->getSeoRulesKeyValueArray(SeoToolRepository::ADULT_HOME_PAGE, $this->container);
+        if (! empty($seoPageRules[SeoToolRepository::ADULT_HOME_PAGE.'_global'])) {
+            $seoPageRule = $seoPageRules[SeoToolRepository::ADULT_HOME_PAGE.'_global'];
             if (! empty($seoPageRule)) {
                 $seoManager = $this->container->get('fa.seo.manager');
                 $seoFields = CommonManager::getSeoFields($seoPageRule);
@@ -180,7 +180,7 @@ class AdultController extends ThirdPartyLoginController
             }
         }
 
-        $locationId = '';
+        $locationId = LocationRepository::COUNTY_ID;
         if (! empty($cookieLocationDetails) && ! empty($cookieLocationDetails['location'])) {
             $locationId = $cookieLocationDetails['location'];
         }
@@ -211,7 +211,8 @@ class AdultController extends ThirdPartyLoginController
             'topSearchForm' => $this->getTopSearchForm($request),
             'adultCategories' => $adultCategories['values'],
             'adultCategoriesConstants' => $adultCategories['constants'],
-            'locationId' => $locationId
+            'locationId' => $locationId,
+            'cookieLocationDetails' => $cookieLocationDetails
         );
         return $this->renderWithTwigParameters('FaFrontendBundle:Adult:indexNew.html.twig', $parameters, $request);
     }
@@ -227,7 +228,6 @@ class AdultController extends ThirdPartyLoginController
     {
         $categories = $constants = [];
         $adRoutingManager = $this->container->get('fa_ad.manager.ad_routing');
-
         $constants = [
             'categoryAdultId'       => CategoryRepository::ADULT_ID,
             'escortServicesId'      => CategoryRepository::ESCORT_SERVICES_ID
@@ -511,7 +511,7 @@ class AdultController extends ThirdPartyLoginController
                             'status_id' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID] : null),
                             'user_name' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME] : null),
                             'profile_url' => $adRoutingManager->getProfilePageUrl($businessExposureUser[UserShopDetailSolrFieldMapping::ID]),
-                            'user_logo' => CommonManager::getUserLogo($this->container, $businessExposureUser[UserShopDetailSolrFieldMapping::USER_COMPANY_LOGO_PATH], $businessExposureUser[UserShopDetailSolrFieldMapping::ID], null, null, true, true, $businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID], $businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME])
+                            'user_logo' => CommonManager::getCustomUserLogo($this->container, $businessExposureUser[UserShopDetailSolrFieldMapping::USER_COMPANY_LOGO_PATH], $businessExposureUser[UserShopDetailSolrFieldMapping::ID], null, null, true, true, $businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID], $businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME])
                         );
                     }
                 }
@@ -742,7 +742,11 @@ class AdultController extends ThirdPartyLoginController
         $solrSearchManager = $this->get('fa.solrsearch.manager');
         $solrSearchManager->init('ad', $keywords, $data, $page, $recordsPerPage);
         if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['latitude']) && isset($cookieLocationDetails['longitude'])) {
-            $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocationDetails['latitude'].', '.$cookieLocationDetails['longitude']);
+            if ($location) {
+                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocationDetails['latitude'] . ',' . $cookieLocationDetails['longitude'], 'd' => $distanceRange);
+            } else {
+                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocationDetails['latitude'].','.$cookieLocationDetails['longitude']);
+            }
             $solrSearchManager->setGeoDistQuery($geoDistParams);
         }
         $solrResponse = $solrSearchManager->getSolrResponse();
@@ -961,8 +965,9 @@ class AdultController extends ThirdPartyLoginController
         }
 
         $location = $request->get('location');
+        $distance = $request->get('distance');
         $locationDetails = $this->getRepository('FaEntityBundle:Location')->getLocationDetailForHeaderCategories($this->container, $request, $location);
-        $parameters['headerCategories'] = $this->getRepository('FaEntityBundle:Category')->getAdultHeaderCategories($this->container, $locationDetails);
+        $parameters['headerCategories'] = $this->getRepository('FaEntityBundle:Category')->getAdultHeaderCategories($this->container, $locationDetails, $distance);
         $parameters['footerDetails'] = $this->getAdultFooterCategories();
         $parameters['footerStaticBlock'] = $this->getAdultFooterStaticBlock($request);
 

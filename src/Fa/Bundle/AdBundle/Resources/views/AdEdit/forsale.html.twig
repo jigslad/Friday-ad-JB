@@ -18,6 +18,20 @@
 {% use "FaCoreBundle:GoogleMap:renderLocationUsingCircle.html.twig" %}
 
 {% block body -%}
+
+    <style>
+        .error {
+            font-weight: normal;
+            background: transparent;
+            margin-top: 10px;
+            font-family: "Helvetica Neue",Arial;
+            font-size: 12px;
+            font-style: normal;
+            padding-left: 0;
+            color: #f74d4d;
+            line-height: 15px;
+        }
+    </style>
     <div class="posting-bg">
         {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
         <div class="row d-board-main">
@@ -49,7 +63,7 @@
                                         {{ include('FaAdBundle:AdEdit:forsaleFields.html.twig') }}
                                     {% endif %}
                                     <div class="small-wrapper">
-                                        {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand'}}) }}
+                                        {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 paa-next-btn expand'}}) }}
                                     </div>
                                 {{ form_end(form) }}
                             </div>
@@ -239,19 +253,20 @@
                       if (isPaypalVerifiedEmail) {
                           $('#paypal_email_verify_status').addClass('success-icon');
                           $('#paypal_email_verify_status').show('inline-block');
+                          $('#paypal_err_id').html("");
                           $('#fa_paa_edit_for_sale_paypal_email, #fa_paa_edit_for_sale_paypal_first_name, #fa_paa_edit_for_sale_paypal_last_name').removeClass('error');
                       } else {
                           $('#paypal_email_verify_status').addClass('error-icon');
                           if ($('#fa_paa_edit_for_sale_paypal_email').is(':visible') && $('#fa_paa_edit_for_sale_paypal_email').val().length) {
                               if (showMessage) {
                                   $('#fa_paa_edit_for_sale_paypal_email, #fa_paa_edit_for_sale_paypal_first_name, #fa_paa_edit_for_sale_paypal_last_name').addClass('error');
-                                  $("<small class='error'>{{'Paypal account is not verified.'|trans({}, 'frontend-ad-edit')}}</small>").insertBefore('#paypal_text_id');
+                                  $('#paypal_err_id').html("<div class='text-center'><p class='mt20'><div id='paa_paypal_mail_tips'>{{'This PayPal account is not verified.'|trans({}, 'frontend-paa-fourth-step')}} <div class='image-tooltip-wrapper'><span class='image-tooltip'>{{ 'Friday-Ad cares about the security of our sellers and buyers. To protect you we ask that you provide details for a verified PayPal account. You can find out more'|trans({}, 'frontend-paa-fourth-step')}} <a href='https://www.paypal.com/uk/smarthelp/article/how-do-i-verify-my-paypal-account-faq444' target='_blank' style='color:#a8dc28'>{{ 'here' }}</a></span><span><a style='color: #f74d4d;'><u>{{ 'What does this mean?' }}</u></a></span></div></div></p></div>");
                                   $('#paypal_email_verify_status').show('inline-block');
                               }
                           } else {
                               if (showMessage) {
                                   $('#fa_paa_edit_for_sale_paypal_email, #fa_paa_edit_for_sale_paypal_first_name, #fa_paa_edit_for_sale_paypal_last_name').addClass('error');
-                                  $("<small class='error'>{{'Paypal account is not verified.'|trans({}, 'frontend-ad-edit')}}</small>").insertBefore('#paypal_text_id');
+                                  $('#paypal_err_id').html("<div class='text-center'><p class='mt20'><div id='paa_paypal_mail_tips'>{{'This PayPal account is not verified.'|trans({}, 'frontend-paa-fourth-step')}} <div class='image-tooltip-wrapper'><span class='image-tooltip'>{{ 'Friday-Ad cares about the security of our sellers and buyers. To protect you we ask that you provide details for a verified PayPal account. You can find out more'|trans({}, 'frontend-paa-fourth-step')}} <a href='https://www.paypal.com/uk/smarthelp/article/how-do-i-verify-my-paypal-account-faq444' target='_blank' style='color:#a8dc28'>{{ 'here' }}</a></span><span><a style='color: #f74d4d;'><u>{{ 'What does this mean?' }}</u></a></span></div></div></p></div>");
                                   $('#paypal_email_verify_status').show('inline-block');
                               }
                           }
@@ -259,6 +274,7 @@
                    } else {
                        $('#paypal_section_id').hide();
                        $("#paypal_text_id").prev('small').remove();
+                       $('#paypal_err_id').html("");
                        $('#paypal_email_verify_status').hide();
                        $('#fa_paa_edit_for_sale_paypal_email, #fa_paa_edit_for_sale_paypal_first_name, #fa_paa_edit_for_sale_paypal_last_name').removeClass('error');
                    }

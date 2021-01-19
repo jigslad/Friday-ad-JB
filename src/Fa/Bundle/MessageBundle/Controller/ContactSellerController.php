@@ -64,7 +64,7 @@ class ContactSellerController extends CoreController
                     //check for own ad.
                     $loggedInUser = $this->getLoggedInUser();
                     if ($loggedInUser->getId() == $adUserId) {
-                        $error = $this->get('translator')->trans('You can not contact for your own ad.', array(), 'frontend-show-ad');
+                        $error = $this->get('translator')->trans('Sorry, it looks like you’re trying to enquire on your own advert!', array(), 'frontend-show-ad');
                         $this->getRepository('FaUserBundle:User')->removeUserCookies();
                     }
                 }
@@ -90,6 +90,7 @@ class ContactSellerController extends CoreController
                                     );
                                     $halfAccountForm = $formManager->createForm(UserHalfAccountType::class, null, array('method' => 'POST'));
                                     $halfAccountForm->submit($halfAccountData);
+                                    $this->getEntityManager()->flush();sleep(5);
                                     $loggedInUser = $this->getRepository('FaUserBundle:User')->findOneBy(array('email' => $form->get('sender_email')->getData()));
                                     if(!$loggedInUser){
                                         $error = $this->get('translator')->trans('Unable to find user.', array(), 'frontend-show-ad');
@@ -99,7 +100,7 @@ class ContactSellerController extends CoreController
                                     $error = $this->get('translator')->trans('Your account was blocked.', array(), 'frontend-show-ad');
                                 }
                                 elseif ($loggedInUser->getId() == $adUserId) {
-                                    $error = $this->get('translator')->trans('You can not contact for your own ad.', array(), 'frontend-show-ad');
+                                    $error = $this->get('translator')->trans('Sorry, it looks like you’re trying to enquire on your own advert!', array(), 'frontend-show-ad');
                                 }
                                 else{
                                     $this->container->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('Please log in to your account to send the message.', array(), 'frontend-show-ad'));

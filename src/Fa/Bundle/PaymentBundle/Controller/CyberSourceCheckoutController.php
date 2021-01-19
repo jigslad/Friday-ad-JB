@@ -74,6 +74,10 @@ class CyberSourceCheckoutController extends CoreController
         $form        = $formManager->createForm(CyberSourceCheckoutType::class, array('subscription' => $request->get('subscription')));
         $gaStr       = '';
 
+        $expire = date('D, d M Y H:i:s', time() + (86400 * 180)); // 3 months from now
+        header("Set-cookie: PHPSESSID=".$request->cookies->get('PHPSESSID')."; expires=".$expire."; path=/; HttpOnly; SameSite=None; Secure");
+
+
         if ('POST' === $request->getMethod() || $this->container->get('session')->has('upgrade_cybersource_params_'.$loggedinUser->getId())) {
             if ($cybersource3DSecureResponseFlag) {
 //                 $csrfToken     = $this->container->get('form.csrf_provider')->generateCsrfToken('fa_payment_cyber_source_checkout');

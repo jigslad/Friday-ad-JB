@@ -70,6 +70,12 @@ EOF
                 $solr = $solrClient->connect();
                 $solr->optimize();
             }
+
+            $solrClientNew = $this->getContainer()->get('fa.solr.client.ad.new');
+            if ($solrClientNew->ping()) {
+                $solrNew = $solrClientNew->connect();
+                $solrNew->optimize();
+            }
         } catch (\Exception $e) {
             echo $e->getMessage();
             $output->writeln('Error occurred during subtask', true);
