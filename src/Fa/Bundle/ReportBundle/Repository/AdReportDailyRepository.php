@@ -243,6 +243,9 @@ class AdReportDailyRepository extends EntityRepository
             $qb->andWhere("regexp(".self::ALIAS.".print_edition_ids, '".$pattern."') != false");*/
             $qb->andWhere(AdPrintInsertDateReportDailyRepository::ALIAS . '.print_edition_id = ' . $searchParams['print_edition_id']);
         }
+        if(isset($searchParams['report_columns']['print_edition_ids'])){
+            $qb->andWhere(self::ALIAS . '.id = '.AdPrintInsertDateReportDailyRepository::ALIAS . '.ad_report_daily_id ');
+        }
 
         // sorting.
         if ($sorter['sort_field'] == 'ad_report_daily__id') {
