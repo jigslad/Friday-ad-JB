@@ -1011,6 +1011,7 @@ class AdListController extends CoreController
         $result      = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponse);
         $resultCount = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($solrResponse);
         $facetResult = $this->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
+        $facetData = $data;
 
         $defaultRadiusPageCount = ($page==0)?1:ceil($resultCount/$recordsPerPage);
         $defaultRadiusLastPageCount = ($resultCount%$recordsPerPage);
@@ -1307,7 +1308,7 @@ class AdListController extends CoreController
             'recommendedSlotLimit'  => $this->getRepository('FaCoreBundle:Config')->getSponsoredLimit(),
             'pagination'            => $pagination,
             'adFavouriteIds'        => $adFavouriteIds,
-            'leftFilters'           => $this->getLeftFilters($category, $root, $facetResult, $resultCount, $searchableDimensions, $findersSearchParams, $data, $extendedFacetResult),
+            'leftFilters'           => $this->getLeftFilters($category, $root, $facetResult, $resultCount, $searchableDimensions, $findersSearchParams, $data, $extendedFacetResult,$facetData),
             'currentLocation'       => $requestlocation,
             'searchParams'          => $findersSearchParams,
             'cookieLocationDetails' => $cookieLocationDetails,
@@ -1643,7 +1644,7 @@ class AdListController extends CoreController
      * @param $extendedFacetResult
      * @return array
      */
-    private function getLeftFilters($categoryObj, $rootCategory, $facetResult, $totalAds, $dimensions, $searchParams, $data, $extendedFacetResult=null)
+    private function getLeftFilters($categoryObj, $rootCategory, $facetResult, $totalAds, $dimensions, $searchParams, $data, $extendedFacetResult=null, $facetData)
     {
         $params = [];
         foreach ($searchParams as $dimensionSlug => $searchParam) {
@@ -1704,7 +1705,7 @@ class AdListController extends CoreController
         $keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: NULL;
 
         if (isset($params['is_trade_ad'])) {
-            $newData = $data;
+            $newData = $facetData;
             if ($newData['static_filters']) {
                 $staticFilters = explode(' AND ', $newData['static_filters']);
                 $newStaticFilters = '';
