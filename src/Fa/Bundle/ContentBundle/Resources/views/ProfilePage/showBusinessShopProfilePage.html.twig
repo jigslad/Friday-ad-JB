@@ -74,7 +74,7 @@
 {% endblock %}
 
 {% block body %}
-<style>.about-shop .other-pro-location { margin:10px 0px !important; }.bus-name-head { line-height:38px !important; }</style>
+    {{ include('FaContentBundle:ProfilePage:showBusinessShopProfilePage-css.html.twig') }}
 {{ include('FaContentBundle:ProfilePage:shopHeader.html.twig') }}
 <div class="shops-main">
     <div class="row" id="profile_main_div">
@@ -127,8 +127,8 @@
                             {% endif %}
                         </div>
                         <div id="business_about_us_div">
-                        	 {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [userDetail['about_us'], 'hide']) %}
-                             {% set adDescWithReplacedPhoneAndEmail = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [userDetail['id'], adDescWithReplacedPhone, 'hide']) %}
+                        	 {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [userDetail['about_us'], 'hide','Profile']) %}
+                             {% set adDescWithReplacedPhoneAndEmail = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [userDetail['id'], adDescWithReplacedPhone, 'hide','Profile']) %}
                              {{ adDescWithReplacedPhoneAndEmail|raw }}
                         </div>
                     </div>
@@ -174,8 +174,8 @@
                             {% endif %}
                         </div>
                         <div id="business_about_us_div">
-                         {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [userDetail['about_us'], 'hide']) %}
-                         {% set adDescWithReplacedPhoneAndEmail = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [userDetail['id'], adDescWithReplacedPhone, 'hide']) %}
+                         {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [userDetail['about_us'], 'hide','Profile']) %}
+                         {% set adDescWithReplacedPhoneAndEmail = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [userDetail['id'], adDescWithReplacedPhone, 'hide','Profile']) %}
                             {{ adDescWithReplacedPhoneAndEmail|raw }}
                         </div>
                     </div>
@@ -222,7 +222,7 @@
                 <div class="text-center">{{'Or choose from the options below'|trans({}, 'frontend-my-profile')}}</div>
                 <ul class="cover-img-thumbs clearfix">
                     {% for userSiteBannerOtherImage in userSiteBannerOtherImages%}
-                        <li><a href="javascript:void(0);" onclick="return changeBanner('{{ userSiteBannerOtherImage.getId() }}');"><img src="{{ shared_url(userSiteBannerOtherImage.getPath()~'/'~userSiteBannerOtherImage.getFilename()|replace({'.png':''})~'_68x55.jpg') }}" alt="" /></a></li>
+                        <li><a href="javascript:void(0);" onclick="return changeBanner('{{ userSiteBannerOtherImage.getId() }}');"><img src="{{ image_url(userSiteBannerOtherImage.getPath()~'/'~userSiteBannerOtherImage.getFilename()|replace({'.png':''})~'_68x55.jpg') }}" alt="" /></a></li>
                     {% endfor %}
                 </ul>
             </div>

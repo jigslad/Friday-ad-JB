@@ -333,8 +333,8 @@ class MyProfileController extends CoreController
                         $userSite = $formManager->save($userSite);
                         $userDetail = array();
                         $userDetail['about_us'] = $userSite->getAboutUs();
-                        $adDescWithReplacedPhone = CommonManager::hideOrRemovePhoneNumber($userDetail['about_us'], 'hide');
-                        $adDescWithReplacedPhoneAndEmail = CommonManager::hideOrRemoveEmail($userSite->getId(), $adDescWithReplacedPhone, 'hide');
+                        $adDescWithReplacedPhone = CommonManager::hideOrRemovePhoneNumber($userDetail['about_us'], 'hide','Profile');
+                        $adDescWithReplacedPhoneAndEmail = CommonManager::hideOrRemoveEmail($userSite->getId(), $adDescWithReplacedPhone, 'hide','Profile');
                         $successContent = $adDescWithReplacedPhoneAndEmail;
                     } elseif ($request->isXmlHttpRequest()) {
                         $htmlContent = $this->renderView('FaUserBundle:MyProfile:ajaxEditAboutUs.html.twig', array('form' => $form->createView()));
@@ -471,7 +471,33 @@ class MyProfileController extends CoreController
                             $userDetail['latitude'] = $userSite->getUser()->getLocationTown()->getLatitude();
                             $userDetail['longitude'] = $userSite->getUser()->getLocationTown()->getLongitude();
                         }
+                        
+                        
+                        $showAdultMapMarker = 0;
+                        
+                        if ($userDetail['business_category_id'] !='') {
+                            $categoryPath = $this->getEntityManager()->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($userDetail["business_category_id"], false, $this->container);
+                            $catCnt = 0;
+                            if (!empty($categoryPath)) {
+                                foreach ($categoryPath as $categoryId => $categoryName) {
+                                    if ($catCnt == 0) {
+                                        if ($categoryId == CategoryRepository::ADULT_ID)  {
+                                            $showAdultMapMarker = 1;
+                                        }
+                                    }
+                                    $catCnt = $catCnt + 1;
+                                }
+                            }
+                        }
+                        
+                        if ($showAdultMapMarker==1) {  
+                            $userDetail['markerUrl'] = $this->container->getParameter('fa.static.url').'/fafrontend/images/adul-map-marker.svg';
+                        } else {
+                            $userDetail['markerUrl'] = $this->container->getParameter('fa.static.url').'/fafrontend/images/map-marker.png';
+                        }
+                        
                         $mapContent = $this->renderView('FaContentBundle:ProfilePage:showMap.html.twig', array('userDetail' => $userDetail, 'allowProfileEdit' => true));
+
                         $successContent = $this->renderView('FaContentBundle:ProfilePage:shopLocationDetail.html.twig', array('userDetail' => $userDetail, 'allowProfileEdit' => true, 'entityCacheManager' => $this->container->get('fa.entity.cache.manager')));
                     } elseif ($request->isXmlHttpRequest()) {
                         $htmlContent = $this->renderView('FaUserBundle:MyProfile:ajaxEditLocation.html.twig', array('form' => $form->createView()));

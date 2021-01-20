@@ -260,6 +260,13 @@ class AdPostType extends AbstractType
         } else {
             $fieldOptions['required'] = false;
         }
+
+        if ($paaFieldRule['hide_field']) {
+            $fieldOptions['attr']['hide_field'] = true;
+        } else {
+            $fieldOptions['attr']['hide_field'] = false;
+        }
+
         $fieldOptions['label']= $paaField['label'];
         $fieldOptions['mapped']= false;
         $fieldOptions['choices'] = array_flip($this->em->getRepository('FaPaymentBundle:Payment')->getPaymentMethodOptionsArray($this->container, $categoryId));
@@ -384,6 +391,13 @@ class AdPostType extends AbstractType
             $fieldOptions['required'] = false;
         }
 
+        if ($paaFieldRule['hide_field']) {
+            $fieldOptions['attr']['hide_field'] = true;
+        } else {
+            $fieldOptions['attr']['hide_field'] = false;
+        }
+
+
         if ($paaFieldRule['min_value'] || $paaFieldRule['max_value']) {
             $lengthOptions = array();
 
@@ -484,6 +498,7 @@ class AdPostType extends AbstractType
             $fieldOptions['placeholder'] = false;
         } elseif ($paaField['field'] == 'ad_type_id') {
             $fieldOptions['data'] = EntityRepository::AD_TYPE_FORSALE_ID;
+            $fieldOptions['attr']['class'] = 'choice-display-flex';
         } elseif ($paaField['field'] == 'delivery_method_option_id') {
             $fieldOptions['choices'] = array_flip($this->em->getRepository('FaPaymentBundle:DeliveryMethodOption')->getDeliveryMethodOptionArray($this->container));
             $fieldOptions['data'] = DeliveryMethodOptionRepository::COLLECTION_ONLY_ID;
@@ -671,6 +686,7 @@ class AdPostType extends AbstractType
                 'attr' => array(
                     'class' => 'fdatepicker',
                     'autocomplete' => 'off',
+                    'hide_field'=>$paaFieldRule['hide_field']
                 )
             );
 
@@ -978,6 +994,11 @@ class AdPostType extends AbstractType
         if (isset($paaFieldRule['placeholder_text']) && $paaFieldRule['placeholder_text']) {
             $fieldOptions['attr']['placeholder'] = $paaFieldRule['placeholder_text'];
         }
+
+        if (isset($paaFieldRule['help_text']) && $paaFieldRule['help_text']) {
+            $fieldOptions['attr']['field-help'] = $paaFieldRule['help_text'];
+        }
+
 
         $form->add('location_autocomplete', TextType::class, $fieldOptions);
         $form->add('location_lat_lng', HiddenType::class, array(

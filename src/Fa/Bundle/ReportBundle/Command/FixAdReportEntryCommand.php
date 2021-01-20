@@ -253,8 +253,8 @@ EOF
      */
     protected function getAdCount()
     {
-        $sql = 'select count(id) as total from '.$this->historyDbName.'.ad_report_daily where print_revenue_gross > 0 AND duration_print = 0;';
-
+        //$sql = 'select count(id) as total from '.$this->historyDbName.'.ad_report_daily where print_revenue_gross > 0 AND duration_print = 0;';
+        $sql = 'select count(id) as total from '.$this->historyDbName.'.ad_report_daily where duration_print = 1;';
         $stmt = $this->entityManager->getConnection()->prepare($sql);
         $stmt->execute();
 
@@ -273,8 +273,8 @@ EOF
      */
     protected function getAdResult($offset, $limit)
     {
-        $sql = 'select ard.id, ard.ad_id, ard.created_at from '.$this->historyDbName.'.ad_report_daily as ard where print_revenue_gross > 0 AND duration_print = 0;';
-
+        //$sql = 'select ard.id, ard.ad_id, ard.created_at from '.$this->historyDbName.'.ad_report_daily as ard where print_revenue_gross > 0 AND duration_print = 0;';
+        $sql = 'select ard.id, ard.ad_id, ard.created_at from '.$this->historyDbName.'.ad_report_daily as ard where duration_print = 1;';
         $stmt = $this->entityManager->getConnection()->prepare($sql);
         $stmt->execute();
 

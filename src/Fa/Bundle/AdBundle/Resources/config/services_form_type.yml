@@ -125,6 +125,12 @@ services:
         tags:
             - { name: form.type, alias: fa_left_search }
 
+    fa_ad.form.type.ad_left_search_new:
+        class: Fa\Bundle\AdBundle\Form\AdLeftSearchNewType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_left_search_new }
+
     fa_ad.form.type.ad_left_search_dimension:
         class: Fa\Bundle\AdBundle\Form\AdLeftSearchDimensionType
         arguments: ['@service_container', '@request_stack']
@@ -460,3 +466,10 @@ services:
         arguments: ['@service_container', '@request_stack']
         tags:
             - { name: form.type, alias: fa_ad_paa_search_keyword_upload_csv_admin }
+
+    fa_ad.form.type.adult_home_page_search:
+        class: Fa\Bundle\AdBundle\Form\AdultHomePageSearchType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_adult_home_page_search }
+

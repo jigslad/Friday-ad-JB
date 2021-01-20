@@ -109,6 +109,10 @@ EOF
                             $this->em->getRepository('FaAdBundle:Ad')->sendExpireTomorrowAlertEmailByUser($user, $this->getContainer());
                             $output->writeln('Renewal email sent for User ID: '.$user->getId(), true);
                             break;
+                        case 'ad_expires_tomorrow_free':
+                            $this->em->getRepository('FaAdBundle:Ad')->sendExpireTomorrowFreeAlertEmailByUser($user, $this->getContainer());
+                            $output->writeln('Renewal email sent for User ID: '.$user->getId(), true);
+                            break;
                         case 'ad_is_expired':
                             $this->em->getRepository('FaAdBundle:Ad')->sendExpirationEmailByUser($user, $this->getContainer());
                             $output->writeln('Expired ads email sent for User ID: '.$user->getId(), true);

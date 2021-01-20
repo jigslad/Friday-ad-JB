@@ -1,3 +1,4 @@
+{{ include('FaUserBundle:Newsletter:footerNewsletter-css.html.twig') }}
 <div class="mb20">
             {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'fa_user_newsletter'}}) }}
                 <div class="mb20 newsletter-head"><span class="newsletter-icon list-icons" style=""></span><label class="footer-head">Subscribe to our <br> newsletter</label></div>
@@ -31,6 +32,7 @@
                             <p>You can easily tailor or unsubscribe from our newsletters at any time by clicking on the links at the bottom of each of our emails. You can also update your preferences and personal information at any time.</p>
                         </div>
                     </div>
+                    <div class="clearfix"></div>
                 </div>
             {{ form_end(form) }}
         </div>

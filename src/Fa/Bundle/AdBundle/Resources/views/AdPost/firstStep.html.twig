@@ -8,6 +8,10 @@
     {{ 'What are you advertising'|trans({}, 'frontend-paa-first-step') }}
 {% endblock %}
 
+{% block meta_description %}
+    {{ 'Place an ad listing on Friday-Ad. It is the fun and free way to sell your things, no fees, no catches. Get your items seen online instantly in a few clicks!'|trans({}, 'frontend-paa-first-step') }}
+{% endblock %}
+
 {% block canonical_url %}
  {{ app.request.uri|replace({('?'~app.request.queryString) : ''}) }}
 {% endblock %}
@@ -27,7 +31,8 @@
 
 {% if showRegNoFieldsFlag %}
     {% set regNoDetailsOrderedFields = {13 : 'colour_id_autocomplete', 0 : 'colour_id', 1 : 'body_type_id', 2 : 'reg_year', 3 : 'fuel_type_id', 4 : 'transmission_id', 5 : 'engine_size', 6 : 'no_of_doors', 7 : 'no_of_seats', 8: 'fuel_economy', 9 : '062mph', 10 : 'top_speed', 11 : 'ncap_rating', 12 : 'co2_emissions', '14': 'colour_id_dimension_id'} %}
-    {% set regNoDetailsHiddenFields = {0: 'fuel_economy', 1 : '062mph', 2 : 'top_speed', 3 : 'ncap_rating', 4 : 'co2_emissions', 5: 'colour_id_dimension_id', 6: 'first_step_ordered_fields'} %}
+    {# {% set regNoDetailsHiddenFields = {0: 'fuel_economy', 1 : '062mph', 2 : 'top_speed', 3 : 'ncap_rating', 4 : 'co2_emissions', 5: 'colour_id_dimension_id', 6: 'first_step_ordered_fields'} %} #}
+    {% set regNoDetailsHiddenFields = {0: 'colour_id_dimension_id', 1: 'first_step_ordered_fields'} %}
 {% endif %}
 
 {% block body %}
@@ -36,14 +41,31 @@
         <div class="row paa-main paa-btm-space" {% if app.user and app.user.getRole() and app.user.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}data-equalizer{% endif %}>
             {{ include('FaAdBundle:AdPost:paaStepsList.html.twig', {'step' : 1}) }}
             <div id="middle-column" class="large-12 columns" data-equalizer-watch>
-                <h1 class="text-center paa-title">{{ 'what are you advertising?'|trans({}, 'frontend-paa-first-step') }}</h1>
+                <h1 class="text-center paa-title">{{ 'What are you advertising?'|trans({}, 'frontend-paa-first-step') }}</h1>
                 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
                 {{ form_errors(form) }}
                 <div class="big-wrapper">
-                    <h2 class="text-center" id="choose_cat_msg">{{ 'choose from all categories'|trans({}, 'frontend-paa-first-step') }}</h2>
-                    <h3 class="text-center mt10" id="redirect_msg" style="display:none">{{ 'please wait…'|trans({}, 'frontend-paa-first-step') }}</h3>
+                    <div class="category-search" id="category_autocomplete_div">
+                        <div class="disable-autocomplete"></div>
+                        <div class="relative text-center">
+                            {#<span id="field_arrow">#}
+                            {#<i class="fi-arrow-right large element-animation"></i>#}
+                            {#<i class="fi-arrow-down large element-animation"></i>#}
+                            {#</span>#}
+                            <span class="textbox-wrapper">
+                                {{ form_row(form.category_id_autocomplete,{'attr':{'autofocus': true}}) }}
+                                <a href="javascript:void(0);" id="fa_paa_category_select_category_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                            </span>
+                            <span id="category_id_autocomplete_error" class="error" style="display:none">No matching categories found. Try a different search or use the category icons to navigate to find your category.</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="big-wrapper">
+                    <h2 class="text-center" >{{ 'OR'|trans({}, 'frontend-paa-first-step') }}</h2>
+                    <h2 class="text-center" id="choose_cat_msg">{{ 'Choose from all categories'|trans({}, 'frontend-paa-first-step') }}</h2>
+                    <h3 class="text-center mt10" id="redirect_msg" style="display:none">{{ 'please wait…'|trans({}, 'frontend-paa-first-step') }}</h3>
+                </div>
+                <div class="choose-list">
                     <div class="choose-all-categories">
                         {% set categories = fetch_repository('FaEntityBundle:Category').getCategoryByLevelArray(1, fetch_container_instance()) %}
                         {% for categoryId, categoryName in categories %}
@@ -115,6 +137,9 @@
                                     <div id="category_choice_div_{{ i }}" class="category_choice_div">
                                         {% set field = 'category_' ~ i %}
                                         {{ form_widget(attribute(form, field)) }}
+                                        <div id="category_choice_div_selected_{{ i }}" class="category_choice_div_selected_div">
+                                            <span class="tickmark-icon right hide-for-small-only">&nbsp;</span>
+                                        </div>
                                     </div>
                                 {% endfor %}
                             </div>
@@ -122,9 +147,9 @@
                     {% endif %}
     </div>
     <div class="small-wrapper">
-      {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand button disabled'}}) }}
+      {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 paa-next-btn expand button disabled'}}) }}
     </div>
-    <div class="big-wrapper">
+    {#<div class="big-wrapper">
       <h2 class="text-center" id="or_msg">{{ 'OR'|trans({}, 'frontend-paa-first-step') }}</h2>
       <h2 class="text-center subtitle">{{ 'Tell us what it is and we\'ll help you find the category'|trans({}, 'frontend-paa-first-step') }}</h2>
       <div class="category-search" id="category_autocomplete_div">
@@ -141,7 +166,7 @@
               <span id="category_id_autocomplete_error" class="error" style="display:none">No matching categories found. Try a different search or use the category icons to navigate to find your category.</span>
           </div>
       </div>
-    </div>
+    </div>#}
    
     {{ form_end(form) }}
   </div>
@@ -171,13 +196,15 @@
     var autoCompleteCategoryName = '';
 
     $(document).ready(function(){
-      bindCustomRadioEvent();
-      {% if (objDraftAd is defined and objDraftAd is not null and not app.request.cookies.has('draft_ad_popup')) %}
-        openDraftAdPopup();
-      {% endif %}
+        $('#fa_paa_category_select_save').hide();
+        bindCustomRadioEvent();
+          {% if (objDraftAd is defined and objDraftAd is not null and not app.request.cookies.has('draft_ad_popup')) %}
+            openDraftAdPopup();
+          {% endif %}
         $('.category_choice_div').hide();
+        $('.category_choice_div_selected_div').hide();
         enableDisableNextBtn();
-       // showCategoryFieldArrow();
+        // showCategoryFieldArrow();
         // Remove selected auto complete category when category changed from choice field
         $('.category').change(function(e) {
            //$('#fa_paa_category_select_colour_id_dimension_id').remove();
@@ -195,8 +222,9 @@
                }
            } else {
                $("#category_choices_div").prependTo("#main_div");
+               $('#category_choice_div_selected_' + (nextLevel-1)).show();
            }
-
+           $('#category_choice_div_selected_' + nextLevel).hide();
            resetCategoryAutocompleteField();
            loadCategoryByLevel($(this).val(), nextLevel);
            if (level == 2 && $.inArray( parseInt($(this).val()), regNoFieldCategoryIds) != -1) {
@@ -228,8 +256,15 @@
              if ($("#fa_paa_category_select_has_reg_no > .checked >").val() == '0') {
                eventLabel = eventLabel + ' - No';
              }
+                window.dataLayer = window.dataLayer || []
+                dataLayer.push({
 
-             ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
+                   'event' : 'PAA Category Selection',
+                   'eventCategory':  'PAA - Step 1',
+                   'eventAction': 'Category icon click',
+                   'eventLabel': eventLabel
+                });
+                ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
            }
            //GA Analytics code end
         });
@@ -260,7 +295,13 @@
               if ($("#fa_paa_category_select_has_reg_no > .checked >").val() == '0') {
                 eventLabel = eventLabel + ' - No';
               }
-
+                window.dataLayer = window.dataLayer || []
+                dataLayer.push({
+                    'event' : 'PAA Next Step',
+                    'eventCategory':  'Next Step',
+                    'eventAction': '',
+                    'eventLabel': category_id
+                });
               ga('send', 'event', 'PAA - Step 1', 'Category icon Next step', eventLabel);
             }
             //GA Analytics code end
@@ -289,6 +330,7 @@
                 if (catLevel == 2 && $.inArray( parseInt(catArray[1]), regNoFieldCategoryIds) != -1 && '{{app.request.get('is_edit')}}' != '1') {
                   loadCategoryByLevel('{{key}}', (catLevel + 1), catArray[catLevel]);
                   $('#category_choice_div_' + (catLevel+1)).hide();
+                  $('#category_choice_div_selected_' + (catLevel-1)).hide();
                   getMotorsRegNoFields(catArray[1], false);
                 } else if (catArray[catLevel] !== 'undefined') {
                   loadCategoryByLevel('{{key}}', (catLevel + 1), catArray[catLevel]);
@@ -316,6 +358,14 @@
                    regLookupResult = ' - Lookup unsuccessful || '+regNo;
                  }
                  var eventLabel = categoryPath + regLookupResult;
+                 window.dataLayer = window.dataLayer || []
+                 dataLayer.push({
+
+                     'event' : 'PAA Category Selection',
+                     'eventCategory':  'PAA - Step 1',
+                     'eventAction': 'Category icon click',
+                     'eventLabel': eventLabel
+                 });
                  ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
                  //GA Analytics code end
              });
@@ -371,6 +421,7 @@
                     if (data.length > 0) {
                         lastLevel = level;
                         $('#category_choice_div_' + level).show();
+                        $('#category_choice_div_selected_' + (level-1)).show();
                         $(category_selector).show();
                         for (var i=0, total = data.length; i < total; i++) {
                             category_selector.append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
@@ -378,6 +429,7 @@
 
                         if (selectCat !== undefined && selectCat != '') {
                           $(category_selector).val(selectCat);
+                          $('#category_choice_div_selected_' + (level)).show();
                         }
                     } else {
                         lastLevel = parseInt(level) - 1;
@@ -425,7 +477,8 @@
     function changeMainCategory(categoryId, selectedValue, removeRegNo)
     {
         $("#category_choices_div").prependTo("#main_div");
-        
+        $('.category_choice_div_selected_div').hide();
+
         if ($('#maincategory_' + categoryId).hasClass('active')) {
             $('.main_category').removeClass('active');
             $('#fa_paa_category_select_category_1').val('');
@@ -441,7 +494,15 @@
            		incrscroll = 80;
            	} else if(winwidth>=400 && winwidth<=500) {
            		incrscroll = 40;
-           	} 
+           	}
+            window.dataLayer = window.dataLayer || []
+            dataLayer.push({
+
+                'event' : 'PAA Category Selection',
+                'eventCategory':  'PAA - Step 1',
+                'eventAction': 'Category icon click',
+                'eventLabel': eventLabel
+            });
             ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
             //GA Analytics code end
             
@@ -479,7 +540,34 @@
         var category_id = last_category_id ? last_category_id : autocomplete_category_id;
 
         if (category_id) {
+            if(lastLevel != 2){
+                $('#category_choice_div_selected_' + lastLevel).show();
+            }
             $('#fa_paa_category_select_save').removeClass('disabled');
+            // save selected category
+            {% if (app.request.get('is_edit') is defined) and (app.request.get('is_edit') is not null) %}
+                $('#fa_paa_category_select_save').show();
+            {% else %}
+                 $('#fa_paa_category_select_category_id').val(category_id);
+                 if($('#fa_paa_category_select_category_id_autocomplete').val() == '')  {
+                     if($('#category_choice_div_selected_2').is(":hidden")) {
+                         $('#category_choice_div_selected_2').show();
+                     }
+                     setTimeout( function() {
+                         document.forms['fa_paa_category_select'].submit();
+                     }, 1000);
+                 }
+                 else {
+                     if($('#fa_paa_category_select_category_1').val() == ''){
+                         if($('#category_choice_div_selected_2').is(":hidden")) {
+                             $('#category_choice_div_selected_2').show();
+                         }
+                         setTimeout( function() {
+                             document.forms['fa_paa_category_select'].submit();
+                         }, 1000);
+                     }
+                 }
+            {% endif %}
         } else {
             if (!$('#fa_paa_category_select_save').hasClass('disabled')) {
                 $('#fa_paa_category_select_save').addClass('disabled');
@@ -530,6 +618,7 @@
     function setStepSessionData(adId)
     {
       var url = Routing.generate('ad_post_set_step_session_data', { 'adId': adId});
+      url = url.replace(':https','');
       location.href = url;
     }
 

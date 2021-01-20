@@ -7,12 +7,13 @@
 {% endif %}
 
 {% set userSiteViewCounter = fetch_repository('FaUserBundle:UserSiteViewCounter').getUserSiteViewCounter(userDetail['id'], fetch_container_instance()) %}
+{% set userSiteBannerUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserSiteBannerUrl', [fetch_container_instance(), userDetail['site_id'], 0]) %}
 <div class="shops-header" id="shop_header_div">
     {% if allowProfileEdit %}
         <div class="cover-img-overlay"> </div>
     {% endif %}
     <div class="shops-header-img text-center" id="user_site_banner_div">
-        <img id="user_site_banner_img" src="{{ shared_url(userDetail['banner_path']~'/banner_'~userDetail['site_id']~'.jpg')~'?'~random(1000) }}" alt="" />
+        <img id="user_site_banner_img" src="{{ userSiteBannerUrl }}" alt="" />
     </div>
     {% if allowProfileEdit %}
         {% set bigImageRoute = "ajax_get_big_user_site_banner_image" %}
@@ -50,7 +51,7 @@
                             <ul id="profile_image_upload" data-dropdown-content class="f-dropdown" aria-hidden="true">
                                 <li><a href="javascript:void(0)" class="pickProfileFile needsclick" id="pickProfileFile">{{'Upload profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
                                 <li><a href="javascript:getProfileBigImage('{{ path(getProfileBigImageRoute, {'userId': app.user.getId(), 'isCompany': 1}) }}')">{{'Edit profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
-                                <li><a href="javascript:deleteImage('{{ path(deleteRoute, {'userId': app.user.getId(), 'isCompany': 1}) }}')">{{'Remove'|trans({}, 'frontend-my-profile')}}</a></li>
+                                <li><a href="javascript:deleteProfileImage('{{ path(deleteRoute, {'userId': app.user.getId(), 'isCompany': 1}) }}')">{{'Remove'|trans({}, 'frontend-my-profile')}}</a></li>
                             </ul>
                         </div>
                         <div class="profile-box" id="profile_change_btn_without_opt" {% if userSiteObj.getPath() %}style="display:none;"{% endif %}>

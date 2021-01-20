@@ -74,7 +74,26 @@ class AdRequestListener
                 $event->setResponse($response);
             }
         }
-
+        
+        /* FFR-3683 Starts */
+        $lastChrUri = substr($uri, -1);
+        $redirectEscortUri = '';
+        if($lastChrUri=='/') {
+            $adulturi = substr($uri, -7);
+            if($adulturi === '/adult/') {
+                $redirectEscortUri = substr($uri,0,-7).'/adult-services/escorts/';
+            }
+        } else {
+            $adulturi = substr($uri, -6);
+            if($adulturi === '/adult') {
+                $redirectEscortUri = substr($uri,0,-6).'/adult-services/escorts/';
+            }            
+        }
+        if($redirectEscortUri!='') {
+            $response = new RedirectResponse($redirectEscortUri, 301);
+            $event->setResponse($response);
+        }
+        /* FFR-3683 Ends */
         
         //redirect greate-london slug
         if (preg_match('/greate-london/', $uri)) {
@@ -126,7 +145,7 @@ class AdRequestListener
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
         } elseif (preg_match('/adult\/phone-cam-chat\//', $uri)) {
-            $locationUrl = str_replace('adult/phone-cam-chat/', 'adult/', $uri);
+            $locationUrl = str_replace('adult/phone-cam-chat/', 'adult-services/escorts/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
         } elseif (preg_match('/avon/', $uri)) {
@@ -227,6 +246,14 @@ class AdRequestListener
                 $response = new RedirectResponse($locationUrl, 301);
                 $event->setResponse($response);
             }
+        } elseif (preg_match('/uk\/adult\//', $uri)) {
+            $routeManager = $this->container->get('fa_ad.manager.ad_routing');
+            $url = $routeManager->getAdultHomePageUrl();
+            $event->setResponse(new RedirectResponse($url, 301));
+        } elseif (preg_match('/\/adult\//', $uri) && !preg_match('/delete_image\/adult\//', $uri) && !preg_match('/reset_image\/adult\//', $uri)) {
+            $locationUrl = str_replace('adult', 'adult-services/escorts', $uri);
+            $response = new RedirectResponse($locationUrl, 301);
+            $event->setResponse($response);
         } elseif (preg_match('/bristol\/celebrations-special-occasions\/20-years-old-male-prostitute-for-you-16359610/', $uri)) {
             throw new HttpException(410);
         }
@@ -340,11 +367,11 @@ class AdRequestListener
         if ($currentRoute == 'landing_page_category' || $currentRoute == 'landing_page_category_location') {
             $catObj = $this->getMatchedCategory($request->get('category_string'));
 
-            if ($catObj && $catObj['id'] == CategoryRepository::ADULT_ID) {
+            /*if ($catObj && $catObj['id'] == CategoryRepository::ADULT_ID) {
                 $location = ($request->get('location') ? $request->get('location') : 'uk');
                 $url = $this->container->get('router')->generate('listing_page', array('location' => $location, 'page_string' => $request->get('category_string')), true);
                 $event->setResponse(new RedirectResponse($url, 301));
-            }
+            }*/
 
             if (isset($params['path'])) {
                 $this->redirectOldUrls(ltrim($params['path'], '/'), 'uk', $request, $event, 'location_home');
@@ -353,7 +380,7 @@ class AdRequestListener
             if ($catObj) {
                 $request->attributes->set('category_id', $catObj['id']);
             }
-        } elseif ($currentRoute ==  'listing_page'|| $currentRoute ==  'motor_listing_page') {
+        } elseif ($currentRoute ==  'old_listing_page'|| $currentRoute ==  'listing_page'|| $currentRoute ==  'motor_listing_page') {
             $queryParams  =  array();
             $searchParams = $request->query->all();
             $redirectString = $request->get('page_string');
@@ -473,26 +500,33 @@ class AdRequestListener
                                 
                 $catObj = $this->getMatchedCategory($categoryText);
                 $this->getCatRedirects($redirectString, $categoryText, $locationId, $request, $event);
-                                
                 if ($catObj) {
                     $this->getCatRedirects($redirectString, $catObj['full_slug'], $locationId, $request, $event);
                     /*if($catObj['status']!=1) {
                         $this->redirectParentCatUrls($redirectString,$catObj['id'], $locationId, $request, $event);
                     } */
-                    
+
                     $check = false;
                     $request->attributes->set('cat_full_slug', $catObj['full_slug']);
                     //$categoryText = $catObj['full_slug'].'/';
-                    
+
                     //$parent   = $this->getFirstLevelParent($catObj['id']);
 
+                    if (! isset($searchParams['item__category_id'])) {
+                        $searchParams['item__category_id'] = $catObj['id'];
+                    }
+                    if (! isset($searchParams['item__location'])) {
+                        $searchParams['item__location'] = $locationId;
+                    }
+
+                    $setDefaultRadius = false;
                     $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
                     if ($request->get('item__distance')) {
                         $searchParams['item__distance']  =  $request->get('item__distance');
                     } else {
-                        $searchParams['item__distance']  =  ($getDefaultRadius)?$getDefaultRadius:'';
+                        $setDefaultRadius = true;
+                        $searchParams['item__distance']  =  ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
                     }
-
                     /*if (($catObj['id'] == CategoryRepository::MOTORS_ID) || ($parent['id'] == CategoryRepository::MOTORS_ID)) {
                         $queryParams['item__distance']  =  $request->get('item__distance') == '' ? CategoryRepository::MOTORS_DISTANCE : $request->get('item__distance');
                     } else {
@@ -502,19 +536,21 @@ class AdRequestListener
                     //check location belongs to area
                     if (preg_match('/^\d+$/', $locationId) && is_null($request->get('item__distance'))) {
                         $isLocationArea = $this->em->getRepository('FaEntityBundle:Location')->find($locationId);
-                        if (!empty($isLocationArea) && $isLocationArea && $isLocationArea->getLvl() == '4' && isset($queryParams['item__distance'])) {                            
+                        if (!empty($isLocationArea) && $isLocationArea && $isLocationArea->getLvl() == '4' && isset($queryParams['item__distance'])) {
                             $queryParams['item__distance'] = $queryParams['item__distance']/CategoryRepository::AREA_DISTANCE_DIVISION;
                         }
                     }
 
                     if (isset($searchParams['item__distance'])) {
-                        $request->attributes->set('finders', array_merge($queryParams, array('item__distance' => $searchParams['item__distance'])));
+                        $request->attributes->set('finders', array_merge($queryParams, array('item__distance' => $searchParams['item__distance'], 'setDefaultRadius' => $setDefaultRadius)));
+                        $queryParams = $request->attributes->get('finders');
                     }
-                    
+
                     $request->attributes->set('finders', array_merge($queryParams, array('item__category_id' => $catObj['id'], 'item__location' => $locationId)));
                 } else {
                     $request->attributes->set('finders', array_merge($queryParams, array('item__location' => $locationId)));
                 }
+
 
                 if (!strpos($categoryText, '/')) {
                     $check = false;
@@ -605,7 +641,7 @@ class AdRequestListener
                     if ($request->get('item__distance')) {
                         $queryParams['item__distance']  =  $request->get('item__distance');
                     } else {
-                        $queryParams['item__distance']  =  ($getDefaultRadius)?$getDefaultRadius:'';
+                        $queryParams['item__distance']  =  ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
                     }
 
                     /* if (($catObj['id'] == CategoryRepository::MOTORS_ID) || ($parent['id'] == CategoryRepository::MOTORS_ID)) {
@@ -616,7 +652,14 @@ class AdRequestListener
 
                     $request->attributes->set('finders', array_merge($queryParams, array('item__category_id' => $catObj['id'], 'item__location' => $locationId)));
                 } else {
-                    $queryParams['item__distance'] = isset($queryParams['item__distance']) && $queryParams['item__distance'] != null ? $queryParams['item__distance'] : CategoryRepository::OTHERS_DISTANCE;
+                    $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($queryParams, $this->container);
+                    if ($request->get('item__distance')) {
+                        $queryParams['item__distance']  =  $request->get('item__distance');
+                    } else {
+                        $queryParams['item__distance']  =  ($getDefaultRadius)?$getDefaultRadius:CategoryRepository::MAX_DISTANCE;
+                    }
+
+                    //$queryParams['item__distance'] = isset($queryParams['item__distance']) && $queryParams['item__distance'] != null ? $queryParams['item__distance'] : CategoryRepository::OTHERS_DISTANCE;
                     $request->attributes->set('finders', array_merge($queryParams, array('item__location' => $locationId)));
                 }
 
@@ -675,7 +718,10 @@ class AdRequestListener
     private function getCatRedirects($redirectString, $categoryText, $locationId, $request, $event, $page = null)
     {
         $url = null;
-        
+        $uri = $event->getRequest()->getUri();
+        $explodeUri = explode('?',$uri);
+        $queryString = isset($explodeUri[1])?$explodeUri[1]:'';
+
         $redirect = $this->em->getRepository('FaAdBundle:Redirects')->getCategoryRedirects($categoryText, $this->container);
         if ($redirect) {
             if ($locationId) {
@@ -735,13 +781,14 @@ class AdRequestListener
                 }
             }
             $newRedirect = str_replace('[location]/','',$newRedirect);
+
             if($newRedirect!=$redirectString) {
                 $url = $this->container->get('router')->generate('listing_page', array(
                     'location' => $locationString,
                     'page_string' => str_replace($newCatText, $newRedirect, $redirectString),
                 ), true);
                 $url = str_replace('//', '/', $url);
-            
+                if($queryString) { $url = $url.'?'.$queryString; }
                 $response = new RedirectResponse($url, 301);
                 $event->setResponse($response);
             }
@@ -862,6 +909,11 @@ class AdRequestListener
      */
     public function getMatchedCategory($category)
     {
+        if($category=='adult') {
+            $category = 'adult-services';
+        } elseif ($category=='adult/escort-services') {
+            $category = 'adult-services/escorts';
+        }
         $cat = $this->em->getRepository('FaEntityBundle:Category')->getCategoryByFullSlug($category, $this->container);
         if ($cat) {
             return $cat;

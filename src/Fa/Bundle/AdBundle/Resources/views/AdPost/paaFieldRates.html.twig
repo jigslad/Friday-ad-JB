@@ -25,9 +25,7 @@
 		
 {% endfor %}
 
-<style>
-.responsive-card-table tbody tr td:last-child { word-wrap: break-word; }
-</style>
+{{ include('FaAdBundle:AdPost:paaFieldsRates-css.html.twig') }}
 <div class="in-out-calls-subblock" id="in-calls-subblock">
     <div class="in-out-calls-text"><span colspan="4"><span class="safety-fe-incall m-r-10"></span><span>In-calls</span></span></div>
     <table class="responsive-card-table boder-rates" style="table-layout: fixed!important;">

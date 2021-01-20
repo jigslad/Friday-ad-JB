@@ -462,7 +462,11 @@ class DefaultController extends ThirdPartyLoginController
         $solrSearchManager = $this->get('fa.solrsearch.manager');
         $solrSearchManager->init('ad', $keywords, $data, $page, $recordsPerPage);
         if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['latitude']) && isset($cookieLocationDetails['longitude'])) {
-            $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocationDetails['latitude'].', '.$cookieLocationDetails['longitude']);
+            if ($location) {
+                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocationDetails['latitude'] . ',' . $cookieLocationDetails['longitude'], 'd' => 15);
+            }  else {
+                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocationDetails['latitude'].','.$cookieLocationDetails['longitude']);
+            }
             $solrSearchManager->setGeoDistQuery($geoDistParams);
         }
         $solrResponse = $solrSearchManager->getSolrResponse();
@@ -589,7 +593,11 @@ class DefaultController extends ThirdPartyLoginController
         $solrSearchManager = $this->get('fa.solrsearch.manager');
         $solrSearchManager->init('ad', $keywords, $data, $page, $recordsPerPage);
         if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['latitude']) && isset($cookieLocationDetails['longitude'])) {
-            $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocationDetails['latitude'].', '.$cookieLocationDetails['longitude']);
+            if ($location) {
+                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocationDetails['latitude'] . ',' . $cookieLocationDetails['longitude'] , 'd' => $distanceRange);
+            } else {
+                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocationDetails['latitude'].','.$cookieLocationDetails['longitude']);
+            }
             $solrSearchManager->setGeoDistQuery($geoDistParams);
         }
         $solrResponse = $solrSearchManager->getSolrResponse();
@@ -667,29 +675,28 @@ class DefaultController extends ThirdPartyLoginController
             $cookieValue = $this->getRepository('FaEntityBundle:Location')->getCookieValue($request->get('location'), $this->container, false, $request->get('location_area'));
             $locationByValue = $this->getRepository('FaEntityBundle:Location')->getArrayByTownId($request->get('location'), $this->container);
             $categoryId = $request->get('catId');
+            $distance = $request->get('distance');
             
             if($categoryId != '') {
                 $srchParam['item__category_id'] = $categoryId;
             }
-            
+            if($distance != '') {
+                $srchParam['item__distance'] = $distance;
+            }
+
             if (!empty($cookieValue)) {
                 $srchParam['item__location']   = $cookieValue['location'];
             } elseif (!empty($locationByValue)) {
                 $srchParam['item__location']   = $locationByValue['location'];
             } elseif (strtolower($request->get('location')) == 'uk' || strtolower($request->get('location')) == 'united kingdom') {
                 $srchParam['item__location']   = 2;
-            } 
+            }
 
-            $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($srchParam, $this->container);
-            $defDistance = ($getDefaultRadius)?$getDefaultRadius:'';
-            
-            if($defDistance=='') {
-                if($categoryId!='') {
-                    $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
-                    $defDistance = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
-                } else {
-                    $defDistance = CategoryRepository::MAX_DISTANCE;
-                }
+            if($distance != '') {
+                $defDistance = $distance;
+            } else {
+                $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParamsOnly($srchParam, $this->container);
+                $defDistance = ($getDefaultRadius) ? $getDefaultRadius : CategoryRepository::MAX_DISTANCE;
             }
             
             if (!empty($cookieValue)) {
@@ -1218,5 +1225,15 @@ class DefaultController extends ThirdPartyLoginController
         );
 
         return $this->render('FaFrontendBundle:Default:showHomePageLocationBlocks.html.twig', $parameters);
+    }
+    /**
+     * Set covid 19 session data
+     *
+     */
+    public function ajaxCovidSetSessionDataAction()
+    {
+        $this->container->get('session')->set('CovidSession', 1);
+        return new JsonResponse(array('response' => true));
+        
     }
 }

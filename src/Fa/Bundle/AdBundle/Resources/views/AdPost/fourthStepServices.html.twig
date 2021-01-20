@@ -38,8 +38,8 @@
                             {{ adJobsRepository.copyBusinessLogo(fetch_container_instance(), ad.id) }}
                             {{ include('FaAdBundle:AdPost:fourthStepServicesFields.html.twig') }}
                             <div class="small-wrapper">
-                                {{ form_widget(form.preview, {'attr': {'class':'secondary-btn-2 expand'}}) }}
-                                {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand'}}) }}
+                                {{ form_widget(form.preview, {'attr': {'class':'paa-preview-btn secondary-btn-2 expand'}}) }}
+                                {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 paa-next-btn expand'}}) }}
                             </div>
                         {{ form_end(form) }}
                     </div>
@@ -54,6 +54,7 @@
 {{ parent() }}
 {{ include('FaAdBundle:AdPost:paaLocationJs.html.twig') }}
 {{ include('FaAdBundle:AdPost:fourthStepCommonJs.html.twig') }}
+    {{ include('FaAdBundle:AdPost:fourthStepCtaButtonJs.html.twig', {'categoryName' : 'services'}) }}
 <script src="{{ asset_url('fafrontend/js/jquery.equalizer.min.js') }}"></script>
 <script language="javascript" type="text/javascript">
 //<![CDATA[
@@ -155,7 +156,7 @@
 //]]>
 </script>
 {% if (form.location_autocomplete) is defined %}
-    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_fourth_step_services_location', 'placeHolder': ((attribute(form, 'location_autocomplete').vars.attr.placeholder is defined and attribute(form, 'location_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'location_autocomplete').vars.attr.placeholder : 'Type postal code or town'|trans), 'route' : 'town_ajax_find_town_by_term', 'dropdownCssClass': 'white-choices' }) }}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_fourth_step_services_location', 'placeHolder': ((attribute(form, 'location_autocomplete').vars.attr.placeholder is defined and attribute(form, 'location_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'location_autocomplete').vars.attr.placeholder : ''), 'route' : 'town_ajax_find_town_by_term', 'dropdownCssClass': 'white-choices' }) }}
     {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_fourth_step_services_area', 'placeHolder': ((attribute(form, 'area_autocomplete').vars.attr.placeholder is defined and attribute(form, 'area_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'area_autocomplete').vars.attr.placeholder : 'ex: SE2'|trans), 'route' : 'area_ajax_find_town_by_term', 'dropdownCssClass': 'white-choices', 'townIdForArea': constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::LONDON_TOWN_ID') }) }}
 {% endif %}
 

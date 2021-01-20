@@ -37,12 +37,14 @@
                         <tr class="gradeX">
                             <td>
                                 {% if headerImage.file_name %}
-                                    <img src="{{ shared_url(headerImage.path~'/'~headerImage.file_name) }}?{{ random(1000) }}" width="100px" />
+                                	{% set headerImgUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSharedImageUrl', [fetch_container_instance(), headerImage.path, headerImage.file_name]) %}
+                                    <img src="{{ headerImgUrl }}?{{ date().timestamp }}" width="100px" />
                                 {% endif %}
                             </td>
                             <td>
                                 {% if headerImage.phone_file_name %}
-                                    <img src="{{ shared_url(headerImage.path~'/'~headerImage.phone_file_name) }}?{{ random(1000) }}" width="100px" />
+                                    {% set headerPhoneImgUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSharedImageUrl', [fetch_container_instance(), headerImage.path, headerImage.phone_file_name]) %} 
+                                    <img src="{{ headerPhoneImgUrl }}?{{ date().timestamp }}" width="100px" />
                                 {% endif %}
                             </td>
                             <td>

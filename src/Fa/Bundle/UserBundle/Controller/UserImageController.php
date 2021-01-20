@@ -90,13 +90,13 @@ class UserImageController extends CoreController
                 //upload original image.
                 $uploadedFile->move($orgImagePath, $orgImageName);
                 $dimension = getimagesize($imagePath.DIRECTORY_SEPARATOR.$orgImageName);
-                $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, 90, 'ImageMagickManager');
-                $origImage->loadFile($imagePath.DIRECTORY_SEPARATOR.$orgImageName);
-                $origImage->save($imagePath.DIRECTORY_SEPARATOR.$userId.'_original.jpg', 'image/jpeg');
-                unlink($imagePath.DIRECTORY_SEPARATOR.$orgImageName);
+                //$origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, 90, 'ImageMagickManager');
+                //$origImage->loadFile($imagePath.DIRECTORY_SEPARATOR.$orgImageName);
+                //$origImage->save($imagePath.DIRECTORY_SEPARATOR.$userId.'_original.jpg', 'image/jpeg');
+                //unlink($imagePath.DIRECTORY_SEPARATOR.$orgImageName);
 
                 $userImageManager = new UserImageManager($this->container, $userId, $orgImagePath, $isCompany);
-                $userImageManager->saveOriginalJpgImage($userId.'_original.jpg');
+                $userImageManager->saveOriginalJpgImage($orgImageName);
                 sleep(1);
 
                 return new Response();
@@ -137,6 +137,11 @@ class UserImageController extends CoreController
                     exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:ad-solr-index --user_id="'.$userId.'" --category="For sale" update >/dev/null &');
                     exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:ad-solr-index --user_id="'.$userId.'" --category="Adult" update >/dev/null &');
                     exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:send:business-user-for-moderation --userId='.$userId.' >/dev/null &');
+                    if($isCompany) {
+                        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:upload-user:image-s3 --user_id='.$userId.' --image_type=company >/dev/null &');
+                    } else {
+                        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:upload-user:image-s3 --user_id='.$userId.' --image_type=user >/dev/null &');
+                    }
                     $culture  = CommonManager::getCurrentCulture($this->container);
                     $cacheKey = 'user|isTrustedUser|'.$userId.'|'.$culture;
                     CommonManager::removeCache($this->container, $cacheKey);
@@ -348,15 +353,27 @@ class UserImageController extends CoreController
             }
 
             if (($isCompany && $imageObj && $imageObj->getPath()) || (!$isCompany && $imageObj && $imageObj->getImage())) {
-                $webPath = $this->container->get('kernel')->getRootDir().'/../web';
-
+                
+                $awsFileExists = 0;
                 if ($isCompany) {
-                    $orgImagePath = $webPath.DIRECTORY_SEPARATOR.$imageObj->getPath();
+                    $orgImageName = $imageObj->getPath();
                 } else {
-                    $orgImagePath = $webPath.DIRECTORY_SEPARATOR.$imageObj->getImage();
+                    $orgImageName = $imageObj->getImage();
                 }
-
-                if (file_exists($orgImagePath.DIRECTORY_SEPARATOR.$userId.'.jpg')) {
+                
+                if(CommonManager::checkImageExistOnAws($this->container,$orgImageName.DIRECTORY_SEPARATOR.$userId.'.jpg')) {
+                    $webPath = $this->container->getParameter('fa.static.aws.url');
+                    $awsFileExists = 1;
+                } else {
+                    $webPath = $this->container->get('kernel')->getRootDir().'/../web';
+                }
+                
+                $orgImagePath = $webPath.DIRECTORY_SEPARATOR.$orgImageName;
+                
+                if($awsFileExists==1) {
+                    $imageUrl = $orgImagePath.DIRECTORY_SEPARATOR.$userId.'_org.jpg?'.time();
+                    $htmlContent = $this->renderView('FaUserBundle:UserImage:renderProfileBigImage.html.twig', array('userId' => $userId, 'isCompany' => $isCompany, 'imageUrl' => $imageUrl, 'fromProfilePage' => $fromProfilePage));
+                } elseif (file_exists($orgImagePath.DIRECTORY_SEPARATOR.$userId.'.jpg')) {
                     $imageUrl    = str_replace('.jpg', '_org.jpg', CommonManager::getUserLogoByUserId($this->container, $userId, true, true));
                     $htmlContent = $this->renderView('FaUserBundle:UserImage:renderProfileBigImage.html.twig', array('userId' => $userId, 'isCompany' => $isCompany, 'imageUrl' => $imageUrl, 'fromProfilePage' => $fromProfilePage));
                 } else {
@@ -415,17 +432,42 @@ class UserImageController extends CoreController
             }
 
             if (($isCompany && $imageObj && $imageObj->getPath()) || (!$isCompany && $imageObj && $imageObj->getImage())) {
-                $webPath = $this->container->get('kernel')->getRootDir().'/../web';
-
+                
                 if ($isCompany) {
-                    $orgImagePath = $webPath.DIRECTORY_SEPARATOR.$imageObj->getPath();
+                    $orgImageName = $imageObj->getPath();
+                    $folder_name = 'company/'.CommonManager::getGroupDirNameById($userId, 5000);
                 } else {
-                    $orgImagePath = $webPath.DIRECTORY_SEPARATOR.$imageObj->getImage();
+                    $orgImageName = $imageObj->getImage();
+                    $folder_name = 'user/'.CommonManager::getGroupDirNameById($userId, 5000);
                 }
-
-                if (file_exists($orgImagePath.DIRECTORY_SEPARATOR.$userId.'.jpg')) {
+                
+                $webPath = $this->container->get('kernel')->getRootDir().'/../web';
+                $orgImagePath = $webPath.DIRECTORY_SEPARATOR.$orgImageName;
+                
+                $fileExistsInAws = 0;
+                if(CommonManager::checkImageExistOnAws($this->container,$orgImageName.DIRECTORY_SEPARATOR.$userId.'.jpg')) {
+                    if (!file_exists($orgImagePath)) {
+                        mkdir($orgImagePath, 0777, true);
+                    }
+                    
+                    $awsImagePath = $this->container->getParameter('fa.static.aws.url').DIRECTORY_SEPARATOR.$orgImageName;
+                    $orgawsurl = $awsImagePath.DIRECTORY_SEPARATOR.$userId.'_org.jpg?'.time();
+                    $orglocalimg = $orgImagePath.DIRECTORY_SEPARATOR.$userId.'_org.jpg';
+                    file_put_contents($orglocalimg, file_get_contents($orgawsurl));
+                    $originalawsurl = $awsImagePath.DIRECTORY_SEPARATOR.$userId.'_original.jpg?'.time();
+                    $originallocalimg = $orgImagePath.DIRECTORY_SEPARATOR.$userId.'_original.jpg';
+                    file_put_contents($originallocalimg, file_get_contents($originalawsurl));
+                    $awsurl = $awsImagePath.DIRECTORY_SEPARATOR.$userId.'.jpg?'.time();
+                    $localimg = $orgImagePath.DIRECTORY_SEPARATOR.$userId.'.jpg';
+                    file_put_contents($localimg, file_get_contents($awsurl));
+                    $fileExistsInAws = 1;
+                } 
+                
+                if(file_exists($orgImagePath.DIRECTORY_SEPARATOR.$userId.'.jpg')) {
                     exec('convert '.$orgImagePath.DIRECTORY_SEPARATOR.$userId.'_org.jpg'.' -resize '.$request->get('profile_crop_real_w').'x'.$request->get('profile_crop_real_h').'^ -crop '.$request->get('profile_crop_w').'x'.$request->get('profile_crop_h').'+'.($request->get('profile_crop_x') < 0 ? 0 : $request->get('profile_crop_x')).'+'.($request->get('profile_crop_y') < 0 ? 0 : $request->get('profile_crop_y')).' '.$orgImagePath.DIRECTORY_SEPARATOR.$userId.'.jpg');
-
+                
+                    
+                    
                     if ($isCompany) {
                         $imageObj = $this->getRepository('FaUserBundle:UserSite')->findOneBy(array('user'=> $userId));
                         if ($imageObj && $imageObj->getPath()) {
@@ -437,7 +479,16 @@ class UserImageController extends CoreController
                             $image = CommonManager::getUserLogo($this->container, $imageObj->getImage(), $userId, null, null, true);
                         }
                     }
+                    if($fileExistsInAws==1) {
+                        $userImageManager = new UserImageManager($this->container, $userId, $orgImagePath, $isCompany);
+                        if($isCompany) {
+                            $userImageManager->uploadImagesToS3($userId,'company');
+                        } else {
+                            $userImageManager->uploadImagesToS3($userId,'user');
+                        }
+                    }
                     exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:send:business-user-for-moderation --userId='.$userId.' >/dev/null &');
+                    
                 } else {
                     $error = $this->get('translator')->trans('Problem in loading image.');
                 }

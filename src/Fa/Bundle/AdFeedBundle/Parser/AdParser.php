@@ -423,10 +423,17 @@ abstract class AdParser
             umask($old);
         }
 
+        // todo: Download only max 20 images.
+        // todo: Check with @Laura to confirm - the image count.
+
         $i = 1;
         foreach ($ad['AdvertImages'] as $key => $img) {
             $fileName     = $idir.'/'.$ad['Id'].'_'.basename($img['Uri']);
             $imageArray[] = $fileName;
+
+            // todo: Affiliate ad check should be happening outside the foreach-loop
+            // todo: Inside the for-loop the Affiliate is not going to change as its the same ad.
+
             if (!$affiliate || ($affiliate && $img['IsMainImage'])) {
                 if (!file_exists($fileName)) {
                     $multi_curl->addDownload($img['Uri'], function ($instance, $tempFile) use ($fileName) {
@@ -453,7 +460,7 @@ abstract class AdParser
     }
 
     /**
-     * Remove extra images.
+     * Remove old deleted images - from NFS [+ S3].
      *
      * @param string $dir        Directory path.
      * @param string $productId  Product id.
@@ -510,11 +517,6 @@ abstract class AdParser
         if (isset($this->advert['full_data']) && ($force == 'remap' || $force == 'iremap')) {
             $originalJson  = unserialize($this->advert['full_data']);
             $this->mapAdData($originalJson, $this->advert['ref_site_id']);
-            if ($force == 'iremap') {
-                $ad_feed_site = $this->em->getRepository('FaAdFeedBundle:AdFeedSite')->findOneBy(array('id' => $feedAd->getRefSiteId()));
-                $target_dir = $ad_feed_site->getType().'_'.$ad_feed_site->getRefSiteId();
-                $this->parseAdForImage($originalJson, $target_dir);
-            }
 
             if (isset($this->advert['status']) && $this->advert['status'] == 'R') {
                 $feedAd->setStatus('R');
@@ -571,7 +573,14 @@ abstract class AdParser
 
             $this->advert['image_hash'] = isset($this->advert['image_hash']) ? $this->advert['image_hash'] : null;
 
+            // todo: Download image only if necessary.
+            // todo: necessary = only if the image_hash is changed.
+
             if (($force == 'all')|| !$feedAd || ($this->advert['image_hash'] != $feedAd->getImageHash())) {
+                $originalJson  = unserialize($this->advert['full_data']);
+                $ad_feed_site = $this->em->getRepository('FaAdFeedBundle:AdFeedSite')->findOneBy(array('id' => $feedAd->getRefSiteId()));
+                $target_dir = $ad_feed_site->getType().'_'.$ad_feed_site->getRefSiteId();
+                $this->parseAdForImage($originalJson, $target_dir);
                 $this->updateImages($ad);
             }
 
@@ -621,7 +630,7 @@ abstract class AdParser
 
         $adMain->setTransId($this->advert['unique_id']);
         $this->em->persist($adMain);
-        $this->em->flush();
+        $this->em->flush($adMain);
         return $adMain;
     }
 
@@ -917,12 +926,16 @@ abstract class AdParser
 
         $currentImages = $this->em->getRepository('FaAdBundle:AdImage')->getAdImages($ad->getId());
 
+        // todo: download the new feed image here
+
+        // Deleting all old images
         foreach ($currentImages as $image) {
             $adImageManager = new AdImageManager($this->container, $ad->getId(), $image->getHash(), $imagePath);
             $adImageManager->removeImage();
             $this->em->remove($image);
         }
 
+        // Processing the images again
         foreach ($this->advert['images'] as $img) {
             $filePath = $this->dir.'/images/'.$img['local_path'];
             $dimension = @getimagesize($filePath);
@@ -941,13 +954,20 @@ abstract class AdParser
                 $image->setAws(0);
                 $this->em->persist($image);
 
-                $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, 75, 'ImageMagickManager');
-                $origImage->loadFile($filePath);
-                $origImage->save($imagePath.'/'.$ad->getId().'_'.$hash.'.jpg', 'image/jpeg');
+                //$origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, 75, 'ImageMagickManager');
+                //$origImage->loadFile($filePath);
+                //$origImage->save($imagePath.'/'.$ad->getId().'_'.$hash.'.jpg', 'image/jpeg');
+                exec('convert -flatten '.escapeshellarg($filePath).' '.$imagePath.'/'.$ad->getId().'_'.$hash.'.jpg');
 
                 $adImageManager = new AdImageManager($this->container, $ad->getId(), $hash, $imagePath);
                 $adImageManager->createThumbnail();
                 $adImageManager->createCropedThumbnail();
+                
+                $adImgPath = $imagePath.'/'.$ad->getId().'_'.$hash.'.jpg';
+                if (file_exists($adImgPath)) {
+                    $adImageManager->uploadImagesToS3($image);
+                    unlink($filePath);
+                } 
 
                 $i++;
             }

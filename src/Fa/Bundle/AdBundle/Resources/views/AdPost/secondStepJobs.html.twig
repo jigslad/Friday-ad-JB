@@ -14,15 +14,8 @@
                 <a href="{{ path('ad_post_first_step', {'is_edit' : 1}) }}" class="paa-back-arrow" title="{{ 'Go back'|trans({}, 'frontend-paa') }}">{{ 'Go back'|trans({}, 'frontend-paa') }}</a>
                 <h1 class="text-center paa-title">{{ 'Describe your item and choose your price'|trans({}, 'frontend-paa-second-step') }} </h1>
                 <div class="big-wrapper">
-                    <div class="change-category clearfix">
-                        <div class="left cat-name-wrap">
-                            {% set categoryId = attribute(first_step_data, 'category_id') %}
-                            <span>{{ 'Category'|trans({}, 'frontend-paa-second-step') }}:</span> {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|join('<span class="seperator"></span>')|raw }}
-                        </div>
-                        <div class="right">
-                            <a href="{{ path('ad_post_first_step', {'is_edit' : 1}) }}" title="{{ 'Change category'|trans({}, 'frontend-paa-second-step') }}">{{ 'Change'|trans({}, 'frontend-paa-second-step') }}</a>
-                        </div>
-                    </div>
+                    {% set categoryId = attribute(first_step_data, 'category_id') %}
+                	{{ include('FaAdBundle:AdPost:secondStepCategory.html.twig', {'categoryId' : categoryId}) }}
                     {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
                         {{ form_errors(form) }}
                         {% set orderedFields = form.second_step_ordered_fields.vars.value|split(',') %}
@@ -30,7 +23,7 @@
                             {{ include('FaAdBundle:AdPost:secondStepJobsFields.html.twig') }}
                         {% endif %}
                         <div class="small-wrapper">
-                            {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand'}}) }}
+                            {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 paa-next-btn expand'}}) }}
                         </div>
                     {{ form_end(form) }}
                 </div>

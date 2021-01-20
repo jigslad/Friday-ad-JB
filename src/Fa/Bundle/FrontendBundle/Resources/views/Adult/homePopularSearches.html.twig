@@ -1,0 +1,15 @@
+{% set container = fetch_container_instance() %}
+{% set seoToolPopularSearchRepository = fetch_repository('FaContentBundle:SeoToolPopularSearch') %}
+{% set popularSearchArray = seoToolPopularSearchRepository.getPopularSearchArrayBySeoToolId(seoFields['seo_tool_id'], container) %}
+{% if popularSearchArray|length %}
+<div class="medium-24 columns text-center">
+<a href="javascript:void(0)" class="element_toggle tab-down m-pop-click show-for-medium-down" id=""><span class="adult-down-arrow"></span><span class="adult-up-arrow" style="display: none;"></span></a>
+<div class="m-pop-1" id="popular-dropdown">
+        {% for popularSearch in popularSearchArray %}
+                <a href="{{ seoToolPopularSearchRepository.getPopularSearchUrl(popularSearch['url'], cookieLocationDetails, mapFlag, container) }}" class="secondary-btn-2 thin-btn button btn-transparent ga-ahpPopularSearch">
+                        {{ popularSearch['title'] }}
+                </a>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}

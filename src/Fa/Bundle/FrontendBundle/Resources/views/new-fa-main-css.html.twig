@@ -1,0 +1,1030 @@
+<link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900,Poppins-SemiBold&display=swap" rel="stylesheet"> 
+<style>
+@font-face {
+  font-family: 'Poppins-Regular';
+  src: url('/bundles/fafrontend/fonts/poppins/Poppins-Regular.eot?#iefix') format('embedded-opentype'),  url('/bundles/fafrontend/fonts/poppins/Poppins-Regular.woff') format('woff'), url('/bundles/fafrontend/fonts/poppins/Poppins-Regular.ttf')  format('truetype'), url('/bundles/fafrontend/fonts/poppins/Poppins-Regular.svg#Poppins-Regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Poppins-SemiBold';
+  src: url('/bundles/fafrontend/fonts/poppins/Poppins-SemiBold.eot?#iefix') format('embedded-opentype'),  url('/bundles/fafrontend/fonts/poppins/Poppins-SemiBold.woff') format('woff'), url('/bundles/fafrontend/fonts/poppins/Poppins-SemiBold.ttf')  format('truetype'), url('/bundles/fafrontend/fonts/poppins/Poppins-SemiBold.svg#Poppins-SemiBold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Poppins-Medium';
+  src: url('/bundles/fafrontend/fonts/poppins/Poppins-Medium.eot?#iefix') format('embedded-opentype'),  url('/bundles/fafrontend/fonts/poppins/Poppins-Medium.woff') format('woff'), url('/bundles/fafrontend/fonts/poppins/Poppins-Medium.ttf')  format('truetype'), url('/bundles/fafrontend/fonts/poppins/Poppins-Medium.svg#Poppins-Medium') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Poppins-Bold';
+  src: url('/bundles/fafrontend/fonts/poppins/Poppins-Bold.eot?#iefix') format('embedded-opentype'),  url('/bundles/fafrontend/fonts/poppins/Poppins-Bold.woff') format('woff'), url('/bundles/fafrontend/fonts/poppins/Poppins-Bold.ttf')  format('truetype'), url('/bundles/fafrontend/fonts/poppins/Poppins-Bold.svg#Poppins-Bold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body, html, input, textarea, select { font-family: 'Poppins-Regular' !important;font-weight: normal !important; }
+a { color: #82C249; }
+a:hover, a:focus:hover, a:focus { color: #82C249 !important; }
+.ad-edit a:hover.xs-btn-2, .ad-edit a:focus.xs-btn-2, .ad-remove a:hover.xs-btn-2, .ad-remove a:focus.xs-btn-2 { color: #a4a4a4 !important; }
+
+label { color: #ACB0B7 !important; font-family: "Poppins-SemiBold" !important; font-weight: normal !important;}
+input { border-radius:4px !important; }
+#manage-my-ads-list-only .tab-menu li a {
+    color: #ACB0B7 !important;
+    font-weight: normal !important;
+}
+h1, .abt-other-profile h1, .homepage-title, .homepage-title-small {font-weight: normal !important;color: #212527 !important; font-family: "Poppins-Medium" !important; font-size: 36px !important; line-height: 46px !important;}
+h2 {color: #212527 !important; font-family: "Poppins-Medium" !important;font-size: 20px !important; line-height: 27px !important;font-weight: normal !important;}
+h3, .show-review-detail .reply-msg-heading h3, #shop-user-item-slider h3, .map-wrapper .listing h3, .my-msg-heading h3, 
+.manage-item-list h3, .featured-profile-list h3, .map-wrapper .listing h3, h3.homepage-title {font-weight: normal !important;color: #212527 !important; font-family: "Poppins-SemiBold" !important;font-size: 18px !important; line-height: 24px !important;}
+h4, .paa-help-text h4, .vif-rec-slider .slots-3 .rec-slider-info h4, .rec-slider-info h4 {font-weight: normal !important;color: #212527 !important; font-family: "Poppins-SemiBold" !important;font-size: 16px !important; line-height: 21px !important;}
+h5 {font-weight: normal !important;color: #212527 !important; font-family: "Poppins-SemiBold" !important;font-size: 14px !important; line-height: 21px !important;}
+
+.find-label, .change-location, .pkg-subtitle, 
+.list-price, .details-similar-item h2, .promo-code .show-code, .promo-code .show-code:hover, .promo-code .show-code:focus, 
+#home-search .location, , .small-slider .small-content b, .intro-text, .explore-price, 
+.near-location, .section-head, .accordion dd>a.section-head, .section-head, .accordion dd>div.section-head, .manage-price, 
+.finance-btn, .no-photo-heading, .private-business-modal h2, .detail-thumb-img .img-placeholder span, 
+.total-credits-remaining, .adult-parallax h1 span  {
+	font-family: 'Poppins-Regular' !important;
+	font-weight: normal !important;
+}
+.footer-head, .footer-head a {
+	font-family: 'Poppins-SemiBold' !important;
+	font-weight: normal !important;
+}
+button, .button, .secondary-btn-1, .secondary-btn-2, .secondary-btn-3, .secondary-btn-4,
+.primary-btn-1, .primary-btn-2, .primary-btn-3, .primary-btn-4,.footer-newsletter-btn
+{ 
+  font-family: "Poppins-SemiBold" !important; border-radius: 4px !important; text-align:center !important; font-weight: normal !important;  
+}
+.primary-btn-1, a:hover.primary-btn-1, a:focus.primary-btn-1, .primary-btn-1:focus, .primary-btn-1:hover,
+.primary-btn-2, a:hover.primary-btn-2, a:focus.primary-btn-2, .primary-btn-2:focus, .primary-btn-2:hover,
+.primary-btn-3, a:hover.primary-btn-3, a:focus.primary-btn-3, .primary-btn-3:focus, .primary-btn-3:hover,
+.primary-btn-4, a:hover.primary-btn-4, a:focus.primary-btn-4, .primary-btn-4:focus, .primary-btn-4:hover
+{ 
+	height:60px !important; padding:15px 0px !important;font-size:18px !important; line-height:27px !important; font-weight: normal !important; 
+}
+.secondary-btn-1, .secondary-btn-2, .secondary-btn-3, .secondary-btn-4,
+a:hover.secondary-btn-1, a:hover.secondary-btn-2, a:hover.secondary-btn-3, a:hover.secondary-btn-4,
+a:focus.secondary-btn-1, a:focus.secondary-btn-2, a:focus.secondary-btn-3, a:focus.secondary-btn-4,
+.secondary-btn-1:focus, .secondary-btn-1:hover, .secondary-btn-2:focus, .secondary-btn-2:hover,
+.secondary-btn-3:focus, .secondary-btn-3:hover, .secondary-btn-4:focus, .secondary-btn-4:hover,
+.footer-newsletter-btn, .footer-newsletter-btn:hover, .footer-newsletter-btn:focus,
+.primary-btn-1.thin-btn, a:hover.primary-btn-1.thin-btn, a:focus.primary-btn-1.thin-btn, .primary-btn-1.thin-btn:focus, .primary-btn-1.thin-btn:hover,
+.primary-btn-2.thin-btn, a:hover.primary-btn-2.thin-btn, a:focus.primary-btn-2.thin-btn, .primary-btn-2.thin-btn:focus, .primary-btn-2.thin-btn:hover,
+.primary-btn-3.thin-btn, a:hover.primary-btn-3.thin-btn, a:focus.primary-btn-3.thin-btn, .primary-btn-3.thin-btn:focus, .primary-btn-3.thin-btn:hover,
+.primary-btn-4.thin-btn, a:hover.primary-btn-4.thin-btn, a:focus.primary-btn-4.thin-btn, .primary-btn-4.thin-btn:focus, .primary-btn-4.thin-btn:hover
+{ 
+    height:40px !important; padding:8px 10px !important; font-size:16px !important; line-height:21px !important;font-weight: normal !important; 
+}
+.xs-blue-btn, .xs-btn-1, .xs-black-btn,  .secondary-btn-1.thin-btn, a:hover.secondary-btn-1.thin-btn, a:focus.secondary-btn-1.thin-btn, .secondary-btn-1.thin-btn:focus, .secondary-btn-1.thin-btn:hover,
+.secondary-btn-2.thin-btn, a:hover.secondary-btn-2.thin-btn, a:focus.secondary-btn-2.thin-btn, .secondary-btn-2.thin-btn:focus, .secondary-btn-2.thin-btn:hover,
+.secondary-btn-3.thin-btn, a:hover.secondary-btn-3.thin-btn, a:focus.secondary-btn-3.thin-btn, .secondary-btn-3.thin-btn:focus, .secondary-btn-3.thin-btn:hover,
+.secondary-btn-4.thin-btn, a:hover.secondary-btn-4.thin-btn, a:focus.secondary-btn-4.thin-btn, .secondary-btn-4.thin-btn:focus, .secondary-btn-4.thin-btn:hover
+{
+    height:30px !important; padding:5px 10px !important; font-size:14px !important; line-height:16px !important; 
+}
+.xs-blue-btn { background: #FFFFFF !important; }
+.xs-black-btn, , .xs-black-large-btn {
+    background: transparent !important;
+    border: 1px solid #212527 !important;
+    color: #212527 !important;
+    font-size: 14px !important;
+    line-height: 16px !important;
+    padding: 5px 20px 7px 20px !important;
+}
+.xs-black-btn:focus, .xs-black-btn:hover, .xs-black-large-btn:focus, .xs-black-large-btn:hover {
+    background: #212527 !important;
+    border: 1px solid #212527 !important;
+    color: #FFFFFF !important;
+}
+.db-section .manage-item-btns .xs-black-btn {
+    color: #212527 !important;
+}
+.db-section .manage-item-btns .xs-black-btn:hover, .db-section .manage-item-btns .xs-black-btn:focus, .db-section .manage-item-btns .xs-black-btn:active {
+    color: #FFFFFF !important;
+}
+
+.reply-msg-heading .report, .reply-msg-heading .mark-sold, .paypal-box, .credit-cards-box { border-radius: 4px !important; }
+.top-bar-section ul { font-size:14px !important; }
+.top-bar-section li:not(.has-form).place-item-btn a { 
+	font-family: "Poppins-SemiBold" !important; text-align:center !important;height:60px !important; padding:18px 20px !important;font-size:18px !important; line-height:20px !important;
+    font-weight: normal !important;text-transform: capitalize !important;
+}
+.top-bar .name h1 a {
+    width: auto !important;
+    padding: 0 !important;
+}
+.db-section .accordion dd>.content.address-book {
+    padding: 24px 0 20px !important;
+}
+.save-item-btn, .saved-item-btn, .details-breadcrumb .back-link {
+	font-family: "Poppins-SemiBold" !important;
+	font-weight: normal !important;
+}
+.simple-footer .fad-logo span { background: url('/bundles/fafrontend/images/FAD-register.svg') no-repeat !important; }
+footer .fad-logo span { background: url('/bundles/fafrontend/images/Fad-footer.svg') no-repeat !important; }
+.f-ad-sign { background: url('/bundles/fafrontend/images/Fad-logo-compact.svg') no-repeat !important; }
+
+.site-search .search-icon {
+    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2215.3%22%20height%3D%2215.3%22%20viewBox%3D%22-4226.7%201392.2%2015.3%2015.3%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23FFFFFF%3B%7D%0D%0A%3C/style%3E%3Ctitle%3ESEARCH%20ICON%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch%20Beta.%3C/desc%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-4211.4%201406l-3.6-3.6c0.8-1.1%201.3-2.4%201.3-3.8%200-1.7-0.7-3.4-1.9-4.6%20-2.5-2.5-6.7-2.5-9.2%200%20-1.2%201.2-1.9%202.9-1.9%204.6s0.7%203.4%201.9%204.6c1.3%201.3%202.9%201.9%204.6%201.9%201.3%200%202.7-0.4%203.8-1.3l3.6%203.6L-4211.4%201406zM-4223.5%201401.7c-0.9-0.9-1.3-2-1.3-3.2%200-1.2%200.5-2.3%201.3-3.2%200.9-0.9%202-1.3%203.2-1.3%201.2%200%202.3%200.4%203.2%201.3%200.9%200.8%201.3%202%201.3%203.2%200%201.2-0.5%202.3-1.3%203.2C-4218.8%201403.5-4221.7%201403.5-4223.5%201401.7z%22/%3E%3C/svg%3E') no-repeat center center, linear-gradient(135deg, #A8DC28 0%,#79D378 100%) !important;
+    background-size: auto !important;
+}
+.site-search .search-icon:hover, .site-search .search-icon:focus {
+    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2215.3%22%20height%3D%2215.3%22%20viewBox%3D%22-4226.7%201392.2%2015.3%2015.3%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23FFFFFF%3B%7D%0D%0A%3C/style%3E%3Ctitle%3ESEARCH%20ICON%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch%20Beta.%3C/desc%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-4211.4%201406l-3.6-3.6c0.8-1.1%201.3-2.4%201.3-3.8%200-1.7-0.7-3.4-1.9-4.6%20-2.5-2.5-6.7-2.5-9.2%200%20-1.2%201.2-1.9%202.9-1.9%204.6s0.7%203.4%201.9%204.6c1.3%201.3%202.9%201.9%204.6%201.9%201.3%200%202.7-0.4%203.8-1.3l3.6%203.6L-4211.4%201406zM-4223.5%201401.7c-0.9-0.9-1.3-2-1.3-3.2%200-1.2%200.5-2.3%201.3-3.2%200.9-0.9%202-1.3%203.2-1.3%201.2%200%202.3%200.4%203.2%201.3%200.9%200.8%201.3%202%201.3%203.2%200%201.2-0.5%202.3-1.3%203.2C-4218.8%201403.5-4221.7%201403.5-4223.5%201401.7z%22/%3E%3C/svg%3E') no-repeat center center, linear-gradient(-135deg, #A8DC28 0%,#79D378 100%) !important;
+    background-size: auto !important;
+}
+
+a:hover.button, a:focus.button,a:hover.secondary-btn-1, a:focus.secondary-btn-1,a:hover.primary-btn-1, a:focus.primary-btn-1 {
+	color: #FFFFFF !important;   
+}
+.primary-btn-1, .primary-btn-1.not-hover {
+	background: linear-gradient(135deg, #EE316F 0%, #FE8A7A 100%) !important;
+	border: 0px solid transparent !important;
+}
+
+.primary-btn-1:hover, .primary-btn-1:focus {
+	background: linear-gradient(135deg, #BE2858 0%, #CA6C61 100%) !important;
+	border: 0px solid transparent !important;
+}
+
+.secondary-btn-1, .footer-newsletter-btn, .xs-btn-1, .primary-btn-2
+{
+	background: linear-gradient(135deg, #A8DC28 0%, #79D378 100%) !important;
+	border: 1px solid #91D851 !important;
+	color:#FFFFFF !important; 
+	
+}
+.secondary-btn-1:hover, .secondary-btn-1:focus, .footer-newsletter-btn:hover, .footer-newsletter-btn:focus, 
+.xs-btn-1:hover, .xs-btn-1:focus, .primary-btn-2:hover, .primary-btn-2:focus
+{
+	background: linear-gradient(135deg, #85B021 0%, #60A85E 100%) !important;
+	border: 1px solid #85B021 !important;
+	color:#FFFFFF !important;
+}
+
+.secondary-btn-2,.secondary-btn-3, .secondary-btn-4, .xs-blue-btn, .primary-btn-3, .primary-btn-4 {
+	border: 1px solid #91D851 !important;
+	color: #82C249 !important;
+	background:#FFFFFF !important;
+}
+
+.secondary-btn-2:hover, .secondary-btn-2:focus,.secondary-btn-3:hover, .secondary-btn-3:focus, 
+.secondary-btn-4:hover, .secondary-btn-4:focus, .primary-btn-3:hover, .primary-btn-3:focus,.primary-btn-4:hover, .primary-btn-4:focus,
+.xs-blue-btn:hover, .xs-blue-btn:focus
+{
+	background: linear-gradient(135deg, #A6DB2A 0%, #79D377 100%) !important;
+	border: 1px solid #91D851 !important;
+	color:#FFFFFF !important; 
+	
+}
+
+#home-search .search-btn button, .notify-me.opened button, .site-search .search-icon  {
+    border-radius: 0 4px 4px 0 !important;
+}
+.top-bar-section li:not(.has-form).place-item-btn a {
+    background: linear-gradient(135deg, #EE316F 0%, #FE8A7A 100%) !important;
+    border: transparent !important;
+}
+.top-bar-section li:not(.has-form).place-item-btn a:hover, .top-bar-section li:not(.has-form).place-item-btn a:focus {
+	background: linear-gradient(135deg, #BE2858 0%, #CA6C61 100%) !important;
+	border: transparent !important;
+	color: #FFFFFF !important;
+}
+.budget-go-btn {
+    background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' x='0' y='0' width='40' height='40' viewBox='-459 261 40 40' xml:space='preserve'%3e%3cstyle type='text/css'%3e .st0%7bfill:none;stroke:%23FFFFFF;%7d .st1%7bfill:none;stroke:%23FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;%7d .st2%7bfill:none;stroke:%23FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;%7d %3c/style%3e%3ctitle%3ebutton filters%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cg transform='translate(-362.000000, -910.000000)'%3e%3cg transform='translate(182.000000, 627.000000)'%3e%3cg transform='translate(1.000000, 243.000000)'%3e%3cg transform='translate(179.000000, 40.000000)'%3e%3cpath class='st0' d='M-457 261h36c1.1 0 2 0.9 2 2v36c0 1.1-0.9 2-2 2h-36c-1.1 0-2-0.9-2-2v-36C-459 261.9-458.1 261-457 261z'/%3e%3cg transform='translate(15.000000, 16.000000)'%3e%3cg transform='translate(8.000000, 0.000000)'%3e%3cpath class='st1' d='M-459 261l4 5 -4 5'/%3e%3c/g%3e%3cpath class='st2' d='M-459 261l4 5 -4 5'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e") no-repeat center center, linear-gradient(135deg, #A8DC28 0%,#79D378 100%) !important;
+    background-color: transparent !important;
+}
+.budget-go-btn:hover,.budget-go-btn:focus {
+    background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' x='0' y='0' width='40' height='40' viewBox='-459 261 40 40' xml:space='preserve'%3e%3cstyle type='text/css'%3e .st0%7bfill:none;stroke:%23FFFFFF;%7d .st1%7bfill:none;stroke:%23FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;%7d .st2%7bfill:none;stroke:%23FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;%7d %3c/style%3e%3ctitle%3ebutton filters%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cg transform='translate(-362.000000, -910.000000)'%3e%3cg transform='translate(182.000000, 627.000000)'%3e%3cg transform='translate(1.000000, 243.000000)'%3e%3cg transform='translate(179.000000, 40.000000)'%3e%3cpath class='st0' d='M-457 261h36c1.1 0 2 0.9 2 2v36c0 1.1-0.9 2-2 2h-36c-1.1 0-2-0.9-2-2v-36C-459 261.9-458.1 261-457 261z'/%3e%3cg transform='translate(15.000000, 16.000000)'%3e%3cg transform='translate(8.000000, 0.000000)'%3e%3cpath class='st1' d='M-459 261l4 5 -4 5'/%3e%3c/g%3e%3cpath class='st2' d='M-459 261l4 5 -4 5'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e") no-repeat center center, linear-gradient(135deg, #A8DC28 0%,#79D378 100%) !important;
+}
+
+.paa-user-type label{
+	margin-right: 0px !important;
+}
+.adimg-thumb .edit-img {
+	width: 90px !important;
+}
+.landing-header h1 {
+    font-size: 36px !important;
+    line-height: 48px !important;
+    color: #fff !important;
+    margin: 0px !important;
+}
+
+
+
+.top-bar-section .has-dropdown a { padding-left:10px !important; }
+
+.search-pin { background: url("data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' x='0' y='0' width='21' height='25' viewBox='-469 268 21 25' xml:space='preserve'%3E%3Cstyle type='text/css'%3E .st0%7Bfill:%2391d851;%7D%0A%3C/style%3E%3Ctitle%3Esearch-pin%3C/title%3E%3Cdesc%3ECreated with Sketch.%3C/desc%3E%3Cpath class='st0' d='M-458.5 268c-5.5 0-10 4.3-10 9.6 0.1 7.2 10 15.4 10 15.4 -0.1 0 9.8-7.7 10-15.4C-448.5 272.3-453 268-458.5 268zM-458.5 281.3c-1.8 0-3.3-1.5-3.3-3.3s1.5-3.3 3.3-3.3 3.3 1.5 3.3 3.3S-456.7 281.3-458.5 281.3z'/%3E%3C/svg%3E") no-repeat !important; }
+.featured .featured-ribbon { background: url('/bundles/fafrontend/images/featured-ribbon-pink.svg') no-repeat !important; }
+.website-btn-1, .website-btn-1:hover, .website-btn-1:focus, .website-btn-1:active, .website-btn-1:visited {
+    padding: 9px 10px 9px 10px !important;
+    height: 40px !important;
+}
+/*.msg-btns .thin-btn:hover, .msg-btns .thin-btn:focus, .msg-btns .thin-btn:active, .msg-btns .thin-btn:visited {
+    height: 40px !important;
+    padding: 9px 10px !important;
+    font-size: 16px !important;
+    line-height: 18px !important;
+    font-weight: normal !important;
+}*/
+
+.sub-page-head { font-size: 20px !important;line-height: 28px !important;}
+ul.pagination li.pager-prev.unavailable:hover a, ul.pagination li.pager-next.unavailable:hover a { text-indent: -9999px !important; }
+ul.pagination li.pager-next a, ul.pagination li.pager-next.unavailable a {  text-indent: -9999px !important; }
+#eighteenPlusWarnningModel .primary-btn-2 { background:linear-gradient(135deg, #A75BD8 0%, #C60A84 100%) !important;border: 0px solid transparent !important; }
+#eighteenPlusWarnningModel .primary-btn-2:hover { background:linear-gradient(135deg, #8645AA 0%, #9D086A 100%) !important; }
+.interested-item a.button:hover, .interested-item a.button:focus, .interested-item a.button:active { color: #FFFFFF !important; }
+.paypal-box { background-color: transparent !important;border: solid 1px #CBD5D9 !important; }
+.ui-selectmenu-button { border-radius: 4px !important; }
+.paa-bdr-box input[type="text"] { margin-bottom: 15px !important; }
+
+/* Paa Step Numbers */
+.step-nav .step-num { float: left;width: 52px;height: 52px;margin-right: 13px;text-align: center;border: 1px solid #fff;border-radius: 50%;position: relative;padding: 13px 0px !important;text-indent: unset; }
+.step-nav .step-1, .step-nav .step-2, .step-nav .step-3, .step-nav .step-4 { background: transparent !important; }
+.step-nav .step-on .step-1, .step-nav .step-on .step-2, .step-nav .step-on .step-3, .step-nav .step-on .step-2 { background: transparent !important; border: 3px solid #82C249;color: #82C249; }
+.step-nav .step-on .step-text { color: #ffffff; }
+.step-off {  opacity: .5 !important; }
+.step-text { width: 110px !important; }
+
+/* PAA second step */
+.big-wrapper { width: 470px !important; }
+.change-category { padding: 8px 10px !important; }
+.change-category .breadcrumb { padding: 0px !important;}
+.change-category a {font-size: 12px !important;}
+.change-category .breadcrumb a {color: #212527 !important; }
+.breadcrumb a:last-child {background: transparent !important; padding-right: 0px !important;}
+.change-category .cat-name-wrap {width: auto !important;}
+.paa-bdr-box {border-bottom: 0px !important; }
+.paa-enter-price input[type="number"] {width: 157px !important;}
+.change-category:first-child {margin-bottom: 10px;}
+.change-category .separator, .breadcrumb span.separator:last-child {
+    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%226%22%20height%3D%2210%22%20viewBox%3D%220%200%206%2010%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3Anone%3Bstroke%3A%23ACB0B7%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Ebreadcrumbs%20arrow%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-253.000000%2C%20-531.000000%29%22%3E%3Cg%20transform%3D%22translate%28-42.000000%2C%20406.000000%29%22%3E%3Cg%20transform%3D%22translate%280.000000%2C%20119.000000%29%22%3E%3Cg%20transform%3D%22translate%28296.000000%2C%206.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M0%200l4%205%20-4%205%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat 100% 7px !important;
+    width: 10px;height: 20px;padding-right: 15px !important;
+ }
+.category-text { font-size: 12px;line-height: 22px; }
+.find-all .select2-choice, .find-all .select2-choice:hover, .find-all .select2-choice:focus, .find-all .select2-choice:active {
+    color: #ACB0B7 !important;border-top-left-radius: 4px !important;border-bottom-left-radius: 4px !important;
+    border-top-right-radius: 0px !important;border-bottom-right-radius: 0px !important;
+	border-color: #CBD5D9 !important;border-right: 0px !important;
+}
+.primary-btn-1.disabled, .btn-disabled { background: #EAEFF0 !important; }
+
+.search-pref a.expand-search, .search-pref a.expand-search:hover { background:url('/bundles/fafrontend/images/setplus-green.png') no-repeat left center !important; }
+.search-pref a.collapse-search, .search-pref a.collapse-search:hover { background:url('/bundles/fafrontend/images/setminus.png') no-repeat left center !important; }
+.cart-item-price h4.total-price { padding: 60px 0 0 0 !important; }
+.notify-me.opened button {border-radius: 4px 4px 4px 4px !important;}
+
+/* Category Images */
+.discover-forsale, .cat-forsale { background: url(/bundles/fafrontend/images/categories/Ic-btn-For-Sale.png) no-repeat !important; }
+.discover-motors, .cat-motors { background: url(/bundles/fafrontend/images/categories/Ic-btn-Motors.png) no-repeat !important; }
+.discover-jobs, .cat-jobs { background: url(/bundles/fafrontend/images/categories/Ic-btn-Jobs.png) no-repeat !important; }
+.discover-services, .cat-services { background: url(/bundles/fafrontend/images/categories/Ic-btn-Services.png) no-repeat !important; }
+.discover-property, .cat-property { background: url(/bundles/fafrontend/images/categories/Ic-btn-Property.png) no-repeat !important; }
+.discover-animals, .cat-animals { background: url(/bundles/fafrontend/images/categories/Ic-btn-Animals.png) no-repeat !important; }
+.discover-community, .cat-community { background: url(/bundles/fafrontend/images/categories/Ic-btn-Community.png) no-repeat !important; }
+.discover-adult, .cat-adult { background: url(/bundles/fafrontend/images/categories/Ic-btn-Adult.png) no-repeat !important; }
+
+.discover-forsale:hover, .cat-forsale:hover { background: url(/bundles/fafrontend/images/categories/Ic-btn-For-Sale-Hover.png) no-repeat !important; }
+.discover-motors:hover, .cat-motors:hover { background: url(/bundles/fafrontend/images/categories/Ic-btn-Motors-Hover.png) no-repeat !important; }
+.discover-jobs:hover, .cat-jobs:hover { background: url(/bundles/fafrontend/images/categories/Ic-btn-Jobs-Hover.png) no-repeat !important; }
+.discover-services:hover, .cat-services:hover { background: url(/bundles/fafrontend/images/categories/Ic-btn-Services-Hover.png) no-repeat !important; }
+.discover-property:hover, .cat-property:hover { background: url(/bundles/fafrontend/images/categories/Ic-btn-Property-Hover.png) no-repeat !important; }
+.discover-animals:hover, .cat-animals:hover { background: url(/bundles/fafrontend/images/categories/Ic-btn-Animals-Hover.png) no-repeat !important; }
+.discover-community:hover, .cat-community:hover { background: url(/bundles/fafrontend/images/categories/Ic-btn-Community-Hover.png) no-repeat !important; }
+.discover-adult:hover, .cat-adult:hover { background: url(/bundles/fafrontend/images/categories/Ic-btn-Adult-Hover.png) no-repeat !important; }
+
+.discover-forsale.active, .cat-forsale.active { background: url(/bundles/fafrontend/images/categories/Ic-btn-For-Sale-ON.png) no-repeat !important; border-radius: 5px !important; }
+.discover-motors.active, .cat-motors.active { background: url(/bundles/fafrontend/images/categories/Ic-btn-Motors-ON.png) no-repeat !important; border-radius: 5px !important; }
+.discover-jobs.active, .cat-jobs.active { background: url(/bundles/fafrontend/images/categories/Ic-btn-Jobs-ON.png) no-repeat !important; border-radius: 5px !important; }
+.discover-services.active, .cat-services.active { background: url(/bundles/fafrontend/images/categories/Ic-btn-Services-ON.png) no-repeat !important; border-radius: 5px !important; }
+.discover-property.active, .cat-property.active { background: url(/bundles/fafrontend/images/categories/Ic-btn-Property-ON.png) no-repeat !important; border-radius: 5px !important; }
+.discover-animals.active, .cat-animals.active { background: url(/bundles/fafrontend/images/categories/Ic-btn-Animals-ON.png) no-repeat !important; border-radius: 5px !important; }
+.discover-community.active, .cat-community.active { background: url(/bundles/fafrontend/images/categories/Ic-btn-Community-ON.png) no-repeat !important; border-radius: 5px !important; }
+.discover-adult.active, .cat-adult.active { background: url(/bundles/fafrontend/images/categories/Ic-btn-Adult-ON.png) no-repeat !important; border-radius: 5px !important; }
+
+/* Animals Images */
+.pets-dogs { background: url(/bundles/fafrontend/images/animals/Ic-btn-Dogs.png) no-repeat !important; }
+.pets-cats { background: url(/bundles/fafrontend/images/animals/Ic-btn-Cats.png) no-repeat !important; }
+.pets-birds { background: url(/bundles/fafrontend/images/animals/Ic-btn-Birds.png) no-repeat !important; }
+.pets-rabbits { background: url(/bundles/fafrontend/images/animals/Ic-btn-Rabbits.png) no-repeat !important; }
+.pets-guinea-pigs { background: url(/bundles/fafrontend/images/animals/Ic-btn-Guinea-Pigs.png) no-repeat !important; }
+.pets-reptiles { background: url(/bundles/fafrontend/images/animals/Ic-btn-Reptiles.png) no-repeat !important; }
+.pets-fish { background: url(/bundles/fafrontend/images/animals/Ic-btn-Fish.png) no-repeat !important; }
+.pets-insects { background: url(/bundles/fafrontend/images/animals/Ic-btn-Insects.png) no-repeat !important; }
+.pets-exotic-pets { background: url(/bundles/fafrontend/images/animals/Ic-btn-Exotic.png) no-repeat !important; }
+.pets-other-pets { background: url(/bundles/fafrontend/images/animals/Ic-btn-Other.png) no-repeat !important; }
+.pets-pet-accessories { background: url(/bundles/fafrontend/images/animals/Ic-btn-Pet-accessories.png) no-repeat !important; }
+.pets-pet-supplies { background: url(/bundles/fafrontend/images/animals/Ic-btn-Pet-supplies.png) no-repeat !important; }
+
+.pets-dogs:active, .pets-dogs:hover { background: url(/bundles/fafrontend/images/animals/Ic-btn-Dogs-Hover.png) no-repeat !important; }
+.pets-cats:active, .pets-cats:hover { background: url(/bundles/fafrontend/images/animals/Ic-btn-Cats-Hover.png) no-repeat !important; }
+.pets-birds:active, .pets-birds:hover { background: url(/bundles/fafrontend/images/animals/Ic-btn-Birds-Hover.png) no-repeat !important; }
+.pets-rabbits:active, .pets-rabbits:hover { background: url(/bundles/fafrontend/images/animals/Ic-btn-Rabbits-Hover.png) no-repeat !important; }
+.pets-guinea-pigs:active, .pets-guinea-pigs:hover { background: url(/bundles/fafrontend/images/animals/Ic-btn-Guinea-Pigs-Hover.png) no-repeat !important; }
+.pets-reptiles:active, .pets-reptiles:hover { background: url(/bundles/fafrontend/images/animals/Ic-btn-Reptiles-Hover.png) no-repeat !important; }
+.pets-fish:active, .pets-fish:hover { background: url(/bundles/fafrontend/images/animals/Ic-btn-Fish-Hover.png) no-repeat !important; }
+.pets-insects:active, .pets-insects:hover { background: url(/bundles/fafrontend/images/animals/Ic-btn-Insects-Hover.png) no-repeat !important; }
+.pets-exotic-pets:active, .pets-exotic-pets:hover { background: url(/bundles/fafrontend/images/animals/Ic-btn-Exotic-Hover.png) no-repeat !important; }
+.pets-other-pets:active, .pets-other-pets:hover { background: url(/bundles/fafrontend/images/animals/Ic-btn-Other-Hover.png) no-repeat !important; }
+.pets-pet-accessories:active, .pets-pet-accessories:hover { background: url(/bundles/fafrontend/images/animals/Ic-btn-Pet-accessories-Hover.png) no-repeat !important; }
+.pets-pet-supplies:active, .pets-pet-supplies:hover { background: url(/bundles/fafrontend/images/animals/Ic-btn-Pet-supplies-Hover.png) no-repeat !important; }
+
+/* Motors Images */
+.any-category { background: url(/bundles/fafrontend/images/Ic-btn-Any.png) no-repeat !important; }
+.choose-all-categories a, .choose-all-categories a.active, .choose-all-categories a:hover, .choose-all-categories a:focus, .choose-all-categories a:active 
+{ border-radius: 5px !important;background-size: cover !important;margin: 0px 8px 20px 8px !important; }
+.intro-text { font-size:17px !important; }
+.link-list a, .top-links .f-dropdown li a  { font-size:13px !important; }
+.top-links .f-dropdown { min-width: 190px !important; }
+.parent-link, .parent-link span { color:#82C249 !important; }
+
+.pkg-box label {
+	color: #ffffff !important;
+}
+.edition-link a {
+	color: #82C249 !important;
+}
+
+.cookie-wrapper {
+    margin: 15px auto 0px !important;
+}
+.cookie-content {
+    line-height: 21px !important;
+}
+.cookie_notification_bar .secondary-btn-1 {
+    margin: 0px !important;
+}
+.recommended-div.listing.recommended-ad-detail .content-cls-recommend-2 .list-title {  
+	font-size: 12px !important;
+    line-height: 16px !important;
+}
+.recommended-2-slot-ad-detail-btn.recommended-2-3-slot-ad-detail-btn {
+    margin-top: 10px !important;
+    height: 30px !important;
+    line-height: 16px !important;
+}
+.recommended-div.listing.recommended-ad-detail .content-cls-recommend-3 .show-title-r-ad-det {
+    font-size: 12px !important;
+}
+.capsule-links a:hover, .capsule-links a.active { color:#ffffff !important; }
+
+button.signup-fb-btn.expand {
+    padding: 17px 0px 22px 80px !important;
+}
+.landing-circles a, .landing-circles a:hover, .landing-circles a:focus, .landing-circles a:active, .landing-circles a.active {
+    background-size: 100% !important;
+}
+.manage-item-btns a:hover.primary-btn-1, .manage-item-btns a:focus.primary-btn-1 {
+    font-size: 14px !important;
+    line-height: 16px !important;
+}
+.one-click-upsell.parent {
+    display: inline-block !important;
+}
+.paa-user-type { padding: 0 0 15px 0 !important; }
+.paa-user-type label, .buyer-contact label { width: 88% !important; }
+.buyer-contact span { width: 20px !important; }
+.own-item .large-6 .xs-btn-2 { padding: 5px 5px 7px !important; }
+
+.img-status-overlay .img-status-overlay-text {
+    font-size: 14px !important;
+}
+.reveal-modal .close-reveal-modal, dialog .close-reveal-modal {
+    background: url('/bundles/fafrontend/images/cross-new.svg') no-repeat center !important;
+}
+
+.payment-card-option-block li:last-child {
+    margin-bottom: 20px !important;
+}
+
+.custom-checkbox, .custom-checkbox.checked {
+    background-size: cover !important;
+}
+.manage-lst .all-sel-text {
+    font-weight: normal !important;
+}
+.individual-upsell-modal-content { padding-top:20px !important}
+
+.paa-back-arrow-pkg, .paa-back-arrow { color: #82C249 !important; } 
+.top-bar-section .has-dropdown > a::after{ right: -10px !important; }
+.select2-drop, .ui-autocomplete {  margin-top: 0px !important; }
+.choice-display-flex { display:inline-flex !important; }
+.choice-display-flex label { margin-right:10px !important; line-height:25px !important; }
+
+.discover-categories a,.discover-categories a:hover, .discover-categories a:focus  {
+	background-size: cover !important;
+}
+
+#home-search .looking-for input[type="text"], .site-search .search-box input[type="text"] {
+    border-radius: 0 !important;
+}
+.paa-footer-links {column-count: 4;} 
+.paypal-acc-btn {
+	display: contents !important;
+}
+.signup-google-btn .tickmark-icon, .signup-fb-btn .tickmark-icon {
+	position: absolute !important; right: -20px !important;top: 0px !important;
+}
+//FB an Goggle button
+.button.signup-fb-btn {
+	background-color: #3B5998;
+	font-family: 'Poppins-SemiBold' !important;
+	color: #ffffff;
+}
+.signup-fb-btn:focus, .signup-fb-btn:hover {
+	background-color: #2b4a7a !important;
+	background: #2b4a7a !important;
+}
+.button.signup-google-btn, .button.signup-google-btn:hover, .button.signup-google-btn:focus {
+	background-color: #FFFFFF !important;
+	box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 1px 1px 0 rgba(0,0,0,0.24) !important;
+	color: #ACB0B7 !important;
+}
+.signup-google-btn .btn-text {
+	color: #ACB0B7 !important;
+}
+.button.special {
+	border-radius: 4px;
+	display: block;
+	width: 100%;
+	text-align: center;
+	font-size: 18px;
+	font-weight: normal;
+	letter-spacing: 0;
+	line-height: 20px;
+	padding: 17px 20px 22px 20px;
+	height: 60px;
+}
+.fb-icon {
+	background: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding='UTF-8'?%3e%3csvg width='24px' height='24px' viewBox='0 0 24 24' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3c!-- Generator: Sketch 64 (93537) - https://sketch.com --%3e%3ctitle%3eIcon / 24 / Social / Facebook%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cg id='Icon-/-24-/-Social-/-Facebook' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3e%3cpath d='M22.6753442,-5.15143483e-14 L1.32456584,-5.15143483e-14 C0.592862362,-5.15143483e-14 0,0.592952285 0,1.32456584 L0,22.6753442 C0,23.4068679 0.592952285,23.9999101 1.32456584,23.9999101 L12.8190637,23.9999101 L12.8190637,14.7059181 L9.69145169,14.7059181 L9.69145169,11.0838195 L12.8190637,11.0838195 L12.8190637,8.41265666 C12.8190637,5.31274097 14.7123925,3.62479627 17.4777047,3.62479627 C18.8022706,3.62479627 19.9407857,3.7234418 20.2725117,3.76750407 L20.2725117,7.0070702 L18.3546338,7.00796943 C16.8506716,7.00796943 16.5595009,7.72258753 16.5595009,8.7712696 L16.5595009,11.0838195 L20.1462598,11.0838195 L19.6792896,14.7059181 L16.5595909,14.7059181 L16.5595909,23.9999101 L22.6754342,23.9999101 C23.4069578,23.9999101 24,23.4067779 24,22.6753442 L24,1.32456584 C24,0.592862362 23.4068679,-5.15143483e-14 22.6753442,-5.15143483e-14 L22.6753442,-5.15143483e-14 Z' id='Path' fill='%23FFFFFF' fill-rule='nonzero'%3e%3c/path%3e%3c/g%3e%3c/svg%3e");
+	background-repeat: no-repeat;
+	width: 24px;
+	height: 24px;
+	background-size: contain;
+	display: inline-block;  
+}
+.google-icon {
+	background: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding='UTF-8'?%3e%3csvg width='24px' height='24px' viewBox='0 0 24 24' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3c!-- Generator: Sketch 64 (93537) - https://sketch.com --%3e%3ctitle%3eIcon / 24 / Social / Google%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cg id='Icon-/-24-/-Social-/-Google' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3e%3cg id='Group'%3e%3cpath d='M23.52,12.2727273 C23.52,11.4218182 23.4436364,10.6036364 23.3018182,9.81818182 L12,9.81818182 L12,14.46 L18.4581818,14.46 C18.18,15.96 17.3345455,17.2309091 16.0636364,18.0818182 L16.0636364,21.0927273 L19.9418182,21.0927273 C22.2109091,19.0036364 23.52,15.9272727 23.52,12.2727273 L23.52,12.2727273 Z' id='Shape' fill='%234285F4'%3e%3c/path%3e%3cpath d='M12,24 C15.24,24 17.9563636,22.9254545 19.9418182,21.0927273 L16.0636364,18.0818182 C14.9890909,18.8018182 13.6145455,19.2272727 12,19.2272727 C8.87454545,19.2272727 6.22909091,17.1163636 5.28545455,14.28 L1.27636364,14.28 L1.27636364,17.3890909 C3.25090909,21.3109091 7.30909091,24 12,24 L12,24 Z' id='Shape' fill='%2334A853'%3e%3c/path%3e%3cpath d='M5.28545455,14.28 C5.04545455,13.56 4.90909091,12.7909091 4.90909091,12 C4.90909091,11.2090909 5.04545455,10.44 5.28545455,9.72 L5.28545455,6.61090909 L1.27636364,6.61090909 C0.463636364,8.23090909 0,10.0636364 0,12 C0,13.9363636 0.463636364,15.7690909 1.27636364,17.3890909 L5.28545455,14.28 L5.28545455,14.28 Z' id='Shape' fill='%23FBBC05'%3e%3c/path%3e%3cpath d='M12,4.77272727 C13.7618182,4.77272727 15.3436364,5.37818182 16.5872727,6.56727273 L20.0290909,3.12545455 C17.9509091,1.18909091 15.2345455,0 12,0 C7.30909091,0 3.25090909,2.68909091 1.27636364,6.61090909 L5.28545455,9.72 C6.22909091,6.88363636 8.87454545,4.77272727 12,4.77272727 L12,4.77272727 Z' id='Shape' fill='%23EA4335'%3e%3c/path%3e%3c/g%3e%3c/g%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    width: 24px;
+    height: 24px;
+    background-size: contain;
+    display: inline-block;  
+}
+.btn-text {
+	position: relative;
+	top: -6px;
+	font-size: 18px;
+	font-weight: normal !important;
+	letter-spacing: 0;
+	line-height: 20px;
+	padding: 0 10px;
+}
+.custom-checkbox, .custom-checkbox.checked, .checkbox-disabled.custom-checkbox, .checkbox-disabled.custom-checkbox.checked {
+	background-size: cover !important;
+	width:20px !important;
+	height:20px !important;
+}
+.myacc-details {
+    width: 320px !important;
+}
+
+.forsale-badge {
+	background: url('/bundles/fafrontend/images/badges/for-sale.png') no-repeat !important;
+}
+.motors-badge {
+	background: url('/bundles/fafrontend/images/badges/motors.png') no-repeat !important;
+}
+.job-badge {
+	background: url('/bundles/fafrontend/images/badges/jobs.png') no-repeat !important;
+}
+.services-badge {
+	background: url('/bundles/fafrontend/images/badges/services.png') no-repeat !important;
+}
+.property-badge {
+	background: url('/bundles/fafrontend/images/badges/properties.png') no-repeat !important;
+}
+.animals-badge {
+	background: url('/bundles/fafrontend/images/badges/animals.png') no-repeat !important;
+}
+.community-badge {
+	background: url('/bundles/fafrontend/images/badges/community.png') no-repeat !important;
+}
+
+.mob-forsale {
+	background: url('/bundles/fafrontend/images/icons/main/for-sale.png') no-repeat !important;
+}
+.mob-motors {
+	background: url('/bundles/fafrontend/images/icons/main/motors.png') no-repeat !important;
+}
+.mob-jobs {
+	background: url('/bundles/fafrontend/images/icons/main/jobs.png') no-repeat !important;
+}
+.mob-services {
+	background: url('/bundles/fafrontend/images/icons/main/services.png') no-repeat !important;
+}
+.mob-property {
+	background: url('/bundles/fafrontend/images/icons/main/property.png') no-repeat !important;
+}
+.mob-animals {
+	background: url('/bundles/fafrontend/images/icons/main/animals.png') no-repeat !important;
+}
+.mob-community {
+	background: url('/bundles/fafrontend/images/icons/main/community.png') no-repeat !important;
+}
+.mob-adult {
+	background: url('/bundles/fafrontend/images/icons/main/adult-green.png') no-repeat !important;
+}
+/* Accordian addetails page */
+.accordion .accordion-navigation, .accordion dd {
+    border-bottom: solid 1px #e3e3e3 !important;
+    box-shadow: none !important;
+}
+.accordion .accordion-navigation li a {
+    color: #212527 !important;
+}
+.accordion .accordion-navigation li a:hover, 
+.accordion .accordion-navigation li a:focus, 
+.accordion .accordion-navigation li a:active,
+.accordion .accordion-navigation .search-type label:hover,
+.accordion .accordion-navigation .search-type label:focus,
+.accordion .accordion-navigation .search-type label:active  {
+    color: #82C249 !important
+}
+.accordion .accordion-navigation .search-type label {
+    color: #212527 !important;
+    font-size: 13px !important;
+    margin: 0 0px 6px !important;
+    font-weight: normal !important; 
+}
+
+.xs-black-btn, .xs-black-large-btn {
+    background: transparent !important; border: 1px solid #212527 !important; color: #212527 !important;
+}
+.xs-black-btn:hover, .xs-black-btn:focus, .xs-black-btn:active, .xs-black-large-btn;hover, .xs-black-large-btn;focus, .xs-black-large-btn;active {
+	background: #212527 !important; color: #FFFFFF !important;
+}
+.manage-price { font-size: 20px !important; }
+.profile-logo-ins .pickProfileFile { font-size: 14px !important; } 
+
+.details-top-banner .double-buttons a:first-child {
+    width: 42% !important;
+}
+.details-top-banner .double-buttons a:last-child {
+    width: 55% !important;
+}
+.details-top-banner .double-buttons .enquire-btn .btn-txt {
+    width: auto !important;
+} 
+.details-top-banner h3 {
+	padding-right: 7em !important;
+}
+.details-top-banner .item-price {
+	margin: -27px 0 0 0 !important;
+}
+.pkg-pricing-wrap h4 {
+	color: #82C249 !important;
+}
+.pkg-pricing h4 {
+    color: #82C249 !important;
+    font-size: 36px !important;
+    line-height: 46px !important;
+}
+.capsule-links a {
+	margin-bottom: 15px !important;
+}
+.top-links ul li.notification-link .f-dropdown {
+	min-width: 320px !important;
+}
+.db-notifications .alert-box {
+    border-radius: 0px !important;
+    border: 0px !important;
+    border-bottom: 1px solid #CBD5D9 !important;
+}
+.manage-item-list .adEditBlock1 a {
+	color: #FFFFFF !important;
+}
+.car-hatchback { background: url(/bundles/fafrontend/images/motors/Ic-btn-Hatchback.png) no-repeat !important; }
+.car-coupes { background: url(/bundles/fafrontend/images/motors/Ic-btn-Coupes.png) no-repeat !important; }
+.car-saloons { background: url(/bundles/fafrontend/images/motors/Ic-btn-Saloons.png) no-repeat !important; }
+.car-convertibles { background: url(/bundles/fafrontend/images/motors/Ic-btn-Convertibles.png) no-repeat !important; }
+.car-estates { background: url(/bundles/fafrontend/images/motors/Ic-btn-Estates.png) no-repeat !important; }
+.car-mpvs { background: url(/bundles/fafrontend/images/motors/Ic-btn-MPVs.png) no-repeat !important; }
+.car-4x4 { background: url(/bundles/fafrontend/images/motors/Ic-btn-4x4.png) no-repeat !important; }
+
+.any-category:hover { background: url(/bundles/fafrontend/images/Ic-btn-Any-Hover.png) no-repeat !important; }
+.car-hatchback:hover { background: url(/bundles/fafrontend/images/motors/Ic-btn-Hatchback-Hover.png) no-repeat !important; }
+.car-coupes:hover { background: url(/bundles/fafrontend/images/motors/Ic-btn-Coupes-Hover.png) no-repeat !important; }
+.car-saloons:hover { background: url(/bundles/fafrontend/images/motors/Ic-btn-Saloons-Hover.png) no-repeat !important; }
+.car-convertibles:hover { background: url(/bundles/fafrontend/images/motors/Ic-btn-Convertibles-Hover.png) no-repeat !important; }
+.car-estates:hover { background: url(/bundles/fafrontend/images/motors/Ic-btn-Estates-Hover.png) no-repeat !important; }
+.car-mpvs:hover { background: url(/bundles/fafrontend/images/motors/Ic-btn-MPVs-Hover.png) no-repeat !important; }
+.car-4x4:hover { background: url(/bundles/fafrontend/images/motors/Ic-btn-4x4-Hover.png) no-repeat !important; }
+
+.any-category.active { background: url(/bundles/fafrontend/images/Ic-btn-Any-ON.png) no-repeat !important;border-radius: 5px !important;  }
+.car-hatchback.active { background: url(/bundles/fafrontend/images/motors/Ic-btn-Hatchback-ON.png) no-repeat !important;border-radius: 5px !important; }
+.car-coupes.active { background: url(/bundles/fafrontend/images/motors/Ic-btn-Coupes-ON.png) no-repeat !important;border-radius: 5px !important; }
+.car-saloons.active { background: url(/bundles/fafrontend/images/motors/Ic-btn-Saloons-ON.png) no-repeat !important;border-radius: 5px !important; }
+.car-convertibles.active { background: url(/bundles/fafrontend/images/motors/Ic-btn-Convertibles-ON.png) no-repeat !important;border-radius: 5px !important; }
+.car-estates.active { background: url(/bundles/fafrontend/images/motors/Ic-btn-Estates-ON.png) no-repeat !important;border-radius: 5px !important; }
+.car-mpvs.active { background: url(/bundles/fafrontend/images/motors/Ic-btn-MPVs-ON.png) no-repeat !important;border-radius: 5px !important; }
+.car-4x4.active { background: url(/bundles/fafrontend/images/motors/Ic-btn-4x4-ON.png) no-repeat !important;border-radius: 5px !important; }
+
+/* Property Images */
+.pt-commercial { background: url(/bundles/fafrontend/images/Properties/Commercial.png) no-repeat !important; }
+.pt-flats { background: url(/bundles/fafrontend/images/Properties/Flats.png) no-repeat !important; }
+.pt-garages { background: url(/bundles/fafrontend/images/Properties/Garages.png) no-repeat !important; }
+.pt-houses { background: url(/bundles/fafrontend/images/Properties/Houses.png) no-repeat !important; }
+.pt-land { background: url(/bundles/fafrontend/images/Properties/Land.png) no-repeat !important; }
+.pt-mobile-homes { background: url(/bundles/fafrontend/images/Properties/Mobile-Homes.png) no-repeat !important; }
+.pt-overseas { background: url(/bundles/fafrontend/images/Properties/Overseas.png) no-repeat !important; }
+.pt-parking { background: url(/bundles/fafrontend/images/Properties/Parking.png) no-repeat !important; }
+.pt-rooms { background: url(/bundles/fafrontend/images/Properties/Rooms.png) no-repeat !important; }
+
+.pt-commercial:hover { background: url(/bundles/fafrontend/images/Properties/Commercial-Hover.png) no-repeat !important; }
+.pt-flats:hover { background: url(/bundles/fafrontend/images/Properties/Flats-Hover.png) no-repeat !important; }
+.pt-garages:hover { background: url(/bundles/fafrontend/images/Properties/Garages-Hover.png) no-repeat !important; }
+.pt-houses:hover { background: url(/bundles/fafrontend/images/Properties/Houses-Hover.png) no-repeat !important; }
+.pt-land:hover { background: url(/bundles/fafrontend/images/Properties/Land-Hover.png) no-repeat !important; }
+.pt-mobile-homes:hover { background: url(/bundles/fafrontend/images/Properties/Mobile-Homes-Hover.png) no-repeat !important; }
+.pt-overseas:hover { background: url(/bundles/fafrontend/images/Properties/Overseas-Hover.png) no-repeat !important; }
+.pt-parking:hover { background: url(/bundles/fafrontend/images/Properties/Parking-Hover.png) no-repeat !important; }
+.pt-rooms:hover { background: url(/bundles/fafrontend/images/Properties/Rooms-Hover.png) no-repeat !important; }
+
+.pt-commercial.active { background: url(/bundles/fafrontend/images/Properties/Commercial-ON.png) no-repeat !important; }
+.pt-flats.active { background: url(/bundles/fafrontend/images/Properties/Flats-ON.png) no-repeat !important; }
+.pt-garages.active { background: url(/bundles/fafrontend/images/Properties/Garages-ON.png) no-repeat !important; }
+.pt-houses.active { background: url(/bundles/fafrontend/images/Properties/Houses-ON.png) no-repeat !important; }
+.pt-land.active { background: url(/bundles/fafrontend/images/Properties/Land-ON.png) no-repeat !important; }
+.pt-mobile-homes.active { background: url(/bundles/fafrontend/images/Properties/Mobile-Homes-ON.png) no-repeat !important; }
+.pt-overseas.active { background: url(/bundles/fafrontend/images/Properties/Overseas-ON.png) no-repeat !important; }
+.pt-parking.active { background: url(/bundles/fafrontend/images/Properties/Parking-ON.png) no-repeat !important; }
+.pt-rooms.active { background: url(/bundles/fafrontend/images/Properties/Rooms-ON.png) no-repeat !important; }
+
+/* Job Images */
+.job-full-time { background: url(/bundles/fafrontend/images/Jobs/Full-Time.png) no-repeat !important; }
+.job-part-time { background: url(/bundles/fafrontend/images/Jobs/Part-Time.png) no-repeat !important; }
+.job-contract { background: url(/bundles/fafrontend/images/Jobs/Contract.png) no-repeat !important; }
+.job-weekend { background: url(/bundles/fafrontend/images/Jobs/Weekends.png) no-repeat !important; }
+.job-evenings { background: url(/bundles/fafrontend/images/Jobs/Evenings.png) no-repeat !important; }
+.job-home-working { background: url(/bundles/fafrontend/images/Jobs/Home-Working.png) no-repeat !important; }
+.job-freelance { background: url(/bundles/fafrontend/images/Jobs/Freelance.png) no-repeat !important; }
+.job-wanted { background: url(/bundles/fafrontend/images/Jobs/Wanted.png) no-repeat !important; }
+.job-temporary { background: url(/bundles/fafrontend/images/Jobs/Temporary.png) no-repeat !important; }
+
+.job-full-time:hover { background: url(/bundles/fafrontend/images/Jobs/Full-Time-Hover.png) no-repeat !important; }
+.job-part-time:hover { background: url(/bundles/fafrontend/images/Jobs/Part-Time-Hover.png) no-repeat !important; }
+.job-contract:hover { background: url(/bundles/fafrontend/images/Jobs/Contract-Hover.png) no-repeat !important; }
+.job-weekend:hover { background: url(/bundles/fafrontend/images/Jobs/Weekends-Hover.png) no-repeat !important; }
+.job-evenings:hover { background: url(/bundles/fafrontend/images/Jobs/Evenings-Hover.png) no-repeat !important; }
+.job-home-working:hover { background: url(/bundles/fafrontend/images/Jobs/Home-Working-Hover.png) no-repeat !important; }
+.job-freelance:hover { background: url(/bundles/fafrontend/images/Jobs/Freelance-Hover.png) no-repeat !important; }
+.job-wanted:hover { background: url(/bundles/fafrontend/images/Jobs/Wanted-Hover.png) no-repeat !important; }
+.job-temporary:hover { background: url(/bundles/fafrontend/images/Jobs/Temporary-Hover.png) no-repeat !important; }
+
+.job-full-time.active { background: url(/bundles/fafrontend/images/Jobs/Full-Time-ON.png) no-repeat !important; }
+.job-part-time.active { background: url(/bundles/fafrontend/images/Jobs/Part-Time-ON.png) no-repeat !important; }
+.job-contract.active { background: url(/bundles/fafrontend/images/Jobs/Contract-ON.png) no-repeat !important; }
+.job-weekend.active { background: url(/bundles/fafrontend/images/Jobs/Weekends-ON.png) no-repeat !important; }
+.job-evenings.active { background: url(/bundles/fafrontend/images/Jobs/Evenings-ON.png) no-repeat !important; }
+.job-home-working.active { background: url(/bundles/fafrontend/images/Jobs/Home-Working-ON.png) no-repeat !important; }
+.job-freelance.active { background: url(/bundles/fafrontend/images/Jobs/Freelance-ON.png) no-repeat !important; }
+.job-wanted.active { background: url(/bundles/fafrontend/images/Jobs/Wanted-ON.png) no-repeat !important; }
+.job-temporary.active { background: url(/bundles/fafrontend/images/Jobs/Temporary-ON.png) no-repeat !important; }
+
+/* other css */
+.nav-bg.homepage-nav { background: rgba(255,255,255,1) !important; }
+.alert-box.info { border: 1px solid #31c5f2 !important; color: #31c5f2 !important;}
+.footer-subscribe-label { line-height: 14px !important;font-size: 12px !important;color: #FFFFFF !important; }
+.find-all .select2-choice { border-top-left-radius: 4px !important; border-bottom-left-radius: 4px !important; }
+.find-all .select2-choice::after { 
+    border-top: 0px solid #CBD5D9;
+	border-left: 0px solid transparent;
+	border-right: 0px solid transparent;
+	top: 16px;
+	/*background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns%3D"http%3A//www.w3.org/2000/svg" version%3D"1.1" x%3D"0" y%3D"0" width%3D"8" height%3D"6" viewBox%3D"0 0 8 6" xml%3Aspace%3D"preserve"%3E%3Cstyle type%3D"text/css"%3E%0D%0A%09.st0%7Bfill%3Anone%3Bstroke%3A%23EFEFEF%3Bstroke-width%3A2%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Earrow-down-white%3C/title%3E%3Cdesc%3ECreated with Sketch.%3C/desc%3E%3Cg transform%3D"translate(-1029.000000%2C -132.000000)"%3E%3Cg transform%3D"translate(-1.000000%2C 0.000000)"%3E%3Cg transform%3D"translate(1.000000%2C 0.000000)"%3E%3Cg transform%3D"translate(1030.000000%2C 133.000000)"%3E%3Cpath class%3D"st0" d%3D"M6 0.9l-3 3 -3-3"/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat center center;*/
+}
+.find-all, .find-all:hover, .find-all:focus, .find-all:active {
+	border-top-left-radius: 4px !important;
+	border-bottom-left-radius: 4px !important;
+}
+.find-all .select2-container .select2-choice:hover, #home-search .find-all .select2-container .select2-choice:focus {
+    border: 0px !important;
+}
+.find-all .select2-choice, .find-all .select2-choice:hover, .find-all .select2-choice:focus, .find-all .select2-choice:active {
+    border-top-left-radius: 4px !important;
+    border-bottom-left-radius: 4px !important;
+}
+/* remove arrow for adul */
+.top-bar-section .real-desktop li:last-child .main_category{
+    padding-right: 15px !important;
+}
+.top-bar-section .real-desktop li:last-child a::after {
+    content: none !important;
+}
+.search-filters {
+    border: 0px solid #CBD5D9 !important;
+}
+.keyword-search button, .keyword-search button:hover {
+	background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2215.3%22%20height%3D%2215.3%22%20viewBox%3D%22-4226.7%201392.2%2015.3%2015.3%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23FFFFFF%3B%7D%0D%0A%3C/style%3E%3Ctitle%3ESEARCH%20ICON%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch%20Beta.%3C/desc%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-4211.4%201406l-3.6-3.6c0.8-1.1%201.3-2.4%201.3-3.8%200-1.7-0.7-3.4-1.9-4.6%20-2.5-2.5-6.7-2.5-9.2%200%20-1.2%201.2-1.9%202.9-1.9%204.6s0.7%203.4%201.9%204.6c1.3%201.3%202.9%201.9%204.6%201.9%201.3%200%202.7-0.4%203.8-1.3l3.6%203.6L-4211.4%201406zM-4223.5%201401.7c-0.9-0.9-1.3-2-1.3-3.2%200-1.2%200.5-2.3%201.3-3.2%200.9-0.9%202-1.3%203.2-1.3%201.2%200%202.3%200.4%203.2%201.3%200.9%200.8%201.3%202%201.3%203.2%200%201.2-0.5%202.3-1.3%203.2C-4218.8%201403.5-4221.7%201403.5-4223.5%201401.7z%22/%3E%3C/svg%3E') no-repeat center center, linear-gradient(135deg, #A8DC28 0%, #79D378 100%) !important;
+}
+
+.paypal-box:hover { border: 1px solid #82C249 !important; }
+.tagline-text {
+    font-size: 14px !important;
+    line-height: 22px !important;
+    text-align: center !important;
+    color: #212527 !important;
+    font-family: "Poppins-Regular" !important;
+}
+.item-box { border-radius:4px !important; }
+.landing-header .cat-icon {
+    margin-top: 50px !important
+}
+.landing-header .cat-icon img {
+    display: none !important;
+}
+.intro-text {
+    background: none !important;
+    margin-top: 0px !important;
+}
+.alert-stop-icon {
+	background: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding='utf-8'?%3e%3c!-- Generator: Adobe Illustrator 19.2.0, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3e%3csvg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='24px' height='18px' viewBox='0 0 24 18' style='enable-background:new 0 0 24 18;' xml:space='preserve'%3e%3cstyle type='text/css'%3e .st0%7bfill:%23FFFFFF;%7d .st1%7bfill:%23FFFFFF;%7d %3c/style%3e%3ctitle%3ealert-stop%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cg id='Page-1'%3e%3cg id='Create-alert' transform='translate(-364.000000, -407.000000)'%3e%3cg id='Filters' transform='translate(182.000000, 385.000000)'%3e%3cg id='stop-alert' transform='translate(11.000000, 11.000000)'%3e%3cg id='Group-2' transform='translate(32.000000, 11.000000)'%3e%3cg id='alert-stop' transform='translate(139.000000, 0.000000)'%3e%3cpath id='Combined-Shape' class='st0' d='M11.5,1.2C10.6,0.4,9.4,0,8.2,0C5.5,0,3.2,2.1,3.2,4.6c0,3.9-3,8.7-3,8.7 c-0.2,0.3-0.2,0.6,0,0.8c0.2,0.3,0.4,0.4,0.7,0.4h14.3c0.3,0,0.6-0.2,0.7-0.4c0.2-0.3,0.1-0.6,0-0.8c0,0,0,0,0,0 c-1.2,0.4-2.5,0.2-3.5-0.7c-1.4-1.3-1.6-3.5-0.3-4.9l1-1.2c-0.1-0.4-0.1-0.8-0.2-1.2l-0.9-1C11.5,3.4,11.2,2.3,11.5,1.2z'/%3e%3cpath id='Fill-3' class='st0' d='M8.2,17.8C7,17.8,6.1,17,6,15.9h4.4C10.2,17,9.3,17.8,8.2,17.8'/%3e%3cpath id='cross' class='st1' d='M18.4,8.3L16,11c-0.6,0.6-1.5,0.7-2.1,0.1c-0.6-0.6-0.7-1.5-0.1-2.1l2.7-3l-2.7-3 c-0.6-0.6-0.5-1.6,0.1-2.1S15.4,0.4,16,1l2.5,2.7L20.9,1c0.6-0.6,1.5-0.7,2.1-0.1s0.7,1.5,0.1,2.1l-2.7,3l2.7,3 c0.6,0.6,0.5,1.6-0.1,2.1c-0.6,0.6-1.6,0.5-2.1-0.1L18.4,8.3z'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e") no-repeat !important;
+}
+.alert-check-icon {
+    background: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding='utf-8'?%3e%3c!-- Generator: Adobe Illustrator 19.2.0, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3e%3csvg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='27px' height='18px' viewBox='0 0 27 18' style='enable-background:new 0 0 27 18;' xml:space='preserve'%3e%3cstyle type='text/css'%3e .st0%7bfill:%23FFFFFF;%7d %3c/style%3e%3ctitle%3eBell-check%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cg id='Page-1_1_'%3e%3cg id='Create-alert' transform='translate(-364.000000, -407.000000)'%3e%3cg id='Filters' transform='translate(182.000000, 385.000000)'%3e%3cg id='alert-created' transform='translate(11.000000, 11.000000)'%3e%3cg id='Group-2' transform='translate(31.000000, 11.000000)'%3e%3cg id='Bell-check' transform='translate(140.000000, 0.000000)'%3e%3cpath id='Combined-Shape' class='st0' d='M12.8,3.1C12.1,1.3,10.3,0,8.2,0C5.5,0,3.2,2.1,3.2,4.6c0,3.9-3,8.7-3,8.7 c-0.2,0.3-0.2,0.6,0,0.8c0.2,0.3,0.4,0.4,0.7,0.4h14.3c0.2,0,0.3,0,0.5-0.1c-0.4-0.2-0.7-0.5-1.1-0.8l0,0l-4.2-4.5 C9.2,7.7,9.2,5.4,10.7,4C11.3,3.5,12,3.1,12.8,3.1z'/%3e%3cpath id='Fill-3' class='st0' d='M8.2,17.8C7,17.8,6.1,17,6,15.9h4.4C10.2,17,9.3,17.8,8.2,17.8'/%3e%3cpath id='Page-1' class='st0' d='M16.2,12.3c0.7,0.8,1.9,0.7,2.5-0.1l7-8.9c0.6-0.7,0.4-1.8-0.3-2.4c-0.7-0.6-1.8-0.4-2.4,0.3 l-5.8,7.4l-2.8-3.1c-0.6-0.7-1.7-0.7-2.4-0.1S11.4,7.2,12,7.9L16.2,12.3z'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e") no-repeat !important;
+}
+.landing-header .intro-text .landing-desc {
+    font-size: 14px !important;
+    line-height: 22px !important;
+    text-align: center !important;
+    font-family: "Poppins-Regular" !important;
+}
+.landing-header {
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+}
+.website-btn-1, .website-btn-1:focus, .website-btn-1:active, .website-btn-1:visited {
+    border: 0px solid #760F62 !important;
+}
+footer a:hover, .footer-head:hover, .pkg-includes a {
+    color: #E62EEB !important;
+}
+.banner-mid-column #left_search .alertButton:hover,
+.banner-mid-column #left_search .alertButton:focus,
+.banner-mid-column #left_search .alertButton:active {
+	color: #FFFFFF !important;
+}
+@media only screen and (min-width: 760px) {
+	#package_purchase_form .equalizer-inner, #package_purchase_form .pkg-columns {
+	    display: grid !important;
+    	align-items: stretch !important;
+	}	
+}
+@media (max-width: 640px) {
+  .button.special { padding: 17px 6px 22px 6px !important;  }
+}
+@media (min-width: 600px) {
+    .myacc-details {
+        width: 320px !important;
+    }
+}
+@media only screen and (min-width: 320px) and (max-width: 559px) {
+	.listing h5 {
+		max-height: 25px !important;
+	}
+}
+@media only screen and (min-width: 320px) and (max-width: 759px) {
+	#home-search .all-cat-select {
+		min-width: 52px !important;
+		width: 52px !important;
+	}
+	#home-search .looking-for {
+		width: 100% !important;
+	}
+	#home-search .find-all .select2-choice {
+		min-width: 52px !important;
+		width: 52px !important;
+	}
+	.find-all .select2-choice, .find-all .select2-choice:hover, .find-all .select2-choice:focus, .find-all .select2-choice:active {
+        border: 0px !important;
+        border-color: transparent !important; 
+    }
+	#home-search .search-btn button {
+	    background: url(/bundles/fafrontend/images/search-icon.svg) no-repeat center center / 16px 16px, linear-gradient(135deg, #A8DC28 0%, #79D378 100%) !important;
+	    width: 40px !important;height: 40px !important;
+	}
+	#home-search .search-btn button:hover {
+		background: url(/bundles/fafrontend/images/search-icon.svg) no-repeat center center / 16px 16px, linear-gradient(135deg, #85B021 0%, #61A85F 100%) !important;
+	}
+	.homepage-title, .homepage-title-small {
+	    font-size: 18px !important;
+	    letter-spacing: 0 !important;
+	    line-height: 24px !important;
+	    margin: 0 0px 20px !important;
+	}
+	.sub-head-text {
+	    color: #212527 !important;
+	    font-size: 14px !important;
+	    letter-spacing: 0 !important;
+	    line-height: 22px !important;
+	    text-align: center !important;
+	}
+	.equalizer-inner, .pkg-columns {
+        height: auto !important;
+    }
+    .step-nav {
+	    margin: 0px !important;
+		text-align: center !important;
+		max-height: 55px !important;
+		padding: 7px 0px !important;
+	}
+	.step-nav li {
+		color: #ACB0B7 !important;
+		font-size: 16px !important;
+		letter-spacing: 0 !important;
+		line-height: 21px !important;
+		text-align: center !important;
+		font-family: "Poppins-SemiBold" !important;
+		margin: 0 !important;
+	}
+	.step-nav .step-num {
+		width: 40px !important;
+		height: 40px !important;
+		border: 1px solid #CBD5D9 !important;
+		padding: 7px 0px !important;
+		margin-left: 10px !important;
+		margin-right: 10px !important;
+	}
+	li.step-complete .step-num, li.step-complete .step-text {
+		opacity: 0.5 !important;
+	}
+	.step-nav .step-on .step-1, .step-nav .step-on .step-2, .step-nav .step-on .step-3, .step-nav .step-on .step-2 {
+	    background: transparent !important;
+	    border: 3px solid #91D851 !important;
+	    color: #91D851 !important;
+	}
+    .dtl-user-links .large-12.dtl-white-btn {
+        width: 50%!important;
+    }
+    .dtl-white-btn .report {
+        width: auto !important;
+    }	
+    #eighteenPlusWarnningModel .primary-btn-2 {
+		padding: 7px 0 12px !important;
+		line-height: 21px !important;
+	}
+	.proceed-buttons {
+    	background: rgba(0, 0, 0, 1) !important;
+    }
+    .change-category .right {
+	    margin-right: 0px !important;
+	}
+	#shop-user-item-slider{
+		display: none !important;
+	}
+	.desc-col-1 {
+	    width: 90% !important;
+	}
+	.desc-col-2 {
+	    margin-right: 0 !important;
+	}
+	.looking-for .ui-autocomplete-input {
+		border-left: 0px !important
+	}
+	.secondary-btn-1, .secondary-btn-1:hover, .secondary-btn-1:focus, .primary-btn-2, .primary-btn-2:hover, .primary-btn-2:focus { border:0px solid transparent !important; }
+}
+@media only screen and (min-width: 320px) and (max-width: 599px) {
+    .myacc-details {
+        width: 300px !important;
+        margin: 15px 0 0;
+    }
+}
+
+
+@media only screen and (min-width: 320px) and (max-width: 399px) {   
+	#popular_shops_slider .item, #featured-item-slider .item {
+        width: 100% !important;
+    }
+    #popular_shops_slider .list-img, #featured-item-slider .list-img {
+        width: auto !important;
+    }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 640px) {
+    .mob-forsale, .mob-motors, .mob-jobs, .mob-services, .mob-property, .mob-animals, .mob-community, .mob-adult {
+        background-size: 23px 23px !important; width:23px !important; height:23px !important;
+    }
+    .top-bar-section .accordion dd > a, .top-bar-section .accordion dd > a:hover, .top-bar-section .accordion dd.active > a {
+        background: #4D5052 !important;
+        font-size: 12px;
+        font-weight: normal !important;
+        font-family: "Poppins-SemiBold" !important;
+        border-bottom: 0px !important;
+    }
+    .top-bar-section .accordion .accordion-navigation, .top-bar-section .accordion dd {
+        border-bottom: solid 0px #e3e3e3 !important;
+    }
+    .top-bar-section li:not(.has-form) a:not(.button) {
+        font-size: 12px;
+        font-weight: normal !important;
+        color:#FFFFFF !important;
+        font-family: "Poppins-SemiBold" !important;
+    }
+    .top-bar-section .login-menu li:not(.has-form) a:not(.button) {
+        background: #4D5052 !important;
+        border-right: 1px solid #212527 !important;
+        box-shadow: none !important;
+    }
+    .top-bar-section li:not(.has-form).place-item-btn a {
+        font-size: 18px !important;
+    }
+    .top-bar-section ul.login-menu.login-reg-flex {
+        column-count: 2 !important;
+        column-gap: 0 !important;
+    }
+    .top-bar .toggle-topbar.menu-icon a span { background: url('/bundles/fafrontend/images/menu-icon.svg') no-repeat !important; }
+    .top-bar .toggle-topbar.menu-icon a span.menu-on {
+        background: url('/bundles/fafrontend/images/menu-icon-on.svg') no-repeat !important;
+    }
+    .top-bar-section .accordion .accordion-navigation #cat-mob-menu li a { color:#ffffff !important; }
+	.homepage-title {
+		font-size: 18px !important;
+		line-height: 24px !important;
+		font-family: "Poppins-SemiBold" !important;
+		font-weight: normal !important;
+	}
+	.dtl-user-links .large-12.dtl-white-btn {
+        width: 100%!important;
+    }
+    .manage-item-list .featuredBlock, .manage-item-list .adEditBlock {
+	    margin-top: 0px !important;
+	    margin-bottom: 0px !important
+	}	
+	.top-bar-section .db-menu-mobile li {
+	    background: #212527 !important;
+	}
+	.looking-for .ui-autocomplete-input {
+		border: 0px !important;
+	}
+}
+@media only screen and (max-width: 640px) {
+    .help-links {
+        margin: 10px 0px 0 !important !important;
+        column-count: 1 !important !important;
+        width: 100% !important !important;
+    }
+   .paa-footer-links { column-count: 2; }                   
+   .big-wrapper { width: auto !important;}  
+}
+@media only screen and (min-width: 520px) and (max-width: 759px) {
+    .paa-user-type label, .buyer-contact label {
+        width: 90% !important;
+    }
+}
+@media only screen and (max-width: 759px) {
+    .discover-categories a {
+        background-size: cover !important;
+    }
+}
+@media only screen and (min-width: 641px) and (max-width: 959px) {  
+  .big-wrapper { width: auto !important;}   
+  .manage-item-list .large-5 a {  margin-bottom: 16px !important; }             
+} 
+@media only screen and (min-width:760px) and (max-width: 959px) {
+	#home-search .search-btn button { text-indent:unset !important; }
+	.top-bar-section a.tab-cat-link::after { 
+        margin-right: 12px;
+    }
+    #left-column .step-text {
+        width: 90px !important;
+    }
+    #paa_similar_adverts .list-col-2, #paa_similar_adverts .list-distance {
+	    width: 150px !important;
+	}
+}
+@media only screen and (min-width:960px) and (max-width: 1151px) {
+    .top-bar-section .real-desktop .has-dropdown a {
+    	padding: 0 12px 0px 5px !important;
+    }
+    #paa_similar_adverts .list-col-2, #paa_similar_adverts .list-distance {
+	    width: 210px !important;
+	}
+}
+@media only screen and (min-width: 1152px) {
+    .big-wrapper.choose-list {
+        width: 100% !important;
+    }
+    #paa_similar_adverts .list-col-2, #paa_similar_adverts .list-distance {
+	    width: 240px !important;
+	}
+}
+.top-links .f-dropdown { min-width: 205px !important;width: -moz-fit-content; }
+</style>

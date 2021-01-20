@@ -187,9 +187,30 @@ show_business_user_ads_location:
     schemes:  [https]
     requirements:
         page_string: '.+'
+        
+fa_adult_homepage:
+    path:     /adult-services-old/
+    host: '%fa.main.host%'
+    schemes:  [https]
+    defaults: { _controller: FaFrontendBundle:Adult:index }
+
+fa_new_adult_homepage:
+    path:     /adult-services/
+    host: '%fa.main.host%'
+    schemes:  [https]
+    defaults: { _controller: FaFrontendBundle:Adult:indexNew }
 
 listing_page:
     path: /{location}/{page_string}/
+    defaults: { _controller: 'FaAdBundle:AdList:searchResultNew'}
+    host: '%fa.main.host%'
+    schemes:  [https]
+    requirements:
+        location: '^(?:(?!admin\/)([A-Za-z0-9_-]+))'
+        page_string: '.+'
+
+old_listing_page:
+    path: /ads/{location}/{page_string}/
     defaults: { _controller: 'FaAdBundle:AdList:searchResult'}
     host: '%fa.main.host%'
     schemes:  [https]
@@ -367,3 +388,4 @@ FaUserBundle_user_address_book_admin:
     resource: '@FaUserBundle/Resources/config/routing/user_address_book_admin.yml'
     prefix:   /admin/user_address_book
     schemes:  [http|https]
+    

@@ -5,3 +5,8 @@ services:
     fa.report.createdatafield.resource:
         class: '%fa.report.createdatafield.class%'
         arguments: ['@service_container']
+        
+    ti_package_created_log:
+        class: Monolog\Handler\StreamHandler
+        arguments: ['%kernel.logs_dir%/%kernel.environment%.ti_package_created_log.log']
+        

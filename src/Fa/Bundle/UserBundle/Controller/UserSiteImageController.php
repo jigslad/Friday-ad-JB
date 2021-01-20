@@ -106,7 +106,10 @@ class UserSiteImageController extends CoreController
 
                 try {
                     if ($form->isValid()) {
-                        $formManager->save($userSiteImage);
+                        $formManager->save($userSiteImage);                      
+                        $userSiteImageManager = new UserSiteImageManager($this->container, $userSite->getId(), $userSiteImage->getHash(), $userSiteImage->getPath());
+                        $userSiteImageManager->uploadImagesToS3($userSite->getId(), $userSiteImage->getHash(), $userSiteImage->getPath());
+                        //exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:upload-user-site:image-s3 --user_id='.$userSite->getUser()->getId().' --image_type=company >/dev/null &');
                         exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:send:business-user-for-moderation --userId='.$userSite->getUser()->getId().' >/dev/null &');
                     } else {
                         $error = $form->getErrors(true, false);
@@ -377,16 +380,39 @@ class UserSiteImageController extends CoreController
             $imageId  = $request->get('imageId');
             $hash     = $request->get('imageHash');
             $userSiteImgObj = $this->getRepository('FaUserBundle:UserSiteImage')->getUserSiteImageQueryByUserSiteIdImageIdHash($userSiteId, $imageId, $hash)->getQuery()->getOneOrNullResult();
+            
+            if($userSiteImgObj) {
             $oldHash  = $userSiteImgObj->getHash();
             $newHash  = CommonManager::generateHash();
             $userSiteImgObj->setHash($newHash);
             $this->getEntityManager()->persist($userSiteImgObj);
             $this->getEntityManager()->flush();
             $imagePath = $this->get('kernel')->getRootDir().'/../web/'.$userSiteImgObj->getPath();
+            
+            $fileExistsInAws = 0;
+            if(CommonManager::checkImageExistOnAws($this->container,$userSiteImgObj->getPath().DIRECTORY_SEPARATOR.$userSiteId.'_'.$oldHash.'.jpg')) {
+                if (!file_exists($imagePath)) {
+                    mkdir($imagePath, 0777, true);
+                }
+                
+                $awsImagePath = $this->container->getParameter('fa.static.aws.url').DIRECTORY_SEPARATOR.$userSiteImgObj->getPath();
+                $orgawsurl = $awsImagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$oldHash.'.jpg';
+                $orglocalimg = $imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$oldHash.'.jpg';
+                file_put_contents($orglocalimg, file_get_contents($orgawsurl));
+                $orgawsthumburl = $awsImagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$oldHash.'_300X225.jpg';
+                $orglocalthumbimg = $imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$oldHash.'_300X225.jpg';
+                file_put_contents($orglocalthumbimg, file_get_contents($orgawsthumburl));
+                $orgawsthumburl1 = $awsImagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$oldHash.'_800X600.jpg';
+                $orglocalthumbimg1 = $imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$oldHash.'_800X600.jpg';
+                file_put_contents($orglocalthumbimg1, file_get_contents($orgawsthumburl1));
+                $fileExistsInAws = 1;
+            } 
+            
             //rename org image.
             rename($imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$oldHash.'.jpg', $imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$newHash.'_org.jpg');
+            copy($imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$newHash.'_org.jpg', $imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$newHash.'.jpg');
             if ($request->get('show_org')) {
-                copy($imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$newHash.'_org.jpg', $imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$newHash.'.jpg');
+                //copy($imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$newHash.'_org.jpg', $imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$newHash.'.jpg');
             /*exec('convert -rotate '.($request->get('angle').' -resize '.($request->get('scale') * 100).'% '.$imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$newHash.'_org1.jpg'.' -crop '.$request->get('w').'x'.$request->get('h').'+'.$request->get('x').'+'.$request->get('y').' '.$imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$newHash.'.jpg'));
              unlink($imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$newHash.'_org1.jpg');*/
             } else {
@@ -400,14 +426,15 @@ class UserSiteImageController extends CoreController
             $userSiteImageManager = new UserSiteImageManager($this->container, $userSiteId, $newHash, $imagePath);
             //create thumbnails
             $userSiteImageManager->createThumbnail();
-
+            
             //rename org image.
             rename($imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$newHash.'_org.jpg', $imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$newHash.'.jpg');
-
-            $userSiteImgObj = $this->getRepository('FaUserBundle:UserSiteImage')->getUserSiteImageQueryByUserSiteIdImageIdHash($userSiteId, $imageId, $newHash)->getQuery()->getOneOrNullResult();
+            }
+            $userSiteImgObj = $this->getRepository('FaUserBundle:UserSiteImage')->getUserSiteImageQueryByUserSiteIdImageIdHash($userSiteId, $imageId, $newHash)->getQuery()->getOneOrNullResult();            
             if (!$userSiteImgObj) {
                 $error = $this->get('translator')->trans('Problem in croping photo.');
             } else {
+                $userSiteImageManager->uploadImagesToS3($userSiteId, $newHash, $userSiteImgObj->getPath());
                 $successMsg = $this->get('translator')->trans('Photo has been cropped successfully.');
                 exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:send:business-user-for-moderation --userId='.$userSite->getUser()->getId().' >/dev/null &');
             }

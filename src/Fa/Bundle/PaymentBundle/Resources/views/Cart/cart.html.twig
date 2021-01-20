@@ -82,11 +82,11 @@
                                                         {% else %}
                                                             {% set editUrl = path('ad_package_purchase', {'adId': cartDetail['ad_id'], 'packageId': packageId, 'packagePrintId': packagePrintId, 'business': businessValue}) %} 
                                                         {% endif %}
-                                                        <a href="javascript:void(0);" onclick="return sendGaAndRedirect('{{ editUrl }}', 'Change', '{{categoryPath|e('js')}}');" class="secondary-btn-3 button expand">{{'Change'|trans({}, 'frontend-cart')}}</a>
+                                                        <a href="javascript:void(0);" onclick="return sendGaAndRedirect('{{ editUrl }}', 'Change', '{{categoryPath|e('js')}}  - {{ packageId }}');" class="secondary-btn-3 button expand">{{'Change'|trans({}, 'frontend-cart')}}</a>
                                                     </div>
                                                 {% endif %}
                                                 <div class="large-12 columns">
-                                                    <a href="javascript:void(0);" onclick="return removeCartItem('{{cartDetail['id']}}', '{{categoryPath|e('js')}}');" class="secondary-btn-3 button expand">{{'Delete'|trans({}, 'frontend-cart')}}</a>
+                                                    <a href="javascript:void(0);" onclick="return removeCartItem('{{cartDetail['id']}}', '{{categoryPath|e('js')}}','{{ packageId }}');" class="secondary-btn-3 button expand">{{'Delete'|trans({}, 'frontend-cart')}}</a>
                                                 </div>
                                             </div>
                                         {% endif %}
@@ -150,7 +150,7 @@
                                     {% endif %}
                                     <div class="clearfix code-field {% if cartValue['discount_values'] is defined and cartValue['discount_values']|length %}promo-disable{% endif %}" {% if cartValue['discount_values'] is not defined and currentDevice == 'M' %} style="display:none;"{% endif %} id="discount_code_input_div">
                                         <input type="text" class="white-field" name="discount_code" id="discount_code" placeholder="{{'Insert promotional code'|trans({}, 'frontend-cart')}}" />
-                                        <button class="secondary-btn-3 button expand" onclick="return applyDiscountcode();">{{'Apply'|trans({}, 'frontend-cart')}}</button>
+                                        <button class="secondary-btn-1 button expand" onclick="return applyDiscountcode();">{{'Apply'|trans({}, 'frontend-cart')}}</button>
                                     </div>
                                 </div>
                             {% endif %}
@@ -227,7 +227,7 @@
                     {% set catPath = categoryPath %}
                 {% endif %}
                 
-                <button class="primary-btn-1 expand" name="" id="" type="button" onclick="return sendGaAndRedirect('{{ redirectUrl }}', 'Place another ad', '{{catPath|e('js')}}');">{{'Place another ad'|trans({}, 'frontend-cart')}}</button>
+                <button class="secondary-btn-1 paa-next-btn expand" name="" id="" type="button" onclick="return sendGaAndRedirect('{{ redirectUrl }}', 'Place another ad', '');">{{'Place another ad'|trans({}, 'frontend-cart')}}</button>
             </div>
         </div>
     </div>
@@ -250,6 +250,9 @@ The main client-side JS. Handles displaying the Apple Pay button and requesting 
 * If we wanted more fine-grained control, we could use
 * ApplePaySession.canMakePaymentsWithActiveCards() instead.
 */
+$(document).ready(function() {
+    document.cookie = "SameSite=None;Secure;path=/";
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     if (window.ApplePaySession) {

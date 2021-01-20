@@ -1,16 +1,22 @@
-{% set staticPageRepository = fetch_repository('FaContentBundle:StaticPage') %}
-{% set staticPageArray      = staticPageRepository.getStaticPageLinkArray(fetch_container_instance()) %}
-{% set cookiePolicyLink     = '<a href="javascript:void();" rel="nofollow" title="Cookie Policy" class="cookie-policy">' %}
-{% if staticPageArray is defined and staticPageArray[constant('Fa\\Bundle\\ContentBundle\\Repository\\StaticPageRepository::STATIC_PAGE_COOKIES_POLICY_ID')] is defined %}
-    {% set cookiePolicyLink = path('location_home_page', {'location': staticPageArray[constant('Fa\\Bundle\\ContentBundle\\Repository\\StaticPageRepository::STATIC_PAGE_COOKIES_POLICY_ID')]}) %}
+{% if currentRoute == 'fa_new_adult_homepage' %}
     {% set cookiePolicyLink = '<a href="' ~ cookiePolicyLink ~ '" title="Cookie Policy" class="cookie-policy">' %}
+{% else %}
+    {% set staticPageRepository = fetch_repository('FaContentBundle:StaticPage') %}
+    {% set staticPageArray      = staticPageRepository.getStaticPageLinkArray(fetch_container_instance()) %}
+    {% set cookiePolicyLink     = '<a href="javascript:void();" rel="nofollow" title="Cookie Policy" class="cookie-policy">' %}
+    {% if staticPageArray is defined and staticPageArray[constant('Fa\\Bundle\\ContentBundle\\Repository\\StaticPageRepository::STATIC_PAGE_COOKIES_POLICY_ID')] is defined %}
+        {% set cookiePolicyLink = path('location_home_page', {'location': staticPageArray[constant('Fa\\Bundle\\ContentBundle\\Repository\\StaticPageRepository::STATIC_PAGE_COOKIES_POLICY_ID')]}) %}
+        {% set cookiePolicyLink = '<a href="' ~ cookiePolicyLink ~ '" title="Cookie Policy" class="cookie-policy">' %}
+    {% endif %}
 {% endif %}
 
 <div class="cookie_notification_bar" id="cookie_notification_bar">
     <div class="cookie-wrapper clearfix row">
         <div class="column">
+            <div>
             <div class="cookie-content">{{'We use cookies to help you get the best experience when using our site. By continuing to use this website, you are agreeing to our  %cookie_policy_start%Cookie Policy%cookie_policy_end%'|trans({'%cookie_policy_start%':cookiePolicyLink, '%cookie_policy_end%':'</a>'}, 'frontend-cookie-policy')|raw}}</div>
             <a href="javascript:void(0);" rel="nofollow" onclick="setCookiePolicy();$('#cookie_notification_bar').hide();refreshParallax();return false;" class="button secondary-btn-1">{{'OK'|trans({}, 'frontend')}}</a>
+        	</div>
         </div>
     </div>
 </div>

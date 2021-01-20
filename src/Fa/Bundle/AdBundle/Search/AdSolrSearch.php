@@ -347,6 +347,19 @@ class AdSolrSearch extends SolrSearch
             $this->query .= ' AND ('.$query.')';
         }
     }
+    /**
+     * Add root category id filter to solr query.
+     *
+     * @param integer $id Root category id.
+     */
+    protected function addRootCategoryIdFilter($id = null)
+    {
+        if (defined($this->getSolrFieldMappingClass().'::ROOT_CATEGORY_ID')) {
+            $query = constant($this->getSolrFieldMappingClass().'::ROOT_CATEGORY_ID').':'.$id;
+            $query = ' AND ('.$query.')';
+            $this->query .= $query;
+        }
+    }
 
     /**
      * Add location filter to solr query.
@@ -456,7 +469,7 @@ class AdSolrSearch extends SolrSearch
                 }
             } elseif ($latitude && $longitude && (isset($locationData[1]) && $locationData[1]==0 && $locationData[1]!='')) {
                 $pt = $latitude.','.$longitude;
-                $d  = 0.8000; // convert miles to km
+                $d  = 200*0.8000; // convert miles to km
                 
                 if ($startDistance) {
                     $sd  = ($startDistance * 1.60934);
@@ -481,6 +494,7 @@ class AdSolrSearch extends SolrSearch
                 $this->geoDistQuery['sfield'] = 'store';
                 $this->geoDistQuery['pt'] = $latitude.','.$longitude;
             }
+            if($distance==null) { $this->geoDistQuery['d'] = 200; }
         }
     }
 

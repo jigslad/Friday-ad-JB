@@ -118,6 +118,54 @@ class AdServicesRepository extends EntityRepository
         return $document;
     }
 
+    public function getSolrDocumentNew($ad, $container)
+    {
+        $document = new \SolrInputDocument($ad);
+
+        $document = $this->_em->getRepository('FaAdBundle:Ad')->getSolrDocumentNew($ad, $document, $container);
+
+        $categoryId = ($ad->getCategory() ? $ad->getCategory()->getId() : null);
+        // get service object
+        $adService = $this->findOneBy(array('ad' => $ad->getId()));
+
+        $listingDimensions = $this->getAdListingFields();
+        $entityRepository = $this->_em->getRepository('FaEntityBundle:Entity');
+        $adRepository = $this->_em->getRepository('FaAdBundle:Ad');
+        if ($ad->getUser()) {
+
+            $businessName = ($ad->getUser()->getBusinessName() ? $ad->getUser()->getBusinessName() : null);
+            if ($businessName) {
+                $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'business_name', false), $businessName);
+            }
+        }
+
+        if ($adService) {
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'service_type'), $entityRepository->getCachedEntityById($container, $adService->getServiceTypeId()));
+            $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'event_type'), $entityRepository->getCachedEntityById($container, $adService->getEventTypeId()));
+
+            $metaData = ($adService->getMetaData() ? unserialize($adService->getMetaData()) : null);
+            if ($metaData && count($metaData)) {
+                $document = $this->addField($document, 'meta_values', $adService->getMetaData());
+            }
+
+            // add amenities.
+            $servicesOfferedIds = explode(',', $adService->getServicesOfferedId());
+            if (count($servicesOfferedIds)) {
+                foreach ($servicesOfferedIds as $servicesOfferedId) {
+                    $document = $this->addField($document, $adRepository->getSolrFieldName($listingDimensions, 'services_offered'), $entityRepository->getCachedEntityById($container, $servicesOfferedId));
+                }
+            }
+        }
+
+        // update keyword search fields.
+        $keywordSearch = $this->_em->getRepository('FaAdBundle:Ad')->getKeywordSearchArray($ad, $categoryId, $adService, $container);
+        if (count($keywordSearch)) {
+            $document = $this->addField($document, 'keyword_search', implode(',', $keywordSearch));
+        }
+
+        return $document;
+    }
+
     /**
      * Add field to solr document.
      *
@@ -130,6 +178,14 @@ class AdServicesRepository extends EntityRepository
     private function addField($document, $field, $value)
     {
         if ($value != null) {
+            if (is_array($value)) {
+                $value = (string) json_encode($value);
+            }
+
+            if (!is_string($value)) {
+                $value = (string) $value;
+            }
+
             $document->addField($field, $value);
         }
 

@@ -6,7 +6,7 @@ ad_promote:
     path:     /{type}/{adId}
     defaults: { _controller: "FaAdBundle:AdPackage:promoteAd" }
     requirements:
-        type:  promote|repost|renew
+        type:  promote|repost|renew|all
         
 nursery_location_group_package:
     path:     /{adId}

@@ -1,0 +1,59 @@
+<script>
+    $(document).ready(function(){
+        var inputFields = $(':input');
+        inputFields.keyup(function (){
+            enableDisableNextButton()
+        });
+        inputFields.change(function (){
+            enableDisableNextButton()
+        });
+        inputFields.on("input", function(){
+            enableDisableNextButton()
+        });
+        $('#fa_paa_fourth_step_{{ categoryName }}_location_close').click(function (){
+            disableNextButton()
+        });
+        $('#fa_paa_fourth_step_{{ categoryName }}_area_close').click(function (){
+            disableNextButton()
+        });
+        disableNextButton()
+        enableDisableNextButton()
+        $("form[name='fa_paa_fourth_step_{{ categoryName }}']").submit(function() {
+            if ($('#fa_paa_fourth_step_{{ categoryName }}_save').hasClass('disabled')) {
+                return false;
+            }
+            if ($('#fa_paa_fourth_step_{{ categoryName }}_preview').hasClass('disabled')) {
+                return false;
+            }
+        });
+    });
+    function enableDisableNextButton(){
+        $('#fa_paa_fourth_step_{{ categoryName }}_save').removeClass('disabled');
+        $('#fa_paa_fourth_step_{{ categoryName }}_preview').removeClass('disabled');
+        if($('#fa_paa_fourth_step_{{ categoryName }}_gender_id') .length != 0) {
+            if (!$('#fa_paa_fourth_step_{{ categoryName }}_gender_id').val()) {
+                disableNextButton()
+            }
+        }
+        if($('#fa_paa_fourth_step_{{ categoryName }}_species_id') .length != 0) {
+            if (!$('#fa_paa_fourth_step_{{ categoryName }}_species_id').val()) {
+                disableNextButton()
+            }
+        }
+        var requiredFieldsUpdated = $(':input[required]:visible');
+        requiredFieldsUpdated.each(function( index, element ) {
+            {#if(element.id != 'fa_paa_fourth_step_{{ categoryName }}_location_autocomplete')#}
+            if (!element.value) {
+                disableNextButton()
+            }
+        });
+    }
+    function disableNextButton(){
+        if (!$('#fa_paa_fourth_step_{{ categoryName }}_save').hasClass('disabled')) {
+            $('#fa_paa_fourth_step_{{ categoryName }}_save').addClass('disabled');
+        }
+        if (!$('#fa_paa_fourth_step_{{ categoryName }}_preview').hasClass('disabled')) {
+            $('#fa_paa_fourth_step_{{ categoryName }}_preview').addClass('disabled');
+        }
+    }
+</script>
