@@ -53,11 +53,7 @@ FaAdBundle_nimber:
 FaAdBundle_search_keyword:
     resource: '@FaAdBundle/Resources/config/routing/search_keyword.yml'
     prefix:   /search_keyword
-    
-FaAdBundle_nimber:
-    resource: '@FaAdBundle/Resources/config/routing/nimber.yml'
-    prefix:   /nimber
-    
+
 FaAdBundle_item:
     resource: '@FaAdBundle/Resources/config/routing/item.yml'
     prefix:   /item
@@ -65,3 +61,7 @@ FaAdBundle_item:
 FaAdBundle_campaign:
     resource: '@FaAdBundle/Resources/config/routing/campaign.yml'
     prefix:   /paa-lite
+
+FaAdBundle_paa_search_keyword:
+    resource: '@FaAdBundle/Resources/config/routing/paa_search_keyword.yml'
+    prefix:   /paa_search_keyword

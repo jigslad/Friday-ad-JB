@@ -3,6 +3,12 @@ category_ajax_term_postad:
     defaults: { _controller: "FaEntityBundle:Category:ajaxGetPostadCategory" }
     options:
         expose: true
+        
+category_ajax_update_paakeywordsearch:
+    path:     /ajax/update/paakeywordsearch/{term}/{catId}/
+    defaults: { _controller: "FaEntityBundle:Category:ajaxUpdatePostadCategory" }
+    options:
+        expose: true
 
 category_ajax_get_node_json:
     path:     /ajax/get/nodejson
@@ -22,5 +28,8 @@ category_ajax_get_category_name_by_id:
 
 eighteen_plus_warnning_model_ajax:
     path: /ajax/eighteen_plus_warnning_model
-    defaults: { _controller: "FaAdBundle:Ad:ajaxEighteenPlusWarnningModel"}
-    
+    defaults: { _controller: "FaAdBundle:Ad:ajaxEighteenPlusWarnningModel" }
+ 
+
+        
+   

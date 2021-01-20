@@ -584,7 +584,7 @@
 
     function onSelectAutoSuggestCategory()
     {
-        if($("#fa_paa_category_select_category_id_autocomplete").val().length > 0) {
+         if($("#fa_paa_category_select_category_id_autocomplete").val().length > 0) {
             //$('#fa_paa_category_select_colour_id_dimension_id').remove();
             $('#motor_reg_fields').html('');
             var selCatId = $('#fa_paa_category_select_category_id').val();
@@ -606,7 +606,7 @@
                 // submit the form after selection category from auto-complete
                 $('form[name="fa_paa_category_select"]').submit();
             }
-        }
+        } 
     }
 
     function onRemoveAutoSuggestCategory()
@@ -688,6 +688,17 @@
         }
     }
 
+    function updatePaaKeywordSearch(keyword,catId)
+    {
+		//alert(keyword+'==='+catId);
+        var ajxurl = "/category/ajax/update/paakeywordsearch/"+keyword+"/"+catId;
+        $.ajax({
+            type: 'GET',
+            url: ajxurl,
+            async: false,
+        });
+    }
+    
     function getCategoryPath(catLevel)
     {
       var categoryPath = $('.choose-all-categories > .active').html();

@@ -449,6 +449,24 @@ services:
         tags:
             - { name: form.type, alias: fa_ad_location_radius_search_admin }
 
+    fa_ad.form.type.paa_search_keyword_search_admin:
+        class: Fa\Bundle\AdBundle\Form\PaaSearchKeywordSearchAdminType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_ad_paa_search_keyword_search_admin }
+
+    fa_ad.form.type.paa_search_keyword_admin:
+        class: Fa\Bundle\AdBundle\Form\PaaSearchKeywordAdminType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_ad_paa_search_keyword_admin }
+
+    fa_ad.form.type.paa_search_keyword_upload_csv_admin:
+        class: Fa\Bundle\AdBundle\Form\PaaSearchKeywordUploadCsvAdminType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_ad_paa_search_keyword_upload_csv_admin }
+
     fa_ad.form.type.adult_home_page_search:
         class: Fa\Bundle\AdBundle\Form\AdultHomePageSearchType
         arguments: ['@service_container', '@request_stack']
