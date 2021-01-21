@@ -1663,6 +1663,12 @@ class AdListController extends CoreController
     private function getLeftFilters($categoryObj, $rootCategory, $facetResult, $totalAds, $dimensions, $searchParams, $data, $extendedFacetResult=null, $facetData)
     {
         $params = [];
+        if(isset($data['search']['item__distance']) and $data['search']['item__distance'] != $facetData['search']['item__distance']){
+            $data['search']['item__distance'] = $facetData['search']['item__distance'];
+        }
+        if(isset($data['query_filters']['distance']) and $data['query_filters']['distance'] != $facetData['query_filters']['distance']){
+            $data['query_filters']['distance'] = $facetData['query_filters']['distance'];
+        }
         foreach ($searchParams as $dimensionSlug => $searchParam) {
             $paramname = $this->getDimensionName($dimensionSlug);
             if ($paramname !== false) {
